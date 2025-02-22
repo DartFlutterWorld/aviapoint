@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "996698290424",
+    "project_id": "aviapoint-7f329",
+    "storage_bucket": "aviapoint-7f329.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996698290424:android:0a256f85f72e3ddc8f630d",
+        "android_client_info": {
+          "package_name": "dev.surf.check_to_fly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFKanuKl38irph1H91Vzmev3-OHX58T8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996698290424-jiolte3kqtbdf84lv4tv4pnrop59c6dd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.dartflutter.aviapoint"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996698290424:android:a8c8cce2c27b7d8f8f630d",
+        "android_client_info": {
+          "package_name": "ru.dartflutterworld.check_to_fly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFKanuKl38irph1H91Vzmev3-OHX58T8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996698290424-jiolte3kqtbdf84lv4tv4pnrop59c6dd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.dartflutter.aviapoint"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996698290424:android:616d982db9d415b18f630d",
+        "android_client_info": {
+          "package_name": "ru.dartflutter.aviapoint"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFKanuKl38irph1H91Vzmev3-OHX58T8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996698290424-jiolte3kqtbdf84lv4tv4pnrop59c6dd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.dartflutter.aviapoint"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996698290424:android:57876cac095dd5ae8f630d",
+        "android_client_info": {
+          "package_name": "ru.dartflutter.aviapoint.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFKanuKl38irph1H91Vzmev3-OHX58T8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996698290424-jiolte3kqtbdf84lv4tv4pnrop59c6dd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.dartflutter.aviapoint"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,13 @@
+{
+  "isOpen": true,
+  "header": "string",
+  "subheader": "string",
+  "canShare": true,
+  "data": {
+    "string": [
+      {"string": "string"},
+      {"string": true},
+      {"string": 0}
+    ]
+  }
+}

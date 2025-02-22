@@ -1,0 +1,8 @@
+{
+  "id": "1",
+  "title": "string1",
+  "address": "string1",
+  "longCoord": "1.000123",
+  "latCoord": "2.000123",
+  "loadingNorm": 1.0
+}

@@ -1,0 +1,23 @@
+{
+  "id": null,
+  "company": {
+    "id": null,
+    "nameOfProvider": null,
+    "headOfProvider": null,
+    "shortFio": null,
+    "positionHeadOfProvider": null,
+    "basicOfDoc": null,
+    "addressLoad": null,
+    "ulAddress": null,
+    "inn": null,
+    "kpp": null,
+    "ogrn": null,
+    "bik": null,
+    "paymentAccount": null,
+    "correspondentAccount": null,
+    "phoneNumber": null,
+    "emailOfHead": null,
+    "nameOfBank": null,
+    "staff": null 
+  }
+}

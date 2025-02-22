@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "title": "string",
+    "address": "string",
+    "longCoord": "60.043997",
+    "latCoord": "29.981327",
+    "loadingNorm": 10.0
+  },
+  {
+    "id": "2",
+    "title": "string",
+    "address": "string",
+    "longCoord": "37.634574",
+    "latCoord": "55.704409",
+    "loadingNorm": 0.0
+  }
+]

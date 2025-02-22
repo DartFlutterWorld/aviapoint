@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "name": "dev",
+            "request": "launch",
+            "args": [
+                "--flavor",
+                "dev"
+            ],
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "prod",
+            "request": "launch",
+            "args": [
+                "--flavor",
+                "prod"
+            ],
+            "type": "dart",
+            "program": "lib/main_prod.dart"
+        },
+        {
+            "name": "Flutter tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "./test/"
+        },
+        {
+            "name": "Flutter Goldens",
+            "request": "launch",
+            "type": "dart",
+            "codeLens": {
+                "for": [
+                    "run-test",
+                    "run-test-file"
+                ]
+            },
+            "args": [
+                "--update-goldens"
+            ]
+        }
+    ]
+}

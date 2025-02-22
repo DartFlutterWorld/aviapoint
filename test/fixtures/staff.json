@@ -1,0 +1,7 @@
+{
+  "id": "0",
+  "type": "string",
+  "fio": "string",
+  "phoneNumber": "string",
+  "emailOfHead": "string"
+}

@@ -1,0 +1,157 @@
+name: aviapoint
+description: Aero application.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.3 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  auto_route: ^9.2.2
+  bloc_concurrency: ^0.3.0
+  dio: ^5.7.0
+  expandable: ^5.0.1
+  firebase_core: ^3.10.1
+  firebase_crashlytics: ^4.3.1
+  firebase_analytics: ^11.4.1
+  firebase_messaging: ^15.2.1
+  flutter_bloc: ^9.0.0
+  flutter_secure_storage: ^9.2.4
+  flutter_svg: ^2.0.17
+  flutter_widget_from_html: ^0.15.2
+  freezed_annotation: ^2.4.4
+  intl: any
+  json_annotation: ^4.9.0
+  logger: 1.1.0
+  mask_text_input_formatter: ^2.9.0
+  geolocator: ^13.0.1
+  percent_indicator: ^4.2.4
+  provider: ^6.0.2
+  share_plus: ^7.2.2
+  shared_preferences: ^2.0.13
+  syncfusion_flutter_pdfviewer: ^24.2.7
+  path_provider: ^2.0.11
+  permission_handler: ^11.1.0
+  lecle_downloads_path_provider: ^0.0.2+8
+  open_file_manager: ^0.0.4
+  file_saver: 0.2.7
+  url_launcher: ^6.3.0
+  device_info_plus: ^9.0.2
+  package_info_plus: ^8.1.3
+  auto_size_text: ^3.0.0
+  socket_io_client: ^3.0.2
+  modal_bottom_sheet: ^2.1.2
+  mask: ^1.0.5
+  pinput: ^5.0.1
+  dropdown_button2: ^2.1.4
+  image_picker: ^1.0.0
+  another_flushbar: ^1.12.29
+  calendar_date_picker2: ^1.1.8
+  dotted_border: ^2.1.0
+  file_picker: ^8.3.1
+  path: ^1.8.2
+  flutter_slidable: ^3.1.2
+  keyboard_dismisser: ^3.0.0
+  semicircle_indicator: ^1.1.1
+  expandable_widgets: ^1.0.3+1
+  shimmer_animation: ^2.2.1
+  pretty_dio_logger: ^1.3.1
+  flutter_app_badge: ^2.0.2
+  scrollable_positioned_list: ^0.3.8
+  flutter_stories: ^0.3.1
+  cached_network_image: ^3.4.1
+  flutter_instagram_storyboard: ^0.0.8
+  equatable: ^2.0.7
+  dartz: ^0.10.1
+  google_fonts: ^6.2.0
+  card_swiper: ^3.0.1
+  carousel_slider: ^5.0.0
+  flutter_native_splash: ^2.4.0
+  collection: ^1.18.0
+  retrofit: ^4.4.1
+  #flutter_widget_from_html: ^0.15.2
+  url_strategy: ^0.3.0
+  animated_text_kit: ^4.2.2
+  meta_seo: ^3.0.9
+  onesignal_flutter: ^5.2.9
+  currency_text_input_formatter: ^2.2.5
+  flutter_screenutil: ^5.9.3
+  namefully: ^0.2.1
+  flutter_typeahead: ^5.2.0
+  smart_auth: ^2.0.0
+  flutter_sticky_header: ^0.7.0
+  cached_video_player_plus: ^3.0.3
+  flutter_carousel_slider: ^1.1.0
+  video_player: ^2.9.2
+  flutter_cache_manager: ^3.4.1
+  gradient_borders: ^1.0.1
+
+#dart run build_runner build --delete-conflicting-outputs
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^10.0.0
+  build_runner: ^2.4.11
+  #dart_code_metrics: ^5.7.5
+  flutter_lints: ^2.0.1
+  freezed: ^2.5.7
+  intl_utils: ^2.6.1
+  json_serializable: ^6.1.5
+  mockito: ^5.1.0
+  retrofit_generator: ^9.1.2
+  auto_route_generator: ^9.0.0
+  flutter_launcher_icons: ^0.14.1
+
+# Временное решение, потом надо обновить пакет modal_bottom_sheet когда пофиксят чтоб прила собаралсь и удалить dependency_overrides:
+dependency_overrides:
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/danReynolds/modal_bottom_sheet.git
+      path: modal_bottom_sheet
+
+flutter_launcher_icons:
+  android: false
+  remove_alpha_ios: true
+  ios: true
+  #image_path_android: "assets/png/logo_grain_price_android.png"
+  image_path_android: "assets/logo/android_logo.png"
+  image_path_ios: "assets/logo/ios_logo.png"
+  # adaptive_icon_foreground: "assets/png/logo_grain_price_android.png"
+  adaptive_icon_background: "#7A0FD9"
+
+# TODO remove when packages will updated
+# dependency_overrides:
+#  test_api: ^0.4.9 # for bloc_test
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/svg/
+    - assets/png/
+    - assets/gif/
+    - assets/weather/
+    - assets/weather/day/
+    - assets/weather/night/
+
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/noto_sans/NotoSans-Regular.ttf
+        - asset: assets/fonts/noto_sans/NotoSans-Bold.ttf
+        - asset: assets/fonts/noto_sans/NotoSans-Medium.ttf
+        - asset: assets/fonts/noto_sans/NotoSans-Light.ttf
+        - asset: assets/fonts/noto_sans/NotoSans-Semibold.ttf
+
+flutter_intl:
+  enabled: true
+  class_name: S
+  main_locale: ru
+  arb_dir: lib/l10n
+  output_dir: lib/generated

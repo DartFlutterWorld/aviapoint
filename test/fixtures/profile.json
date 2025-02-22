@@ -1,0 +1,23 @@
+{
+  "id": "0",
+  "company": {
+    "id": "0",
+    "nameOfProvider": "string",
+    "headOfProvider": "string",
+    "shortFio": "string",
+    "positionHeadOfProvider": "string",
+    "basicOfDoc": "string",
+    "addressLoad": "string",
+    "ulAddress": "string",
+    "inn": "string",
+    "kpp": "string",
+    "ogrn": "string",
+    "bik": "string",
+    "paymentAccount": "string",
+    "correspondentAccount": "string",
+    "phoneNumber": "string",
+    "emailOfHead": "string",
+    "nameOfBank": "string",
+    "staff": []
+  }
+}

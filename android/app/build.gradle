@@ -1,0 +1,79 @@
+plugins {
+    id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    // END: FlutterFire Configuration
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply from: "../keystore/signingConfigs.gradle"
+
+android {
+    compileSdkVersion 34
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "ru.dartflutter.aviapoint"
+        minSdkVersion 21
+        targetSdkVersion 32
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing app_config.dart for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    flavorDimensions "release-type"
+
+    productFlavors {
+        dev {
+            dimension "release-type"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
+
+        prod {
+            dimension "release-type"
+        }
+    }
+    lint {
+        disable 'InvalidPackage'
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {}
