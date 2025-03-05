@@ -1,5 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/widgets/app_state.dart';
+import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/pages/hand_book_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/pages/preflight_inspection_categories_screen.dart';
+import 'package:aviapoint/learning/learning_screen.dart';
+import 'package:aviapoint/learning/learning_navigation_screen.dart';
+import 'package:aviapoint/learning/video_for_students_page/presentation/pages/video_for_students_screen.dart';
 import 'package:aviapoint/news/news_navigation_screen.dart';
 import 'package:aviapoint/news/news_screen.dart';
 import 'package:aviapoint/ntb/presentation/pages/tradings_navigation_screen.dart';
@@ -9,13 +13,10 @@ import 'package:aviapoint/sale/sale_request_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:aviapoint/base_screen.dart';
-import 'package:aviapoint/core/domain/service_locator.dart';
 import 'package:aviapoint/core/presentation/pages/empty_navigation_screen.dart';
 import 'package:aviapoint/main_page/main_navigation_screen.dart';
 import 'package:aviapoint/main_page/main_screen.dart';
 import 'package:aviapoint/price_page/prices_screen.dart';
-import 'package:aviapoint/learning_page/orders/presentation/pages/learning_navigation_screen.dart';
-import 'package:aviapoint/learning_page/orders/presentation/pages/learning_screen.dart';
 import 'package:aviapoint/price_page/prices_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_screen.dart';
@@ -37,7 +38,7 @@ class AppRouter extends RootStackRouter {
           children: [
             AutoRoute(
               page: MainNavigationRoute.page,
-              // initial: true,
+              initial: true,
               children: [
                 AutoRoute(
                   path: '',
@@ -73,6 +74,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(
               path: 'prices',
               page: PricesNavigationRoute.page,
+              // initial: true,
               children: [
                 AutoRoute(
                   path: '',
@@ -82,7 +84,7 @@ class AppRouter extends RootStackRouter {
               ],
             ),
             AutoRoute(
-              initial: true,
+              // initial: true,
               path: 'learning',
               page: LearningNavigationRoute.page,
               children: [
@@ -90,6 +92,35 @@ class AppRouter extends RootStackRouter {
                   path: '',
                   initial: true,
                   page: LearningRoute.page,
+                  children: [
+                    // AutoRoute(
+                    //   path: 'video_for_students',
+                    //   page: ViseoForStudentsRoute.page,
+                    // ),
+                  ],
+                ),
+                AutoRoute(
+                  path: 'video_for_students',
+                  page: VideoForStudentsRoute.page,
+                ),
+                // AutoRoute(path: '', page: HandBookNavigationRoute.page, children: [
+                //   AutoRoute(
+                //     path: 'hand_book',
+                //     page: HandBookMainCategoriesRoute.page,
+                //     initial: true,
+                //   ),
+                //   // AutoRoute(
+                //   //   path: 'hand_book/preflight_inspection_categories',
+                //   //   page: PreflightInspectionCategoriesRoute.page,
+                //   // ),
+                // ]),
+                AutoRoute(
+                  path: 'hand_book',
+                  page: HandBookMainCategoriesRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/preflight_inspection_categories',
+                  page: PreflightInspectionCategoriesRoute.page,
                 ),
               ],
             ),

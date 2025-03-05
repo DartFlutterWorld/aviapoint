@@ -4,7 +4,7 @@ import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/models/api_result.dart';
 import 'package:aviapoint/core/data/models/exception_network_model.dart';
 import 'package:aviapoint/core/failure/failure.dart';
-import 'package:aviapoint/core/utils/logger.dart';
+import 'package:aviapoint/core/failure/logger.dart';
 import 'package:aviapoint/generated/l10n.dart';
 import 'package:aviapoint/profile_page/profile/data/datasources/profile_service.dart';
 import 'package:aviapoint/profile_page/profile/data/mappers/profile_mapper.dart';

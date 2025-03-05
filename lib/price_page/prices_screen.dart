@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -7,9 +9,18 @@ class PricesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('PricesScreen'),
+    return Scaffold(
+      appBar: CustomAppBar(title: 'Price'),
+      body: Column(
+        children: [
+          Center(
+            child: Text('PricesScreen'),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextButton(onPressed: () => FirebaseCrashlytics.instance.crash(), child: Text('Error'))
+        ],
       ),
     );
   }

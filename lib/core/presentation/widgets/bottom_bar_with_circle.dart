@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:aviapoint/core/domain/service_locator.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/core/utils/const/theme.dart';
+import 'package:aviapoint/core/themes/app_colors.dart';
 
 /// Нижнаяя панель навигации.
 class BottomBarWithCircle extends StatefulWidget {

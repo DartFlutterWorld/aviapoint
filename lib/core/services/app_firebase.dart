@@ -1,6 +1,6 @@
-import 'package:aviapoint/config/firebase/firebase_options_dev.dart';
 import 'package:aviapoint/core/services/app_crashlytics.dart';
 import 'package:aviapoint/core/services/app_messaging.dart';
+import 'package:aviapoint/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
@@ -29,12 +29,12 @@ class AppFirebase {
 
   Future<void> init() async {
     if (kIsWeb) {
-      // await Firebase.initializeApp(
-      //   options: web,
-      // );
+      await Firebase.initializeApp(
+        options: web,
+      );
     } else {
       await Firebase.initializeApp(
-        //name: 'Silk',
+        name: 'aviapoint',
         options: DefaultFirebaseOptions.currentPlatform,
       ).whenComplete(
         () {

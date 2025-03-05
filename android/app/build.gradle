@@ -1,10 +1,9 @@
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
     id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
-    // END: FlutterFire Configuration
+    id "com.google.firebase.crashlytics"
     id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -26,7 +25,10 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply from: "../keystore/signingConfigs.gradle"
+def keystorePropertiesFile = rootProject.file("keystores/release-key.properties");
+def keystoreProperties = new Properties()
+
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 34
@@ -35,40 +37,35 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "ru.dartflutter.aviapoint"
-        minSdkVersion 21
-        targetSdkVersion 32
+        minSdkVersion 24
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing app_config.dart for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles fileTree('proguard').asList().toArray()
         }
-    }
-
-    flavorDimensions "release-type"
-
-    productFlavors {
-        dev {
-            dimension "release-type"
-            applicationIdSuffix ".dev"
-            versionNameSuffix "-dev"
+        debug {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            debuggable true
         }
-
-        prod {
-            dimension "release-type"
-        }
-    }
-    lint {
-        disable 'InvalidPackage'
     }
 }
 
@@ -76,4 +73,16 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    // implementation 'com.android.support:multidex:1.0.3'
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // implementation 'ru.cryptopro.sdk:mydss:2.1.275'
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.yandex.android:maps.mobile:4.6.1-full'
+    implementation platform('com.google.firebase:firebase-bom:33.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    //implementation 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
+}

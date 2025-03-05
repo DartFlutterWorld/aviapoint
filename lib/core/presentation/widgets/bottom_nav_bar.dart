@@ -31,18 +31,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     //final hideBottomNavMeta = ServiceLocator.instance.get<AppRouter>().topMatch.meta['hideBottomNav'] == true;
     const List<String> hideBottomNavPath = [
-      '/requests/create_sale_request',
-      '/requests/order_spec/',
-      '/orders/order_spec/',
-      '/signing_spec_screen/docview',
-      '/tradings/trading_schedule/',
-      '/result_map_cpt',
-      '/result_map_exw',
-      '/stories',
+      // 'learning'
+      // '/requests/create_sale_request',
+      // '/requests/order_spec/',
+      // '/orders/order_spec/',
+      // '/signing_spec_screen/docview',
+      // '/tradings/trading_schedule/',
+      // '/result_map_cpt',
+      // '/result_map_exw',
+      // '/stories',
     ];
 
     return Visibility(
       visible: !hideBottomNavPath.any((path) => context.router.currentPath.contains(path)),
+
       // child: Provider.of<AppState>(context).auth != null ? BottomBarWithCircle(tabsRouter: widget.tabsRouter) : BottomBarPromo(tabsRouter: widget.tabsRouter),
       child: BottomBarWithCircle(tabsRouter: widget.tabsRouter),
     );

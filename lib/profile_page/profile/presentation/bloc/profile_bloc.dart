@@ -1,9 +1,6 @@
 import 'package:aviapoint/core/presentation/widgets/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:aviapoint/core/domain/entities/exception_network.dart';
-import 'package:aviapoint/core/utils/logger.dart';
 import 'package:aviapoint/profile_page/profile/domain/entities/profile_entity.dart';
 
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
@@ -11,14 +8,14 @@ import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repos
 part 'profile_bloc.freezed.dart';
 
 @freezed
-class ProfileEvent with _$ProfileEvent {
+abstract class ProfileEvent with _$ProfileEvent {
   const ProfileEvent._();
 
   const factory ProfileEvent.get() = GetProfileEvent;
 }
 
 @freezed
-class ProfileState with _$ProfileState {
+abstract class ProfileState with _$ProfileState {
   const ProfileState._();
   const factory ProfileState.loading() = LoadingProfileState;
   const factory ProfileState.error({

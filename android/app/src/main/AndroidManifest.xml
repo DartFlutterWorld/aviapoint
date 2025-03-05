@@ -19,7 +19,7 @@ xmlns:tools="http://schemas.android.com/tools"
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:node="remove"/>
 
    <application
-        android:label="Check To Fly"
+        android:label="AviaPoint"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:requestLegacyExternalStorage="true"

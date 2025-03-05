@@ -13,7 +13,7 @@ import 'package:meta_seo/meta_seo.dart';
 import 'package:aviapoint/core/domain/app_bloc_observer.dart';
 import 'package:aviapoint/core/domain/service_locator.dart';
 
-import 'package:aviapoint/core/utils/logger.dart';
+import 'package:aviapoint/core/failure/logger.dart';
 
 import 'package:url_strategy/url_strategy.dart';
 
@@ -53,7 +53,7 @@ Future<void> _run() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Задаем только портретный режим
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   /// Задаем цвета статусбара.
   SystemChrome.setSystemUIOverlayStyle(

@@ -1,0 +1,2 @@
+/Users/admin/Projects/aviapoint/android/app/.cxx/Debug/91y11443/x86/CMakeFiles/rebuild_cache.dir
+/Users/admin/Projects/aviapoint/android/app/.cxx/Debug/91y11443/x86/CMakeFiles/edit_cache.dir

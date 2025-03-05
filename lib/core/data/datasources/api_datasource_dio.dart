@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
-import 'package:aviapoint/core/utils/logger.dart';
+import 'package:aviapoint/core/failure/logger.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultRecieveTimeout = Duration.millisecondsPerMinute;

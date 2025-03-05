@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:aviapoint/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
-import 'package:aviapoint/core/utils/const/theme.dart';
+import 'package:aviapoint/core/themes/app_colors.dart';
 
 @RoutePage()
 class BaseScreen extends StatelessWidget {
@@ -33,7 +33,11 @@ class BaseScreen extends StatelessWidget {
           ? (_, tabsRouter) {
               return BottomNavBar(tabsRouter: tabsRouter);
             }
-          : null,
+          :
+          // Помеенять на null если хотим чтоб не покзывался BottomNavBar
+          (_, tabsRouter) {
+              return BottomNavBar(tabsRouter: tabsRouter);
+            },
     );
   }
 }

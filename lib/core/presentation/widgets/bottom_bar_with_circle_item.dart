@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:aviapoint/core/themes/styles.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 
 class BottomBarWithCircleItem extends StatelessWidget {
   final String icon;

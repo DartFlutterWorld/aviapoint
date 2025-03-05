@@ -46,29 +46,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCBodwyV7a-iXKufmNjMzYZvot11muc_ig',
-    appId: '1:996698290424:web:a865726e6b79e6b48f630d',
-    messagingSenderId: '996698290424',
-    projectId: 'aviapoint-7f329',
-    authDomain: 'aviapoint-7f329.firebaseapp.com',
-    storageBucket: 'aviapoint-7f329.firebasestorage.app',
-    measurementId: 'G-4HS9RB0WX8',
+    apiKey: 'AIzaSyAfxnnGLqc5c2F0yFu421Jh9YM_Ed2Dj5I',
+    appId: '1:591230040091:web:0a26e42135d38dce37a0be',
+    messagingSenderId: '591230040091',
+    projectId: 'aviapoint',
+    authDomain: 'aviapoint.firebaseapp.com',
+    storageBucket: 'aviapoint.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDFKanuKl38irph1H91Vzmev3-OHX58T8E',
-    appId: '1:996698290424:android:616d982db9d415b18f630d',
-    messagingSenderId: '996698290424',
-    projectId: 'aviapoint-7f329',
-    storageBucket: 'aviapoint-7f329.firebasestorage.app',
+    apiKey: 'AIzaSyCcT6JeUkM6owRc6WsvVsZ1CyXO8MQvLyE',
+    appId: '1:591230040091:android:97028d2ed7bef3de37a0be',
+    messagingSenderId: '591230040091',
+    projectId: 'aviapoint',
+    storageBucket: 'aviapoint.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBHYlMPfcTx8JU8uTcQSYk258fkIBmvgTg',
-    appId: '1:996698290424:ios:7371b95d228e017d8f630d',
-    messagingSenderId: '996698290424',
-    projectId: 'aviapoint-7f329',
-    storageBucket: 'aviapoint-7f329.firebasestorage.app',
-    iosBundleId: 'ru.dartflutterworld.ch',
+    apiKey: 'AIzaSyA6X7dz4IH_4n06IZBB8JDEfGv9Fpr2bdA',
+    appId: '1:591230040091:ios:4d5e15696d584a9037a0be',
+    messagingSenderId: '591230040091',
+    projectId: 'aviapoint',
+    storageBucket: 'aviapoint.firebasestorage.app',
+    iosBundleId: 'ru.dartflutter.aviapoint',
   );
+
 }

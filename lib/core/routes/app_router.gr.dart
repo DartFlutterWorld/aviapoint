@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -13,10 +14,7 @@ part of 'app_router.dart';
 /// [BaseScreen]
 class BaseRoute extends PageRouteInfo<void> {
   const BaseRoute({List<PageRouteInfo>? children})
-      : super(
-          BaseRoute.name,
-          initialChildren: children,
-        );
+    : super(BaseRoute.name, initialChildren: children);
 
   static const String name = 'BaseRoute';
 
@@ -32,10 +30,7 @@ class BaseRoute extends PageRouteInfo<void> {
 /// [EmptyNavigationScreen]
 class EmptyNavigationRoute extends PageRouteInfo<void> {
   const EmptyNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          EmptyNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(EmptyNavigationRoute.name, initialChildren: children);
 
   static const String name = 'EmptyNavigationRoute';
 
@@ -48,13 +43,26 @@ class EmptyNavigationRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HandBookMainCategoriesScreen]
+class HandBookMainCategoriesRoute extends PageRouteInfo<void> {
+  const HandBookMainCategoriesRoute({List<PageRouteInfo>? children})
+    : super(HandBookMainCategoriesRoute.name, initialChildren: children);
+
+  static const String name = 'HandBookMainCategoriesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HandBookMainCategoriesScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [LearningNavigationScreen]
 class LearningNavigationRoute extends PageRouteInfo<void> {
   const LearningNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          LearningNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(LearningNavigationRoute.name, initialChildren: children);
 
   static const String name = 'LearningNavigationRoute';
 
@@ -70,10 +78,7 @@ class LearningNavigationRoute extends PageRouteInfo<void> {
 /// [LearningScreen]
 class LearningRoute extends PageRouteInfo<void> {
   const LearningRoute({List<PageRouteInfo>? children})
-      : super(
-          LearningRoute.name,
-          initialChildren: children,
-        );
+    : super(LearningRoute.name, initialChildren: children);
 
   static const String name = 'LearningRoute';
 
@@ -89,10 +94,7 @@ class LearningRoute extends PageRouteInfo<void> {
 /// [MainNavigationScreen]
 class MainNavigationRoute extends PageRouteInfo<void> {
   const MainNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          MainNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(MainNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MainNavigationRoute';
 
@@ -108,10 +110,7 @@ class MainNavigationRoute extends PageRouteInfo<void> {
 /// [MainScreen]
 class MainRoute extends PageRouteInfo<void> {
   const MainRoute({List<PageRouteInfo>? children})
-      : super(
-          MainRoute.name,
-          initialChildren: children,
-        );
+    : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -127,10 +126,7 @@ class MainRoute extends PageRouteInfo<void> {
 /// [NewsNavigationScreen]
 class NewsNavigationRoute extends PageRouteInfo<void> {
   const NewsNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          NewsNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(NewsNavigationRoute.name, initialChildren: children);
 
   static const String name = 'NewsNavigationRoute';
 
@@ -146,10 +142,7 @@ class NewsNavigationRoute extends PageRouteInfo<void> {
 /// [NewsScreen]
 class NewsRoute extends PageRouteInfo<void> {
   const NewsRoute({List<PageRouteInfo>? children})
-      : super(
-          NewsRoute.name,
-          initialChildren: children,
-        );
+    : super(NewsRoute.name, initialChildren: children);
 
   static const String name = 'NewsRoute';
 
@@ -162,13 +155,26 @@ class NewsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PreflightInspectionCategoriesScreen]
+class PreflightInspectionCategoriesRoute extends PageRouteInfo<void> {
+  const PreflightInspectionCategoriesRoute({List<PageRouteInfo>? children})
+    : super(PreflightInspectionCategoriesRoute.name, initialChildren: children);
+
+  static const String name = 'PreflightInspectionCategoriesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PreflightInspectionCategoriesScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [PricesNavigationScreen]
 class PricesNavigationRoute extends PageRouteInfo<void> {
   const PricesNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          PricesNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(PricesNavigationRoute.name, initialChildren: children);
 
   static const String name = 'PricesNavigationRoute';
 
@@ -184,10 +190,7 @@ class PricesNavigationRoute extends PageRouteInfo<void> {
 /// [PricesScreen]
 class PricesRoute extends PageRouteInfo<void> {
   const PricesRoute({List<PageRouteInfo>? children})
-      : super(
-          PricesRoute.name,
-          initialChildren: children,
-        );
+    : super(PricesRoute.name, initialChildren: children);
 
   static const String name = 'PricesRoute';
 
@@ -203,10 +206,7 @@ class PricesRoute extends PageRouteInfo<void> {
 /// [ProfileNavigationScreen]
 class ProfileNavigationRoute extends PageRouteInfo<void> {
   const ProfileNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          ProfileNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(ProfileNavigationRoute.name, initialChildren: children);
 
   static const String name = 'ProfileNavigationRoute';
 
@@ -222,10 +222,7 @@ class ProfileNavigationRoute extends PageRouteInfo<void> {
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})
-      : super(
-          ProfileRoute.name,
-          initialChildren: children,
-        );
+    : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -241,10 +238,7 @@ class ProfileRoute extends PageRouteInfo<void> {
 /// [SaleRequestNavigationScreen]
 class SaleRequestNavigationRoute extends PageRouteInfo<void> {
   const SaleRequestNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          SaleRequestNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(SaleRequestNavigationRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestNavigationRoute';
 
@@ -260,10 +254,7 @@ class SaleRequestNavigationRoute extends PageRouteInfo<void> {
 /// [SaleRequestScreen]
 class SaleRequestRoute extends PageRouteInfo<void> {
   const SaleRequestRoute({List<PageRouteInfo>? children})
-      : super(
-          SaleRequestRoute.name,
-          initialChildren: children,
-        );
+    : super(SaleRequestRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestRoute';
 
@@ -279,10 +270,7 @@ class SaleRequestRoute extends PageRouteInfo<void> {
 /// [TradingsNavigationScreen]
 class TradingsNavigationRoute extends PageRouteInfo<void> {
   const TradingsNavigationRoute({List<PageRouteInfo>? children})
-      : super(
-          TradingsNavigationRoute.name,
-          initialChildren: children,
-        );
+    : super(TradingsNavigationRoute.name, initialChildren: children);
 
   static const String name = 'TradingsNavigationRoute';
 
@@ -298,10 +286,7 @@ class TradingsNavigationRoute extends PageRouteInfo<void> {
 /// [TradingsScreen]
 class TradingsRoute extends PageRouteInfo<void> {
   const TradingsRoute({List<PageRouteInfo>? children})
-      : super(
-          TradingsRoute.name,
-          initialChildren: children,
-        );
+    : super(TradingsRoute.name, initialChildren: children);
 
   static const String name = 'TradingsRoute';
 
@@ -309,6 +294,22 @@ class TradingsRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const TradingsScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [VideoForStudentsScreen]
+class VideoForStudentsRoute extends PageRouteInfo<void> {
+  const VideoForStudentsRoute({List<PageRouteInfo>? children})
+    : super(VideoForStudentsRoute.name, initialChildren: children);
+
+  static const String name = 'VideoForStudentsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const VideoForStudentsScreen();
     },
   );
 }
