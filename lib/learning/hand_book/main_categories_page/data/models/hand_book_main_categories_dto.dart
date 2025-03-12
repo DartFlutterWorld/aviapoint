@@ -5,6 +5,7 @@ part 'hand_book_main_categories_dto.g.dart';
 
 @freezed
 abstract class HandBookMainCategoriesDto with _$HandBookMainCategoriesDto {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory HandBookMainCategoriesDto({
     required int mainCategoryId,
     required String title,

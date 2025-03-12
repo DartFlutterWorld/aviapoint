@@ -11,7 +11,7 @@ _$VideoForStudentsDtoImpl _$$VideoForStudentsDtoImplFromJson(
     _$VideoForStudentsDtoImpl(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
-      fileName: json['fileName'] as String,
+      fileName: json['file_name'] as String,
       url: json['url'] as String,
     );
 
@@ -20,6 +20,6 @@ Map<String, dynamic> _$$VideoForStudentsDtoImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'fileName': instance.fileName,
+      'file_name': instance.fileName,
       'url': instance.url,
     };

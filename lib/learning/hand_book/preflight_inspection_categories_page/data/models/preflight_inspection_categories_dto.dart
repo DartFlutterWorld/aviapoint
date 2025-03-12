@@ -5,9 +5,11 @@ part 'preflight_inspection_categories_dto.g.dart';
 
 @freezed
 abstract class PreflightInspectionCategoriesDto with _$PreflightInspectionCategoriesDto {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory PreflightInspectionCategoriesDto({
     required int id,
     required String title,
+    required String subTitle,
     required int mainCategoryId,
     required String titleEng,
     required String picture,

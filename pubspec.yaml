@@ -91,6 +91,8 @@ dependencies:
   gradient_borders: ^1.0.1
   visibility_detector: ^0.4.0+2
   get_it: ^7.6.0
+  auto_animated: ^3.2.0
+  progress_state_button: ^1.0.4
 
 #dart run build_runner build --delete-conflicting-outputs
 dev_dependencies:

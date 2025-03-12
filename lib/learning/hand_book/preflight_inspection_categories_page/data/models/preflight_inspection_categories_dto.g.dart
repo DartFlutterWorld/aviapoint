@@ -12,8 +12,9 @@ _$PreflightInspectionCategoriesDtoImpl
         _$PreflightInspectionCategoriesDtoImpl(
           id: (json['id'] as num).toInt(),
           title: json['title'] as String,
-          mainCategoryId: (json['mainCategoryId'] as num).toInt(),
-          titleEng: json['titleEng'] as String,
+          subTitle: json['sub_title'] as String,
+          mainCategoryId: (json['main_category_id'] as num).toInt(),
+          titleEng: json['title_eng'] as String,
           picture: json['picture'] as String,
         );
 
@@ -22,7 +23,8 @@ Map<String, dynamic> _$$PreflightInspectionCategoriesDtoImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'mainCategoryId': instance.mainCategoryId,
-      'titleEng': instance.titleEng,
+      'sub_title': instance.subTitle,
+      'main_category_id': instance.mainCategoryId,
+      'title_eng': instance.titleEng,
       'picture': instance.picture,
     };

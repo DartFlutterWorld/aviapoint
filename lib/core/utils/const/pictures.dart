@@ -84,4 +84,6 @@ class Pictures {
   static const String fizik = 'assets/png/user_fizik_icon.png';
   static const String urik = 'assets/png/user_ur_icon.png';
   static const String snackBarIcon = 'assets/svg/snack_bar_icon.svg';
+
+  static const String checkOk = 'assets/png/check_ok.png';
 }

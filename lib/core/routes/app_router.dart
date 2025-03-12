@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/pages/hand_book_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/pages/preflight_inspection_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/pages/preflight_inspection_check_list_screen.dart';
 import 'package:aviapoint/learning/learning_screen.dart';
 import 'package:aviapoint/learning/learning_navigation_screen.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/pages/video_for_students_screen.dart';
@@ -43,6 +44,7 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(
                   path: '',
                   page: MainRoute.page,
+                  initial: true,
                 ),
                 // На главной и в ценах есть одинаковый виджет сравнения цен, чтоб кнопка назад возвращала
                 // с какого экрана пришли продублировал  пути
@@ -90,7 +92,7 @@ class AppRouter extends RootStackRouter {
               children: [
                 AutoRoute(
                   path: '',
-                  initial: true,
+                  // initial: true,
                   page: LearningRoute.page,
                   children: [
                     // AutoRoute(
@@ -121,6 +123,10 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(
                   path: 'hand_book/preflight_inspection_categories',
                   page: PreflightInspectionCategoriesRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/preflight_inspection_categories/check_list/:preflihgtInspectionCategoryId',
+                  page: PreflightInspectionCheckListRoute.page,
                 ),
               ],
             ),

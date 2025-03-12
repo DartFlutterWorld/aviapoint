@@ -143,7 +143,8 @@ class __$$HandBookMainCategoriesDtoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$HandBookMainCategoriesDtoImpl implements _HandBookMainCategoriesDto {
   const _$HandBookMainCategoriesDtoImpl(
       {required this.mainCategoryId,

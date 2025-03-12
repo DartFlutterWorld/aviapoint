@@ -5,6 +5,7 @@ part 'video_for_students_dto.g.dart';
 
 @freezed
 abstract class VideoForStudentsDto with _$VideoForStudentsDto {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory VideoForStudentsDto({
     required int id,
     required String title,

@@ -5,6 +5,9 @@ import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/bloc/hand_book_main_categories_bloc.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/bloc/preflight_inspection_categories_bloc.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_checked_cubit.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_bloc.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_by_category_bloc.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/repositories/video_for_students_repository.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/bloc/video_for_students_bloc.dart';
@@ -56,6 +59,21 @@ class _AppState extends State<App> {
           create: (context) => PreflightInspectionCategoriesBloc(
             handBookRepository: getIt<HandBookRepository>(),
           ),
+        ),
+        BlocProvider<PreflightInspectionCheckListByCategoryBloc>(
+          create: (context) => PreflightInspectionCheckListByCategoryBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+            preflightCheckedCubit: getIt<PreflightCheckedCubit>(),
+          ),
+          lazy: false,
+        ),
+        BlocProvider<PreflightInspectionCheckListBloc>(
+          create: (context) => PreflightInspectionCheckListBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+          ),
+        ),
+        BlocProvider<PreflightCheckedCubit>(
+          create: (context) => getIt<PreflightCheckedCubit>(),
         ),
       ],
       child: BlocProvider<ProfileBloc>(

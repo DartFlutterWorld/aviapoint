@@ -156,18 +156,122 @@ class NewsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [PreflightInspectionCategoriesScreen]
-class PreflightInspectionCategoriesRoute extends PageRouteInfo<void> {
-  const PreflightInspectionCategoriesRoute({List<PageRouteInfo>? children})
-    : super(PreflightInspectionCategoriesRoute.name, initialChildren: children);
+class PreflightInspectionCategoriesRoute
+    extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
+  PreflightInspectionCategoriesRoute({
+    Key? key,
+    required String nameCategory,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PreflightInspectionCategoriesRoute.name,
+         args: PreflightInspectionCategoriesRouteArgs(
+           key: key,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'PreflightInspectionCategoriesRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const PreflightInspectionCategoriesScreen();
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<PreflightInspectionCategoriesRouteArgs>(
+        orElse:
+            () => PreflightInspectionCategoriesRouteArgs(
+              nameCategory: pathParams.getString('nameCategory'),
+            ),
+      );
+      return PreflightInspectionCategoriesScreen(
+        key: args.key,
+        nameCategory: args.nameCategory,
+      );
     },
   );
+}
+
+class PreflightInspectionCategoriesRouteArgs {
+  const PreflightInspectionCategoriesRouteArgs({
+    this.key,
+    required this.nameCategory,
+  });
+
+  final Key? key;
+
+  final String nameCategory;
+
+  @override
+  String toString() {
+    return 'PreflightInspectionCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
+  }
+}
+
+/// generated route for
+/// [PreflightInspectionCheckListScreen]
+class PreflightInspectionCheckListRoute
+    extends PageRouteInfo<PreflightInspectionCheckListRouteArgs> {
+  PreflightInspectionCheckListRoute({
+    Key? key,
+    required String preflihgtInspectionCategoryId,
+    required String nameCategory,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PreflightInspectionCheckListRoute.name,
+         args: PreflightInspectionCheckListRouteArgs(
+           key: key,
+           preflihgtInspectionCategoryId: preflihgtInspectionCategoryId,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {
+           'preflihgtInspectionCategoryId': preflihgtInspectionCategoryId,
+           'nameCategory': nameCategory,
+         },
+         initialChildren: children,
+       );
+
+  static const String name = 'PreflightInspectionCheckListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<PreflightInspectionCheckListRouteArgs>(
+        orElse:
+            () => PreflightInspectionCheckListRouteArgs(
+              preflihgtInspectionCategoryId: pathParams.getString(
+                'preflihgtInspectionCategoryId',
+              ),
+              nameCategory: pathParams.getString('nameCategory'),
+            ),
+      );
+      return PreflightInspectionCheckListScreen(
+        key: args.key,
+        preflihgtInspectionCategoryId: args.preflihgtInspectionCategoryId,
+        nameCategory: args.nameCategory,
+      );
+    },
+  );
+}
+
+class PreflightInspectionCheckListRouteArgs {
+  const PreflightInspectionCheckListRouteArgs({
+    this.key,
+    required this.preflihgtInspectionCategoryId,
+    required this.nameCategory,
+  });
+
+  final Key? key;
+
+  final String preflihgtInspectionCategoryId;
+
+  final String nameCategory;
+
+  @override
+  String toString() {
+    return 'PreflightInspectionCheckListRouteArgs{key: $key, preflihgtInspectionCategoryId: $preflihgtInspectionCategoryId, nameCategory: $nameCategory}';
+  }
 }
 
 /// generated route for

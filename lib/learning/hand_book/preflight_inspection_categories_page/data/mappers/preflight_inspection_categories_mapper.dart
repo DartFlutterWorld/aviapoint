@@ -8,6 +8,7 @@ class PreflightInspectionCategoriesMapper {
     return PreflightInspectionCategoriesEntity(
       id: model.id,
       title: model.title,
+      subTitle: model.subTitle,
       mainCategoryId: model.mainCategoryId,
       titleEng: model.titleEng,
       picture: model.picture,

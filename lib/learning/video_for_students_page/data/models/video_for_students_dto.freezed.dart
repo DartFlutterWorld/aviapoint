@@ -136,7 +136,8 @@ class __$$VideoForStudentsDtoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$VideoForStudentsDtoImpl implements _VideoForStudentsDto {
   const _$VideoForStudentsDtoImpl(
       {required this.id,

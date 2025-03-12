@@ -9,6 +9,8 @@ class CategoryWidget extends StatelessWidget {
   final VoidCallback onTap;
   final String? picture;
   final Widget? child;
+  final String icon;
+  final VoidCallback? clearCategory;
 
   const CategoryWidget({
     super.key,
@@ -17,6 +19,8 @@ class CategoryWidget extends StatelessWidget {
     required this.subTitle,
     this.picture,
     this.child,
+    this.icon = Pictures.strelka,
+    this.clearCategory,
   });
 
   @override
@@ -77,7 +81,16 @@ class CategoryWidget extends StatelessWidget {
                           height: 60,
                         ),
                       ),
-                    Image.asset(Pictures.strelka),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: GestureDetector(
+                        onTap: clearCategory,
+                        child: Image.asset(
+                          icon,
+                          height: 30,
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ],

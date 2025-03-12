@@ -54,7 +54,7 @@ class _Success extends StatelessWidget {
   PageRouteInfo<Object?> selectSubCategory(int category) {
     switch (category) {
       case 1:
-        return PreflightInspectionCategoriesRoute();
+        return PreflightInspectionCategoriesRoute(nameCategory: 'Предполётные процедуры');
       case 2:
         return BaseRoute();
       case 3:
@@ -76,7 +76,7 @@ class _Success extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: CategoryWidget(
             title: handBookCategories[index].title,
-            onTap: () => AutoRouter.of(context).push(
+            onTap: () => context.router.push(
               selectSubCategory(index + 1),
             ),
             subTitle: handBookCategories[index].subTitle,

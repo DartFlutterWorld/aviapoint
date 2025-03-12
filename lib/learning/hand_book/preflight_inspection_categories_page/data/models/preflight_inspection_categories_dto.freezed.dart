@@ -23,6 +23,7 @@ PreflightInspectionCategoriesDto _$PreflightInspectionCategoriesDtoFromJson(
 mixin _$PreflightInspectionCategoriesDto {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
+  String get subTitle => throw _privateConstructorUsedError;
   int get mainCategoryId => throw _privateConstructorUsedError;
   String get titleEng => throw _privateConstructorUsedError;
   String get picture => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $PreflightInspectionCategoriesDtoCopyWith<$Res> {
   $Res call(
       {int id,
       String title,
+      String subTitle,
       int mainCategoryId,
       String titleEng,
       String picture});
@@ -71,6 +73,7 @@ class _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
   $Res call({
     Object? id = null,
     Object? title = null,
+    Object? subTitle = null,
     Object? mainCategoryId = null,
     Object? titleEng = null,
     Object? picture = null,
@@ -83,6 +86,10 @@ class _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      subTitle: null == subTitle
+          ? _value.subTitle
+          : subTitle // ignore: cast_nullable_to_non_nullable
               as String,
       mainCategoryId: null == mainCategoryId
           ? _value.mainCategoryId
@@ -112,6 +119,7 @@ abstract class _$$PreflightInspectionCategoriesDtoImplCopyWith<$Res>
   $Res call(
       {int id,
       String title,
+      String subTitle,
       int mainCategoryId,
       String titleEng,
       String picture});
@@ -134,6 +142,7 @@ class __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
+    Object? subTitle = null,
     Object? mainCategoryId = null,
     Object? titleEng = null,
     Object? picture = null,
@@ -146,6 +155,10 @@ class __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      subTitle: null == subTitle
+          ? _value.subTitle
+          : subTitle // ignore: cast_nullable_to_non_nullable
               as String,
       mainCategoryId: null == mainCategoryId
           ? _value.mainCategoryId
@@ -164,12 +177,14 @@ class __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$PreflightInspectionCategoriesDtoImpl
     implements _PreflightInspectionCategoriesDto {
   const _$PreflightInspectionCategoriesDtoImpl(
       {required this.id,
       required this.title,
+      required this.subTitle,
       required this.mainCategoryId,
       required this.titleEng,
       required this.picture});
@@ -183,6 +198,8 @@ class _$PreflightInspectionCategoriesDtoImpl
   @override
   final String title;
   @override
+  final String subTitle;
+  @override
   final int mainCategoryId;
   @override
   final String titleEng;
@@ -191,7 +208,7 @@ class _$PreflightInspectionCategoriesDtoImpl
 
   @override
   String toString() {
-    return 'PreflightInspectionCategoriesDto(id: $id, title: $title, mainCategoryId: $mainCategoryId, titleEng: $titleEng, picture: $picture)';
+    return 'PreflightInspectionCategoriesDto(id: $id, title: $title, subTitle: $subTitle, mainCategoryId: $mainCategoryId, titleEng: $titleEng, picture: $picture)';
   }
 
   @override
@@ -201,6 +218,8 @@ class _$PreflightInspectionCategoriesDtoImpl
             other is _$PreflightInspectionCategoriesDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
+            (identical(other.subTitle, subTitle) ||
+                other.subTitle == subTitle) &&
             (identical(other.mainCategoryId, mainCategoryId) ||
                 other.mainCategoryId == mainCategoryId) &&
             (identical(other.titleEng, titleEng) ||
@@ -210,8 +229,8 @@ class _$PreflightInspectionCategoriesDtoImpl
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, mainCategoryId, titleEng, picture);
+  int get hashCode => Object.hash(
+      runtimeType, id, title, subTitle, mainCategoryId, titleEng, picture);
 
   /// Create a copy of PreflightInspectionCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -236,6 +255,7 @@ abstract class _PreflightInspectionCategoriesDto
   const factory _PreflightInspectionCategoriesDto(
       {required final int id,
       required final String title,
+      required final String subTitle,
       required final int mainCategoryId,
       required final String titleEng,
       required final String picture}) = _$PreflightInspectionCategoriesDtoImpl;
@@ -248,6 +268,8 @@ abstract class _PreflightInspectionCategoriesDto
   int get id;
   @override
   String get title;
+  @override
+  String get subTitle;
   @override
   int get mainCategoryId;
   @override
