@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/pages/hand_book_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/pages/normal_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/pages/normal_check_list_screen.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/pages/preflight_inspection_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/pages/preflight_inspection_check_list_screen.dart';
 import 'package:aviapoint/learning/learning_screen.dart';
@@ -127,6 +129,16 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(
                   path: 'hand_book/preflight_inspection_categories/check_list/:preflihgtInspectionCategoryId',
                   page: PreflightInspectionCheckListRoute.page,
+                ),
+
+                AutoRoute(
+                  path: 'hand_book/normal_categories',
+                  page: NormalCategoriesRoute.page,
+                ),
+
+                AutoRoute(
+                  path: 'hand_book/normal_categories/check_list/:normalCategoryId',
+                  page: NormalCheckListRoute.page,
                 ),
               ],
             ),

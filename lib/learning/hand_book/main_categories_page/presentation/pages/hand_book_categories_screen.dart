@@ -56,7 +56,7 @@ class _Success extends StatelessWidget {
       case 1:
         return PreflightInspectionCategoriesRoute(nameCategory: 'Предполётные процедуры');
       case 2:
-        return BaseRoute();
+        return NormalCategoriesRoute(nameCategory: 'Нормальные процедуры');
       case 3:
         print("число равно 3");
       default:

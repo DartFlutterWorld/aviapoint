@@ -4,6 +4,10 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/bloc/hand_book_main_categories_bloc.dart';
+import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/bloc/normal_categories_bloc.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_check_list_bloc.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_check_list_by_category_bloc.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_checked_cubit.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/bloc/preflight_inspection_categories_bloc.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_checked_cubit.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_bloc.dart';
@@ -74,6 +78,26 @@ class _AppState extends State<App> {
         ),
         BlocProvider<PreflightCheckedCubit>(
           create: (context) => getIt<PreflightCheckedCubit>(),
+        ),
+        BlocProvider<NormalCategoriesBloc>(
+          create: (context) => NormalCategoriesBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+          ),
+        ),
+        BlocProvider<NormalCheckListByCategoryBloc>(
+          create: (context) => NormalCheckListByCategoryBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+            normalCheckedCubit: getIt<NormalCheckedCubit>(),
+          ),
+          lazy: false,
+        ),
+        BlocProvider<NormalCheckListBloc>(
+          create: (context) => NormalCheckListBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+          ),
+        ),
+        BlocProvider<NormalCheckedCubit>(
+          create: (context) => getIt<NormalCheckedCubit>(),
         ),
       ],
       child: BlocProvider<ProfileBloc>(

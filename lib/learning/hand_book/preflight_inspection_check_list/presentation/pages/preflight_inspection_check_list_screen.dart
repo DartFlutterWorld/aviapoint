@@ -1,6 +1,8 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
@@ -11,8 +13,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:progress_state_button/iconed_button.dart';
-import 'package:progress_state_button/progress_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class PreflightInspectionCheckListScreen extends StatefulWidget {
@@ -81,7 +82,6 @@ class _Success extends StatefulWidget {
 
 class _SuccessState extends State<_Success> {
   late int indexCheck;
-  ButtonState state = ButtonState.idle;
 
   @override
   void initState() {
@@ -99,20 +99,6 @@ class _SuccessState extends State<_Success> {
     reAnimateOnVisibility: false,
   );
 
-  Future<void> buttonState() async {
-    if (!mounted) return;
-
-    setState(() => state = ButtonState.loading);
-    await Future.delayed(const Duration(milliseconds: 300));
-    if (!mounted) return;
-
-    setState(() => state = ButtonState.success);
-    await Future.delayed(const Duration(milliseconds: 1000));
-    if (!mounted) return;
-
-    setState(() => state = ButtonState.idle);
-  }
-
   Color isCheckColor(int index) {
     final state = BlocProvider.of<PreflightCheckedCubit>(context).state;
     // По preflightInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
@@ -121,6 +107,9 @@ class _SuccessState extends State<_Success> {
     final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
       (e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId,
     );
+    if (index == indexCheck) {
+      return Colors.white;
+    }
     return checkProgressByIdCategory?.checkedIds.contains(index + 1) == true ? Colors.green : Colors.red;
   }
 
@@ -146,13 +135,13 @@ class _SuccessState extends State<_Success> {
                 return Container(
                   decoration: BoxDecoration(
                     color: isCheckColor(index),
-                    border: index == indexCheck ? Border.all(color: Colors.black, width: 2) : null,
+                    border: index == indexCheck ? Border.all(color: Colors.blue, width: 2) : null,
                   ),
                   child: Center(
                       child: Text(
                     (index + 1).toString(),
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: AppStyles.subSmallSemi.copyWith(
+                      color: index == indexCheck ? Colors.black : Colors.white,
                     ),
                   )),
                 );
@@ -163,18 +152,19 @@ class _SuccessState extends State<_Success> {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 20, top: 8),
         child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               children: [
                 LiveGrid.options(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   options: options,
                   itemBuilder: buildAnimatedItem,
                   itemCount: widget.preflightInspectionCheck.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 10,
+                    crossAxisCount: 15,
                     crossAxisSpacing: 4,
                     mainAxisSpacing: 4,
                   ),
@@ -182,10 +172,13 @@ class _SuccessState extends State<_Success> {
                 SizedBox(height: 30),
                 Wrap(
                   children: [
-                    Text(
-                      widget.preflightInspectionCheck[indexCheck].title,
-                      style: AppStyles.bigButtonCulture.copyWith(fontSize: 22),
-                      textAlign: TextAlign.center,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        widget.preflightInspectionCheck[indexCheck].title.replaceAll("\\n", "\n"),
+                        style: AppStyles.bigButtonCulture.copyWith(fontSize: 22),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                   ],
                 ),
@@ -202,43 +195,67 @@ class _SuccessState extends State<_Success> {
                 SizedBox(
                   height: 30,
                 ),
-                Text(
-                  widget.preflightInspectionCheck[indexCheck].doing,
-                  style: AppStyles.bigButtonCulture,
-                  textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n"),
+                    style: AppStyles.bigButtonCulture,
+                    textAlign: TextAlign.start,
+                  ),
                 ),
                 Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 40),
-                  child: ProgressButton.icon(
-                    maxWidth: MediaQuery.of(context).size.width,
-                    radius: 16.0,
-                    textStyle: AppStyles.bigButtonCulture.copyWith(color: Colors.white),
-                    iconedButtons: {
-                      ButtonState.idle: IconedButton(icon: Icon(Icons.check_box_outline_blank, size: 40, color: Colors.white), color: Colors.red),
-                      ButtonState.loading: IconedButton(text: "Loading", color: Colors.deepPurple.shade700),
-                      ButtonState.fail: IconedButton(text: "Failed", icon: Icon(Icons.cancel, color: Colors.white), color: Colors.red.shade300),
-                      ButtonState.success: IconedButton(icon: Icon(Icons.check_box_outlined, size: 40, color: Colors.white), color: Colors.green)
-                    },
-                    onPressed: state == ButtonState.idle
-                        ? () async {
-                            await buttonState();
 
-                            context.read<PreflightCheckedCubit>().setCheck(
-                                  idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId,
-                                  idCheck: indexCheck + 1,
-                                );
+                CustomButton(
+                  title: 'Checked',
+                  textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.sp, height: 1, color: AppColors.mainSolid),
+                  borderColor: Colors.blue,
+                  onPressed: () {
+                    context.read<PreflightCheckedCubit>().setCheck(
+                          idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId,
+                          idCheck: indexCheck + 1,
+                        );
 
-                            if (widget.preflightInspectionCheck.length - 1 > indexCheck) {
-                              setState(() => indexCheck++);
-                            } else {
-                              context.router.pop();
-                            }
-                          }
-                        : () {},
-                    state: state,
-                  ),
-                )
+                    if (widget.preflightInspectionCheck.length - 1 > indexCheck) {
+                      setState(() => indexCheck++);
+                    } else {
+                      context.router.pop();
+                    }
+                  },
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(bottom: 40),
+                //   child: Container(
+                //     decoration: BoxDecoration(border: Border.all(color: Colors.blue, width: 2), borderRadius: BorderRadius.circular(16)),
+                //     child: ProgressButton.icon(
+                //       maxWidth: MediaQuery.of(context).size.width,
+                //       radius: 16.0,
+                //       textStyle: AppStyles.bigButtonCulture.copyWith(color: Colors.white),
+                //       iconedButtons: {
+                //         ButtonState.idle: IconedButton(icon: Icon(Icons.check_box_outline_blank, size: 40, color: Colors.grey), color: Colors.white),
+                //         ButtonState.loading: IconedButton(text: "Loading", color: Colors.blue),
+                //         ButtonState.fail: IconedButton(text: "Failed", icon: Icon(Icons.cancel, color: Colors.white), color: Colors.red.shade300),
+                //         ButtonState.success: IconedButton(icon: Icon(Icons.check_box_outlined, size: 40, color: Colors.green), color: Colors.white)
+                //       },
+                //       onPressed: state == ButtonState.idle
+                //           ? () async {
+                //               await buttonState();
+
+                //               context.read<PreflightCheckedCubit>().setCheck(
+                //                     idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId,
+                //                     idCheck: indexCheck + 1,
+                //                   );
+
+                //               if (widget.preflightInspectionCheck.length - 1 > indexCheck) {
+                //                 setState(() => indexCheck++);
+                //               } else {
+                //                 context.router.pop();
+                //               }
+                //             }
+                //           : () {},
+                //       state: state,
+                //     ),
+                //   ),
+                // )
               ],
             )),
       ),

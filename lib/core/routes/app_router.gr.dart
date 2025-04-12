@@ -155,6 +155,116 @@ class NewsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NormalCategoriesScreen]
+class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
+  NormalCategoriesRoute({
+    Key? key,
+    required String nameCategory,
+    List<PageRouteInfo>? children,
+  }) : super(
+         NormalCategoriesRoute.name,
+         args: NormalCategoriesRouteArgs(key: key, nameCategory: nameCategory),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
+
+  static const String name = 'NormalCategoriesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<NormalCategoriesRouteArgs>(
+        orElse:
+            () => NormalCategoriesRouteArgs(
+              nameCategory: pathParams.getString('nameCategory'),
+            ),
+      );
+      return NormalCategoriesScreen(
+        key: args.key,
+        nameCategory: args.nameCategory,
+      );
+    },
+  );
+}
+
+class NormalCategoriesRouteArgs {
+  const NormalCategoriesRouteArgs({this.key, required this.nameCategory});
+
+  final Key? key;
+
+  final String nameCategory;
+
+  @override
+  String toString() {
+    return 'NormalCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
+  }
+}
+
+/// generated route for
+/// [NormalCheckListScreen]
+class NormalCheckListRoute extends PageRouteInfo<NormalCheckListRouteArgs> {
+  NormalCheckListRoute({
+    Key? key,
+    required String normalCategoryId,
+    required String nameCategory,
+    List<PageRouteInfo>? children,
+  }) : super(
+         NormalCheckListRoute.name,
+         args: NormalCheckListRouteArgs(
+           key: key,
+           normalCategoryId: normalCategoryId,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {
+           'normalCategoryId': normalCategoryId,
+           'nameCategory': nameCategory,
+         },
+         initialChildren: children,
+       );
+
+  static const String name = 'NormalCheckListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<NormalCheckListRouteArgs>(
+        orElse:
+            () => NormalCheckListRouteArgs(
+              normalCategoryId: pathParams.getString('normalCategoryId'),
+              nameCategory: pathParams.getString('nameCategory'),
+            ),
+      );
+      return NormalCheckListScreen(
+        key: args.key,
+        normalCategoryId: args.normalCategoryId,
+        nameCategory: args.nameCategory,
+      );
+    },
+  );
+}
+
+class NormalCheckListRouteArgs {
+  const NormalCheckListRouteArgs({
+    this.key,
+    required this.normalCategoryId,
+    required this.nameCategory,
+  });
+
+  final Key? key;
+
+  final String normalCategoryId;
+
+  final String nameCategory;
+
+  @override
+  String toString() {
+    return 'NormalCheckListRouteArgs{key: $key, normalCategoryId: $normalCategoryId, nameCategory: $nameCategory}';
+  }
+}
+
+/// generated route for
 /// [PreflightInspectionCategoriesScreen]
 class PreflightInspectionCategoriesRoute
     extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {

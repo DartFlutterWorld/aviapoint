@@ -2,6 +2,10 @@ import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/learning/hand_book/datasources/hand_book_service.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/data/mappers/hand_book_main_categories_mapper.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/domain/entities/hand_book_categories_entity.dart';
+import 'package:aviapoint/learning/hand_book/normal_categories_page/data/mappers/normal_categories_mapper.dart';
+import 'package:aviapoint/learning/hand_book/normal_categories_page/domain/entities/normal_categories_entity.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/data/mappers/hand_book_categories_mapper.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/data/mappers/preflight_inspection_categories_mapper.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/domain/entities/preflight_inspection_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/data/mappers/hand_book_categories_mapper.dart';
@@ -79,6 +83,62 @@ class HandBookRepositoryImpl extends HandBookRepository {
 
       return right(
         PreflightInspectionCheckListMapper.toEntities(response),
+      );
+    } on DioException catch (e) {
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<NormalCategoriesEntity>>> fetchNormalCategories() async {
+    try {
+      final response = await _handBookService.fetchNormalCategories();
+
+      return right(
+        NormalCategoriesMapper.toEntities(response),
+      );
+    } on DioException catch (e) {
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  // Получение чек листа  Нормальной проверки по конкретной категории.
+  @override
+  Future<Either<Failure, List<NormalCheckListEntity>>> fetchNormalCheckListByCategory(String normalCategoryId) async {
+    try {
+      final response = await _handBookService.fetchNormalCheckListByCategory(normalCategoryId);
+
+      return right(
+        NormalCheckListMapper.toEntities(response),
+      );
+    } on DioException catch (e) {
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  // Получение всех чек листов из Нормальной процедуры.
+  @override
+  Future<Either<Failure, List<NormalCheckListEntity>>> fetchNormalCheckList() async {
+    try {
+      final response = await _handBookService.fetchNormalCheckList();
+
+      return right(
+        NormalCheckListMapper.toEntities(response),
       );
     } on DioException catch (e) {
       return left(

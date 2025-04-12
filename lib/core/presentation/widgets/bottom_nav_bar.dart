@@ -31,7 +31,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     //final hideBottomNavMeta = ServiceLocator.instance.get<AppRouter>().topMatch.meta['hideBottomNav'] == true;
     const List<String> hideBottomNavPath = [
-      'learning/hand_book/preflight_inspection_categories/check_list/'
+      'learning/hand_book/preflight_inspection_categories/check_list',
+      'learning/hand_book/normal_categories/check_list'
       // '/requests/create_sale_request',
       // '/requests/order_spec/',
       // '/orders/order_spec/',

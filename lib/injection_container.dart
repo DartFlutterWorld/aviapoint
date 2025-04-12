@@ -5,6 +5,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/learning/hand_book/datasources/hand_book_service.dart';
+import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_checked_cubit.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_checked_cubit.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository_impl.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
@@ -55,5 +56,8 @@ Future<void> setupDependencies() async {
   );
   getIt.registerSingleton<PreflightCheckedCubit>(
     PreflightCheckedCubit(),
+  );
+  getIt.registerSingleton<NormalCheckedCubit>(
+    NormalCheckedCubit(),
   );
 }

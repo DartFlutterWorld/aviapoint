@@ -113,7 +113,7 @@ class BanerWidget extends StatelessWidget {
                         title: titleButton,
                         verticalPadding: 12.h,
                         backgroundColor: AppColors.white,
-                        onTap: ontap,
+                        onPressed: ontap,
                         borderRadius: 12.r,
                         textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.sp, height: 1, color: AppColors.mainSolid),
                         borderColor: AppColors.white,
