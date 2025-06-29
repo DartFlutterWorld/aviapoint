@@ -92,6 +92,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   get_it: ^7.6.0
   auto_animated: ^3.2.0
+  easy_localization: ^3.0.7+1
 
 #dart run build_runner build --delete-conflicting-outputs
 dev_dependencies:
@@ -139,6 +140,7 @@ flutter:
     - assets/svg/
     - assets/png/
     - assets/gif/
+    - assets/translations/
 
   fonts:
     - family: NotoSans

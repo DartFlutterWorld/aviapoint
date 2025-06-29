@@ -1,3 +1,4 @@
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/data/models/emergency_categories_dto.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/data/models/hand_book_main_categories_dto.dart';
 import 'package:aviapoint/learning/hand_book/normal_categories_page/data/models/normal_categories_dto.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/data/models/normal_check_list_dto.dart';
@@ -33,4 +34,8 @@ abstract class HandBookService {
 
   @GET('/learning/hand_book/normal_categories/check_list')
   Future<List<NormalCheckListDto>> fetchNormalCheckList();
+
+  // Получение категорий для аварийных процедур
+  @GET('/learning/hand_book/emergency_categories')
+  Future<List<EmergencyCategoriesDto>> fetchEmergencyCategories();
 }

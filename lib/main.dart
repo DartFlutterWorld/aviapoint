@@ -11,10 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:aviapoint/core/domain/app_bloc_observer.dart';
-import 'package:aviapoint/core/domain/service_locator.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aviapoint/core/failure/logger.dart';
-
 import 'package:url_strategy/url_strategy.dart';
 
 class SSlHttpOverrides extends HttpOverrides {
@@ -51,6 +49,7 @@ Future<void> main() async {
 
 Future<void> _run() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   /// Задаем только портретный режим
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -87,7 +86,16 @@ Future<void> _run() async {
       enableScaleWH: () => kIsWeb ? false : true,
       enableScaleText: () => kIsWeb ? false : true,
       designSize: const Size(375, 812),
-      child: const App(),
+      child: EasyLocalization(
+        supportedLocales: [
+          Locale('en', 'US'),
+          Locale('ru', 'RU'),
+        ],
+        path: 'assets/translations',
+        // startLocale: Locale('en', 'EN'),
+        startLocale: Locale('ru', 'RU'),
+        child: const App(),
+      ),
     ),
   );
 }

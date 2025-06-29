@@ -3,6 +3,7 @@ import 'package:aviapoint/core/presentation/widgets/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/injection_container.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/bloc/emergency_categories_bloc.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/bloc/hand_book_main_categories_bloc.dart';
 import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/bloc/normal_categories_bloc.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_check_list_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:aviapoint/learning/video_for_students_page/domain/repositories/v
 import 'package:aviapoint/learning/video_for_students_page/presentation/bloc/video_for_students_bloc.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,6 +101,11 @@ class _AppState extends State<App> {
         BlocProvider<NormalCheckedCubit>(
           create: (context) => getIt<NormalCheckedCubit>(),
         ),
+        BlocProvider<EmergencyCategoriesBloc>(
+          create: (context) => EmergencyCategoriesBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+          ),
+        ),
       ],
       child: BlocProvider<ProfileBloc>(
         create: (context) => ProfileBloc(
@@ -113,11 +120,9 @@ class _AppState extends State<App> {
           },
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             title: 'AviaPoint',
             routerDelegate: getIt<AppRouter>().delegate(
               navigatorObservers: () => [MyRouteObserver()],

@@ -1,4 +1,21 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/abnormal_landings/abnormal_landings_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/air_speeds/airspeeds_for_emergency_operations.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/engine_failure/engine_failure_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/emergency_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/excessive_fuel_vapor/excessive_fuel_vapor_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/fires/cabin_fire_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/fires/electrical_fire_in_flight_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/fires/engine_fire_in_flight_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/fires/fires_during_start_on_ground_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/fires/fires_sub_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/fires/wing_fire_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/ditching_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/emergency_landing_with_engine_power_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/emergency_landing_without_engine_power_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/forced_landings_sub_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/icing/icing_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/static_source_blockage/static_source_blockage_screen.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/pages/hand_book_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/pages/normal_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/pages/normal_check_list_screen.dart';
@@ -107,17 +124,6 @@ class AppRouter extends RootStackRouter {
                   path: 'video_for_students',
                   page: VideoForStudentsRoute.page,
                 ),
-                // AutoRoute(path: '', page: HandBookNavigationRoute.page, children: [
-                //   AutoRoute(
-                //     path: 'hand_book',
-                //     page: HandBookMainCategoriesRoute.page,
-                //     initial: true,
-                //   ),
-                //   // AutoRoute(
-                //   //   path: 'hand_book/preflight_inspection_categories',
-                //   //   page: PreflightInspectionCategoriesRoute.page,
-                //   // ),
-                // ]),
                 AutoRoute(
                   path: 'hand_book',
                   page: HandBookMainCategoriesRoute.page,
@@ -130,15 +136,81 @@ class AppRouter extends RootStackRouter {
                   path: 'hand_book/preflight_inspection_categories/check_list/:preflihgtInspectionCategoryId',
                   page: PreflightInspectionCheckListRoute.page,
                 ),
-
                 AutoRoute(
                   path: 'hand_book/normal_categories',
                   page: NormalCategoriesRoute.page,
                 ),
-
                 AutoRoute(
                   path: 'hand_book/normal_categories/check_list/:normalCategoryId',
                   page: NormalCheckListRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories',
+                  page: EmergencyCategoriesRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/airspeeds_for_emergency_operations',
+                  page: AirspeedsForEmergencyOperationsRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/engine_failure',
+                  page: EngineFailureRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories',
+                  page: ForcedLandingsSubCategoriesRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
+                  page: EmergencyLandingWithoutEnginePowerRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
+                  page: EmergencyLandingWithEnginePowerRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories/ditching',
+                  page: DitchingRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/fires_sub_categories',
+                  page: FiresSubCategoriesRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/fires_sub_categories/fires_during_start_on_ground',
+                  page: FiresDuringStartOnGroundRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/fires_sub_categories/engine_fire_in_flight',
+                  page: EngineFireInFlightRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/fires_sub_categories/electrical_fire_in_flight',
+                  page: ElectricalFireInFlightRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/fires_sub_categories/cabin_fire',
+                  page: CabinFireRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/fires_sub_categories/wing_fire',
+                  page: WingFireRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/icing',
+                  page: IcingRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/static_source_blockage',
+                  page: StaticSourceBlockageRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/excessive_fuel_vapor',
+                  page: ExcessiveFuelVaporRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergeny_categories/abnormal_landings',
+                  page: AbnormalLandingsRoute.page,
                 ),
               ],
             ),

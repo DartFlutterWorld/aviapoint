@@ -58,7 +58,7 @@ class _Success extends StatelessWidget {
       case 2:
         return NormalCategoriesRoute(nameCategory: 'Нормальные процедуры');
       case 3:
-        print("число равно 3");
+        return EmergencyCategoriesRoute(nameCategory: 'Аварийные процедуры');
       default:
         print("число не равно 1, 2, 3");
     }

@@ -22,7 +22,9 @@ class _LearningScreenState extends State<LearningScreen> {
       appBar: const CustomAppBar(
         title: 'Обучение',
         withBack: false,
+        // backgroundColor: AppColors.newbg,
       ),
+      backgroundColor: AppColors.newbg,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(

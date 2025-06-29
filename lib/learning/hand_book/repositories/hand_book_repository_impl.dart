@@ -1,5 +1,7 @@
 import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/learning/hand_book/datasources/hand_book_service.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/data/mappers/emergency_categories_mapper.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/domain/entities/emergency_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/data/mappers/hand_book_main_categories_mapper.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/domain/entities/hand_book_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/normal_categories_page/data/mappers/normal_categories_mapper.dart';
@@ -139,6 +141,24 @@ class HandBookRepositoryImpl extends HandBookRepository {
 
       return right(
         NormalCheckListMapper.toEntities(response),
+      );
+    } on DioException catch (e) {
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<EmergencyCategoriesEntity>>> fetchEmergencyCategories() async {
+    try {
+      final response = await _handBookService.fetchEmergencyCategories();
+
+      return right(
+        EmergencyCategoriesMapper.toEntities(response),
       );
     } on DioException catch (e) {
       return left(
