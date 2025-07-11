@@ -9,13 +9,17 @@ part of 'profile_dto.dart';
 _$ProfileDtoImpl _$$ProfileDtoImplFromJson(Map<String, dynamic> json) =>
     _$ProfileDtoImpl(
       id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
       phone: json['phone'] as String,
+      email: json['email'] as String?,
+      firstName: json['first_name'] as String?,
+      lastName: json['last_name'] as String?,
     );
 
 Map<String, dynamic> _$$ProfileDtoImplToJson(_$ProfileDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
       'phone': instance.phone,
+      'email': instance.email,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
     };

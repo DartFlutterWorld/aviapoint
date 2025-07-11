@@ -17,6 +17,9 @@ class ApiDatasourceDio extends ApiDatasource {
   DateTime? updateTokenTime;
   String? updatedToken;
 
+  String? _accessToken;
+  String? _refreshToken;
+
   /// baseUrl - базовая ссылка на API
   /// dio - экземпляр [Dio]
   /// interceptors - интерсепторы для [Dio]
@@ -50,6 +53,33 @@ class ApiDatasourceDio extends ApiDatasource {
     _addloggerInterseptor();
   }
 
+  // Метод для установки обоих токенов
+  @override
+  void setAuthTokens({
+    required String accessToken,
+    required String refreshToken,
+    Future<String?> Function()? onRefresh,
+    void Function()? onLogout,
+  }) {
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
+    _onRefresh = onRefresh;
+    _onLogout = onLogout;
+    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+  }
+
+  // Метод для обновления токенов
+  @override
+  void updateTokens({String? accessToken, String? refreshToken}) {
+    if (accessToken != null) {
+      _accessToken = accessToken;
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+    }
+    if (refreshToken != null) {
+      _refreshToken = refreshToken;
+    }
+  }
+
   void _addloggerInterseptor() {
     _dio.interceptors.add(
       PrettyDioLogger(
@@ -66,63 +96,61 @@ class ApiDatasourceDio extends ApiDatasource {
 
   Dio get dio => _dio;
 
-  /// Добавляет интерсептор для обновления RefreshToken.
   void _addRefreshInterseptor() {
     _dio.interceptors.clear();
     _dio.interceptors.add(
       QueuedInterceptorsWrapper(
         onError: (error, handler) async {
-          //if (error.response?.statusCode == 401 && (error.response?.data == null || error.response?.data['code'] == null || error.response?.data['code'] != 'user_not_found')) {
           if (error.response?.statusCode == 401) {
-            // Сохраняем колбэки.
             final onRefresh = _onRefresh;
             final onLogout = _onLogout;
-            // Очищаем старый колбек чтобы он не вызывался сам на себя.
+            final refreshToken = _refreshToken;
+
+            // Проверяем, что это не запрос на обновление токена
+            if (error.requestOptions.path.contains('/refresh')) {
+              onLogout?.call();
+              return handler.reject(error);
+            }
+
+            // Блокируем другие запросы пока обновляем токен
             _onRefresh = null;
             try {
-              // Если задан коллбек для восстановления токена.
-              if (onRefresh != null) {
-                if (updateTokenTime == null || updateTokenTime == null || (updateTokenTime != null && updateTokenTime!.difference(DateTime.now()).inMinutes > 1)) {
+              if (onRefresh != null && refreshToken != null) {
+                // Проверяем, не пытаемся ли мы уже обновить токен
+                if (updateTokenTime == null || (updateTokenTime != null && DateTime.now().difference(updateTokenTime!).inMinutes > 1)) {
                   updatedToken = await onRefresh();
                 }
 
                 if (updatedToken != null) {
                   updateTokenTime = DateTime.now();
-                  // Если коллбек вернул новый токен.
                   error.requestOptions.headers["Authorization"] = _dio.options.headers['Authorization'] = 'Bearer $updatedToken';
-                  // Повторим предыдущий запрос.
-                  final opts = Options(method: error.requestOptions.method, headers: error.requestOptions.headers);
+
+                  // Повторяем оригинальный запрос с новым токеном
                   final cloneReq = await _dio.request<dynamic>(
                     error.requestOptions.path,
-                    options: opts,
+                    options: Options(
+                      method: error.requestOptions.method,
+                      headers: error.requestOptions.headers,
+                    ),
                     data: error.requestOptions.data,
                     queryParameters: error.requestOptions.queryParameters,
                   );
-                  // Восстановим старый колбэк.
-                  _onRefresh = onRefresh;
 
+                  _onRefresh = onRefresh; // Восстанавливаем callback
                   return handler.resolve(cloneReq);
                 }
               }
-              if (onLogout != null) {
-                // При неудаче вызовим коллбек разлогинивания.
-                onLogout();
-              }
-
+              onLogout?.call();
               return handler.reject(error);
             } catch (exc, stack) {
               logger.e("Error refresh token", exc, stack);
-              if (onLogout != null) {
-                // При неудаче вызовим коллбек разлогинивания.
-                onLogout();
-              }
-
+              onLogout?.call();
               return handler.reject(error);
+            } finally {
+              _onRefresh = onRefresh; // Всегда восстанавливаем callback
             }
-          } else {
-            //if (_onLogout != null) _onLogout!();
-            return handler.reject(error);
           }
+          return handler.reject(error);
         },
       ),
     );
@@ -131,16 +159,6 @@ class ApiDatasourceDio extends ApiDatasource {
   @override
   void delAuthHeader() {
     _dio.options.headers.remove('Authorization');
-  }
-
-  @override
-  void setAuthHeader(String token, {Future<String?> Function()? onRefresh, void Function()? onLogout}) {
-    _onRefresh = onRefresh;
-    _onLogout = onLogout;
-    _dio.options.headers['Authorization'] = 'Bearer $token';
-    if (kDebugMode) {
-      print('token - $token');
-    }
   }
 
   @override

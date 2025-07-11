@@ -1,4 +1,4 @@
-import 'package:aviapoint/core/presentation/widgets/app_state.dart';
+import 'package:aviapoint/core/presentation/proveider/app_state.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/entities/video_for_students_entity.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/repositories/video_for_students_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

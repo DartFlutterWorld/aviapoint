@@ -1,6 +1,9 @@
+import 'package:aviapoint/auth_page/data/datasources/remote/auth_service.dart';
+import 'package:aviapoint/auth_page/data/repositories/auth_repository_impl.dart';
+import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
-import 'package:aviapoint/core/presentation/widgets/app_state.dart';
+import 'package:aviapoint/core/presentation/proveider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
@@ -22,17 +25,26 @@ final GetIt getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   final appRouter = AppRouter();
-
   final dataSource = ApiDatasourceDio(baseUrl: '$backUrl');
 
-  final AppState appState = AppState();
-
-  // Регистрация зависимостей через get_it
-  getIt.registerSingleton<AppState>(appState);
+  // Регистрируем ApiDatasource и другие зависимости, которые не зависят от AuthRepository
+  getIt.registerSingleton<ApiDatasource>(dataSource);
   getIt.registerSingleton<AppRouter>(appRouter);
   getIt.registerSingleton<MyRouteObserver>(MyRouteObserver());
-  getIt.registerSingleton<ApiDatasource>(dataSource);
 
+  // Сначала регистрируем AuthRepository
+  getIt.registerSingleton<AuthRepository>(
+    AuthRepositoryImpl(
+      authService: AuthService(dataSource.dio),
+      apiDatasource: getIt.get<ApiDatasource>(),
+    ),
+  );
+
+  // Теперь создаём AppState, используя зарегистрированный AuthRepository
+  final appState = AppState(authRepository: getIt<AuthRepository>());
+  getIt.registerSingleton<AppState>(appState);
+
+  // Регистрируем остальные зависимости
   getIt.registerSingleton<ProfileRepository>(
     ProfileRepositoryImpl(
       profileService: ProfileService(dataSource.dio),

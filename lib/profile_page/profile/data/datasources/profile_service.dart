@@ -10,4 +10,9 @@ abstract class ProfileService {
 
   @GET('/profiles')
   Future<List<ProfileDto>> fetchProfilesList();
+
+  @POST('/profile')
+  Future<ProfileDto> fetchProfile(
+      // @Body() Map<String, dynamic> body,
+      );
 }

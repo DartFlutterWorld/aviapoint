@@ -50,8 +50,8 @@ class BanerWidget extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xff695CF8),
-              Color(0xFF7A0FD9),
+              Colors.grey,
+              Colors.blueGrey,
             ],
           ),
           image: DecorationImage(
@@ -61,16 +61,16 @@ class BanerWidget extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned.fill(
-              bottom: 0,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Image.asset(
-                  picture,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
+            // Positioned.fill(
+            //   bottom: 0,
+            //   child: Align(
+            //     alignment: Alignment.centerRight,
+            //     child: Image.asset(
+            //       picture,
+            //       fit: BoxFit.contain,
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 16.w,

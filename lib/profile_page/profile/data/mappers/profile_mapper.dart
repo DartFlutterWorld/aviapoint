@@ -7,8 +7,10 @@ class ProfileMapper {
   ) {
     return ProfileEntity(
       id: model.id,
-      name: model.name,
       phone: model.phone,
+      firstName: model.firstName,
+      lastName: model.lastName,
+      email: model.email,
     );
   }
 

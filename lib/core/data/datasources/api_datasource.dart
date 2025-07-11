@@ -5,14 +5,13 @@ abstract class ApiDatasource {
   /// Del auth information.
   void delAuthHeader();
 
-  /// add auth information
-  /// onRefresh - вызывается при получении 401 или 403
-  /// onLogout - вызывается если не прошел вызов onRefresh
-  void setAuthHeader(
-    String token, {
+  void setAuthTokens({
+    required String accessToken,
+    required String refreshToken,
     Future<String?> Function()? onRefresh,
     void Function()? onLogout,
   });
+  void updateTokens({String? accessToken, String? refreshToken});
 
   /// GET request to API
   /// [uri] - additional url string to [baseUrl]

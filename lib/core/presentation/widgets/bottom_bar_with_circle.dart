@@ -71,12 +71,12 @@ class BottomBarWithCircleState extends State<BottomBarWithCircle> {
                 padding: const EdgeInsets.only(top: 5.0),
                 child: BottomBarWithCircleItem(
                   icon: widget.tabsRouter!.activeIndex == 1 ? Pictures.ntbTabGradient : Pictures.ntbTabGrey,
-                  text: 'Биржа',
+                  text: 'Маркет',
                   colors: widget.tabsRouter!.activeIndex == 1 ? AppColors.mainSolid : AppColors.inactive,
                   onPressed: () {
                     if (widget.tabsRouter!.activeIndex == 1) {
                       AutoRouter.of(context).navigate(
-                        const TradingsNavigationRoute(),
+                        const MarketNavigationRoute(),
                       );
                     } else {
                       widget.tabsRouter!.setActiveIndex(1);
@@ -92,12 +92,12 @@ class BottomBarWithCircleState extends State<BottomBarWithCircle> {
                 padding: const EdgeInsets.only(top: 5.0),
                 child: BottomBarWithCircleItem(
                   icon: widget.tabsRouter!.activeIndex == 3 || widget.tabsRouter!.activeIndex == 3 ? Pictures.pricesTabGradient : Pictures.pricesTabGrey,
-                  text: 'Цены',
+                  text: 'Новости',
                   colors: widget.tabsRouter!.activeIndex == 3 || widget.tabsRouter!.activeIndex == 3 ? AppColors.mainSolid : AppColors.inactive,
                   onPressed: () {
                     if (widget.tabsRouter!.activeIndex == 3) {
                       AutoRouter.of(context).navigate(
-                        const PricesNavigationRoute(),
+                        const NewsNavigationRoute(),
                       );
                     } else {
                       widget.tabsRouter!.setActiveIndex(3);
@@ -109,12 +109,12 @@ class BottomBarWithCircleState extends State<BottomBarWithCircle> {
                 padding: const EdgeInsets.only(top: 5.0),
                 child: BottomBarWithCircleItem(
                   icon: widget.tabsRouter!.activeIndex == 4 ? Pictures.newsTabGradient : Pictures.newsTabGrey,
-                  text: 'Новости',
+                  text: 'Профиль',
                   colors: widget.tabsRouter!.activeIndex == 4 ? AppColors.mainSolid : AppColors.inactive,
                   onPressed: () {
                     if (widget.tabsRouter!.activeIndex == 4) {
                       AutoRouter.of(context).navigate(
-                        const NewsNavigationRoute(),
+                        const ProfileNavigationRoute(),
                       );
                     } else {
                       widget.tabsRouter!.setActiveIndex(4);

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/market/presentation/pages/market_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:aviapoint/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
@@ -17,16 +18,16 @@ class BaseScreen extends StatelessWidget {
       animationDuration: Duration.zero,
       routes: const [
         LearningNavigationRoute(),
-        TradingsNavigationRoute(),
+        MarketNavigationRoute(),
 
         // MainRoute(),
         MainNavigationRoute(),
 
-        PricesNavigationRoute(),
+        // PricesNavigationRoute(),
 
         NewsNavigationRoute(),
 
-        // ProfileNavigationRoute(),
+        ProfileNavigationRoute(),
         // SaleRequestNavigationRoute(),
       ],
       bottomNavigationBuilder: MediaQuery.of(context).size.width < 768

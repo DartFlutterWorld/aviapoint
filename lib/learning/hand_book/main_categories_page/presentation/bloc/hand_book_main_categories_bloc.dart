@@ -1,4 +1,4 @@
-import 'package:aviapoint/core/presentation/widgets/app_state.dart';
+import 'package:aviapoint/core/presentation/proveider/app_state.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/domain/entities/hand_book_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/entities/video_for_students_entity.dart';

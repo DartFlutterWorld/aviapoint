@@ -21,8 +21,12 @@ ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ProfileDto {
   int get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'first_name')
+  String? get firstName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_name')
+  String? get lastName => throw _privateConstructorUsedError;
 
   /// Serializes this ProfileDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,7 +44,12 @@ abstract class $ProfileDtoCopyWith<$Res> {
           ProfileDto value, $Res Function(ProfileDto) then) =
       _$ProfileDtoCopyWithImpl<$Res, ProfileDto>;
   @useResult
-  $Res call({int id, String name, String phone});
+  $Res call(
+      {int id,
+      String phone,
+      String? email,
+      @JsonKey(name: 'first_name') String? firstName,
+      @JsonKey(name: 'last_name') String? lastName});
 }
 
 /// @nodoc
@@ -59,22 +68,32 @@ class _$ProfileDtoCopyWithImpl<$Res, $Val extends ProfileDto>
   @override
   $Res call({
     Object? id = null,
-    Object? name = null,
     Object? phone = null,
+    Object? email = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
       phone: null == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      firstName: freezed == firstName
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastName: freezed == lastName
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -87,7 +106,12 @@ abstract class _$$ProfileDtoImplCopyWith<$Res>
       __$$ProfileDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String name, String phone});
+  $Res call(
+      {int id,
+      String phone,
+      String? email,
+      @JsonKey(name: 'first_name') String? firstName,
+      @JsonKey(name: 'last_name') String? lastName});
 }
 
 /// @nodoc
@@ -104,22 +128,32 @@ class __$$ProfileDtoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? name = null,
     Object? phone = null,
+    Object? email = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
   }) {
     return _then(_$ProfileDtoImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
       phone: null == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      firstName: freezed == firstName
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastName: freezed == lastName
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -128,7 +162,11 @@ class __$$ProfileDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProfileDtoImpl implements _ProfileDto {
   const _$ProfileDtoImpl(
-      {required this.id, required this.name, required this.phone});
+      {required this.id,
+      required this.phone,
+      this.email,
+      @JsonKey(name: 'first_name') this.firstName,
+      @JsonKey(name: 'last_name') this.lastName});
 
   factory _$ProfileDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileDtoImplFromJson(json);
@@ -136,13 +174,19 @@ class _$ProfileDtoImpl implements _ProfileDto {
   @override
   final int id;
   @override
-  final String name;
-  @override
   final String phone;
+  @override
+  final String? email;
+  @override
+  @JsonKey(name: 'first_name')
+  final String? firstName;
+  @override
+  @JsonKey(name: 'last_name')
+  final String? lastName;
 
   @override
   String toString() {
-    return 'ProfileDto(id: $id, name: $name, phone: $phone)';
+    return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName)';
   }
 
   @override
@@ -151,13 +195,18 @@ class _$ProfileDtoImpl implements _ProfileDto {
         (other.runtimeType == runtimeType &&
             other is _$ProfileDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.phone, phone) || other.phone == phone));
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.firstName, firstName) ||
+                other.firstName == firstName) &&
+            (identical(other.lastName, lastName) ||
+                other.lastName == lastName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, phone);
+  int get hashCode =>
+      Object.hash(runtimeType, id, phone, email, firstName, lastName);
 
   /// Create a copy of ProfileDto
   /// with the given fields replaced by the non-null parameter values.
@@ -178,8 +227,10 @@ class _$ProfileDtoImpl implements _ProfileDto {
 abstract class _ProfileDto implements ProfileDto {
   const factory _ProfileDto(
       {required final int id,
-      required final String name,
-      required final String phone}) = _$ProfileDtoImpl;
+      required final String phone,
+      final String? email,
+      @JsonKey(name: 'first_name') final String? firstName,
+      @JsonKey(name: 'last_name') final String? lastName}) = _$ProfileDtoImpl;
 
   factory _ProfileDto.fromJson(Map<String, dynamic> json) =
       _$ProfileDtoImpl.fromJson;
@@ -187,9 +238,15 @@ abstract class _ProfileDto implements ProfileDto {
   @override
   int get id;
   @override
-  String get name;
-  @override
   String get phone;
+  @override
+  String? get email;
+  @override
+  @JsonKey(name: 'first_name')
+  String? get firstName;
+  @override
+  @JsonKey(name: 'last_name')
+  String? get lastName;
 
   /// Create a copy of ProfileDto
   /// with the given fields replaced by the non-null parameter values.

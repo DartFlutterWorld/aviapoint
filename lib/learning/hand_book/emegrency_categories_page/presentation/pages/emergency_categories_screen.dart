@@ -8,6 +8,7 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/domain/entities/emergency_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/bloc/emergency_categories_bloc.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/autopilot/autopilot_or_electric_trim_failure_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/engine_failure/engine_failure_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/forced_landings_sub_categories_screen.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,20 @@ class _Success extends StatelessWidget {
         return ExcessiveFuelVaporRoute();
       case 8:
         return AbnormalLandingsRoute();
+      case 9:
+        return ElectricalPowerSubCategoryRoute(nameCategory: 'Неисправности системы электроснабжеения');
+      case 10:
+        return AirDataSystemFailureRoute();
+      case 11:
+        return AttitudeAndHeadingReferenceSystemAhrsFailureRoute();
+      case 12:
+        return AutopilotOrElectricTrimFailureRoute();
+      case 13:
+        return DisplayCoolingAdvisoryRoute();
+      case 14:
+        return VacuumSystemFailureRoute();
+      case 15:
+        return HighCarbonMonoxideCoLevelAdvisoryRoute();
       default:
         print("число не равно 1, 2, 3");
     }

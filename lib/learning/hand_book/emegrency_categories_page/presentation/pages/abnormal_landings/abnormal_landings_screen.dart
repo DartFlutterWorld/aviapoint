@@ -45,10 +45,55 @@ class AbnormalLandingsScreen extends StatelessWidget {
                 },
                 border: TableBorder.all(color: Colors.grey),
                 children: [
-                  customTableRow(1, 'fuel_pump_switch', 'on'),
-                  customTableRow(2, 'mixture_controle', 'adjust_as_necessary_for_smooth_engine_operation'),
-                  customTableRow(3, 'fuel_selector_valve', 'select_opposite_tank_if_vapor_symptoms_continue'),
-                  customTableRow(4, 'fuel_pump_switch', 'off_after_fuel_flow_has_stabilized'),
+                  customTableRow(1, 'approach', 'normal'),
+                  customTableRow(2, 'wing_flaps', 'full'),
+                  customTableRow(3, 'touchdown', 'good_main_tire_first_hold_airplane_off_flat_tire_as_long_as_possible_with_aileron_control'),
+                  customTableRow(4, 'directional_control', 'maintain_using_brake_on_good_wheel_as_required'),
+                ],
+              ),
+              SizedBox(height: 8),
+              Center(
+                child: Text(
+                  'landing_with_a_flat_nose_tire',
+                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
+                ).tr(),
+              ),
+              SizedBox(height: 8),
+              Table(
+                columnWidths: {
+                  0: FixedColumnWidth(32),
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(1),
+                },
+                border: TableBorder.all(color: Colors.grey),
+                children: [
+                  customTableRow(1, 'approach', 'normal'),
+                  customTableRow(2, 'wing_flaps', 'as_required'),
+                  customTableRow(0, '85_110_kias', 'flaps_up_10'),
+                  customTableRow(0, 'below_85_kias', 'flaps_10_full'),
+                  customTableRow(3, 'touchdown', 'on_mains_hold_nose_wheel_off_the_ground_as_long_as_possible'),
+                ],
+              ),
+              Table(
+                columnWidths: {
+                  0: FixedColumnWidth(32),
+                  1: FlexColumnWidth(1),
+                },
+                border: TableBorder.all(color: Colors.grey),
+                children: [
+                  TableRow(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('4'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'when_nose_wheel_touches_down_maintain_full_up_elevator_as_airplane_slows_to_stop',
+                        textAlign: TextAlign.right,
+                      ).tr(),
+                    ),
+                  ])
                 ],
               ),
               SizedBox(height: 16),

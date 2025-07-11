@@ -7,8 +7,10 @@ part 'profile_dto.g.dart';
 abstract class ProfileDto with _$ProfileDto {
   const factory ProfileDto({
     required int id,
-    required String name,
     required String phone,
+    String? email,
+    @JsonKey(name: 'first_name') String? firstName,
+    @JsonKey(name: 'last_name') String? lastName,
   }) = _ProfileDto;
 
   // factory ProfileDto.fromEntity(ProfileEntity profile) => ProfileDto(

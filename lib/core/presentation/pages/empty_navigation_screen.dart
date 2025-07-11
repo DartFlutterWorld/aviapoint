@@ -9,8 +9,8 @@ class EmptyNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoRouter(
-      placeholder: (_) => Container(
-        color: AppColors.newbg,
+      placeholder: (_) => Scaffold(
+        backgroundColor: AppColors.newbg,
       ),
     );
   }

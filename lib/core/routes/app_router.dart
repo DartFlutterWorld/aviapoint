@@ -1,6 +1,18 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/auth_page/data/tokens/token_storage.dart';
+import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
+import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/abnormal_landings/abnormal_landings_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/air_data_system_failure/air_data_system_failure_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/air_speeds/airspeeds_for_emergency_operations.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/attitude_and_heading_reference_system_ahrs_failure/attitude_and_heading_reference_system_ahrs_failure_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/autopilot/autopilot_or_electric_trim_failure_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/display_cooling_advisory/display_cooling_advisory_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/electrical_power/electrical_power_sub_category_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/electrical_power/electrical_power_supply_system_malfunctions_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/electrical_power/low_volts_annunciator_comes_on_bellow_1000_rpm_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/electrical_power/low_volts_annunciator_comes_on_or_does_not_go_off_at_higher_rpm_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/engine_failure/engine_failure_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/emergency_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/excessive_fuel_vapor/excessive_fuel_vapor_screen.dart';
@@ -14,8 +26,10 @@ import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentat
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/emergency_landing_with_engine_power_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/emergency_landing_without_engine_power_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/forced_landings_sub_categories_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/high_carbon_monoxide/high_carbon_monoxide_co_level_advisory_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/icing/icing_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/static_source_blockage/static_source_blockage_screen.dart';
+import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/vacuum_system_failure/vacuum_system_failure_screen.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/pages/hand_book_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/pages/normal_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/pages/normal_check_list_screen.dart';
@@ -26,8 +40,8 @@ import 'package:aviapoint/learning/learning_navigation_screen.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/pages/video_for_students_screen.dart';
 import 'package:aviapoint/news/news_navigation_screen.dart';
 import 'package:aviapoint/news/news_screen.dart';
-import 'package:aviapoint/ntb/presentation/pages/tradings_navigation_screen.dart';
-import 'package:aviapoint/ntb/presentation/pages/tradings_screen.dart';
+import 'package:aviapoint/market/presentation/pages/market_navigation_screen.dart';
+import 'package:aviapoint/market/presentation/pages/market_screen.dart';
 import 'package:aviapoint/sale/sale_request_navigation_screen.dart';
 import 'package:aviapoint/sale/sale_request_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -40,11 +54,18 @@ import 'package:aviapoint/price_page/prices_screen.dart';
 import 'package:aviapoint/price_page/prices_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_screen.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 part 'app_router.gr.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
 class AppRouter extends RootStackRouter {
+  AppRouter()
+      : super(
+          navigatorKey: navigatorKey,
+        );
   @override
   RouteType get defaultRouteType => const RouteType.custom();
 
@@ -145,82 +166,123 @@ class AppRouter extends RootStackRouter {
                   page: NormalCheckListRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories',
+                  path: 'hand_book/emergency_categories',
                   page: EmergencyCategoriesRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/airspeeds_for_emergency_operations',
+                  path: 'hand_book/emergency_categories/airspeeds_for_emergency_operations',
                   page: AirspeedsForEmergencyOperationsRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/engine_failure',
+                  path: 'hand_book/emergency_categories/engine_failure',
                   page: EngineFailureRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories',
+                  path: 'hand_book/emergency_categories/forced_landings_sub_categories',
                   page: ForcedLandingsSubCategoriesRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
+                  path: 'hand_book/emergency_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
                   page: EmergencyLandingWithoutEnginePowerRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
+                  path: 'hand_book/emergency_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
                   page: EmergencyLandingWithEnginePowerRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/forced_landings_sub_categories/ditching',
+                  path: 'hand_book/emergency_categories/forced_landings_sub_categories/ditching',
                   page: DitchingRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/fires_sub_categories',
+                  path: 'hand_book/emergency_categories/fires_sub_categories',
                   page: FiresSubCategoriesRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/fires_sub_categories/fires_during_start_on_ground',
+                  path: 'hand_book/emergency_categories/fires_sub_categories/fires_during_start_on_ground',
                   page: FiresDuringStartOnGroundRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/fires_sub_categories/engine_fire_in_flight',
+                  path: 'hand_book/emergency_categories/fires_sub_categories/engine_fire_in_flight',
                   page: EngineFireInFlightRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/fires_sub_categories/electrical_fire_in_flight',
+                  path: 'hand_book/emergency_categories/fires_sub_categories/electrical_fire_in_flight',
                   page: ElectricalFireInFlightRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/fires_sub_categories/cabin_fire',
+                  path: 'hand_book/emergency_categories/fires_sub_categories/cabin_fire',
                   page: CabinFireRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/fires_sub_categories/wing_fire',
+                  path: 'hand_book/emergency_categories/fires_sub_categories/wing_fire',
                   page: WingFireRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/icing',
+                  path: 'hand_book/emergency_categories/icing',
                   page: IcingRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/static_source_blockage',
+                  path: 'hand_book/emergency_categories/static_source_blockage',
                   page: StaticSourceBlockageRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/excessive_fuel_vapor',
+                  path: 'hand_book/emergency_categories/excessive_fuel_vapor',
                   page: ExcessiveFuelVaporRoute.page,
                 ),
                 AutoRoute(
-                  path: 'hand_book/emergeny_categories/abnormal_landings',
+                  path: 'hand_book/emergency_categories/abnormal_landings',
                   page: AbnormalLandingsRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/electrical_power',
+                  page: ElectricalPowerSubCategoryRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/electrical_power/electrical_power_supply_system_malfunctions',
+                  page: ElectricalPowerSupplySystemMalfunctionsRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/electrical_power/low_volts_annunciator_comes_on_bellow_1000_rpm',
+                  page: LowVoltsAnnunciatorComesOnBellow1000RpmRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/electrical_power/low_volts_annunciator_comes_on_or_does_not_go_off_at_higher_rpm',
+                  page: LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/air_data_system_failure',
+                  page: AirDataSystemFailureRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/attitude_and_heading_reference_system_ahrs_failure',
+                  page: AttitudeAndHeadingReferenceSystemAhrsFailureRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/autopilot_or_electric_trim_failure',
+                  page: AutopilotOrElectricTrimFailureRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/display_cooling_advisory',
+                  page: DisplayCoolingAdvisoryRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/vacuum_system_failure',
+                  page: VacuumSystemFailureRoute.page,
+                ),
+                AutoRoute(
+                  path: 'hand_book/emergency_categories/high_carbon_monoxide_co_level_advisory',
+                  page: HighCarbonMonoxideCoLevelAdvisoryRoute.page,
                 ),
               ],
             ),
             AutoRoute(
               path: 'profile',
-              //guards: [AuthGuard()],
+              // guards: [AuthGuard()],
               page: ProfileNavigationRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
+                  // guards: [AuthGuard()],
                   page: ProfileRoute.page,
                 ),
               ],
@@ -233,12 +295,12 @@ class AppRouter extends RootStackRouter {
               ],
             ),
             AutoRoute(
-              path: 'tradings',
-              page: TradingsNavigationRoute.page,
+              path: 'market',
+              page: MarketNavigationRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
-                  page: TradingsRoute.page,
+                  page: MarketRoute.page,
                 ),
               ],
             ),
@@ -251,91 +313,49 @@ class AppRouter extends RootStackRouter {
       ];
 }
 
-Route<T> notDismissibleModalSheetBuilder<T>(BuildContext context, Widget child, AutoRoutePage<T> page) {
-  return ModalBottomSheetRoute(
-    isDismissible: false,
-    enableDrag: false,
-    settings: page,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(20),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => Navigator.of(context).pop(),
-        child: GestureDetector(
-          onTap: () {},
-          child: child,
-        ),
-      );
-    },
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-  );
+class AuthGuard extends AutoRouteGuard {
+  @override
+  Future<void> onNavigation(
+    NavigationResolver resolver,
+    StackRouter router,
+  ) async {
+    try {
+      // final isAuthenticated = await TokenStorage.isAccessTokenValid();
+      final isAuthenticated = await getIt<AppState>().checkAuthStatus();
+
+      if (isAuthenticated) {
+        resolver.next(true);
+        return;
+      }
+
+      // Получаем контекст из любого доступного источника
+      final context = navigatorKey.currentContext;
+
+      if (context == null) {
+        resolver.next(false);
+        return;
+      }
+
+      final result = await _showLoginBottomSheet(context);
+
+      if (result == true) {
+        resolver.next(true);
+      } else {
+        resolver.next(false);
+        router.pop();
+      }
+    } catch (e) {
+      resolver.next(false);
+      router.pop();
+    }
+  }
+
+  Future<bool?> _showLoginBottomSheet(BuildContext context) async {
+    return await showCupertinoModalBottomSheet<bool>(
+      barrierColor: Colors.black12,
+      topRadius: const Radius.circular(20),
+      context: context,
+      builder: (context) => PhoneAuthScreen(),
+    );
+  }
 }
-
-Route<T> modalSheetBuilder<T>(BuildContext context, Widget child, AutoRoutePage<T> page) {
-  return ModalBottomSheetRoute(
-    settings: page,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(20),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => Navigator.of(context).pop(),
-        child: GestureDetector(
-          onTap: () {},
-          child: child,
-        ),
-      );
-    },
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-  );
-}
-
-// class AuthGuard extends AutoRouteGuard {
-//   @override
-//   void onNavigation(NavigationResolver resolver, StackRouter router) {
-//     // the navigation is paused until resolver.next() is called with either
-//     // true to resume/continue navigation or false to abort navigation
-//     if (ServiceLocator.instance.get<AppState>().auth != null) {
-//       // if user is authenticated we continue
-//       resolver.next(true);
-//     } else {
-//       // we redirect the user to our login page
-//       // tip: use resolver.redirect to have the redirected route
-//       // automatically removed from the stack when the resolver is completed
-//       resolver.redirect(AuthRoute(
-//         onResult: (isLogin) => resolver.next(isLogin),
-//       ));
-//     }
-//   }
-// }
-
-// class BusinessTypeGuard extends AutoRouteGuard {
-//   @override
-//   void onNavigation(NavigationResolver resolver, StackRouter router) {
-//     // the navigation is paused until resolver.next() is called with either
-//     // true to resume/continue navigation or false to abort navigation
-//     if (ServiceLocator.instance.get<AppState>().auth == null ||
-//         ServiceLocator.instance
-//                 .get<AppState>()
-//                 .auth!
-//                 .profile
-//                 .company
-//                 .businessType ==
-//             'individual') {
-//       resolver.redirect(const BaseRoute());
-//     } else {
-//       resolver.next(true);
-//     }
-//   }
-// }

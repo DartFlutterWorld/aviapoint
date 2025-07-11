@@ -19,32 +19,38 @@ mixin _$ProfileEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() get,
+    required TResult Function() initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? get,
+    TResult? Function()? initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
+    TResult Function()? initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileEvent value) get,
+    required TResult Function(InitialProfileEvent value) initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileEvent value)? get,
+    TResult? Function(InitialProfileEvent value)? initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileEvent value)? get,
+    TResult Function(InitialProfileEvent value)? initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,6 +119,7 @@ class _$GetProfileEventImpl extends GetProfileEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() get,
+    required TResult Function() initial,
   }) {
     return get();
   }
@@ -121,6 +128,7 @@ class _$GetProfileEventImpl extends GetProfileEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? get,
+    TResult? Function()? initial,
   }) {
     return get?.call();
   }
@@ -129,6 +137,7 @@ class _$GetProfileEventImpl extends GetProfileEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
+    TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (get != null) {
@@ -141,6 +150,7 @@ class _$GetProfileEventImpl extends GetProfileEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileEvent value) get,
+    required TResult Function(InitialProfileEvent value) initial,
   }) {
     return get(this);
   }
@@ -149,6 +159,7 @@ class _$GetProfileEventImpl extends GetProfileEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileEvent value)? get,
+    TResult? Function(InitialProfileEvent value)? initial,
   }) {
     return get?.call(this);
   }
@@ -157,6 +168,7 @@ class _$GetProfileEventImpl extends GetProfileEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileEvent value)? get,
+    TResult Function(InitialProfileEvent value)? initial,
     required TResult orElse(),
   }) {
     if (get != null) {
@@ -172,6 +184,113 @@ abstract class GetProfileEvent extends ProfileEvent {
 }
 
 /// @nodoc
+abstract class _$$InitialProfileEventImplCopyWith<$Res> {
+  factory _$$InitialProfileEventImplCopyWith(_$InitialProfileEventImpl value,
+          $Res Function(_$InitialProfileEventImpl) then) =
+      __$$InitialProfileEventImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InitialProfileEventImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$InitialProfileEventImpl>
+    implements _$$InitialProfileEventImplCopyWith<$Res> {
+  __$$InitialProfileEventImplCopyWithImpl(_$InitialProfileEventImpl _value,
+      $Res Function(_$InitialProfileEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialProfileEventImpl extends InitialProfileEvent {
+  const _$InitialProfileEventImpl() : super._();
+
+  @override
+  String toString() {
+    return 'ProfileEvent.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InitialProfileEventImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() get,
+    required TResult Function() initial,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? get,
+    TResult? Function()? initial,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? get,
+    TResult Function()? initial,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetProfileEvent value) get,
+    required TResult Function(InitialProfileEvent value) initial,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetProfileEvent value)? get,
+    TResult? Function(InitialProfileEvent value)? initial,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetProfileEvent value)? get,
+    TResult Function(InitialProfileEvent value)? initial,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class InitialProfileEvent extends ProfileEvent {
+  const factory InitialProfileEvent() = _$InitialProfileEventImpl;
+  const InitialProfileEvent._() : super._();
+}
+
+/// @nodoc
 mixin _$ProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -179,8 +298,8 @@ mixin _$ProfileState {
     required TResult Function(String? errorFromApi, String errorForUser,
             String? statusCode, StackTrace? stackTrace, String? responseMessage)
         error,
-    required TResult Function(List<ProfileEntity> profile) success,
-    required TResult Function() done,
+    required TResult Function(ProfileEntity profile) success,
+    required TResult Function() initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -193,8 +312,8 @@ mixin _$ProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult? Function(List<ProfileEntity> profile)? success,
-    TResult? Function()? done,
+    TResult? Function(ProfileEntity profile)? success,
+    TResult? Function()? initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -207,8 +326,8 @@ mixin _$ProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult Function(List<ProfileEntity> profile)? success,
-    TResult Function()? done,
+    TResult Function(ProfileEntity profile)? success,
+    TResult Function()? initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -217,7 +336,7 @@ mixin _$ProfileState {
     required TResult Function(LoadingProfileState value) loading,
     required TResult Function(ErrorProfileState value) error,
     required TResult Function(SuccessProfileState value) success,
-    required TResult Function(DoneProfileState value) done,
+    required TResult Function(InitialProfileState value) initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -225,7 +344,7 @@ mixin _$ProfileState {
     TResult? Function(LoadingProfileState value)? loading,
     TResult? Function(ErrorProfileState value)? error,
     TResult? Function(SuccessProfileState value)? success,
-    TResult? Function(DoneProfileState value)? done,
+    TResult? Function(InitialProfileState value)? initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -233,7 +352,7 @@ mixin _$ProfileState {
     TResult Function(LoadingProfileState value)? loading,
     TResult Function(ErrorProfileState value)? error,
     TResult Function(SuccessProfileState value)? success,
-    TResult Function(DoneProfileState value)? done,
+    TResult Function(InitialProfileState value)? initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -306,8 +425,8 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
     required TResult Function(String? errorFromApi, String errorForUser,
             String? statusCode, StackTrace? stackTrace, String? responseMessage)
         error,
-    required TResult Function(List<ProfileEntity> profile) success,
-    required TResult Function() done,
+    required TResult Function(ProfileEntity profile) success,
+    required TResult Function() initial,
   }) {
     return loading();
   }
@@ -323,8 +442,8 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult? Function(List<ProfileEntity> profile)? success,
-    TResult? Function()? done,
+    TResult? Function(ProfileEntity profile)? success,
+    TResult? Function()? initial,
   }) {
     return loading?.call();
   }
@@ -340,8 +459,8 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult Function(List<ProfileEntity> profile)? success,
-    TResult Function()? done,
+    TResult Function(ProfileEntity profile)? success,
+    TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -356,7 +475,7 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
     required TResult Function(LoadingProfileState value) loading,
     required TResult Function(ErrorProfileState value) error,
     required TResult Function(SuccessProfileState value) success,
-    required TResult Function(DoneProfileState value) done,
+    required TResult Function(InitialProfileState value) initial,
   }) {
     return loading(this);
   }
@@ -367,7 +486,7 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
     TResult? Function(LoadingProfileState value)? loading,
     TResult? Function(ErrorProfileState value)? error,
     TResult? Function(SuccessProfileState value)? success,
-    TResult? Function(DoneProfileState value)? done,
+    TResult? Function(InitialProfileState value)? initial,
   }) {
     return loading?.call(this);
   }
@@ -378,7 +497,7 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
     TResult Function(LoadingProfileState value)? loading,
     TResult Function(ErrorProfileState value)? error,
     TResult Function(SuccessProfileState value)? success,
-    TResult Function(DoneProfileState value)? done,
+    TResult Function(InitialProfileState value)? initial,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -515,8 +634,8 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
     required TResult Function(String? errorFromApi, String errorForUser,
             String? statusCode, StackTrace? stackTrace, String? responseMessage)
         error,
-    required TResult Function(List<ProfileEntity> profile) success,
-    required TResult Function() done,
+    required TResult Function(ProfileEntity profile) success,
+    required TResult Function() initial,
   }) {
     return error(
         errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
@@ -533,8 +652,8 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult? Function(List<ProfileEntity> profile)? success,
-    TResult? Function()? done,
+    TResult? Function(ProfileEntity profile)? success,
+    TResult? Function()? initial,
   }) {
     return error?.call(
         errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
@@ -551,8 +670,8 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult Function(List<ProfileEntity> profile)? success,
-    TResult Function()? done,
+    TResult Function(ProfileEntity profile)? success,
+    TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -568,7 +687,7 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
     required TResult Function(LoadingProfileState value) loading,
     required TResult Function(ErrorProfileState value) error,
     required TResult Function(SuccessProfileState value) success,
-    required TResult Function(DoneProfileState value) done,
+    required TResult Function(InitialProfileState value) initial,
   }) {
     return error(this);
   }
@@ -579,7 +698,7 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
     TResult? Function(LoadingProfileState value)? loading,
     TResult? Function(ErrorProfileState value)? error,
     TResult? Function(SuccessProfileState value)? success,
-    TResult? Function(DoneProfileState value)? done,
+    TResult? Function(InitialProfileState value)? initial,
   }) {
     return error?.call(this);
   }
@@ -590,7 +709,7 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
     TResult Function(LoadingProfileState value)? loading,
     TResult Function(ErrorProfileState value)? error,
     TResult Function(SuccessProfileState value)? success,
-    TResult Function(DoneProfileState value)? done,
+    TResult Function(InitialProfileState value)? initial,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -628,7 +747,7 @@ abstract class _$$SuccessProfileStateImplCopyWith<$Res> {
           $Res Function(_$SuccessProfileStateImpl) then) =
       __$$SuccessProfileStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProfileEntity> profile});
+  $Res call({ProfileEntity profile});
 }
 
 /// @nodoc
@@ -648,9 +767,9 @@ class __$$SuccessProfileStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$SuccessProfileStateImpl(
       profile: null == profile
-          ? _value._profile
+          ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
-              as List<ProfileEntity>,
+              as ProfileEntity,
     ));
   }
 }
@@ -658,17 +777,10 @@ class __$$SuccessProfileStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SuccessProfileStateImpl extends SuccessProfileState {
-  const _$SuccessProfileStateImpl({required final List<ProfileEntity> profile})
-      : _profile = profile,
-        super._();
+  const _$SuccessProfileStateImpl({required this.profile}) : super._();
 
-  final List<ProfileEntity> _profile;
   @override
-  List<ProfileEntity> get profile {
-    if (_profile is EqualUnmodifiableListView) return _profile;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_profile);
-  }
+  final ProfileEntity profile;
 
   @override
   String toString() {
@@ -680,12 +792,11 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessProfileStateImpl &&
-            const DeepCollectionEquality().equals(other._profile, _profile));
+            (identical(other.profile, profile) || other.profile == profile));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_profile));
+  int get hashCode => Object.hash(runtimeType, profile);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -703,8 +814,8 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
     required TResult Function(String? errorFromApi, String errorForUser,
             String? statusCode, StackTrace? stackTrace, String? responseMessage)
         error,
-    required TResult Function(List<ProfileEntity> profile) success,
-    required TResult Function() done,
+    required TResult Function(ProfileEntity profile) success,
+    required TResult Function() initial,
   }) {
     return success(profile);
   }
@@ -720,8 +831,8 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult? Function(List<ProfileEntity> profile)? success,
-    TResult? Function()? done,
+    TResult? Function(ProfileEntity profile)? success,
+    TResult? Function()? initial,
   }) {
     return success?.call(profile);
   }
@@ -737,8 +848,8 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult Function(List<ProfileEntity> profile)? success,
-    TResult Function()? done,
+    TResult Function(ProfileEntity profile)? success,
+    TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -753,7 +864,7 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
     required TResult Function(LoadingProfileState value) loading,
     required TResult Function(ErrorProfileState value) error,
     required TResult Function(SuccessProfileState value) success,
-    required TResult Function(DoneProfileState value) done,
+    required TResult Function(InitialProfileState value) initial,
   }) {
     return success(this);
   }
@@ -764,7 +875,7 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
     TResult? Function(LoadingProfileState value)? loading,
     TResult? Function(ErrorProfileState value)? error,
     TResult? Function(SuccessProfileState value)? success,
-    TResult? Function(DoneProfileState value)? done,
+    TResult? Function(InitialProfileState value)? initial,
   }) {
     return success?.call(this);
   }
@@ -775,7 +886,7 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
     TResult Function(LoadingProfileState value)? loading,
     TResult Function(ErrorProfileState value)? error,
     TResult Function(SuccessProfileState value)? success,
-    TResult Function(DoneProfileState value)? done,
+    TResult Function(InitialProfileState value)? initial,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -786,11 +897,11 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
 }
 
 abstract class SuccessProfileState extends ProfileState {
-  const factory SuccessProfileState(
-      {required final List<ProfileEntity> profile}) = _$SuccessProfileStateImpl;
+  const factory SuccessProfileState({required final ProfileEntity profile}) =
+      _$SuccessProfileStateImpl;
   const SuccessProfileState._() : super._();
 
-  List<ProfileEntity> get profile;
+  ProfileEntity get profile;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -800,18 +911,18 @@ abstract class SuccessProfileState extends ProfileState {
 }
 
 /// @nodoc
-abstract class _$$DoneProfileStateImplCopyWith<$Res> {
-  factory _$$DoneProfileStateImplCopyWith(_$DoneProfileStateImpl value,
-          $Res Function(_$DoneProfileStateImpl) then) =
-      __$$DoneProfileStateImplCopyWithImpl<$Res>;
+abstract class _$$InitialProfileStateImplCopyWith<$Res> {
+  factory _$$InitialProfileStateImplCopyWith(_$InitialProfileStateImpl value,
+          $Res Function(_$InitialProfileStateImpl) then) =
+      __$$InitialProfileStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$DoneProfileStateImplCopyWithImpl<$Res>
-    extends _$ProfileStateCopyWithImpl<$Res, _$DoneProfileStateImpl>
-    implements _$$DoneProfileStateImplCopyWith<$Res> {
-  __$$DoneProfileStateImplCopyWithImpl(_$DoneProfileStateImpl _value,
-      $Res Function(_$DoneProfileStateImpl) _then)
+class __$$InitialProfileStateImplCopyWithImpl<$Res>
+    extends _$ProfileStateCopyWithImpl<$Res, _$InitialProfileStateImpl>
+    implements _$$InitialProfileStateImplCopyWith<$Res> {
+  __$$InitialProfileStateImplCopyWithImpl(_$InitialProfileStateImpl _value,
+      $Res Function(_$InitialProfileStateImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of ProfileState
@@ -820,18 +931,19 @@ class __$$DoneProfileStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DoneProfileStateImpl extends DoneProfileState {
-  const _$DoneProfileStateImpl() : super._();
+class _$InitialProfileStateImpl extends InitialProfileState {
+  const _$InitialProfileStateImpl() : super._();
 
   @override
   String toString() {
-    return 'ProfileState.done()';
+    return 'ProfileState.initial()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$DoneProfileStateImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$InitialProfileStateImpl);
   }
 
   @override
@@ -844,10 +956,10 @@ class _$DoneProfileStateImpl extends DoneProfileState {
     required TResult Function(String? errorFromApi, String errorForUser,
             String? statusCode, StackTrace? stackTrace, String? responseMessage)
         error,
-    required TResult Function(List<ProfileEntity> profile) success,
-    required TResult Function() done,
+    required TResult Function(ProfileEntity profile) success,
+    required TResult Function() initial,
   }) {
-    return done();
+    return initial();
   }
 
   @override
@@ -861,10 +973,10 @@ class _$DoneProfileStateImpl extends DoneProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult? Function(List<ProfileEntity> profile)? success,
-    TResult? Function()? done,
+    TResult? Function(ProfileEntity profile)? success,
+    TResult? Function()? initial,
   }) {
-    return done?.call();
+    return initial?.call();
   }
 
   @override
@@ -878,12 +990,12 @@ class _$DoneProfileStateImpl extends DoneProfileState {
             StackTrace? stackTrace,
             String? responseMessage)?
         error,
-    TResult Function(List<ProfileEntity> profile)? success,
-    TResult Function()? done,
+    TResult Function(ProfileEntity profile)? success,
+    TResult Function()? initial,
     required TResult orElse(),
   }) {
-    if (done != null) {
-      return done();
+    if (initial != null) {
+      return initial();
     }
     return orElse();
   }
@@ -894,9 +1006,9 @@ class _$DoneProfileStateImpl extends DoneProfileState {
     required TResult Function(LoadingProfileState value) loading,
     required TResult Function(ErrorProfileState value) error,
     required TResult Function(SuccessProfileState value) success,
-    required TResult Function(DoneProfileState value) done,
+    required TResult Function(InitialProfileState value) initial,
   }) {
-    return done(this);
+    return initial(this);
   }
 
   @override
@@ -905,9 +1017,9 @@ class _$DoneProfileStateImpl extends DoneProfileState {
     TResult? Function(LoadingProfileState value)? loading,
     TResult? Function(ErrorProfileState value)? error,
     TResult? Function(SuccessProfileState value)? success,
-    TResult? Function(DoneProfileState value)? done,
+    TResult? Function(InitialProfileState value)? initial,
   }) {
-    return done?.call(this);
+    return initial?.call(this);
   }
 
   @override
@@ -916,17 +1028,17 @@ class _$DoneProfileStateImpl extends DoneProfileState {
     TResult Function(LoadingProfileState value)? loading,
     TResult Function(ErrorProfileState value)? error,
     TResult Function(SuccessProfileState value)? success,
-    TResult Function(DoneProfileState value)? done,
+    TResult Function(InitialProfileState value)? initial,
     required TResult orElse(),
   }) {
-    if (done != null) {
-      return done(this);
+    if (initial != null) {
+      return initial(this);
     }
     return orElse();
   }
 }
 
-abstract class DoneProfileState extends ProfileState {
-  const factory DoneProfileState() = _$DoneProfileStateImpl;
-  const DoneProfileState._() : super._();
+abstract class InitialProfileState extends ProfileState {
+  const factory InitialProfileState() = _$InitialProfileStateImpl;
+  const InitialProfileState._() : super._();
 }

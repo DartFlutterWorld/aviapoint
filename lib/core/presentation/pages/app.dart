@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/widgets/app_state.dart';
+import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
+import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
+import 'package:aviapoint/auth_page/presentation/bloc/sms_bloc.dart';
+import 'package:aviapoint/core/presentation/proveider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/injection_container.dart';
@@ -29,8 +32,8 @@ import 'package:provider/provider.dart';
 @immutable
 class App extends StatefulWidget {
   const App({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<App> createState() => _AppState();
@@ -43,14 +46,16 @@ class _AppState extends State<App> {
   }
 
   // Получаем зависимости через get_it
-  final _init = getIt<AppState>();
+
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: _init),
+        ChangeNotifierProvider<AppState>(
+          create: (context) => getIt<AppState>(),
+        ),
         BlocProvider<VideoForStudentsBloc>(
           create: (context) => VideoForStudentsBloc(
             videoForStudentsRepository: getIt<VideoForStudentsRepository>(),
@@ -106,29 +111,28 @@ class _AppState extends State<App> {
             handBookRepository: getIt<HandBookRepository>(),
           ),
         ),
+        BlocProvider<SmsBloc>(
+          create: (context) => SmsBloc(authRepository: getIt<AuthRepository>()),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(authRepository: getIt<AuthRepository>(), appState: getIt<AppState>()),
+        ),
       ],
       child: BlocProvider<ProfileBloc>(
         create: (context) => ProfileBloc(
           profileRepository: getIt<ProfileRepository>(),
-          initState: _init,
+          initState: getIt<AppState>(),
         ),
-        child: BlocListener<ProfileBloc, ProfileState>(
-          listener: (context, state) {
-            if (state is LoadingProfileState) {
-              // context.read<OrdersSummaryBloc>().emit(LoadingOrdersSummaryState());
-            }
-          },
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            title: 'AviaPoint',
-            routerDelegate: getIt<AppRouter>().delegate(
-              navigatorObservers: () => [MyRouteObserver()],
-            ),
-            routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          title: 'AviaPoint',
+          routerDelegate: getIt<AppRouter>().delegate(
+            navigatorObservers: () => [MyRouteObserver()],
           ),
+          routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
         ),
       ),
     );
