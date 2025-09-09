@@ -65,7 +65,7 @@ class _ElectricalPowerSubCategoryScreenState extends State<ElectricalPowerSubCat
         //   ),
         // ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: _Success(subCategory),
     );
   }
@@ -104,9 +104,8 @@ class _Success extends StatelessWidget {
               title: emergencyCategories[index].title,
               onTap: () => context.router.push(navigateToCategory(index + 1)),
               subTitle: emergencyCategories[index].subTitle,
-              picture: emergencyCategories[index].picture,
-              icon: Pictures.strelka,
               clearCategory: () {},
+              withClear: false,
             ),
           ),
         ),

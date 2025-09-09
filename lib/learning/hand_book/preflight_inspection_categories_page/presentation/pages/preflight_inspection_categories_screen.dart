@@ -1,12 +1,18 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/pages/category_widget.dart';
+import 'package:aviapoint/core/presentation/widgets/clear_progress.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/pages/normal_categories_screen.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/domain/entities/preflight_inspection_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/bloc/preflight_inspection_categories_bloc.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/widgets/progress_widget.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_checked_cubit.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_bloc.dart';
 import 'package:collection/collection.dart';
@@ -47,16 +53,18 @@ class _PreflightInspectionCategoriesScreenState extends State<PreflightInspectio
           ),
         ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: BlocBuilder<PreflightInspectionCategoriesBloc, PreflightInspectionCategoriesState>(
         builder: (context, state) => state.map(
           success: (value) => _Success(value.preflightInspectionCategories),
-          loading: (value) => Center(
-            child: CircularProgressIndicator(),
+          error: (value) => ErrorCustom(
+            textError: value.errorForUser,
+            repeat: () {
+              BlocProvider.of<PreflightInspectionCategoriesBloc>(context).add(GetPreflightInspectionCategoriesEvent());
+              BlocProvider.of<PreflightInspectionCheckListBloc>(context).add(GetPreflightInspectionCheckListEvent());
+            },
           ),
-          error: (value) => Center(
-            child: Text(value.errorForUser),
-          ),
+          loading: (value) => LoadingCustom(),
         ),
       ),
     );
@@ -67,7 +75,7 @@ class _Success extends StatelessWidget {
   final List<PreflightInspectionCategoriesEntity> preflightInspectionCategories;
   const _Success(this.preflightInspectionCategories);
 
-  String getIcon({required BuildContext context, required int index}) {
+  bool getIcon({required BuildContext context, required int index}) {
     final state = BlocProvider.of<PreflightCheckedCubit>(context).state;
     final checksLenght = BlocProvider.of<PreflightInspectionCheckListBloc>(context).preflightInspectionCheckList.where((e) => e.preflightInspectionCategoryId == index + 1).length;
 
@@ -76,10 +84,10 @@ class _Success extends StatelessWidget {
     );
     if (checkProgressByIdCategory != null) {
       if (checkProgressByIdCategory.checkedIds.length == checksLenght) {
-        return Pictures.checkOk;
+        return true;
       }
     }
-    return Pictures.strelka;
+    return false;
   }
 
   void canNavigation({required BuildContext context, required int index}) {
@@ -106,30 +114,35 @@ class _Success extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: BlocBuilder<PreflightCheckedCubit, PreflightCheckedState>(
           builder: (context, preflightCheckedState) {
             return ListView.builder(
               clipBehavior: Clip.none,
               itemCount: preflightInspectionCategories.length,
               itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: CategoryWidget(
                   title: preflightInspectionCategories[index].title,
                   onTap: () => canNavigation(context: context, index: index),
                   subTitle: preflightInspectionCategories[index].subTitle,
-                  picture: preflightInspectionCategories[index].picture,
-                  icon: getIcon(context: context, index: index),
-                  clearCategory: () {
-                    BlocProvider.of<PreflightCheckedCubit>(context).clearCategory(idCategory: preflightInspectionCategories[index].id);
+                  withClear: preflightCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.isNotEmpty ?? false,
+                  clearCategory: () async {
+                    final bool? result = await showDialogCustom(
+                      context: context,
+                    );
+                    if (result == true) {
+                      BlocProvider.of<PreflightCheckedCubit>(context).clearCategory(idCategory: preflightInspectionCategories[index].id);
+                    }
                   },
                   child: BlocBuilder<PreflightInspectionCheckListBloc, PreflightInspectionCheckListState>(
-                    builder: (context, state) {
-                      return ProgressWidget(
+                    builder: (context, state) => state.maybeMap(
+                      success: (value) => ProgressWidget(
                         from: preflightCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.length ?? 0,
                         to: BlocProvider.of<PreflightInspectionCheckListBloc>(context).preflightInspectionCheckList.where((e) => e.preflightInspectionCategoryId == index + 1).length,
-                      );
-                    },
+                      ),
+                      orElse: () => SizedBox(),
+                    ),
                   ),
                 ),
               ),
@@ -137,25 +150,6 @@ class _Success extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class ProgressWidget extends StatelessWidget {
-  final int from;
-  final int to;
-
-  const ProgressWidget({
-    super.key,
-    required this.from,
-    required this.to,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Выполнено: $from из $to',
-      style: AppStyles.caption2,
     );
   }
 }

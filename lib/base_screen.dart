@@ -12,7 +12,7 @@ class BaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       // backgroundColor: Colors.transparent,
       transitionBuilder: (_, child, __) => child,
       animationDuration: Duration.zero,

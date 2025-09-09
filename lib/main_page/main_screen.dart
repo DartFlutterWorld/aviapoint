@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/main_page/stories/presentation/widgets/list_stories_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.newbg,
+      backgroundColor: Color(0xFFF9FDFF),
       appBar: CustomAppBar(
         title: 'AviaPoint',
         withBack: false,
@@ -44,7 +45,12 @@ class _MainScreenState extends State<MainScreen> {
                 )
         ],
       ),
-      body: Center(child: Text('Главная')),
+      body: ListView(
+        padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+        children: [
+          ListStoriesWidget(),
+        ],
+      ),
 
       // body: BlocBuilder<ProfileBloc, ProfileState>(
       //   builder: (context, state) => state.maybeMap(

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/sms_bloc.dart';
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/injection_container.dart';
@@ -17,8 +17,22 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/pre
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_bloc.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_by_category_bloc.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_correct_answers_bloc.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_sertificates_bloc.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/repositories/video_for_students_repository.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/bloc/video_for_students_bloc.dart';
+import 'package:aviapoint/main_page/stories/domain/repositories/story_repository.dart';
+import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
+import 'package:aviapoint/main_page/stories/presentation/bloc/detail_story_bloc.dart';
+import 'package:aviapoint/main_page/stories/presentation/bloc/story_cubit.dart';
+import 'package:aviapoint/news/domain/repositories/news_repository.dart';
+import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
+import 'package:aviapoint/news/presentation/bloc/detail_news_bloc.dart';
+import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
+import 'package:aviapoint/news/presentation/cubit/news_cubit.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -117,23 +131,56 @@ class _AppState extends State<App> {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository: getIt<AuthRepository>(), appState: getIt<AppState>()),
         ),
-      ],
-      child: BlocProvider<ProfileBloc>(
-        create: (context) => ProfileBloc(
-          profileRepository: getIt<ProfileRepository>(),
-          initState: getIt<AppState>(),
+        BlocProvider<CacheManagerBloc>(
+          create: (context) => CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent()),
         ),
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          title: 'AviaPoint',
-          routerDelegate: getIt<AppRouter>().delegate(
-            navigatorObservers: () => [MyRouteObserver()],
+        BlocProvider<ProfileBloc>(
+          create: (context) => ProfileBloc(
+            profileRepository: getIt<ProfileRepository>(),
+            initState: getIt<AppState>(),
           ),
-          routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
         ),
+        BlocProvider<StoryCubit>(
+          create: (context) => StoryCubit(),
+        ),
+        BlocProvider<DetailStoryBloc>(
+          create: (context) => DetailStoryBloc(storyRepository: getIt<StoryRepository>()),
+        ),
+        BlocProvider<DetailNewsBloc>(
+          create: (context) => DetailNewsBloc(newsRepository: getIt<NewsRepository>()),
+        ),
+        BlocProvider<NewsBloc>(
+          create: (context) => NewsBloc(newsRepository: getIt<NewsRepository>()),
+        ),
+        BlocProvider<CategoryNewsBloc>(
+          create: (context) => CategoryNewsBloc(newsRepository: getIt<NewsRepository>()),
+        ),
+        BlocProvider<NewsCubit>(
+          create: (context) => NewsCubit(),
+        ),
+        BlocProvider<TypeSertificatesBloc>(
+          create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<TypeCorrectAnswersBloc>(
+          create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<CategoriesWithListQuestionsBloc>(
+          create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<RosAviaTestCubit>(
+          create: (context) => RosAviaTestCubit(),
+        ),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        title: 'AviaPoint',
+        routerDelegate: getIt<AppRouter>().delegate(
+          navigatorObservers: () => [MyRouteObserver()],
+        ),
+        routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
       ),
     );
   }

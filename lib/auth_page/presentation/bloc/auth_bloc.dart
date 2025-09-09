@@ -1,7 +1,7 @@
 import 'package:aviapoint/auth_page/data/tokens/token_storage.dart';
 import 'package:aviapoint/auth_page/domain/entities/auth_entity.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:provider/provider.dart';

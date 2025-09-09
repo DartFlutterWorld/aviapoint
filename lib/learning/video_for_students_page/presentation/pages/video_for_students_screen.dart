@@ -4,6 +4,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/domain/service_locator.dart';
 import 'package:aviapoint/core/presentation/pages/app.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
@@ -80,7 +82,14 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
             }
           },
           builder: (context, state) => state.maybeMap(
-            orElse: () => Center(child: CircularProgressIndicator()),
+            loading: (value) => LoadingCustom(),
+            error: (value) => ErrorCustom(
+              textError: value.errorForUser,
+              repeat: () {
+                BlocProvider.of<VideoForStudentsBloc>(context).add(GetByIdVideoForStudentsEvent(0));
+              },
+            ),
+            orElse: () => LoadingCustom(),
             successById: (value) => (_videoPlayerController != null && _videoPlayerController!.value.isInitialized)
                 ? Center(
                     child: ClipRRect(

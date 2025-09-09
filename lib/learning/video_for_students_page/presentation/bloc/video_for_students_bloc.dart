@@ -1,4 +1,4 @@
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/entities/video_for_students_entity.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/repositories/video_for_students_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +52,7 @@ class VideoForStudentsBloc extends Bloc<VideoForStudentsEvent, VideoForStudentsS
       (l) {
         emit(
           ErrorVideoForStudentsState(
-            errorForUser: 'Что-то пошло не так! Попробуйте позже..',
+            errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
             errorFromApi: l.message,
             statusCode: 'Код ошибки сервера: ${l.statusCode}',
             responseMessage: l.responseMessage,
@@ -76,7 +76,7 @@ class VideoForStudentsBloc extends Bloc<VideoForStudentsEvent, VideoForStudentsS
       (l) {
         emit(
           ErrorVideoForStudentsState(
-            errorForUser: 'Что-то пошло не так! Попробуйте позже..',
+            errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
             errorFromApi: l.message,
             statusCode: 'Код ошибки сервера: ${l.statusCode}',
             responseMessage: l.responseMessage,

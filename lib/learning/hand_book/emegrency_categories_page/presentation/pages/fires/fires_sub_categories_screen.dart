@@ -83,7 +83,7 @@ class _FiresSubCategoriesScreenState extends State<FiresSubCategoriesScreen> {
         //   ),
         // ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: _Success(subCategory),
     );
   }
@@ -122,12 +122,11 @@ class _Success extends StatelessWidget {
           itemBuilder: (context, index) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: CategoryWidget(
-              title: capitalizeSentence(emergencyCategories[index].title),
+              title: bigFirstSymbol(emergencyCategories[index].title),
               onTap: () => context.router.push(navigateToCategory(index + 1)),
-              subTitle: capitalizeSentence(emergencyCategories[index].subTitle),
-              picture: emergencyCategories[index].picture,
-              icon: Pictures.strelka,
+              subTitle: bigFirstSymbol(emergencyCategories[index].subTitle),
               clearCategory: () {},
+              withClear: false,
             ),
           ),
         ),

@@ -37,7 +37,6 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^28.2.7
   path_provider: ^2.0.11
   permission_handler: ^11.1.0
-  lecle_downloads_path_provider: ^0.0.2+8
   file_saver: ^0.2.14
   url_launcher: ^6.3.0
   device_info_plus: ^11.0.0
@@ -108,7 +107,7 @@ dev_dependencies:
   mockito: ^5.1.0
   retrofit_generator: ^9.1.2
   auto_route_generator: ^10.0.1
-  flutter_launcher_icons: ^0.14.1
+  flutter_launcher_icons: ^0.14.4
   easy_sidemenu: ^0.6.1
 
 onesignal_flutter:
@@ -123,33 +122,35 @@ dependency_overrides:
       path: modal_bottom_sheet
 
 flutter_launcher_icons:
-  android: false
+  android: "launcher_icon"
   remove_alpha_ios: true
   ios: true
-  #image_path_android: "assets/png/logo_grain_price_android.png"
   image_path_android: "assets/logo/android_logo.png"
   image_path_ios: "assets/logo/ios_logo.png"
-  # adaptive_icon_foreground: "assets/png/logo_grain_price_android.png"
-  adaptive_icon_background: "#7A0FD9"
+  adaptive_icon_foreground: "assets/logo/android_logo.png"
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/
     - assets/svg/
     - assets/png/
     - assets/gif/
+    - assets/mp4/
     - assets/translations/
+    - assets/logo/
 
   fonts:
-    - family: NotoSans
+    - family: Geologica
       fonts:
-        - asset: assets/fonts/noto_sans/NotoSans-Regular.ttf
-        - asset: assets/fonts/noto_sans/NotoSans-Bold.ttf
-        - asset: assets/fonts/noto_sans/NotoSans-Medium.ttf
-        - asset: assets/fonts/noto_sans/NotoSans-Light.ttf
-        - asset: assets/fonts/noto_sans/NotoSans-Semibold.ttf
+        - asset: assets/fonts/geologica/Geologica-Regular.ttf
+        - asset: assets/fonts/geologica/Geologica-Bold.ttf
+        - asset: assets/fonts/geologica/Geologica-Medium.ttf
+        - asset: assets/fonts/geologica/Geologica-Light.ttf
+        - asset: assets/fonts/geologica/Geologica-Semibold.ttf
+        - asset: assets/fonts/geologica/Geologica-Thin.ttf
 
 flutter_intl:
   enabled: true

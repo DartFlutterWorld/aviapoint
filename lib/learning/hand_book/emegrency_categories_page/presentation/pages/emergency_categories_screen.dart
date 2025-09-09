@@ -1,16 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/pages/category_widget.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
-import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/domain/entities/emergency_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/bloc/emergency_categories_bloc.dart';
-import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/autopilot/autopilot_or_electric_trim_failure_screen.dart';
-import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/engine_failure/engine_failure_screen.dart';
-import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/forced_landings/forced_landings_sub_categories_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,15 +45,16 @@ class _EmergencyCategoriesScreenState extends State<EmergencyCategoriesScreen> {
         //   ),
         // ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: BlocBuilder<EmergencyCategoriesBloc, EmergencyCategoriesState>(
         builder: (context, state) => state.map(
           success: (value) => _Success(value.emergencyCategories),
-          loading: (value) => Center(
-            child: CircularProgressIndicator(),
-          ),
-          error: (value) => Center(
-            child: Text(value.errorForUser),
+          loading: (value) => LoadingCustom(),
+          error: (value) => ErrorCustom(
+            textError: value.errorForUser,
+            repeat: () {
+              BlocProvider.of<EmergencyCategoriesBloc>(context).add(GetEmergencyCategoriesEvent());
+            },
           ),
         ),
       ),
@@ -86,7 +85,7 @@ class _Success extends StatelessWidget {
       case 8:
         return AbnormalLandingsRoute();
       case 9:
-        return ElectricalPowerSubCategoryRoute(nameCategory: 'Неисправности системы электроснабжеения');
+        return ElectricalPowerSubCategoryRoute(nameCategory: 'Неисправности системы электроснабжения');
       case 10:
         return AirDataSystemFailureRoute();
       case 11:
@@ -109,19 +108,18 @@ class _Success extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: ListView.builder(
           clipBehavior: Clip.none,
           itemCount: emergencyCategories.length,
           itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.symmetric(vertical: 6.0),
             child: CategoryWidget(
-              title: capitalizeSentence(emergencyCategories[index].title),
+              title: bigFirstSymbol(emergencyCategories[index].title),
               onTap: () => context.router.push(navigateToCategory(index + 1)),
-              subTitle: capitalizeSentence(emergencyCategories[index].subTitle),
-              picture: emergencyCategories[index].picture,
-              icon: Pictures.strelka,
+              subTitle: bigFirstSymbol(emergencyCategories[index].subTitle),
               clearCategory: () {},
+              withClear: false,
             ),
           ),
         ),

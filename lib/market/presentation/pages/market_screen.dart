@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
@@ -29,7 +29,7 @@ class MarketScreen extends StatelessWidget {
                 )
         ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: Center(
         child: Text('Маркет'),
       ),

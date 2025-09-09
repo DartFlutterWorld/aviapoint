@@ -1,4 +1,4 @@
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:aviapoint/profile_page/profile/domain/entities/profile_entity.dart';
@@ -56,7 +56,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (l) {
         emit(
           ErrorProfileState(
-            errorForUser: 'Что-то пошло не так! Попробуйте позже..',
+            errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
             errorFromApi: l.message,
             statusCode: 'Код ошибки сервера: ${l.statusCode}',
             responseMessage: l.responseMessage,

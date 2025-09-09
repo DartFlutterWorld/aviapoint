@@ -1,4 +1,4 @@
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/learning/hand_book/main_categories_page/domain/entities/hand_book_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/entities/video_for_students_entity.dart';
@@ -54,7 +54,7 @@ class HandBookMainCategoriesBloc extends Bloc<HandBookMainCategoriesEvent, HandB
       (l) {
         emit(
           ErrorHandBookMainCategoriesState(
-            errorForUser: 'Что-то пошло не так! Попробуйте позже..',
+            errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
             errorFromApi: l.message,
             statusCode: 'Код ошибки сервера: ${l.statusCode}',
             responseMessage: l.responseMessage,
@@ -78,7 +78,7 @@ class HandBookMainCategoriesBloc extends Bloc<HandBookMainCategoriesEvent, HandB
   //     (l) {
   //       emit(
   //         ErrorHandBookMainCategoriesState(
-  //           errorForUser: 'Что-то пошло не так! Попробуйте позже..',
+  //           errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
   //           errorFromApi: l.message,
   //           statusCode: 'Код ошибки сервера: ${l.statusCode}',
   //           responseMessage: l.responseMessage,

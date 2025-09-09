@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/pages/category_widget.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
@@ -9,6 +11,7 @@ import 'package:aviapoint/learning/hand_book/normal_categories_page/domain/entit
 import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/bloc/normal_categories_bloc.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_check_list_bloc.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_checked_cubit.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/widgets/progress_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,15 +50,17 @@ class _NormalCategoriesScreenState extends State<NormalCategoriesScreen> {
           ),
         ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: BlocBuilder<NormalCategoriesBloc, NormalCategoriesState>(
         builder: (context, state) => state.map(
           success: (value) => _Success(value.normalCategories),
-          loading: (value) => Center(
-            child: CircularProgressIndicator(),
-          ),
-          error: (value) => Center(
-            child: Text(value.errorForUser),
+          loading: (value) => LoadingCustom(),
+          error: (value) => ErrorCustom(
+            textError: value.errorForUser,
+            repeat: () {
+              BlocProvider.of<NormalCategoriesBloc>(context).add(GetNormalCategoriesEvent());
+              BlocProvider.of<NormalCheckListBloc>(context).add(GetNormalCheckListEvent());
+            },
           ),
         ),
       ),
@@ -106,56 +111,35 @@ class _Success extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: BlocBuilder<NormalCheckedCubit, NormalCheckedState>(
           builder: (context, normalCheckedState) {
             return ListView.builder(
               clipBehavior: Clip.none,
               itemCount: normalCategories.length,
               itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: CategoryWidget(
                   title: normalCategories[index].title,
                   onTap: () => canNavigation(context: context, index: index),
                   subTitle: normalCategories[index].subTitle,
-                  picture: normalCategories[index].picture,
-                  icon: getIcon(context: context, index: index),
                   clearCategory: () {
                     BlocProvider.of<NormalCheckedCubit>(context).clearCategory(idCategory: normalCategories[index].id);
                   },
                   child: BlocBuilder<NormalCheckListBloc, NormalCheckListState>(
-                    builder: (context, state) {
-                      return ProgressWidget(
-                        from: normalCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.length ?? 0,
-                        to: BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length,
-                      );
-                    },
-                  ),
+                      builder: (context, state) => state.maybeMap(
+                            success: (value) => ProgressWidget(
+                              from: normalCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.length ?? 0,
+                              to: BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length,
+                            ),
+                            orElse: () => SizedBox.shrink(),
+                          )),
                 ),
               ),
             );
           },
         ),
       ),
-    );
-  }
-}
-
-class ProgressWidget extends StatelessWidget {
-  final int from;
-  final int to;
-
-  const ProgressWidget({
-    super.key,
-    required this.from,
-    required this.to,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Выполнено: $from из $to',
-      style: AppStyles.caption2,
     );
   }
 }

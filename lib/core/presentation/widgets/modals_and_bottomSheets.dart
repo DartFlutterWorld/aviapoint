@@ -1,9 +1,17 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/core/presentation/widgets/clear_progress.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> checkList({required BuildContext context, required List<NormalCheckListEntity> checkList}) async {
@@ -14,7 +22,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
     isScrollControlled: true,
     enableDrag: false,
     barrierColor: AppColors.bgOverlay,
-    backgroundColor: AppColors.newbg,
+    backgroundColor: AppColors.background,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(10.r),
@@ -46,9 +54,23 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
                     ])),
               ]),
               CustomButton(
-                title: 'Ok',
-                textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.sp, height: 1, color: AppColors.mainSolid),
-                borderColor: Colors.blue,
+                verticalPadding: 8,
+                backgroundColor: Color(0xFF0A6EFA),
+                title: 'Проверено',
+                textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                borderColor: Color(0xFF0A6EFA),
+                borderRadius: 46,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xff0064D6).withOpacity(0.25),
+                    blurRadius: 4,
+                    spreadRadius: 0,
+                    offset: Offset(
+                      0.0,
+                      7.0,
+                    ),
+                  ),
+                ],
                 onPressed: () => context.router.maybePop(),
               )
             ],
@@ -57,4 +79,96 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
       );
     },
   );
+}
+
+Future<void> selectTypeCertificate({required BuildContext context}) async {
+  final result = await showModalBottomSheet<TypeSertificatesEntity>(
+    useRootNavigator: true,
+    isDismissible: true,
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    barrierColor: AppColors.bgOverlay,
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(10.r),
+      ),
+    ),
+    builder: (context) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height - 100,
+        child: TypeSertificatesScreen(
+          title: 'Выбирите свидетельство',
+        ),
+      );
+    },
+  );
+  if (result != null) {
+    BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
+    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
+  }
+}
+
+Future<bool?> showDialogCustom({required BuildContext context}) async {
+  final bool? result = await showDialog<bool>(
+    context: context,
+    // barrierColor: Color(0xFF1F2937),
+    builder: (BuildContext context) {
+      return Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            child: ClearProgress(
+              onTap1: () => Navigator.pop(context, true),
+              onTap2: () => Navigator.pop(context, false),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+  return result;
+
+  // if (result != null) {}
+}
+
+Future<void> openQuestion({
+  required BuildContext context,
+  required QuestionWithAnswersEntity? question,
+  required int questionId,
+  required String? categoryTitle,
+}) async {
+  final result = await showModalBottomSheet<TypeSertificatesEntity>(
+    useRootNavigator: true,
+    isDismissible: true,
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    barrierColor: AppColors.bgOverlay,
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(10.r),
+      ),
+    ),
+    builder: (context) {
+      return ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height - 100,
+          child: DetailQuestionScreen(
+            questionId: questionId,
+            categoryTitle: categoryTitle,
+            question: question,
+            withClose: true,
+          ),
+        ),
+      );
+    },
+  );
+  if (result != null) {
+    BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
+  }
 }

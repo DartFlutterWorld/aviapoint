@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? shadowColor;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.height = kToolbarHeight,
     this.actions = const [],
@@ -28,9 +29,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onTap,
     this.withLogo = false,
     this.backgroundColor,
-    this.elevation = 3,
+    this.elevation = 1,
     this.shadowColor,
-  }) : super(key: key);
+  });
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -51,30 +52,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.transparent,
                 child: Row(
                   children: [
-                    SizedBox(width: 8.w),
+                    SizedBox(width: 12.w),
                     SvgPicture.asset(
-                      'assets/svg/back_new.svg',
-                      height: 16.h,
-                      colorFilter: const ColorFilter.mode(
-                        AppColors.primary100p,
-                        BlendMode.srcIn,
-                      ),
+                      Pictures.arrowCircleLeft,
+                      height: 24,
                     ),
-                    SizedBox(width: 8.w),
-                    Text('Назад', style: AppStyles.appbarTitle.copyWith(color: AppColors.mainSolid)),
                   ],
                 ),
               ),
             )
-          : GestureDetector(
-              onTap: onTap,
-            ),
-      leadingWidth: 90.r,
-      iconTheme: const IconThemeData(
-        color: AppColors.bgViolet,
-      ),
+          : SizedBox(),
+      leadingWidth: 60.r,
       centerTitle: true,
-      backgroundColor: kIsWeb ? AppColors.newbg : backgroundColor ?? AppColors.white,
+      backgroundColor: AppColors.backgroundAppBar,
       elevation: elevation,
       shadowColor: kIsWeb ? null : shadowColor ?? const Color(0xFFA8A39C).withValues(alpha: 0.12),
       title: withLogo
@@ -90,7 +80,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : Text(
               title,
-              style: AppStyles.appbarTitle.copyWith(color: AppColors.netural100p),
+              style: TextStyle(color: Color(0xFF223B76), fontSize: 14.sp, fontFamily: 'Geologica-Medium', fontWeight: FontWeight.bold),
               maxLines: 2,
               textAlign: titleTextAlign,
             ),

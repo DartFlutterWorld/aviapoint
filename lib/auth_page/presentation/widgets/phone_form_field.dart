@@ -50,15 +50,7 @@ class PhoneFormFieldState extends State<PhoneFormField> {
       width: double.infinity,
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFFFE2BA),
-            Color(0xFF9690FF),
-          ],
-        ),
-        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
         //autofocus: true,
@@ -66,41 +58,35 @@ class PhoneFormFieldState extends State<PhoneFormField> {
         readOnly: widget.onlyRead,
         controller: _textController,
         onChanged: widget.onChange,
-        style: const TextStyle(
-          color: AppColors.netural70p,
-          fontWeight: FontWeight.w500,
-          fontSize: 18,
-          height: 1,
-        ),
+        style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E)),
         decoration: InputDecoration(
+          border: null,
+          disabledBorder: InputBorder.none,
           filled: true,
-          fillColor: AppColors.white,
+          fillColor: Color(0xFFE3F1FF),
           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.white),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.white),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
           ),
-          hintText: 'Ваш номер',
-          hintStyle: AppStyles.subBig.copyWith(
-            color: AppColors.inactive,
-            height: 1,
+          hintText: 'Номер телефона',
+          hintStyle: AppStyles.bold20s.copyWith(
+            color: Color(0xFF9CA5AF),
           ),
           prefixIcon: Container(
             padding: const EdgeInsets.only(top: 2.5),
             width: 54,
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                '+7  ',
-                style: AppStyles.titleMain.copyWith(
-                  color: AppColors.mainSolid,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: Text('+7  ', style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E))),
             ),
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/auth_page/data/tokens/token_storage.dart';
 import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/abnormal_landings/abnormal_landings_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/air_data_system_failure/air_data_system_failure_screen.dart';
@@ -37,9 +37,19 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_pag
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/pages/preflight_inspection_check_list_screen.dart';
 import 'package:aviapoint/learning/learning_screen.dart';
 import 'package:aviapoint/learning/learning_navigation_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/base_questions_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/list_question_by_category_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/pages/video_for_students_screen.dart';
-import 'package:aviapoint/news/news_navigation_screen.dart';
-import 'package:aviapoint/news/news_screen.dart';
+import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
+import 'package:aviapoint/main_page/stories/presentation/pages/detail_story_screen.dart';
+import 'package:aviapoint/news/domain/entities/news_entity.dart';
+import 'package:aviapoint/news/presentation/pages/detail_news_screen.dart';
+import 'package:aviapoint/news/presentation/pages/news_navigation_screen.dart';
+import 'package:aviapoint/news/presentation/pages/news_screen.dart';
 import 'package:aviapoint/market/presentation/pages/market_navigation_screen.dart';
 import 'package:aviapoint/market/presentation/pages/market_screen.dart';
 import 'package:aviapoint/sale/sale_request_navigation_screen.dart';
@@ -111,6 +121,19 @@ class AppRouter extends RootStackRouter {
                 //     ),
                 //   ],
                 // ),
+                CustomRoute<CustomRoute<dynamic>>(
+                  path: 'stories/:id',
+                  page: DetailStoryRoute.page,
+                  // duration: const Duration(milliseconds: 500),
+                  transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      alwaysIncludeSemantics: true,
+                      child: child,
+                    );
+                  },
+                  meta: const {'hideBottomNav': true},
+                ),
               ],
             ),
             AutoRoute(
@@ -134,12 +157,6 @@ class AppRouter extends RootStackRouter {
                   path: '',
                   // initial: true,
                   page: LearningRoute.page,
-                  children: [
-                    // AutoRoute(
-                    //   path: 'video_for_students',
-                    //   page: ViseoForStudentsRoute.page,
-                    // ),
-                  ],
                 ),
                 AutoRoute(
                   path: 'video_for_students',
@@ -273,6 +290,18 @@ class AppRouter extends RootStackRouter {
                   path: 'hand_book/emergency_categories/high_carbon_monoxide_co_level_advisory',
                   page: HighCarbonMonoxideCoLevelAdvisoryRoute.page,
                 ),
+                AutoRoute(
+                  path: 'base_questions',
+                  page: BaseQuestionsRoute.page,
+                ),
+                AutoRoute(
+                  path: 'base_questions/:categoryId',
+                  page: ListQuestionByCategoryRoute.page,
+                ),
+                AutoRoute(
+                  path: 'type_sertificates/:typeCertificate/:questionId',
+                  page: DetailQuestionRoute.page,
+                ),
               ],
             ),
             AutoRoute(
@@ -292,6 +321,7 @@ class AppRouter extends RootStackRouter {
               page: NewsNavigationRoute.page,
               children: [
                 AutoRoute(initial: true, page: NewsRoute.page),
+                AutoRoute(path: ':id', page: DetailNewsRoute.page),
               ],
             ),
             AutoRoute(
@@ -306,6 +336,7 @@ class AppRouter extends RootStackRouter {
             ),
           ],
         ),
+
         // AutoRoute(
         //   initial: !kIsWeb && ServiceLocator.instance.get<AppState>().isNewUser,
         //   page: OnboardingRoute.page,

@@ -4,26 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 final defaultPinTheme = PinTheme(
-  width: 52,
-  height: 65,
-  textStyle: AppStyles.code.copyWith(
-    color: AppColors.textPrimary,
-  ),
+  width: 58,
+  height: 71,
+  textStyle: AppStyles.extraBold.copyWith(color: Color(0xFF2B373E)),
   decoration: const BoxDecoration(
-    color: AppColors.white,
-    border: Border.fromBorderSide(BorderSide(color: AppColors.grey14)),
-    borderRadius: BorderRadius.all(Radius.circular(10)),
+    color: Color(0xFFE3F1FF),
+    borderRadius: BorderRadius.all(Radius.circular(12)),
   ),
 );
 
-final disabledPinTheme = defaultPinTheme.copyWith(
-  textStyle: AppStyles.code.copyWith(
-    color: AppColors.textPrimary.withValues(alpha: .4),
-  ),
-);
+final disabledPinTheme = defaultPinTheme.copyWith();
 
 final focusedPinTheme = defaultPinTheme.copyWith(
-  decoration: defaultPinTheme.decoration?.copyWith(
-    border: const Border.fromBorderSide(BorderSide(color: Color(0xFFFFD362))),
+  decoration: const BoxDecoration(
+    color: Color(0xFFE3F1FF),
+    border: Border.fromBorderSide(BorderSide(color: Color(0xFF0A6EFA))),
+    borderRadius: BorderRadius.all(Radius.circular(12)),
   ),
 );

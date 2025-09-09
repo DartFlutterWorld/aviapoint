@@ -61,7 +61,7 @@ class PreflightInspectionCheckListByCategoryBloc extends Bloc<PreflightInspectio
       (l) {
         emit(
           ErrorPreflightInspectionCheckListByCategoryState(
-            errorForUser: 'Что-то пошло не так! Попробуйте позже..',
+            errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
             errorFromApi: l.message,
             statusCode: 'Код ошибки сервера: ${l.statusCode}',
             responseMessage: l.responseMessage,

@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/widgets/bottom_bar_with_circle.dart';
+import 'package:aviapoint/core/presentation/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -29,25 +29,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    //final hideBottomNavMeta = ServiceLocator.instance.get<AppRouter>().topMatch.meta['hideBottomNav'] == true;
+    // final hideBottomNavMeta = ServiceLocator.instance.get<AppRouter>().topMatch.meta['hideBottomNav'] == true;
     const List<String> hideBottomNavPath = [
       'learning/hand_book/preflight_inspection_categories/check_list',
-      'learning/hand_book/normal_categories/check_list'
-      // '/requests/create_sale_request',
-      // '/requests/order_spec/',
-      // '/orders/order_spec/',
-      // '/signing_spec_screen/docview',
-      // '/tradings/trading_schedule/',
-      // '/result_map_cpt',
-      // '/result_map_exw',
-      // '/stories',
+      'learning/hand_book/normal_categories/check_list',
+      '/stories',
+      'base_questions/',
     ];
 
-    return Visibility(
-      visible: !hideBottomNavPath.any((path) => context.router.currentPath.contains(path)),
+    final shouldHide = hideBottomNavPath.any((path) => context.router.currentPath.contains(path));
 
-      // child: Provider.of<AppState>(context).auth != null ? BottomBarWithCircle(tabsRouter: widget.tabsRouter) : BottomBarPromo(tabsRouter: widget.tabsRouter),
-      child: BottomBarWithCircle(tabsRouter: widget.tabsRouter),
+    return Visibility(
+      visible: !shouldHide,
+      maintainState: true,
+      maintainAnimation: true,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: shouldHide ? 0.0 : 1.0,
+        child: IgnorePointer(
+          ignoring: shouldHide,
+          child: BottomBar(tabsRouter: widget.tabsRouter),
+        ),
+      ),
     );
   }
 }

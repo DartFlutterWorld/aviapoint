@@ -31,7 +31,8 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 34
+    namespace "ru.dartflutter.aviapoint"
+    compileSdkVersion 36
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -67,6 +68,10 @@ android {
             debuggable true
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
 flutter {
@@ -85,4 +90,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation("com.google.firebase:firebase-analytics-ktx")
     //implementation 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
+}
+
+kotlin {
+    jvmToolchain(17) // Укажите версию Java (например, 17)
 }

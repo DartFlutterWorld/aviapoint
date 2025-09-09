@@ -1,5 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// Настраиваемая кнопка.
 class CustomButton extends StatelessWidget {
@@ -14,9 +14,11 @@ class CustomButton extends StatelessWidget {
   final double borderWidth;
   final List<Color>? gradientBackgroundColor;
   final List<BoxShadow>? boxShadow;
+  final String? leftSvg;
+  final String? rightSvg;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.title,
     this.backgroundColor,
     required this.textStyle,
@@ -29,8 +31,8 @@ class CustomButton extends StatelessWidget {
     this.gradientBackgroundColor,
     this.boxShadow = const [
       BoxShadow(
-        color: Color(0xffCFBAE2),
-        blurRadius: 5,
+        color: Color(0xff104A91),
+        blurRadius: 4,
         spreadRadius: 0,
         offset: Offset(
           0.0,
@@ -38,72 +40,46 @@ class CustomButton extends StatelessWidget {
         ),
       ),
     ],
-  }) : super(key: key);
-
-  List<Color>? disableColors(List<Color>? gradientBackgroundColor) {
-    dynamic opacity;
-    if (gradientBackgroundColor != null) {
-      final opacity1 = gradientBackgroundColor.first.withValues(alpha: 0.6);
-      final opacity2 = gradientBackgroundColor.last.withValues(alpha: 0.6);
-
-      opacity = [opacity1, opacity2];
-    }
-
-    return opacity;
-  }
+    this.leftSvg,
+    this.rightSvg,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // return Material(
-    //   color: Colors.transparent,
-    //   child: InkWell(
-    //     onTap: disabled ? null : onTap,
-    //     splashColor: Colors.blue.withOpacity(0.3), // Цвет эффекта
-    //     highlightColor: Colors.blue.withOpacity(0.1), // Цвет подсветки
-    //     child: Container(
-    //       padding: EdgeInsets.symmetric(vertical: verticalPadding),
-    //       decoration: BoxDecoration(
-    //           // color: backgroundColor,
-    //           borderRadius: BorderRadius.circular(
-    //             borderRadius,
-    //           ),
-    //           border: Border.all(
-    //             color: borderColor,
-    //             width: borderWidth,
-    //           ),
-    //           gradient: backgroundColor != null
-    //               ? null
-    //               : LinearGradient(
-    //                   begin: Alignment.topLeft,
-    //                   end: Alignment.bottomRight,
-    //                   colors: disabled ? disableColors(gradientBackgroundColor) ?? [] : gradientBackgroundColor ?? <Color>[],
-    //                 ),
-    //           boxShadow: boxShadow),
-    //       child: Center(
-    //         child: AutoSizeText(
-    //           title,
-    //           style: disabled ? textStyle.copyWith(color: textStyle.color) : textStyle,
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: Colors.green,
-          side: BorderSide(color: borderColor, width: borderWidth),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: verticalPadding),
+        decoration: BoxDecoration(
+            border: Border.all(color: borderColor),
+            color: disabled ? backgroundColor?.withOpacity(0.5) : backgroundColor,
+            borderRadius: BorderRadius.circular(
+              borderRadius,
+            ),
+            boxShadow: boxShadow),
+        width: double.infinity,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 9,
+            children: [
+              if (leftSvg != null)
+                Opacity(
+                  opacity: disabled ? 0.5 : 1,
+                  child: SvgPicture.asset(leftSvg!),
+                ),
+              Text(
+                title,
+                style: disabled ? textStyle.copyWith(color: textStyle.color?.withOpacity(0.5)) : textStyle,
+              ),
+              if (rightSvg != null)
+                Opacity(
+                  opacity: disabled ? 0.5 : 1,
+                  child: SvgPicture.asset(rightSvg!),
+                ),
+            ],
           ),
-          // Настройки эффекта:
-          overlayColor: Colors.green.withOpacity(0.1),
-          splashFactory: InkRipple.splashFactory, // Используем стандартный ripple-эффект
         ),
-        child: AutoSizeText(title, style: disabled ? textStyle.copyWith(color: textStyle.color) : textStyle),
       ),
     );
   }

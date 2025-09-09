@@ -1,103 +1,98 @@
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoryWidget extends StatelessWidget {
   final String title;
   final String subTitle;
   final VoidCallback onTap;
-  final String? picture;
+
   final Widget? child;
-  final String icon;
+
   final VoidCallback? clearCategory;
+  final bool withClear;
+  final String? image;
 
   const CategoryWidget({
     super.key,
     required this.title,
     required this.onTap,
     required this.subTitle,
-    this.picture,
     this.child,
-    this.icon = Pictures.strelka,
     this.clearCategory,
+    this.withClear = true,
+    this.image,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFE0E0E0), width: 0.5),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          color: AppColors.netural5p,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: .1),
-              blurRadius: 15.0,
-              offset: const Offset(
-                0.0,
-                7.0,
-              ),
-            ),
-          ],
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xffF3EBFF),
-              Color(0xFFFFFAF1),
-            ],
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-            ),
-            // SizedBox(height: 9),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    subTitle,
-                    style: AppStyles.subTextReg.copyWith(color: AppColors.netural70p),
-                  ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 11, bottom: 11),
+            decoration: BoxDecoration(border: Border.all(color: const Color(0xFFE3F1FF), width: 1), borderRadius: BorderRadius.all(Radius.circular(16.r)), color: Colors.white, boxShadow: [
+              BoxShadow(
+                color: Color(0xFF045EC5).withOpacity(0.08),
+                blurRadius: 9.3,
+                offset: Offset(
+                  0.0,
+                  4.0,
                 ),
+              ),
+            ]),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (picture != null && picture!.isNotEmpty)
+                    if (image != null)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Image.asset(
-                          picture!,
-                          height: 60,
-                        ),
+                        padding: const EdgeInsets.only(right: 10),
+                        child: SvgPicture.asset(image!),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: GestureDetector(
-                        onTap: clearCategory,
-                        child: Image.asset(
-                          icon,
-                          height: 30,
+                    Expanded(
+                      flex: 5,
+                      child: Text(
+                        title,
+                        style: AppStyles.bold15s.copyWith(
+                          color: Color(0xFF374151),
                         ),
                       ),
                     ),
+                    SizedBox(width: 8),
+                    if (withClear)
+                      GestureDetector(
+                        onTap: clearCategory,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(Pictures.refresh),
+                              SizedBox(width: 2),
+                              Text(
+                                'Сбросить',
+                                style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA)),
+                                textAlign: TextAlign.right,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
-                )
+                ),
+                // SizedBox(height: 4.h),
+                if (subTitle.isNotEmpty) Text(subTitle, style: AppStyles.regular13s.copyWith(color: Color(0xFF6E7A89))),
+                if (child != null) child!,
               ],
             ),
-            if (child != null) child!,
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

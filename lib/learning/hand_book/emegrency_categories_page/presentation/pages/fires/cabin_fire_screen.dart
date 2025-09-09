@@ -22,7 +22,7 @@ class CabinFireScreen extends StatelessWidget {
         //   ),
         // ],
       ),
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

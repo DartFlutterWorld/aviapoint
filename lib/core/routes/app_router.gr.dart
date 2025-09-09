@@ -13,8 +13,7 @@ part of 'app_router.dart';
 /// generated route for
 /// [AbnormalLandingsScreen]
 class AbnormalLandingsRoute extends PageRouteInfo<void> {
-  const AbnormalLandingsRoute({List<PageRouteInfo>? children})
-    : super(AbnormalLandingsRoute.name, initialChildren: children);
+  const AbnormalLandingsRoute({List<PageRouteInfo>? children}) : super(AbnormalLandingsRoute.name, initialChildren: children);
 
   static const String name = 'AbnormalLandingsRoute';
 
@@ -29,8 +28,7 @@ class AbnormalLandingsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [AirDataSystemFailureScreen]
 class AirDataSystemFailureRoute extends PageRouteInfo<void> {
-  const AirDataSystemFailureRoute({List<PageRouteInfo>? children})
-    : super(AirDataSystemFailureRoute.name, initialChildren: children);
+  const AirDataSystemFailureRoute({List<PageRouteInfo>? children}) : super(AirDataSystemFailureRoute.name, initialChildren: children);
 
   static const String name = 'AirDataSystemFailureRoute';
 
@@ -46,10 +44,10 @@ class AirDataSystemFailureRoute extends PageRouteInfo<void> {
 /// [AirspeedsForEmergencyOperationsScreen]
 class AirspeedsForEmergencyOperationsRoute extends PageRouteInfo<void> {
   const AirspeedsForEmergencyOperationsRoute({List<PageRouteInfo>? children})
-    : super(
-        AirspeedsForEmergencyOperationsRoute.name,
-        initialChildren: children,
-      );
+      : super(
+          AirspeedsForEmergencyOperationsRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'AirspeedsForEmergencyOperationsRoute';
 
@@ -63,17 +61,15 @@ class AirspeedsForEmergencyOperationsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [AttitudeAndHeadingReferenceSystemAhrsFailureScreen]
-class AttitudeAndHeadingReferenceSystemAhrsFailureRoute
-    extends PageRouteInfo<void> {
+class AttitudeAndHeadingReferenceSystemAhrsFailureRoute extends PageRouteInfo<void> {
   const AttitudeAndHeadingReferenceSystemAhrsFailureRoute({
     List<PageRouteInfo>? children,
   }) : super(
-         AttitudeAndHeadingReferenceSystemAhrsFailureRoute.name,
-         initialChildren: children,
-       );
+          AttitudeAndHeadingReferenceSystemAhrsFailureRoute.name,
+          initialChildren: children,
+        );
 
-  static const String name =
-      'AttitudeAndHeadingReferenceSystemAhrsFailureRoute';
+  static const String name = 'AttitudeAndHeadingReferenceSystemAhrsFailureRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -87,10 +83,10 @@ class AttitudeAndHeadingReferenceSystemAhrsFailureRoute
 /// [AutopilotOrElectricTrimFailureScreen]
 class AutopilotOrElectricTrimFailureRoute extends PageRouteInfo<void> {
   const AutopilotOrElectricTrimFailureRoute({List<PageRouteInfo>? children})
-    : super(
-        AutopilotOrElectricTrimFailureRoute.name,
-        initialChildren: children,
-      );
+      : super(
+          AutopilotOrElectricTrimFailureRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'AutopilotOrElectricTrimFailureRoute';
 
@@ -103,10 +99,24 @@ class AutopilotOrElectricTrimFailureRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [BaseQuestionsScreen]
+class BaseQuestionsRoute extends PageRouteInfo<void> {
+  const BaseQuestionsRoute({List<PageRouteInfo>? children}) : super(BaseQuestionsRoute.name, initialChildren: children);
+
+  static const String name = 'BaseQuestionsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BaseQuestionsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [BaseScreen]
 class BaseRoute extends PageRouteInfo<void> {
-  const BaseRoute({List<PageRouteInfo>? children})
-    : super(BaseRoute.name, initialChildren: children);
+  const BaseRoute({List<PageRouteInfo>? children}) : super(BaseRoute.name, initialChildren: children);
 
   static const String name = 'BaseRoute';
 
@@ -121,8 +131,7 @@ class BaseRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [CabinFireScreen]
 class CabinFireRoute extends PageRouteInfo<void> {
-  const CabinFireRoute({List<PageRouteInfo>? children})
-    : super(CabinFireRoute.name, initialChildren: children);
+  const CabinFireRoute({List<PageRouteInfo>? children}) : super(CabinFireRoute.name, initialChildren: children);
 
   static const String name = 'CabinFireRoute';
 
@@ -135,10 +144,185 @@ class CabinFireRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DetailNewsScreen]
+class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
+  DetailNewsRoute({
+    Key? key,
+    required int newsId,
+    required NewsEntity news,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailNewsRoute.name,
+          args: DetailNewsRouteArgs(key: key, newsId: newsId, news: news),
+          rawPathParams: {'id': newsId},
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailNewsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DetailNewsRouteArgs>();
+      return DetailNewsScreen(
+        key: args.key,
+        newsId: args.newsId,
+        news: args.news,
+      );
+    },
+  );
+}
+
+class DetailNewsRouteArgs {
+  const DetailNewsRouteArgs({
+    this.key,
+    required this.newsId,
+    required this.news,
+  });
+
+  final Key? key;
+
+  final int newsId;
+
+  final NewsEntity news;
+
+  @override
+  String toString() {
+    return 'DetailNewsRouteArgs{key: $key, newsId: $newsId, news: $news}';
+  }
+}
+
+/// generated route for
+/// [DetailQuestionScreen]
+class DetailQuestionRoute extends PageRouteInfo<DetailQuestionRouteArgs> {
+  DetailQuestionRoute({
+    Key? key,
+    QuestionWithAnswersEntity? question,
+    String? categoryTitle,
+    required int questionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailQuestionRoute.name,
+          args: DetailQuestionRouteArgs(
+            key: key,
+            question: question,
+            categoryTitle: categoryTitle,
+            questionId: questionId,
+          ),
+          rawPathParams: {'questionId': questionId},
+          rawQueryParams: {'question': question, 'categoryTitle': categoryTitle},
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailQuestionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final queryParams = data.queryParams;
+      final args = data.argsAs<DetailQuestionRouteArgs>(
+        orElse: () => DetailQuestionRouteArgs(
+          question: queryParams.get('question'),
+          categoryTitle: queryParams.optString('categoryTitle'),
+          questionId: pathParams.getInt('questionId'),
+        ),
+      );
+      return DetailQuestionScreen(
+        key: args.key,
+        question: args.question,
+        categoryTitle: args.categoryTitle,
+        questionId: args.questionId,
+      );
+    },
+  );
+}
+
+class DetailQuestionRouteArgs {
+  const DetailQuestionRouteArgs({
+    this.key,
+    this.question,
+    this.categoryTitle,
+    required this.questionId,
+  });
+
+  final Key? key;
+
+  final QuestionWithAnswersEntity? question;
+
+  final String? categoryTitle;
+
+  final int questionId;
+
+  @override
+  String toString() {
+    return 'DetailQuestionRouteArgs{key: $key, question: $question, categoryTitle: $categoryTitle, questionId: $questionId}';
+  }
+}
+
+/// generated route for
+/// [DetailStoryScreen]
+class DetailStoryRoute extends PageRouteInfo<DetailStoryRouteArgs> {
+  DetailStoryRoute({
+    Key? key,
+    required int idStory,
+    required List<StoryEntity> stories,
+    required int currentIndex,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailStoryRoute.name,
+          args: DetailStoryRouteArgs(
+            key: key,
+            idStory: idStory,
+            stories: stories,
+            currentIndex: currentIndex,
+          ),
+          rawPathParams: {'id': idStory},
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailStoryRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DetailStoryRouteArgs>();
+      return DetailStoryScreen(
+        key: args.key,
+        idStory: args.idStory,
+        stories: args.stories,
+        currentIndex: args.currentIndex,
+      );
+    },
+  );
+}
+
+class DetailStoryRouteArgs {
+  const DetailStoryRouteArgs({
+    this.key,
+    required this.idStory,
+    required this.stories,
+    required this.currentIndex,
+  });
+
+  final Key? key;
+
+  final int idStory;
+
+  final List<StoryEntity> stories;
+
+  final int currentIndex;
+
+  @override
+  String toString() {
+    return 'DetailStoryRouteArgs{key: $key, idStory: $idStory, stories: $stories, currentIndex: $currentIndex}';
+  }
+}
+
+/// generated route for
 /// [DisplayCoolingAdvisoryScreen]
 class DisplayCoolingAdvisoryRoute extends PageRouteInfo<void> {
-  const DisplayCoolingAdvisoryRoute({List<PageRouteInfo>? children})
-    : super(DisplayCoolingAdvisoryRoute.name, initialChildren: children);
+  const DisplayCoolingAdvisoryRoute({List<PageRouteInfo>? children}) : super(DisplayCoolingAdvisoryRoute.name, initialChildren: children);
 
   static const String name = 'DisplayCoolingAdvisoryRoute';
 
@@ -153,8 +337,7 @@ class DisplayCoolingAdvisoryRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [DitchingScreen]
 class DitchingRoute extends PageRouteInfo<void> {
-  const DitchingRoute({List<PageRouteInfo>? children})
-    : super(DitchingRoute.name, initialChildren: children);
+  const DitchingRoute({List<PageRouteInfo>? children}) : super(DitchingRoute.name, initialChildren: children);
 
   static const String name = 'DitchingRoute';
 
@@ -169,8 +352,7 @@ class DitchingRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ElectricalFireInFlightScreen]
 class ElectricalFireInFlightRoute extends PageRouteInfo<void> {
-  const ElectricalFireInFlightRoute({List<PageRouteInfo>? children})
-    : super(ElectricalFireInFlightRoute.name, initialChildren: children);
+  const ElectricalFireInFlightRoute({List<PageRouteInfo>? children}) : super(ElectricalFireInFlightRoute.name, initialChildren: children);
 
   static const String name = 'ElectricalFireInFlightRoute';
 
@@ -184,21 +366,20 @@ class ElectricalFireInFlightRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ElectricalPowerSubCategoryScreen]
-class ElectricalPowerSubCategoryRoute
-    extends PageRouteInfo<ElectricalPowerSubCategoryRouteArgs> {
+class ElectricalPowerSubCategoryRoute extends PageRouteInfo<ElectricalPowerSubCategoryRouteArgs> {
   ElectricalPowerSubCategoryRoute({
     Key? key,
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         ElectricalPowerSubCategoryRoute.name,
-         args: ElectricalPowerSubCategoryRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+          ElectricalPowerSubCategoryRoute.name,
+          args: ElectricalPowerSubCategoryRouteArgs(
+            key: key,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {'nameCategory': nameCategory},
+          initialChildren: children,
+        );
 
   static const String name = 'ElectricalPowerSubCategoryRoute';
 
@@ -207,10 +388,9 @@ class ElectricalPowerSubCategoryRoute
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<ElectricalPowerSubCategoryRouteArgs>(
-        orElse:
-            () => ElectricalPowerSubCategoryRouteArgs(
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => ElectricalPowerSubCategoryRouteArgs(
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return ElectricalPowerSubCategoryScreen(
         key: args.key,
@@ -242,9 +422,9 @@ class ElectricalPowerSupplySystemMalfunctionsRoute extends PageRouteInfo<void> {
   const ElectricalPowerSupplySystemMalfunctionsRoute({
     List<PageRouteInfo>? children,
   }) : super(
-         ElectricalPowerSupplySystemMalfunctionsRoute.name,
-         initialChildren: children,
-       );
+          ElectricalPowerSupplySystemMalfunctionsRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'ElectricalPowerSupplySystemMalfunctionsRoute';
 
@@ -258,21 +438,20 @@ class ElectricalPowerSupplySystemMalfunctionsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EmergencyCategoriesScreen]
-class EmergencyCategoriesRoute
-    extends PageRouteInfo<EmergencyCategoriesRouteArgs> {
+class EmergencyCategoriesRoute extends PageRouteInfo<EmergencyCategoriesRouteArgs> {
   EmergencyCategoriesRoute({
     Key? key,
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         EmergencyCategoriesRoute.name,
-         args: EmergencyCategoriesRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+          EmergencyCategoriesRoute.name,
+          args: EmergencyCategoriesRouteArgs(
+            key: key,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {'nameCategory': nameCategory},
+          initialChildren: children,
+        );
 
   static const String name = 'EmergencyCategoriesRoute';
 
@@ -281,10 +460,9 @@ class EmergencyCategoriesRoute
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<EmergencyCategoriesRouteArgs>(
-        orElse:
-            () => EmergencyCategoriesRouteArgs(
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => EmergencyCategoriesRouteArgs(
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return EmergencyCategoriesScreen(
         key: args.key,
@@ -311,10 +489,10 @@ class EmergencyCategoriesRouteArgs {
 /// [EmergencyLandingWithEnginePowerScreen]
 class EmergencyLandingWithEnginePowerRoute extends PageRouteInfo<void> {
   const EmergencyLandingWithEnginePowerRoute({List<PageRouteInfo>? children})
-    : super(
-        EmergencyLandingWithEnginePowerRoute.name,
-        initialChildren: children,
-      );
+      : super(
+          EmergencyLandingWithEnginePowerRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'EmergencyLandingWithEnginePowerRoute';
 
@@ -330,10 +508,10 @@ class EmergencyLandingWithEnginePowerRoute extends PageRouteInfo<void> {
 /// [EmergencyLandingWithoutEnginePowerScreen]
 class EmergencyLandingWithoutEnginePowerRoute extends PageRouteInfo<void> {
   const EmergencyLandingWithoutEnginePowerRoute({List<PageRouteInfo>? children})
-    : super(
-        EmergencyLandingWithoutEnginePowerRoute.name,
-        initialChildren: children,
-      );
+      : super(
+          EmergencyLandingWithoutEnginePowerRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'EmergencyLandingWithoutEnginePowerRoute';
 
@@ -348,8 +526,7 @@ class EmergencyLandingWithoutEnginePowerRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [EmptyNavigationScreen]
 class EmptyNavigationRoute extends PageRouteInfo<void> {
-  const EmptyNavigationRoute({List<PageRouteInfo>? children})
-    : super(EmptyNavigationRoute.name, initialChildren: children);
+  const EmptyNavigationRoute({List<PageRouteInfo>? children}) : super(EmptyNavigationRoute.name, initialChildren: children);
 
   static const String name = 'EmptyNavigationRoute';
 
@@ -364,8 +541,7 @@ class EmptyNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [EngineFailureScreen]
 class EngineFailureRoute extends PageRouteInfo<void> {
-  const EngineFailureRoute({List<PageRouteInfo>? children})
-    : super(EngineFailureRoute.name, initialChildren: children);
+  const EngineFailureRoute({List<PageRouteInfo>? children}) : super(EngineFailureRoute.name, initialChildren: children);
 
   static const String name = 'EngineFailureRoute';
 
@@ -380,8 +556,7 @@ class EngineFailureRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [EngineFireInFlightScreen]
 class EngineFireInFlightRoute extends PageRouteInfo<void> {
-  const EngineFireInFlightRoute({List<PageRouteInfo>? children})
-    : super(EngineFireInFlightRoute.name, initialChildren: children);
+  const EngineFireInFlightRoute({List<PageRouteInfo>? children}) : super(EngineFireInFlightRoute.name, initialChildren: children);
 
   static const String name = 'EngineFireInFlightRoute';
 
@@ -396,8 +571,7 @@ class EngineFireInFlightRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ExcessiveFuelVaporScreen]
 class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
-  const ExcessiveFuelVaporRoute({List<PageRouteInfo>? children})
-    : super(ExcessiveFuelVaporRoute.name, initialChildren: children);
+  const ExcessiveFuelVaporRoute({List<PageRouteInfo>? children}) : super(ExcessiveFuelVaporRoute.name, initialChildren: children);
 
   static const String name = 'ExcessiveFuelVaporRoute';
 
@@ -412,8 +586,7 @@ class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [FiresDuringStartOnGroundScreen]
 class FiresDuringStartOnGroundRoute extends PageRouteInfo<void> {
-  const FiresDuringStartOnGroundRoute({List<PageRouteInfo>? children})
-    : super(FiresDuringStartOnGroundRoute.name, initialChildren: children);
+  const FiresDuringStartOnGroundRoute({List<PageRouteInfo>? children}) : super(FiresDuringStartOnGroundRoute.name, initialChildren: children);
 
   static const String name = 'FiresDuringStartOnGroundRoute';
 
@@ -427,21 +600,20 @@ class FiresDuringStartOnGroundRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [FiresSubCategoriesScreen]
-class FiresSubCategoriesRoute
-    extends PageRouteInfo<FiresSubCategoriesRouteArgs> {
+class FiresSubCategoriesRoute extends PageRouteInfo<FiresSubCategoriesRouteArgs> {
   FiresSubCategoriesRoute({
     Key? key,
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         FiresSubCategoriesRoute.name,
-         args: FiresSubCategoriesRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+          FiresSubCategoriesRoute.name,
+          args: FiresSubCategoriesRouteArgs(
+            key: key,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {'nameCategory': nameCategory},
+          initialChildren: children,
+        );
 
   static const String name = 'FiresSubCategoriesRoute';
 
@@ -450,10 +622,9 @@ class FiresSubCategoriesRoute
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<FiresSubCategoriesRouteArgs>(
-        orElse:
-            () => FiresSubCategoriesRouteArgs(
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => FiresSubCategoriesRouteArgs(
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return FiresSubCategoriesScreen(
         key: args.key,
@@ -478,21 +649,20 @@ class FiresSubCategoriesRouteArgs {
 
 /// generated route for
 /// [ForcedLandingsSubCategoriesScreen]
-class ForcedLandingsSubCategoriesRoute
-    extends PageRouteInfo<ForcedLandingsSubCategoriesRouteArgs> {
+class ForcedLandingsSubCategoriesRoute extends PageRouteInfo<ForcedLandingsSubCategoriesRouteArgs> {
   ForcedLandingsSubCategoriesRoute({
     Key? key,
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         ForcedLandingsSubCategoriesRoute.name,
-         args: ForcedLandingsSubCategoriesRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+          ForcedLandingsSubCategoriesRoute.name,
+          args: ForcedLandingsSubCategoriesRouteArgs(
+            key: key,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {'nameCategory': nameCategory},
+          initialChildren: children,
+        );
 
   static const String name = 'ForcedLandingsSubCategoriesRoute';
 
@@ -501,10 +671,9 @@ class ForcedLandingsSubCategoriesRoute
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<ForcedLandingsSubCategoriesRouteArgs>(
-        orElse:
-            () => ForcedLandingsSubCategoriesRouteArgs(
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => ForcedLandingsSubCategoriesRouteArgs(
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return ForcedLandingsSubCategoriesScreen(
         key: args.key,
@@ -533,8 +702,7 @@ class ForcedLandingsSubCategoriesRouteArgs {
 /// generated route for
 /// [HandBookMainCategoriesScreen]
 class HandBookMainCategoriesRoute extends PageRouteInfo<void> {
-  const HandBookMainCategoriesRoute({List<PageRouteInfo>? children})
-    : super(HandBookMainCategoriesRoute.name, initialChildren: children);
+  const HandBookMainCategoriesRoute({List<PageRouteInfo>? children}) : super(HandBookMainCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'HandBookMainCategoriesRoute';
 
@@ -550,10 +718,10 @@ class HandBookMainCategoriesRoute extends PageRouteInfo<void> {
 /// [HighCarbonMonoxideCoLevelAdvisoryScreen]
 class HighCarbonMonoxideCoLevelAdvisoryRoute extends PageRouteInfo<void> {
   const HighCarbonMonoxideCoLevelAdvisoryRoute({List<PageRouteInfo>? children})
-    : super(
-        HighCarbonMonoxideCoLevelAdvisoryRoute.name,
-        initialChildren: children,
-      );
+      : super(
+          HighCarbonMonoxideCoLevelAdvisoryRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'HighCarbonMonoxideCoLevelAdvisoryRoute';
 
@@ -568,8 +736,7 @@ class HighCarbonMonoxideCoLevelAdvisoryRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [IcingScreen]
 class IcingRoute extends PageRouteInfo<void> {
-  const IcingRoute({List<PageRouteInfo>? children})
-    : super(IcingRoute.name, initialChildren: children);
+  const IcingRoute({List<PageRouteInfo>? children}) : super(IcingRoute.name, initialChildren: children);
 
   static const String name = 'IcingRoute';
 
@@ -584,8 +751,7 @@ class IcingRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [LearningNavigationScreen]
 class LearningNavigationRoute extends PageRouteInfo<void> {
-  const LearningNavigationRoute({List<PageRouteInfo>? children})
-    : super(LearningNavigationRoute.name, initialChildren: children);
+  const LearningNavigationRoute({List<PageRouteInfo>? children}) : super(LearningNavigationRoute.name, initialChildren: children);
 
   static const String name = 'LearningNavigationRoute';
 
@@ -600,8 +766,7 @@ class LearningNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [LearningScreen]
 class LearningRoute extends PageRouteInfo<void> {
-  const LearningRoute({List<PageRouteInfo>? children})
-    : super(LearningRoute.name, initialChildren: children);
+  const LearningRoute({List<PageRouteInfo>? children}) : super(LearningRoute.name, initialChildren: children);
 
   static const String name = 'LearningRoute';
 
@@ -614,14 +779,81 @@ class LearningRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ListQuestionByCategoryScreen]
+class ListQuestionByCategoryRoute extends PageRouteInfo<ListQuestionByCategoryRouteArgs> {
+  ListQuestionByCategoryRoute({
+    Key? key,
+    required int categoryId,
+    List<QuestionWithAnswersEntity>? questionWithAnswersList,
+    String? categoryTitle,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ListQuestionByCategoryRoute.name,
+          args: ListQuestionByCategoryRouteArgs(
+            key: key,
+            categoryId: categoryId,
+            questionWithAnswersList: questionWithAnswersList,
+            categoryTitle: categoryTitle,
+          ),
+          rawPathParams: {'categoryId': categoryId},
+          rawQueryParams: {'categoryTitle': categoryTitle},
+          initialChildren: children,
+        );
+
+  static const String name = 'ListQuestionByCategoryRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final queryParams = data.queryParams;
+      final args = data.argsAs<ListQuestionByCategoryRouteArgs>(
+        orElse: () => ListQuestionByCategoryRouteArgs(
+          categoryId: pathParams.getInt('categoryId'),
+          categoryTitle: queryParams.optString('categoryTitle'),
+        ),
+      );
+      return ListQuestionByCategoryScreen(
+        key: args.key,
+        categoryId: args.categoryId,
+        questionWithAnswersList: args.questionWithAnswersList,
+        categoryTitle: args.categoryTitle,
+      );
+    },
+  );
+}
+
+class ListQuestionByCategoryRouteArgs {
+  const ListQuestionByCategoryRouteArgs({
+    this.key,
+    required this.categoryId,
+    this.questionWithAnswersList,
+    this.categoryTitle,
+  });
+
+  final Key? key;
+
+  final int categoryId;
+
+  final List<QuestionWithAnswersEntity>? questionWithAnswersList;
+
+  final String? categoryTitle;
+
+  @override
+  String toString() {
+    return 'ListQuestionByCategoryRouteArgs{key: $key, categoryId: $categoryId, questionWithAnswersList: $questionWithAnswersList, categoryTitle: $categoryTitle}';
+  }
+}
+
+/// generated route for
 /// [LowVoltsAnnunciatorComesOnBellow1000RpmScreen]
 class LowVoltsAnnunciatorComesOnBellow1000RpmRoute extends PageRouteInfo<void> {
   const LowVoltsAnnunciatorComesOnBellow1000RpmRoute({
     List<PageRouteInfo>? children,
   }) : super(
-         LowVoltsAnnunciatorComesOnBellow1000RpmRoute.name,
-         initialChildren: children,
-       );
+          LowVoltsAnnunciatorComesOnBellow1000RpmRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'LowVoltsAnnunciatorComesOnBellow1000RpmRoute';
 
@@ -635,17 +867,15 @@ class LowVoltsAnnunciatorComesOnBellow1000RpmRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmScreen]
-class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute
-    extends PageRouteInfo<void> {
+class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute extends PageRouteInfo<void> {
   const LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute({
     List<PageRouteInfo>? children,
   }) : super(
-         LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute.name,
-         initialChildren: children,
-       );
+          LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute.name,
+          initialChildren: children,
+        );
 
-  static const String name =
-      'LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute';
+  static const String name = 'LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -658,8 +888,7 @@ class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute
 /// generated route for
 /// [MainNavigationScreen]
 class MainNavigationRoute extends PageRouteInfo<void> {
-  const MainNavigationRoute({List<PageRouteInfo>? children})
-    : super(MainNavigationRoute.name, initialChildren: children);
+  const MainNavigationRoute({List<PageRouteInfo>? children}) : super(MainNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MainNavigationRoute';
 
@@ -674,8 +903,7 @@ class MainNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MainScreen]
 class MainRoute extends PageRouteInfo<void> {
-  const MainRoute({List<PageRouteInfo>? children})
-    : super(MainRoute.name, initialChildren: children);
+  const MainRoute({List<PageRouteInfo>? children}) : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -690,8 +918,7 @@ class MainRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MarketNavigationScreen]
 class MarketNavigationRoute extends PageRouteInfo<void> {
-  const MarketNavigationRoute({List<PageRouteInfo>? children})
-    : super(MarketNavigationRoute.name, initialChildren: children);
+  const MarketNavigationRoute({List<PageRouteInfo>? children}) : super(MarketNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MarketNavigationRoute';
 
@@ -706,8 +933,7 @@ class MarketNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MarketScreen]
 class MarketRoute extends PageRouteInfo<void> {
-  const MarketRoute({List<PageRouteInfo>? children})
-    : super(MarketRoute.name, initialChildren: children);
+  const MarketRoute({List<PageRouteInfo>? children}) : super(MarketRoute.name, initialChildren: children);
 
   static const String name = 'MarketRoute';
 
@@ -722,8 +948,7 @@ class MarketRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [NewsNavigationScreen]
 class NewsNavigationRoute extends PageRouteInfo<void> {
-  const NewsNavigationRoute({List<PageRouteInfo>? children})
-    : super(NewsNavigationRoute.name, initialChildren: children);
+  const NewsNavigationRoute({List<PageRouteInfo>? children}) : super(NewsNavigationRoute.name, initialChildren: children);
 
   static const String name = 'NewsNavigationRoute';
 
@@ -738,8 +963,7 @@ class NewsNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [NewsScreen]
 class NewsRoute extends PageRouteInfo<void> {
-  const NewsRoute({List<PageRouteInfo>? children})
-    : super(NewsRoute.name, initialChildren: children);
+  const NewsRoute({List<PageRouteInfo>? children}) : super(NewsRoute.name, initialChildren: children);
 
   static const String name = 'NewsRoute';
 
@@ -759,11 +983,11 @@ class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         NormalCategoriesRoute.name,
-         args: NormalCategoriesRouteArgs(key: key, nameCategory: nameCategory),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+          NormalCategoriesRoute.name,
+          args: NormalCategoriesRouteArgs(key: key, nameCategory: nameCategory),
+          rawPathParams: {'nameCategory': nameCategory},
+          initialChildren: children,
+        );
 
   static const String name = 'NormalCategoriesRoute';
 
@@ -772,10 +996,9 @@ class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<NormalCategoriesRouteArgs>(
-        orElse:
-            () => NormalCategoriesRouteArgs(
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => NormalCategoriesRouteArgs(
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return NormalCategoriesScreen(
         key: args.key,
@@ -807,18 +1030,18 @@ class NormalCheckListRoute extends PageRouteInfo<NormalCheckListRouteArgs> {
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         NormalCheckListRoute.name,
-         args: NormalCheckListRouteArgs(
-           key: key,
-           normalCategoryId: normalCategoryId,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {
-           'normalCategoryId': normalCategoryId,
-           'nameCategory': nameCategory,
-         },
-         initialChildren: children,
-       );
+          NormalCheckListRoute.name,
+          args: NormalCheckListRouteArgs(
+            key: key,
+            normalCategoryId: normalCategoryId,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {
+            'normalCategoryId': normalCategoryId,
+            'nameCategory': nameCategory,
+          },
+          initialChildren: children,
+        );
 
   static const String name = 'NormalCheckListRoute';
 
@@ -827,11 +1050,10 @@ class NormalCheckListRoute extends PageRouteInfo<NormalCheckListRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<NormalCheckListRouteArgs>(
-        orElse:
-            () => NormalCheckListRouteArgs(
-              normalCategoryId: pathParams.getString('normalCategoryId'),
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => NormalCheckListRouteArgs(
+          normalCategoryId: pathParams.getString('normalCategoryId'),
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return NormalCheckListScreen(
         key: args.key,
@@ -863,21 +1085,20 @@ class NormalCheckListRouteArgs {
 
 /// generated route for
 /// [PreflightInspectionCategoriesScreen]
-class PreflightInspectionCategoriesRoute
-    extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
+class PreflightInspectionCategoriesRoute extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
   PreflightInspectionCategoriesRoute({
     Key? key,
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         PreflightInspectionCategoriesRoute.name,
-         args: PreflightInspectionCategoriesRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+          PreflightInspectionCategoriesRoute.name,
+          args: PreflightInspectionCategoriesRouteArgs(
+            key: key,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {'nameCategory': nameCategory},
+          initialChildren: children,
+        );
 
   static const String name = 'PreflightInspectionCategoriesRoute';
 
@@ -886,10 +1107,9 @@ class PreflightInspectionCategoriesRoute
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<PreflightInspectionCategoriesRouteArgs>(
-        orElse:
-            () => PreflightInspectionCategoriesRouteArgs(
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => PreflightInspectionCategoriesRouteArgs(
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return PreflightInspectionCategoriesScreen(
         key: args.key,
@@ -917,26 +1137,25 @@ class PreflightInspectionCategoriesRouteArgs {
 
 /// generated route for
 /// [PreflightInspectionCheckListScreen]
-class PreflightInspectionCheckListRoute
-    extends PageRouteInfo<PreflightInspectionCheckListRouteArgs> {
+class PreflightInspectionCheckListRoute extends PageRouteInfo<PreflightInspectionCheckListRouteArgs> {
   PreflightInspectionCheckListRoute({
     Key? key,
     required String preflihgtInspectionCategoryId,
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-         PreflightInspectionCheckListRoute.name,
-         args: PreflightInspectionCheckListRouteArgs(
-           key: key,
-           preflihgtInspectionCategoryId: preflihgtInspectionCategoryId,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {
-           'preflihgtInspectionCategoryId': preflihgtInspectionCategoryId,
-           'nameCategory': nameCategory,
-         },
-         initialChildren: children,
-       );
+          PreflightInspectionCheckListRoute.name,
+          args: PreflightInspectionCheckListRouteArgs(
+            key: key,
+            preflihgtInspectionCategoryId: preflihgtInspectionCategoryId,
+            nameCategory: nameCategory,
+          ),
+          rawPathParams: {
+            'preflihgtInspectionCategoryId': preflihgtInspectionCategoryId,
+            'nameCategory': nameCategory,
+          },
+          initialChildren: children,
+        );
 
   static const String name = 'PreflightInspectionCheckListRoute';
 
@@ -945,13 +1164,12 @@ class PreflightInspectionCheckListRoute
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<PreflightInspectionCheckListRouteArgs>(
-        orElse:
-            () => PreflightInspectionCheckListRouteArgs(
-              preflihgtInspectionCategoryId: pathParams.getString(
-                'preflihgtInspectionCategoryId',
-              ),
-              nameCategory: pathParams.getString('nameCategory'),
-            ),
+        orElse: () => PreflightInspectionCheckListRouteArgs(
+          preflihgtInspectionCategoryId: pathParams.getString(
+            'preflihgtInspectionCategoryId',
+          ),
+          nameCategory: pathParams.getString('nameCategory'),
+        ),
       );
       return PreflightInspectionCheckListScreen(
         key: args.key,
@@ -984,8 +1202,7 @@ class PreflightInspectionCheckListRouteArgs {
 /// generated route for
 /// [PricesNavigationScreen]
 class PricesNavigationRoute extends PageRouteInfo<void> {
-  const PricesNavigationRoute({List<PageRouteInfo>? children})
-    : super(PricesNavigationRoute.name, initialChildren: children);
+  const PricesNavigationRoute({List<PageRouteInfo>? children}) : super(PricesNavigationRoute.name, initialChildren: children);
 
   static const String name = 'PricesNavigationRoute';
 
@@ -1000,8 +1217,7 @@ class PricesNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [PricesScreen]
 class PricesRoute extends PageRouteInfo<void> {
-  const PricesRoute({List<PageRouteInfo>? children})
-    : super(PricesRoute.name, initialChildren: children);
+  const PricesRoute({List<PageRouteInfo>? children}) : super(PricesRoute.name, initialChildren: children);
 
   static const String name = 'PricesRoute';
 
@@ -1016,8 +1232,7 @@ class PricesRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ProfileNavigationScreen]
 class ProfileNavigationRoute extends PageRouteInfo<void> {
-  const ProfileNavigationRoute({List<PageRouteInfo>? children})
-    : super(ProfileNavigationRoute.name, initialChildren: children);
+  const ProfileNavigationRoute({List<PageRouteInfo>? children}) : super(ProfileNavigationRoute.name, initialChildren: children);
 
   static const String name = 'ProfileNavigationRoute';
 
@@ -1032,8 +1247,7 @@ class ProfileNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
-  const ProfileRoute({List<PageRouteInfo>? children})
-    : super(ProfileRoute.name, initialChildren: children);
+  const ProfileRoute({List<PageRouteInfo>? children}) : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -1048,8 +1262,7 @@ class ProfileRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [SaleRequestNavigationScreen]
 class SaleRequestNavigationRoute extends PageRouteInfo<void> {
-  const SaleRequestNavigationRoute({List<PageRouteInfo>? children})
-    : super(SaleRequestNavigationRoute.name, initialChildren: children);
+  const SaleRequestNavigationRoute({List<PageRouteInfo>? children}) : super(SaleRequestNavigationRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestNavigationRoute';
 
@@ -1064,8 +1277,7 @@ class SaleRequestNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [SaleRequestScreen]
 class SaleRequestRoute extends PageRouteInfo<void> {
-  const SaleRequestRoute({List<PageRouteInfo>? children})
-    : super(SaleRequestRoute.name, initialChildren: children);
+  const SaleRequestRoute({List<PageRouteInfo>? children}) : super(SaleRequestRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestRoute';
 
@@ -1080,8 +1292,7 @@ class SaleRequestRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [StaticSourceBlockageScreen]
 class StaticSourceBlockageRoute extends PageRouteInfo<void> {
-  const StaticSourceBlockageRoute({List<PageRouteInfo>? children})
-    : super(StaticSourceBlockageRoute.name, initialChildren: children);
+  const StaticSourceBlockageRoute({List<PageRouteInfo>? children}) : super(StaticSourceBlockageRoute.name, initialChildren: children);
 
   static const String name = 'StaticSourceBlockageRoute';
 
@@ -1096,8 +1307,7 @@ class StaticSourceBlockageRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [VacuumSystemFailureScreen]
 class VacuumSystemFailureRoute extends PageRouteInfo<void> {
-  const VacuumSystemFailureRoute({List<PageRouteInfo>? children})
-    : super(VacuumSystemFailureRoute.name, initialChildren: children);
+  const VacuumSystemFailureRoute({List<PageRouteInfo>? children}) : super(VacuumSystemFailureRoute.name, initialChildren: children);
 
   static const String name = 'VacuumSystemFailureRoute';
 
@@ -1112,8 +1322,7 @@ class VacuumSystemFailureRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [VideoForStudentsScreen]
 class VideoForStudentsRoute extends PageRouteInfo<void> {
-  const VideoForStudentsRoute({List<PageRouteInfo>? children})
-    : super(VideoForStudentsRoute.name, initialChildren: children);
+  const VideoForStudentsRoute({List<PageRouteInfo>? children}) : super(VideoForStudentsRoute.name, initialChildren: children);
 
   static const String name = 'VideoForStudentsRoute';
 
@@ -1128,8 +1337,7 @@ class VideoForStudentsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [WingFireScreen]
 class WingFireRoute extends PageRouteInfo<void> {
-  const WingFireRoute({List<PageRouteInfo>? children})
-    : super(WingFireRoute.name, initialChildren: children);
+  const WingFireRoute({List<PageRouteInfo>? children}) : super(WingFireRoute.name, initialChildren: children);
 
   static const String name = 'WingFireRoute';
 

@@ -22,7 +22,7 @@ class AirspeedsForEmergencyOperationsScreen extends StatelessWidget {
           //   ),
           // ],
         ),
-        backgroundColor: AppColors.newbg,
+        backgroundColor: AppColors.background,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

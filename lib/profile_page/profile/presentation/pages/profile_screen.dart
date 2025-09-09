@@ -1,9 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
-import 'package:aviapoint/core/presentation/proveider/app_state.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: CustomAppBar(
           title: 'Профиль',
           withBack: false,
-          // backgroundColor: AppColors.newbg,
+          // backgroundColor: AppColors.background,
           actions: [
             Provider.of<AppState>(context, listen: true).isAuthenticated
                 ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))
@@ -52,36 +57,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )
           ],
         ),
-        backgroundColor: AppColors.newbg,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 16),
-            Text(
-              Provider.of<AppState>(context, listen: true).isAuthenticated ? 'Вы авторизованы' : 'Вы не авторизованы',
-              textAlign: TextAlign.center,
-            ),
-            BlocBuilder<ProfileBloc, ProfileState>(
-                builder: (context, state) => state.map(
-                      success: (state) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(state.profile.id.toString()),
-                            Text(state.profile.firstName ?? ''),
-                            Text(state.profile.lastName ?? ''),
-                            Text(state.profile.phone),
-                            Text(state.profile.email ?? ''),
-                          ],
+        backgroundColor: AppColors.background,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Provider.of<AppState>(context, listen: true).isAuthenticated
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Image.asset(
+                          Pictures.pilot,
+                          height: 63,
+                          width: 63,
                         ),
-                      ),
-                      loading: (state) => const Center(child: CircularProgressIndicator()),
-                      initial: (state) => SizedBox(),
-                      error: (state) => Text(state.errorForUser),
-                    )),
-          ],
+                        BlocBuilder<ProfileBloc, ProfileState>(
+                          builder: (context, state) => state.map(
+                            success: (state) => Padding(
+                              padding: const EdgeInsets.only(left: 12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}',
+                                    style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E)),
+                                  ),
+                                  Text(
+                                    state.profile.phone,
+                                    style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                  ),
+                                  Text(
+                                    state.profile.email ?? '',
+                                    style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            error: (state) => ErrorCustom(
+                              textError: state.errorForUser,
+                              repeat: () {
+                                if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
+                                  BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+                                }
+                              },
+                            ),
+                            loading: (state) => LoadingCustom(),
+                            initial: (state) => SizedBox(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      Pictures.planeProfile,
+                      height: 374,
+                      width: 286,
+                    ),
+                    SizedBox(height: 16),
+                    CustomButton(
+                      verticalPadding: 8,
+                      backgroundColor: Color(0xFF0A6EFA),
+                      title: 'Войти в профиль',
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                      borderColor: Color(0xFF0A6EFA),
+                      borderRadius: 46,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xff0064D6).withOpacity(0.25),
+                          blurRadius: 4,
+                          spreadRadius: 0,
+                          offset: Offset(
+                            0.0,
+                            7.0,
+                          ),
+                        ),
+                      ],
+                      onPressed: () => showLogin(context),
+                    ),
+                  ],
+                ),
         ),
       ),
     );

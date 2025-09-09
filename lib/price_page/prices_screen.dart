@@ -11,7 +11,7 @@ class PricesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.newbg,
+      backgroundColor: AppColors.background,
       appBar: CustomAppBar(title: 'Price'),
       body: Column(
         children: [
