@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
-import 'package:aviapoint/core/failure/logger.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultRecieveTimeout = Duration.millisecondsPerMinute;
@@ -143,7 +142,7 @@ class ApiDatasourceDio extends ApiDatasource {
               onLogout?.call();
               return handler.reject(error);
             } catch (exc, stack) {
-              logger.e("Error refresh token", exc, stack);
+              // logger.e("Error refresh token", exc, stack);
               onLogout?.call();
               return handler.reject(error);
             } finally {

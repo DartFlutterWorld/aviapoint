@@ -1,6 +1,5 @@
 import 'package:aviapoint/core/domain/entities/exception_network.dart';
 import 'package:aviapoint/core/domain/service_locator.dart';
-import 'package:aviapoint/core/failure/logger.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/bloc/emergency_categories_bloc.dart';
@@ -121,7 +120,7 @@ class CacheManagerBloc extends Bloc<CacheManagerEvent, CacheManagerState> {
 
     response.fold(
       (l) {
-        logger.e('getDetailStory', l.responseMessage);
+        // logger.e('getDetailStory', l.responseMessage);
       },
       (r) {
         // cacheMiniStor(r);

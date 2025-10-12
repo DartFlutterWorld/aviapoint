@@ -1,13 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/pages/category_widget.dart';
-import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_sertificates_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,6 +114,7 @@ class _Success extends StatelessWidget {
                   clearCategory: () {},
                   withClear: false,
                   image: getIcon(typeSertificatesEntity[index].id),
+                  isSelect: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title == typeSertificatesEntity[index].title,
                 ),
               ),
             ),

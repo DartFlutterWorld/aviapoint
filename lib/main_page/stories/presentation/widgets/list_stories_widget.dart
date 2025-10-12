@@ -1,19 +1,15 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/domain/service_locator.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/story_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class ListStoriesWidget extends StatefulWidget {
@@ -60,13 +56,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
               itemCount: state.story.length,
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
-                  AutoRouter.of(context).push(
-                    DetailStoryRoute(
-                      idStory: state.story[index].id,
-                      stories: state.story,
-                      currentIndex: index,
-                    ),
-                  );
+                  AutoRouter.of(context).push(DetailStoryRoute(idStory: state.story[index].id, stories: state.story, currentIndex: index));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -75,12 +65,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                     width: 100.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      border: BlocProvider.of<StoryCubit>(context, listen: true).state.listStories.contains(state.story[index].id)
-                          ? null
-                          : Border.all(
-                              color: Color(0xFF0A6EFA),
-                              width: 1,
-                            ),
+                      border: BlocProvider.of<StoryCubit>(context, listen: true).state.listStories.contains(state.story[index].id) ? null : Border.all(color: Color(0xFF0A6EFA), width: 1),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
@@ -91,9 +76,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                           duration: const Duration(milliseconds: 1000),
                           color: const Color(0xFF8D66FE),
                           colorOpacity: 0.2,
-                          child: Container(
-                            decoration: const BoxDecoration(),
-                          ),
+                          child: Container(decoration: const BoxDecoration()),
                         ),
                         height: 100.h,
                         width: 100.w,
@@ -113,26 +96,23 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
           width: 100.w,
           margin: const EdgeInsets.only(right: 8).r,
           child: ListView.builder(
-              itemCount: 3,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Shimmer(
-                    duration: const Duration(milliseconds: 1000),
-                    color: const Color(0xFF8D66FE),
-                    colorOpacity: 0.2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Container(
-                        height: 100.h,
-                        width: 100.w,
-                        decoration: const BoxDecoration(),
-                      ),
-                    ),
+            itemCount: 3,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: Shimmer(
+                  duration: const Duration(milliseconds: 1000),
+                  color: const Color(0xFF8D66FE),
+                  colorOpacity: 0.2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: Container(height: 100.h, width: 100.w, decoration: const BoxDecoration()),
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
         );
       },
     );

@@ -7,7 +7,6 @@ import 'package:aviapoint/auth_page/domain/entities/sms_entity.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/failure/failure.dart';
-import 'package:aviapoint/core/failure/logger.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -110,7 +109,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return response.token;
     } catch (e, stack) {
       // Логируем ошибку, но НЕ выходим из системы автоматически
-      logger.e("Refresh token failed (non-critical)", e, stack);
+      // logger.e("Refresh token failed (non-critical)", e, stack);
       return null; // Пусть вызывающий код решает, что делать
     }
   }

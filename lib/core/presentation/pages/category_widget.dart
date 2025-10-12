@@ -8,6 +8,7 @@ class CategoryWidget extends StatelessWidget {
   final String title;
   final String subTitle;
   final VoidCallback onTap;
+  final bool isSelect;
 
   final Widget? child;
 
@@ -24,6 +25,7 @@ class CategoryWidget extends StatelessWidget {
     this.clearCategory,
     this.withClear = true,
     this.image,
+    this.isSelect = false,
   });
 
   @override
@@ -34,22 +36,26 @@ class CategoryWidget extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(left: 15, right: 15, top: 11, bottom: 11),
-            decoration: BoxDecoration(border: Border.all(color: const Color(0xFFE3F1FF), width: 1), borderRadius: BorderRadius.all(Radius.circular(16.r)), color: Colors.white, boxShadow: [
-              BoxShadow(
-                color: Color(0xFF045EC5).withOpacity(0.08),
-                blurRadius: 9.3,
-                offset: Offset(
-                  0.0,
-                  4.0,
+            decoration: BoxDecoration(
+                border: Border.all(color: isSelect ? Color(0xFF0A6EFA) : const Color(0xFFE3F1FF), width: 1),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.r),
                 ),
-              ),
-            ]),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 9.3,
+                    offset: Offset(
+                      0.0,
+                      4.0,
+                    ),
+                  ),
+                ]),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (image != null)
                       Padding(

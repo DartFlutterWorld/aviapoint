@@ -2,10 +2,12 @@ import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/datasources/ros_avia_test_service.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/privat_pilot_plane_category_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/question_with_answers_mapper.dart';
+import 'package:aviapoint/learning/ros_avia_test/data/mappers/ros_avia_test_category_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/ros_avia_test_category_with_questions_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/type_correct_answer_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/type_sertificates_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/privat_pilot_plane_category_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_area_category_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_correct_answer_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
@@ -137,6 +139,24 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
 
       return right(
         RosAviaTestCategoryWithQuestionsMapper.toEntities(response),
+      );
+    } on DioException catch (e) {
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RosAviaTestCategoryEntity>>> fetchRosAviaTestCategory(int typeSsertificatesId) async {
+    try {
+      final response = await _rosAviaTestService.fetchRosAviaTestCategory(typeSsertificatesId.toString());
+
+      return right(
+        RosAviaTestCategoryMapper.toEntities(response),
       );
     } on DioException catch (e) {
       return left(

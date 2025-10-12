@@ -56,4 +56,11 @@ class Pictures {
   static const String isOfficial = 'assets/svg/is_official.svg';
   static const String leftArrowMini = 'assets/svg/left_arrow_mini.svg';
   static const String rightArrowMini = 'assets/svg/right_arrow_mini.svg';
+  static const String logoTitle = 'assets/svg/logo_title.svg';
+  static const String checkBox = 'assets/svg/check_box.svg';
+  static const String checkBoxActive = 'assets/svg/check_box_active.svg';
+  static const String traningTestBg = 'assets/svg/training_test_bg.svg';
+  static const String testMySelfBg = 'assets/svg/test_my_self_bg.svg';
+  static const String zamok = 'assets/png/zamok.png';
+  static const String mozgi = 'assets/png/mozgi.png';
 }

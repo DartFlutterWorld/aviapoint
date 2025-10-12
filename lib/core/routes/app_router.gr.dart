@@ -13,7 +13,8 @@ part of 'app_router.dart';
 /// generated route for
 /// [AbnormalLandingsScreen]
 class AbnormalLandingsRoute extends PageRouteInfo<void> {
-  const AbnormalLandingsRoute({List<PageRouteInfo>? children}) : super(AbnormalLandingsRoute.name, initialChildren: children);
+  const AbnormalLandingsRoute({List<PageRouteInfo>? children})
+      : super(AbnormalLandingsRoute.name, initialChildren: children);
 
   static const String name = 'AbnormalLandingsRoute';
 
@@ -28,7 +29,8 @@ class AbnormalLandingsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [AirDataSystemFailureScreen]
 class AirDataSystemFailureRoute extends PageRouteInfo<void> {
-  const AirDataSystemFailureRoute({List<PageRouteInfo>? children}) : super(AirDataSystemFailureRoute.name, initialChildren: children);
+  const AirDataSystemFailureRoute({List<PageRouteInfo>? children})
+      : super(AirDataSystemFailureRoute.name, initialChildren: children);
 
   static const String name = 'AirDataSystemFailureRoute';
 
@@ -61,7 +63,8 @@ class AirspeedsForEmergencyOperationsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [AttitudeAndHeadingReferenceSystemAhrsFailureScreen]
-class AttitudeAndHeadingReferenceSystemAhrsFailureRoute extends PageRouteInfo<void> {
+class AttitudeAndHeadingReferenceSystemAhrsFailureRoute
+    extends PageRouteInfo<void> {
   const AttitudeAndHeadingReferenceSystemAhrsFailureRoute({
     List<PageRouteInfo>? children,
   }) : super(
@@ -69,7 +72,8 @@ class AttitudeAndHeadingReferenceSystemAhrsFailureRoute extends PageRouteInfo<vo
           initialChildren: children,
         );
 
-  static const String name = 'AttitudeAndHeadingReferenceSystemAhrsFailureRoute';
+  static const String name =
+      'AttitudeAndHeadingReferenceSystemAhrsFailureRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -101,7 +105,8 @@ class AutopilotOrElectricTrimFailureRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [BaseQuestionsScreen]
 class BaseQuestionsRoute extends PageRouteInfo<void> {
-  const BaseQuestionsRoute({List<PageRouteInfo>? children}) : super(BaseQuestionsRoute.name, initialChildren: children);
+  const BaseQuestionsRoute({List<PageRouteInfo>? children})
+      : super(BaseQuestionsRoute.name, initialChildren: children);
 
   static const String name = 'BaseQuestionsRoute';
 
@@ -116,7 +121,8 @@ class BaseQuestionsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [BaseScreen]
 class BaseRoute extends PageRouteInfo<void> {
-  const BaseRoute({List<PageRouteInfo>? children}) : super(BaseRoute.name, initialChildren: children);
+  const BaseRoute({List<PageRouteInfo>? children})
+      : super(BaseRoute.name, initialChildren: children);
 
   static const String name = 'BaseRoute';
 
@@ -131,7 +137,8 @@ class BaseRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [CabinFireScreen]
 class CabinFireRoute extends PageRouteInfo<void> {
-  const CabinFireRoute({List<PageRouteInfo>? children}) : super(CabinFireRoute.name, initialChildren: children);
+  const CabinFireRoute({List<PageRouteInfo>? children})
+      : super(CabinFireRoute.name, initialChildren: children);
 
   static const String name = 'CabinFireRoute';
 
@@ -190,6 +197,16 @@ class DetailNewsRouteArgs {
   String toString() {
     return 'DetailNewsRouteArgs{key: $key, newsId: $newsId, news: $news}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DetailNewsRouteArgs) return false;
+    return key == other.key && newsId == other.newsId && news == other.news;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ newsId.hashCode ^ news.hashCode;
 }
 
 /// generated route for
@@ -198,6 +215,7 @@ class DetailQuestionRoute extends PageRouteInfo<DetailQuestionRouteArgs> {
   DetailQuestionRoute({
     Key? key,
     QuestionWithAnswersEntity? question,
+    bool withClose = false,
     String? categoryTitle,
     required int questionId,
     List<PageRouteInfo>? children,
@@ -206,11 +224,16 @@ class DetailQuestionRoute extends PageRouteInfo<DetailQuestionRouteArgs> {
           args: DetailQuestionRouteArgs(
             key: key,
             question: question,
+            withClose: withClose,
             categoryTitle: categoryTitle,
             questionId: questionId,
           ),
           rawPathParams: {'questionId': questionId},
-          rawQueryParams: {'question': question, 'categoryTitle': categoryTitle},
+          rawQueryParams: {
+            'question': question,
+            'withClose': withClose,
+            'categoryTitle': categoryTitle,
+          },
           initialChildren: children,
         );
 
@@ -224,6 +247,7 @@ class DetailQuestionRoute extends PageRouteInfo<DetailQuestionRouteArgs> {
       final args = data.argsAs<DetailQuestionRouteArgs>(
         orElse: () => DetailQuestionRouteArgs(
           question: queryParams.get('question'),
+          withClose: queryParams.getBool('withClose', false),
           categoryTitle: queryParams.optString('categoryTitle'),
           questionId: pathParams.getInt('questionId'),
         ),
@@ -231,6 +255,7 @@ class DetailQuestionRoute extends PageRouteInfo<DetailQuestionRouteArgs> {
       return DetailQuestionScreen(
         key: args.key,
         question: args.question,
+        withClose: args.withClose,
         categoryTitle: args.categoryTitle,
         questionId: args.questionId,
       );
@@ -242,6 +267,7 @@ class DetailQuestionRouteArgs {
   const DetailQuestionRouteArgs({
     this.key,
     this.question,
+    this.withClose = false,
     this.categoryTitle,
     required this.questionId,
   });
@@ -250,14 +276,35 @@ class DetailQuestionRouteArgs {
 
   final QuestionWithAnswersEntity? question;
 
+  final bool withClose;
+
   final String? categoryTitle;
 
   final int questionId;
 
   @override
   String toString() {
-    return 'DetailQuestionRouteArgs{key: $key, question: $question, categoryTitle: $categoryTitle, questionId: $questionId}';
+    return 'DetailQuestionRouteArgs{key: $key, question: $question, withClose: $withClose, categoryTitle: $categoryTitle, questionId: $questionId}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DetailQuestionRouteArgs) return false;
+    return key == other.key &&
+        question == other.question &&
+        withClose == other.withClose &&
+        categoryTitle == other.categoryTitle &&
+        questionId == other.questionId;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      question.hashCode ^
+      withClose.hashCode ^
+      categoryTitle.hashCode ^
+      questionId.hashCode;
 }
 
 /// generated route for
@@ -317,12 +364,30 @@ class DetailStoryRouteArgs {
   String toString() {
     return 'DetailStoryRouteArgs{key: $key, idStory: $idStory, stories: $stories, currentIndex: $currentIndex}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DetailStoryRouteArgs) return false;
+    return key == other.key &&
+        idStory == other.idStory &&
+        const ListEquality().equals(stories, other.stories) &&
+        currentIndex == other.currentIndex;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      idStory.hashCode ^
+      const ListEquality().hash(stories) ^
+      currentIndex.hashCode;
 }
 
 /// generated route for
 /// [DisplayCoolingAdvisoryScreen]
 class DisplayCoolingAdvisoryRoute extends PageRouteInfo<void> {
-  const DisplayCoolingAdvisoryRoute({List<PageRouteInfo>? children}) : super(DisplayCoolingAdvisoryRoute.name, initialChildren: children);
+  const DisplayCoolingAdvisoryRoute({List<PageRouteInfo>? children})
+      : super(DisplayCoolingAdvisoryRoute.name, initialChildren: children);
 
   static const String name = 'DisplayCoolingAdvisoryRoute';
 
@@ -337,7 +402,8 @@ class DisplayCoolingAdvisoryRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [DitchingScreen]
 class DitchingRoute extends PageRouteInfo<void> {
-  const DitchingRoute({List<PageRouteInfo>? children}) : super(DitchingRoute.name, initialChildren: children);
+  const DitchingRoute({List<PageRouteInfo>? children})
+      : super(DitchingRoute.name, initialChildren: children);
 
   static const String name = 'DitchingRoute';
 
@@ -352,7 +418,8 @@ class DitchingRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ElectricalFireInFlightScreen]
 class ElectricalFireInFlightRoute extends PageRouteInfo<void> {
-  const ElectricalFireInFlightRoute({List<PageRouteInfo>? children}) : super(ElectricalFireInFlightRoute.name, initialChildren: children);
+  const ElectricalFireInFlightRoute({List<PageRouteInfo>? children})
+      : super(ElectricalFireInFlightRoute.name, initialChildren: children);
 
   static const String name = 'ElectricalFireInFlightRoute';
 
@@ -366,7 +433,8 @@ class ElectricalFireInFlightRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ElectricalPowerSubCategoryScreen]
-class ElectricalPowerSubCategoryRoute extends PageRouteInfo<ElectricalPowerSubCategoryRouteArgs> {
+class ElectricalPowerSubCategoryRoute
+    extends PageRouteInfo<ElectricalPowerSubCategoryRouteArgs> {
   ElectricalPowerSubCategoryRoute({
     Key? key,
     required String nameCategory,
@@ -414,6 +482,16 @@ class ElectricalPowerSubCategoryRouteArgs {
   String toString() {
     return 'ElectricalPowerSubCategoryRouteArgs{key: $key, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ElectricalPowerSubCategoryRouteArgs) return false;
+    return key == other.key && nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
@@ -438,7 +516,8 @@ class ElectricalPowerSupplySystemMalfunctionsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EmergencyCategoriesScreen]
-class EmergencyCategoriesRoute extends PageRouteInfo<EmergencyCategoriesRouteArgs> {
+class EmergencyCategoriesRoute
+    extends PageRouteInfo<EmergencyCategoriesRouteArgs> {
   EmergencyCategoriesRoute({
     Key? key,
     required String nameCategory,
@@ -483,6 +562,16 @@ class EmergencyCategoriesRouteArgs {
   String toString() {
     return 'EmergencyCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EmergencyCategoriesRouteArgs) return false;
+    return key == other.key && nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
@@ -526,7 +615,8 @@ class EmergencyLandingWithoutEnginePowerRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [EmptyNavigationScreen]
 class EmptyNavigationRoute extends PageRouteInfo<void> {
-  const EmptyNavigationRoute({List<PageRouteInfo>? children}) : super(EmptyNavigationRoute.name, initialChildren: children);
+  const EmptyNavigationRoute({List<PageRouteInfo>? children})
+      : super(EmptyNavigationRoute.name, initialChildren: children);
 
   static const String name = 'EmptyNavigationRoute';
 
@@ -541,7 +631,8 @@ class EmptyNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [EngineFailureScreen]
 class EngineFailureRoute extends PageRouteInfo<void> {
-  const EngineFailureRoute({List<PageRouteInfo>? children}) : super(EngineFailureRoute.name, initialChildren: children);
+  const EngineFailureRoute({List<PageRouteInfo>? children})
+      : super(EngineFailureRoute.name, initialChildren: children);
 
   static const String name = 'EngineFailureRoute';
 
@@ -556,7 +647,8 @@ class EngineFailureRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [EngineFireInFlightScreen]
 class EngineFireInFlightRoute extends PageRouteInfo<void> {
-  const EngineFireInFlightRoute({List<PageRouteInfo>? children}) : super(EngineFireInFlightRoute.name, initialChildren: children);
+  const EngineFireInFlightRoute({List<PageRouteInfo>? children})
+      : super(EngineFireInFlightRoute.name, initialChildren: children);
 
   static const String name = 'EngineFireInFlightRoute';
 
@@ -571,7 +663,8 @@ class EngineFireInFlightRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ExcessiveFuelVaporScreen]
 class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
-  const ExcessiveFuelVaporRoute({List<PageRouteInfo>? children}) : super(ExcessiveFuelVaporRoute.name, initialChildren: children);
+  const ExcessiveFuelVaporRoute({List<PageRouteInfo>? children})
+      : super(ExcessiveFuelVaporRoute.name, initialChildren: children);
 
   static const String name = 'ExcessiveFuelVaporRoute';
 
@@ -586,7 +679,8 @@ class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [FiresDuringStartOnGroundScreen]
 class FiresDuringStartOnGroundRoute extends PageRouteInfo<void> {
-  const FiresDuringStartOnGroundRoute({List<PageRouteInfo>? children}) : super(FiresDuringStartOnGroundRoute.name, initialChildren: children);
+  const FiresDuringStartOnGroundRoute({List<PageRouteInfo>? children})
+      : super(FiresDuringStartOnGroundRoute.name, initialChildren: children);
 
   static const String name = 'FiresDuringStartOnGroundRoute';
 
@@ -600,7 +694,8 @@ class FiresDuringStartOnGroundRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [FiresSubCategoriesScreen]
-class FiresSubCategoriesRoute extends PageRouteInfo<FiresSubCategoriesRouteArgs> {
+class FiresSubCategoriesRoute
+    extends PageRouteInfo<FiresSubCategoriesRouteArgs> {
   FiresSubCategoriesRoute({
     Key? key,
     required String nameCategory,
@@ -645,11 +740,22 @@ class FiresSubCategoriesRouteArgs {
   String toString() {
     return 'FiresSubCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FiresSubCategoriesRouteArgs) return false;
+    return key == other.key && nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
 /// [ForcedLandingsSubCategoriesScreen]
-class ForcedLandingsSubCategoriesRoute extends PageRouteInfo<ForcedLandingsSubCategoriesRouteArgs> {
+class ForcedLandingsSubCategoriesRoute
+    extends PageRouteInfo<ForcedLandingsSubCategoriesRouteArgs> {
   ForcedLandingsSubCategoriesRoute({
     Key? key,
     required String nameCategory,
@@ -697,12 +803,23 @@ class ForcedLandingsSubCategoriesRouteArgs {
   String toString() {
     return 'ForcedLandingsSubCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ForcedLandingsSubCategoriesRouteArgs) return false;
+    return key == other.key && nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
 /// [HandBookMainCategoriesScreen]
 class HandBookMainCategoriesRoute extends PageRouteInfo<void> {
-  const HandBookMainCategoriesRoute({List<PageRouteInfo>? children}) : super(HandBookMainCategoriesRoute.name, initialChildren: children);
+  const HandBookMainCategoriesRoute({List<PageRouteInfo>? children})
+      : super(HandBookMainCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'HandBookMainCategoriesRoute';
 
@@ -736,7 +853,8 @@ class HighCarbonMonoxideCoLevelAdvisoryRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [IcingScreen]
 class IcingRoute extends PageRouteInfo<void> {
-  const IcingRoute({List<PageRouteInfo>? children}) : super(IcingRoute.name, initialChildren: children);
+  const IcingRoute({List<PageRouteInfo>? children})
+      : super(IcingRoute.name, initialChildren: children);
 
   static const String name = 'IcingRoute';
 
@@ -751,7 +869,8 @@ class IcingRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [LearningNavigationScreen]
 class LearningNavigationRoute extends PageRouteInfo<void> {
-  const LearningNavigationRoute({List<PageRouteInfo>? children}) : super(LearningNavigationRoute.name, initialChildren: children);
+  const LearningNavigationRoute({List<PageRouteInfo>? children})
+      : super(LearningNavigationRoute.name, initialChildren: children);
 
   static const String name = 'LearningNavigationRoute';
 
@@ -766,7 +885,8 @@ class LearningNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [LearningScreen]
 class LearningRoute extends PageRouteInfo<void> {
-  const LearningRoute({List<PageRouteInfo>? children}) : super(LearningRoute.name, initialChildren: children);
+  const LearningRoute({List<PageRouteInfo>? children})
+      : super(LearningRoute.name, initialChildren: children);
 
   static const String name = 'LearningRoute';
 
@@ -780,7 +900,8 @@ class LearningRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ListQuestionByCategoryScreen]
-class ListQuestionByCategoryRoute extends PageRouteInfo<ListQuestionByCategoryRouteArgs> {
+class ListQuestionByCategoryRoute
+    extends PageRouteInfo<ListQuestionByCategoryRouteArgs> {
   ListQuestionByCategoryRoute({
     Key? key,
     required int categoryId,
@@ -843,6 +964,26 @@ class ListQuestionByCategoryRouteArgs {
   String toString() {
     return 'ListQuestionByCategoryRouteArgs{key: $key, categoryId: $categoryId, questionWithAnswersList: $questionWithAnswersList, categoryTitle: $categoryTitle}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ListQuestionByCategoryRouteArgs) return false;
+    return key == other.key &&
+        categoryId == other.categoryId &&
+        const ListEquality().equals(
+          questionWithAnswersList,
+          other.questionWithAnswersList,
+        ) &&
+        categoryTitle == other.categoryTitle;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      categoryId.hashCode ^
+      const ListEquality().hash(questionWithAnswersList) ^
+      categoryTitle.hashCode;
 }
 
 /// generated route for
@@ -867,7 +1008,8 @@ class LowVoltsAnnunciatorComesOnBellow1000RpmRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmScreen]
-class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute extends PageRouteInfo<void> {
+class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute
+    extends PageRouteInfo<void> {
   const LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute({
     List<PageRouteInfo>? children,
   }) : super(
@@ -875,7 +1017,8 @@ class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute extends PageRoute
           initialChildren: children,
         );
 
-  static const String name = 'LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute';
+  static const String name =
+      'LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -888,7 +1031,8 @@ class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute extends PageRoute
 /// generated route for
 /// [MainNavigationScreen]
 class MainNavigationRoute extends PageRouteInfo<void> {
-  const MainNavigationRoute({List<PageRouteInfo>? children}) : super(MainNavigationRoute.name, initialChildren: children);
+  const MainNavigationRoute({List<PageRouteInfo>? children})
+      : super(MainNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MainNavigationRoute';
 
@@ -903,7 +1047,8 @@ class MainNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MainScreen]
 class MainRoute extends PageRouteInfo<void> {
-  const MainRoute({List<PageRouteInfo>? children}) : super(MainRoute.name, initialChildren: children);
+  const MainRoute({List<PageRouteInfo>? children})
+      : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -918,7 +1063,8 @@ class MainRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MarketNavigationScreen]
 class MarketNavigationRoute extends PageRouteInfo<void> {
-  const MarketNavigationRoute({List<PageRouteInfo>? children}) : super(MarketNavigationRoute.name, initialChildren: children);
+  const MarketNavigationRoute({List<PageRouteInfo>? children})
+      : super(MarketNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MarketNavigationRoute';
 
@@ -933,7 +1079,8 @@ class MarketNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MarketScreen]
 class MarketRoute extends PageRouteInfo<void> {
-  const MarketRoute({List<PageRouteInfo>? children}) : super(MarketRoute.name, initialChildren: children);
+  const MarketRoute({List<PageRouteInfo>? children})
+      : super(MarketRoute.name, initialChildren: children);
 
   static const String name = 'MarketRoute';
 
@@ -948,7 +1095,8 @@ class MarketRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [NewsNavigationScreen]
 class NewsNavigationRoute extends PageRouteInfo<void> {
-  const NewsNavigationRoute({List<PageRouteInfo>? children}) : super(NewsNavigationRoute.name, initialChildren: children);
+  const NewsNavigationRoute({List<PageRouteInfo>? children})
+      : super(NewsNavigationRoute.name, initialChildren: children);
 
   static const String name = 'NewsNavigationRoute';
 
@@ -963,7 +1111,8 @@ class NewsNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [NewsScreen]
 class NewsRoute extends PageRouteInfo<void> {
-  const NewsRoute({List<PageRouteInfo>? children}) : super(NewsRoute.name, initialChildren: children);
+  const NewsRoute({List<PageRouteInfo>? children})
+      : super(NewsRoute.name, initialChildren: children);
 
   static const String name = 'NewsRoute';
 
@@ -1019,6 +1168,16 @@ class NormalCategoriesRouteArgs {
   String toString() {
     return 'NormalCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NormalCategoriesRouteArgs) return false;
+    return key == other.key && nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
@@ -1081,11 +1240,25 @@ class NormalCheckListRouteArgs {
   String toString() {
     return 'NormalCheckListRouteArgs{key: $key, normalCategoryId: $normalCategoryId, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NormalCheckListRouteArgs) return false;
+    return key == other.key &&
+        normalCategoryId == other.normalCategoryId &&
+        nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ normalCategoryId.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
 /// [PreflightInspectionCategoriesScreen]
-class PreflightInspectionCategoriesRoute extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
+class PreflightInspectionCategoriesRoute
+    extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
   PreflightInspectionCategoriesRoute({
     Key? key,
     required String nameCategory,
@@ -1133,11 +1306,22 @@ class PreflightInspectionCategoriesRouteArgs {
   String toString() {
     return 'PreflightInspectionCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PreflightInspectionCategoriesRouteArgs) return false;
+    return key == other.key && nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
 /// [PreflightInspectionCheckListScreen]
-class PreflightInspectionCheckListRoute extends PageRouteInfo<PreflightInspectionCheckListRouteArgs> {
+class PreflightInspectionCheckListRoute
+    extends PageRouteInfo<PreflightInspectionCheckListRouteArgs> {
   PreflightInspectionCheckListRoute({
     Key? key,
     required String preflihgtInspectionCategoryId,
@@ -1197,12 +1381,28 @@ class PreflightInspectionCheckListRouteArgs {
   String toString() {
     return 'PreflightInspectionCheckListRouteArgs{key: $key, preflihgtInspectionCategoryId: $preflihgtInspectionCategoryId, nameCategory: $nameCategory}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PreflightInspectionCheckListRouteArgs) return false;
+    return key == other.key &&
+        preflihgtInspectionCategoryId == other.preflihgtInspectionCategoryId &&
+        nameCategory == other.nameCategory;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      preflihgtInspectionCategoryId.hashCode ^
+      nameCategory.hashCode;
 }
 
 /// generated route for
 /// [PricesNavigationScreen]
 class PricesNavigationRoute extends PageRouteInfo<void> {
-  const PricesNavigationRoute({List<PageRouteInfo>? children}) : super(PricesNavigationRoute.name, initialChildren: children);
+  const PricesNavigationRoute({List<PageRouteInfo>? children})
+      : super(PricesNavigationRoute.name, initialChildren: children);
 
   static const String name = 'PricesNavigationRoute';
 
@@ -1217,7 +1417,8 @@ class PricesNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [PricesScreen]
 class PricesRoute extends PageRouteInfo<void> {
-  const PricesRoute({List<PageRouteInfo>? children}) : super(PricesRoute.name, initialChildren: children);
+  const PricesRoute({List<PageRouteInfo>? children})
+      : super(PricesRoute.name, initialChildren: children);
 
   static const String name = 'PricesRoute';
 
@@ -1232,7 +1433,8 @@ class PricesRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ProfileNavigationScreen]
 class ProfileNavigationRoute extends PageRouteInfo<void> {
-  const ProfileNavigationRoute({List<PageRouteInfo>? children}) : super(ProfileNavigationRoute.name, initialChildren: children);
+  const ProfileNavigationRoute({List<PageRouteInfo>? children})
+      : super(ProfileNavigationRoute.name, initialChildren: children);
 
   static const String name = 'ProfileNavigationRoute';
 
@@ -1247,7 +1449,8 @@ class ProfileNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
-  const ProfileRoute({List<PageRouteInfo>? children}) : super(ProfileRoute.name, initialChildren: children);
+  const ProfileRoute({List<PageRouteInfo>? children})
+      : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -1262,7 +1465,8 @@ class ProfileRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [SaleRequestNavigationScreen]
 class SaleRequestNavigationRoute extends PageRouteInfo<void> {
-  const SaleRequestNavigationRoute({List<PageRouteInfo>? children}) : super(SaleRequestNavigationRoute.name, initialChildren: children);
+  const SaleRequestNavigationRoute({List<PageRouteInfo>? children})
+      : super(SaleRequestNavigationRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestNavigationRoute';
 
@@ -1277,7 +1481,8 @@ class SaleRequestNavigationRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [SaleRequestScreen]
 class SaleRequestRoute extends PageRouteInfo<void> {
-  const SaleRequestRoute({List<PageRouteInfo>? children}) : super(SaleRequestRoute.name, initialChildren: children);
+  const SaleRequestRoute({List<PageRouteInfo>? children})
+      : super(SaleRequestRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestRoute';
 
@@ -1292,7 +1497,8 @@ class SaleRequestRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [StaticSourceBlockageScreen]
 class StaticSourceBlockageRoute extends PageRouteInfo<void> {
-  const StaticSourceBlockageRoute({List<PageRouteInfo>? children}) : super(StaticSourceBlockageRoute.name, initialChildren: children);
+  const StaticSourceBlockageRoute({List<PageRouteInfo>? children})
+      : super(StaticSourceBlockageRoute.name, initialChildren: children);
 
   static const String name = 'StaticSourceBlockageRoute';
 
@@ -1307,7 +1513,8 @@ class StaticSourceBlockageRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [VacuumSystemFailureScreen]
 class VacuumSystemFailureRoute extends PageRouteInfo<void> {
-  const VacuumSystemFailureRoute({List<PageRouteInfo>? children}) : super(VacuumSystemFailureRoute.name, initialChildren: children);
+  const VacuumSystemFailureRoute({List<PageRouteInfo>? children})
+      : super(VacuumSystemFailureRoute.name, initialChildren: children);
 
   static const String name = 'VacuumSystemFailureRoute';
 
@@ -1322,7 +1529,8 @@ class VacuumSystemFailureRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [VideoForStudentsScreen]
 class VideoForStudentsRoute extends PageRouteInfo<void> {
-  const VideoForStudentsRoute({List<PageRouteInfo>? children}) : super(VideoForStudentsRoute.name, initialChildren: children);
+  const VideoForStudentsRoute({List<PageRouteInfo>? children})
+      : super(VideoForStudentsRoute.name, initialChildren: children);
 
   static const String name = 'VideoForStudentsRoute';
 
@@ -1337,7 +1545,8 @@ class VideoForStudentsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [WingFireScreen]
 class WingFireRoute extends PageRouteInfo<void> {
-  const WingFireRoute({List<PageRouteInfo>? children}) : super(WingFireRoute.name, initialChildren: children);
+  const WingFireRoute({List<PageRouteInfo>? children})
+      : super(WingFireRoute.name, initialChildren: children);
 
   static const String name = 'WingFireRoute';
 

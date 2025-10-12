@@ -1,13 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
-import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/answer_widget.dart';
-import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/oval_lable_question_widget.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -85,7 +82,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                 Row(
                   spacing: 12.w,
                   children: [
-                    OvalLableQuestionWidget(
+                    ChipsWidget(
                       questionWithAnswers: widget.question ?? emptyQuestion,
                     ),
                     Flexible(
@@ -125,9 +122,6 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                             isOfficial: widget.question?.answers[index].isOfficial ?? false,
                           ).$1,
                         )
-                        // Text(widget.question.answers[1].answerText.toString()),
-                        // Text(widget.question.answers[2].answerText.toString()),
-                        // Text(widget.question.explanation ?? ''),
                       ],
                     ),
                   ),

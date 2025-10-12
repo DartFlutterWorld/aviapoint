@@ -33,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: CustomAppBar(
         title: 'AviaPoint',
         withBack: false,
+        withLogo: true,
         actions: [
           Provider.of<AppState>(context, listen: true).isAuthenticated
               ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))

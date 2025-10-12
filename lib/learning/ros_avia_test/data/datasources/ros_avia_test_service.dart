@@ -1,4 +1,5 @@
 import 'package:aviapoint/learning/ros_avia_test/data/models/privat_pilot_plane_category_dto.dart';
+import 'package:aviapoint/learning/ros_avia_test/data/models/ros_avia_test_category_dto.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/models/ros_avia_test_category_with_questions_dto.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/models/type_correct_answer_dto.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/models/type_sertificates_dto.dart';
@@ -34,6 +35,9 @@ abstract class RosAviaTestService {
 
   @GET('/learning/ros_avia_test/{typeCertificateId}')
   Future<List<RosAviaTestCategoryWithQuestionsDto>> fetchRosAviaTestCategoryWithQuestions(@Path('typeCertificateId') String typeCertificateId);
+
+  @GET('/learning/ros_avia_test/categories/{typeCertificateId}')
+  Future<List<RosAviaTestCategoryDto>> fetchRosAviaTestCategory(@Path('typeCertificateId') String typeCertificateId);
 
   // @GET('/learning/hand_book/normal_categories/check_list')
   // Future<List<NormalCheckListDto>> fetchNormalCheckList();

@@ -59,7 +59,7 @@ void logOut(BuildContext context) async {
     case 5:
       return (Color(0xFFE8DAFF), Color(0xFF8258F5));
     default:
-      return (Colors.transparent, Colors.transparent);
+      return (Colors.lime, Colors.black);
   }
 }
 
@@ -68,3 +68,10 @@ final emptyQuestion = QuestionWithAnswersEntity(
   questionId: 0,
   questionText: '',
 );
+
+enum TestMode { training, standart }
+
+enum Screens {
+  learning, // обучение
+  selectTopicsScreen, // Выбор сертификата и тем в боттом шите тестирования
+}

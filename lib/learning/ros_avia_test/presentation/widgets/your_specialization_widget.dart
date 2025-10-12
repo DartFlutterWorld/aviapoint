@@ -18,10 +18,10 @@ class YourSpecializationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 16, left: 12, right: 12, bottom: 16),
+      padding: EdgeInsets.only(top: 10, left: 12, right: 12, bottom: 16),
       decoration: BoxDecoration(
         color: Color(0xFFE3F1FF),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
             color: Color(0xFF000000).withOpacity(0.08),
@@ -74,7 +74,7 @@ class YourSpecializationWidget extends StatelessWidget {
           GestureDetector(
             onTap: onTap,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.5.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 9.5.h),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),

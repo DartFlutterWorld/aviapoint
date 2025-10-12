@@ -6,7 +6,7 @@ part of 'profile_service.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
 class _ProfileService implements ProfileService {
   _ProfileService(this._dio, {this.baseUrl, this.errorLogger});
@@ -37,9 +37,7 @@ class _ProfileService implements ProfileService {
     late List<ProfileDto> _value;
     try {
       _value = _result.data!
-          .map(
-            (dynamic i) => ProfileDto.fromJson(i as Map<String, dynamic>),
-          )
+          .map((dynamic i) => ProfileDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

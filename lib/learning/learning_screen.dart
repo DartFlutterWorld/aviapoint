@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/baner_widget.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
@@ -75,6 +76,7 @@ class _LearningScreenState extends State<LearningScreen> {
               onTap: () => AutoRouter.of(context).push(
                 BaseQuestionsRoute(),
               ),
+              onTap2: () => testingModeDialog(context: context),
               alignPicture: Alignment.topRight,
               titleButton2: 'Тестирование',
               boxShadowButton: [

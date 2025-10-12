@@ -3,13 +3,17 @@ import 'package:aviapoint/core/presentation/widgets/clear_progress.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/select_topics_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mode_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -81,7 +85,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
   );
 }
 
-Future<void> selectTypeCertificate({required BuildContext context}) async {
+Future<void> selectTypeCertificate({required BuildContext context, required Enum screen}) async {
   final result = await showModalBottomSheet<TypeSertificatesEntity>(
     useRootNavigator: true,
     isDismissible: true,
@@ -105,8 +109,27 @@ Future<void> selectTypeCertificate({required BuildContext context}) async {
     },
   );
   if (result != null) {
-    BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
-    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
+    if (screen == Screens.learning) {
+      BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(
+        result,
+      );
+
+      BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(
+        GetCategoriesWithListQuestionsEvent(
+          typeSsertificatesId: result.id,
+        ),
+      );
+    }
+    if (screen == Screens.selectTopicsScreen) {
+      BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(
+        result,
+      );
+      BlocProvider.of<CategoriesBloc>(context).add(
+        GetCategoriesEvent(
+          typeSsertificatesId: result.id,
+        ),
+      );
+    }
   }
 }
 
@@ -170,5 +193,51 @@ Future<void> openQuestion({
   );
   if (result != null) {
     BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
+  }
+}
+
+Future<void> selectTopics({
+  required BuildContext context,
+}) async {
+  final result = await showModalBottomSheet<Set<int>>(
+    useRootNavigator: true,
+    isDismissible: true,
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    barrierColor: AppColors.bgOverlay,
+    backgroundColor: Color(0xFFF1F7FF),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(10.r),
+      ),
+    ),
+    builder: (context) {
+      return ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height - 100,
+          child: SelectTopicsScreen(),
+        ),
+      );
+    },
+  );
+  if (result != null) {
+    print(result);
+  }
+}
+
+// Модалка выбор режима тестирования
+Future<void> testingModeDialog({required BuildContext context}) async {
+  final result = await showDialog<Enum?>(
+    context: context,
+    // barrierColor: Color(0xFF1F2937),
+    builder: (BuildContext context) {
+      return TestingModeDialog();
+    },
+  );
+
+  if (result != null) {
+    selectTopics(context: context);
   }
 }

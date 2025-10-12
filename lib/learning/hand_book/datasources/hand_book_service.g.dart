@@ -6,7 +6,7 @@ part of 'hand_book_service.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
 class _HandBookService implements HandBookService {
   _HandBookService(this._dio, {this.baseUrl, this.errorLogger});
@@ -38,9 +38,8 @@ class _HandBookService implements HandBookService {
     try {
       _value = _result.data!
           .map(
-            (dynamic i) => HandBookMainCategoriesDto.fromJson(
-              i as Map<String, dynamic>,
-            ),
+            (dynamic i) =>
+                HandBookMainCategoriesDto.fromJson(i as Map<String, dynamic>),
           )
           .toList();
     } on Object catch (e, s) {

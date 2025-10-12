@@ -73,9 +73,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SvgPicture.asset('assets/svg/newlogo.svg'),
-                // const SizedBox(width: 4),
-                // SvgPicture.asset('assets/svg/logo_price_seed.svg'),
+                SvgPicture.asset(Pictures.logoTitle),
               ],
             )
           : Text(

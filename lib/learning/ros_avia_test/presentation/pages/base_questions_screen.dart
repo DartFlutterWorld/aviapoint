@@ -17,7 +17,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_wi
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_correct_answers_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/correct_answer.dart';
-import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/oval_lable_question_widget.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/ros_avia_test_category_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/test_my_self_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/your_specialization_widget.dart';
@@ -68,15 +68,16 @@ class _BaseQuestionsScreenState extends State<BaseQuestionsScreen> {
           TestMySelfWidget(),
           SizedBox(height: 12),
           BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
-              builder: (context, state) => state.map(
-                    loading: (value) => SizedBox(),
-                    error: (value) => SizedBox(),
-                    success: (value) => YourSpecializationWidget(
-                      specialization: context.watch<RosAviaTestCubit>().state.typeSertificate.title,
-                      topics: value.categoryWithQuestions.length,
-                      onTap: () => selectTypeCertificate(context: context),
-                    ),
-                  )),
+            builder: (context, state) => state.map(
+              loading: (value) => SizedBox(),
+              error: (value) => SizedBox(),
+              success: (value) => YourSpecializationWidget(
+                specialization: context.watch<RosAviaTestCubit>().state.typeSertificate.title,
+                topics: value.categoryWithQuestions.length,
+                onTap: () => selectTypeCertificate(context: context, screen: Screens.learning),
+              ),
+            ),
+          ),
           SizedBox(height: 12),
           BlocBuilder<TypeCorrectAnswersBloc, TypeCorrectAnswersState>(
             builder: (context, state) => state.maybeMap(
@@ -183,24 +184,20 @@ class _Success extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: Row(
-                            children: List.generate(
-                              categoryWithQuestions[index].questionsWithAnswers.length,
-                              (index2) => Padding(
-                                padding: EdgeInsets.only(right: 6, top: 3, bottom: 3), // Отступ справа
-                                child: GestureDetector(
-                                  onTap: () => openQuestion(
-                                    context: context,
-                                    question: categoryWithQuestions[index].questionsWithAnswers[index2],
-                                    questionId: categoryWithQuestions[index].questionsWithAnswers[index2].questionId,
-                                    categoryTitle: categoryWithQuestions[index].categoryTitle,
-                                  ),
-                                  child: OvalLableQuestionWidget(
-                                    questionWithAnswers: categoryWithQuestions[index].questionsWithAnswers[index2],
-                                  ),
+                        Wrap(
+                          children: List.generate(
+                            categoryWithQuestions[index].questionsWithAnswers.length,
+                            (index2) => Padding(
+                              padding: EdgeInsets.only(right: 3, left: 3, top: 3, bottom: 3),
+                              child: GestureDetector(
+                                onTap: () => openQuestion(
+                                  context: context,
+                                  question: categoryWithQuestions[index].questionsWithAnswers[index2],
+                                  questionId: categoryWithQuestions[index].questionsWithAnswers[index2].questionId,
+                                  categoryTitle: categoryWithQuestions[index].categoryTitle,
+                                ),
+                                child: ChipsWidget(
+                                  questionWithAnswers: categoryWithQuestions[index].questionsWithAnswers[index2],
                                 ),
                               ),
                             ),

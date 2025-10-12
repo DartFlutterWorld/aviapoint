@@ -12,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:aviapoint/core/domain/app_bloc_observer.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aviapoint/core/failure/logger.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 class SSlHttpOverrides extends HttpOverrides {
@@ -42,7 +41,7 @@ Future<void> main() async {
   runZonedGuarded<void>(
     _run,
     (error, stackTrace) async {
-      logger.e('Unexpected error: $error\n$stackTrace');
+      // logger.e('Unexpected error: $error\n$stackTrace');
     },
   );
 }

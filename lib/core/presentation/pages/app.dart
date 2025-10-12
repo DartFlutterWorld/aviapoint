@@ -18,6 +18,7 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/pre
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_by_category_bloc.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_correct_answers_bloc.dart';
@@ -166,6 +167,9 @@ class _AppState extends State<App> {
         ),
         BlocProvider<CategoriesWithListQuestionsBloc>(
           create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<CategoriesBloc>(
+          create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
         ),
         BlocProvider<RosAviaTestCubit>(
           create: (context) => RosAviaTestCubit(),

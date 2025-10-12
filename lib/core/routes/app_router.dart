@@ -54,6 +54,7 @@ import 'package:aviapoint/market/presentation/pages/market_navigation_screen.dar
 import 'package:aviapoint/market/presentation/pages/market_screen.dart';
 import 'package:aviapoint/sale/sale_request_navigation_screen.dart';
 import 'package:aviapoint/sale/sale_request_screen.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:aviapoint/base_screen.dart';
@@ -77,7 +78,7 @@ class AppRouter extends RootStackRouter {
           navigatorKey: navigatorKey,
         );
   @override
-  RouteType get defaultRouteType => const RouteType.custom();
+  RouteType get defaultRouteType => RouteType.custom();
 
   @override
   List<AutoRoute> get routes => [

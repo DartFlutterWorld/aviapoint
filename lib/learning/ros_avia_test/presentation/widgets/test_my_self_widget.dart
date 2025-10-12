@@ -1,8 +1,11 @@
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class TestMySelfWidget extends StatelessWidget {
   const TestMySelfWidget({
@@ -41,7 +44,7 @@ class TestMySelfWidget extends StatelessWidget {
             SizedBox(height: 12),
             Flexible(
               child: Text(
-                'Частный пилот (вертолёт)',
+                Provider.of<RosAviaTestCubit>(context).state.typeSertificate.title,
                 style: AppStyles.bold16s.copyWith(
                   color: Color(0xFF1F2937),
                 ),
@@ -58,7 +61,8 @@ class TestMySelfWidget extends StatelessWidget {
               title: 'Тестирование',
               verticalPadding: 8.h,
               backgroundColor: Color(0xFF0A6EFA),
-              onPressed: () {},
+              // onPressed: () => settingsTest(context: context),
+              onPressed: () => testingModeDialog(context: context),
               borderRadius: 46.r,
               textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),

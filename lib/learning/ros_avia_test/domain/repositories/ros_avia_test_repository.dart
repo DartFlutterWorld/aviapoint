@@ -1,5 +1,6 @@
 import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/privat_pilot_plane_category_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_area_category_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_correct_answer_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
@@ -12,14 +13,5 @@ abstract class RosAviaTestRepository {
   Future<Either<Failure, List<TypeCorrectAnswerEntity>>> fetchTypeCorrectAnswer();
   Future<Either<Failure, List<PrivatPilotPlaneCategoryEntity>>> fetchPrivatPilotPlaneCategory();
   Future<Either<Failure, List<RosAviaTestCategoryWithQuestionsEntity>>> fetchRosAviaTestCategoryWithQuestions(int typeSsertificatesId);
-  // Future<Either<Failure, List<PreflightInspectionCategoriesEntity>>> fetchPreflightInspectionCategories();
-  // Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckList();
-  // Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckListByCategory(String preflihgtInspectionCategoryId);
-  // // Future<Either<Failure, VideoForStudentsEntity>> fetchVideoById(String id);
-
-  // Future<Either<Failure, List<NormalCategoriesEntity>>> fetchNormalCategories();
-  // Future<Either<Failure, List<NormalCheckListEntity>>> fetchNormalCheckList();
-  // Future<Either<Failure, List<NormalCheckListEntity>>> fetchNormalCheckListByCategory(String normalCategoryId);
-
-  // Future<Either<Failure, List<EmergencyCategoriesEntity>>> fetchEmergencyCategories();
+  Future<Either<Failure, List<RosAviaTestCategoryEntity>>> fetchRosAviaTestCategory(int typeSsertificatesId);
 }

@@ -1,6 +1,7 @@
 import 'package:aviapoint/auth_page/data/datasources/remote/auth_service.dart';
 import 'package:aviapoint/auth_page/data/repositories/auth_repository_impl.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
+import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
@@ -91,4 +92,5 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<RosAviaTestRepository>(
     RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)),
   );
+  getIt.registerSingleton<AppDb>(AppDb());
 }
