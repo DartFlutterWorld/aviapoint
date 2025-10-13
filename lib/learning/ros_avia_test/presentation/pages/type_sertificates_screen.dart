@@ -14,10 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class TypeSertificatesScreen extends StatefulWidget {
   final String title;
-  const TypeSertificatesScreen({
-    super.key,
-    required this.title,
-  });
+  const TypeSertificatesScreen({super.key, required this.title});
 
   @override
   State<TypeSertificatesScreen> createState() => _TypeSertificatesScreenState();
@@ -81,23 +78,10 @@ class _Success extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: () => context.router.maybePop(null),
-              child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Center(
-                  child: SvgPicture.asset(
-                    Pictures.closeAuth,
-                  ),
-                ),
-              ),
+              child: SizedBox(width: 30, height: 30, child: Center(child: SvgPicture.asset(Pictures.closeAuth))),
             ),
           ),
-          Text(
-            'Выберите тип свидетельства',
-            style: AppStyles.semibpld14s.copyWith(
-              color: Color(0xFF374151),
-            ),
-          ),
+          Text('Выберите тип свидетельства', style: AppStyles.semibpld14s.copyWith(color: Color(0xFF374151))),
           SizedBox(height: 8),
           Expanded(
             child: ListView.builder(

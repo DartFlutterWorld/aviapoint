@@ -12,7 +12,8 @@ part of 'video_for_students_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 VideoForStudentsDto _$VideoForStudentsDtoFromJson(Map<String, dynamic> json) {
   return _VideoForStudentsDto.fromJson(json);
@@ -38,8 +39,9 @@ mixin _$VideoForStudentsDto {
 /// @nodoc
 abstract class $VideoForStudentsDtoCopyWith<$Res> {
   factory $VideoForStudentsDtoCopyWith(
-          VideoForStudentsDto value, $Res Function(VideoForStudentsDto) then) =
-      _$VideoForStudentsDtoCopyWithImpl<$Res, VideoForStudentsDto>;
+    VideoForStudentsDto value,
+    $Res Function(VideoForStudentsDto) then,
+  ) = _$VideoForStudentsDtoCopyWithImpl<$Res, VideoForStudentsDto>;
   @useResult
   $Res call({int id, String title, String fileName, String url});
 }
@@ -64,33 +66,37 @@ class _$VideoForStudentsDtoCopyWithImpl<$Res, $Val extends VideoForStudentsDto>
     Object? fileName = null,
     Object? url = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      fileName: null == fileName
-          ? _value.fileName
-          : fileName // ignore: cast_nullable_to_non_nullable
-              as String,
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fileName: null == fileName
+                ? _value.fileName
+                : fileName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            url: null == url
+                ? _value.url
+                : url // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$VideoForStudentsDtoImplCopyWith<$Res>
     implements $VideoForStudentsDtoCopyWith<$Res> {
-  factory _$$VideoForStudentsDtoImplCopyWith(_$VideoForStudentsDtoImpl value,
-          $Res Function(_$VideoForStudentsDtoImpl) then) =
-      __$$VideoForStudentsDtoImplCopyWithImpl<$Res>;
+  factory _$$VideoForStudentsDtoImplCopyWith(
+    _$VideoForStudentsDtoImpl value,
+    $Res Function(_$VideoForStudentsDtoImpl) then,
+  ) = __$$VideoForStudentsDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String title, String fileName, String url});
@@ -100,9 +106,10 @@ abstract class _$$VideoForStudentsDtoImplCopyWith<$Res>
 class __$$VideoForStudentsDtoImplCopyWithImpl<$Res>
     extends _$VideoForStudentsDtoCopyWithImpl<$Res, _$VideoForStudentsDtoImpl>
     implements _$$VideoForStudentsDtoImplCopyWith<$Res> {
-  __$$VideoForStudentsDtoImplCopyWithImpl(_$VideoForStudentsDtoImpl _value,
-      $Res Function(_$VideoForStudentsDtoImpl) _then)
-      : super(_value, _then);
+  __$$VideoForStudentsDtoImplCopyWithImpl(
+    _$VideoForStudentsDtoImpl _value,
+    $Res Function(_$VideoForStudentsDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsDto
   /// with the given fields replaced by the non-null parameter values.
@@ -114,24 +121,26 @@ class __$$VideoForStudentsDtoImplCopyWithImpl<$Res>
     Object? fileName = null,
     Object? url = null,
   }) {
-    return _then(_$VideoForStudentsDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      fileName: null == fileName
-          ? _value.fileName
-          : fileName // ignore: cast_nullable_to_non_nullable
-              as String,
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$VideoForStudentsDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fileName: null == fileName
+            ? _value.fileName
+            : fileName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        url: null == url
+            ? _value.url
+            : url // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -139,11 +148,12 @@ class __$$VideoForStudentsDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$VideoForStudentsDtoImpl implements _VideoForStudentsDto {
-  const _$VideoForStudentsDtoImpl(
-      {required this.id,
-      required this.title,
-      required this.fileName,
-      required this.url});
+  const _$VideoForStudentsDtoImpl({
+    required this.id,
+    required this.title,
+    required this.fileName,
+    required this.url,
+  });
 
   factory _$VideoForStudentsDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$VideoForStudentsDtoImplFromJson(json);
@@ -185,22 +195,23 @@ class _$VideoForStudentsDtoImpl implements _VideoForStudentsDto {
   @pragma('vm:prefer-inline')
   _$$VideoForStudentsDtoImplCopyWith<_$VideoForStudentsDtoImpl> get copyWith =>
       __$$VideoForStudentsDtoImplCopyWithImpl<_$VideoForStudentsDtoImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$VideoForStudentsDtoImplToJson(
-      this,
-    );
+    return _$$VideoForStudentsDtoImplToJson(this);
   }
 }
 
 abstract class _VideoForStudentsDto implements VideoForStudentsDto {
-  const factory _VideoForStudentsDto(
-      {required final int id,
-      required final String title,
-      required final String fileName,
-      required final String url}) = _$VideoForStudentsDtoImpl;
+  const factory _VideoForStudentsDto({
+    required final int id,
+    required final String title,
+    required final String fileName,
+    required final String url,
+  }) = _$VideoForStudentsDtoImpl;
 
   factory _VideoForStudentsDto.fromJson(Map<String, dynamic> json) =
       _$VideoForStudentsDtoImpl.fromJson;

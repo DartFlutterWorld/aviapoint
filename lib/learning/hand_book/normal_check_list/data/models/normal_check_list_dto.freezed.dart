@@ -12,7 +12,8 @@ part of 'normal_check_list_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 NormalCheckListDto _$NormalCheckListDtoFromJson(Map<String, dynamic> json) {
   return _NormalCheckListDto.fromJson(json);
@@ -44,20 +45,22 @@ mixin _$NormalCheckListDto {
 /// @nodoc
 abstract class $NormalCheckListDtoCopyWith<$Res> {
   factory $NormalCheckListDtoCopyWith(
-          NormalCheckListDto value, $Res Function(NormalCheckListDto) then) =
-      _$NormalCheckListDtoCopyWithImpl<$Res, NormalCheckListDto>;
+    NormalCheckListDto value,
+    $Res Function(NormalCheckListDto) then,
+  ) = _$NormalCheckListDtoCopyWithImpl<$Res, NormalCheckListDto>;
   @useResult
-  $Res call(
-      {int id,
-      int normalCategoryId,
-      String title,
-      String doing,
-      String? picture,
-      String titleEng,
-      String doingEng,
-      bool checkList,
-      String? subCategory,
-      String? subCategoryEng});
+  $Res call({
+    int id,
+    int normalCategoryId,
+    String title,
+    String doing,
+    String? picture,
+    String titleEng,
+    String doingEng,
+    bool checkList,
+    String? subCategory,
+    String? subCategoryEng,
+  });
 }
 
 /// @nodoc
@@ -86,79 +89,85 @@ class _$NormalCheckListDtoCopyWithImpl<$Res, $Val extends NormalCheckListDto>
     Object? subCategory = freezed,
     Object? subCategoryEng = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      normalCategoryId: null == normalCategoryId
-          ? _value.normalCategoryId
-          : normalCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      doing: null == doing
-          ? _value.doing
-          : doing // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: freezed == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String?,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      doingEng: null == doingEng
-          ? _value.doingEng
-          : doingEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      checkList: null == checkList
-          ? _value.checkList
-          : checkList // ignore: cast_nullable_to_non_nullable
-              as bool,
-      subCategory: freezed == subCategory
-          ? _value.subCategory
-          : subCategory // ignore: cast_nullable_to_non_nullable
-              as String?,
-      subCategoryEng: freezed == subCategoryEng
-          ? _value.subCategoryEng
-          : subCategoryEng // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            normalCategoryId: null == normalCategoryId
+                ? _value.normalCategoryId
+                : normalCategoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            doing: null == doing
+                ? _value.doing
+                : doing // ignore: cast_nullable_to_non_nullable
+                      as String,
+            picture: freezed == picture
+                ? _value.picture
+                : picture // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            titleEng: null == titleEng
+                ? _value.titleEng
+                : titleEng // ignore: cast_nullable_to_non_nullable
+                      as String,
+            doingEng: null == doingEng
+                ? _value.doingEng
+                : doingEng // ignore: cast_nullable_to_non_nullable
+                      as String,
+            checkList: null == checkList
+                ? _value.checkList
+                : checkList // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            subCategory: freezed == subCategory
+                ? _value.subCategory
+                : subCategory // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            subCategoryEng: freezed == subCategoryEng
+                ? _value.subCategoryEng
+                : subCategoryEng // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$NormalCheckListDtoImplCopyWith<$Res>
     implements $NormalCheckListDtoCopyWith<$Res> {
-  factory _$$NormalCheckListDtoImplCopyWith(_$NormalCheckListDtoImpl value,
-          $Res Function(_$NormalCheckListDtoImpl) then) =
-      __$$NormalCheckListDtoImplCopyWithImpl<$Res>;
+  factory _$$NormalCheckListDtoImplCopyWith(
+    _$NormalCheckListDtoImpl value,
+    $Res Function(_$NormalCheckListDtoImpl) then,
+  ) = __$$NormalCheckListDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      int normalCategoryId,
-      String title,
-      String doing,
-      String? picture,
-      String titleEng,
-      String doingEng,
-      bool checkList,
-      String? subCategory,
-      String? subCategoryEng});
+  $Res call({
+    int id,
+    int normalCategoryId,
+    String title,
+    String doing,
+    String? picture,
+    String titleEng,
+    String doingEng,
+    bool checkList,
+    String? subCategory,
+    String? subCategoryEng,
+  });
 }
 
 /// @nodoc
 class __$$NormalCheckListDtoImplCopyWithImpl<$Res>
     extends _$NormalCheckListDtoCopyWithImpl<$Res, _$NormalCheckListDtoImpl>
     implements _$$NormalCheckListDtoImplCopyWith<$Res> {
-  __$$NormalCheckListDtoImplCopyWithImpl(_$NormalCheckListDtoImpl _value,
-      $Res Function(_$NormalCheckListDtoImpl) _then)
-      : super(_value, _then);
+  __$$NormalCheckListDtoImplCopyWithImpl(
+    _$NormalCheckListDtoImpl _value,
+    $Res Function(_$NormalCheckListDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListDto
   /// with the given fields replaced by the non-null parameter values.
@@ -176,48 +185,50 @@ class __$$NormalCheckListDtoImplCopyWithImpl<$Res>
     Object? subCategory = freezed,
     Object? subCategoryEng = freezed,
   }) {
-    return _then(_$NormalCheckListDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      normalCategoryId: null == normalCategoryId
-          ? _value.normalCategoryId
-          : normalCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      doing: null == doing
-          ? _value.doing
-          : doing // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: freezed == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String?,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      doingEng: null == doingEng
-          ? _value.doingEng
-          : doingEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      checkList: null == checkList
-          ? _value.checkList
-          : checkList // ignore: cast_nullable_to_non_nullable
-              as bool,
-      subCategory: freezed == subCategory
-          ? _value.subCategory
-          : subCategory // ignore: cast_nullable_to_non_nullable
-              as String?,
-      subCategoryEng: freezed == subCategoryEng
-          ? _value.subCategoryEng
-          : subCategoryEng // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$NormalCheckListDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        normalCategoryId: null == normalCategoryId
+            ? _value.normalCategoryId
+            : normalCategoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        doing: null == doing
+            ? _value.doing
+            : doing // ignore: cast_nullable_to_non_nullable
+                  as String,
+        picture: freezed == picture
+            ? _value.picture
+            : picture // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        titleEng: null == titleEng
+            ? _value.titleEng
+            : titleEng // ignore: cast_nullable_to_non_nullable
+                  as String,
+        doingEng: null == doingEng
+            ? _value.doingEng
+            : doingEng // ignore: cast_nullable_to_non_nullable
+                  as String,
+        checkList: null == checkList
+            ? _value.checkList
+            : checkList // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        subCategory: freezed == subCategory
+            ? _value.subCategory
+            : subCategory // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        subCategoryEng: freezed == subCategoryEng
+            ? _value.subCategoryEng
+            : subCategoryEng // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -225,17 +236,18 @@ class __$$NormalCheckListDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$NormalCheckListDtoImpl implements _NormalCheckListDto {
-  const _$NormalCheckListDtoImpl(
-      {required this.id,
-      required this.normalCategoryId,
-      required this.title,
-      required this.doing,
-      this.picture = '',
-      required this.titleEng,
-      required this.doingEng,
-      required this.checkList,
-      this.subCategory,
-      this.subCategoryEng});
+  const _$NormalCheckListDtoImpl({
+    required this.id,
+    required this.normalCategoryId,
+    required this.title,
+    required this.doing,
+    this.picture = '',
+    required this.titleEng,
+    required this.doingEng,
+    required this.checkList,
+    this.subCategory,
+    this.subCategoryEng,
+  });
 
   factory _$NormalCheckListDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$NormalCheckListDtoImplFromJson(json);
@@ -293,17 +305,18 @@ class _$NormalCheckListDtoImpl implements _NormalCheckListDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      normalCategoryId,
-      title,
-      doing,
-      picture,
-      titleEng,
-      doingEng,
-      checkList,
-      subCategory,
-      subCategoryEng);
+    runtimeType,
+    id,
+    normalCategoryId,
+    title,
+    doing,
+    picture,
+    titleEng,
+    doingEng,
+    checkList,
+    subCategory,
+    subCategoryEng,
+  );
 
   /// Create a copy of NormalCheckListDto
   /// with the given fields replaced by the non-null parameter values.
@@ -312,28 +325,29 @@ class _$NormalCheckListDtoImpl implements _NormalCheckListDto {
   @pragma('vm:prefer-inline')
   _$$NormalCheckListDtoImplCopyWith<_$NormalCheckListDtoImpl> get copyWith =>
       __$$NormalCheckListDtoImplCopyWithImpl<_$NormalCheckListDtoImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$NormalCheckListDtoImplToJson(
-      this,
-    );
+    return _$$NormalCheckListDtoImplToJson(this);
   }
 }
 
 abstract class _NormalCheckListDto implements NormalCheckListDto {
-  const factory _NormalCheckListDto(
-      {required final int id,
-      required final int normalCategoryId,
-      required final String title,
-      required final String doing,
-      final String? picture,
-      required final String titleEng,
-      required final String doingEng,
-      required final bool checkList,
-      final String? subCategory,
-      final String? subCategoryEng}) = _$NormalCheckListDtoImpl;
+  const factory _NormalCheckListDto({
+    required final int id,
+    required final int normalCategoryId,
+    required final String title,
+    required final String doing,
+    final String? picture,
+    required final String titleEng,
+    required final String doingEng,
+    required final bool checkList,
+    final String? subCategory,
+    final String? subCategoryEng,
+  }) = _$NormalCheckListDtoImpl;
 
   factory _NormalCheckListDto.fromJson(Map<String, dynamic> json) =
       _$NormalCheckListDtoImpl.fromJson;

@@ -12,56 +12,54 @@ part of 'hand_book_main_categories_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$HandBookMainCategoriesEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) =>
+  TResult when<TResult extends Object?>({required TResult Function() get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) =>
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetHandBookMainCategoriesEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetHandBookMainCategoriesEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetHandBookMainCategoriesEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $HandBookMainCategoriesEventCopyWith<$Res> {
   factory $HandBookMainCategoriesEventCopyWith(
-          HandBookMainCategoriesEvent value,
-          $Res Function(HandBookMainCategoriesEvent) then) =
-      _$HandBookMainCategoriesEventCopyWithImpl<$Res,
-          HandBookMainCategoriesEvent>;
+    HandBookMainCategoriesEvent value,
+    $Res Function(HandBookMainCategoriesEvent) then,
+  ) =
+      _$HandBookMainCategoriesEventCopyWithImpl<
+        $Res,
+        HandBookMainCategoriesEvent
+      >;
 }
 
 /// @nodoc
-class _$HandBookMainCategoriesEventCopyWithImpl<$Res,
-        $Val extends HandBookMainCategoriesEvent>
+class _$HandBookMainCategoriesEventCopyWithImpl<
+  $Res,
+  $Val extends HandBookMainCategoriesEvent
+>
     implements $HandBookMainCategoriesEventCopyWith<$Res> {
   _$HandBookMainCategoriesEventCopyWithImpl(this._value, this._then);
 
@@ -77,20 +75,23 @@ class _$HandBookMainCategoriesEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetHandBookMainCategoriesEventImplCopyWith<$Res> {
   factory _$$GetHandBookMainCategoriesEventImplCopyWith(
-          _$GetHandBookMainCategoriesEventImpl value,
-          $Res Function(_$GetHandBookMainCategoriesEventImpl) then) =
-      __$$GetHandBookMainCategoriesEventImplCopyWithImpl<$Res>;
+    _$GetHandBookMainCategoriesEventImpl value,
+    $Res Function(_$GetHandBookMainCategoriesEventImpl) then,
+  ) = __$$GetHandBookMainCategoriesEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetHandBookMainCategoriesEventImplCopyWithImpl<$Res>
-    extends _$HandBookMainCategoriesEventCopyWithImpl<$Res,
-        _$GetHandBookMainCategoriesEventImpl>
+    extends
+        _$HandBookMainCategoriesEventCopyWithImpl<
+          $Res,
+          _$GetHandBookMainCategoriesEventImpl
+        >
     implements _$$GetHandBookMainCategoriesEventImplCopyWith<$Res> {
   __$$GetHandBookMainCategoriesEventImplCopyWithImpl(
-      _$GetHandBookMainCategoriesEventImpl _value,
-      $Res Function(_$GetHandBookMainCategoriesEventImpl) _then)
-      : super(_value, _then);
+    _$GetHandBookMainCategoriesEventImpl _value,
+    $Res Function(_$GetHandBookMainCategoriesEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of HandBookMainCategoriesEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -119,17 +120,13 @@ class _$GetHandBookMainCategoriesEventImpl
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) {
+  TResult when<TResult extends Object?>({required TResult Function() get}) {
     return get();
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) {
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) {
     return get?.call();
   }
 
@@ -186,79 +183,86 @@ mixin _$HandBookMainCategoriesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<HandBookMainCategoriesEntity> handBookCategories)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<HandBookMainCategoriesEntity> handBookCategories,
+    )
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingHandBookMainCategoriesState value) loading,
     required TResult Function(ErrorHandBookMainCategoriesState value) error,
     required TResult Function(SuccessHandBookMainCategoriesState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingHandBookMainCategoriesState value)? loading,
     TResult? Function(ErrorHandBookMainCategoriesState value)? error,
     TResult? Function(SuccessHandBookMainCategoriesState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingHandBookMainCategoriesState value)? loading,
     TResult Function(ErrorHandBookMainCategoriesState value)? error,
     TResult Function(SuccessHandBookMainCategoriesState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $HandBookMainCategoriesStateCopyWith<$Res> {
   factory $HandBookMainCategoriesStateCopyWith(
-          HandBookMainCategoriesState value,
-          $Res Function(HandBookMainCategoriesState) then) =
-      _$HandBookMainCategoriesStateCopyWithImpl<$Res,
-          HandBookMainCategoriesState>;
+    HandBookMainCategoriesState value,
+    $Res Function(HandBookMainCategoriesState) then,
+  ) =
+      _$HandBookMainCategoriesStateCopyWithImpl<
+        $Res,
+        HandBookMainCategoriesState
+      >;
 }
 
 /// @nodoc
-class _$HandBookMainCategoriesStateCopyWithImpl<$Res,
-        $Val extends HandBookMainCategoriesState>
+class _$HandBookMainCategoriesStateCopyWithImpl<
+  $Res,
+  $Val extends HandBookMainCategoriesState
+>
     implements $HandBookMainCategoriesStateCopyWith<$Res> {
   _$HandBookMainCategoriesStateCopyWithImpl(this._value, this._then);
 
@@ -274,20 +278,23 @@ class _$HandBookMainCategoriesStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingHandBookMainCategoriesStateImplCopyWith<$Res> {
   factory _$$LoadingHandBookMainCategoriesStateImplCopyWith(
-          _$LoadingHandBookMainCategoriesStateImpl value,
-          $Res Function(_$LoadingHandBookMainCategoriesStateImpl) then) =
-      __$$LoadingHandBookMainCategoriesStateImplCopyWithImpl<$Res>;
+    _$LoadingHandBookMainCategoriesStateImpl value,
+    $Res Function(_$LoadingHandBookMainCategoriesStateImpl) then,
+  ) = __$$LoadingHandBookMainCategoriesStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingHandBookMainCategoriesStateImplCopyWithImpl<$Res>
-    extends _$HandBookMainCategoriesStateCopyWithImpl<$Res,
-        _$LoadingHandBookMainCategoriesStateImpl>
+    extends
+        _$HandBookMainCategoriesStateCopyWithImpl<
+          $Res,
+          _$LoadingHandBookMainCategoriesStateImpl
+        >
     implements _$$LoadingHandBookMainCategoriesStateImplCopyWith<$Res> {
   __$$LoadingHandBookMainCategoriesStateImplCopyWithImpl(
-      _$LoadingHandBookMainCategoriesStateImpl _value,
-      $Res Function(_$LoadingHandBookMainCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingHandBookMainCategoriesStateImpl _value,
+    $Res Function(_$LoadingHandBookMainCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of HandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -318,12 +325,18 @@ class _$LoadingHandBookMainCategoriesStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<HandBookMainCategoriesEntity> handBookCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<HandBookMainCategoriesEntity> handBookCategories,
+    )
+    success,
   }) {
     return loading();
   }
@@ -333,14 +346,15 @@ class _$LoadingHandBookMainCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
   }) {
     return loading?.call();
   }
@@ -350,14 +364,15 @@ class _$LoadingHandBookMainCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -411,27 +426,31 @@ abstract class LoadingHandBookMainCategoriesState
 /// @nodoc
 abstract class _$$ErrorHandBookMainCategoriesStateImplCopyWith<$Res> {
   factory _$$ErrorHandBookMainCategoriesStateImplCopyWith(
-          _$ErrorHandBookMainCategoriesStateImpl value,
-          $Res Function(_$ErrorHandBookMainCategoriesStateImpl) then) =
-      __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<$Res>;
+    _$ErrorHandBookMainCategoriesStateImpl value,
+    $Res Function(_$ErrorHandBookMainCategoriesStateImpl) then,
+  ) = __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<$Res>
-    extends _$HandBookMainCategoriesStateCopyWithImpl<$Res,
-        _$ErrorHandBookMainCategoriesStateImpl>
+    extends
+        _$HandBookMainCategoriesStateCopyWithImpl<
+          $Res,
+          _$ErrorHandBookMainCategoriesStateImpl
+        >
     implements _$$ErrorHandBookMainCategoriesStateImplCopyWith<$Res> {
   __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl(
-      _$ErrorHandBookMainCategoriesStateImpl _value,
-      $Res Function(_$ErrorHandBookMainCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorHandBookMainCategoriesStateImpl _value,
+    $Res Function(_$ErrorHandBookMainCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of HandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -444,28 +463,30 @@ class __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorHandBookMainCategoriesStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorHandBookMainCategoriesStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -473,13 +494,13 @@ class __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<$Res>
 
 class _$ErrorHandBookMainCategoriesStateImpl
     extends ErrorHandBookMainCategoriesState {
-  const _$ErrorHandBookMainCategoriesStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorHandBookMainCategoriesStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -515,8 +536,14 @@ class _$ErrorHandBookMainCategoriesStateImpl
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of HandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -524,23 +551,37 @@ class _$ErrorHandBookMainCategoriesStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorHandBookMainCategoriesStateImplCopyWith<
-          _$ErrorHandBookMainCategoriesStateImpl>
-      get copyWith => __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<
-          _$ErrorHandBookMainCategoriesStateImpl>(this, _$identity);
+    _$ErrorHandBookMainCategoriesStateImpl
+  >
+  get copyWith =>
+      __$$ErrorHandBookMainCategoriesStateImplCopyWithImpl<
+        _$ErrorHandBookMainCategoriesStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<HandBookMainCategoriesEntity> handBookCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<HandBookMainCategoriesEntity> handBookCategories,
+    )
+    success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -548,17 +589,23 @@ class _$ErrorHandBookMainCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -566,19 +613,25 @@ class _$ErrorHandBookMainCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -620,12 +673,13 @@ class _$ErrorHandBookMainCategoriesStateImpl
 
 abstract class ErrorHandBookMainCategoriesState
     extends HandBookMainCategoriesState {
-  const factory ErrorHandBookMainCategoriesState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorHandBookMainCategoriesStateImpl;
+  const factory ErrorHandBookMainCategoriesState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorHandBookMainCategoriesStateImpl;
   const ErrorHandBookMainCategoriesState._() : super._();
 
   String? get errorFromApi;
@@ -638,43 +692,47 @@ abstract class ErrorHandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorHandBookMainCategoriesStateImplCopyWith<
-          _$ErrorHandBookMainCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$ErrorHandBookMainCategoriesStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessHandBookMainCategoriesStateImplCopyWith<$Res> {
   factory _$$SuccessHandBookMainCategoriesStateImplCopyWith(
-          _$SuccessHandBookMainCategoriesStateImpl value,
-          $Res Function(_$SuccessHandBookMainCategoriesStateImpl) then) =
-      __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl<$Res>;
+    _$SuccessHandBookMainCategoriesStateImpl value,
+    $Res Function(_$SuccessHandBookMainCategoriesStateImpl) then,
+  ) = __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<HandBookMainCategoriesEntity> handBookCategories});
 }
 
 /// @nodoc
 class __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl<$Res>
-    extends _$HandBookMainCategoriesStateCopyWithImpl<$Res,
-        _$SuccessHandBookMainCategoriesStateImpl>
+    extends
+        _$HandBookMainCategoriesStateCopyWithImpl<
+          $Res,
+          _$SuccessHandBookMainCategoriesStateImpl
+        >
     implements _$$SuccessHandBookMainCategoriesStateImplCopyWith<$Res> {
   __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl(
-      _$SuccessHandBookMainCategoriesStateImpl _value,
-      $Res Function(_$SuccessHandBookMainCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessHandBookMainCategoriesStateImpl _value,
+    $Res Function(_$SuccessHandBookMainCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of HandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? handBookCategories = null,
-  }) {
-    return _then(_$SuccessHandBookMainCategoriesStateImpl(
-      handBookCategories: null == handBookCategories
-          ? _value._handBookCategories
-          : handBookCategories // ignore: cast_nullable_to_non_nullable
-              as List<HandBookMainCategoriesEntity>,
-    ));
+  $Res call({Object? handBookCategories = null}) {
+    return _then(
+      _$SuccessHandBookMainCategoriesStateImpl(
+        handBookCategories: null == handBookCategories
+            ? _value._handBookCategories
+            : handBookCategories // ignore: cast_nullable_to_non_nullable
+                  as List<HandBookMainCategoriesEntity>,
+      ),
+    );
   }
 }
 
@@ -682,10 +740,10 @@ class __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl<$Res>
 
 class _$SuccessHandBookMainCategoriesStateImpl
     extends SuccessHandBookMainCategoriesState {
-  const _$SuccessHandBookMainCategoriesStateImpl(
-      {required final List<HandBookMainCategoriesEntity> handBookCategories})
-      : _handBookCategories = handBookCategories,
-        super._();
+  const _$SuccessHandBookMainCategoriesStateImpl({
+    required final List<HandBookMainCategoriesEntity> handBookCategories,
+  }) : _handBookCategories = handBookCategories,
+       super._();
 
   final List<HandBookMainCategoriesEntity> _handBookCategories;
   @override
@@ -706,13 +764,17 @@ class _$SuccessHandBookMainCategoriesStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessHandBookMainCategoriesStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._handBookCategories, _handBookCategories));
+            const DeepCollectionEquality().equals(
+              other._handBookCategories,
+              _handBookCategories,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_handBookCategories));
+    runtimeType,
+    const DeepCollectionEquality().hash(_handBookCategories),
+  );
 
   /// Create a copy of HandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -720,20 +782,29 @@ class _$SuccessHandBookMainCategoriesStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessHandBookMainCategoriesStateImplCopyWith<
-          _$SuccessHandBookMainCategoriesStateImpl>
-      get copyWith => __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl<
-          _$SuccessHandBookMainCategoriesStateImpl>(this, _$identity);
+    _$SuccessHandBookMainCategoriesStateImpl
+  >
+  get copyWith =>
+      __$$SuccessHandBookMainCategoriesStateImplCopyWithImpl<
+        _$SuccessHandBookMainCategoriesStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<HandBookMainCategoriesEntity> handBookCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<HandBookMainCategoriesEntity> handBookCategories,
+    )
+    success,
   }) {
     return success(handBookCategories);
   }
@@ -743,14 +814,15 @@ class _$SuccessHandBookMainCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
   }) {
     return success?.call(handBookCategories);
   }
@@ -760,14 +832,15 @@ class _$SuccessHandBookMainCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<HandBookMainCategoriesEntity> handBookCategories)?
-        success,
+    success,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -813,9 +886,9 @@ class _$SuccessHandBookMainCategoriesStateImpl
 
 abstract class SuccessHandBookMainCategoriesState
     extends HandBookMainCategoriesState {
-  const factory SuccessHandBookMainCategoriesState(
-      {required final List<HandBookMainCategoriesEntity>
-          handBookCategories}) = _$SuccessHandBookMainCategoriesStateImpl;
+  const factory SuccessHandBookMainCategoriesState({
+    required final List<HandBookMainCategoriesEntity> handBookCategories,
+  }) = _$SuccessHandBookMainCategoriesStateImpl;
   const SuccessHandBookMainCategoriesState._() : super._();
 
   List<HandBookMainCategoriesEntity> get handBookCategories;
@@ -824,6 +897,7 @@ abstract class SuccessHandBookMainCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessHandBookMainCategoriesStateImplCopyWith<
-          _$SuccessHandBookMainCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessHandBookMainCategoriesStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

@@ -51,7 +51,7 @@ class _HandBookService implements HandBookService {
 
   @override
   Future<List<PreflightInspectionCategoriesDto>>
-      fetchPreflightInspectionCategories() async {
+  fetchPreflightInspectionCategories() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -85,7 +85,7 @@ class _HandBookService implements HandBookService {
 
   @override
   Future<List<PreflightInspectionCheckListDto>>
-      fetchPreflightInspectionCheckListByCategory(
+  fetchPreflightInspectionCheckListByCategory(
     String preflihgtInspectionCategoryId,
   ) async {
     final _extra = <String, dynamic>{};
@@ -121,7 +121,7 @@ class _HandBookService implements HandBookService {
 
   @override
   Future<List<PreflightInspectionCheckListDto>>
-      fetchPreflightInspectionCheckList() async {
+  fetchPreflightInspectionCheckList() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

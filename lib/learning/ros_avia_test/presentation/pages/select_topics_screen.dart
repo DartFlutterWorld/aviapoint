@@ -1,12 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
-import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
-import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_area_category_entity.dart';
+import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
@@ -16,7 +14,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/your_speci
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 typedef SettingsTest = ({bool mixAnswers, bool buttonHint});
@@ -32,14 +29,27 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
   final ValueNotifier<Set<int>> selectedCategoryId = ValueNotifier<Set<int>>({});
   final ValueNotifier<int> categoriesLenght = ValueNotifier<int>(0);
   final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((mixAnswers: true, buttonHint: true));
-  final ValueNotifier<bool> showHelp = ValueNotifier<bool>(false);
 
   @override
   void initState() {
-    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeCertificateId));
+    // BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeCertificateId));
 
-    BlocProvider.of<CategoriesBloc>(context).add(GetCategoriesEvent(typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeCertificateId));
     super.initState();
+    startSettings();
+  }
+
+  void startSettings() async {
+    final db = getIt<AppDb>();
+
+    final certificateTypeId = context.read<RosAviaTestCubit>().state.typeSertificate.id;
+    final s = await db.getSettingsForCertificate(certificateTypeId: certificateTypeId);
+    if (s != null) {
+      settingsTest.value = (mixAnswers: s.mixAnswers, buttonHint: s.buttonHint);
+      selectedCategoryId.value.addAll(s.selectedCategoryIds.toSet());
+      BlocProvider.of<CategoriesBloc>(context).add(GetCategoriesEvent(typeSsertificatesId: s.certificateTypeId));
+    } else {
+      BlocProvider.of<CategoriesBloc>(context).add(GetCategoriesEvent(typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id));
+    }
   }
 
   @override
@@ -161,7 +171,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
               verticalPadding: 8.h,
               backgroundColor: Color(0xFF0A6EFA),
               // onPressed: () => settingsTest(context: context),
-              onPressed: () => context.router.pop(selectedCategoryId.value),
+              onPressed: () => context.router.pop((context.read<RosAviaTestCubit>().state.typeSertificate.id, settingsTest.value.mixAnswers, settingsTest.value.buttonHint, selectedCategoryId.value)),
               borderRadius: 46.r,
               textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),

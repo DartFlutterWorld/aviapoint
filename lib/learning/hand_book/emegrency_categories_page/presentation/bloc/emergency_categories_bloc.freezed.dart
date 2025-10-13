@@ -12,54 +12,50 @@ part of 'emergency_categories_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$EmergencyCategoriesEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) =>
+  TResult when<TResult extends Object?>({required TResult Function() get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) =>
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetEmergencyCategoriesEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetEmergencyCategoriesEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetEmergencyCategoriesEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $EmergencyCategoriesEventCopyWith<$Res> {
-  factory $EmergencyCategoriesEventCopyWith(EmergencyCategoriesEvent value,
-          $Res Function(EmergencyCategoriesEvent) then) =
-      _$EmergencyCategoriesEventCopyWithImpl<$Res, EmergencyCategoriesEvent>;
+  factory $EmergencyCategoriesEventCopyWith(
+    EmergencyCategoriesEvent value,
+    $Res Function(EmergencyCategoriesEvent) then,
+  ) = _$EmergencyCategoriesEventCopyWithImpl<$Res, EmergencyCategoriesEvent>;
 }
 
 /// @nodoc
-class _$EmergencyCategoriesEventCopyWithImpl<$Res,
-        $Val extends EmergencyCategoriesEvent>
+class _$EmergencyCategoriesEventCopyWithImpl<
+  $Res,
+  $Val extends EmergencyCategoriesEvent
+>
     implements $EmergencyCategoriesEventCopyWith<$Res> {
   _$EmergencyCategoriesEventCopyWithImpl(this._value, this._then);
 
@@ -75,20 +71,23 @@ class _$EmergencyCategoriesEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetEmergencyCategoriesEventImplCopyWith<$Res> {
   factory _$$GetEmergencyCategoriesEventImplCopyWith(
-          _$GetEmergencyCategoriesEventImpl value,
-          $Res Function(_$GetEmergencyCategoriesEventImpl) then) =
-      __$$GetEmergencyCategoriesEventImplCopyWithImpl<$Res>;
+    _$GetEmergencyCategoriesEventImpl value,
+    $Res Function(_$GetEmergencyCategoriesEventImpl) then,
+  ) = __$$GetEmergencyCategoriesEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetEmergencyCategoriesEventImplCopyWithImpl<$Res>
-    extends _$EmergencyCategoriesEventCopyWithImpl<$Res,
-        _$GetEmergencyCategoriesEventImpl>
+    extends
+        _$EmergencyCategoriesEventCopyWithImpl<
+          $Res,
+          _$GetEmergencyCategoriesEventImpl
+        >
     implements _$$GetEmergencyCategoriesEventImplCopyWith<$Res> {
   __$$GetEmergencyCategoriesEventImplCopyWithImpl(
-      _$GetEmergencyCategoriesEventImpl _value,
-      $Res Function(_$GetEmergencyCategoriesEventImpl) _then)
-      : super(_value, _then);
+    _$GetEmergencyCategoriesEventImpl _value,
+    $Res Function(_$GetEmergencyCategoriesEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EmergencyCategoriesEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -116,17 +115,13 @@ class _$GetEmergencyCategoriesEventImpl extends GetEmergencyCategoriesEvent {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) {
+  TResult when<TResult extends Object?>({required TResult Function() get}) {
     return get();
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) {
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) {
     return get?.call();
   }
 
@@ -182,77 +177,82 @@ mixin _$EmergencyCategoriesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<EmergencyCategoriesEntity> emergencyCategories)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<EmergencyCategoriesEntity> emergencyCategories,
+    )
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingEmergencyCategoriesState value) loading,
     required TResult Function(ErrorEmergencyCategoriesState value) error,
     required TResult Function(SuccessEmergencyCategoriesState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingEmergencyCategoriesState value)? loading,
     TResult? Function(ErrorEmergencyCategoriesState value)? error,
     TResult? Function(SuccessEmergencyCategoriesState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingEmergencyCategoriesState value)? loading,
     TResult Function(ErrorEmergencyCategoriesState value)? error,
     TResult Function(SuccessEmergencyCategoriesState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $EmergencyCategoriesStateCopyWith<$Res> {
-  factory $EmergencyCategoriesStateCopyWith(EmergencyCategoriesState value,
-          $Res Function(EmergencyCategoriesState) then) =
-      _$EmergencyCategoriesStateCopyWithImpl<$Res, EmergencyCategoriesState>;
+  factory $EmergencyCategoriesStateCopyWith(
+    EmergencyCategoriesState value,
+    $Res Function(EmergencyCategoriesState) then,
+  ) = _$EmergencyCategoriesStateCopyWithImpl<$Res, EmergencyCategoriesState>;
 }
 
 /// @nodoc
-class _$EmergencyCategoriesStateCopyWithImpl<$Res,
-        $Val extends EmergencyCategoriesState>
+class _$EmergencyCategoriesStateCopyWithImpl<
+  $Res,
+  $Val extends EmergencyCategoriesState
+>
     implements $EmergencyCategoriesStateCopyWith<$Res> {
   _$EmergencyCategoriesStateCopyWithImpl(this._value, this._then);
 
@@ -268,20 +268,23 @@ class _$EmergencyCategoriesStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingEmergencyCategoriesStateImplCopyWith<$Res> {
   factory _$$LoadingEmergencyCategoriesStateImplCopyWith(
-          _$LoadingEmergencyCategoriesStateImpl value,
-          $Res Function(_$LoadingEmergencyCategoriesStateImpl) then) =
-      __$$LoadingEmergencyCategoriesStateImplCopyWithImpl<$Res>;
+    _$LoadingEmergencyCategoriesStateImpl value,
+    $Res Function(_$LoadingEmergencyCategoriesStateImpl) then,
+  ) = __$$LoadingEmergencyCategoriesStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingEmergencyCategoriesStateImplCopyWithImpl<$Res>
-    extends _$EmergencyCategoriesStateCopyWithImpl<$Res,
-        _$LoadingEmergencyCategoriesStateImpl>
+    extends
+        _$EmergencyCategoriesStateCopyWithImpl<
+          $Res,
+          _$LoadingEmergencyCategoriesStateImpl
+        >
     implements _$$LoadingEmergencyCategoriesStateImplCopyWith<$Res> {
   __$$LoadingEmergencyCategoriesStateImplCopyWithImpl(
-      _$LoadingEmergencyCategoriesStateImpl _value,
-      $Res Function(_$LoadingEmergencyCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingEmergencyCategoriesStateImpl _value,
+    $Res Function(_$LoadingEmergencyCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EmergencyCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -312,12 +315,18 @@ class _$LoadingEmergencyCategoriesStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<EmergencyCategoriesEntity> emergencyCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<EmergencyCategoriesEntity> emergencyCategories,
+    )
+    success,
   }) {
     return loading();
   }
@@ -327,14 +336,15 @@ class _$LoadingEmergencyCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
   }) {
     return loading?.call();
   }
@@ -344,14 +354,15 @@ class _$LoadingEmergencyCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -405,27 +416,31 @@ abstract class LoadingEmergencyCategoriesState
 /// @nodoc
 abstract class _$$ErrorEmergencyCategoriesStateImplCopyWith<$Res> {
   factory _$$ErrorEmergencyCategoriesStateImplCopyWith(
-          _$ErrorEmergencyCategoriesStateImpl value,
-          $Res Function(_$ErrorEmergencyCategoriesStateImpl) then) =
-      __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<$Res>;
+    _$ErrorEmergencyCategoriesStateImpl value,
+    $Res Function(_$ErrorEmergencyCategoriesStateImpl) then,
+  ) = __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<$Res>
-    extends _$EmergencyCategoriesStateCopyWithImpl<$Res,
-        _$ErrorEmergencyCategoriesStateImpl>
+    extends
+        _$EmergencyCategoriesStateCopyWithImpl<
+          $Res,
+          _$ErrorEmergencyCategoriesStateImpl
+        >
     implements _$$ErrorEmergencyCategoriesStateImplCopyWith<$Res> {
   __$$ErrorEmergencyCategoriesStateImplCopyWithImpl(
-      _$ErrorEmergencyCategoriesStateImpl _value,
-      $Res Function(_$ErrorEmergencyCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorEmergencyCategoriesStateImpl _value,
+    $Res Function(_$ErrorEmergencyCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EmergencyCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -438,28 +453,30 @@ class __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorEmergencyCategoriesStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorEmergencyCategoriesStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -467,13 +484,13 @@ class __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<$Res>
 
 class _$ErrorEmergencyCategoriesStateImpl
     extends ErrorEmergencyCategoriesState {
-  const _$ErrorEmergencyCategoriesStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorEmergencyCategoriesStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -509,8 +526,14 @@ class _$ErrorEmergencyCategoriesStateImpl
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of EmergencyCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -518,23 +541,37 @@ class _$ErrorEmergencyCategoriesStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorEmergencyCategoriesStateImplCopyWith<
-          _$ErrorEmergencyCategoriesStateImpl>
-      get copyWith => __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<
-          _$ErrorEmergencyCategoriesStateImpl>(this, _$identity);
+    _$ErrorEmergencyCategoriesStateImpl
+  >
+  get copyWith =>
+      __$$ErrorEmergencyCategoriesStateImplCopyWithImpl<
+        _$ErrorEmergencyCategoriesStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<EmergencyCategoriesEntity> emergencyCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<EmergencyCategoriesEntity> emergencyCategories,
+    )
+    success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -542,17 +579,23 @@ class _$ErrorEmergencyCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -560,19 +603,25 @@ class _$ErrorEmergencyCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -613,12 +662,13 @@ class _$ErrorEmergencyCategoriesStateImpl
 }
 
 abstract class ErrorEmergencyCategoriesState extends EmergencyCategoriesState {
-  const factory ErrorEmergencyCategoriesState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorEmergencyCategoriesStateImpl;
+  const factory ErrorEmergencyCategoriesState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorEmergencyCategoriesStateImpl;
   const ErrorEmergencyCategoriesState._() : super._();
 
   String? get errorFromApi;
@@ -631,43 +681,47 @@ abstract class ErrorEmergencyCategoriesState extends EmergencyCategoriesState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorEmergencyCategoriesStateImplCopyWith<
-          _$ErrorEmergencyCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$ErrorEmergencyCategoriesStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessEmergencyCategoriesStateImplCopyWith<$Res> {
   factory _$$SuccessEmergencyCategoriesStateImplCopyWith(
-          _$SuccessEmergencyCategoriesStateImpl value,
-          $Res Function(_$SuccessEmergencyCategoriesStateImpl) then) =
-      __$$SuccessEmergencyCategoriesStateImplCopyWithImpl<$Res>;
+    _$SuccessEmergencyCategoriesStateImpl value,
+    $Res Function(_$SuccessEmergencyCategoriesStateImpl) then,
+  ) = __$$SuccessEmergencyCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<EmergencyCategoriesEntity> emergencyCategories});
 }
 
 /// @nodoc
 class __$$SuccessEmergencyCategoriesStateImplCopyWithImpl<$Res>
-    extends _$EmergencyCategoriesStateCopyWithImpl<$Res,
-        _$SuccessEmergencyCategoriesStateImpl>
+    extends
+        _$EmergencyCategoriesStateCopyWithImpl<
+          $Res,
+          _$SuccessEmergencyCategoriesStateImpl
+        >
     implements _$$SuccessEmergencyCategoriesStateImplCopyWith<$Res> {
   __$$SuccessEmergencyCategoriesStateImplCopyWithImpl(
-      _$SuccessEmergencyCategoriesStateImpl _value,
-      $Res Function(_$SuccessEmergencyCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessEmergencyCategoriesStateImpl _value,
+    $Res Function(_$SuccessEmergencyCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EmergencyCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? emergencyCategories = null,
-  }) {
-    return _then(_$SuccessEmergencyCategoriesStateImpl(
-      emergencyCategories: null == emergencyCategories
-          ? _value._emergencyCategories
-          : emergencyCategories // ignore: cast_nullable_to_non_nullable
-              as List<EmergencyCategoriesEntity>,
-    ));
+  $Res call({Object? emergencyCategories = null}) {
+    return _then(
+      _$SuccessEmergencyCategoriesStateImpl(
+        emergencyCategories: null == emergencyCategories
+            ? _value._emergencyCategories
+            : emergencyCategories // ignore: cast_nullable_to_non_nullable
+                  as List<EmergencyCategoriesEntity>,
+      ),
+    );
   }
 }
 
@@ -675,10 +729,10 @@ class __$$SuccessEmergencyCategoriesStateImplCopyWithImpl<$Res>
 
 class _$SuccessEmergencyCategoriesStateImpl
     extends SuccessEmergencyCategoriesState {
-  const _$SuccessEmergencyCategoriesStateImpl(
-      {required final List<EmergencyCategoriesEntity> emergencyCategories})
-      : _emergencyCategories = emergencyCategories,
-        super._();
+  const _$SuccessEmergencyCategoriesStateImpl({
+    required final List<EmergencyCategoriesEntity> emergencyCategories,
+  }) : _emergencyCategories = emergencyCategories,
+       super._();
 
   final List<EmergencyCategoriesEntity> _emergencyCategories;
   @override
@@ -699,13 +753,17 @@ class _$SuccessEmergencyCategoriesStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessEmergencyCategoriesStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._emergencyCategories, _emergencyCategories));
+            const DeepCollectionEquality().equals(
+              other._emergencyCategories,
+              _emergencyCategories,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_emergencyCategories));
+    runtimeType,
+    const DeepCollectionEquality().hash(_emergencyCategories),
+  );
 
   /// Create a copy of EmergencyCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -713,20 +771,29 @@ class _$SuccessEmergencyCategoriesStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessEmergencyCategoriesStateImplCopyWith<
-          _$SuccessEmergencyCategoriesStateImpl>
-      get copyWith => __$$SuccessEmergencyCategoriesStateImplCopyWithImpl<
-          _$SuccessEmergencyCategoriesStateImpl>(this, _$identity);
+    _$SuccessEmergencyCategoriesStateImpl
+  >
+  get copyWith =>
+      __$$SuccessEmergencyCategoriesStateImplCopyWithImpl<
+        _$SuccessEmergencyCategoriesStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<EmergencyCategoriesEntity> emergencyCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<EmergencyCategoriesEntity> emergencyCategories,
+    )
+    success,
   }) {
     return success(emergencyCategories);
   }
@@ -736,14 +803,15 @@ class _$SuccessEmergencyCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
   }) {
     return success?.call(emergencyCategories);
   }
@@ -753,14 +821,15 @@ class _$SuccessEmergencyCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<EmergencyCategoriesEntity> emergencyCategories)?
-        success,
+    success,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -806,9 +875,9 @@ class _$SuccessEmergencyCategoriesStateImpl
 
 abstract class SuccessEmergencyCategoriesState
     extends EmergencyCategoriesState {
-  const factory SuccessEmergencyCategoriesState(
-      {required final List<EmergencyCategoriesEntity>
-          emergencyCategories}) = _$SuccessEmergencyCategoriesStateImpl;
+  const factory SuccessEmergencyCategoriesState({
+    required final List<EmergencyCategoriesEntity> emergencyCategories,
+  }) = _$SuccessEmergencyCategoriesStateImpl;
   const SuccessEmergencyCategoriesState._() : super._();
 
   List<EmergencyCategoriesEntity> get emergencyCategories;
@@ -817,6 +886,7 @@ abstract class SuccessEmergencyCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessEmergencyCategoriesStateImplCopyWith<
-          _$SuccessEmergencyCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessEmergencyCategoriesStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

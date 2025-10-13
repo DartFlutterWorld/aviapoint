@@ -12,7 +12,8 @@ part of 'story_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$StoryState {
@@ -29,8 +30,9 @@ mixin _$StoryState {
 /// @nodoc
 abstract class $StoryStateCopyWith<$Res> {
   factory $StoryStateCopyWith(
-          StoryState value, $Res Function(StoryState) then) =
-      _$StoryStateCopyWithImpl<$Res, StoryState>;
+    StoryState value,
+    $Res Function(StoryState) then,
+  ) = _$StoryStateCopyWithImpl<$Res, StoryState>;
   @useResult
   $Res call({int currentIndex, List<int> listStories});
 }
@@ -49,20 +51,20 @@ class _$StoryStateCopyWithImpl<$Res, $Val extends StoryState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? currentIndex = null,
-    Object? listStories = null,
-  }) {
-    return _then(_value.copyWith(
-      currentIndex: null == currentIndex
-          ? _value.currentIndex
-          : currentIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      listStories: null == listStories
-          ? _value.listStories
-          : listStories // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-    ) as $Val);
+  $Res call({Object? currentIndex = null, Object? listStories = null}) {
+    return _then(
+      _value.copyWith(
+            currentIndex: null == currentIndex
+                ? _value.currentIndex
+                : currentIndex // ignore: cast_nullable_to_non_nullable
+                      as int,
+            listStories: null == listStories
+                ? _value.listStories
+                : listStories // ignore: cast_nullable_to_non_nullable
+                      as List<int>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -70,8 +72,9 @@ class _$StoryStateCopyWithImpl<$Res, $Val extends StoryState>
 abstract class _$$StoryStateImplCopyWith<$Res>
     implements $StoryStateCopyWith<$Res> {
   factory _$$StoryStateImplCopyWith(
-          _$StoryStateImpl value, $Res Function(_$StoryStateImpl) then) =
-      __$$StoryStateImplCopyWithImpl<$Res>;
+    _$StoryStateImpl value,
+    $Res Function(_$StoryStateImpl) then,
+  ) = __$$StoryStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int currentIndex, List<int> listStories});
@@ -82,36 +85,37 @@ class __$$StoryStateImplCopyWithImpl<$Res>
     extends _$StoryStateCopyWithImpl<$Res, _$StoryStateImpl>
     implements _$$StoryStateImplCopyWith<$Res> {
   __$$StoryStateImplCopyWithImpl(
-      _$StoryStateImpl _value, $Res Function(_$StoryStateImpl) _then)
-      : super(_value, _then);
+    _$StoryStateImpl _value,
+    $Res Function(_$StoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of StoryState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? currentIndex = null,
-    Object? listStories = null,
-  }) {
-    return _then(_$StoryStateImpl(
-      currentIndex: null == currentIndex
-          ? _value.currentIndex
-          : currentIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      listStories: null == listStories
-          ? _value._listStories
-          : listStories // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-    ));
+  $Res call({Object? currentIndex = null, Object? listStories = null}) {
+    return _then(
+      _$StoryStateImpl(
+        currentIndex: null == currentIndex
+            ? _value.currentIndex
+            : currentIndex // ignore: cast_nullable_to_non_nullable
+                  as int,
+        listStories: null == listStories
+            ? _value._listStories
+            : listStories // ignore: cast_nullable_to_non_nullable
+                  as List<int>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$StoryStateImpl implements _StoryState {
-  const _$StoryStateImpl(
-      {this.currentIndex = 0, final List<int> listStories = const []})
-      : _listStories = listStories;
+  const _$StoryStateImpl({
+    this.currentIndex = 0,
+    final List<int> listStories = const [],
+  }) : _listStories = listStories;
 
   @override
   @JsonKey()
@@ -137,13 +141,18 @@ class _$StoryStateImpl implements _StoryState {
             other is _$StoryStateImpl &&
             (identical(other.currentIndex, currentIndex) ||
                 other.currentIndex == currentIndex) &&
-            const DeepCollectionEquality()
-                .equals(other._listStories, _listStories));
+            const DeepCollectionEquality().equals(
+              other._listStories,
+              _listStories,
+            ));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, currentIndex,
-      const DeepCollectionEquality().hash(_listStories));
+  int get hashCode => Object.hash(
+    runtimeType,
+    currentIndex,
+    const DeepCollectionEquality().hash(_listStories),
+  );
 
   /// Create a copy of StoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -155,8 +164,10 @@ class _$StoryStateImpl implements _StoryState {
 }
 
 abstract class _StoryState implements StoryState {
-  const factory _StoryState(
-      {final int currentIndex, final List<int> listStories}) = _$StoryStateImpl;
+  const factory _StoryState({
+    final int currentIndex,
+    final List<int> listStories,
+  }) = _$StoryStateImpl;
 
   @override
   int get currentIndex;

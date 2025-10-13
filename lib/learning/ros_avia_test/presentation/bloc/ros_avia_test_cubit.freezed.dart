@@ -12,11 +12,11 @@ part of 'ros_avia_test_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$RosAviaTestState {
-  int get typeCertificateId => throw _privateConstructorUsedError;
   String get typeCertificateName => throw _privateConstructorUsedError;
   TypeSertificatesEntity get typeSertificate =>
       throw _privateConstructorUsedError;
@@ -31,13 +31,14 @@ mixin _$RosAviaTestState {
 /// @nodoc
 abstract class $RosAviaTestStateCopyWith<$Res> {
   factory $RosAviaTestStateCopyWith(
-          RosAviaTestState value, $Res Function(RosAviaTestState) then) =
-      _$RosAviaTestStateCopyWithImpl<$Res, RosAviaTestState>;
+    RosAviaTestState value,
+    $Res Function(RosAviaTestState) then,
+  ) = _$RosAviaTestStateCopyWithImpl<$Res, RosAviaTestState>;
   @useResult
-  $Res call(
-      {int typeCertificateId,
-      String typeCertificateName,
-      TypeSertificatesEntity typeSertificate});
+  $Res call({
+    String typeCertificateName,
+    TypeSertificatesEntity typeSertificate,
+  });
 }
 
 /// @nodoc
@@ -55,87 +56,84 @@ class _$RosAviaTestStateCopyWithImpl<$Res, $Val extends RosAviaTestState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? typeCertificateId = null,
     Object? typeCertificateName = null,
     Object? typeSertificate = null,
   }) {
-    return _then(_value.copyWith(
-      typeCertificateId: null == typeCertificateId
-          ? _value.typeCertificateId
-          : typeCertificateId // ignore: cast_nullable_to_non_nullable
-              as int,
-      typeCertificateName: null == typeCertificateName
-          ? _value.typeCertificateName
-          : typeCertificateName // ignore: cast_nullable_to_non_nullable
-              as String,
-      typeSertificate: null == typeSertificate
-          ? _value.typeSertificate
-          : typeSertificate // ignore: cast_nullable_to_non_nullable
-              as TypeSertificatesEntity,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            typeCertificateName: null == typeCertificateName
+                ? _value.typeCertificateName
+                : typeCertificateName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            typeSertificate: null == typeSertificate
+                ? _value.typeSertificate
+                : typeSertificate // ignore: cast_nullable_to_non_nullable
+                      as TypeSertificatesEntity,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$RosAviaTestStateImplCopyWith<$Res>
     implements $RosAviaTestStateCopyWith<$Res> {
-  factory _$$RosAviaTestStateImplCopyWith(_$RosAviaTestStateImpl value,
-          $Res Function(_$RosAviaTestStateImpl) then) =
-      __$$RosAviaTestStateImplCopyWithImpl<$Res>;
+  factory _$$RosAviaTestStateImplCopyWith(
+    _$RosAviaTestStateImpl value,
+    $Res Function(_$RosAviaTestStateImpl) then,
+  ) = __$$RosAviaTestStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int typeCertificateId,
-      String typeCertificateName,
-      TypeSertificatesEntity typeSertificate});
+  $Res call({
+    String typeCertificateName,
+    TypeSertificatesEntity typeSertificate,
+  });
 }
 
 /// @nodoc
 class __$$RosAviaTestStateImplCopyWithImpl<$Res>
     extends _$RosAviaTestStateCopyWithImpl<$Res, _$RosAviaTestStateImpl>
     implements _$$RosAviaTestStateImplCopyWith<$Res> {
-  __$$RosAviaTestStateImplCopyWithImpl(_$RosAviaTestStateImpl _value,
-      $Res Function(_$RosAviaTestStateImpl) _then)
-      : super(_value, _then);
+  __$$RosAviaTestStateImplCopyWithImpl(
+    _$RosAviaTestStateImpl _value,
+    $Res Function(_$RosAviaTestStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RosAviaTestState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? typeCertificateId = null,
     Object? typeCertificateName = null,
     Object? typeSertificate = null,
   }) {
-    return _then(_$RosAviaTestStateImpl(
-      typeCertificateId: null == typeCertificateId
-          ? _value.typeCertificateId
-          : typeCertificateId // ignore: cast_nullable_to_non_nullable
-              as int,
-      typeCertificateName: null == typeCertificateName
-          ? _value.typeCertificateName
-          : typeCertificateName // ignore: cast_nullable_to_non_nullable
-              as String,
-      typeSertificate: null == typeSertificate
-          ? _value.typeSertificate
-          : typeSertificate // ignore: cast_nullable_to_non_nullable
-              as TypeSertificatesEntity,
-    ));
+    return _then(
+      _$RosAviaTestStateImpl(
+        typeCertificateName: null == typeCertificateName
+            ? _value.typeCertificateName
+            : typeCertificateName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        typeSertificate: null == typeSertificate
+            ? _value.typeSertificate
+            : typeSertificate // ignore: cast_nullable_to_non_nullable
+                  as TypeSertificatesEntity,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$RosAviaTestStateImpl implements _RosAviaTestState {
-  const _$RosAviaTestStateImpl(
-      {this.typeCertificateId = 1,
-      this.typeCertificateName = 'Частный пилот (самолет)',
-      this.typeSertificate = const TypeSertificatesEntity(
-          id: 1, title: 'Частный пилот (самолет)', image: '')});
+  const _$RosAviaTestStateImpl({
+    this.typeCertificateName = 'Частный пилот (самолет)',
+    this.typeSertificate = const TypeSertificatesEntity(
+      id: 1,
+      title: 'Частный пилот (самолет)',
+      image: '',
+    ),
+  });
 
-  @override
-  @JsonKey()
-  final int typeCertificateId;
   @override
   @JsonKey()
   final String typeCertificateName;
@@ -145,7 +143,7 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
 
   @override
   String toString() {
-    return 'RosAviaTestState(typeCertificateId: $typeCertificateId, typeCertificateName: $typeCertificateName, typeSertificate: $typeSertificate)';
+    return 'RosAviaTestState(typeCertificateName: $typeCertificateName, typeSertificate: $typeSertificate)';
   }
 
   @override
@@ -153,8 +151,6 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RosAviaTestStateImpl &&
-            (identical(other.typeCertificateId, typeCertificateId) ||
-                other.typeCertificateId == typeCertificateId) &&
             (identical(other.typeCertificateName, typeCertificateName) ||
                 other.typeCertificateName == typeCertificateName) &&
             (identical(other.typeSertificate, typeSertificate) ||
@@ -162,8 +158,8 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, typeCertificateId, typeCertificateName, typeSertificate);
+  int get hashCode =>
+      Object.hash(runtimeType, typeCertificateName, typeSertificate);
 
   /// Create a copy of RosAviaTestState
   /// with the given fields replaced by the non-null parameter values.
@@ -172,17 +168,17 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
   @pragma('vm:prefer-inline')
   _$$RosAviaTestStateImplCopyWith<_$RosAviaTestStateImpl> get copyWith =>
       __$$RosAviaTestStateImplCopyWithImpl<_$RosAviaTestStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _RosAviaTestState implements RosAviaTestState {
-  const factory _RosAviaTestState(
-      {final int typeCertificateId,
-      final String typeCertificateName,
-      final TypeSertificatesEntity typeSertificate}) = _$RosAviaTestStateImpl;
+  const factory _RosAviaTestState({
+    final String typeCertificateName,
+    final TypeSertificatesEntity typeSertificate,
+  }) = _$RosAviaTestStateImpl;
 
-  @override
-  int get typeCertificateId;
   @override
   String get typeCertificateName;
   @override

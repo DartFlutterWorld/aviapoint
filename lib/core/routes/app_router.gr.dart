@@ -14,7 +14,7 @@ part of 'app_router.dart';
 /// [AbnormalLandingsScreen]
 class AbnormalLandingsRoute extends PageRouteInfo<void> {
   const AbnormalLandingsRoute({List<PageRouteInfo>? children})
-      : super(AbnormalLandingsRoute.name, initialChildren: children);
+    : super(AbnormalLandingsRoute.name, initialChildren: children);
 
   static const String name = 'AbnormalLandingsRoute';
 
@@ -30,7 +30,7 @@ class AbnormalLandingsRoute extends PageRouteInfo<void> {
 /// [AirDataSystemFailureScreen]
 class AirDataSystemFailureRoute extends PageRouteInfo<void> {
   const AirDataSystemFailureRoute({List<PageRouteInfo>? children})
-      : super(AirDataSystemFailureRoute.name, initialChildren: children);
+    : super(AirDataSystemFailureRoute.name, initialChildren: children);
 
   static const String name = 'AirDataSystemFailureRoute';
 
@@ -46,10 +46,10 @@ class AirDataSystemFailureRoute extends PageRouteInfo<void> {
 /// [AirspeedsForEmergencyOperationsScreen]
 class AirspeedsForEmergencyOperationsRoute extends PageRouteInfo<void> {
   const AirspeedsForEmergencyOperationsRoute({List<PageRouteInfo>? children})
-      : super(
-          AirspeedsForEmergencyOperationsRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        AirspeedsForEmergencyOperationsRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'AirspeedsForEmergencyOperationsRoute';
 
@@ -68,9 +68,9 @@ class AttitudeAndHeadingReferenceSystemAhrsFailureRoute
   const AttitudeAndHeadingReferenceSystemAhrsFailureRoute({
     List<PageRouteInfo>? children,
   }) : super(
-          AttitudeAndHeadingReferenceSystemAhrsFailureRoute.name,
-          initialChildren: children,
-        );
+         AttitudeAndHeadingReferenceSystemAhrsFailureRoute.name,
+         initialChildren: children,
+       );
 
   static const String name =
       'AttitudeAndHeadingReferenceSystemAhrsFailureRoute';
@@ -87,10 +87,10 @@ class AttitudeAndHeadingReferenceSystemAhrsFailureRoute
 /// [AutopilotOrElectricTrimFailureScreen]
 class AutopilotOrElectricTrimFailureRoute extends PageRouteInfo<void> {
   const AutopilotOrElectricTrimFailureRoute({List<PageRouteInfo>? children})
-      : super(
-          AutopilotOrElectricTrimFailureRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        AutopilotOrElectricTrimFailureRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'AutopilotOrElectricTrimFailureRoute';
 
@@ -106,7 +106,7 @@ class AutopilotOrElectricTrimFailureRoute extends PageRouteInfo<void> {
 /// [BaseQuestionsScreen]
 class BaseQuestionsRoute extends PageRouteInfo<void> {
   const BaseQuestionsRoute({List<PageRouteInfo>? children})
-      : super(BaseQuestionsRoute.name, initialChildren: children);
+    : super(BaseQuestionsRoute.name, initialChildren: children);
 
   static const String name = 'BaseQuestionsRoute';
 
@@ -122,7 +122,7 @@ class BaseQuestionsRoute extends PageRouteInfo<void> {
 /// [BaseScreen]
 class BaseRoute extends PageRouteInfo<void> {
   const BaseRoute({List<PageRouteInfo>? children})
-      : super(BaseRoute.name, initialChildren: children);
+    : super(BaseRoute.name, initialChildren: children);
 
   static const String name = 'BaseRoute';
 
@@ -138,7 +138,7 @@ class BaseRoute extends PageRouteInfo<void> {
 /// [CabinFireScreen]
 class CabinFireRoute extends PageRouteInfo<void> {
   const CabinFireRoute({List<PageRouteInfo>? children})
-      : super(CabinFireRoute.name, initialChildren: children);
+    : super(CabinFireRoute.name, initialChildren: children);
 
   static const String name = 'CabinFireRoute';
 
@@ -159,11 +159,11 @@ class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
     required NewsEntity news,
     List<PageRouteInfo>? children,
   }) : super(
-          DetailNewsRoute.name,
-          args: DetailNewsRouteArgs(key: key, newsId: newsId, news: news),
-          rawPathParams: {'id': newsId},
-          initialChildren: children,
-        );
+         DetailNewsRoute.name,
+         args: DetailNewsRouteArgs(key: key, newsId: newsId, news: news),
+         rawPathParams: {'id': newsId},
+         initialChildren: children,
+       );
 
   static const String name = 'DetailNewsRoute';
 
@@ -220,22 +220,22 @@ class DetailQuestionRoute extends PageRouteInfo<DetailQuestionRouteArgs> {
     required int questionId,
     List<PageRouteInfo>? children,
   }) : super(
-          DetailQuestionRoute.name,
-          args: DetailQuestionRouteArgs(
-            key: key,
-            question: question,
-            withClose: withClose,
-            categoryTitle: categoryTitle,
-            questionId: questionId,
-          ),
-          rawPathParams: {'questionId': questionId},
-          rawQueryParams: {
-            'question': question,
-            'withClose': withClose,
-            'categoryTitle': categoryTitle,
-          },
-          initialChildren: children,
-        );
+         DetailQuestionRoute.name,
+         args: DetailQuestionRouteArgs(
+           key: key,
+           question: question,
+           withClose: withClose,
+           categoryTitle: categoryTitle,
+           questionId: questionId,
+         ),
+         rawPathParams: {'questionId': questionId},
+         rawQueryParams: {
+           'question': question,
+           'withClose': withClose,
+           'categoryTitle': categoryTitle,
+         },
+         initialChildren: children,
+       );
 
   static const String name = 'DetailQuestionRoute';
 
@@ -317,16 +317,16 @@ class DetailStoryRoute extends PageRouteInfo<DetailStoryRouteArgs> {
     required int currentIndex,
     List<PageRouteInfo>? children,
   }) : super(
-          DetailStoryRoute.name,
-          args: DetailStoryRouteArgs(
-            key: key,
-            idStory: idStory,
-            stories: stories,
-            currentIndex: currentIndex,
-          ),
-          rawPathParams: {'id': idStory},
-          initialChildren: children,
-        );
+         DetailStoryRoute.name,
+         args: DetailStoryRouteArgs(
+           key: key,
+           idStory: idStory,
+           stories: stories,
+           currentIndex: currentIndex,
+         ),
+         rawPathParams: {'id': idStory},
+         initialChildren: children,
+       );
 
   static const String name = 'DetailStoryRoute';
 
@@ -387,7 +387,7 @@ class DetailStoryRouteArgs {
 /// [DisplayCoolingAdvisoryScreen]
 class DisplayCoolingAdvisoryRoute extends PageRouteInfo<void> {
   const DisplayCoolingAdvisoryRoute({List<PageRouteInfo>? children})
-      : super(DisplayCoolingAdvisoryRoute.name, initialChildren: children);
+    : super(DisplayCoolingAdvisoryRoute.name, initialChildren: children);
 
   static const String name = 'DisplayCoolingAdvisoryRoute';
 
@@ -403,7 +403,7 @@ class DisplayCoolingAdvisoryRoute extends PageRouteInfo<void> {
 /// [DitchingScreen]
 class DitchingRoute extends PageRouteInfo<void> {
   const DitchingRoute({List<PageRouteInfo>? children})
-      : super(DitchingRoute.name, initialChildren: children);
+    : super(DitchingRoute.name, initialChildren: children);
 
   static const String name = 'DitchingRoute';
 
@@ -419,7 +419,7 @@ class DitchingRoute extends PageRouteInfo<void> {
 /// [ElectricalFireInFlightScreen]
 class ElectricalFireInFlightRoute extends PageRouteInfo<void> {
   const ElectricalFireInFlightRoute({List<PageRouteInfo>? children})
-      : super(ElectricalFireInFlightRoute.name, initialChildren: children);
+    : super(ElectricalFireInFlightRoute.name, initialChildren: children);
 
   static const String name = 'ElectricalFireInFlightRoute';
 
@@ -440,14 +440,14 @@ class ElectricalPowerSubCategoryRoute
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          ElectricalPowerSubCategoryRoute.name,
-          args: ElectricalPowerSubCategoryRouteArgs(
-            key: key,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {'nameCategory': nameCategory},
-          initialChildren: children,
-        );
+         ElectricalPowerSubCategoryRoute.name,
+         args: ElectricalPowerSubCategoryRouteArgs(
+           key: key,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'ElectricalPowerSubCategoryRoute';
 
@@ -500,9 +500,9 @@ class ElectricalPowerSupplySystemMalfunctionsRoute extends PageRouteInfo<void> {
   const ElectricalPowerSupplySystemMalfunctionsRoute({
     List<PageRouteInfo>? children,
   }) : super(
-          ElectricalPowerSupplySystemMalfunctionsRoute.name,
-          initialChildren: children,
-        );
+         ElectricalPowerSupplySystemMalfunctionsRoute.name,
+         initialChildren: children,
+       );
 
   static const String name = 'ElectricalPowerSupplySystemMalfunctionsRoute';
 
@@ -523,14 +523,14 @@ class EmergencyCategoriesRoute
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          EmergencyCategoriesRoute.name,
-          args: EmergencyCategoriesRouteArgs(
-            key: key,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {'nameCategory': nameCategory},
-          initialChildren: children,
-        );
+         EmergencyCategoriesRoute.name,
+         args: EmergencyCategoriesRouteArgs(
+           key: key,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'EmergencyCategoriesRoute';
 
@@ -578,10 +578,10 @@ class EmergencyCategoriesRouteArgs {
 /// [EmergencyLandingWithEnginePowerScreen]
 class EmergencyLandingWithEnginePowerRoute extends PageRouteInfo<void> {
   const EmergencyLandingWithEnginePowerRoute({List<PageRouteInfo>? children})
-      : super(
-          EmergencyLandingWithEnginePowerRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        EmergencyLandingWithEnginePowerRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'EmergencyLandingWithEnginePowerRoute';
 
@@ -597,10 +597,10 @@ class EmergencyLandingWithEnginePowerRoute extends PageRouteInfo<void> {
 /// [EmergencyLandingWithoutEnginePowerScreen]
 class EmergencyLandingWithoutEnginePowerRoute extends PageRouteInfo<void> {
   const EmergencyLandingWithoutEnginePowerRoute({List<PageRouteInfo>? children})
-      : super(
-          EmergencyLandingWithoutEnginePowerRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        EmergencyLandingWithoutEnginePowerRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'EmergencyLandingWithoutEnginePowerRoute';
 
@@ -616,7 +616,7 @@ class EmergencyLandingWithoutEnginePowerRoute extends PageRouteInfo<void> {
 /// [EmptyNavigationScreen]
 class EmptyNavigationRoute extends PageRouteInfo<void> {
   const EmptyNavigationRoute({List<PageRouteInfo>? children})
-      : super(EmptyNavigationRoute.name, initialChildren: children);
+    : super(EmptyNavigationRoute.name, initialChildren: children);
 
   static const String name = 'EmptyNavigationRoute';
 
@@ -632,7 +632,7 @@ class EmptyNavigationRoute extends PageRouteInfo<void> {
 /// [EngineFailureScreen]
 class EngineFailureRoute extends PageRouteInfo<void> {
   const EngineFailureRoute({List<PageRouteInfo>? children})
-      : super(EngineFailureRoute.name, initialChildren: children);
+    : super(EngineFailureRoute.name, initialChildren: children);
 
   static const String name = 'EngineFailureRoute';
 
@@ -648,7 +648,7 @@ class EngineFailureRoute extends PageRouteInfo<void> {
 /// [EngineFireInFlightScreen]
 class EngineFireInFlightRoute extends PageRouteInfo<void> {
   const EngineFireInFlightRoute({List<PageRouteInfo>? children})
-      : super(EngineFireInFlightRoute.name, initialChildren: children);
+    : super(EngineFireInFlightRoute.name, initialChildren: children);
 
   static const String name = 'EngineFireInFlightRoute';
 
@@ -664,7 +664,7 @@ class EngineFireInFlightRoute extends PageRouteInfo<void> {
 /// [ExcessiveFuelVaporScreen]
 class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
   const ExcessiveFuelVaporRoute({List<PageRouteInfo>? children})
-      : super(ExcessiveFuelVaporRoute.name, initialChildren: children);
+    : super(ExcessiveFuelVaporRoute.name, initialChildren: children);
 
   static const String name = 'ExcessiveFuelVaporRoute';
 
@@ -680,7 +680,7 @@ class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
 /// [FiresDuringStartOnGroundScreen]
 class FiresDuringStartOnGroundRoute extends PageRouteInfo<void> {
   const FiresDuringStartOnGroundRoute({List<PageRouteInfo>? children})
-      : super(FiresDuringStartOnGroundRoute.name, initialChildren: children);
+    : super(FiresDuringStartOnGroundRoute.name, initialChildren: children);
 
   static const String name = 'FiresDuringStartOnGroundRoute';
 
@@ -701,14 +701,14 @@ class FiresSubCategoriesRoute
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          FiresSubCategoriesRoute.name,
-          args: FiresSubCategoriesRouteArgs(
-            key: key,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {'nameCategory': nameCategory},
-          initialChildren: children,
-        );
+         FiresSubCategoriesRoute.name,
+         args: FiresSubCategoriesRouteArgs(
+           key: key,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'FiresSubCategoriesRoute';
 
@@ -761,14 +761,14 @@ class ForcedLandingsSubCategoriesRoute
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          ForcedLandingsSubCategoriesRoute.name,
-          args: ForcedLandingsSubCategoriesRouteArgs(
-            key: key,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {'nameCategory': nameCategory},
-          initialChildren: children,
-        );
+         ForcedLandingsSubCategoriesRoute.name,
+         args: ForcedLandingsSubCategoriesRouteArgs(
+           key: key,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'ForcedLandingsSubCategoriesRoute';
 
@@ -819,7 +819,7 @@ class ForcedLandingsSubCategoriesRouteArgs {
 /// [HandBookMainCategoriesScreen]
 class HandBookMainCategoriesRoute extends PageRouteInfo<void> {
   const HandBookMainCategoriesRoute({List<PageRouteInfo>? children})
-      : super(HandBookMainCategoriesRoute.name, initialChildren: children);
+    : super(HandBookMainCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'HandBookMainCategoriesRoute';
 
@@ -835,10 +835,10 @@ class HandBookMainCategoriesRoute extends PageRouteInfo<void> {
 /// [HighCarbonMonoxideCoLevelAdvisoryScreen]
 class HighCarbonMonoxideCoLevelAdvisoryRoute extends PageRouteInfo<void> {
   const HighCarbonMonoxideCoLevelAdvisoryRoute({List<PageRouteInfo>? children})
-      : super(
-          HighCarbonMonoxideCoLevelAdvisoryRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        HighCarbonMonoxideCoLevelAdvisoryRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'HighCarbonMonoxideCoLevelAdvisoryRoute';
 
@@ -854,7 +854,7 @@ class HighCarbonMonoxideCoLevelAdvisoryRoute extends PageRouteInfo<void> {
 /// [IcingScreen]
 class IcingRoute extends PageRouteInfo<void> {
   const IcingRoute({List<PageRouteInfo>? children})
-      : super(IcingRoute.name, initialChildren: children);
+    : super(IcingRoute.name, initialChildren: children);
 
   static const String name = 'IcingRoute';
 
@@ -870,7 +870,7 @@ class IcingRoute extends PageRouteInfo<void> {
 /// [LearningNavigationScreen]
 class LearningNavigationRoute extends PageRouteInfo<void> {
   const LearningNavigationRoute({List<PageRouteInfo>? children})
-      : super(LearningNavigationRoute.name, initialChildren: children);
+    : super(LearningNavigationRoute.name, initialChildren: children);
 
   static const String name = 'LearningNavigationRoute';
 
@@ -886,7 +886,7 @@ class LearningNavigationRoute extends PageRouteInfo<void> {
 /// [LearningScreen]
 class LearningRoute extends PageRouteInfo<void> {
   const LearningRoute({List<PageRouteInfo>? children})
-      : super(LearningRoute.name, initialChildren: children);
+    : super(LearningRoute.name, initialChildren: children);
 
   static const String name = 'LearningRoute';
 
@@ -909,17 +909,17 @@ class ListQuestionByCategoryRoute
     String? categoryTitle,
     List<PageRouteInfo>? children,
   }) : super(
-          ListQuestionByCategoryRoute.name,
-          args: ListQuestionByCategoryRouteArgs(
-            key: key,
-            categoryId: categoryId,
-            questionWithAnswersList: questionWithAnswersList,
-            categoryTitle: categoryTitle,
-          ),
-          rawPathParams: {'categoryId': categoryId},
-          rawQueryParams: {'categoryTitle': categoryTitle},
-          initialChildren: children,
-        );
+         ListQuestionByCategoryRoute.name,
+         args: ListQuestionByCategoryRouteArgs(
+           key: key,
+           categoryId: categoryId,
+           questionWithAnswersList: questionWithAnswersList,
+           categoryTitle: categoryTitle,
+         ),
+         rawPathParams: {'categoryId': categoryId},
+         rawQueryParams: {'categoryTitle': categoryTitle},
+         initialChildren: children,
+       );
 
   static const String name = 'ListQuestionByCategoryRoute';
 
@@ -992,9 +992,9 @@ class LowVoltsAnnunciatorComesOnBellow1000RpmRoute extends PageRouteInfo<void> {
   const LowVoltsAnnunciatorComesOnBellow1000RpmRoute({
     List<PageRouteInfo>? children,
   }) : super(
-          LowVoltsAnnunciatorComesOnBellow1000RpmRoute.name,
-          initialChildren: children,
-        );
+         LowVoltsAnnunciatorComesOnBellow1000RpmRoute.name,
+         initialChildren: children,
+       );
 
   static const String name = 'LowVoltsAnnunciatorComesOnBellow1000RpmRoute';
 
@@ -1013,9 +1013,9 @@ class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute
   const LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute({
     List<PageRouteInfo>? children,
   }) : super(
-          LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute.name,
-          initialChildren: children,
-        );
+         LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute.name,
+         initialChildren: children,
+       );
 
   static const String name =
       'LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute';
@@ -1032,7 +1032,7 @@ class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute
 /// [MainNavigationScreen]
 class MainNavigationRoute extends PageRouteInfo<void> {
   const MainNavigationRoute({List<PageRouteInfo>? children})
-      : super(MainNavigationRoute.name, initialChildren: children);
+    : super(MainNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MainNavigationRoute';
 
@@ -1048,7 +1048,7 @@ class MainNavigationRoute extends PageRouteInfo<void> {
 /// [MainScreen]
 class MainRoute extends PageRouteInfo<void> {
   const MainRoute({List<PageRouteInfo>? children})
-      : super(MainRoute.name, initialChildren: children);
+    : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -1064,7 +1064,7 @@ class MainRoute extends PageRouteInfo<void> {
 /// [MarketNavigationScreen]
 class MarketNavigationRoute extends PageRouteInfo<void> {
   const MarketNavigationRoute({List<PageRouteInfo>? children})
-      : super(MarketNavigationRoute.name, initialChildren: children);
+    : super(MarketNavigationRoute.name, initialChildren: children);
 
   static const String name = 'MarketNavigationRoute';
 
@@ -1080,7 +1080,7 @@ class MarketNavigationRoute extends PageRouteInfo<void> {
 /// [MarketScreen]
 class MarketRoute extends PageRouteInfo<void> {
   const MarketRoute({List<PageRouteInfo>? children})
-      : super(MarketRoute.name, initialChildren: children);
+    : super(MarketRoute.name, initialChildren: children);
 
   static const String name = 'MarketRoute';
 
@@ -1096,7 +1096,7 @@ class MarketRoute extends PageRouteInfo<void> {
 /// [NewsNavigationScreen]
 class NewsNavigationRoute extends PageRouteInfo<void> {
   const NewsNavigationRoute({List<PageRouteInfo>? children})
-      : super(NewsNavigationRoute.name, initialChildren: children);
+    : super(NewsNavigationRoute.name, initialChildren: children);
 
   static const String name = 'NewsNavigationRoute';
 
@@ -1112,7 +1112,7 @@ class NewsNavigationRoute extends PageRouteInfo<void> {
 /// [NewsScreen]
 class NewsRoute extends PageRouteInfo<void> {
   const NewsRoute({List<PageRouteInfo>? children})
-      : super(NewsRoute.name, initialChildren: children);
+    : super(NewsRoute.name, initialChildren: children);
 
   static const String name = 'NewsRoute';
 
@@ -1132,11 +1132,11 @@ class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          NormalCategoriesRoute.name,
-          args: NormalCategoriesRouteArgs(key: key, nameCategory: nameCategory),
-          rawPathParams: {'nameCategory': nameCategory},
-          initialChildren: children,
-        );
+         NormalCategoriesRoute.name,
+         args: NormalCategoriesRouteArgs(key: key, nameCategory: nameCategory),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'NormalCategoriesRoute';
 
@@ -1189,18 +1189,18 @@ class NormalCheckListRoute extends PageRouteInfo<NormalCheckListRouteArgs> {
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          NormalCheckListRoute.name,
-          args: NormalCheckListRouteArgs(
-            key: key,
-            normalCategoryId: normalCategoryId,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {
-            'normalCategoryId': normalCategoryId,
-            'nameCategory': nameCategory,
-          },
-          initialChildren: children,
-        );
+         NormalCheckListRoute.name,
+         args: NormalCheckListRouteArgs(
+           key: key,
+           normalCategoryId: normalCategoryId,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {
+           'normalCategoryId': normalCategoryId,
+           'nameCategory': nameCategory,
+         },
+         initialChildren: children,
+       );
 
   static const String name = 'NormalCheckListRoute';
 
@@ -1264,14 +1264,14 @@ class PreflightInspectionCategoriesRoute
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          PreflightInspectionCategoriesRoute.name,
-          args: PreflightInspectionCategoriesRouteArgs(
-            key: key,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {'nameCategory': nameCategory},
-          initialChildren: children,
-        );
+         PreflightInspectionCategoriesRoute.name,
+         args: PreflightInspectionCategoriesRouteArgs(
+           key: key,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {'nameCategory': nameCategory},
+         initialChildren: children,
+       );
 
   static const String name = 'PreflightInspectionCategoriesRoute';
 
@@ -1328,18 +1328,18 @@ class PreflightInspectionCheckListRoute
     required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
-          PreflightInspectionCheckListRoute.name,
-          args: PreflightInspectionCheckListRouteArgs(
-            key: key,
-            preflihgtInspectionCategoryId: preflihgtInspectionCategoryId,
-            nameCategory: nameCategory,
-          ),
-          rawPathParams: {
-            'preflihgtInspectionCategoryId': preflihgtInspectionCategoryId,
-            'nameCategory': nameCategory,
-          },
-          initialChildren: children,
-        );
+         PreflightInspectionCheckListRoute.name,
+         args: PreflightInspectionCheckListRouteArgs(
+           key: key,
+           preflihgtInspectionCategoryId: preflihgtInspectionCategoryId,
+           nameCategory: nameCategory,
+         ),
+         rawPathParams: {
+           'preflihgtInspectionCategoryId': preflihgtInspectionCategoryId,
+           'nameCategory': nameCategory,
+         },
+         initialChildren: children,
+       );
 
   static const String name = 'PreflightInspectionCheckListRoute';
 
@@ -1402,7 +1402,7 @@ class PreflightInspectionCheckListRouteArgs {
 /// [PricesNavigationScreen]
 class PricesNavigationRoute extends PageRouteInfo<void> {
   const PricesNavigationRoute({List<PageRouteInfo>? children})
-      : super(PricesNavigationRoute.name, initialChildren: children);
+    : super(PricesNavigationRoute.name, initialChildren: children);
 
   static const String name = 'PricesNavigationRoute';
 
@@ -1418,7 +1418,7 @@ class PricesNavigationRoute extends PageRouteInfo<void> {
 /// [PricesScreen]
 class PricesRoute extends PageRouteInfo<void> {
   const PricesRoute({List<PageRouteInfo>? children})
-      : super(PricesRoute.name, initialChildren: children);
+    : super(PricesRoute.name, initialChildren: children);
 
   static const String name = 'PricesRoute';
 
@@ -1434,7 +1434,7 @@ class PricesRoute extends PageRouteInfo<void> {
 /// [ProfileNavigationScreen]
 class ProfileNavigationRoute extends PageRouteInfo<void> {
   const ProfileNavigationRoute({List<PageRouteInfo>? children})
-      : super(ProfileNavigationRoute.name, initialChildren: children);
+    : super(ProfileNavigationRoute.name, initialChildren: children);
 
   static const String name = 'ProfileNavigationRoute';
 
@@ -1450,7 +1450,7 @@ class ProfileNavigationRoute extends PageRouteInfo<void> {
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})
-      : super(ProfileRoute.name, initialChildren: children);
+    : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -1466,7 +1466,7 @@ class ProfileRoute extends PageRouteInfo<void> {
 /// [SaleRequestNavigationScreen]
 class SaleRequestNavigationRoute extends PageRouteInfo<void> {
   const SaleRequestNavigationRoute({List<PageRouteInfo>? children})
-      : super(SaleRequestNavigationRoute.name, initialChildren: children);
+    : super(SaleRequestNavigationRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestNavigationRoute';
 
@@ -1482,7 +1482,7 @@ class SaleRequestNavigationRoute extends PageRouteInfo<void> {
 /// [SaleRequestScreen]
 class SaleRequestRoute extends PageRouteInfo<void> {
   const SaleRequestRoute({List<PageRouteInfo>? children})
-      : super(SaleRequestRoute.name, initialChildren: children);
+    : super(SaleRequestRoute.name, initialChildren: children);
 
   static const String name = 'SaleRequestRoute';
 
@@ -1498,7 +1498,7 @@ class SaleRequestRoute extends PageRouteInfo<void> {
 /// [StaticSourceBlockageScreen]
 class StaticSourceBlockageRoute extends PageRouteInfo<void> {
   const StaticSourceBlockageRoute({List<PageRouteInfo>? children})
-      : super(StaticSourceBlockageRoute.name, initialChildren: children);
+    : super(StaticSourceBlockageRoute.name, initialChildren: children);
 
   static const String name = 'StaticSourceBlockageRoute';
 
@@ -1514,7 +1514,7 @@ class StaticSourceBlockageRoute extends PageRouteInfo<void> {
 /// [VacuumSystemFailureScreen]
 class VacuumSystemFailureRoute extends PageRouteInfo<void> {
   const VacuumSystemFailureRoute({List<PageRouteInfo>? children})
-      : super(VacuumSystemFailureRoute.name, initialChildren: children);
+    : super(VacuumSystemFailureRoute.name, initialChildren: children);
 
   static const String name = 'VacuumSystemFailureRoute';
 
@@ -1530,7 +1530,7 @@ class VacuumSystemFailureRoute extends PageRouteInfo<void> {
 /// [VideoForStudentsScreen]
 class VideoForStudentsRoute extends PageRouteInfo<void> {
   const VideoForStudentsRoute({List<PageRouteInfo>? children})
-      : super(VideoForStudentsRoute.name, initialChildren: children);
+    : super(VideoForStudentsRoute.name, initialChildren: children);
 
   static const String name = 'VideoForStudentsRoute';
 
@@ -1546,7 +1546,7 @@ class VideoForStudentsRoute extends PageRouteInfo<void> {
 /// [WingFireScreen]
 class WingFireRoute extends PageRouteInfo<void> {
   const WingFireRoute({List<PageRouteInfo>? children})
-      : super(WingFireRoute.name, initialChildren: children);
+    : super(WingFireRoute.name, initialChildren: children);
 
   static const String name = 'WingFireRoute';
 

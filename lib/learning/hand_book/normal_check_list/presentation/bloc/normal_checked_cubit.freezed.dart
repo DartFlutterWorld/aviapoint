@@ -12,7 +12,8 @@ part of 'normal_checked_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$NormalCheckedState {
@@ -28,8 +29,9 @@ mixin _$NormalCheckedState {
 /// @nodoc
 abstract class $NormalCheckedStateCopyWith<$Res> {
   factory $NormalCheckedStateCopyWith(
-          NormalCheckedState value, $Res Function(NormalCheckedState) then) =
-      _$NormalCheckedStateCopyWithImpl<$Res, NormalCheckedState>;
+    NormalCheckedState value,
+    $Res Function(NormalCheckedState) then,
+  ) = _$NormalCheckedStateCopyWithImpl<$Res, NormalCheckedState>;
   @useResult
   $Res call({Set<CheckProgress> checkProgress});
 }
@@ -48,24 +50,26 @@ class _$NormalCheckedStateCopyWithImpl<$Res, $Val extends NormalCheckedState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? checkProgress = null,
-  }) {
-    return _then(_value.copyWith(
-      checkProgress: null == checkProgress
-          ? _value.checkProgress
-          : checkProgress // ignore: cast_nullable_to_non_nullable
-              as Set<CheckProgress>,
-    ) as $Val);
+  $Res call({Object? checkProgress = null}) {
+    return _then(
+      _value.copyWith(
+            checkProgress: null == checkProgress
+                ? _value.checkProgress
+                : checkProgress // ignore: cast_nullable_to_non_nullable
+                      as Set<CheckProgress>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$NormalCheckedStateImplCopyWith<$Res>
     implements $NormalCheckedStateCopyWith<$Res> {
-  factory _$$NormalCheckedStateImplCopyWith(_$NormalCheckedStateImpl value,
-          $Res Function(_$NormalCheckedStateImpl) then) =
-      __$$NormalCheckedStateImplCopyWithImpl<$Res>;
+  factory _$$NormalCheckedStateImplCopyWith(
+    _$NormalCheckedStateImpl value,
+    $Res Function(_$NormalCheckedStateImpl) then,
+  ) = __$$NormalCheckedStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Set<CheckProgress> checkProgress});
@@ -75,32 +79,33 @@ abstract class _$$NormalCheckedStateImplCopyWith<$Res>
 class __$$NormalCheckedStateImplCopyWithImpl<$Res>
     extends _$NormalCheckedStateCopyWithImpl<$Res, _$NormalCheckedStateImpl>
     implements _$$NormalCheckedStateImplCopyWith<$Res> {
-  __$$NormalCheckedStateImplCopyWithImpl(_$NormalCheckedStateImpl _value,
-      $Res Function(_$NormalCheckedStateImpl) _then)
-      : super(_value, _then);
+  __$$NormalCheckedStateImplCopyWithImpl(
+    _$NormalCheckedStateImpl _value,
+    $Res Function(_$NormalCheckedStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckedState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? checkProgress = null,
-  }) {
-    return _then(_$NormalCheckedStateImpl(
-      checkProgress: null == checkProgress
-          ? _value._checkProgress
-          : checkProgress // ignore: cast_nullable_to_non_nullable
-              as Set<CheckProgress>,
-    ));
+  $Res call({Object? checkProgress = null}) {
+    return _then(
+      _$NormalCheckedStateImpl(
+        checkProgress: null == checkProgress
+            ? _value._checkProgress
+            : checkProgress // ignore: cast_nullable_to_non_nullable
+                  as Set<CheckProgress>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$NormalCheckedStateImpl implements _NormalCheckedState {
-  const _$NormalCheckedStateImpl(
-      {final Set<CheckProgress> checkProgress = const {}})
-      : _checkProgress = checkProgress;
+  const _$NormalCheckedStateImpl({
+    final Set<CheckProgress> checkProgress = const {},
+  }) : _checkProgress = checkProgress;
 
   final Set<CheckProgress> _checkProgress;
   @override
@@ -121,13 +126,17 @@ class _$NormalCheckedStateImpl implements _NormalCheckedState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NormalCheckedStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._checkProgress, _checkProgress));
+            const DeepCollectionEquality().equals(
+              other._checkProgress,
+              _checkProgress,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_checkProgress));
+    runtimeType,
+    const DeepCollectionEquality().hash(_checkProgress),
+  );
 
   /// Create a copy of NormalCheckedState
   /// with the given fields replaced by the non-null parameter values.
@@ -136,7 +145,9 @@ class _$NormalCheckedStateImpl implements _NormalCheckedState {
   @pragma('vm:prefer-inline')
   _$$NormalCheckedStateImplCopyWith<_$NormalCheckedStateImpl> get copyWith =>
       __$$NormalCheckedStateImplCopyWithImpl<_$NormalCheckedStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _NormalCheckedState implements NormalCheckedState {

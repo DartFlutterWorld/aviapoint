@@ -12,7 +12,8 @@ part of 'profile_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$ProfileEvent {
@@ -20,47 +21,42 @@ mixin _$ProfileEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() get,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? get,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileEvent value) get,
     required TResult Function(InitialProfileEvent value) initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileEvent value)? get,
     TResult? Function(InitialProfileEvent value)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileEvent value)? get,
     TResult Function(InitialProfileEvent value)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ProfileEventCopyWith<$Res> {
   factory $ProfileEventCopyWith(
-          ProfileEvent value, $Res Function(ProfileEvent) then) =
-      _$ProfileEventCopyWithImpl<$Res, ProfileEvent>;
+    ProfileEvent value,
+    $Res Function(ProfileEvent) then,
+  ) = _$ProfileEventCopyWithImpl<$Res, ProfileEvent>;
 }
 
 /// @nodoc
@@ -79,9 +75,10 @@ class _$ProfileEventCopyWithImpl<$Res, $Val extends ProfileEvent>
 
 /// @nodoc
 abstract class _$$GetProfileEventImplCopyWith<$Res> {
-  factory _$$GetProfileEventImplCopyWith(_$GetProfileEventImpl value,
-          $Res Function(_$GetProfileEventImpl) then) =
-      __$$GetProfileEventImplCopyWithImpl<$Res>;
+  factory _$$GetProfileEventImplCopyWith(
+    _$GetProfileEventImpl value,
+    $Res Function(_$GetProfileEventImpl) then,
+  ) = __$$GetProfileEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -89,8 +86,9 @@ class __$$GetProfileEventImplCopyWithImpl<$Res>
     extends _$ProfileEventCopyWithImpl<$Res, _$GetProfileEventImpl>
     implements _$$GetProfileEventImplCopyWith<$Res> {
   __$$GetProfileEventImplCopyWithImpl(
-      _$GetProfileEventImpl _value, $Res Function(_$GetProfileEventImpl) _then)
-      : super(_value, _then);
+    _$GetProfileEventImpl _value,
+    $Res Function(_$GetProfileEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -185,18 +183,20 @@ abstract class GetProfileEvent extends ProfileEvent {
 
 /// @nodoc
 abstract class _$$InitialProfileEventImplCopyWith<$Res> {
-  factory _$$InitialProfileEventImplCopyWith(_$InitialProfileEventImpl value,
-          $Res Function(_$InitialProfileEventImpl) then) =
-      __$$InitialProfileEventImplCopyWithImpl<$Res>;
+  factory _$$InitialProfileEventImplCopyWith(
+    _$InitialProfileEventImpl value,
+    $Res Function(_$InitialProfileEventImpl) then,
+  ) = __$$InitialProfileEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$InitialProfileEventImplCopyWithImpl<$Res>
     extends _$ProfileEventCopyWithImpl<$Res, _$InitialProfileEventImpl>
     implements _$$InitialProfileEventImplCopyWith<$Res> {
-  __$$InitialProfileEventImplCopyWithImpl(_$InitialProfileEventImpl _value,
-      $Res Function(_$InitialProfileEventImpl) _then)
-      : super(_value, _then);
+  __$$InitialProfileEventImplCopyWithImpl(
+    _$InitialProfileEventImpl _value,
+    $Res Function(_$InitialProfileEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -295,58 +295,60 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(ProfileEntity profile) success,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(ProfileEntity profile)? success,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(ProfileEntity profile)? success,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingProfileState value) loading,
     required TResult Function(ErrorProfileState value) error,
     required TResult Function(SuccessProfileState value) success,
     required TResult Function(InitialProfileState value) initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingProfileState value)? loading,
     TResult? Function(ErrorProfileState value)? error,
     TResult? Function(SuccessProfileState value)? success,
     TResult? Function(InitialProfileState value)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingProfileState value)? loading,
@@ -354,15 +356,15 @@ mixin _$ProfileState {
     TResult Function(SuccessProfileState value)? success,
     TResult Function(InitialProfileState value)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ProfileStateCopyWith<$Res> {
   factory $ProfileStateCopyWith(
-          ProfileState value, $Res Function(ProfileState) then) =
-      _$ProfileStateCopyWithImpl<$Res, ProfileState>;
+    ProfileState value,
+    $Res Function(ProfileState) then,
+  ) = _$ProfileStateCopyWithImpl<$Res, ProfileState>;
 }
 
 /// @nodoc
@@ -381,18 +383,20 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
 
 /// @nodoc
 abstract class _$$LoadingProfileStateImplCopyWith<$Res> {
-  factory _$$LoadingProfileStateImplCopyWith(_$LoadingProfileStateImpl value,
-          $Res Function(_$LoadingProfileStateImpl) then) =
-      __$$LoadingProfileStateImplCopyWithImpl<$Res>;
+  factory _$$LoadingProfileStateImplCopyWith(
+    _$LoadingProfileStateImpl value,
+    $Res Function(_$LoadingProfileStateImpl) then,
+  ) = __$$LoadingProfileStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingProfileStateImplCopyWithImpl<$Res>
     extends _$ProfileStateCopyWithImpl<$Res, _$LoadingProfileStateImpl>
     implements _$$LoadingProfileStateImplCopyWith<$Res> {
-  __$$LoadingProfileStateImplCopyWithImpl(_$LoadingProfileStateImpl _value,
-      $Res Function(_$LoadingProfileStateImpl) _then)
-      : super(_value, _then);
+  __$$LoadingProfileStateImplCopyWithImpl(
+    _$LoadingProfileStateImpl _value,
+    $Res Function(_$LoadingProfileStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -422,9 +426,14 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(ProfileEntity profile) success,
     required TResult Function() initial,
   }) {
@@ -436,12 +445,13 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(ProfileEntity profile)? success,
     TResult? Function()? initial,
   }) {
@@ -453,12 +463,13 @@ class _$LoadingProfileStateImpl extends LoadingProfileState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(ProfileEntity profile)? success,
     TResult Function()? initial,
     required TResult orElse(),
@@ -514,25 +525,28 @@ abstract class LoadingProfileState extends ProfileState {
 
 /// @nodoc
 abstract class _$$ErrorProfileStateImplCopyWith<$Res> {
-  factory _$$ErrorProfileStateImplCopyWith(_$ErrorProfileStateImpl value,
-          $Res Function(_$ErrorProfileStateImpl) then) =
-      __$$ErrorProfileStateImplCopyWithImpl<$Res>;
+  factory _$$ErrorProfileStateImplCopyWith(
+    _$ErrorProfileStateImpl value,
+    $Res Function(_$ErrorProfileStateImpl) then,
+  ) = __$$ErrorProfileStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorProfileStateImplCopyWithImpl<$Res>
     extends _$ProfileStateCopyWithImpl<$Res, _$ErrorProfileStateImpl>
     implements _$$ErrorProfileStateImplCopyWith<$Res> {
-  __$$ErrorProfileStateImplCopyWithImpl(_$ErrorProfileStateImpl _value,
-      $Res Function(_$ErrorProfileStateImpl) _then)
-      : super(_value, _then);
+  __$$ErrorProfileStateImplCopyWithImpl(
+    _$ErrorProfileStateImpl _value,
+    $Res Function(_$ErrorProfileStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -545,41 +559,43 @@ class __$$ErrorProfileStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorProfileStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorProfileStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorProfileStateImpl extends ErrorProfileState {
-  const _$ErrorProfileStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorProfileStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -615,8 +631,14 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -625,20 +647,32 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
   @pragma('vm:prefer-inline')
   _$$ErrorProfileStateImplCopyWith<_$ErrorProfileStateImpl> get copyWith =>
       __$$ErrorProfileStateImplCopyWithImpl<_$ErrorProfileStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(ProfileEntity profile) success,
     required TResult Function() initial,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -646,17 +680,23 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(ProfileEntity profile)? success,
     TResult? Function()? initial,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -664,19 +704,25 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(ProfileEntity profile)? success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -720,12 +766,13 @@ class _$ErrorProfileStateImpl extends ErrorProfileState {
 }
 
 abstract class ErrorProfileState extends ProfileState {
-  const factory ErrorProfileState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorProfileStateImpl;
+  const factory ErrorProfileState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorProfileStateImpl;
   const ErrorProfileState._() : super._();
 
   String? get errorFromApi;
@@ -743,9 +790,10 @@ abstract class ErrorProfileState extends ProfileState {
 
 /// @nodoc
 abstract class _$$SuccessProfileStateImplCopyWith<$Res> {
-  factory _$$SuccessProfileStateImplCopyWith(_$SuccessProfileStateImpl value,
-          $Res Function(_$SuccessProfileStateImpl) then) =
-      __$$SuccessProfileStateImplCopyWithImpl<$Res>;
+  factory _$$SuccessProfileStateImplCopyWith(
+    _$SuccessProfileStateImpl value,
+    $Res Function(_$SuccessProfileStateImpl) then,
+  ) = __$$SuccessProfileStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ProfileEntity profile});
 }
@@ -754,23 +802,24 @@ abstract class _$$SuccessProfileStateImplCopyWith<$Res> {
 class __$$SuccessProfileStateImplCopyWithImpl<$Res>
     extends _$ProfileStateCopyWithImpl<$Res, _$SuccessProfileStateImpl>
     implements _$$SuccessProfileStateImplCopyWith<$Res> {
-  __$$SuccessProfileStateImplCopyWithImpl(_$SuccessProfileStateImpl _value,
-      $Res Function(_$SuccessProfileStateImpl) _then)
-      : super(_value, _then);
+  __$$SuccessProfileStateImplCopyWithImpl(
+    _$SuccessProfileStateImpl _value,
+    $Res Function(_$SuccessProfileStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? profile = null,
-  }) {
-    return _then(_$SuccessProfileStateImpl(
-      profile: null == profile
-          ? _value.profile
-          : profile // ignore: cast_nullable_to_non_nullable
-              as ProfileEntity,
-    ));
+  $Res call({Object? profile = null}) {
+    return _then(
+      _$SuccessProfileStateImpl(
+        profile: null == profile
+            ? _value.profile
+            : profile // ignore: cast_nullable_to_non_nullable
+                  as ProfileEntity,
+      ),
+    );
   }
 }
 
@@ -805,15 +854,22 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
   @pragma('vm:prefer-inline')
   _$$SuccessProfileStateImplCopyWith<_$SuccessProfileStateImpl> get copyWith =>
       __$$SuccessProfileStateImplCopyWithImpl<_$SuccessProfileStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(ProfileEntity profile) success,
     required TResult Function() initial,
   }) {
@@ -825,12 +881,13 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(ProfileEntity profile)? success,
     TResult? Function()? initial,
   }) {
@@ -842,12 +899,13 @@ class _$SuccessProfileStateImpl extends SuccessProfileState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(ProfileEntity profile)? success,
     TResult Function()? initial,
     required TResult orElse(),
@@ -912,18 +970,20 @@ abstract class SuccessProfileState extends ProfileState {
 
 /// @nodoc
 abstract class _$$InitialProfileStateImplCopyWith<$Res> {
-  factory _$$InitialProfileStateImplCopyWith(_$InitialProfileStateImpl value,
-          $Res Function(_$InitialProfileStateImpl) then) =
-      __$$InitialProfileStateImplCopyWithImpl<$Res>;
+  factory _$$InitialProfileStateImplCopyWith(
+    _$InitialProfileStateImpl value,
+    $Res Function(_$InitialProfileStateImpl) then,
+  ) = __$$InitialProfileStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$InitialProfileStateImplCopyWithImpl<$Res>
     extends _$ProfileStateCopyWithImpl<$Res, _$InitialProfileStateImpl>
     implements _$$InitialProfileStateImplCopyWith<$Res> {
-  __$$InitialProfileStateImplCopyWithImpl(_$InitialProfileStateImpl _value,
-      $Res Function(_$InitialProfileStateImpl) _then)
-      : super(_value, _then);
+  __$$InitialProfileStateImplCopyWithImpl(
+    _$InitialProfileStateImpl _value,
+    $Res Function(_$InitialProfileStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -953,9 +1013,14 @@ class _$InitialProfileStateImpl extends InitialProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(ProfileEntity profile) success,
     required TResult Function() initial,
   }) {
@@ -967,12 +1032,13 @@ class _$InitialProfileStateImpl extends InitialProfileState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(ProfileEntity profile)? success,
     TResult? Function()? initial,
   }) {
@@ -984,12 +1050,13 @@ class _$InitialProfileStateImpl extends InitialProfileState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(ProfileEntity profile)? success,
     TResult Function()? initial,
     required TResult orElse(),

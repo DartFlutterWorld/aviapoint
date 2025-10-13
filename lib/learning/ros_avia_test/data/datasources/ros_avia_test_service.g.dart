@@ -83,7 +83,7 @@ class _RosAviaTestService implements RosAviaTestService {
 
   @override
   Future<List<PrivatPilotPlaneCategoryDto>>
-      fetchPrivatPilotPlaneCategory() async {
+  fetchPrivatPilotPlaneCategory() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -116,7 +116,7 @@ class _RosAviaTestService implements RosAviaTestService {
 
   @override
   Future<List<RosAviaTestCategoryWithQuestionsDto>>
-      fetchRosAviaTestCategoryWithQuestions(String typeCertificateId) async {
+  fetchRosAviaTestCategoryWithQuestions(String typeCertificateId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

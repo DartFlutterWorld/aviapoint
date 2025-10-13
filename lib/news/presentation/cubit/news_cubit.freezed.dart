@@ -12,7 +12,8 @@ part of 'news_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$NewsCubitState {
@@ -29,8 +30,9 @@ mixin _$NewsCubitState {
 /// @nodoc
 abstract class $NewsCubitStateCopyWith<$Res> {
   factory $NewsCubitStateCopyWith(
-          NewsCubitState value, $Res Function(NewsCubitState) then) =
-      _$NewsCubitStateCopyWithImpl<$Res, NewsCubitState>;
+    NewsCubitState value,
+    $Res Function(NewsCubitState) then,
+  ) = _$NewsCubitStateCopyWithImpl<$Res, NewsCubitState>;
   @useResult
   $Res call({int categoryId, String titleCategory});
 }
@@ -49,29 +51,30 @@ class _$NewsCubitStateCopyWithImpl<$Res, $Val extends NewsCubitState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? categoryId = null,
-    Object? titleCategory = null,
-  }) {
-    return _then(_value.copyWith(
-      categoryId: null == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleCategory: null == titleCategory
-          ? _value.titleCategory
-          : titleCategory // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? categoryId = null, Object? titleCategory = null}) {
+    return _then(
+      _value.copyWith(
+            categoryId: null == categoryId
+                ? _value.categoryId
+                : categoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            titleCategory: null == titleCategory
+                ? _value.titleCategory
+                : titleCategory // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$NewsCubitStateImplCopyWith<$Res>
     implements $NewsCubitStateCopyWith<$Res> {
-  factory _$$NewsCubitStateImplCopyWith(_$NewsCubitStateImpl value,
-          $Res Function(_$NewsCubitStateImpl) then) =
-      __$$NewsCubitStateImplCopyWithImpl<$Res>;
+  factory _$$NewsCubitStateImplCopyWith(
+    _$NewsCubitStateImpl value,
+    $Res Function(_$NewsCubitStateImpl) then,
+  ) = __$$NewsCubitStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int categoryId, String titleCategory});
@@ -82,27 +85,27 @@ class __$$NewsCubitStateImplCopyWithImpl<$Res>
     extends _$NewsCubitStateCopyWithImpl<$Res, _$NewsCubitStateImpl>
     implements _$$NewsCubitStateImplCopyWith<$Res> {
   __$$NewsCubitStateImplCopyWithImpl(
-      _$NewsCubitStateImpl _value, $Res Function(_$NewsCubitStateImpl) _then)
-      : super(_value, _then);
+    _$NewsCubitStateImpl _value,
+    $Res Function(_$NewsCubitStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NewsCubitState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? categoryId = null,
-    Object? titleCategory = null,
-  }) {
-    return _then(_$NewsCubitStateImpl(
-      categoryId: null == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleCategory: null == titleCategory
-          ? _value.titleCategory
-          : titleCategory // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? categoryId = null, Object? titleCategory = null}) {
+    return _then(
+      _$NewsCubitStateImpl(
+        categoryId: null == categoryId
+            ? _value.categoryId
+            : categoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        titleCategory: null == titleCategory
+            ? _value.titleCategory
+            : titleCategory // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -144,13 +147,16 @@ class _$NewsCubitStateImpl implements _NewsCubitState {
   @pragma('vm:prefer-inline')
   _$$NewsCubitStateImplCopyWith<_$NewsCubitStateImpl> get copyWith =>
       __$$NewsCubitStateImplCopyWithImpl<_$NewsCubitStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _NewsCubitState implements NewsCubitState {
-  const factory _NewsCubitState(
-      {final int categoryId,
-      final String titleCategory}) = _$NewsCubitStateImpl;
+  const factory _NewsCubitState({
+    final int categoryId,
+    final String titleCategory,
+  }) = _$NewsCubitStateImpl;
 
   @override
   int get categoryId;

@@ -12,7 +12,8 @@ part of 'type_sertificates_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TypeSertificatesDto _$TypeSertificatesDtoFromJson(Map<String, dynamic> json) {
   return _TypeSertificatesDto.fromJson(json);
@@ -37,8 +38,9 @@ mixin _$TypeSertificatesDto {
 /// @nodoc
 abstract class $TypeSertificatesDtoCopyWith<$Res> {
   factory $TypeSertificatesDtoCopyWith(
-          TypeSertificatesDto value, $Res Function(TypeSertificatesDto) then) =
-      _$TypeSertificatesDtoCopyWithImpl<$Res, TypeSertificatesDto>;
+    TypeSertificatesDto value,
+    $Res Function(TypeSertificatesDto) then,
+  ) = _$TypeSertificatesDtoCopyWithImpl<$Res, TypeSertificatesDto>;
   @useResult
   $Res call({int id, String title, String image});
 }
@@ -57,34 +59,34 @@ class _$TypeSertificatesDtoCopyWithImpl<$Res, $Val extends TypeSertificatesDto>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? image = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? id = null, Object? title = null, Object? image = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            image: null == image
+                ? _value.image
+                : image // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TypeSertificatesDtoImplCopyWith<$Res>
     implements $TypeSertificatesDtoCopyWith<$Res> {
-  factory _$$TypeSertificatesDtoImplCopyWith(_$TypeSertificatesDtoImpl value,
-          $Res Function(_$TypeSertificatesDtoImpl) then) =
-      __$$TypeSertificatesDtoImplCopyWithImpl<$Res>;
+  factory _$$TypeSertificatesDtoImplCopyWith(
+    _$TypeSertificatesDtoImpl value,
+    $Res Function(_$TypeSertificatesDtoImpl) then,
+  ) = __$$TypeSertificatesDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String title, String image});
@@ -94,33 +96,32 @@ abstract class _$$TypeSertificatesDtoImplCopyWith<$Res>
 class __$$TypeSertificatesDtoImplCopyWithImpl<$Res>
     extends _$TypeSertificatesDtoCopyWithImpl<$Res, _$TypeSertificatesDtoImpl>
     implements _$$TypeSertificatesDtoImplCopyWith<$Res> {
-  __$$TypeSertificatesDtoImplCopyWithImpl(_$TypeSertificatesDtoImpl _value,
-      $Res Function(_$TypeSertificatesDtoImpl) _then)
-      : super(_value, _then);
+  __$$TypeSertificatesDtoImplCopyWithImpl(
+    _$TypeSertificatesDtoImpl _value,
+    $Res Function(_$TypeSertificatesDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TypeSertificatesDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? image = null,
-  }) {
-    return _then(_$TypeSertificatesDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? id = null, Object? title = null, Object? image = null}) {
+    return _then(
+      _$TypeSertificatesDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        image: null == image
+            ? _value.image
+            : image // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -128,8 +129,11 @@ class __$$TypeSertificatesDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$TypeSertificatesDtoImpl implements _TypeSertificatesDto {
-  const _$TypeSertificatesDtoImpl(
-      {required this.id, required this.title, required this.image});
+  const _$TypeSertificatesDtoImpl({
+    required this.id,
+    required this.title,
+    required this.image,
+  });
 
   factory _$TypeSertificatesDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$TypeSertificatesDtoImplFromJson(json);
@@ -167,21 +171,22 @@ class _$TypeSertificatesDtoImpl implements _TypeSertificatesDto {
   @pragma('vm:prefer-inline')
   _$$TypeSertificatesDtoImplCopyWith<_$TypeSertificatesDtoImpl> get copyWith =>
       __$$TypeSertificatesDtoImplCopyWithImpl<_$TypeSertificatesDtoImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TypeSertificatesDtoImplToJson(
-      this,
-    );
+    return _$$TypeSertificatesDtoImplToJson(this);
   }
 }
 
 abstract class _TypeSertificatesDto implements TypeSertificatesDto {
-  const factory _TypeSertificatesDto(
-      {required final int id,
-      required final String title,
-      required final String image}) = _$TypeSertificatesDtoImpl;
+  const factory _TypeSertificatesDto({
+    required final int id,
+    required final String title,
+    required final String image,
+  }) = _$TypeSertificatesDtoImpl;
 
   factory _TypeSertificatesDto.fromJson(Map<String, dynamic> json) =
       _$TypeSertificatesDtoImpl.fromJson;

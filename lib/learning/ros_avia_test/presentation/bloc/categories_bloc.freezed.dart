@@ -12,7 +12,8 @@ part of 'categories_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$CategoriesEvent {
@@ -20,35 +21,29 @@ mixin _$CategoriesEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int typeSsertificatesId) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int typeSsertificatesId)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int typeSsertificatesId)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetCategoriesEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetCategoriesEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetCategoriesEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 
   /// Create a copy of CategoriesEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -60,8 +55,9 @@ mixin _$CategoriesEvent {
 /// @nodoc
 abstract class $CategoriesEventCopyWith<$Res> {
   factory $CategoriesEventCopyWith(
-          CategoriesEvent value, $Res Function(CategoriesEvent) then) =
-      _$CategoriesEventCopyWithImpl<$Res, CategoriesEvent>;
+    CategoriesEvent value,
+    $Res Function(CategoriesEvent) then,
+  ) = _$CategoriesEventCopyWithImpl<$Res, CategoriesEvent>;
   @useResult
   $Res call({int typeSsertificatesId});
 }
@@ -80,24 +76,26 @@ class _$CategoriesEventCopyWithImpl<$Res, $Val extends CategoriesEvent>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? typeSsertificatesId = null,
-  }) {
-    return _then(_value.copyWith(
-      typeSsertificatesId: null == typeSsertificatesId
-          ? _value.typeSsertificatesId
-          : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  $Res call({Object? typeSsertificatesId = null}) {
+    return _then(
+      _value.copyWith(
+            typeSsertificatesId: null == typeSsertificatesId
+                ? _value.typeSsertificatesId
+                : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GetCategoriesEventImplCopyWith<$Res>
     implements $CategoriesEventCopyWith<$Res> {
-  factory _$$GetCategoriesEventImplCopyWith(_$GetCategoriesEventImpl value,
-          $Res Function(_$GetCategoriesEventImpl) then) =
-      __$$GetCategoriesEventImplCopyWithImpl<$Res>;
+  factory _$$GetCategoriesEventImplCopyWith(
+    _$GetCategoriesEventImpl value,
+    $Res Function(_$GetCategoriesEventImpl) then,
+  ) = __$$GetCategoriesEventImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int typeSsertificatesId});
@@ -107,23 +105,24 @@ abstract class _$$GetCategoriesEventImplCopyWith<$Res>
 class __$$GetCategoriesEventImplCopyWithImpl<$Res>
     extends _$CategoriesEventCopyWithImpl<$Res, _$GetCategoriesEventImpl>
     implements _$$GetCategoriesEventImplCopyWith<$Res> {
-  __$$GetCategoriesEventImplCopyWithImpl(_$GetCategoriesEventImpl _value,
-      $Res Function(_$GetCategoriesEventImpl) _then)
-      : super(_value, _then);
+  __$$GetCategoriesEventImplCopyWithImpl(
+    _$GetCategoriesEventImpl _value,
+    $Res Function(_$GetCategoriesEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoriesEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? typeSsertificatesId = null,
-  }) {
-    return _then(_$GetCategoriesEventImpl(
-      typeSsertificatesId: null == typeSsertificatesId
-          ? _value.typeSsertificatesId
-          : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? typeSsertificatesId = null}) {
+    return _then(
+      _$GetCategoriesEventImpl(
+        typeSsertificatesId: null == typeSsertificatesId
+            ? _value.typeSsertificatesId
+            : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -131,7 +130,7 @@ class __$$GetCategoriesEventImplCopyWithImpl<$Res>
 
 class _$GetCategoriesEventImpl extends GetCategoriesEvent {
   const _$GetCategoriesEventImpl({required this.typeSsertificatesId})
-      : super._();
+    : super._();
 
   @override
   final int typeSsertificatesId;
@@ -160,7 +159,9 @@ class _$GetCategoriesEventImpl extends GetCategoriesEvent {
   @pragma('vm:prefer-inline')
   _$$GetCategoriesEventImplCopyWith<_$GetCategoriesEventImpl> get copyWith =>
       __$$GetCategoriesEventImplCopyWithImpl<_$GetCategoriesEventImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -240,69 +241,71 @@ mixin _$CategoriesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<RosAviaTestCategoryEntity> categories)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<RosAviaTestCategoryEntity> categories)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<RosAviaTestCategoryEntity> categories)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingCategoriesState value) loading,
     required TResult Function(ErrorCategoriesState value) error,
     required TResult Function(SuccessCategoriesState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingCategoriesState value)? loading,
     TResult? Function(ErrorCategoriesState value)? error,
     TResult? Function(SuccessCategoriesState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingCategoriesState value)? loading,
     TResult Function(ErrorCategoriesState value)? error,
     TResult Function(SuccessCategoriesState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CategoriesStateCopyWith<$Res> {
   factory $CategoriesStateCopyWith(
-          CategoriesState value, $Res Function(CategoriesState) then) =
-      _$CategoriesStateCopyWithImpl<$Res, CategoriesState>;
+    CategoriesState value,
+    $Res Function(CategoriesState) then,
+  ) = _$CategoriesStateCopyWithImpl<$Res, CategoriesState>;
 }
 
 /// @nodoc
@@ -322,9 +325,9 @@ class _$CategoriesStateCopyWithImpl<$Res, $Val extends CategoriesState>
 /// @nodoc
 abstract class _$$LoadingCategoriesStateImplCopyWith<$Res> {
   factory _$$LoadingCategoriesStateImplCopyWith(
-          _$LoadingCategoriesStateImpl value,
-          $Res Function(_$LoadingCategoriesStateImpl) then) =
-      __$$LoadingCategoriesStateImplCopyWithImpl<$Res>;
+    _$LoadingCategoriesStateImpl value,
+    $Res Function(_$LoadingCategoriesStateImpl) then,
+  ) = __$$LoadingCategoriesStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -332,9 +335,9 @@ class __$$LoadingCategoriesStateImplCopyWithImpl<$Res>
     extends _$CategoriesStateCopyWithImpl<$Res, _$LoadingCategoriesStateImpl>
     implements _$$LoadingCategoriesStateImplCopyWith<$Res> {
   __$$LoadingCategoriesStateImplCopyWithImpl(
-      _$LoadingCategoriesStateImpl _value,
-      $Res Function(_$LoadingCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingCategoriesStateImpl _value,
+    $Res Function(_$LoadingCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -364,11 +367,16 @@ class _$LoadingCategoriesStateImpl extends LoadingCategoriesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<RosAviaTestCategoryEntity> categories)
-        success,
+    success,
   }) {
     return loading();
   }
@@ -378,12 +386,13 @@ class _$LoadingCategoriesStateImpl extends LoadingCategoriesState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<RosAviaTestCategoryEntity> categories)? success,
   }) {
     return loading?.call();
@@ -394,12 +403,13 @@ class _$LoadingCategoriesStateImpl extends LoadingCategoriesState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<RosAviaTestCategoryEntity> categories)? success,
     required TResult orElse(),
   }) {
@@ -451,25 +461,28 @@ abstract class LoadingCategoriesState extends CategoriesState {
 
 /// @nodoc
 abstract class _$$ErrorCategoriesStateImplCopyWith<$Res> {
-  factory _$$ErrorCategoriesStateImplCopyWith(_$ErrorCategoriesStateImpl value,
-          $Res Function(_$ErrorCategoriesStateImpl) then) =
-      __$$ErrorCategoriesStateImplCopyWithImpl<$Res>;
+  factory _$$ErrorCategoriesStateImplCopyWith(
+    _$ErrorCategoriesStateImpl value,
+    $Res Function(_$ErrorCategoriesStateImpl) then,
+  ) = __$$ErrorCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorCategoriesStateImplCopyWithImpl<$Res>
     extends _$CategoriesStateCopyWithImpl<$Res, _$ErrorCategoriesStateImpl>
     implements _$$ErrorCategoriesStateImplCopyWith<$Res> {
-  __$$ErrorCategoriesStateImplCopyWithImpl(_$ErrorCategoriesStateImpl _value,
-      $Res Function(_$ErrorCategoriesStateImpl) _then)
-      : super(_value, _then);
+  __$$ErrorCategoriesStateImplCopyWithImpl(
+    _$ErrorCategoriesStateImpl _value,
+    $Res Function(_$ErrorCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -482,41 +495,43 @@ class __$$ErrorCategoriesStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorCategoriesStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorCategoriesStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorCategoriesStateImpl extends ErrorCategoriesState {
-  const _$ErrorCategoriesStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorCategoriesStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -552,8 +567,14 @@ class _$ErrorCategoriesStateImpl extends ErrorCategoriesState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of CategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -561,22 +582,34 @@ class _$ErrorCategoriesStateImpl extends ErrorCategoriesState {
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorCategoriesStateImplCopyWith<_$ErrorCategoriesStateImpl>
-      get copyWith =>
-          __$$ErrorCategoriesStateImplCopyWithImpl<_$ErrorCategoriesStateImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$ErrorCategoriesStateImplCopyWithImpl<_$ErrorCategoriesStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<RosAviaTestCategoryEntity> categories)
-        success,
+    success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -584,16 +617,22 @@ class _$ErrorCategoriesStateImpl extends ErrorCategoriesState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<RosAviaTestCategoryEntity> categories)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -601,18 +640,24 @@ class _$ErrorCategoriesStateImpl extends ErrorCategoriesState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<RosAviaTestCategoryEntity> categories)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -653,12 +698,13 @@ class _$ErrorCategoriesStateImpl extends ErrorCategoriesState {
 }
 
 abstract class ErrorCategoriesState extends CategoriesState {
-  const factory ErrorCategoriesState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorCategoriesStateImpl;
+  const factory ErrorCategoriesState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorCategoriesStateImpl;
   const ErrorCategoriesState._() : super._();
 
   String? get errorFromApi;
@@ -671,15 +717,15 @@ abstract class ErrorCategoriesState extends CategoriesState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorCategoriesStateImplCopyWith<_$ErrorCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessCategoriesStateImplCopyWith<$Res> {
   factory _$$SuccessCategoriesStateImplCopyWith(
-          _$SuccessCategoriesStateImpl value,
-          $Res Function(_$SuccessCategoriesStateImpl) then) =
-      __$$SuccessCategoriesStateImplCopyWithImpl<$Res>;
+    _$SuccessCategoriesStateImpl value,
+    $Res Function(_$SuccessCategoriesStateImpl) then,
+  ) = __$$SuccessCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<RosAviaTestCategoryEntity> categories});
 }
@@ -689,33 +735,33 @@ class __$$SuccessCategoriesStateImplCopyWithImpl<$Res>
     extends _$CategoriesStateCopyWithImpl<$Res, _$SuccessCategoriesStateImpl>
     implements _$$SuccessCategoriesStateImplCopyWith<$Res> {
   __$$SuccessCategoriesStateImplCopyWithImpl(
-      _$SuccessCategoriesStateImpl _value,
-      $Res Function(_$SuccessCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessCategoriesStateImpl _value,
+    $Res Function(_$SuccessCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? categories = null,
-  }) {
-    return _then(_$SuccessCategoriesStateImpl(
-      categories: null == categories
-          ? _value._categories
-          : categories // ignore: cast_nullable_to_non_nullable
-              as List<RosAviaTestCategoryEntity>,
-    ));
+  $Res call({Object? categories = null}) {
+    return _then(
+      _$SuccessCategoriesStateImpl(
+        categories: null == categories
+            ? _value._categories
+            : categories // ignore: cast_nullable_to_non_nullable
+                  as List<RosAviaTestCategoryEntity>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$SuccessCategoriesStateImpl extends SuccessCategoriesState {
-  const _$SuccessCategoriesStateImpl(
-      {required final List<RosAviaTestCategoryEntity> categories})
-      : _categories = categories,
-        super._();
+  const _$SuccessCategoriesStateImpl({
+    required final List<RosAviaTestCategoryEntity> categories,
+  }) : _categories = categories,
+       super._();
 
   final List<RosAviaTestCategoryEntity> _categories;
   @override
@@ -735,13 +781,17 @@ class _$SuccessCategoriesStateImpl extends SuccessCategoriesState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessCategoriesStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._categories, _categories));
+            const DeepCollectionEquality().equals(
+              other._categories,
+              _categories,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_categories));
+    runtimeType,
+    const DeepCollectionEquality().hash(_categories),
+  );
 
   /// Create a copy of CategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -749,18 +799,26 @@ class _$SuccessCategoriesStateImpl extends SuccessCategoriesState {
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessCategoriesStateImplCopyWith<_$SuccessCategoriesStateImpl>
-      get copyWith => __$$SuccessCategoriesStateImplCopyWithImpl<
-          _$SuccessCategoriesStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$SuccessCategoriesStateImplCopyWithImpl<_$SuccessCategoriesStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<RosAviaTestCategoryEntity> categories)
-        success,
+    success,
   }) {
     return success(categories);
   }
@@ -770,12 +828,13 @@ class _$SuccessCategoriesStateImpl extends SuccessCategoriesState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<RosAviaTestCategoryEntity> categories)? success,
   }) {
     return success?.call(categories);
@@ -786,12 +845,13 @@ class _$SuccessCategoriesStateImpl extends SuccessCategoriesState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<RosAviaTestCategoryEntity> categories)? success,
     required TResult orElse(),
   }) {
@@ -837,9 +897,9 @@ class _$SuccessCategoriesStateImpl extends SuccessCategoriesState {
 }
 
 abstract class SuccessCategoriesState extends CategoriesState {
-  const factory SuccessCategoriesState(
-          {required final List<RosAviaTestCategoryEntity> categories}) =
-      _$SuccessCategoriesStateImpl;
+  const factory SuccessCategoriesState({
+    required final List<RosAviaTestCategoryEntity> categories,
+  }) = _$SuccessCategoriesStateImpl;
   const SuccessCategoriesState._() : super._();
 
   List<RosAviaTestCategoryEntity> get categories;
@@ -848,5 +908,5 @@ abstract class SuccessCategoriesState extends CategoriesState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessCategoriesStateImplCopyWith<_$SuccessCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

@@ -12,10 +12,12 @@ part of 'hand_book_main_categories_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 HandBookMainCategoriesDto _$HandBookMainCategoriesDtoFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _HandBookMainCategoriesDto.fromJson(json);
 }
 
@@ -38,17 +40,24 @@ mixin _$HandBookMainCategoriesDto {
 
 /// @nodoc
 abstract class $HandBookMainCategoriesDtoCopyWith<$Res> {
-  factory $HandBookMainCategoriesDtoCopyWith(HandBookMainCategoriesDto value,
-          $Res Function(HandBookMainCategoriesDto) then) =
-      _$HandBookMainCategoriesDtoCopyWithImpl<$Res, HandBookMainCategoriesDto>;
+  factory $HandBookMainCategoriesDtoCopyWith(
+    HandBookMainCategoriesDto value,
+    $Res Function(HandBookMainCategoriesDto) then,
+  ) = _$HandBookMainCategoriesDtoCopyWithImpl<$Res, HandBookMainCategoriesDto>;
   @useResult
-  $Res call(
-      {int mainCategoryId, String title, String subTitle, String picture});
+  $Res call({
+    int mainCategoryId,
+    String title,
+    String subTitle,
+    String picture,
+  });
 }
 
 /// @nodoc
-class _$HandBookMainCategoriesDtoCopyWithImpl<$Res,
-        $Val extends HandBookMainCategoriesDto>
+class _$HandBookMainCategoriesDtoCopyWithImpl<
+  $Res,
+  $Val extends HandBookMainCategoriesDto
+>
     implements $HandBookMainCategoriesDtoCopyWith<$Res> {
   _$HandBookMainCategoriesDtoCopyWithImpl(this._value, this._then);
 
@@ -67,24 +76,27 @@ class _$HandBookMainCategoriesDtoCopyWithImpl<$Res,
     Object? subTitle = null,
     Object? picture = null,
   }) {
-    return _then(_value.copyWith(
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            mainCategoryId: null == mainCategoryId
+                ? _value.mainCategoryId
+                : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            subTitle: null == subTitle
+                ? _value.subTitle
+                : subTitle // ignore: cast_nullable_to_non_nullable
+                      as String,
+            picture: null == picture
+                ? _value.picture
+                : picture // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -92,24 +104,31 @@ class _$HandBookMainCategoriesDtoCopyWithImpl<$Res,
 abstract class _$$HandBookMainCategoriesDtoImplCopyWith<$Res>
     implements $HandBookMainCategoriesDtoCopyWith<$Res> {
   factory _$$HandBookMainCategoriesDtoImplCopyWith(
-          _$HandBookMainCategoriesDtoImpl value,
-          $Res Function(_$HandBookMainCategoriesDtoImpl) then) =
-      __$$HandBookMainCategoriesDtoImplCopyWithImpl<$Res>;
+    _$HandBookMainCategoriesDtoImpl value,
+    $Res Function(_$HandBookMainCategoriesDtoImpl) then,
+  ) = __$$HandBookMainCategoriesDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int mainCategoryId, String title, String subTitle, String picture});
+  $Res call({
+    int mainCategoryId,
+    String title,
+    String subTitle,
+    String picture,
+  });
 }
 
 /// @nodoc
 class __$$HandBookMainCategoriesDtoImplCopyWithImpl<$Res>
-    extends _$HandBookMainCategoriesDtoCopyWithImpl<$Res,
-        _$HandBookMainCategoriesDtoImpl>
+    extends
+        _$HandBookMainCategoriesDtoCopyWithImpl<
+          $Res,
+          _$HandBookMainCategoriesDtoImpl
+        >
     implements _$$HandBookMainCategoriesDtoImplCopyWith<$Res> {
   __$$HandBookMainCategoriesDtoImplCopyWithImpl(
-      _$HandBookMainCategoriesDtoImpl _value,
-      $Res Function(_$HandBookMainCategoriesDtoImpl) _then)
-      : super(_value, _then);
+    _$HandBookMainCategoriesDtoImpl _value,
+    $Res Function(_$HandBookMainCategoriesDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of HandBookMainCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -121,24 +140,26 @@ class __$$HandBookMainCategoriesDtoImplCopyWithImpl<$Res>
     Object? subTitle = null,
     Object? picture = null,
   }) {
-    return _then(_$HandBookMainCategoriesDtoImpl(
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$HandBookMainCategoriesDtoImpl(
+        mainCategoryId: null == mainCategoryId
+            ? _value.mainCategoryId
+            : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        subTitle: null == subTitle
+            ? _value.subTitle
+            : subTitle // ignore: cast_nullable_to_non_nullable
+                  as String,
+        picture: null == picture
+            ? _value.picture
+            : picture // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -146,11 +167,12 @@ class __$$HandBookMainCategoriesDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$HandBookMainCategoriesDtoImpl implements _HandBookMainCategoriesDto {
-  const _$HandBookMainCategoriesDtoImpl(
-      {required this.mainCategoryId,
-      required this.title,
-      required this.subTitle,
-      required this.picture});
+  const _$HandBookMainCategoriesDtoImpl({
+    required this.mainCategoryId,
+    required this.title,
+    required this.subTitle,
+    required this.picture,
+  });
 
   factory _$HandBookMainCategoriesDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$HandBookMainCategoriesDtoImplFromJson(json);
@@ -193,23 +215,24 @@ class _$HandBookMainCategoriesDtoImpl implements _HandBookMainCategoriesDto {
   @override
   @pragma('vm:prefer-inline')
   _$$HandBookMainCategoriesDtoImplCopyWith<_$HandBookMainCategoriesDtoImpl>
-      get copyWith => __$$HandBookMainCategoriesDtoImplCopyWithImpl<
-          _$HandBookMainCategoriesDtoImpl>(this, _$identity);
+  get copyWith =>
+      __$$HandBookMainCategoriesDtoImplCopyWithImpl<
+        _$HandBookMainCategoriesDtoImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$HandBookMainCategoriesDtoImplToJson(
-      this,
-    );
+    return _$$HandBookMainCategoriesDtoImplToJson(this);
   }
 }
 
 abstract class _HandBookMainCategoriesDto implements HandBookMainCategoriesDto {
-  const factory _HandBookMainCategoriesDto(
-      {required final int mainCategoryId,
-      required final String title,
-      required final String subTitle,
-      required final String picture}) = _$HandBookMainCategoriesDtoImpl;
+  const factory _HandBookMainCategoriesDto({
+    required final int mainCategoryId,
+    required final String title,
+    required final String subTitle,
+    required final String picture,
+  }) = _$HandBookMainCategoriesDtoImpl;
 
   factory _HandBookMainCategoriesDto.fromJson(Map<String, dynamic> json) =
       _$HandBookMainCategoriesDtoImpl.fromJson;
@@ -228,5 +251,5 @@ abstract class _HandBookMainCategoriesDto implements HandBookMainCategoriesDto {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HandBookMainCategoriesDtoImplCopyWith<_$HandBookMainCategoriesDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

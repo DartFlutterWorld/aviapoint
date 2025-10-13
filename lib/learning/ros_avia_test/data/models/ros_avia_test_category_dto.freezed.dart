@@ -12,10 +12,12 @@ part of 'ros_avia_test_category_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 RosAviaTestCategoryDto _$RosAviaTestCategoryDtoFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _RosAviaTestCategoryDto.fromJson(json);
 }
 
@@ -37,16 +39,19 @@ mixin _$RosAviaTestCategoryDto {
 
 /// @nodoc
 abstract class $RosAviaTestCategoryDtoCopyWith<$Res> {
-  factory $RosAviaTestCategoryDtoCopyWith(RosAviaTestCategoryDto value,
-          $Res Function(RosAviaTestCategoryDto) then) =
-      _$RosAviaTestCategoryDtoCopyWithImpl<$Res, RosAviaTestCategoryDto>;
+  factory $RosAviaTestCategoryDtoCopyWith(
+    RosAviaTestCategoryDto value,
+    $Res Function(RosAviaTestCategoryDto) then,
+  ) = _$RosAviaTestCategoryDtoCopyWithImpl<$Res, RosAviaTestCategoryDto>;
   @useResult
   $Res call({int id, String title, String image});
 }
 
 /// @nodoc
-class _$RosAviaTestCategoryDtoCopyWithImpl<$Res,
-        $Val extends RosAviaTestCategoryDto>
+class _$RosAviaTestCategoryDtoCopyWithImpl<
+  $Res,
+  $Val extends RosAviaTestCategoryDto
+>
     implements $RosAviaTestCategoryDtoCopyWith<$Res> {
   _$RosAviaTestCategoryDtoCopyWithImpl(this._value, this._then);
 
@@ -59,25 +64,24 @@ class _$RosAviaTestCategoryDtoCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? image = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? id = null, Object? title = null, Object? image = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            image: null == image
+                ? _value.image
+                : image // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -85,9 +89,9 @@ class _$RosAviaTestCategoryDtoCopyWithImpl<$Res,
 abstract class _$$RosAviaTestCategoryDtoImplCopyWith<$Res>
     implements $RosAviaTestCategoryDtoCopyWith<$Res> {
   factory _$$RosAviaTestCategoryDtoImplCopyWith(
-          _$RosAviaTestCategoryDtoImpl value,
-          $Res Function(_$RosAviaTestCategoryDtoImpl) then) =
-      __$$RosAviaTestCategoryDtoImplCopyWithImpl<$Res>;
+    _$RosAviaTestCategoryDtoImpl value,
+    $Res Function(_$RosAviaTestCategoryDtoImpl) then,
+  ) = __$$RosAviaTestCategoryDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String title, String image});
@@ -95,37 +99,35 @@ abstract class _$$RosAviaTestCategoryDtoImplCopyWith<$Res>
 
 /// @nodoc
 class __$$RosAviaTestCategoryDtoImplCopyWithImpl<$Res>
-    extends _$RosAviaTestCategoryDtoCopyWithImpl<$Res,
-        _$RosAviaTestCategoryDtoImpl>
+    extends
+        _$RosAviaTestCategoryDtoCopyWithImpl<$Res, _$RosAviaTestCategoryDtoImpl>
     implements _$$RosAviaTestCategoryDtoImplCopyWith<$Res> {
   __$$RosAviaTestCategoryDtoImplCopyWithImpl(
-      _$RosAviaTestCategoryDtoImpl _value,
-      $Res Function(_$RosAviaTestCategoryDtoImpl) _then)
-      : super(_value, _then);
+    _$RosAviaTestCategoryDtoImpl _value,
+    $Res Function(_$RosAviaTestCategoryDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RosAviaTestCategoryDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? image = null,
-  }) {
-    return _then(_$RosAviaTestCategoryDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? id = null, Object? title = null, Object? image = null}) {
+    return _then(
+      _$RosAviaTestCategoryDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        image: null == image
+            ? _value.image
+            : image // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -133,8 +135,11 @@ class __$$RosAviaTestCategoryDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$RosAviaTestCategoryDtoImpl implements _RosAviaTestCategoryDto {
-  const _$RosAviaTestCategoryDtoImpl(
-      {required this.id, required this.title, required this.image});
+  const _$RosAviaTestCategoryDtoImpl({
+    required this.id,
+    required this.title,
+    required this.image,
+  });
 
   factory _$RosAviaTestCategoryDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$RosAviaTestCategoryDtoImplFromJson(json);
@@ -171,22 +176,24 @@ class _$RosAviaTestCategoryDtoImpl implements _RosAviaTestCategoryDto {
   @override
   @pragma('vm:prefer-inline')
   _$$RosAviaTestCategoryDtoImplCopyWith<_$RosAviaTestCategoryDtoImpl>
-      get copyWith => __$$RosAviaTestCategoryDtoImplCopyWithImpl<
-          _$RosAviaTestCategoryDtoImpl>(this, _$identity);
+  get copyWith =>
+      __$$RosAviaTestCategoryDtoImplCopyWithImpl<_$RosAviaTestCategoryDtoImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$RosAviaTestCategoryDtoImplToJson(
-      this,
-    );
+    return _$$RosAviaTestCategoryDtoImplToJson(this);
   }
 }
 
 abstract class _RosAviaTestCategoryDto implements RosAviaTestCategoryDto {
-  const factory _RosAviaTestCategoryDto(
-      {required final int id,
-      required final String title,
-      required final String image}) = _$RosAviaTestCategoryDtoImpl;
+  const factory _RosAviaTestCategoryDto({
+    required final int id,
+    required final String title,
+    required final String image,
+  }) = _$RosAviaTestCategoryDtoImpl;
 
   factory _RosAviaTestCategoryDto.fromJson(Map<String, dynamic> json) =
       _$RosAviaTestCategoryDtoImpl.fromJson;
@@ -203,5 +210,5 @@ abstract class _RosAviaTestCategoryDto implements RosAviaTestCategoryDto {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RosAviaTestCategoryDtoImplCopyWith<_$RosAviaTestCategoryDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

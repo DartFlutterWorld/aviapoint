@@ -12,7 +12,8 @@ part of 'normal_categories_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 NormalCategoriesDto _$NormalCategoriesDtoFromJson(Map<String, dynamic> json) {
   return _NormalCategoriesDto.fromJson(json);
@@ -40,16 +41,18 @@ mixin _$NormalCategoriesDto {
 /// @nodoc
 abstract class $NormalCategoriesDtoCopyWith<$Res> {
   factory $NormalCategoriesDtoCopyWith(
-          NormalCategoriesDto value, $Res Function(NormalCategoriesDto) then) =
-      _$NormalCategoriesDtoCopyWithImpl<$Res, NormalCategoriesDto>;
+    NormalCategoriesDto value,
+    $Res Function(NormalCategoriesDto) then,
+  ) = _$NormalCategoriesDtoCopyWithImpl<$Res, NormalCategoriesDto>;
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String subTitle,
-      int mainCategoryId,
-      String titleEng,
-      String picture});
+  $Res call({
+    int id,
+    String title,
+    String subTitle,
+    int mainCategoryId,
+    String titleEng,
+    String picture,
+  });
 }
 
 /// @nodoc
@@ -74,59 +77,65 @@ class _$NormalCategoriesDtoCopyWithImpl<$Res, $Val extends NormalCategoriesDto>
     Object? titleEng = null,
     Object? picture = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            subTitle: null == subTitle
+                ? _value.subTitle
+                : subTitle // ignore: cast_nullable_to_non_nullable
+                      as String,
+            mainCategoryId: null == mainCategoryId
+                ? _value.mainCategoryId
+                : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            titleEng: null == titleEng
+                ? _value.titleEng
+                : titleEng // ignore: cast_nullable_to_non_nullable
+                      as String,
+            picture: null == picture
+                ? _value.picture
+                : picture // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$NormalCategoriesDtoImplCopyWith<$Res>
     implements $NormalCategoriesDtoCopyWith<$Res> {
-  factory _$$NormalCategoriesDtoImplCopyWith(_$NormalCategoriesDtoImpl value,
-          $Res Function(_$NormalCategoriesDtoImpl) then) =
-      __$$NormalCategoriesDtoImplCopyWithImpl<$Res>;
+  factory _$$NormalCategoriesDtoImplCopyWith(
+    _$NormalCategoriesDtoImpl value,
+    $Res Function(_$NormalCategoriesDtoImpl) then,
+  ) = __$$NormalCategoriesDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String subTitle,
-      int mainCategoryId,
-      String titleEng,
-      String picture});
+  $Res call({
+    int id,
+    String title,
+    String subTitle,
+    int mainCategoryId,
+    String titleEng,
+    String picture,
+  });
 }
 
 /// @nodoc
 class __$$NormalCategoriesDtoImplCopyWithImpl<$Res>
     extends _$NormalCategoriesDtoCopyWithImpl<$Res, _$NormalCategoriesDtoImpl>
     implements _$$NormalCategoriesDtoImplCopyWith<$Res> {
-  __$$NormalCategoriesDtoImplCopyWithImpl(_$NormalCategoriesDtoImpl _value,
-      $Res Function(_$NormalCategoriesDtoImpl) _then)
-      : super(_value, _then);
+  __$$NormalCategoriesDtoImplCopyWithImpl(
+    _$NormalCategoriesDtoImpl _value,
+    $Res Function(_$NormalCategoriesDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -140,32 +149,34 @@ class __$$NormalCategoriesDtoImplCopyWithImpl<$Res>
     Object? titleEng = null,
     Object? picture = null,
   }) {
-    return _then(_$NormalCategoriesDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$NormalCategoriesDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        subTitle: null == subTitle
+            ? _value.subTitle
+            : subTitle // ignore: cast_nullable_to_non_nullable
+                  as String,
+        mainCategoryId: null == mainCategoryId
+            ? _value.mainCategoryId
+            : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        titleEng: null == titleEng
+            ? _value.titleEng
+            : titleEng // ignore: cast_nullable_to_non_nullable
+                  as String,
+        picture: null == picture
+            ? _value.picture
+            : picture // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -173,13 +184,14 @@ class __$$NormalCategoriesDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$NormalCategoriesDtoImpl implements _NormalCategoriesDto {
-  const _$NormalCategoriesDtoImpl(
-      {required this.id,
-      required this.title,
-      required this.subTitle,
-      required this.mainCategoryId,
-      required this.titleEng,
-      required this.picture});
+  const _$NormalCategoriesDtoImpl({
+    required this.id,
+    required this.title,
+    required this.subTitle,
+    required this.mainCategoryId,
+    required this.titleEng,
+    required this.picture,
+  });
 
   factory _$NormalCategoriesDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$NormalCategoriesDtoImplFromJson(json);
@@ -221,7 +233,14 @@ class _$NormalCategoriesDtoImpl implements _NormalCategoriesDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, title, subTitle, mainCategoryId, titleEng, picture);
+    runtimeType,
+    id,
+    title,
+    subTitle,
+    mainCategoryId,
+    titleEng,
+    picture,
+  );
 
   /// Create a copy of NormalCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -230,24 +249,25 @@ class _$NormalCategoriesDtoImpl implements _NormalCategoriesDto {
   @pragma('vm:prefer-inline')
   _$$NormalCategoriesDtoImplCopyWith<_$NormalCategoriesDtoImpl> get copyWith =>
       __$$NormalCategoriesDtoImplCopyWithImpl<_$NormalCategoriesDtoImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$NormalCategoriesDtoImplToJson(
-      this,
-    );
+    return _$$NormalCategoriesDtoImplToJson(this);
   }
 }
 
 abstract class _NormalCategoriesDto implements NormalCategoriesDto {
-  const factory _NormalCategoriesDto(
-      {required final int id,
-      required final String title,
-      required final String subTitle,
-      required final int mainCategoryId,
-      required final String titleEng,
-      required final String picture}) = _$NormalCategoriesDtoImpl;
+  const factory _NormalCategoriesDto({
+    required final int id,
+    required final String title,
+    required final String subTitle,
+    required final int mainCategoryId,
+    required final String titleEng,
+    required final String picture,
+  }) = _$NormalCategoriesDtoImpl;
 
   factory _NormalCategoriesDto.fromJson(Map<String, dynamic> json) =
       _$NormalCategoriesDtoImpl.fromJson;

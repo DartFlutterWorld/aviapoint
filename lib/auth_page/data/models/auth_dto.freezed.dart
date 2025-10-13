@@ -12,7 +12,8 @@ part of 'auth_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AuthDto _$AuthDtoFromJson(Map<String, dynamic> json) {
   return _AuthDto.fromJson(json);
@@ -39,10 +40,11 @@ abstract class $AuthDtoCopyWith<$Res> {
   factory $AuthDtoCopyWith(AuthDto value, $Res Function(AuthDto) then) =
       _$AuthDtoCopyWithImpl<$Res, AuthDto>;
   @useResult
-  $Res call(
-      {String token,
-      @JsonKey(name: 'refresh_token') String refreshToken,
-      ProfileDto profile});
+  $Res call({
+    String token,
+    @JsonKey(name: 'refresh_token') String refreshToken,
+    ProfileDto profile,
+  });
 
   $ProfileDtoCopyWith<$Res> get profile;
 }
@@ -66,20 +68,23 @@ class _$AuthDtoCopyWithImpl<$Res, $Val extends AuthDto>
     Object? refreshToken = null,
     Object? profile = null,
   }) {
-    return _then(_value.copyWith(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-      refreshToken: null == refreshToken
-          ? _value.refreshToken
-          : refreshToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      profile: null == profile
-          ? _value.profile
-          : profile // ignore: cast_nullable_to_non_nullable
-              as ProfileDto,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            token: null == token
+                ? _value.token
+                : token // ignore: cast_nullable_to_non_nullable
+                      as String,
+            refreshToken: null == refreshToken
+                ? _value.refreshToken
+                : refreshToken // ignore: cast_nullable_to_non_nullable
+                      as String,
+            profile: null == profile
+                ? _value.profile
+                : profile // ignore: cast_nullable_to_non_nullable
+                      as ProfileDto,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AuthDto
@@ -96,14 +101,16 @@ class _$AuthDtoCopyWithImpl<$Res, $Val extends AuthDto>
 /// @nodoc
 abstract class _$$AuthDtoImplCopyWith<$Res> implements $AuthDtoCopyWith<$Res> {
   factory _$$AuthDtoImplCopyWith(
-          _$AuthDtoImpl value, $Res Function(_$AuthDtoImpl) then) =
-      __$$AuthDtoImplCopyWithImpl<$Res>;
+    _$AuthDtoImpl value,
+    $Res Function(_$AuthDtoImpl) then,
+  ) = __$$AuthDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String token,
-      @JsonKey(name: 'refresh_token') String refreshToken,
-      ProfileDto profile});
+  $Res call({
+    String token,
+    @JsonKey(name: 'refresh_token') String refreshToken,
+    ProfileDto profile,
+  });
 
   @override
   $ProfileDtoCopyWith<$Res> get profile;
@@ -114,8 +121,9 @@ class __$$AuthDtoImplCopyWithImpl<$Res>
     extends _$AuthDtoCopyWithImpl<$Res, _$AuthDtoImpl>
     implements _$$AuthDtoImplCopyWith<$Res> {
   __$$AuthDtoImplCopyWithImpl(
-      _$AuthDtoImpl _value, $Res Function(_$AuthDtoImpl) _then)
-      : super(_value, _then);
+    _$AuthDtoImpl _value,
+    $Res Function(_$AuthDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AuthDto
   /// with the given fields replaced by the non-null parameter values.
@@ -126,30 +134,33 @@ class __$$AuthDtoImplCopyWithImpl<$Res>
     Object? refreshToken = null,
     Object? profile = null,
   }) {
-    return _then(_$AuthDtoImpl(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-      refreshToken: null == refreshToken
-          ? _value.refreshToken
-          : refreshToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      profile: null == profile
-          ? _value.profile
-          : profile // ignore: cast_nullable_to_non_nullable
-              as ProfileDto,
-    ));
+    return _then(
+      _$AuthDtoImpl(
+        token: null == token
+            ? _value.token
+            : token // ignore: cast_nullable_to_non_nullable
+                  as String,
+        refreshToken: null == refreshToken
+            ? _value.refreshToken
+            : refreshToken // ignore: cast_nullable_to_non_nullable
+                  as String,
+        profile: null == profile
+            ? _value.profile
+            : profile // ignore: cast_nullable_to_non_nullable
+                  as ProfileDto,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$AuthDtoImpl implements _AuthDto {
-  const _$AuthDtoImpl(
-      {required this.token,
-      @JsonKey(name: 'refresh_token') required this.refreshToken,
-      required this.profile});
+  const _$AuthDtoImpl({
+    required this.token,
+    @JsonKey(name: 'refresh_token') required this.refreshToken,
+    required this.profile,
+  });
 
   factory _$AuthDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthDtoImplFromJson(json);
@@ -192,17 +203,16 @@ class _$AuthDtoImpl implements _AuthDto {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AuthDtoImplToJson(
-      this,
-    );
+    return _$$AuthDtoImplToJson(this);
   }
 }
 
 abstract class _AuthDto implements AuthDto {
-  const factory _AuthDto(
-      {required final String token,
-      @JsonKey(name: 'refresh_token') required final String refreshToken,
-      required final ProfileDto profile}) = _$AuthDtoImpl;
+  const factory _AuthDto({
+    required final String token,
+    @JsonKey(name: 'refresh_token') required final String refreshToken,
+    required final ProfileDto profile,
+  }) = _$AuthDtoImpl;
 
   factory _AuthDto.fromJson(Map<String, dynamic> json) = _$AuthDtoImpl.fromJson;
 

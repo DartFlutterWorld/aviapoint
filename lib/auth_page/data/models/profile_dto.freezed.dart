@@ -12,7 +12,8 @@ part of 'profile_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) {
   return _ProfileDto.fromJson(json);
@@ -38,8 +39,9 @@ mixin _$ProfileDto {
 /// @nodoc
 abstract class $ProfileDtoCopyWith<$Res> {
   factory $ProfileDtoCopyWith(
-          ProfileDto value, $Res Function(ProfileDto) then) =
-      _$ProfileDtoCopyWithImpl<$Res, ProfileDto>;
+    ProfileDto value,
+    $Res Function(ProfileDto) then,
+  ) = _$ProfileDtoCopyWithImpl<$Res, ProfileDto>;
   @useResult
   $Res call({String phone, String? email, String? firstName, String? lastName});
 }
@@ -64,24 +66,27 @@ class _$ProfileDtoCopyWithImpl<$Res, $Val extends ProfileDto>
     Object? firstName = freezed,
     Object? lastName = freezed,
   }) {
-    return _then(_value.copyWith(
-      phone: null == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      firstName: freezed == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: freezed == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            phone: null == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                      as String,
+            email: freezed == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            firstName: freezed == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            lastName: freezed == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -89,8 +94,9 @@ class _$ProfileDtoCopyWithImpl<$Res, $Val extends ProfileDto>
 abstract class _$$ProfileDtoImplCopyWith<$Res>
     implements $ProfileDtoCopyWith<$Res> {
   factory _$$ProfileDtoImplCopyWith(
-          _$ProfileDtoImpl value, $Res Function(_$ProfileDtoImpl) then) =
-      __$$ProfileDtoImplCopyWithImpl<$Res>;
+    _$ProfileDtoImpl value,
+    $Res Function(_$ProfileDtoImpl) then,
+  ) = __$$ProfileDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String phone, String? email, String? firstName, String? lastName});
@@ -101,8 +107,9 @@ class __$$ProfileDtoImplCopyWithImpl<$Res>
     extends _$ProfileDtoCopyWithImpl<$Res, _$ProfileDtoImpl>
     implements _$$ProfileDtoImplCopyWith<$Res> {
   __$$ProfileDtoImplCopyWithImpl(
-      _$ProfileDtoImpl _value, $Res Function(_$ProfileDtoImpl) _then)
-      : super(_value, _then);
+    _$ProfileDtoImpl _value,
+    $Res Function(_$ProfileDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileDto
   /// with the given fields replaced by the non-null parameter values.
@@ -114,32 +121,38 @@ class __$$ProfileDtoImplCopyWithImpl<$Res>
     Object? firstName = freezed,
     Object? lastName = freezed,
   }) {
-    return _then(_$ProfileDtoImpl(
-      phone: null == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      firstName: freezed == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: freezed == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ProfileDtoImpl(
+        phone: null == phone
+            ? _value.phone
+            : phone // ignore: cast_nullable_to_non_nullable
+                  as String,
+        email: freezed == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        firstName: freezed == firstName
+            ? _value.firstName
+            : firstName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        lastName: freezed == lastName
+            ? _value.lastName
+            : lastName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ProfileDtoImpl implements _ProfileDto {
-  const _$ProfileDtoImpl(
-      {required this.phone, this.email, this.firstName, this.lastName});
+  const _$ProfileDtoImpl({
+    required this.phone,
+    this.email,
+    this.firstName,
+    this.lastName,
+  });
 
   factory _$ProfileDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileDtoImplFromJson(json);
@@ -186,18 +199,17 @@ class _$ProfileDtoImpl implements _ProfileDto {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProfileDtoImplToJson(
-      this,
-    );
+    return _$$ProfileDtoImplToJson(this);
   }
 }
 
 abstract class _ProfileDto implements ProfileDto {
-  const factory _ProfileDto(
-      {required final String phone,
-      final String? email,
-      final String? firstName,
-      final String? lastName}) = _$ProfileDtoImpl;
+  const factory _ProfileDto({
+    required final String phone,
+    final String? email,
+    final String? firstName,
+    final String? lastName,
+  }) = _$ProfileDtoImpl;
 
   factory _ProfileDto.fromJson(Map<String, dynamic> json) =
       _$ProfileDtoImpl.fromJson;

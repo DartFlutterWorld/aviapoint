@@ -12,54 +12,50 @@ part of 'type_sertificates_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$TypeSertificatesEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) =>
+  TResult when<TResult extends Object?>({required TResult Function() get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) =>
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetTypeSertificatesEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetTypeSertificatesEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetTypeSertificatesEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TypeSertificatesEventCopyWith<$Res> {
-  factory $TypeSertificatesEventCopyWith(TypeSertificatesEvent value,
-          $Res Function(TypeSertificatesEvent) then) =
-      _$TypeSertificatesEventCopyWithImpl<$Res, TypeSertificatesEvent>;
+  factory $TypeSertificatesEventCopyWith(
+    TypeSertificatesEvent value,
+    $Res Function(TypeSertificatesEvent) then,
+  ) = _$TypeSertificatesEventCopyWithImpl<$Res, TypeSertificatesEvent>;
 }
 
 /// @nodoc
-class _$TypeSertificatesEventCopyWithImpl<$Res,
-        $Val extends TypeSertificatesEvent>
+class _$TypeSertificatesEventCopyWithImpl<
+  $Res,
+  $Val extends TypeSertificatesEvent
+>
     implements $TypeSertificatesEventCopyWith<$Res> {
   _$TypeSertificatesEventCopyWithImpl(this._value, this._then);
 
@@ -75,20 +71,23 @@ class _$TypeSertificatesEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetTypeSertificatesEventImplCopyWith<$Res> {
   factory _$$GetTypeSertificatesEventImplCopyWith(
-          _$GetTypeSertificatesEventImpl value,
-          $Res Function(_$GetTypeSertificatesEventImpl) then) =
-      __$$GetTypeSertificatesEventImplCopyWithImpl<$Res>;
+    _$GetTypeSertificatesEventImpl value,
+    $Res Function(_$GetTypeSertificatesEventImpl) then,
+  ) = __$$GetTypeSertificatesEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetTypeSertificatesEventImplCopyWithImpl<$Res>
-    extends _$TypeSertificatesEventCopyWithImpl<$Res,
-        _$GetTypeSertificatesEventImpl>
+    extends
+        _$TypeSertificatesEventCopyWithImpl<
+          $Res,
+          _$GetTypeSertificatesEventImpl
+        >
     implements _$$GetTypeSertificatesEventImplCopyWith<$Res> {
   __$$GetTypeSertificatesEventImplCopyWithImpl(
-      _$GetTypeSertificatesEventImpl _value,
-      $Res Function(_$GetTypeSertificatesEventImpl) _then)
-      : super(_value, _then);
+    _$GetTypeSertificatesEventImpl _value,
+    $Res Function(_$GetTypeSertificatesEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TypeSertificatesEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -116,17 +115,13 @@ class _$GetTypeSertificatesEventImpl extends GetTypeSertificatesEvent {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) {
+  TResult when<TResult extends Object?>({required TResult Function() get}) {
     return get();
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) {
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) {
     return get?.call();
   }
 
@@ -181,74 +176,78 @@ mixin _$TypeSertificatesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<TypeSertificatesEntity> typeSertificates)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<TypeSertificatesEntity> typeSertificates)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<TypeSertificatesEntity> typeSertificates)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingTypeSertificatesState value) loading,
     required TResult Function(ErrorTypeSertificatesState value) error,
     required TResult Function(SuccessTypeSertificatesState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingTypeSertificatesState value)? loading,
     TResult? Function(ErrorTypeSertificatesState value)? error,
     TResult? Function(SuccessTypeSertificatesState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingTypeSertificatesState value)? loading,
     TResult Function(ErrorTypeSertificatesState value)? error,
     TResult Function(SuccessTypeSertificatesState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TypeSertificatesStateCopyWith<$Res> {
-  factory $TypeSertificatesStateCopyWith(TypeSertificatesState value,
-          $Res Function(TypeSertificatesState) then) =
-      _$TypeSertificatesStateCopyWithImpl<$Res, TypeSertificatesState>;
+  factory $TypeSertificatesStateCopyWith(
+    TypeSertificatesState value,
+    $Res Function(TypeSertificatesState) then,
+  ) = _$TypeSertificatesStateCopyWithImpl<$Res, TypeSertificatesState>;
 }
 
 /// @nodoc
-class _$TypeSertificatesStateCopyWithImpl<$Res,
-        $Val extends TypeSertificatesState>
+class _$TypeSertificatesStateCopyWithImpl<
+  $Res,
+  $Val extends TypeSertificatesState
+>
     implements $TypeSertificatesStateCopyWith<$Res> {
   _$TypeSertificatesStateCopyWithImpl(this._value, this._then);
 
@@ -264,20 +263,23 @@ class _$TypeSertificatesStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingTypeSertificatesStateImplCopyWith<$Res> {
   factory _$$LoadingTypeSertificatesStateImplCopyWith(
-          _$LoadingTypeSertificatesStateImpl value,
-          $Res Function(_$LoadingTypeSertificatesStateImpl) then) =
-      __$$LoadingTypeSertificatesStateImplCopyWithImpl<$Res>;
+    _$LoadingTypeSertificatesStateImpl value,
+    $Res Function(_$LoadingTypeSertificatesStateImpl) then,
+  ) = __$$LoadingTypeSertificatesStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingTypeSertificatesStateImplCopyWithImpl<$Res>
-    extends _$TypeSertificatesStateCopyWithImpl<$Res,
-        _$LoadingTypeSertificatesStateImpl>
+    extends
+        _$TypeSertificatesStateCopyWithImpl<
+          $Res,
+          _$LoadingTypeSertificatesStateImpl
+        >
     implements _$$LoadingTypeSertificatesStateImplCopyWith<$Res> {
   __$$LoadingTypeSertificatesStateImplCopyWithImpl(
-      _$LoadingTypeSertificatesStateImpl _value,
-      $Res Function(_$LoadingTypeSertificatesStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingTypeSertificatesStateImpl _value,
+    $Res Function(_$LoadingTypeSertificatesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TypeSertificatesState
   /// with the given fields replaced by the non-null parameter values.
@@ -307,11 +309,16 @@ class _$LoadingTypeSertificatesStateImpl extends LoadingTypeSertificatesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<TypeSertificatesEntity> typeSertificates)
-        success,
+    success,
   }) {
     return loading();
   }
@@ -321,12 +328,13 @@ class _$LoadingTypeSertificatesStateImpl extends LoadingTypeSertificatesState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<TypeSertificatesEntity> typeSertificates)? success,
   }) {
     return loading?.call();
@@ -337,12 +345,13 @@ class _$LoadingTypeSertificatesStateImpl extends LoadingTypeSertificatesState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<TypeSertificatesEntity> typeSertificates)? success,
     required TResult orElse(),
   }) {
@@ -396,27 +405,31 @@ abstract class LoadingTypeSertificatesState extends TypeSertificatesState {
 /// @nodoc
 abstract class _$$ErrorTypeSertificatesStateImplCopyWith<$Res> {
   factory _$$ErrorTypeSertificatesStateImplCopyWith(
-          _$ErrorTypeSertificatesStateImpl value,
-          $Res Function(_$ErrorTypeSertificatesStateImpl) then) =
-      __$$ErrorTypeSertificatesStateImplCopyWithImpl<$Res>;
+    _$ErrorTypeSertificatesStateImpl value,
+    $Res Function(_$ErrorTypeSertificatesStateImpl) then,
+  ) = __$$ErrorTypeSertificatesStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorTypeSertificatesStateImplCopyWithImpl<$Res>
-    extends _$TypeSertificatesStateCopyWithImpl<$Res,
-        _$ErrorTypeSertificatesStateImpl>
+    extends
+        _$TypeSertificatesStateCopyWithImpl<
+          $Res,
+          _$ErrorTypeSertificatesStateImpl
+        >
     implements _$$ErrorTypeSertificatesStateImplCopyWith<$Res> {
   __$$ErrorTypeSertificatesStateImplCopyWithImpl(
-      _$ErrorTypeSertificatesStateImpl _value,
-      $Res Function(_$ErrorTypeSertificatesStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorTypeSertificatesStateImpl _value,
+    $Res Function(_$ErrorTypeSertificatesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TypeSertificatesState
   /// with the given fields replaced by the non-null parameter values.
@@ -429,41 +442,43 @@ class __$$ErrorTypeSertificatesStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorTypeSertificatesStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorTypeSertificatesStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorTypeSertificatesStateImpl extends ErrorTypeSertificatesState {
-  const _$ErrorTypeSertificatesStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorTypeSertificatesStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -499,8 +514,14 @@ class _$ErrorTypeSertificatesStateImpl extends ErrorTypeSertificatesState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of TypeSertificatesState
   /// with the given fields replaced by the non-null parameter values.
@@ -508,21 +529,33 @@ class _$ErrorTypeSertificatesStateImpl extends ErrorTypeSertificatesState {
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorTypeSertificatesStateImplCopyWith<_$ErrorTypeSertificatesStateImpl>
-      get copyWith => __$$ErrorTypeSertificatesStateImplCopyWithImpl<
-          _$ErrorTypeSertificatesStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$ErrorTypeSertificatesStateImplCopyWithImpl<
+        _$ErrorTypeSertificatesStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<TypeSertificatesEntity> typeSertificates)
-        success,
+    success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -530,16 +563,22 @@ class _$ErrorTypeSertificatesStateImpl extends ErrorTypeSertificatesState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<TypeSertificatesEntity> typeSertificates)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -547,18 +586,24 @@ class _$ErrorTypeSertificatesStateImpl extends ErrorTypeSertificatesState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<TypeSertificatesEntity> typeSertificates)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -599,12 +644,13 @@ class _$ErrorTypeSertificatesStateImpl extends ErrorTypeSertificatesState {
 }
 
 abstract class ErrorTypeSertificatesState extends TypeSertificatesState {
-  const factory ErrorTypeSertificatesState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorTypeSertificatesStateImpl;
+  const factory ErrorTypeSertificatesState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorTypeSertificatesStateImpl;
   const ErrorTypeSertificatesState._() : super._();
 
   String? get errorFromApi;
@@ -617,52 +663,55 @@ abstract class ErrorTypeSertificatesState extends TypeSertificatesState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorTypeSertificatesStateImplCopyWith<_$ErrorTypeSertificatesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessTypeSertificatesStateImplCopyWith<$Res> {
   factory _$$SuccessTypeSertificatesStateImplCopyWith(
-          _$SuccessTypeSertificatesStateImpl value,
-          $Res Function(_$SuccessTypeSertificatesStateImpl) then) =
-      __$$SuccessTypeSertificatesStateImplCopyWithImpl<$Res>;
+    _$SuccessTypeSertificatesStateImpl value,
+    $Res Function(_$SuccessTypeSertificatesStateImpl) then,
+  ) = __$$SuccessTypeSertificatesStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<TypeSertificatesEntity> typeSertificates});
 }
 
 /// @nodoc
 class __$$SuccessTypeSertificatesStateImplCopyWithImpl<$Res>
-    extends _$TypeSertificatesStateCopyWithImpl<$Res,
-        _$SuccessTypeSertificatesStateImpl>
+    extends
+        _$TypeSertificatesStateCopyWithImpl<
+          $Res,
+          _$SuccessTypeSertificatesStateImpl
+        >
     implements _$$SuccessTypeSertificatesStateImplCopyWith<$Res> {
   __$$SuccessTypeSertificatesStateImplCopyWithImpl(
-      _$SuccessTypeSertificatesStateImpl _value,
-      $Res Function(_$SuccessTypeSertificatesStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessTypeSertificatesStateImpl _value,
+    $Res Function(_$SuccessTypeSertificatesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TypeSertificatesState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? typeSertificates = null,
-  }) {
-    return _then(_$SuccessTypeSertificatesStateImpl(
-      typeSertificates: null == typeSertificates
-          ? _value._typeSertificates
-          : typeSertificates // ignore: cast_nullable_to_non_nullable
-              as List<TypeSertificatesEntity>,
-    ));
+  $Res call({Object? typeSertificates = null}) {
+    return _then(
+      _$SuccessTypeSertificatesStateImpl(
+        typeSertificates: null == typeSertificates
+            ? _value._typeSertificates
+            : typeSertificates // ignore: cast_nullable_to_non_nullable
+                  as List<TypeSertificatesEntity>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$SuccessTypeSertificatesStateImpl extends SuccessTypeSertificatesState {
-  const _$SuccessTypeSertificatesStateImpl(
-      {required final List<TypeSertificatesEntity> typeSertificates})
-      : _typeSertificates = typeSertificates,
-        super._();
+  const _$SuccessTypeSertificatesStateImpl({
+    required final List<TypeSertificatesEntity> typeSertificates,
+  }) : _typeSertificates = typeSertificates,
+       super._();
 
   final List<TypeSertificatesEntity> _typeSertificates;
   @override
@@ -683,13 +732,17 @@ class _$SuccessTypeSertificatesStateImpl extends SuccessTypeSertificatesState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessTypeSertificatesStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._typeSertificates, _typeSertificates));
+            const DeepCollectionEquality().equals(
+              other._typeSertificates,
+              _typeSertificates,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_typeSertificates));
+    runtimeType,
+    const DeepCollectionEquality().hash(_typeSertificates),
+  );
 
   /// Create a copy of TypeSertificatesState
   /// with the given fields replaced by the non-null parameter values.
@@ -697,19 +750,27 @@ class _$SuccessTypeSertificatesStateImpl extends SuccessTypeSertificatesState {
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessTypeSertificatesStateImplCopyWith<
-          _$SuccessTypeSertificatesStateImpl>
-      get copyWith => __$$SuccessTypeSertificatesStateImplCopyWithImpl<
-          _$SuccessTypeSertificatesStateImpl>(this, _$identity);
+    _$SuccessTypeSertificatesStateImpl
+  >
+  get copyWith =>
+      __$$SuccessTypeSertificatesStateImplCopyWithImpl<
+        _$SuccessTypeSertificatesStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<TypeSertificatesEntity> typeSertificates)
-        success,
+    success,
   }) {
     return success(typeSertificates);
   }
@@ -719,12 +780,13 @@ class _$SuccessTypeSertificatesStateImpl extends SuccessTypeSertificatesState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<TypeSertificatesEntity> typeSertificates)? success,
   }) {
     return success?.call(typeSertificates);
@@ -735,12 +797,13 @@ class _$SuccessTypeSertificatesStateImpl extends SuccessTypeSertificatesState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<TypeSertificatesEntity> typeSertificates)? success,
     required TResult orElse(),
   }) {
@@ -786,9 +849,9 @@ class _$SuccessTypeSertificatesStateImpl extends SuccessTypeSertificatesState {
 }
 
 abstract class SuccessTypeSertificatesState extends TypeSertificatesState {
-  const factory SuccessTypeSertificatesState(
-          {required final List<TypeSertificatesEntity> typeSertificates}) =
-      _$SuccessTypeSertificatesStateImpl;
+  const factory SuccessTypeSertificatesState({
+    required final List<TypeSertificatesEntity> typeSertificates,
+  }) = _$SuccessTypeSertificatesStateImpl;
   const SuccessTypeSertificatesState._() : super._();
 
   List<TypeSertificatesEntity> get typeSertificates;
@@ -797,6 +860,7 @@ abstract class SuccessTypeSertificatesState extends TypeSertificatesState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessTypeSertificatesStateImplCopyWith<
-          _$SuccessTypeSertificatesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessTypeSertificatesStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

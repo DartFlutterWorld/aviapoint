@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:aviapoint/auth_page/data/tokens/token_storage.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
 import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
@@ -6,6 +8,7 @@ import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -16,18 +19,12 @@ String bigFirstSymbol(String input) {
   return input[0].toUpperCase() + input.substring(1).toLowerCase();
 }
 
-Future<void> showLogin(
-  BuildContext context, {
-  GlobalKey<ScaffoldState>? scaffoldKey,
-  final void Function()? callback,
-}) async {
+Future<void> showLogin(BuildContext context, {GlobalKey<ScaffoldState>? scaffoldKey, final void Function()? callback}) async {
   final bool? result = await showCupertinoModalBottomSheet<bool>(
     barrierColor: Colors.black12,
     topRadius: const Radius.circular(20),
     context: context,
-    builder: (context) => PhoneAuthScreen(
-      callback: callback,
-    ),
+    builder: (context) => PhoneAuthScreen(callback: callback),
   );
   if (result == true) {
     if (callback != null) {
@@ -63,15 +60,24 @@ void logOut(BuildContext context) async {
   }
 }
 
-final emptyQuestion = QuestionWithAnswersEntity(
-  answers: List.empty(),
-  questionId: 0,
-  questionText: '',
-);
+final emptyQuestion = QuestionWithAnswersEntity(answers: List.empty(), questionId: 0, questionText: '');
 
 enum TestMode { training, standart }
 
 enum Screens {
   learning, // обучение
   selectTopicsScreen, // Выбор сертификата и тем в боттом шите тестирования
+}
+
+class IntListJson extends TypeConverter<List<int>, String> {
+  const IntListJson();
+  @override
+  List<int> fromSql(String fromDb) {
+    if (fromDb.isEmpty) return const [];
+    final raw = jsonDecode(fromDb);
+    return (raw as List).map((e) => (e as num).toInt()).toList();
+  }
+
+  @override
+  String toSql(List<int> value) => jsonEncode(value);
 }

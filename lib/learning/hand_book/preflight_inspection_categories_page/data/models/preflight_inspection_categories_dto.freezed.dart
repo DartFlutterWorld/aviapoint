@@ -12,10 +12,12 @@ part of 'preflight_inspection_categories_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PreflightInspectionCategoriesDto _$PreflightInspectionCategoriesDtoFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _PreflightInspectionCategoriesDto.fromJson(json);
 }
 
@@ -35,29 +37,35 @@ mixin _$PreflightInspectionCategoriesDto {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $PreflightInspectionCategoriesDtoCopyWith<PreflightInspectionCategoriesDto>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PreflightInspectionCategoriesDtoCopyWith<$Res> {
   factory $PreflightInspectionCategoriesDtoCopyWith(
-          PreflightInspectionCategoriesDto value,
-          $Res Function(PreflightInspectionCategoriesDto) then) =
-      _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
-          PreflightInspectionCategoriesDto>;
+    PreflightInspectionCategoriesDto value,
+    $Res Function(PreflightInspectionCategoriesDto) then,
+  ) =
+      _$PreflightInspectionCategoriesDtoCopyWithImpl<
+        $Res,
+        PreflightInspectionCategoriesDto
+      >;
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String subTitle,
-      int mainCategoryId,
-      String titleEng,
-      String picture});
+  $Res call({
+    int id,
+    String title,
+    String subTitle,
+    int mainCategoryId,
+    String titleEng,
+    String picture,
+  });
 }
 
 /// @nodoc
-class _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
-        $Val extends PreflightInspectionCategoriesDto>
+class _$PreflightInspectionCategoriesDtoCopyWithImpl<
+  $Res,
+  $Val extends PreflightInspectionCategoriesDto
+>
     implements $PreflightInspectionCategoriesDtoCopyWith<$Res> {
   _$PreflightInspectionCategoriesDtoCopyWithImpl(this._value, this._then);
 
@@ -78,32 +86,35 @@ class _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
     Object? titleEng = null,
     Object? picture = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            subTitle: null == subTitle
+                ? _value.subTitle
+                : subTitle // ignore: cast_nullable_to_non_nullable
+                      as String,
+            mainCategoryId: null == mainCategoryId
+                ? _value.mainCategoryId
+                : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            titleEng: null == titleEng
+                ? _value.titleEng
+                : titleEng // ignore: cast_nullable_to_non_nullable
+                      as String,
+            picture: null == picture
+                ? _value.picture
+                : picture // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -111,29 +122,33 @@ class _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
 abstract class _$$PreflightInspectionCategoriesDtoImplCopyWith<$Res>
     implements $PreflightInspectionCategoriesDtoCopyWith<$Res> {
   factory _$$PreflightInspectionCategoriesDtoImplCopyWith(
-          _$PreflightInspectionCategoriesDtoImpl value,
-          $Res Function(_$PreflightInspectionCategoriesDtoImpl) then) =
-      __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>;
+    _$PreflightInspectionCategoriesDtoImpl value,
+    $Res Function(_$PreflightInspectionCategoriesDtoImpl) then,
+  ) = __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String subTitle,
-      int mainCategoryId,
-      String titleEng,
-      String picture});
+  $Res call({
+    int id,
+    String title,
+    String subTitle,
+    int mainCategoryId,
+    String titleEng,
+    String picture,
+  });
 }
 
 /// @nodoc
 class __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCategoriesDtoCopyWithImpl<$Res,
-        _$PreflightInspectionCategoriesDtoImpl>
+    extends
+        _$PreflightInspectionCategoriesDtoCopyWithImpl<
+          $Res,
+          _$PreflightInspectionCategoriesDtoImpl
+        >
     implements _$$PreflightInspectionCategoriesDtoImplCopyWith<$Res> {
   __$$PreflightInspectionCategoriesDtoImplCopyWithImpl(
-      _$PreflightInspectionCategoriesDtoImpl _value,
-      $Res Function(_$PreflightInspectionCategoriesDtoImpl) _then)
-      : super(_value, _then);
+    _$PreflightInspectionCategoriesDtoImpl _value,
+    $Res Function(_$PreflightInspectionCategoriesDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -147,32 +162,34 @@ class __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>
     Object? titleEng = null,
     Object? picture = null,
   }) {
-    return _then(_$PreflightInspectionCategoriesDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$PreflightInspectionCategoriesDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        subTitle: null == subTitle
+            ? _value.subTitle
+            : subTitle // ignore: cast_nullable_to_non_nullable
+                  as String,
+        mainCategoryId: null == mainCategoryId
+            ? _value.mainCategoryId
+            : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        titleEng: null == titleEng
+            ? _value.titleEng
+            : titleEng // ignore: cast_nullable_to_non_nullable
+                  as String,
+        picture: null == picture
+            ? _value.picture
+            : picture // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -181,17 +198,18 @@ class __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$PreflightInspectionCategoriesDtoImpl
     implements _PreflightInspectionCategoriesDto {
-  const _$PreflightInspectionCategoriesDtoImpl(
-      {required this.id,
-      required this.title,
-      required this.subTitle,
-      required this.mainCategoryId,
-      required this.titleEng,
-      required this.picture});
+  const _$PreflightInspectionCategoriesDtoImpl({
+    required this.id,
+    required this.title,
+    required this.subTitle,
+    required this.mainCategoryId,
+    required this.titleEng,
+    required this.picture,
+  });
 
   factory _$PreflightInspectionCategoriesDtoImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$PreflightInspectionCategoriesDtoImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$PreflightInspectionCategoriesDtoImplFromJson(json);
 
   @override
   final int id;
@@ -230,7 +248,14 @@ class _$PreflightInspectionCategoriesDtoImpl
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, title, subTitle, mainCategoryId, titleEng, picture);
+    runtimeType,
+    id,
+    title,
+    subTitle,
+    mainCategoryId,
+    titleEng,
+    picture,
+  );
 
   /// Create a copy of PreflightInspectionCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -238,31 +263,33 @@ class _$PreflightInspectionCategoriesDtoImpl
   @override
   @pragma('vm:prefer-inline')
   _$$PreflightInspectionCategoriesDtoImplCopyWith<
-          _$PreflightInspectionCategoriesDtoImpl>
-      get copyWith => __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<
-          _$PreflightInspectionCategoriesDtoImpl>(this, _$identity);
+    _$PreflightInspectionCategoriesDtoImpl
+  >
+  get copyWith =>
+      __$$PreflightInspectionCategoriesDtoImplCopyWithImpl<
+        _$PreflightInspectionCategoriesDtoImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PreflightInspectionCategoriesDtoImplToJson(
-      this,
-    );
+    return _$$PreflightInspectionCategoriesDtoImplToJson(this);
   }
 }
 
 abstract class _PreflightInspectionCategoriesDto
     implements PreflightInspectionCategoriesDto {
-  const factory _PreflightInspectionCategoriesDto(
-      {required final int id,
-      required final String title,
-      required final String subTitle,
-      required final int mainCategoryId,
-      required final String titleEng,
-      required final String picture}) = _$PreflightInspectionCategoriesDtoImpl;
+  const factory _PreflightInspectionCategoriesDto({
+    required final int id,
+    required final String title,
+    required final String subTitle,
+    required final int mainCategoryId,
+    required final String titleEng,
+    required final String picture,
+  }) = _$PreflightInspectionCategoriesDtoImpl;
 
   factory _PreflightInspectionCategoriesDto.fromJson(
-          Map<String, dynamic> json) =
-      _$PreflightInspectionCategoriesDtoImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$PreflightInspectionCategoriesDtoImpl.fromJson;
 
   @override
   int get id;
@@ -282,6 +309,7 @@ abstract class _PreflightInspectionCategoriesDto
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PreflightInspectionCategoriesDtoImplCopyWith<
-          _$PreflightInspectionCategoriesDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$PreflightInspectionCategoriesDtoImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

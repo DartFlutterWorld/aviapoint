@@ -12,7 +12,8 @@ part of 'normal_check_list_by_category_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$NormalCheckListByCategoryEvent {
@@ -20,55 +21,54 @@ mixin _$NormalCheckListByCategoryEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(String normalCategoryId) get,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String normalCategoryId)? get,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String normalCategoryId)? get,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetNormalCheckListByCategoryEvent value) get,
     required TResult Function(InitialNormalCheckListByCategoryEvent value)
-        initial,
-  }) =>
-      throw _privateConstructorUsedError;
+    initial,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetNormalCheckListByCategoryEvent value)? get,
     TResult? Function(InitialNormalCheckListByCategoryEvent value)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetNormalCheckListByCategoryEvent value)? get,
     TResult Function(InitialNormalCheckListByCategoryEvent value)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $NormalCheckListByCategoryEventCopyWith<$Res> {
   factory $NormalCheckListByCategoryEventCopyWith(
-          NormalCheckListByCategoryEvent value,
-          $Res Function(NormalCheckListByCategoryEvent) then) =
-      _$NormalCheckListByCategoryEventCopyWithImpl<$Res,
-          NormalCheckListByCategoryEvent>;
+    NormalCheckListByCategoryEvent value,
+    $Res Function(NormalCheckListByCategoryEvent) then,
+  ) =
+      _$NormalCheckListByCategoryEventCopyWithImpl<
+        $Res,
+        NormalCheckListByCategoryEvent
+      >;
 }
 
 /// @nodoc
-class _$NormalCheckListByCategoryEventCopyWithImpl<$Res,
-        $Val extends NormalCheckListByCategoryEvent>
+class _$NormalCheckListByCategoryEventCopyWithImpl<
+  $Res,
+  $Val extends NormalCheckListByCategoryEvent
+>
     implements $NormalCheckListByCategoryEventCopyWith<$Res> {
   _$NormalCheckListByCategoryEventCopyWithImpl(this._value, this._then);
 
@@ -84,36 +84,39 @@ class _$NormalCheckListByCategoryEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetNormalCheckListByCategoryEventImplCopyWith<$Res> {
   factory _$$GetNormalCheckListByCategoryEventImplCopyWith(
-          _$GetNormalCheckListByCategoryEventImpl value,
-          $Res Function(_$GetNormalCheckListByCategoryEventImpl) then) =
-      __$$GetNormalCheckListByCategoryEventImplCopyWithImpl<$Res>;
+    _$GetNormalCheckListByCategoryEventImpl value,
+    $Res Function(_$GetNormalCheckListByCategoryEventImpl) then,
+  ) = __$$GetNormalCheckListByCategoryEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String normalCategoryId});
 }
 
 /// @nodoc
 class __$$GetNormalCheckListByCategoryEventImplCopyWithImpl<$Res>
-    extends _$NormalCheckListByCategoryEventCopyWithImpl<$Res,
-        _$GetNormalCheckListByCategoryEventImpl>
+    extends
+        _$NormalCheckListByCategoryEventCopyWithImpl<
+          $Res,
+          _$GetNormalCheckListByCategoryEventImpl
+        >
     implements _$$GetNormalCheckListByCategoryEventImplCopyWith<$Res> {
   __$$GetNormalCheckListByCategoryEventImplCopyWithImpl(
-      _$GetNormalCheckListByCategoryEventImpl _value,
-      $Res Function(_$GetNormalCheckListByCategoryEventImpl) _then)
-      : super(_value, _then);
+    _$GetNormalCheckListByCategoryEventImpl _value,
+    $Res Function(_$GetNormalCheckListByCategoryEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListByCategoryEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? normalCategoryId = null,
-  }) {
-    return _then(_$GetNormalCheckListByCategoryEventImpl(
-      null == normalCategoryId
-          ? _value.normalCategoryId
-          : normalCategoryId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? normalCategoryId = null}) {
+    return _then(
+      _$GetNormalCheckListByCategoryEventImpl(
+        null == normalCategoryId
+            ? _value.normalCategoryId
+            : normalCategoryId // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -122,7 +125,7 @@ class __$$GetNormalCheckListByCategoryEventImplCopyWithImpl<$Res>
 class _$GetNormalCheckListByCategoryEventImpl
     extends GetNormalCheckListByCategoryEvent {
   const _$GetNormalCheckListByCategoryEventImpl(this.normalCategoryId)
-      : super._();
+    : super._();
 
   @override
   final String normalCategoryId;
@@ -150,9 +153,12 @@ class _$GetNormalCheckListByCategoryEventImpl
   @override
   @pragma('vm:prefer-inline')
   _$$GetNormalCheckListByCategoryEventImplCopyWith<
-          _$GetNormalCheckListByCategoryEventImpl>
-      get copyWith => __$$GetNormalCheckListByCategoryEventImplCopyWithImpl<
-          _$GetNormalCheckListByCategoryEventImpl>(this, _$identity);
+    _$GetNormalCheckListByCategoryEventImpl
+  >
+  get copyWith =>
+      __$$GetNormalCheckListByCategoryEventImplCopyWithImpl<
+        _$GetNormalCheckListByCategoryEventImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -190,7 +196,7 @@ class _$GetNormalCheckListByCategoryEventImpl
   TResult map<TResult extends Object?>({
     required TResult Function(GetNormalCheckListByCategoryEvent value) get,
     required TResult Function(InitialNormalCheckListByCategoryEvent value)
-        initial,
+    initial,
   }) {
     return get(this);
   }
@@ -221,7 +227,8 @@ class _$GetNormalCheckListByCategoryEventImpl
 abstract class GetNormalCheckListByCategoryEvent
     extends NormalCheckListByCategoryEvent {
   const factory GetNormalCheckListByCategoryEvent(
-      final String normalCategoryId) = _$GetNormalCheckListByCategoryEventImpl;
+    final String normalCategoryId,
+  ) = _$GetNormalCheckListByCategoryEventImpl;
   const GetNormalCheckListByCategoryEvent._() : super._();
 
   String get normalCategoryId;
@@ -230,27 +237,31 @@ abstract class GetNormalCheckListByCategoryEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetNormalCheckListByCategoryEventImplCopyWith<
-          _$GetNormalCheckListByCategoryEventImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$GetNormalCheckListByCategoryEventImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$InitialNormalCheckListByCategoryEventImplCopyWith<$Res> {
   factory _$$InitialNormalCheckListByCategoryEventImplCopyWith(
-          _$InitialNormalCheckListByCategoryEventImpl value,
-          $Res Function(_$InitialNormalCheckListByCategoryEventImpl) then) =
-      __$$InitialNormalCheckListByCategoryEventImplCopyWithImpl<$Res>;
+    _$InitialNormalCheckListByCategoryEventImpl value,
+    $Res Function(_$InitialNormalCheckListByCategoryEventImpl) then,
+  ) = __$$InitialNormalCheckListByCategoryEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$InitialNormalCheckListByCategoryEventImplCopyWithImpl<$Res>
-    extends _$NormalCheckListByCategoryEventCopyWithImpl<$Res,
-        _$InitialNormalCheckListByCategoryEventImpl>
+    extends
+        _$NormalCheckListByCategoryEventCopyWithImpl<
+          $Res,
+          _$InitialNormalCheckListByCategoryEventImpl
+        >
     implements _$$InitialNormalCheckListByCategoryEventImplCopyWith<$Res> {
   __$$InitialNormalCheckListByCategoryEventImplCopyWithImpl(
-      _$InitialNormalCheckListByCategoryEventImpl _value,
-      $Res Function(_$InitialNormalCheckListByCategoryEventImpl) _then)
-      : super(_value, _then);
+    _$InitialNormalCheckListByCategoryEventImpl _value,
+    $Res Function(_$InitialNormalCheckListByCategoryEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListByCategoryEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -313,7 +324,7 @@ class _$InitialNormalCheckListByCategoryEventImpl
   TResult map<TResult extends Object?>({
     required TResult Function(GetNormalCheckListByCategoryEvent value) get,
     required TResult Function(InitialNormalCheckListByCategoryEvent value)
-        initial,
+    initial,
   }) {
     return initial(this);
   }
@@ -353,67 +364,75 @@ mixin _$NormalCheckListByCategoryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingNormalCheckListByCategoryState value)
-        loading,
+    loading,
     required TResult Function(ErrorNormalCheckListByCategoryState value) error,
     required TResult Function(SuccessNormalCheckListByCategoryState value)
-        success,
+    success,
     required TResult Function(InitialNormalCheckListByCategoryState value)
-        initial,
-  }) =>
-      throw _privateConstructorUsedError;
+    initial,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingNormalCheckListByCategoryState value)? loading,
     TResult? Function(ErrorNormalCheckListByCategoryState value)? error,
     TResult? Function(SuccessNormalCheckListByCategoryState value)? success,
     TResult? Function(InitialNormalCheckListByCategoryState value)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingNormalCheckListByCategoryState value)? loading,
@@ -421,22 +440,26 @@ mixin _$NormalCheckListByCategoryState {
     TResult Function(SuccessNormalCheckListByCategoryState value)? success,
     TResult Function(InitialNormalCheckListByCategoryState value)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $NormalCheckListByCategoryStateCopyWith<$Res> {
   factory $NormalCheckListByCategoryStateCopyWith(
-          NormalCheckListByCategoryState value,
-          $Res Function(NormalCheckListByCategoryState) then) =
-      _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
-          NormalCheckListByCategoryState>;
+    NormalCheckListByCategoryState value,
+    $Res Function(NormalCheckListByCategoryState) then,
+  ) =
+      _$NormalCheckListByCategoryStateCopyWithImpl<
+        $Res,
+        NormalCheckListByCategoryState
+      >;
 }
 
 /// @nodoc
-class _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
-        $Val extends NormalCheckListByCategoryState>
+class _$NormalCheckListByCategoryStateCopyWithImpl<
+  $Res,
+  $Val extends NormalCheckListByCategoryState
+>
     implements $NormalCheckListByCategoryStateCopyWith<$Res> {
   _$NormalCheckListByCategoryStateCopyWithImpl(this._value, this._then);
 
@@ -452,20 +475,23 @@ class _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingNormalCheckListByCategoryStateImplCopyWith<$Res> {
   factory _$$LoadingNormalCheckListByCategoryStateImplCopyWith(
-          _$LoadingNormalCheckListByCategoryStateImpl value,
-          $Res Function(_$LoadingNormalCheckListByCategoryStateImpl) then) =
-      __$$LoadingNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
+    _$LoadingNormalCheckListByCategoryStateImpl value,
+    $Res Function(_$LoadingNormalCheckListByCategoryStateImpl) then,
+  ) = __$$LoadingNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
-        _$LoadingNormalCheckListByCategoryStateImpl>
+    extends
+        _$NormalCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$LoadingNormalCheckListByCategoryStateImpl
+        >
     implements _$$LoadingNormalCheckListByCategoryStateImplCopyWith<$Res> {
   __$$LoadingNormalCheckListByCategoryStateImplCopyWithImpl(
-      _$LoadingNormalCheckListByCategoryStateImpl _value,
-      $Res Function(_$LoadingNormalCheckListByCategoryStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingNormalCheckListByCategoryStateImpl _value,
+    $Res Function(_$LoadingNormalCheckListByCategoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -496,12 +522,19 @@ class _$LoadingNormalCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return loading();
@@ -512,15 +545,18 @@ class _$LoadingNormalCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return loading?.call();
@@ -531,15 +567,18 @@ class _$LoadingNormalCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
@@ -553,12 +592,12 @@ class _$LoadingNormalCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingNormalCheckListByCategoryState value)
-        loading,
+    loading,
     required TResult Function(ErrorNormalCheckListByCategoryState value) error,
     required TResult Function(SuccessNormalCheckListByCategoryState value)
-        success,
+    success,
     required TResult Function(InitialNormalCheckListByCategoryState value)
-        initial,
+    initial,
   }) {
     return loading(this);
   }
@@ -600,27 +639,31 @@ abstract class LoadingNormalCheckListByCategoryState
 /// @nodoc
 abstract class _$$ErrorNormalCheckListByCategoryStateImplCopyWith<$Res> {
   factory _$$ErrorNormalCheckListByCategoryStateImplCopyWith(
-          _$ErrorNormalCheckListByCategoryStateImpl value,
-          $Res Function(_$ErrorNormalCheckListByCategoryStateImpl) then) =
-      __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
+    _$ErrorNormalCheckListByCategoryStateImpl value,
+    $Res Function(_$ErrorNormalCheckListByCategoryStateImpl) then,
+  ) = __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
-        _$ErrorNormalCheckListByCategoryStateImpl>
+    extends
+        _$NormalCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$ErrorNormalCheckListByCategoryStateImpl
+        >
     implements _$$ErrorNormalCheckListByCategoryStateImplCopyWith<$Res> {
   __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl(
-      _$ErrorNormalCheckListByCategoryStateImpl _value,
-      $Res Function(_$ErrorNormalCheckListByCategoryStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorNormalCheckListByCategoryStateImpl _value,
+    $Res Function(_$ErrorNormalCheckListByCategoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -633,28 +676,30 @@ class __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorNormalCheckListByCategoryStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorNormalCheckListByCategoryStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -662,13 +707,13 @@ class __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
 
 class _$ErrorNormalCheckListByCategoryStateImpl
     extends ErrorNormalCheckListByCategoryState {
-  const _$ErrorNormalCheckListByCategoryStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorNormalCheckListByCategoryStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -704,8 +749,14 @@ class _$ErrorNormalCheckListByCategoryStateImpl
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of NormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -713,24 +764,39 @@ class _$ErrorNormalCheckListByCategoryStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorNormalCheckListByCategoryStateImplCopyWith<
-          _$ErrorNormalCheckListByCategoryStateImpl>
-      get copyWith => __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<
-          _$ErrorNormalCheckListByCategoryStateImpl>(this, _$identity);
+    _$ErrorNormalCheckListByCategoryStateImpl
+  >
+  get copyWith =>
+      __$$ErrorNormalCheckListByCategoryStateImplCopyWithImpl<
+        _$ErrorNormalCheckListByCategoryStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -738,19 +804,27 @@ class _$ErrorNormalCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -758,21 +832,29 @@ class _$ErrorNormalCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -781,12 +863,12 @@ class _$ErrorNormalCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingNormalCheckListByCategoryState value)
-        loading,
+    loading,
     required TResult Function(ErrorNormalCheckListByCategoryState value) error,
     required TResult Function(SuccessNormalCheckListByCategoryState value)
-        success,
+    success,
     required TResult Function(InitialNormalCheckListByCategoryState value)
-        initial,
+    initial,
   }) {
     return error(this);
   }
@@ -820,13 +902,13 @@ class _$ErrorNormalCheckListByCategoryStateImpl
 
 abstract class ErrorNormalCheckListByCategoryState
     extends NormalCheckListByCategoryState {
-  const factory ErrorNormalCheckListByCategoryState(
-          {final String? errorFromApi,
-          required final String errorForUser,
-          final String? statusCode,
-          final StackTrace? stackTrace,
-          final String? responseMessage}) =
-      _$ErrorNormalCheckListByCategoryStateImpl;
+  const factory ErrorNormalCheckListByCategoryState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorNormalCheckListByCategoryStateImpl;
   const ErrorNormalCheckListByCategoryState._() : super._();
 
   String? get errorFromApi;
@@ -839,48 +921,51 @@ abstract class ErrorNormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorNormalCheckListByCategoryStateImplCopyWith<
-          _$ErrorNormalCheckListByCategoryStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$ErrorNormalCheckListByCategoryStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessNormalCheckListByCategoryStateImplCopyWith<$Res> {
   factory _$$SuccessNormalCheckListByCategoryStateImplCopyWith(
-          _$SuccessNormalCheckListByCategoryStateImpl value,
-          $Res Function(_$SuccessNormalCheckListByCategoryStateImpl) then) =
-      __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
+    _$SuccessNormalCheckListByCategoryStateImpl value,
+    $Res Function(_$SuccessNormalCheckListByCategoryStateImpl) then,
+  ) = __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<NormalCheckListEntity> normalCheckListByCategory, int index});
 }
 
 /// @nodoc
 class __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
-        _$SuccessNormalCheckListByCategoryStateImpl>
+    extends
+        _$NormalCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$SuccessNormalCheckListByCategoryStateImpl
+        >
     implements _$$SuccessNormalCheckListByCategoryStateImplCopyWith<$Res> {
   __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl(
-      _$SuccessNormalCheckListByCategoryStateImpl _value,
-      $Res Function(_$SuccessNormalCheckListByCategoryStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessNormalCheckListByCategoryStateImpl _value,
+    $Res Function(_$SuccessNormalCheckListByCategoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? normalCheckListByCategory = null,
-    Object? index = null,
-  }) {
-    return _then(_$SuccessNormalCheckListByCategoryStateImpl(
-      normalCheckListByCategory: null == normalCheckListByCategory
-          ? _value._normalCheckListByCategory
-          : normalCheckListByCategory // ignore: cast_nullable_to_non_nullable
-              as List<NormalCheckListEntity>,
-      index: null == index
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? normalCheckListByCategory = null, Object? index = null}) {
+    return _then(
+      _$SuccessNormalCheckListByCategoryStateImpl(
+        normalCheckListByCategory: null == normalCheckListByCategory
+            ? _value._normalCheckListByCategory
+            : normalCheckListByCategory // ignore: cast_nullable_to_non_nullable
+                  as List<NormalCheckListEntity>,
+        index: null == index
+            ? _value.index
+            : index // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -888,11 +973,11 @@ class __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
 
 class _$SuccessNormalCheckListByCategoryStateImpl
     extends SuccessNormalCheckListByCategoryState {
-  const _$SuccessNormalCheckListByCategoryStateImpl(
-      {required final List<NormalCheckListEntity> normalCheckListByCategory,
-      required this.index})
-      : _normalCheckListByCategory = normalCheckListByCategory,
-        super._();
+  const _$SuccessNormalCheckListByCategoryStateImpl({
+    required final List<NormalCheckListEntity> normalCheckListByCategory,
+    required this.index,
+  }) : _normalCheckListByCategory = normalCheckListByCategory,
+       super._();
 
   final List<NormalCheckListEntity> _normalCheckListByCategory;
   @override
@@ -917,13 +1002,18 @@ class _$SuccessNormalCheckListByCategoryStateImpl
         (other.runtimeType == runtimeType &&
             other is _$SuccessNormalCheckListByCategoryStateImpl &&
             const DeepCollectionEquality().equals(
-                other._normalCheckListByCategory, _normalCheckListByCategory) &&
+              other._normalCheckListByCategory,
+              _normalCheckListByCategory,
+            ) &&
             (identical(other.index, index) || other.index == index));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_normalCheckListByCategory), index);
+  int get hashCode => Object.hash(
+    runtimeType,
+    const DeepCollectionEquality().hash(_normalCheckListByCategory),
+    index,
+  );
 
   /// Create a copy of NormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -931,20 +1021,30 @@ class _$SuccessNormalCheckListByCategoryStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessNormalCheckListByCategoryStateImplCopyWith<
-          _$SuccessNormalCheckListByCategoryStateImpl>
-      get copyWith => __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl<
-          _$SuccessNormalCheckListByCategoryStateImpl>(this, _$identity);
+    _$SuccessNormalCheckListByCategoryStateImpl
+  >
+  get copyWith =>
+      __$$SuccessNormalCheckListByCategoryStateImplCopyWithImpl<
+        _$SuccessNormalCheckListByCategoryStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return success(normalCheckListByCategory, index);
@@ -955,15 +1055,18 @@ class _$SuccessNormalCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return success?.call(normalCheckListByCategory, index);
@@ -974,15 +1077,18 @@ class _$SuccessNormalCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
@@ -996,12 +1102,12 @@ class _$SuccessNormalCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingNormalCheckListByCategoryState value)
-        loading,
+    loading,
     required TResult Function(ErrorNormalCheckListByCategoryState value) error,
     required TResult Function(SuccessNormalCheckListByCategoryState value)
-        success,
+    success,
     required TResult Function(InitialNormalCheckListByCategoryState value)
-        initial,
+    initial,
   }) {
     return success(this);
   }
@@ -1035,9 +1141,10 @@ class _$SuccessNormalCheckListByCategoryStateImpl
 
 abstract class SuccessNormalCheckListByCategoryState
     extends NormalCheckListByCategoryState {
-  const factory SuccessNormalCheckListByCategoryState(
-      {required final List<NormalCheckListEntity> normalCheckListByCategory,
-      required final int index}) = _$SuccessNormalCheckListByCategoryStateImpl;
+  const factory SuccessNormalCheckListByCategoryState({
+    required final List<NormalCheckListEntity> normalCheckListByCategory,
+    required final int index,
+  }) = _$SuccessNormalCheckListByCategoryStateImpl;
   const SuccessNormalCheckListByCategoryState._() : super._();
 
   List<NormalCheckListEntity> get normalCheckListByCategory;
@@ -1047,27 +1154,31 @@ abstract class SuccessNormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessNormalCheckListByCategoryStateImplCopyWith<
-          _$SuccessNormalCheckListByCategoryStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessNormalCheckListByCategoryStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$InitialNormalCheckListByCategoryStateImplCopyWith<$Res> {
   factory _$$InitialNormalCheckListByCategoryStateImplCopyWith(
-          _$InitialNormalCheckListByCategoryStateImpl value,
-          $Res Function(_$InitialNormalCheckListByCategoryStateImpl) then) =
-      __$$InitialNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
+    _$InitialNormalCheckListByCategoryStateImpl value,
+    $Res Function(_$InitialNormalCheckListByCategoryStateImpl) then,
+  ) = __$$InitialNormalCheckListByCategoryStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$InitialNormalCheckListByCategoryStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListByCategoryStateCopyWithImpl<$Res,
-        _$InitialNormalCheckListByCategoryStateImpl>
+    extends
+        _$NormalCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$InitialNormalCheckListByCategoryStateImpl
+        >
     implements _$$InitialNormalCheckListByCategoryStateImplCopyWith<$Res> {
   __$$InitialNormalCheckListByCategoryStateImplCopyWithImpl(
-      _$InitialNormalCheckListByCategoryStateImpl _value,
-      $Res Function(_$InitialNormalCheckListByCategoryStateImpl) _then)
-      : super(_value, _then);
+    _$InitialNormalCheckListByCategoryStateImpl _value,
+    $Res Function(_$InitialNormalCheckListByCategoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -1098,12 +1209,19 @@ class _$InitialNormalCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return initial();
@@ -1114,15 +1232,18 @@ class _$InitialNormalCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return initial?.call();
@@ -1133,15 +1254,18 @@ class _$InitialNormalCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<NormalCheckListEntity> normalCheckListByCategory, int index)?
-        success,
+      List<NormalCheckListEntity> normalCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
@@ -1155,12 +1279,12 @@ class _$InitialNormalCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingNormalCheckListByCategoryState value)
-        loading,
+    loading,
     required TResult Function(ErrorNormalCheckListByCategoryState value) error,
     required TResult Function(SuccessNormalCheckListByCategoryState value)
-        success,
+    success,
     required TResult Function(InitialNormalCheckListByCategoryState value)
-        initial,
+    initial,
   }) {
     return initial(this);
   }

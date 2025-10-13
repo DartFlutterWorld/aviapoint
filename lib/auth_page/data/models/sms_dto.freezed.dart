@@ -12,7 +12,8 @@ part of 'sms_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SmsDto _$SmsDtoFromJson(Map<String, dynamic> json) {
   return _SmsDto.fromJson(json);
@@ -55,28 +56,29 @@ class _$SmsDtoCopyWithImpl<$Res, $Val extends SmsDto>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? errCode = freezed,
-    Object? text = null,
-  }) {
-    return _then(_value.copyWith(
-      errCode: freezed == errCode
-          ? _value.errCode
-          : errCode // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? errCode = freezed, Object? text = null}) {
+    return _then(
+      _value.copyWith(
+            errCode: freezed == errCode
+                ? _value.errCode
+                : errCode // ignore: cast_nullable_to_non_nullable
+                      as dynamic,
+            text: null == text
+                ? _value.text
+                : text // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SmsDtoImplCopyWith<$Res> implements $SmsDtoCopyWith<$Res> {
   factory _$$SmsDtoImplCopyWith(
-          _$SmsDtoImpl value, $Res Function(_$SmsDtoImpl) then) =
-      __$$SmsDtoImplCopyWithImpl<$Res>;
+    _$SmsDtoImpl value,
+    $Res Function(_$SmsDtoImpl) then,
+  ) = __$$SmsDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@JsonKey(name: 'err_code') dynamic errCode, String text});
@@ -87,32 +89,34 @@ class __$$SmsDtoImplCopyWithImpl<$Res>
     extends _$SmsDtoCopyWithImpl<$Res, _$SmsDtoImpl>
     implements _$$SmsDtoImplCopyWith<$Res> {
   __$$SmsDtoImplCopyWithImpl(
-      _$SmsDtoImpl _value, $Res Function(_$SmsDtoImpl) _then)
-      : super(_value, _then);
+    _$SmsDtoImpl _value,
+    $Res Function(_$SmsDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? errCode = freezed,
-    Object? text = null,
-  }) {
-    return _then(_$SmsDtoImpl(
-      errCode: freezed == errCode ? _value.errCode! : errCode,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? errCode = freezed, Object? text = null}) {
+    return _then(
+      _$SmsDtoImpl(
+        errCode: freezed == errCode ? _value.errCode! : errCode,
+        text: null == text
+            ? _value.text
+            : text // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SmsDtoImpl implements _SmsDto {
-  const _$SmsDtoImpl(
-      {@JsonKey(name: 'err_code') this.errCode, required this.text});
+  const _$SmsDtoImpl({
+    @JsonKey(name: 'err_code') this.errCode,
+    required this.text,
+  });
 
   factory _$SmsDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$SmsDtoImplFromJson(json);
@@ -140,7 +144,10 @@ class _$SmsDtoImpl implements _SmsDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(errCode), text);
+    runtimeType,
+    const DeepCollectionEquality().hash(errCode),
+    text,
+  );
 
   /// Create a copy of SmsDto
   /// with the given fields replaced by the non-null parameter values.
@@ -152,16 +159,15 @@ class _$SmsDtoImpl implements _SmsDto {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SmsDtoImplToJson(
-      this,
-    );
+    return _$$SmsDtoImplToJson(this);
   }
 }
 
 abstract class _SmsDto implements SmsDto {
-  const factory _SmsDto(
-      {@JsonKey(name: 'err_code') final dynamic errCode,
-      required final String text}) = _$SmsDtoImpl;
+  const factory _SmsDto({
+    @JsonKey(name: 'err_code') final dynamic errCode,
+    required final String text,
+  }) = _$SmsDtoImpl;
 
   factory _SmsDto.fromJson(Map<String, dynamic> json) = _$SmsDtoImpl.fromJson;
 

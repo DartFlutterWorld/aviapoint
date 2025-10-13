@@ -12,7 +12,8 @@ part of 'sms_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$SmsEvent {
@@ -20,40 +21,34 @@ mixin _$SmsEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(String phone) getSms,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String phone)? getSms,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String phone)? getSms,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetSmsEvent value) getSms,
     required TResult Function(InitialSmsEvent value) initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetSmsEvent value)? getSms,
     TResult? Function(InitialSmsEvent value)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetSmsEvent value)? getSms,
     TResult Function(InitialSmsEvent value)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -79,8 +74,9 @@ class _$SmsEventCopyWithImpl<$Res, $Val extends SmsEvent>
 /// @nodoc
 abstract class _$$GetSmsEventImplCopyWith<$Res> {
   factory _$$GetSmsEventImplCopyWith(
-          _$GetSmsEventImpl value, $Res Function(_$GetSmsEventImpl) then) =
-      __$$GetSmsEventImplCopyWithImpl<$Res>;
+    _$GetSmsEventImpl value,
+    $Res Function(_$GetSmsEventImpl) then,
+  ) = __$$GetSmsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String phone});
 }
@@ -90,22 +86,23 @@ class __$$GetSmsEventImplCopyWithImpl<$Res>
     extends _$SmsEventCopyWithImpl<$Res, _$GetSmsEventImpl>
     implements _$$GetSmsEventImplCopyWith<$Res> {
   __$$GetSmsEventImplCopyWithImpl(
-      _$GetSmsEventImpl _value, $Res Function(_$GetSmsEventImpl) _then)
-      : super(_value, _then);
+    _$GetSmsEventImpl _value,
+    $Res Function(_$GetSmsEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? phone = null,
-  }) {
-    return _then(_$GetSmsEventImpl(
-      phone: null == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? phone = null}) {
+    return _then(
+      _$GetSmsEventImpl(
+        phone: null == phone
+            ? _value.phone
+            : phone // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -219,9 +216,10 @@ abstract class GetSmsEvent extends SmsEvent {
 
 /// @nodoc
 abstract class _$$InitialSmsEventImplCopyWith<$Res> {
-  factory _$$InitialSmsEventImplCopyWith(_$InitialSmsEventImpl value,
-          $Res Function(_$InitialSmsEventImpl) then) =
-      __$$InitialSmsEventImplCopyWithImpl<$Res>;
+  factory _$$InitialSmsEventImplCopyWith(
+    _$InitialSmsEventImpl value,
+    $Res Function(_$InitialSmsEventImpl) then,
+  ) = __$$InitialSmsEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -229,8 +227,9 @@ class __$$InitialSmsEventImplCopyWithImpl<$Res>
     extends _$SmsEventCopyWithImpl<$Res, _$InitialSmsEventImpl>
     implements _$$InitialSmsEventImplCopyWith<$Res> {
   __$$InitialSmsEventImplCopyWithImpl(
-      _$InitialSmsEventImpl _value, $Res Function(_$InitialSmsEventImpl) _then)
-      : super(_value, _then);
+    _$InitialSmsEventImpl _value,
+    $Res Function(_$InitialSmsEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -329,57 +328,59 @@ mixin _$SmsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(SmsEntity sms) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(SmsEntity sms)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(SmsEntity sms)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialSmsState value) initial,
     required TResult Function(LoadingSmsState value) loading,
     required TResult Function(ErrorSmsState value) error,
     required TResult Function(SuccessSmsState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(InitialSmsState value)? initial,
     TResult? Function(LoadingSmsState value)? loading,
     TResult? Function(ErrorSmsState value)? error,
     TResult? Function(SuccessSmsState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialSmsState value)? initial,
@@ -387,8 +388,7 @@ mixin _$SmsState {
     TResult Function(ErrorSmsState value)? error,
     TResult Function(SuccessSmsState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -413,9 +413,10 @@ class _$SmsStateCopyWithImpl<$Res, $Val extends SmsState>
 
 /// @nodoc
 abstract class _$$InitialSmsStateImplCopyWith<$Res> {
-  factory _$$InitialSmsStateImplCopyWith(_$InitialSmsStateImpl value,
-          $Res Function(_$InitialSmsStateImpl) then) =
-      __$$InitialSmsStateImplCopyWithImpl<$Res>;
+  factory _$$InitialSmsStateImplCopyWith(
+    _$InitialSmsStateImpl value,
+    $Res Function(_$InitialSmsStateImpl) then,
+  ) = __$$InitialSmsStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -423,8 +424,9 @@ class __$$InitialSmsStateImplCopyWithImpl<$Res>
     extends _$SmsStateCopyWithImpl<$Res, _$InitialSmsStateImpl>
     implements _$$InitialSmsStateImplCopyWith<$Res> {
   __$$InitialSmsStateImplCopyWithImpl(
-      _$InitialSmsStateImpl _value, $Res Function(_$InitialSmsStateImpl) _then)
-      : super(_value, _then);
+    _$InitialSmsStateImpl _value,
+    $Res Function(_$InitialSmsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsState
   /// with the given fields replaced by the non-null parameter values.
@@ -454,9 +456,14 @@ class _$InitialSmsStateImpl extends InitialSmsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(SmsEntity sms) success,
   }) {
     return initial();
@@ -468,12 +475,13 @@ class _$InitialSmsStateImpl extends InitialSmsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(SmsEntity sms)? success,
   }) {
     return initial?.call();
@@ -485,12 +493,13 @@ class _$InitialSmsStateImpl extends InitialSmsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(SmsEntity sms)? success,
     required TResult orElse(),
   }) {
@@ -545,9 +554,10 @@ abstract class InitialSmsState extends SmsState {
 
 /// @nodoc
 abstract class _$$LoadingSmsStateImplCopyWith<$Res> {
-  factory _$$LoadingSmsStateImplCopyWith(_$LoadingSmsStateImpl value,
-          $Res Function(_$LoadingSmsStateImpl) then) =
-      __$$LoadingSmsStateImplCopyWithImpl<$Res>;
+  factory _$$LoadingSmsStateImplCopyWith(
+    _$LoadingSmsStateImpl value,
+    $Res Function(_$LoadingSmsStateImpl) then,
+  ) = __$$LoadingSmsStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -555,8 +565,9 @@ class __$$LoadingSmsStateImplCopyWithImpl<$Res>
     extends _$SmsStateCopyWithImpl<$Res, _$LoadingSmsStateImpl>
     implements _$$LoadingSmsStateImplCopyWith<$Res> {
   __$$LoadingSmsStateImplCopyWithImpl(
-      _$LoadingSmsStateImpl _value, $Res Function(_$LoadingSmsStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingSmsStateImpl _value,
+    $Res Function(_$LoadingSmsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsState
   /// with the given fields replaced by the non-null parameter values.
@@ -586,9 +597,14 @@ class _$LoadingSmsStateImpl extends LoadingSmsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(SmsEntity sms) success,
   }) {
     return loading();
@@ -600,12 +616,13 @@ class _$LoadingSmsStateImpl extends LoadingSmsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(SmsEntity sms)? success,
   }) {
     return loading?.call();
@@ -617,12 +634,13 @@ class _$LoadingSmsStateImpl extends LoadingSmsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(SmsEntity sms)? success,
     required TResult orElse(),
   }) {
@@ -678,15 +696,17 @@ abstract class LoadingSmsState extends SmsState {
 /// @nodoc
 abstract class _$$ErrorSmsStateImplCopyWith<$Res> {
   factory _$$ErrorSmsStateImplCopyWith(
-          _$ErrorSmsStateImpl value, $Res Function(_$ErrorSmsStateImpl) then) =
-      __$$ErrorSmsStateImplCopyWithImpl<$Res>;
+    _$ErrorSmsStateImpl value,
+    $Res Function(_$ErrorSmsStateImpl) then,
+  ) = __$$ErrorSmsStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
@@ -694,8 +714,9 @@ class __$$ErrorSmsStateImplCopyWithImpl<$Res>
     extends _$SmsStateCopyWithImpl<$Res, _$ErrorSmsStateImpl>
     implements _$$ErrorSmsStateImplCopyWith<$Res> {
   __$$ErrorSmsStateImplCopyWithImpl(
-      _$ErrorSmsStateImpl _value, $Res Function(_$ErrorSmsStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorSmsStateImpl _value,
+    $Res Function(_$ErrorSmsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsState
   /// with the given fields replaced by the non-null parameter values.
@@ -708,41 +729,43 @@ class __$$ErrorSmsStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorSmsStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorSmsStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorSmsStateImpl extends ErrorSmsState {
-  const _$ErrorSmsStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorSmsStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -778,8 +801,14 @@ class _$ErrorSmsStateImpl extends ErrorSmsState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of SmsState
   /// with the given fields replaced by the non-null parameter values.
@@ -794,13 +823,23 @@ class _$ErrorSmsStateImpl extends ErrorSmsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(SmsEntity sms) success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -809,16 +848,22 @@ class _$ErrorSmsStateImpl extends ErrorSmsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(SmsEntity sms)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -827,18 +872,24 @@ class _$ErrorSmsStateImpl extends ErrorSmsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(SmsEntity sms)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -882,12 +933,13 @@ class _$ErrorSmsStateImpl extends ErrorSmsState {
 }
 
 abstract class ErrorSmsState extends SmsState {
-  const factory ErrorSmsState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorSmsStateImpl;
+  const factory ErrorSmsState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorSmsStateImpl;
   const ErrorSmsState._() : super._();
 
   String? get errorFromApi;
@@ -905,9 +957,10 @@ abstract class ErrorSmsState extends SmsState {
 
 /// @nodoc
 abstract class _$$SuccessSmsStateImplCopyWith<$Res> {
-  factory _$$SuccessSmsStateImplCopyWith(_$SuccessSmsStateImpl value,
-          $Res Function(_$SuccessSmsStateImpl) then) =
-      __$$SuccessSmsStateImplCopyWithImpl<$Res>;
+  factory _$$SuccessSmsStateImplCopyWith(
+    _$SuccessSmsStateImpl value,
+    $Res Function(_$SuccessSmsStateImpl) then,
+  ) = __$$SuccessSmsStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({SmsEntity sms});
 }
@@ -917,22 +970,23 @@ class __$$SuccessSmsStateImplCopyWithImpl<$Res>
     extends _$SmsStateCopyWithImpl<$Res, _$SuccessSmsStateImpl>
     implements _$$SuccessSmsStateImplCopyWith<$Res> {
   __$$SuccessSmsStateImplCopyWithImpl(
-      _$SuccessSmsStateImpl _value, $Res Function(_$SuccessSmsStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessSmsStateImpl _value,
+    $Res Function(_$SuccessSmsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SmsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? sms = null,
-  }) {
-    return _then(_$SuccessSmsStateImpl(
-      null == sms
-          ? _value.sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as SmsEntity,
-    ));
+  $Res call({Object? sms = null}) {
+    return _then(
+      _$SuccessSmsStateImpl(
+        null == sms
+            ? _value.sms
+            : sms // ignore: cast_nullable_to_non_nullable
+                  as SmsEntity,
+      ),
+    );
   }
 }
 
@@ -967,16 +1021,23 @@ class _$SuccessSmsStateImpl extends SuccessSmsState {
   @pragma('vm:prefer-inline')
   _$$SuccessSmsStateImplCopyWith<_$SuccessSmsStateImpl> get copyWith =>
       __$$SuccessSmsStateImplCopyWithImpl<_$SuccessSmsStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(SmsEntity sms) success,
   }) {
     return success(sms);
@@ -988,12 +1049,13 @@ class _$SuccessSmsStateImpl extends SuccessSmsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(SmsEntity sms)? success,
   }) {
     return success?.call(sms);
@@ -1005,12 +1067,13 @@ class _$SuccessSmsStateImpl extends SuccessSmsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(SmsEntity sms)? success,
     required TResult orElse(),
   }) {

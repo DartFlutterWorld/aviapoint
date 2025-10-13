@@ -12,54 +12,50 @@ part of 'normal_check_list_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$NormalCheckListEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) =>
+  TResult when<TResult extends Object?>({required TResult Function() get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) =>
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetNormalCheckListEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetNormalCheckListEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetNormalCheckListEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $NormalCheckListEventCopyWith<$Res> {
-  factory $NormalCheckListEventCopyWith(NormalCheckListEvent value,
-          $Res Function(NormalCheckListEvent) then) =
-      _$NormalCheckListEventCopyWithImpl<$Res, NormalCheckListEvent>;
+  factory $NormalCheckListEventCopyWith(
+    NormalCheckListEvent value,
+    $Res Function(NormalCheckListEvent) then,
+  ) = _$NormalCheckListEventCopyWithImpl<$Res, NormalCheckListEvent>;
 }
 
 /// @nodoc
-class _$NormalCheckListEventCopyWithImpl<$Res,
-        $Val extends NormalCheckListEvent>
+class _$NormalCheckListEventCopyWithImpl<
+  $Res,
+  $Val extends NormalCheckListEvent
+>
     implements $NormalCheckListEventCopyWith<$Res> {
   _$NormalCheckListEventCopyWithImpl(this._value, this._then);
 
@@ -75,20 +71,20 @@ class _$NormalCheckListEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetNormalCheckListEventImplCopyWith<$Res> {
   factory _$$GetNormalCheckListEventImplCopyWith(
-          _$GetNormalCheckListEventImpl value,
-          $Res Function(_$GetNormalCheckListEventImpl) then) =
-      __$$GetNormalCheckListEventImplCopyWithImpl<$Res>;
+    _$GetNormalCheckListEventImpl value,
+    $Res Function(_$GetNormalCheckListEventImpl) then,
+  ) = __$$GetNormalCheckListEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetNormalCheckListEventImplCopyWithImpl<$Res>
-    extends _$NormalCheckListEventCopyWithImpl<$Res,
-        _$GetNormalCheckListEventImpl>
+    extends
+        _$NormalCheckListEventCopyWithImpl<$Res, _$GetNormalCheckListEventImpl>
     implements _$$GetNormalCheckListEventImplCopyWith<$Res> {
   __$$GetNormalCheckListEventImplCopyWithImpl(
-      _$GetNormalCheckListEventImpl _value,
-      $Res Function(_$GetNormalCheckListEventImpl) _then)
-      : super(_value, _then);
+    _$GetNormalCheckListEventImpl _value,
+    $Res Function(_$GetNormalCheckListEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -116,17 +112,13 @@ class _$GetNormalCheckListEventImpl extends GetNormalCheckListEvent {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) {
+  TResult when<TResult extends Object?>({required TResult Function() get}) {
     return get();
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) {
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) {
     return get?.call();
   }
 
@@ -181,74 +173,78 @@ mixin _$NormalCheckListState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<NormalCheckListEntity> normalCheckList)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+    success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<NormalCheckListEntity> normalCheckList)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<NormalCheckListEntity> normalCheckList)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingNormalCheckListState value) loading,
     required TResult Function(ErrorNormalCheckListState value) error,
     required TResult Function(SuccessNormalCheckListState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingNormalCheckListState value)? loading,
     TResult? Function(ErrorNormalCheckListState value)? error,
     TResult? Function(SuccessNormalCheckListState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingNormalCheckListState value)? loading,
     TResult Function(ErrorNormalCheckListState value)? error,
     TResult Function(SuccessNormalCheckListState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $NormalCheckListStateCopyWith<$Res> {
-  factory $NormalCheckListStateCopyWith(NormalCheckListState value,
-          $Res Function(NormalCheckListState) then) =
-      _$NormalCheckListStateCopyWithImpl<$Res, NormalCheckListState>;
+  factory $NormalCheckListStateCopyWith(
+    NormalCheckListState value,
+    $Res Function(NormalCheckListState) then,
+  ) = _$NormalCheckListStateCopyWithImpl<$Res, NormalCheckListState>;
 }
 
 /// @nodoc
-class _$NormalCheckListStateCopyWithImpl<$Res,
-        $Val extends NormalCheckListState>
+class _$NormalCheckListStateCopyWithImpl<
+  $Res,
+  $Val extends NormalCheckListState
+>
     implements $NormalCheckListStateCopyWith<$Res> {
   _$NormalCheckListStateCopyWithImpl(this._value, this._then);
 
@@ -264,20 +260,23 @@ class _$NormalCheckListStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingNormalCheckListStateImplCopyWith<$Res> {
   factory _$$LoadingNormalCheckListStateImplCopyWith(
-          _$LoadingNormalCheckListStateImpl value,
-          $Res Function(_$LoadingNormalCheckListStateImpl) then) =
-      __$$LoadingNormalCheckListStateImplCopyWithImpl<$Res>;
+    _$LoadingNormalCheckListStateImpl value,
+    $Res Function(_$LoadingNormalCheckListStateImpl) then,
+  ) = __$$LoadingNormalCheckListStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingNormalCheckListStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListStateCopyWithImpl<$Res,
-        _$LoadingNormalCheckListStateImpl>
+    extends
+        _$NormalCheckListStateCopyWithImpl<
+          $Res,
+          _$LoadingNormalCheckListStateImpl
+        >
     implements _$$LoadingNormalCheckListStateImplCopyWith<$Res> {
   __$$LoadingNormalCheckListStateImplCopyWithImpl(
-      _$LoadingNormalCheckListStateImpl _value,
-      $Res Function(_$LoadingNormalCheckListStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingNormalCheckListStateImpl _value,
+    $Res Function(_$LoadingNormalCheckListStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListState
   /// with the given fields replaced by the non-null parameter values.
@@ -307,11 +306,16 @@ class _$LoadingNormalCheckListStateImpl extends LoadingNormalCheckListState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<NormalCheckListEntity> normalCheckList)
-        success,
+    success,
   }) {
     return loading();
   }
@@ -321,12 +325,13 @@ class _$LoadingNormalCheckListStateImpl extends LoadingNormalCheckListState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<NormalCheckListEntity> normalCheckList)? success,
   }) {
     return loading?.call();
@@ -337,12 +342,13 @@ class _$LoadingNormalCheckListStateImpl extends LoadingNormalCheckListState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<NormalCheckListEntity> normalCheckList)? success,
     required TResult orElse(),
   }) {
@@ -396,27 +402,31 @@ abstract class LoadingNormalCheckListState extends NormalCheckListState {
 /// @nodoc
 abstract class _$$ErrorNormalCheckListStateImplCopyWith<$Res> {
   factory _$$ErrorNormalCheckListStateImplCopyWith(
-          _$ErrorNormalCheckListStateImpl value,
-          $Res Function(_$ErrorNormalCheckListStateImpl) then) =
-      __$$ErrorNormalCheckListStateImplCopyWithImpl<$Res>;
+    _$ErrorNormalCheckListStateImpl value,
+    $Res Function(_$ErrorNormalCheckListStateImpl) then,
+  ) = __$$ErrorNormalCheckListStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorNormalCheckListStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListStateCopyWithImpl<$Res,
-        _$ErrorNormalCheckListStateImpl>
+    extends
+        _$NormalCheckListStateCopyWithImpl<
+          $Res,
+          _$ErrorNormalCheckListStateImpl
+        >
     implements _$$ErrorNormalCheckListStateImplCopyWith<$Res> {
   __$$ErrorNormalCheckListStateImplCopyWithImpl(
-      _$ErrorNormalCheckListStateImpl _value,
-      $Res Function(_$ErrorNormalCheckListStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorNormalCheckListStateImpl _value,
+    $Res Function(_$ErrorNormalCheckListStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListState
   /// with the given fields replaced by the non-null parameter values.
@@ -429,41 +439,43 @@ class __$$ErrorNormalCheckListStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorNormalCheckListStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorNormalCheckListStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorNormalCheckListStateImpl extends ErrorNormalCheckListState {
-  const _$ErrorNormalCheckListStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorNormalCheckListStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -499,8 +511,14 @@ class _$ErrorNormalCheckListStateImpl extends ErrorNormalCheckListState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of NormalCheckListState
   /// with the given fields replaced by the non-null parameter values.
@@ -508,21 +526,33 @@ class _$ErrorNormalCheckListStateImpl extends ErrorNormalCheckListState {
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorNormalCheckListStateImplCopyWith<_$ErrorNormalCheckListStateImpl>
-      get copyWith => __$$ErrorNormalCheckListStateImplCopyWithImpl<
-          _$ErrorNormalCheckListStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$ErrorNormalCheckListStateImplCopyWithImpl<
+        _$ErrorNormalCheckListStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<NormalCheckListEntity> normalCheckList)
-        success,
+    success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -530,16 +560,22 @@ class _$ErrorNormalCheckListStateImpl extends ErrorNormalCheckListState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<NormalCheckListEntity> normalCheckList)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -547,18 +583,24 @@ class _$ErrorNormalCheckListStateImpl extends ErrorNormalCheckListState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<NormalCheckListEntity> normalCheckList)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -599,12 +641,13 @@ class _$ErrorNormalCheckListStateImpl extends ErrorNormalCheckListState {
 }
 
 abstract class ErrorNormalCheckListState extends NormalCheckListState {
-  const factory ErrorNormalCheckListState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorNormalCheckListStateImpl;
+  const factory ErrorNormalCheckListState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorNormalCheckListStateImpl;
   const ErrorNormalCheckListState._() : super._();
 
   String? get errorFromApi;
@@ -617,52 +660,55 @@ abstract class ErrorNormalCheckListState extends NormalCheckListState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorNormalCheckListStateImplCopyWith<_$ErrorNormalCheckListStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessNormalCheckListStateImplCopyWith<$Res> {
   factory _$$SuccessNormalCheckListStateImplCopyWith(
-          _$SuccessNormalCheckListStateImpl value,
-          $Res Function(_$SuccessNormalCheckListStateImpl) then) =
-      __$$SuccessNormalCheckListStateImplCopyWithImpl<$Res>;
+    _$SuccessNormalCheckListStateImpl value,
+    $Res Function(_$SuccessNormalCheckListStateImpl) then,
+  ) = __$$SuccessNormalCheckListStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<NormalCheckListEntity> normalCheckList});
 }
 
 /// @nodoc
 class __$$SuccessNormalCheckListStateImplCopyWithImpl<$Res>
-    extends _$NormalCheckListStateCopyWithImpl<$Res,
-        _$SuccessNormalCheckListStateImpl>
+    extends
+        _$NormalCheckListStateCopyWithImpl<
+          $Res,
+          _$SuccessNormalCheckListStateImpl
+        >
     implements _$$SuccessNormalCheckListStateImplCopyWith<$Res> {
   __$$SuccessNormalCheckListStateImplCopyWithImpl(
-      _$SuccessNormalCheckListStateImpl _value,
-      $Res Function(_$SuccessNormalCheckListStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessNormalCheckListStateImpl _value,
+    $Res Function(_$SuccessNormalCheckListStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NormalCheckListState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? normalCheckList = null,
-  }) {
-    return _then(_$SuccessNormalCheckListStateImpl(
-      normalCheckList: null == normalCheckList
-          ? _value._normalCheckList
-          : normalCheckList // ignore: cast_nullable_to_non_nullable
-              as List<NormalCheckListEntity>,
-    ));
+  $Res call({Object? normalCheckList = null}) {
+    return _then(
+      _$SuccessNormalCheckListStateImpl(
+        normalCheckList: null == normalCheckList
+            ? _value._normalCheckList
+            : normalCheckList // ignore: cast_nullable_to_non_nullable
+                  as List<NormalCheckListEntity>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$SuccessNormalCheckListStateImpl extends SuccessNormalCheckListState {
-  const _$SuccessNormalCheckListStateImpl(
-      {required final List<NormalCheckListEntity> normalCheckList})
-      : _normalCheckList = normalCheckList,
-        super._();
+  const _$SuccessNormalCheckListStateImpl({
+    required final List<NormalCheckListEntity> normalCheckList,
+  }) : _normalCheckList = normalCheckList,
+       super._();
 
   final List<NormalCheckListEntity> _normalCheckList;
   @override
@@ -682,13 +728,17 @@ class _$SuccessNormalCheckListStateImpl extends SuccessNormalCheckListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessNormalCheckListStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._normalCheckList, _normalCheckList));
+            const DeepCollectionEquality().equals(
+              other._normalCheckList,
+              _normalCheckList,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_normalCheckList));
+    runtimeType,
+    const DeepCollectionEquality().hash(_normalCheckList),
+  );
 
   /// Create a copy of NormalCheckListState
   /// with the given fields replaced by the non-null parameter values.
@@ -696,18 +746,25 @@ class _$SuccessNormalCheckListStateImpl extends SuccessNormalCheckListState {
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessNormalCheckListStateImplCopyWith<_$SuccessNormalCheckListStateImpl>
-      get copyWith => __$$SuccessNormalCheckListStateImplCopyWithImpl<
-          _$SuccessNormalCheckListStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$SuccessNormalCheckListStateImplCopyWithImpl<
+        _$SuccessNormalCheckListStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<NormalCheckListEntity> normalCheckList)
-        success,
+    success,
   }) {
     return success(normalCheckList);
   }
@@ -717,12 +774,13 @@ class _$SuccessNormalCheckListStateImpl extends SuccessNormalCheckListState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<NormalCheckListEntity> normalCheckList)? success,
   }) {
     return success?.call(normalCheckList);
@@ -733,12 +791,13 @@ class _$SuccessNormalCheckListStateImpl extends SuccessNormalCheckListState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<NormalCheckListEntity> normalCheckList)? success,
     required TResult orElse(),
   }) {
@@ -784,9 +843,9 @@ class _$SuccessNormalCheckListStateImpl extends SuccessNormalCheckListState {
 }
 
 abstract class SuccessNormalCheckListState extends NormalCheckListState {
-  const factory SuccessNormalCheckListState(
-          {required final List<NormalCheckListEntity> normalCheckList}) =
-      _$SuccessNormalCheckListStateImpl;
+  const factory SuccessNormalCheckListState({
+    required final List<NormalCheckListEntity> normalCheckList,
+  }) = _$SuccessNormalCheckListStateImpl;
   const SuccessNormalCheckListState._() : super._();
 
   List<NormalCheckListEntity> get normalCheckList;
@@ -795,5 +854,5 @@ abstract class SuccessNormalCheckListState extends NormalCheckListState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessNormalCheckListStateImplCopyWith<_$SuccessNormalCheckListStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

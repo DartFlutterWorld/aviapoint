@@ -12,7 +12,8 @@ part of 'type_correct_answer_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TypeCorrectAnswerDto _$TypeCorrectAnswerDtoFromJson(Map<String, dynamic> json) {
   return _TypeCorrectAnswerDto.fromJson(json);
@@ -35,16 +36,19 @@ mixin _$TypeCorrectAnswerDto {
 
 /// @nodoc
 abstract class $TypeCorrectAnswerDtoCopyWith<$Res> {
-  factory $TypeCorrectAnswerDtoCopyWith(TypeCorrectAnswerDto value,
-          $Res Function(TypeCorrectAnswerDto) then) =
-      _$TypeCorrectAnswerDtoCopyWithImpl<$Res, TypeCorrectAnswerDto>;
+  factory $TypeCorrectAnswerDtoCopyWith(
+    TypeCorrectAnswerDto value,
+    $Res Function(TypeCorrectAnswerDto) then,
+  ) = _$TypeCorrectAnswerDtoCopyWithImpl<$Res, TypeCorrectAnswerDto>;
   @useResult
   $Res call({int id, String title});
 }
 
 /// @nodoc
-class _$TypeCorrectAnswerDtoCopyWithImpl<$Res,
-        $Val extends TypeCorrectAnswerDto>
+class _$TypeCorrectAnswerDtoCopyWithImpl<
+  $Res,
+  $Val extends TypeCorrectAnswerDto
+>
     implements $TypeCorrectAnswerDtoCopyWith<$Res> {
   _$TypeCorrectAnswerDtoCopyWithImpl(this._value, this._then);
 
@@ -57,29 +61,30 @@ class _$TypeCorrectAnswerDtoCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? id = null, Object? title = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TypeCorrectAnswerDtoImplCopyWith<$Res>
     implements $TypeCorrectAnswerDtoCopyWith<$Res> {
-  factory _$$TypeCorrectAnswerDtoImplCopyWith(_$TypeCorrectAnswerDtoImpl value,
-          $Res Function(_$TypeCorrectAnswerDtoImpl) then) =
-      __$$TypeCorrectAnswerDtoImplCopyWithImpl<$Res>;
+  factory _$$TypeCorrectAnswerDtoImplCopyWith(
+    _$TypeCorrectAnswerDtoImpl value,
+    $Res Function(_$TypeCorrectAnswerDtoImpl) then,
+  ) = __$$TypeCorrectAnswerDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String title});
@@ -89,28 +94,28 @@ abstract class _$$TypeCorrectAnswerDtoImplCopyWith<$Res>
 class __$$TypeCorrectAnswerDtoImplCopyWithImpl<$Res>
     extends _$TypeCorrectAnswerDtoCopyWithImpl<$Res, _$TypeCorrectAnswerDtoImpl>
     implements _$$TypeCorrectAnswerDtoImplCopyWith<$Res> {
-  __$$TypeCorrectAnswerDtoImplCopyWithImpl(_$TypeCorrectAnswerDtoImpl _value,
-      $Res Function(_$TypeCorrectAnswerDtoImpl) _then)
-      : super(_value, _then);
+  __$$TypeCorrectAnswerDtoImplCopyWithImpl(
+    _$TypeCorrectAnswerDtoImpl _value,
+    $Res Function(_$TypeCorrectAnswerDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TypeCorrectAnswerDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-  }) {
-    return _then(_$TypeCorrectAnswerDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? id = null, Object? title = null}) {
+    return _then(
+      _$TypeCorrectAnswerDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -152,22 +157,23 @@ class _$TypeCorrectAnswerDtoImpl implements _TypeCorrectAnswerDto {
   @override
   @pragma('vm:prefer-inline')
   _$$TypeCorrectAnswerDtoImplCopyWith<_$TypeCorrectAnswerDtoImpl>
-      get copyWith =>
-          __$$TypeCorrectAnswerDtoImplCopyWithImpl<_$TypeCorrectAnswerDtoImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$TypeCorrectAnswerDtoImplCopyWithImpl<_$TypeCorrectAnswerDtoImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TypeCorrectAnswerDtoImplToJson(
-      this,
-    );
+    return _$$TypeCorrectAnswerDtoImplToJson(this);
   }
 }
 
 abstract class _TypeCorrectAnswerDto implements TypeCorrectAnswerDto {
-  const factory _TypeCorrectAnswerDto(
-      {required final int id,
-      required final String title}) = _$TypeCorrectAnswerDtoImpl;
+  const factory _TypeCorrectAnswerDto({
+    required final int id,
+    required final String title,
+  }) = _$TypeCorrectAnswerDtoImpl;
 
   factory _TypeCorrectAnswerDto.fromJson(Map<String, dynamic> json) =
       _$TypeCorrectAnswerDtoImpl.fromJson;
@@ -182,5 +188,5 @@ abstract class _TypeCorrectAnswerDto implements TypeCorrectAnswerDto {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TypeCorrectAnswerDtoImplCopyWith<_$TypeCorrectAnswerDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

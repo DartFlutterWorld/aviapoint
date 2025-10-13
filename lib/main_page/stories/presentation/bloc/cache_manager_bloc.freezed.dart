@@ -12,49 +12,45 @@ part of 'cache_manager_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$CacheManagerEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getStories,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getStories,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getStories,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetStoriesCacheManagerEvent value) getStories,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetStoriesCacheManagerEvent value)? getStories,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetStoriesCacheManagerEvent value)? getStories,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CacheManagerEventCopyWith<$Res> {
   factory $CacheManagerEventCopyWith(
-          CacheManagerEvent value, $Res Function(CacheManagerEvent) then) =
-      _$CacheManagerEventCopyWithImpl<$Res, CacheManagerEvent>;
+    CacheManagerEvent value,
+    $Res Function(CacheManagerEvent) then,
+  ) = _$CacheManagerEventCopyWithImpl<$Res, CacheManagerEvent>;
 }
 
 /// @nodoc
@@ -74,20 +70,20 @@ class _$CacheManagerEventCopyWithImpl<$Res, $Val extends CacheManagerEvent>
 /// @nodoc
 abstract class _$$GetStoriesCacheManagerEventImplCopyWith<$Res> {
   factory _$$GetStoriesCacheManagerEventImplCopyWith(
-          _$GetStoriesCacheManagerEventImpl value,
-          $Res Function(_$GetStoriesCacheManagerEventImpl) then) =
-      __$$GetStoriesCacheManagerEventImplCopyWithImpl<$Res>;
+    _$GetStoriesCacheManagerEventImpl value,
+    $Res Function(_$GetStoriesCacheManagerEventImpl) then,
+  ) = __$$GetStoriesCacheManagerEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetStoriesCacheManagerEventImplCopyWithImpl<$Res>
-    extends _$CacheManagerEventCopyWithImpl<$Res,
-        _$GetStoriesCacheManagerEventImpl>
+    extends
+        _$CacheManagerEventCopyWithImpl<$Res, _$GetStoriesCacheManagerEventImpl>
     implements _$$GetStoriesCacheManagerEventImplCopyWith<$Res> {
   __$$GetStoriesCacheManagerEventImplCopyWithImpl(
-      _$GetStoriesCacheManagerEventImpl _value,
-      $Res Function(_$GetStoriesCacheManagerEventImpl) _then)
-      : super(_value, _then);
+    _$GetStoriesCacheManagerEventImpl _value,
+    $Res Function(_$GetStoriesCacheManagerEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CacheManagerEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -189,68 +185,70 @@ mixin _$CacheManagerState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<StoryEntity> story) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<StoryEntity> story)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<StoryEntity> story)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingCacheManagerState value) loading,
     required TResult Function(ErrorCacheManagerState value) error,
     required TResult Function(SuccessCacheManagerState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingCacheManagerState value)? loading,
     TResult? Function(ErrorCacheManagerState value)? error,
     TResult? Function(SuccessCacheManagerState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingCacheManagerState value)? loading,
     TResult Function(ErrorCacheManagerState value)? error,
     TResult Function(SuccessCacheManagerState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CacheManagerStateCopyWith<$Res> {
   factory $CacheManagerStateCopyWith(
-          CacheManagerState value, $Res Function(CacheManagerState) then) =
-      _$CacheManagerStateCopyWithImpl<$Res, CacheManagerState>;
+    CacheManagerState value,
+    $Res Function(CacheManagerState) then,
+  ) = _$CacheManagerStateCopyWithImpl<$Res, CacheManagerState>;
 }
 
 /// @nodoc
@@ -270,20 +268,20 @@ class _$CacheManagerStateCopyWithImpl<$Res, $Val extends CacheManagerState>
 /// @nodoc
 abstract class _$$LoadingCacheManagerStateImplCopyWith<$Res> {
   factory _$$LoadingCacheManagerStateImplCopyWith(
-          _$LoadingCacheManagerStateImpl value,
-          $Res Function(_$LoadingCacheManagerStateImpl) then) =
-      __$$LoadingCacheManagerStateImplCopyWithImpl<$Res>;
+    _$LoadingCacheManagerStateImpl value,
+    $Res Function(_$LoadingCacheManagerStateImpl) then,
+  ) = __$$LoadingCacheManagerStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingCacheManagerStateImplCopyWithImpl<$Res>
-    extends _$CacheManagerStateCopyWithImpl<$Res,
-        _$LoadingCacheManagerStateImpl>
+    extends
+        _$CacheManagerStateCopyWithImpl<$Res, _$LoadingCacheManagerStateImpl>
     implements _$$LoadingCacheManagerStateImplCopyWith<$Res> {
   __$$LoadingCacheManagerStateImplCopyWithImpl(
-      _$LoadingCacheManagerStateImpl _value,
-      $Res Function(_$LoadingCacheManagerStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingCacheManagerStateImpl _value,
+    $Res Function(_$LoadingCacheManagerStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CacheManagerState
   /// with the given fields replaced by the non-null parameter values.
@@ -320,9 +318,14 @@ class _$LoadingCacheManagerStateImpl extends LoadingCacheManagerState
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<StoryEntity> story) success,
   }) {
     return loading();
@@ -333,12 +336,13 @@ class _$LoadingCacheManagerStateImpl extends LoadingCacheManagerState
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<StoryEntity> story)? success,
   }) {
     return loading?.call();
@@ -349,12 +353,13 @@ class _$LoadingCacheManagerStateImpl extends LoadingCacheManagerState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<StoryEntity> story)? success,
     required TResult orElse(),
   }) {
@@ -407,16 +412,17 @@ abstract class LoadingCacheManagerState extends CacheManagerState {
 /// @nodoc
 abstract class _$$ErrorCacheManagerStateImplCopyWith<$Res> {
   factory _$$ErrorCacheManagerStateImplCopyWith(
-          _$ErrorCacheManagerStateImpl value,
-          $Res Function(_$ErrorCacheManagerStateImpl) then) =
-      __$$ErrorCacheManagerStateImplCopyWithImpl<$Res>;
+    _$ErrorCacheManagerStateImpl value,
+    $Res Function(_$ErrorCacheManagerStateImpl) then,
+  ) = __$$ErrorCacheManagerStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
@@ -424,9 +430,9 @@ class __$$ErrorCacheManagerStateImplCopyWithImpl<$Res>
     extends _$CacheManagerStateCopyWithImpl<$Res, _$ErrorCacheManagerStateImpl>
     implements _$$ErrorCacheManagerStateImplCopyWith<$Res> {
   __$$ErrorCacheManagerStateImplCopyWithImpl(
-      _$ErrorCacheManagerStateImpl _value,
-      $Res Function(_$ErrorCacheManagerStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorCacheManagerStateImpl _value,
+    $Res Function(_$ErrorCacheManagerStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CacheManagerState
   /// with the given fields replaced by the non-null parameter values.
@@ -439,28 +445,30 @@ class __$$ErrorCacheManagerStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorCacheManagerStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorCacheManagerStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -468,13 +476,13 @@ class __$$ErrorCacheManagerStateImplCopyWithImpl<$Res>
 
 class _$ErrorCacheManagerStateImpl extends ErrorCacheManagerState
     with DiagnosticableTreeMixin {
-  const _$ErrorCacheManagerStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorCacheManagerStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -522,8 +530,14 @@ class _$ErrorCacheManagerStateImpl extends ErrorCacheManagerState
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of CacheManagerState
   /// with the given fields replaced by the non-null parameter values.
@@ -531,20 +545,33 @@ class _$ErrorCacheManagerStateImpl extends ErrorCacheManagerState
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorCacheManagerStateImplCopyWith<_$ErrorCacheManagerStateImpl>
-      get copyWith => __$$ErrorCacheManagerStateImplCopyWithImpl<
-          _$ErrorCacheManagerStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$ErrorCacheManagerStateImplCopyWithImpl<_$ErrorCacheManagerStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<StoryEntity> story) success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -552,16 +579,22 @@ class _$ErrorCacheManagerStateImpl extends ErrorCacheManagerState
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<StoryEntity> story)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -569,18 +602,24 @@ class _$ErrorCacheManagerStateImpl extends ErrorCacheManagerState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<StoryEntity> story)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -621,12 +660,13 @@ class _$ErrorCacheManagerStateImpl extends ErrorCacheManagerState
 }
 
 abstract class ErrorCacheManagerState extends CacheManagerState {
-  const factory ErrorCacheManagerState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorCacheManagerStateImpl;
+  const factory ErrorCacheManagerState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorCacheManagerStateImpl;
   const ErrorCacheManagerState._() : super._();
 
   String? get errorFromApi;
@@ -639,42 +679,42 @@ abstract class ErrorCacheManagerState extends CacheManagerState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorCacheManagerStateImplCopyWith<_$ErrorCacheManagerStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessCacheManagerStateImplCopyWith<$Res> {
   factory _$$SuccessCacheManagerStateImplCopyWith(
-          _$SuccessCacheManagerStateImpl value,
-          $Res Function(_$SuccessCacheManagerStateImpl) then) =
-      __$$SuccessCacheManagerStateImplCopyWithImpl<$Res>;
+    _$SuccessCacheManagerStateImpl value,
+    $Res Function(_$SuccessCacheManagerStateImpl) then,
+  ) = __$$SuccessCacheManagerStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<StoryEntity> story});
 }
 
 /// @nodoc
 class __$$SuccessCacheManagerStateImplCopyWithImpl<$Res>
-    extends _$CacheManagerStateCopyWithImpl<$Res,
-        _$SuccessCacheManagerStateImpl>
+    extends
+        _$CacheManagerStateCopyWithImpl<$Res, _$SuccessCacheManagerStateImpl>
     implements _$$SuccessCacheManagerStateImplCopyWith<$Res> {
   __$$SuccessCacheManagerStateImplCopyWithImpl(
-      _$SuccessCacheManagerStateImpl _value,
-      $Res Function(_$SuccessCacheManagerStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessCacheManagerStateImpl _value,
+    $Res Function(_$SuccessCacheManagerStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CacheManagerState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? story = null,
-  }) {
-    return _then(_$SuccessCacheManagerStateImpl(
-      story: null == story
-          ? _value._story
-          : story // ignore: cast_nullable_to_non_nullable
-              as List<StoryEntity>,
-    ));
+  $Res call({Object? story = null}) {
+    return _then(
+      _$SuccessCacheManagerStateImpl(
+        story: null == story
+            ? _value._story
+            : story // ignore: cast_nullable_to_non_nullable
+                  as List<StoryEntity>,
+      ),
+    );
   }
 }
 
@@ -683,8 +723,8 @@ class __$$SuccessCacheManagerStateImplCopyWithImpl<$Res>
 class _$SuccessCacheManagerStateImpl extends SuccessCacheManagerState
     with DiagnosticableTreeMixin {
   const _$SuccessCacheManagerStateImpl({required final List<StoryEntity> story})
-      : _story = story,
-        super._();
+    : _story = story,
+      super._();
 
   final List<StoryEntity> _story;
   @override
@@ -725,16 +765,23 @@ class _$SuccessCacheManagerStateImpl extends SuccessCacheManagerState
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessCacheManagerStateImplCopyWith<_$SuccessCacheManagerStateImpl>
-      get copyWith => __$$SuccessCacheManagerStateImplCopyWithImpl<
-          _$SuccessCacheManagerStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$SuccessCacheManagerStateImplCopyWithImpl<
+        _$SuccessCacheManagerStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<StoryEntity> story) success,
   }) {
     return success(story);
@@ -745,12 +792,13 @@ class _$SuccessCacheManagerStateImpl extends SuccessCacheManagerState
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<StoryEntity> story)? success,
   }) {
     return success?.call(story);
@@ -761,12 +809,13 @@ class _$SuccessCacheManagerStateImpl extends SuccessCacheManagerState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<StoryEntity> story)? success,
     required TResult orElse(),
   }) {
@@ -812,9 +861,9 @@ class _$SuccessCacheManagerStateImpl extends SuccessCacheManagerState
 }
 
 abstract class SuccessCacheManagerState extends CacheManagerState {
-  const factory SuccessCacheManagerState(
-          {required final List<StoryEntity> story}) =
-      _$SuccessCacheManagerStateImpl;
+  const factory SuccessCacheManagerState({
+    required final List<StoryEntity> story,
+  }) = _$SuccessCacheManagerStateImpl;
   const SuccessCacheManagerState._() : super._();
 
   List<StoryEntity> get story;
@@ -823,5 +872,5 @@ abstract class SuccessCacheManagerState extends CacheManagerState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessCacheManagerStateImplCopyWith<_$SuccessCacheManagerStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

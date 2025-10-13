@@ -12,7 +12,8 @@ part of 'detail_news_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$DetailNewsEvent {
@@ -20,35 +21,29 @@ mixin _$DetailNewsEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetDetailNewsEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetDetailNewsEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetDetailNewsEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 
   /// Create a copy of DetailNewsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -60,8 +55,9 @@ mixin _$DetailNewsEvent {
 /// @nodoc
 abstract class $DetailNewsEventCopyWith<$Res> {
   factory $DetailNewsEventCopyWith(
-          DetailNewsEvent value, $Res Function(DetailNewsEvent) then) =
-      _$DetailNewsEventCopyWithImpl<$Res, DetailNewsEvent>;
+    DetailNewsEvent value,
+    $Res Function(DetailNewsEvent) then,
+  ) = _$DetailNewsEventCopyWithImpl<$Res, DetailNewsEvent>;
   @useResult
   $Res call({int id});
 }
@@ -80,24 +76,26 @@ class _$DetailNewsEventCopyWithImpl<$Res, $Val extends DetailNewsEvent>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  $Res call({Object? id = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GetDetailNewsEventImplCopyWith<$Res>
     implements $DetailNewsEventCopyWith<$Res> {
-  factory _$$GetDetailNewsEventImplCopyWith(_$GetDetailNewsEventImpl value,
-          $Res Function(_$GetDetailNewsEventImpl) then) =
-      __$$GetDetailNewsEventImplCopyWithImpl<$Res>;
+  factory _$$GetDetailNewsEventImplCopyWith(
+    _$GetDetailNewsEventImpl value,
+    $Res Function(_$GetDetailNewsEventImpl) then,
+  ) = __$$GetDetailNewsEventImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id});
@@ -107,23 +105,24 @@ abstract class _$$GetDetailNewsEventImplCopyWith<$Res>
 class __$$GetDetailNewsEventImplCopyWithImpl<$Res>
     extends _$DetailNewsEventCopyWithImpl<$Res, _$GetDetailNewsEventImpl>
     implements _$$GetDetailNewsEventImplCopyWith<$Res> {
-  __$$GetDetailNewsEventImplCopyWithImpl(_$GetDetailNewsEventImpl _value,
-      $Res Function(_$GetDetailNewsEventImpl) _then)
-      : super(_value, _then);
+  __$$GetDetailNewsEventImplCopyWithImpl(
+    _$GetDetailNewsEventImpl _value,
+    $Res Function(_$GetDetailNewsEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailNewsEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-  }) {
-    return _then(_$GetDetailNewsEventImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? id = null}) {
+    return _then(
+      _$GetDetailNewsEventImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -158,7 +157,9 @@ class _$GetDetailNewsEventImpl extends GetDetailNewsEvent {
   @pragma('vm:prefer-inline')
   _$$GetDetailNewsEventImplCopyWith<_$GetDetailNewsEventImpl> get copyWith =>
       __$$GetDetailNewsEventImplCopyWithImpl<_$GetDetailNewsEventImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -238,68 +239,70 @@ mixin _$DetailNewsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(NewsEntity news) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(NewsEntity news)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(NewsEntity news)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingDetailNewsState value) loading,
     required TResult Function(ErrorDetailNewsState value) error,
     required TResult Function(SuccessDetailNewsState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingDetailNewsState value)? loading,
     TResult? Function(ErrorDetailNewsState value)? error,
     TResult? Function(SuccessDetailNewsState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingDetailNewsState value)? loading,
     TResult Function(ErrorDetailNewsState value)? error,
     TResult Function(SuccessDetailNewsState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $DetailNewsStateCopyWith<$Res> {
   factory $DetailNewsStateCopyWith(
-          DetailNewsState value, $Res Function(DetailNewsState) then) =
-      _$DetailNewsStateCopyWithImpl<$Res, DetailNewsState>;
+    DetailNewsState value,
+    $Res Function(DetailNewsState) then,
+  ) = _$DetailNewsStateCopyWithImpl<$Res, DetailNewsState>;
 }
 
 /// @nodoc
@@ -319,9 +322,9 @@ class _$DetailNewsStateCopyWithImpl<$Res, $Val extends DetailNewsState>
 /// @nodoc
 abstract class _$$LoadingDetailNewsStateImplCopyWith<$Res> {
   factory _$$LoadingDetailNewsStateImplCopyWith(
-          _$LoadingDetailNewsStateImpl value,
-          $Res Function(_$LoadingDetailNewsStateImpl) then) =
-      __$$LoadingDetailNewsStateImplCopyWithImpl<$Res>;
+    _$LoadingDetailNewsStateImpl value,
+    $Res Function(_$LoadingDetailNewsStateImpl) then,
+  ) = __$$LoadingDetailNewsStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -329,9 +332,9 @@ class __$$LoadingDetailNewsStateImplCopyWithImpl<$Res>
     extends _$DetailNewsStateCopyWithImpl<$Res, _$LoadingDetailNewsStateImpl>
     implements _$$LoadingDetailNewsStateImplCopyWith<$Res> {
   __$$LoadingDetailNewsStateImplCopyWithImpl(
-      _$LoadingDetailNewsStateImpl _value,
-      $Res Function(_$LoadingDetailNewsStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingDetailNewsStateImpl _value,
+    $Res Function(_$LoadingDetailNewsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailNewsState
   /// with the given fields replaced by the non-null parameter values.
@@ -361,9 +364,14 @@ class _$LoadingDetailNewsStateImpl extends LoadingDetailNewsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(NewsEntity news) success,
   }) {
     return loading();
@@ -374,12 +382,13 @@ class _$LoadingDetailNewsStateImpl extends LoadingDetailNewsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(NewsEntity news)? success,
   }) {
     return loading?.call();
@@ -390,12 +399,13 @@ class _$LoadingDetailNewsStateImpl extends LoadingDetailNewsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(NewsEntity news)? success,
     required TResult orElse(),
   }) {
@@ -447,25 +457,28 @@ abstract class LoadingDetailNewsState extends DetailNewsState {
 
 /// @nodoc
 abstract class _$$ErrorDetailNewsStateImplCopyWith<$Res> {
-  factory _$$ErrorDetailNewsStateImplCopyWith(_$ErrorDetailNewsStateImpl value,
-          $Res Function(_$ErrorDetailNewsStateImpl) then) =
-      __$$ErrorDetailNewsStateImplCopyWithImpl<$Res>;
+  factory _$$ErrorDetailNewsStateImplCopyWith(
+    _$ErrorDetailNewsStateImpl value,
+    $Res Function(_$ErrorDetailNewsStateImpl) then,
+  ) = __$$ErrorDetailNewsStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorDetailNewsStateImplCopyWithImpl<$Res>
     extends _$DetailNewsStateCopyWithImpl<$Res, _$ErrorDetailNewsStateImpl>
     implements _$$ErrorDetailNewsStateImplCopyWith<$Res> {
-  __$$ErrorDetailNewsStateImplCopyWithImpl(_$ErrorDetailNewsStateImpl _value,
-      $Res Function(_$ErrorDetailNewsStateImpl) _then)
-      : super(_value, _then);
+  __$$ErrorDetailNewsStateImplCopyWithImpl(
+    _$ErrorDetailNewsStateImpl _value,
+    $Res Function(_$ErrorDetailNewsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailNewsState
   /// with the given fields replaced by the non-null parameter values.
@@ -478,41 +491,43 @@ class __$$ErrorDetailNewsStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorDetailNewsStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorDetailNewsStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
-  const _$ErrorDetailNewsStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorDetailNewsStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -548,8 +563,14 @@ class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of DetailNewsState
   /// with the given fields replaced by the non-null parameter values.
@@ -557,21 +578,33 @@ class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorDetailNewsStateImplCopyWith<_$ErrorDetailNewsStateImpl>
-      get copyWith =>
-          __$$ErrorDetailNewsStateImplCopyWithImpl<_$ErrorDetailNewsStateImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$ErrorDetailNewsStateImplCopyWithImpl<_$ErrorDetailNewsStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(NewsEntity news) success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -579,16 +612,22 @@ class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(NewsEntity news)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -596,18 +635,24 @@ class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(NewsEntity news)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -648,12 +693,13 @@ class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
 }
 
 abstract class ErrorDetailNewsState extends DetailNewsState {
-  const factory ErrorDetailNewsState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorDetailNewsStateImpl;
+  const factory ErrorDetailNewsState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorDetailNewsStateImpl;
   const ErrorDetailNewsState._() : super._();
 
   String? get errorFromApi;
@@ -666,15 +712,15 @@ abstract class ErrorDetailNewsState extends DetailNewsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorDetailNewsStateImplCopyWith<_$ErrorDetailNewsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessDetailNewsStateImplCopyWith<$Res> {
   factory _$$SuccessDetailNewsStateImplCopyWith(
-          _$SuccessDetailNewsStateImpl value,
-          $Res Function(_$SuccessDetailNewsStateImpl) then) =
-      __$$SuccessDetailNewsStateImplCopyWithImpl<$Res>;
+    _$SuccessDetailNewsStateImpl value,
+    $Res Function(_$SuccessDetailNewsStateImpl) then,
+  ) = __$$SuccessDetailNewsStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({NewsEntity news});
 }
@@ -684,23 +730,23 @@ class __$$SuccessDetailNewsStateImplCopyWithImpl<$Res>
     extends _$DetailNewsStateCopyWithImpl<$Res, _$SuccessDetailNewsStateImpl>
     implements _$$SuccessDetailNewsStateImplCopyWith<$Res> {
   __$$SuccessDetailNewsStateImplCopyWithImpl(
-      _$SuccessDetailNewsStateImpl _value,
-      $Res Function(_$SuccessDetailNewsStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessDetailNewsStateImpl _value,
+    $Res Function(_$SuccessDetailNewsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailNewsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? news = null,
-  }) {
-    return _then(_$SuccessDetailNewsStateImpl(
-      news: null == news
-          ? _value.news
-          : news // ignore: cast_nullable_to_non_nullable
-              as NewsEntity,
-    ));
+  $Res call({Object? news = null}) {
+    return _then(
+      _$SuccessDetailNewsStateImpl(
+        news: null == news
+            ? _value.news
+            : news // ignore: cast_nullable_to_non_nullable
+                  as NewsEntity,
+      ),
+    );
   }
 }
 
@@ -734,16 +780,24 @@ class _$SuccessDetailNewsStateImpl extends SuccessDetailNewsState {
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessDetailNewsStateImplCopyWith<_$SuccessDetailNewsStateImpl>
-      get copyWith => __$$SuccessDetailNewsStateImplCopyWithImpl<
-          _$SuccessDetailNewsStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$SuccessDetailNewsStateImplCopyWithImpl<_$SuccessDetailNewsStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(NewsEntity news) success,
   }) {
     return success(news);
@@ -754,12 +808,13 @@ class _$SuccessDetailNewsStateImpl extends SuccessDetailNewsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(NewsEntity news)? success,
   }) {
     return success?.call(news);
@@ -770,12 +825,13 @@ class _$SuccessDetailNewsStateImpl extends SuccessDetailNewsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(NewsEntity news)? success,
     required TResult orElse(),
   }) {
@@ -831,5 +887,5 @@ abstract class SuccessDetailNewsState extends DetailNewsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessDetailNewsStateImplCopyWith<_$SuccessDetailNewsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

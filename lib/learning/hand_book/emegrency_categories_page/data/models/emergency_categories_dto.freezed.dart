@@ -12,10 +12,12 @@ part of 'emergency_categories_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 EmergencyCategoriesDto _$EmergencyCategoriesDtoFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _EmergencyCategoriesDto.fromJson(json);
 }
 
@@ -41,23 +43,27 @@ mixin _$EmergencyCategoriesDto {
 
 /// @nodoc
 abstract class $EmergencyCategoriesDtoCopyWith<$Res> {
-  factory $EmergencyCategoriesDtoCopyWith(EmergencyCategoriesDto value,
-          $Res Function(EmergencyCategoriesDto) then) =
-      _$EmergencyCategoriesDtoCopyWithImpl<$Res, EmergencyCategoriesDto>;
+  factory $EmergencyCategoriesDtoCopyWith(
+    EmergencyCategoriesDto value,
+    $Res Function(EmergencyCategoriesDto) then,
+  ) = _$EmergencyCategoriesDtoCopyWithImpl<$Res, EmergencyCategoriesDto>;
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String subTitle,
-      String subTitleEng,
-      int mainCategoryId,
-      String titleEng,
-      String picture});
+  $Res call({
+    int id,
+    String title,
+    String subTitle,
+    String subTitleEng,
+    int mainCategoryId,
+    String titleEng,
+    String picture,
+  });
 }
 
 /// @nodoc
-class _$EmergencyCategoriesDtoCopyWithImpl<$Res,
-        $Val extends EmergencyCategoriesDto>
+class _$EmergencyCategoriesDtoCopyWithImpl<
+  $Res,
+  $Val extends EmergencyCategoriesDto
+>
     implements $EmergencyCategoriesDtoCopyWith<$Res> {
   _$EmergencyCategoriesDtoCopyWithImpl(this._value, this._then);
 
@@ -79,36 +85,39 @@ class _$EmergencyCategoriesDtoCopyWithImpl<$Res,
     Object? titleEng = null,
     Object? picture = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitleEng: null == subTitleEng
-          ? _value.subTitleEng
-          : subTitleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            subTitle: null == subTitle
+                ? _value.subTitle
+                : subTitle // ignore: cast_nullable_to_non_nullable
+                      as String,
+            subTitleEng: null == subTitleEng
+                ? _value.subTitleEng
+                : subTitleEng // ignore: cast_nullable_to_non_nullable
+                      as String,
+            mainCategoryId: null == mainCategoryId
+                ? _value.mainCategoryId
+                : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            titleEng: null == titleEng
+                ? _value.titleEng
+                : titleEng // ignore: cast_nullable_to_non_nullable
+                      as String,
+            picture: null == picture
+                ? _value.picture
+                : picture // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -116,30 +125,31 @@ class _$EmergencyCategoriesDtoCopyWithImpl<$Res,
 abstract class _$$EmergencyCategoriesDtoImplCopyWith<$Res>
     implements $EmergencyCategoriesDtoCopyWith<$Res> {
   factory _$$EmergencyCategoriesDtoImplCopyWith(
-          _$EmergencyCategoriesDtoImpl value,
-          $Res Function(_$EmergencyCategoriesDtoImpl) then) =
-      __$$EmergencyCategoriesDtoImplCopyWithImpl<$Res>;
+    _$EmergencyCategoriesDtoImpl value,
+    $Res Function(_$EmergencyCategoriesDtoImpl) then,
+  ) = __$$EmergencyCategoriesDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String subTitle,
-      String subTitleEng,
-      int mainCategoryId,
-      String titleEng,
-      String picture});
+  $Res call({
+    int id,
+    String title,
+    String subTitle,
+    String subTitleEng,
+    int mainCategoryId,
+    String titleEng,
+    String picture,
+  });
 }
 
 /// @nodoc
 class __$$EmergencyCategoriesDtoImplCopyWithImpl<$Res>
-    extends _$EmergencyCategoriesDtoCopyWithImpl<$Res,
-        _$EmergencyCategoriesDtoImpl>
+    extends
+        _$EmergencyCategoriesDtoCopyWithImpl<$Res, _$EmergencyCategoriesDtoImpl>
     implements _$$EmergencyCategoriesDtoImplCopyWith<$Res> {
   __$$EmergencyCategoriesDtoImplCopyWithImpl(
-      _$EmergencyCategoriesDtoImpl _value,
-      $Res Function(_$EmergencyCategoriesDtoImpl) _then)
-      : super(_value, _then);
+    _$EmergencyCategoriesDtoImpl _value,
+    $Res Function(_$EmergencyCategoriesDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EmergencyCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -154,36 +164,38 @@ class __$$EmergencyCategoriesDtoImplCopyWithImpl<$Res>
     Object? titleEng = null,
     Object? picture = null,
   }) {
-    return _then(_$EmergencyCategoriesDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitle: null == subTitle
-          ? _value.subTitle
-          : subTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      subTitleEng: null == subTitleEng
-          ? _value.subTitleEng
-          : subTitleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      mainCategoryId: null == mainCategoryId
-          ? _value.mainCategoryId
-          : mainCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      titleEng: null == titleEng
-          ? _value.titleEng
-          : titleEng // ignore: cast_nullable_to_non_nullable
-              as String,
-      picture: null == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$EmergencyCategoriesDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        subTitle: null == subTitle
+            ? _value.subTitle
+            : subTitle // ignore: cast_nullable_to_non_nullable
+                  as String,
+        subTitleEng: null == subTitleEng
+            ? _value.subTitleEng
+            : subTitleEng // ignore: cast_nullable_to_non_nullable
+                  as String,
+        mainCategoryId: null == mainCategoryId
+            ? _value.mainCategoryId
+            : mainCategoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        titleEng: null == titleEng
+            ? _value.titleEng
+            : titleEng // ignore: cast_nullable_to_non_nullable
+                  as String,
+        picture: null == picture
+            ? _value.picture
+            : picture // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -191,14 +203,15 @@ class __$$EmergencyCategoriesDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$EmergencyCategoriesDtoImpl implements _EmergencyCategoriesDto {
-  const _$EmergencyCategoriesDtoImpl(
-      {required this.id,
-      required this.title,
-      required this.subTitle,
-      required this.subTitleEng,
-      required this.mainCategoryId,
-      required this.titleEng,
-      required this.picture});
+  const _$EmergencyCategoriesDtoImpl({
+    required this.id,
+    required this.title,
+    required this.subTitle,
+    required this.subTitleEng,
+    required this.mainCategoryId,
+    required this.titleEng,
+    required this.picture,
+  });
 
   factory _$EmergencyCategoriesDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmergencyCategoriesDtoImplFromJson(json);
@@ -243,8 +256,16 @@ class _$EmergencyCategoriesDtoImpl implements _EmergencyCategoriesDto {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, subTitle, subTitleEng,
-      mainCategoryId, titleEng, picture);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    title,
+    subTitle,
+    subTitleEng,
+    mainCategoryId,
+    titleEng,
+    picture,
+  );
 
   /// Create a copy of EmergencyCategoriesDto
   /// with the given fields replaced by the non-null parameter values.
@@ -252,26 +273,28 @@ class _$EmergencyCategoriesDtoImpl implements _EmergencyCategoriesDto {
   @override
   @pragma('vm:prefer-inline')
   _$$EmergencyCategoriesDtoImplCopyWith<_$EmergencyCategoriesDtoImpl>
-      get copyWith => __$$EmergencyCategoriesDtoImplCopyWithImpl<
-          _$EmergencyCategoriesDtoImpl>(this, _$identity);
+  get copyWith =>
+      __$$EmergencyCategoriesDtoImplCopyWithImpl<_$EmergencyCategoriesDtoImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EmergencyCategoriesDtoImplToJson(
-      this,
-    );
+    return _$$EmergencyCategoriesDtoImplToJson(this);
   }
 }
 
 abstract class _EmergencyCategoriesDto implements EmergencyCategoriesDto {
-  const factory _EmergencyCategoriesDto(
-      {required final int id,
-      required final String title,
-      required final String subTitle,
-      required final String subTitleEng,
-      required final int mainCategoryId,
-      required final String titleEng,
-      required final String picture}) = _$EmergencyCategoriesDtoImpl;
+  const factory _EmergencyCategoriesDto({
+    required final int id,
+    required final String title,
+    required final String subTitle,
+    required final String subTitleEng,
+    required final int mainCategoryId,
+    required final String titleEng,
+    required final String picture,
+  }) = _$EmergencyCategoriesDtoImpl;
 
   factory _EmergencyCategoriesDto.fromJson(Map<String, dynamic> json) =
       _$EmergencyCategoriesDtoImpl.fromJson;
@@ -296,5 +319,5 @@ abstract class _EmergencyCategoriesDto implements EmergencyCategoriesDto {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EmergencyCategoriesDtoImplCopyWith<_$EmergencyCategoriesDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

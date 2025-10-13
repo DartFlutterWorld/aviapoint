@@ -12,10 +12,11 @@ part of 'ros_avia_test_category_with_questions_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 RosAviaTestCategoryWithQuestionsDto
-    _$RosAviaTestCategoryWithQuestionsDtoFromJson(Map<String, dynamic> json) {
+_$RosAviaTestCategoryWithQuestionsDtoFromJson(Map<String, dynamic> json) {
   return _RosAviaTestCategoryWithQuestionsDto.fromJson(json);
 }
 
@@ -36,30 +37,37 @@ mixin _$RosAviaTestCategoryWithQuestionsDto {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $RosAviaTestCategoryWithQuestionsDtoCopyWith<
-          RosAviaTestCategoryWithQuestionsDto>
-      get copyWith => throw _privateConstructorUsedError;
+    RosAviaTestCategoryWithQuestionsDto
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $RosAviaTestCategoryWithQuestionsDtoCopyWith<$Res> {
   factory $RosAviaTestCategoryWithQuestionsDtoCopyWith(
-          RosAviaTestCategoryWithQuestionsDto value,
-          $Res Function(RosAviaTestCategoryWithQuestionsDto) then) =
-      _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<$Res,
-          RosAviaTestCategoryWithQuestionsDto>;
+    RosAviaTestCategoryWithQuestionsDto value,
+    $Res Function(RosAviaTestCategoryWithQuestionsDto) then,
+  ) =
+      _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<
+        $Res,
+        RosAviaTestCategoryWithQuestionsDto
+      >;
   @useResult
-  $Res call(
-      {int categoryId,
-      String categoryTitle,
-      String? categoryImage,
-      int categoryPosition,
-      int questionsCount,
-      List<QuestionWithAnswersDto> questionsWithAnswers});
+  $Res call({
+    int categoryId,
+    String categoryTitle,
+    String? categoryImage,
+    int categoryPosition,
+    int questionsCount,
+    List<QuestionWithAnswersDto> questionsWithAnswers,
+  });
 }
 
 /// @nodoc
-class _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<$Res,
-        $Val extends RosAviaTestCategoryWithQuestionsDto>
+class _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<
+  $Res,
+  $Val extends RosAviaTestCategoryWithQuestionsDto
+>
     implements $RosAviaTestCategoryWithQuestionsDtoCopyWith<$Res> {
   _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl(this._value, this._then);
 
@@ -80,32 +88,35 @@ class _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<$Res,
     Object? questionsCount = null,
     Object? questionsWithAnswers = null,
   }) {
-    return _then(_value.copyWith(
-      categoryId: null == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      categoryTitle: null == categoryTitle
-          ? _value.categoryTitle
-          : categoryTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      categoryImage: freezed == categoryImage
-          ? _value.categoryImage
-          : categoryImage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      categoryPosition: null == categoryPosition
-          ? _value.categoryPosition
-          : categoryPosition // ignore: cast_nullable_to_non_nullable
-              as int,
-      questionsCount: null == questionsCount
-          ? _value.questionsCount
-          : questionsCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      questionsWithAnswers: null == questionsWithAnswers
-          ? _value.questionsWithAnswers
-          : questionsWithAnswers // ignore: cast_nullable_to_non_nullable
-              as List<QuestionWithAnswersDto>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            categoryId: null == categoryId
+                ? _value.categoryId
+                : categoryId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            categoryTitle: null == categoryTitle
+                ? _value.categoryTitle
+                : categoryTitle // ignore: cast_nullable_to_non_nullable
+                      as String,
+            categoryImage: freezed == categoryImage
+                ? _value.categoryImage
+                : categoryImage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            categoryPosition: null == categoryPosition
+                ? _value.categoryPosition
+                : categoryPosition // ignore: cast_nullable_to_non_nullable
+                      as int,
+            questionsCount: null == questionsCount
+                ? _value.questionsCount
+                : questionsCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            questionsWithAnswers: null == questionsWithAnswers
+                ? _value.questionsWithAnswers
+                : questionsWithAnswers // ignore: cast_nullable_to_non_nullable
+                      as List<QuestionWithAnswersDto>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -113,29 +124,33 @@ class _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<$Res,
 abstract class _$$RosAviaTestCategoryWithQuestionsDtoImplCopyWith<$Res>
     implements $RosAviaTestCategoryWithQuestionsDtoCopyWith<$Res> {
   factory _$$RosAviaTestCategoryWithQuestionsDtoImplCopyWith(
-          _$RosAviaTestCategoryWithQuestionsDtoImpl value,
-          $Res Function(_$RosAviaTestCategoryWithQuestionsDtoImpl) then) =
-      __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<$Res>;
+    _$RosAviaTestCategoryWithQuestionsDtoImpl value,
+    $Res Function(_$RosAviaTestCategoryWithQuestionsDtoImpl) then,
+  ) = __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int categoryId,
-      String categoryTitle,
-      String? categoryImage,
-      int categoryPosition,
-      int questionsCount,
-      List<QuestionWithAnswersDto> questionsWithAnswers});
+  $Res call({
+    int categoryId,
+    String categoryTitle,
+    String? categoryImage,
+    int categoryPosition,
+    int questionsCount,
+    List<QuestionWithAnswersDto> questionsWithAnswers,
+  });
 }
 
 /// @nodoc
 class __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<$Res>
-    extends _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<$Res,
-        _$RosAviaTestCategoryWithQuestionsDtoImpl>
+    extends
+        _$RosAviaTestCategoryWithQuestionsDtoCopyWithImpl<
+          $Res,
+          _$RosAviaTestCategoryWithQuestionsDtoImpl
+        >
     implements _$$RosAviaTestCategoryWithQuestionsDtoImplCopyWith<$Res> {
   __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl(
-      _$RosAviaTestCategoryWithQuestionsDtoImpl _value,
-      $Res Function(_$RosAviaTestCategoryWithQuestionsDtoImpl) _then)
-      : super(_value, _then);
+    _$RosAviaTestCategoryWithQuestionsDtoImpl _value,
+    $Res Function(_$RosAviaTestCategoryWithQuestionsDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RosAviaTestCategoryWithQuestionsDto
   /// with the given fields replaced by the non-null parameter values.
@@ -149,32 +164,34 @@ class __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<$Res>
     Object? questionsCount = null,
     Object? questionsWithAnswers = null,
   }) {
-    return _then(_$RosAviaTestCategoryWithQuestionsDtoImpl(
-      categoryId: null == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      categoryTitle: null == categoryTitle
-          ? _value.categoryTitle
-          : categoryTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      categoryImage: freezed == categoryImage
-          ? _value.categoryImage
-          : categoryImage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      categoryPosition: null == categoryPosition
-          ? _value.categoryPosition
-          : categoryPosition // ignore: cast_nullable_to_non_nullable
-              as int,
-      questionsCount: null == questionsCount
-          ? _value.questionsCount
-          : questionsCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      questionsWithAnswers: null == questionsWithAnswers
-          ? _value._questionsWithAnswers
-          : questionsWithAnswers // ignore: cast_nullable_to_non_nullable
-              as List<QuestionWithAnswersDto>,
-    ));
+    return _then(
+      _$RosAviaTestCategoryWithQuestionsDtoImpl(
+        categoryId: null == categoryId
+            ? _value.categoryId
+            : categoryId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        categoryTitle: null == categoryTitle
+            ? _value.categoryTitle
+            : categoryTitle // ignore: cast_nullable_to_non_nullable
+                  as String,
+        categoryImage: freezed == categoryImage
+            ? _value.categoryImage
+            : categoryImage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        categoryPosition: null == categoryPosition
+            ? _value.categoryPosition
+            : categoryPosition // ignore: cast_nullable_to_non_nullable
+                  as int,
+        questionsCount: null == questionsCount
+            ? _value.questionsCount
+            : questionsCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        questionsWithAnswers: null == questionsWithAnswers
+            ? _value._questionsWithAnswers
+            : questionsWithAnswers // ignore: cast_nullable_to_non_nullable
+                  as List<QuestionWithAnswersDto>,
+      ),
+    );
   }
 }
 
@@ -183,18 +200,18 @@ class __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$RosAviaTestCategoryWithQuestionsDtoImpl
     implements _RosAviaTestCategoryWithQuestionsDto {
-  const _$RosAviaTestCategoryWithQuestionsDtoImpl(
-      {required this.categoryId,
-      required this.categoryTitle,
-      this.categoryImage,
-      required this.categoryPosition,
-      required this.questionsCount,
-      required final List<QuestionWithAnswersDto> questionsWithAnswers})
-      : _questionsWithAnswers = questionsWithAnswers;
+  const _$RosAviaTestCategoryWithQuestionsDtoImpl({
+    required this.categoryId,
+    required this.categoryTitle,
+    this.categoryImage,
+    required this.categoryPosition,
+    required this.questionsCount,
+    required final List<QuestionWithAnswersDto> questionsWithAnswers,
+  }) : _questionsWithAnswers = questionsWithAnswers;
 
   factory _$RosAviaTestCategoryWithQuestionsDtoImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$RosAviaTestCategoryWithQuestionsDtoImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$RosAviaTestCategoryWithQuestionsDtoImplFromJson(json);
 
   @override
   final int categoryId;
@@ -235,20 +252,23 @@ class _$RosAviaTestCategoryWithQuestionsDtoImpl
                 other.categoryPosition == categoryPosition) &&
             (identical(other.questionsCount, questionsCount) ||
                 other.questionsCount == questionsCount) &&
-            const DeepCollectionEquality()
-                .equals(other._questionsWithAnswers, _questionsWithAnswers));
+            const DeepCollectionEquality().equals(
+              other._questionsWithAnswers,
+              _questionsWithAnswers,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      categoryId,
-      categoryTitle,
-      categoryImage,
-      categoryPosition,
-      questionsCount,
-      const DeepCollectionEquality().hash(_questionsWithAnswers));
+    runtimeType,
+    categoryId,
+    categoryTitle,
+    categoryImage,
+    categoryPosition,
+    questionsCount,
+    const DeepCollectionEquality().hash(_questionsWithAnswers),
+  );
 
   /// Create a copy of RosAviaTestCategoryWithQuestionsDto
   /// with the given fields replaced by the non-null parameter values.
@@ -256,32 +276,33 @@ class _$RosAviaTestCategoryWithQuestionsDtoImpl
   @override
   @pragma('vm:prefer-inline')
   _$$RosAviaTestCategoryWithQuestionsDtoImplCopyWith<
-          _$RosAviaTestCategoryWithQuestionsDtoImpl>
-      get copyWith => __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<
-          _$RosAviaTestCategoryWithQuestionsDtoImpl>(this, _$identity);
+    _$RosAviaTestCategoryWithQuestionsDtoImpl
+  >
+  get copyWith =>
+      __$$RosAviaTestCategoryWithQuestionsDtoImplCopyWithImpl<
+        _$RosAviaTestCategoryWithQuestionsDtoImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$RosAviaTestCategoryWithQuestionsDtoImplToJson(
-      this,
-    );
+    return _$$RosAviaTestCategoryWithQuestionsDtoImplToJson(this);
   }
 }
 
 abstract class _RosAviaTestCategoryWithQuestionsDto
     implements RosAviaTestCategoryWithQuestionsDto {
-  const factory _RosAviaTestCategoryWithQuestionsDto(
-          {required final int categoryId,
-          required final String categoryTitle,
-          final String? categoryImage,
-          required final int categoryPosition,
-          required final int questionsCount,
-          required final List<QuestionWithAnswersDto> questionsWithAnswers}) =
-      _$RosAviaTestCategoryWithQuestionsDtoImpl;
+  const factory _RosAviaTestCategoryWithQuestionsDto({
+    required final int categoryId,
+    required final String categoryTitle,
+    final String? categoryImage,
+    required final int categoryPosition,
+    required final int questionsCount,
+    required final List<QuestionWithAnswersDto> questionsWithAnswers,
+  }) = _$RosAviaTestCategoryWithQuestionsDtoImpl;
 
   factory _RosAviaTestCategoryWithQuestionsDto.fromJson(
-          Map<String, dynamic> json) =
-      _$RosAviaTestCategoryWithQuestionsDtoImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$RosAviaTestCategoryWithQuestionsDtoImpl.fromJson;
 
   @override
   int get categoryId;
@@ -301,12 +322,14 @@ abstract class _RosAviaTestCategoryWithQuestionsDto
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RosAviaTestCategoryWithQuestionsDtoImplCopyWith<
-          _$RosAviaTestCategoryWithQuestionsDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$RosAviaTestCategoryWithQuestionsDtoImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 QuestionWithAnswersDto _$QuestionWithAnswersDtoFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _QuestionWithAnswersDto.fromJson(json);
 }
 
@@ -330,21 +353,25 @@ mixin _$QuestionWithAnswersDto {
 
 /// @nodoc
 abstract class $QuestionWithAnswersDtoCopyWith<$Res> {
-  factory $QuestionWithAnswersDtoCopyWith(QuestionWithAnswersDto value,
-          $Res Function(QuestionWithAnswersDto) then) =
-      _$QuestionWithAnswersDtoCopyWithImpl<$Res, QuestionWithAnswersDto>;
+  factory $QuestionWithAnswersDtoCopyWith(
+    QuestionWithAnswersDto value,
+    $Res Function(QuestionWithAnswersDto) then,
+  ) = _$QuestionWithAnswersDtoCopyWithImpl<$Res, QuestionWithAnswersDto>;
   @useResult
-  $Res call(
-      {int questionId,
-      String questionText,
-      String? explanation,
-      int? correctAnswer,
-      List<AnswerDto> answers});
+  $Res call({
+    int questionId,
+    String questionText,
+    String? explanation,
+    int? correctAnswer,
+    List<AnswerDto> answers,
+  });
 }
 
 /// @nodoc
-class _$QuestionWithAnswersDtoCopyWithImpl<$Res,
-        $Val extends QuestionWithAnswersDto>
+class _$QuestionWithAnswersDtoCopyWithImpl<
+  $Res,
+  $Val extends QuestionWithAnswersDto
+>
     implements $QuestionWithAnswersDtoCopyWith<$Res> {
   _$QuestionWithAnswersDtoCopyWithImpl(this._value, this._then);
 
@@ -364,28 +391,31 @@ class _$QuestionWithAnswersDtoCopyWithImpl<$Res,
     Object? correctAnswer = freezed,
     Object? answers = null,
   }) {
-    return _then(_value.copyWith(
-      questionId: null == questionId
-          ? _value.questionId
-          : questionId // ignore: cast_nullable_to_non_nullable
-              as int,
-      questionText: null == questionText
-          ? _value.questionText
-          : questionText // ignore: cast_nullable_to_non_nullable
-              as String,
-      explanation: freezed == explanation
-          ? _value.explanation
-          : explanation // ignore: cast_nullable_to_non_nullable
-              as String?,
-      correctAnswer: freezed == correctAnswer
-          ? _value.correctAnswer
-          : correctAnswer // ignore: cast_nullable_to_non_nullable
-              as int?,
-      answers: null == answers
-          ? _value.answers
-          : answers // ignore: cast_nullable_to_non_nullable
-              as List<AnswerDto>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            questionId: null == questionId
+                ? _value.questionId
+                : questionId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            questionText: null == questionText
+                ? _value.questionText
+                : questionText // ignore: cast_nullable_to_non_nullable
+                      as String,
+            explanation: freezed == explanation
+                ? _value.explanation
+                : explanation // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            correctAnswer: freezed == correctAnswer
+                ? _value.correctAnswer
+                : correctAnswer // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            answers: null == answers
+                ? _value.answers
+                : answers // ignore: cast_nullable_to_non_nullable
+                      as List<AnswerDto>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -393,28 +423,29 @@ class _$QuestionWithAnswersDtoCopyWithImpl<$Res,
 abstract class _$$QuestionWithAnswersDtoImplCopyWith<$Res>
     implements $QuestionWithAnswersDtoCopyWith<$Res> {
   factory _$$QuestionWithAnswersDtoImplCopyWith(
-          _$QuestionWithAnswersDtoImpl value,
-          $Res Function(_$QuestionWithAnswersDtoImpl) then) =
-      __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>;
+    _$QuestionWithAnswersDtoImpl value,
+    $Res Function(_$QuestionWithAnswersDtoImpl) then,
+  ) = __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int questionId,
-      String questionText,
-      String? explanation,
-      int? correctAnswer,
-      List<AnswerDto> answers});
+  $Res call({
+    int questionId,
+    String questionText,
+    String? explanation,
+    int? correctAnswer,
+    List<AnswerDto> answers,
+  });
 }
 
 /// @nodoc
 class __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>
-    extends _$QuestionWithAnswersDtoCopyWithImpl<$Res,
-        _$QuestionWithAnswersDtoImpl>
+    extends
+        _$QuestionWithAnswersDtoCopyWithImpl<$Res, _$QuestionWithAnswersDtoImpl>
     implements _$$QuestionWithAnswersDtoImplCopyWith<$Res> {
   __$$QuestionWithAnswersDtoImplCopyWithImpl(
-      _$QuestionWithAnswersDtoImpl _value,
-      $Res Function(_$QuestionWithAnswersDtoImpl) _then)
-      : super(_value, _then);
+    _$QuestionWithAnswersDtoImpl _value,
+    $Res Function(_$QuestionWithAnswersDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of QuestionWithAnswersDto
   /// with the given fields replaced by the non-null parameter values.
@@ -427,28 +458,30 @@ class __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>
     Object? correctAnswer = freezed,
     Object? answers = null,
   }) {
-    return _then(_$QuestionWithAnswersDtoImpl(
-      questionId: null == questionId
-          ? _value.questionId
-          : questionId // ignore: cast_nullable_to_non_nullable
-              as int,
-      questionText: null == questionText
-          ? _value.questionText
-          : questionText // ignore: cast_nullable_to_non_nullable
-              as String,
-      explanation: freezed == explanation
-          ? _value.explanation
-          : explanation // ignore: cast_nullable_to_non_nullable
-              as String?,
-      correctAnswer: freezed == correctAnswer
-          ? _value.correctAnswer
-          : correctAnswer // ignore: cast_nullable_to_non_nullable
-              as int?,
-      answers: null == answers
-          ? _value._answers
-          : answers // ignore: cast_nullable_to_non_nullable
-              as List<AnswerDto>,
-    ));
+    return _then(
+      _$QuestionWithAnswersDtoImpl(
+        questionId: null == questionId
+            ? _value.questionId
+            : questionId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        questionText: null == questionText
+            ? _value.questionText
+            : questionText // ignore: cast_nullable_to_non_nullable
+                  as String,
+        explanation: freezed == explanation
+            ? _value.explanation
+            : explanation // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        correctAnswer: freezed == correctAnswer
+            ? _value.correctAnswer
+            : correctAnswer // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        answers: null == answers
+            ? _value._answers
+            : answers // ignore: cast_nullable_to_non_nullable
+                  as List<AnswerDto>,
+      ),
+    );
   }
 }
 
@@ -456,13 +489,13 @@ class __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
-  const _$QuestionWithAnswersDtoImpl(
-      {required this.questionId,
-      required this.questionText,
-      this.explanation,
-      this.correctAnswer,
-      required final List<AnswerDto> answers})
-      : _answers = answers;
+  const _$QuestionWithAnswersDtoImpl({
+    required this.questionId,
+    required this.questionText,
+    this.explanation,
+    this.correctAnswer,
+    required final List<AnswerDto> answers,
+  }) : _answers = answers;
 
   factory _$QuestionWithAnswersDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuestionWithAnswersDtoImplFromJson(json);
@@ -507,12 +540,13 @@ class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      questionId,
-      questionText,
-      explanation,
-      correctAnswer,
-      const DeepCollectionEquality().hash(_answers));
+    runtimeType,
+    questionId,
+    questionText,
+    explanation,
+    correctAnswer,
+    const DeepCollectionEquality().hash(_answers),
+  );
 
   /// Create a copy of QuestionWithAnswersDto
   /// with the given fields replaced by the non-null parameter values.
@@ -520,24 +554,26 @@ class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
   @override
   @pragma('vm:prefer-inline')
   _$$QuestionWithAnswersDtoImplCopyWith<_$QuestionWithAnswersDtoImpl>
-      get copyWith => __$$QuestionWithAnswersDtoImplCopyWithImpl<
-          _$QuestionWithAnswersDtoImpl>(this, _$identity);
+  get copyWith =>
+      __$$QuestionWithAnswersDtoImplCopyWithImpl<_$QuestionWithAnswersDtoImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$QuestionWithAnswersDtoImplToJson(
-      this,
-    );
+    return _$$QuestionWithAnswersDtoImplToJson(this);
   }
 }
 
 abstract class _QuestionWithAnswersDto implements QuestionWithAnswersDto {
-  const factory _QuestionWithAnswersDto(
-      {required final int questionId,
-      required final String questionText,
-      final String? explanation,
-      final int? correctAnswer,
-      required final List<AnswerDto> answers}) = _$QuestionWithAnswersDtoImpl;
+  const factory _QuestionWithAnswersDto({
+    required final int questionId,
+    required final String questionText,
+    final String? explanation,
+    final int? correctAnswer,
+    required final List<AnswerDto> answers,
+  }) = _$QuestionWithAnswersDtoImpl;
 
   factory _QuestionWithAnswersDto.fromJson(Map<String, dynamic> json) =
       _$QuestionWithAnswersDtoImpl.fromJson;
@@ -558,7 +594,7 @@ abstract class _QuestionWithAnswersDto implements QuestionWithAnswersDto {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$QuestionWithAnswersDtoImplCopyWith<_$QuestionWithAnswersDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AnswerDto _$AnswerDtoFromJson(Map<String, dynamic> json) {
@@ -588,12 +624,13 @@ abstract class $AnswerDtoCopyWith<$Res> {
   factory $AnswerDtoCopyWith(AnswerDto value, $Res Function(AnswerDto) then) =
       _$AnswerDtoCopyWithImpl<$Res, AnswerDto>;
   @useResult
-  $Res call(
-      {int answerId,
-      String answerText,
-      bool isCorrect,
-      bool isOfficial,
-      int position});
+  $Res call({
+    int answerId,
+    String answerText,
+    bool isCorrect,
+    bool isOfficial,
+    int position,
+  });
 }
 
 /// @nodoc
@@ -617,28 +654,31 @@ class _$AnswerDtoCopyWithImpl<$Res, $Val extends AnswerDto>
     Object? isOfficial = null,
     Object? position = null,
   }) {
-    return _then(_value.copyWith(
-      answerId: null == answerId
-          ? _value.answerId
-          : answerId // ignore: cast_nullable_to_non_nullable
-              as int,
-      answerText: null == answerText
-          ? _value.answerText
-          : answerText // ignore: cast_nullable_to_non_nullable
-              as String,
-      isCorrect: null == isCorrect
-          ? _value.isCorrect
-          : isCorrect // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isOfficial: null == isOfficial
-          ? _value.isOfficial
-          : isOfficial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      position: null == position
-          ? _value.position
-          : position // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            answerId: null == answerId
+                ? _value.answerId
+                : answerId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            answerText: null == answerText
+                ? _value.answerText
+                : answerText // ignore: cast_nullable_to_non_nullable
+                      as String,
+            isCorrect: null == isCorrect
+                ? _value.isCorrect
+                : isCorrect // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            isOfficial: null == isOfficial
+                ? _value.isOfficial
+                : isOfficial // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            position: null == position
+                ? _value.position
+                : position // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -646,16 +686,18 @@ class _$AnswerDtoCopyWithImpl<$Res, $Val extends AnswerDto>
 abstract class _$$AnswerDtoImplCopyWith<$Res>
     implements $AnswerDtoCopyWith<$Res> {
   factory _$$AnswerDtoImplCopyWith(
-          _$AnswerDtoImpl value, $Res Function(_$AnswerDtoImpl) then) =
-      __$$AnswerDtoImplCopyWithImpl<$Res>;
+    _$AnswerDtoImpl value,
+    $Res Function(_$AnswerDtoImpl) then,
+  ) = __$$AnswerDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int answerId,
-      String answerText,
-      bool isCorrect,
-      bool isOfficial,
-      int position});
+  $Res call({
+    int answerId,
+    String answerText,
+    bool isCorrect,
+    bool isOfficial,
+    int position,
+  });
 }
 
 /// @nodoc
@@ -663,8 +705,9 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
     extends _$AnswerDtoCopyWithImpl<$Res, _$AnswerDtoImpl>
     implements _$$AnswerDtoImplCopyWith<$Res> {
   __$$AnswerDtoImplCopyWithImpl(
-      _$AnswerDtoImpl _value, $Res Function(_$AnswerDtoImpl) _then)
-      : super(_value, _then);
+    _$AnswerDtoImpl _value,
+    $Res Function(_$AnswerDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AnswerDto
   /// with the given fields replaced by the non-null parameter values.
@@ -677,28 +720,30 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
     Object? isOfficial = null,
     Object? position = null,
   }) {
-    return _then(_$AnswerDtoImpl(
-      answerId: null == answerId
-          ? _value.answerId
-          : answerId // ignore: cast_nullable_to_non_nullable
-              as int,
-      answerText: null == answerText
-          ? _value.answerText
-          : answerText // ignore: cast_nullable_to_non_nullable
-              as String,
-      isCorrect: null == isCorrect
-          ? _value.isCorrect
-          : isCorrect // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isOfficial: null == isOfficial
-          ? _value.isOfficial
-          : isOfficial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      position: null == position
-          ? _value.position
-          : position // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$AnswerDtoImpl(
+        answerId: null == answerId
+            ? _value.answerId
+            : answerId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        answerText: null == answerText
+            ? _value.answerText
+            : answerText // ignore: cast_nullable_to_non_nullable
+                  as String,
+        isCorrect: null == isCorrect
+            ? _value.isCorrect
+            : isCorrect // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        isOfficial: null == isOfficial
+            ? _value.isOfficial
+            : isOfficial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        position: null == position
+            ? _value.position
+            : position // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -706,12 +751,13 @@ class __$$AnswerDtoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$AnswerDtoImpl implements _AnswerDto {
-  const _$AnswerDtoImpl(
-      {required this.answerId,
-      required this.answerText,
-      required this.isCorrect,
-      required this.isOfficial,
-      required this.position});
+  const _$AnswerDtoImpl({
+    required this.answerId,
+    required this.answerText,
+    required this.isCorrect,
+    required this.isOfficial,
+    required this.position,
+  });
 
   factory _$AnswerDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$AnswerDtoImplFromJson(json);
@@ -752,7 +798,13 @@ class _$AnswerDtoImpl implements _AnswerDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, answerId, answerText, isCorrect, isOfficial, position);
+    runtimeType,
+    answerId,
+    answerText,
+    isCorrect,
+    isOfficial,
+    position,
+  );
 
   /// Create a copy of AnswerDto
   /// with the given fields replaced by the non-null parameter values.
@@ -764,19 +816,18 @@ class _$AnswerDtoImpl implements _AnswerDto {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AnswerDtoImplToJson(
-      this,
-    );
+    return _$$AnswerDtoImplToJson(this);
   }
 }
 
 abstract class _AnswerDto implements AnswerDto {
-  const factory _AnswerDto(
-      {required final int answerId,
-      required final String answerText,
-      required final bool isCorrect,
-      required final bool isOfficial,
-      required final int position}) = _$AnswerDtoImpl;
+  const factory _AnswerDto({
+    required final int answerId,
+    required final String answerText,
+    required final bool isCorrect,
+    required final bool isOfficial,
+    required final int position,
+  }) = _$AnswerDtoImpl;
 
   factory _AnswerDto.fromJson(Map<String, dynamic> json) =
       _$AnswerDtoImpl.fromJson;

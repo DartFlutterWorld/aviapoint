@@ -12,7 +12,8 @@ part of 'detail_story_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$DetailStoryEvent {
@@ -20,35 +21,29 @@ mixin _$DetailStoryEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetDetailStoryEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetDetailStoryEvent value)? get,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetDetailStoryEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 
   /// Create a copy of DetailStoryEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -60,8 +55,9 @@ mixin _$DetailStoryEvent {
 /// @nodoc
 abstract class $DetailStoryEventCopyWith<$Res> {
   factory $DetailStoryEventCopyWith(
-          DetailStoryEvent value, $Res Function(DetailStoryEvent) then) =
-      _$DetailStoryEventCopyWithImpl<$Res, DetailStoryEvent>;
+    DetailStoryEvent value,
+    $Res Function(DetailStoryEvent) then,
+  ) = _$DetailStoryEventCopyWithImpl<$Res, DetailStoryEvent>;
   @useResult
   $Res call({int id});
 }
@@ -80,24 +76,26 @@ class _$DetailStoryEventCopyWithImpl<$Res, $Val extends DetailStoryEvent>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  $Res call({Object? id = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GetDetailStoryEventImplCopyWith<$Res>
     implements $DetailStoryEventCopyWith<$Res> {
-  factory _$$GetDetailStoryEventImplCopyWith(_$GetDetailStoryEventImpl value,
-          $Res Function(_$GetDetailStoryEventImpl) then) =
-      __$$GetDetailStoryEventImplCopyWithImpl<$Res>;
+  factory _$$GetDetailStoryEventImplCopyWith(
+    _$GetDetailStoryEventImpl value,
+    $Res Function(_$GetDetailStoryEventImpl) then,
+  ) = __$$GetDetailStoryEventImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id});
@@ -107,23 +105,24 @@ abstract class _$$GetDetailStoryEventImplCopyWith<$Res>
 class __$$GetDetailStoryEventImplCopyWithImpl<$Res>
     extends _$DetailStoryEventCopyWithImpl<$Res, _$GetDetailStoryEventImpl>
     implements _$$GetDetailStoryEventImplCopyWith<$Res> {
-  __$$GetDetailStoryEventImplCopyWithImpl(_$GetDetailStoryEventImpl _value,
-      $Res Function(_$GetDetailStoryEventImpl) _then)
-      : super(_value, _then);
+  __$$GetDetailStoryEventImplCopyWithImpl(
+    _$GetDetailStoryEventImpl _value,
+    $Res Function(_$GetDetailStoryEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailStoryEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-  }) {
-    return _then(_$GetDetailStoryEventImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? id = null}) {
+    return _then(
+      _$GetDetailStoryEventImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -158,7 +157,9 @@ class _$GetDetailStoryEventImpl extends GetDetailStoryEvent {
   @pragma('vm:prefer-inline')
   _$$GetDetailStoryEventImplCopyWith<_$GetDetailStoryEventImpl> get copyWith =>
       __$$GetDetailStoryEventImplCopyWithImpl<_$GetDetailStoryEventImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
@@ -238,68 +239,70 @@ mixin _$DetailStoryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(StoryEntity detailstory) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(StoryEntity detailstory)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(StoryEntity detailstory)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingDetailStoryState value) loading,
     required TResult Function(ErrorDetailStoryState value) error,
     required TResult Function(SuccessDetailStoryState value) success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingDetailStoryState value)? loading,
     TResult? Function(ErrorDetailStoryState value)? error,
     TResult? Function(SuccessDetailStoryState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingDetailStoryState value)? loading,
     TResult Function(ErrorDetailStoryState value)? error,
     TResult Function(SuccessDetailStoryState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $DetailStoryStateCopyWith<$Res> {
   factory $DetailStoryStateCopyWith(
-          DetailStoryState value, $Res Function(DetailStoryState) then) =
-      _$DetailStoryStateCopyWithImpl<$Res, DetailStoryState>;
+    DetailStoryState value,
+    $Res Function(DetailStoryState) then,
+  ) = _$DetailStoryStateCopyWithImpl<$Res, DetailStoryState>;
 }
 
 /// @nodoc
@@ -319,9 +322,9 @@ class _$DetailStoryStateCopyWithImpl<$Res, $Val extends DetailStoryState>
 /// @nodoc
 abstract class _$$LoadingDetailStoryStateImplCopyWith<$Res> {
   factory _$$LoadingDetailStoryStateImplCopyWith(
-          _$LoadingDetailStoryStateImpl value,
-          $Res Function(_$LoadingDetailStoryStateImpl) then) =
-      __$$LoadingDetailStoryStateImplCopyWithImpl<$Res>;
+    _$LoadingDetailStoryStateImpl value,
+    $Res Function(_$LoadingDetailStoryStateImpl) then,
+  ) = __$$LoadingDetailStoryStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -329,9 +332,9 @@ class __$$LoadingDetailStoryStateImplCopyWithImpl<$Res>
     extends _$DetailStoryStateCopyWithImpl<$Res, _$LoadingDetailStoryStateImpl>
     implements _$$LoadingDetailStoryStateImplCopyWith<$Res> {
   __$$LoadingDetailStoryStateImplCopyWithImpl(
-      _$LoadingDetailStoryStateImpl _value,
-      $Res Function(_$LoadingDetailStoryStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingDetailStoryStateImpl _value,
+    $Res Function(_$LoadingDetailStoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailStoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -361,9 +364,14 @@ class _$LoadingDetailStoryStateImpl extends LoadingDetailStoryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(StoryEntity detailstory) success,
   }) {
     return loading();
@@ -374,12 +382,13 @@ class _$LoadingDetailStoryStateImpl extends LoadingDetailStoryState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(StoryEntity detailstory)? success,
   }) {
     return loading?.call();
@@ -390,12 +399,13 @@ class _$LoadingDetailStoryStateImpl extends LoadingDetailStoryState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(StoryEntity detailstory)? success,
     required TResult orElse(),
   }) {
@@ -448,25 +458,27 @@ abstract class LoadingDetailStoryState extends DetailStoryState {
 /// @nodoc
 abstract class _$$ErrorDetailStoryStateImplCopyWith<$Res> {
   factory _$$ErrorDetailStoryStateImplCopyWith(
-          _$ErrorDetailStoryStateImpl value,
-          $Res Function(_$ErrorDetailStoryStateImpl) then) =
-      __$$ErrorDetailStoryStateImplCopyWithImpl<$Res>;
+    _$ErrorDetailStoryStateImpl value,
+    $Res Function(_$ErrorDetailStoryStateImpl) then,
+  ) = __$$ErrorDetailStoryStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorDetailStoryStateImplCopyWithImpl<$Res>
     extends _$DetailStoryStateCopyWithImpl<$Res, _$ErrorDetailStoryStateImpl>
     implements _$$ErrorDetailStoryStateImplCopyWith<$Res> {
-  __$$ErrorDetailStoryStateImplCopyWithImpl(_$ErrorDetailStoryStateImpl _value,
-      $Res Function(_$ErrorDetailStoryStateImpl) _then)
-      : super(_value, _then);
+  __$$ErrorDetailStoryStateImplCopyWithImpl(
+    _$ErrorDetailStoryStateImpl _value,
+    $Res Function(_$ErrorDetailStoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailStoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -479,41 +491,43 @@ class __$$ErrorDetailStoryStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorDetailStoryStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorDetailStoryStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorDetailStoryStateImpl extends ErrorDetailStoryState {
-  const _$ErrorDetailStoryStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorDetailStoryStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -549,8 +563,14 @@ class _$ErrorDetailStoryStateImpl extends ErrorDetailStoryState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of DetailStoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -558,20 +578,33 @@ class _$ErrorDetailStoryStateImpl extends ErrorDetailStoryState {
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorDetailStoryStateImplCopyWith<_$ErrorDetailStoryStateImpl>
-      get copyWith => __$$ErrorDetailStoryStateImplCopyWithImpl<
-          _$ErrorDetailStoryStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$ErrorDetailStoryStateImplCopyWithImpl<_$ErrorDetailStoryStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(StoryEntity detailstory) success,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -579,16 +612,22 @@ class _$ErrorDetailStoryStateImpl extends ErrorDetailStoryState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(StoryEntity detailstory)? success,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -596,18 +635,24 @@ class _$ErrorDetailStoryStateImpl extends ErrorDetailStoryState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(StoryEntity detailstory)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -648,12 +693,13 @@ class _$ErrorDetailStoryStateImpl extends ErrorDetailStoryState {
 }
 
 abstract class ErrorDetailStoryState extends DetailStoryState {
-  const factory ErrorDetailStoryState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorDetailStoryStateImpl;
+  const factory ErrorDetailStoryState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorDetailStoryStateImpl;
   const ErrorDetailStoryState._() : super._();
 
   String? get errorFromApi;
@@ -666,15 +712,15 @@ abstract class ErrorDetailStoryState extends DetailStoryState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorDetailStoryStateImplCopyWith<_$ErrorDetailStoryStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessDetailStoryStateImplCopyWith<$Res> {
   factory _$$SuccessDetailStoryStateImplCopyWith(
-          _$SuccessDetailStoryStateImpl value,
-          $Res Function(_$SuccessDetailStoryStateImpl) then) =
-      __$$SuccessDetailStoryStateImplCopyWithImpl<$Res>;
+    _$SuccessDetailStoryStateImpl value,
+    $Res Function(_$SuccessDetailStoryStateImpl) then,
+  ) = __$$SuccessDetailStoryStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({StoryEntity detailstory});
 }
@@ -684,23 +730,23 @@ class __$$SuccessDetailStoryStateImplCopyWithImpl<$Res>
     extends _$DetailStoryStateCopyWithImpl<$Res, _$SuccessDetailStoryStateImpl>
     implements _$$SuccessDetailStoryStateImplCopyWith<$Res> {
   __$$SuccessDetailStoryStateImplCopyWithImpl(
-      _$SuccessDetailStoryStateImpl _value,
-      $Res Function(_$SuccessDetailStoryStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessDetailStoryStateImpl _value,
+    $Res Function(_$SuccessDetailStoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DetailStoryState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? detailstory = null,
-  }) {
-    return _then(_$SuccessDetailStoryStateImpl(
-      detailstory: null == detailstory
-          ? _value.detailstory
-          : detailstory // ignore: cast_nullable_to_non_nullable
-              as StoryEntity,
-    ));
+  $Res call({Object? detailstory = null}) {
+    return _then(
+      _$SuccessDetailStoryStateImpl(
+        detailstory: null == detailstory
+            ? _value.detailstory
+            : detailstory // ignore: cast_nullable_to_non_nullable
+                  as StoryEntity,
+      ),
+    );
   }
 }
 
@@ -735,16 +781,23 @@ class _$SuccessDetailStoryStateImpl extends SuccessDetailStoryState {
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessDetailStoryStateImplCopyWith<_$SuccessDetailStoryStateImpl>
-      get copyWith => __$$SuccessDetailStoryStateImplCopyWithImpl<
-          _$SuccessDetailStoryStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$SuccessDetailStoryStateImplCopyWithImpl<
+        _$SuccessDetailStoryStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(StoryEntity detailstory) success,
   }) {
     return success(detailstory);
@@ -755,12 +808,13 @@ class _$SuccessDetailStoryStateImpl extends SuccessDetailStoryState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(StoryEntity detailstory)? success,
   }) {
     return success?.call(detailstory);
@@ -771,12 +825,13 @@ class _$SuccessDetailStoryStateImpl extends SuccessDetailStoryState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(StoryEntity detailstory)? success,
     required TResult orElse(),
   }) {
@@ -822,8 +877,9 @@ class _$SuccessDetailStoryStateImpl extends SuccessDetailStoryState {
 }
 
 abstract class SuccessDetailStoryState extends DetailStoryState {
-  const factory SuccessDetailStoryState(
-      {required final StoryEntity detailstory}) = _$SuccessDetailStoryStateImpl;
+  const factory SuccessDetailStoryState({
+    required final StoryEntity detailstory,
+  }) = _$SuccessDetailStoryStateImpl;
   const SuccessDetailStoryState._() : super._();
 
   StoryEntity get detailstory;
@@ -832,5 +888,5 @@ abstract class SuccessDetailStoryState extends DetailStoryState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessDetailStoryStateImplCopyWith<_$SuccessDetailStoryStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

@@ -12,7 +12,8 @@ part of 'preflight_inspection_check_list_by_category_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$PreflightInspectionCheckListByCategoryEvent {
@@ -20,64 +21,67 @@ mixin _$PreflightInspectionCheckListByCategoryEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(String preflihgtInspectionCategoryId) get,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String preflihgtInspectionCategoryId)? get,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String preflihgtInspectionCategoryId)? get,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            GetPreflightInspectionCheckListByCategoryEvent value)
-        get,
+      GetPreflightInspectionCheckListByCategoryEvent value,
+    )
+    get,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryEvent value)
-        initial,
-  }) =>
-      throw _privateConstructorUsedError;
+      InitialPreflightInspectionCheckListByCategoryEvent value,
+    )
+    initial,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetPreflightInspectionCheckListByCategoryEvent value)?
-        get,
+    get,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryEvent value)?
-        initial,
-  }) =>
-      throw _privateConstructorUsedError;
+    initial,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetPreflightInspectionCheckListByCategoryEvent value)? get,
     TResult Function(InitialPreflightInspectionCheckListByCategoryEvent value)?
-        initial,
+    initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PreflightInspectionCheckListByCategoryEventCopyWith<$Res> {
   factory $PreflightInspectionCheckListByCategoryEventCopyWith(
-          PreflightInspectionCheckListByCategoryEvent value,
-          $Res Function(PreflightInspectionCheckListByCategoryEvent) then) =
-      _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<$Res,
-          PreflightInspectionCheckListByCategoryEvent>;
+    PreflightInspectionCheckListByCategoryEvent value,
+    $Res Function(PreflightInspectionCheckListByCategoryEvent) then,
+  ) =
+      _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<
+        $Res,
+        PreflightInspectionCheckListByCategoryEvent
+      >;
 }
 
 /// @nodoc
-class _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<$Res,
-        $Val extends PreflightInspectionCheckListByCategoryEvent>
+class _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<
+  $Res,
+  $Val extends PreflightInspectionCheckListByCategoryEvent
+>
     implements $PreflightInspectionCheckListByCategoryEventCopyWith<$Res> {
   _$PreflightInspectionCheckListByCategoryEventCopyWithImpl(
-      this._value, this._then);
+    this._value,
+    this._then,
+  );
 
   // ignore: unused_field
   final $Val _value;
@@ -90,40 +94,43 @@ class _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<$Res,
 
 /// @nodoc
 abstract class _$$GetPreflightInspectionCheckListByCategoryEventImplCopyWith<
-    $Res> {
+  $Res
+> {
   factory _$$GetPreflightInspectionCheckListByCategoryEventImplCopyWith(
-          _$GetPreflightInspectionCheckListByCategoryEventImpl value,
-          $Res Function(_$GetPreflightInspectionCheckListByCategoryEventImpl)
-              then) =
-      __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<$Res>;
+    _$GetPreflightInspectionCheckListByCategoryEventImpl value,
+    $Res Function(_$GetPreflightInspectionCheckListByCategoryEventImpl) then,
+  ) = __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String preflihgtInspectionCategoryId});
 }
 
 /// @nodoc
 class __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<$Res,
-        _$GetPreflightInspectionCheckListByCategoryEventImpl>
+    extends
+        _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<
+          $Res,
+          _$GetPreflightInspectionCheckListByCategoryEventImpl
+        >
     implements
         _$$GetPreflightInspectionCheckListByCategoryEventImplCopyWith<$Res> {
   __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl(
-      _$GetPreflightInspectionCheckListByCategoryEventImpl _value,
-      $Res Function(_$GetPreflightInspectionCheckListByCategoryEventImpl) _then)
-      : super(_value, _then);
+    _$GetPreflightInspectionCheckListByCategoryEventImpl _value,
+    $Res Function(_$GetPreflightInspectionCheckListByCategoryEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCheckListByCategoryEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? preflihgtInspectionCategoryId = null,
-  }) {
-    return _then(_$GetPreflightInspectionCheckListByCategoryEventImpl(
-      null == preflihgtInspectionCategoryId
-          ? _value.preflihgtInspectionCategoryId
-          : preflihgtInspectionCategoryId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? preflihgtInspectionCategoryId = null}) {
+    return _then(
+      _$GetPreflightInspectionCheckListByCategoryEventImpl(
+        null == preflihgtInspectionCategoryId
+            ? _value.preflihgtInspectionCategoryId
+            : preflihgtInspectionCategoryId // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -132,8 +139,8 @@ class __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<$Res>
 class _$GetPreflightInspectionCheckListByCategoryEventImpl
     extends GetPreflightInspectionCheckListByCategoryEvent {
   const _$GetPreflightInspectionCheckListByCategoryEventImpl(
-      this.preflihgtInspectionCategoryId)
-      : super._();
+    this.preflihgtInspectionCategoryId,
+  ) : super._();
 
   @override
   final String preflihgtInspectionCategoryId;
@@ -148,8 +155,10 @@ class _$GetPreflightInspectionCheckListByCategoryEventImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GetPreflightInspectionCheckListByCategoryEventImpl &&
-            (identical(other.preflihgtInspectionCategoryId,
-                    preflihgtInspectionCategoryId) ||
+            (identical(
+                  other.preflihgtInspectionCategoryId,
+                  preflihgtInspectionCategoryId,
+                ) ||
                 other.preflihgtInspectionCategoryId ==
                     preflihgtInspectionCategoryId));
   }
@@ -163,11 +172,12 @@ class _$GetPreflightInspectionCheckListByCategoryEventImpl
   @override
   @pragma('vm:prefer-inline')
   _$$GetPreflightInspectionCheckListByCategoryEventImplCopyWith<
-          _$GetPreflightInspectionCheckListByCategoryEventImpl>
-      get copyWith =>
-          __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<
-                  _$GetPreflightInspectionCheckListByCategoryEventImpl>(
-              this, _$identity);
+    _$GetPreflightInspectionCheckListByCategoryEventImpl
+  >
+  get copyWith =>
+      __$$GetPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<
+        _$GetPreflightInspectionCheckListByCategoryEventImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -204,11 +214,13 @@ class _$GetPreflightInspectionCheckListByCategoryEventImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            GetPreflightInspectionCheckListByCategoryEvent value)
-        get,
+      GetPreflightInspectionCheckListByCategoryEvent value,
+    )
+    get,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryEvent value)
-        initial,
+      InitialPreflightInspectionCheckListByCategoryEvent value,
+    )
+    initial,
   }) {
     return get(this);
   }
@@ -217,9 +229,9 @@ class _$GetPreflightInspectionCheckListByCategoryEventImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetPreflightInspectionCheckListByCategoryEvent value)?
-        get,
+    get,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryEvent value)?
-        initial,
+    initial,
   }) {
     return get?.call(this);
   }
@@ -229,7 +241,7 @@ class _$GetPreflightInspectionCheckListByCategoryEventImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetPreflightInspectionCheckListByCategoryEvent value)? get,
     TResult Function(InitialPreflightInspectionCheckListByCategoryEvent value)?
-        initial,
+    initial,
     required TResult orElse(),
   }) {
     if (get != null) {
@@ -242,8 +254,8 @@ class _$GetPreflightInspectionCheckListByCategoryEventImpl
 abstract class GetPreflightInspectionCheckListByCategoryEvent
     extends PreflightInspectionCheckListByCategoryEvent {
   const factory GetPreflightInspectionCheckListByCategoryEvent(
-          final String preflihgtInspectionCategoryId) =
-      _$GetPreflightInspectionCheckListByCategoryEventImpl;
+    final String preflihgtInspectionCategoryId,
+  ) = _$GetPreflightInspectionCheckListByCategoryEventImpl;
   const GetPreflightInspectionCheckListByCategoryEvent._() : super._();
 
   String get preflihgtInspectionCategoryId;
@@ -252,35 +264,43 @@ abstract class GetPreflightInspectionCheckListByCategoryEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetPreflightInspectionCheckListByCategoryEventImplCopyWith<
-          _$GetPreflightInspectionCheckListByCategoryEventImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$GetPreflightInspectionCheckListByCategoryEventImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$InitialPreflightInspectionCheckListByCategoryEventImplCopyWith<
-    $Res> {
+  $Res
+> {
   factory _$$InitialPreflightInspectionCheckListByCategoryEventImplCopyWith(
-          _$InitialPreflightInspectionCheckListByCategoryEventImpl value,
-          $Res Function(
-                  _$InitialPreflightInspectionCheckListByCategoryEventImpl)
-              then) =
+    _$InitialPreflightInspectionCheckListByCategoryEventImpl value,
+    $Res Function(_$InitialPreflightInspectionCheckListByCategoryEventImpl)
+    then,
+  ) =
       __$$InitialPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<
-          $Res>;
+        $Res
+      >;
 }
 
 /// @nodoc
 class __$$InitialPreflightInspectionCheckListByCategoryEventImplCopyWithImpl<
-        $Res>
-    extends _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<$Res,
-        _$InitialPreflightInspectionCheckListByCategoryEventImpl>
+  $Res
+>
+    extends
+        _$PreflightInspectionCheckListByCategoryEventCopyWithImpl<
+          $Res,
+          _$InitialPreflightInspectionCheckListByCategoryEventImpl
+        >
     implements
         _$$InitialPreflightInspectionCheckListByCategoryEventImplCopyWith<
-            $Res> {
+          $Res
+        > {
   __$$InitialPreflightInspectionCheckListByCategoryEventImplCopyWithImpl(
-      _$InitialPreflightInspectionCheckListByCategoryEventImpl _value,
-      $Res Function(_$InitialPreflightInspectionCheckListByCategoryEventImpl)
-          _then)
-      : super(_value, _then);
+    _$InitialPreflightInspectionCheckListByCategoryEventImpl _value,
+    $Res Function(_$InitialPreflightInspectionCheckListByCategoryEventImpl)
+    _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCheckListByCategoryEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -342,11 +362,13 @@ class _$InitialPreflightInspectionCheckListByCategoryEventImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            GetPreflightInspectionCheckListByCategoryEvent value)
-        get,
+      GetPreflightInspectionCheckListByCategoryEvent value,
+    )
+    get,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryEvent value)
-        initial,
+      InitialPreflightInspectionCheckListByCategoryEvent value,
+    )
+    initial,
   }) {
     return initial(this);
   }
@@ -355,9 +377,9 @@ class _$InitialPreflightInspectionCheckListByCategoryEventImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetPreflightInspectionCheckListByCategoryEvent value)?
-        get,
+    get,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryEvent value)?
-        initial,
+    initial,
   }) {
     return initial?.call(this);
   }
@@ -367,7 +389,7 @@ class _$InitialPreflightInspectionCheckListByCategoryEventImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetPreflightInspectionCheckListByCategoryEvent value)? get,
     TResult Function(InitialPreflightInspectionCheckListByCategoryEvent value)?
-        initial,
+    initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -389,112 +411,127 @@ mixin _$PreflightInspectionCheckListByCategoryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            LoadingPreflightInspectionCheckListByCategoryState value)
-        loading,
+      LoadingPreflightInspectionCheckListByCategoryState value,
+    )
+    loading,
     required TResult Function(
-            ErrorPreflightInspectionCheckListByCategoryState value)
-        error,
+      ErrorPreflightInspectionCheckListByCategoryState value,
+    )
+    error,
     required TResult Function(
-            SuccessPreflightInspectionCheckListByCategoryState value)
-        success,
+      SuccessPreflightInspectionCheckListByCategoryState value,
+    )
+    success,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryState value)
-        initial,
-  }) =>
-      throw _privateConstructorUsedError;
+      InitialPreflightInspectionCheckListByCategoryState value,
+    )
+    initial,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult? Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult? Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
-  }) =>
-      throw _privateConstructorUsedError;
+    initial,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PreflightInspectionCheckListByCategoryStateCopyWith<$Res> {
   factory $PreflightInspectionCheckListByCategoryStateCopyWith(
-          PreflightInspectionCheckListByCategoryState value,
-          $Res Function(PreflightInspectionCheckListByCategoryState) then) =
-      _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
-          PreflightInspectionCheckListByCategoryState>;
+    PreflightInspectionCheckListByCategoryState value,
+    $Res Function(PreflightInspectionCheckListByCategoryState) then,
+  ) =
+      _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<
+        $Res,
+        PreflightInspectionCheckListByCategoryState
+      >;
 }
 
 /// @nodoc
-class _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
-        $Val extends PreflightInspectionCheckListByCategoryState>
+class _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<
+  $Res,
+  $Val extends PreflightInspectionCheckListByCategoryState
+>
     implements $PreflightInspectionCheckListByCategoryStateCopyWith<$Res> {
   _$PreflightInspectionCheckListByCategoryStateCopyWithImpl(
-      this._value, this._then);
+    this._value,
+    this._then,
+  );
 
   // ignore: unused_field
   final $Val _value;
@@ -507,29 +544,36 @@ class _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
 
 /// @nodoc
 abstract class _$$LoadingPreflightInspectionCheckListByCategoryStateImplCopyWith<
-    $Res> {
+  $Res
+> {
   factory _$$LoadingPreflightInspectionCheckListByCategoryStateImplCopyWith(
-          _$LoadingPreflightInspectionCheckListByCategoryStateImpl value,
-          $Res Function(
-                  _$LoadingPreflightInspectionCheckListByCategoryStateImpl)
-              then) =
+    _$LoadingPreflightInspectionCheckListByCategoryStateImpl value,
+    $Res Function(_$LoadingPreflightInspectionCheckListByCategoryStateImpl)
+    then,
+  ) =
       __$$LoadingPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-          $Res>;
+        $Res
+      >;
 }
 
 /// @nodoc
 class __$$LoadingPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-        $Res>
-    extends _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
-        _$LoadingPreflightInspectionCheckListByCategoryStateImpl>
+  $Res
+>
+    extends
+        _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$LoadingPreflightInspectionCheckListByCategoryStateImpl
+        >
     implements
         _$$LoadingPreflightInspectionCheckListByCategoryStateImplCopyWith<
-            $Res> {
+          $Res
+        > {
   __$$LoadingPreflightInspectionCheckListByCategoryStateImplCopyWithImpl(
-      _$LoadingPreflightInspectionCheckListByCategoryStateImpl _value,
-      $Res Function(_$LoadingPreflightInspectionCheckListByCategoryStateImpl)
-          _then)
-      : super(_value, _then);
+    _$LoadingPreflightInspectionCheckListByCategoryStateImpl _value,
+    $Res Function(_$LoadingPreflightInspectionCheckListByCategoryStateImpl)
+    _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -560,14 +604,20 @@ class _$LoadingPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return loading();
@@ -578,17 +628,19 @@ class _$LoadingPreflightInspectionCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return loading?.call();
@@ -599,17 +651,19 @@ class _$LoadingPreflightInspectionCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
@@ -623,17 +677,21 @@ class _$LoadingPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            LoadingPreflightInspectionCheckListByCategoryState value)
-        loading,
+      LoadingPreflightInspectionCheckListByCategoryState value,
+    )
+    loading,
     required TResult Function(
-            ErrorPreflightInspectionCheckListByCategoryState value)
-        error,
+      ErrorPreflightInspectionCheckListByCategoryState value,
+    )
+    error,
     required TResult Function(
-            SuccessPreflightInspectionCheckListByCategoryState value)
-        success,
+      SuccessPreflightInspectionCheckListByCategoryState value,
+    )
+    success,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryState value)
-        initial,
+      InitialPreflightInspectionCheckListByCategoryState value,
+    )
+    initial,
   }) {
     return loading(this);
   }
@@ -642,13 +700,13 @@ class _$LoadingPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult? Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult? Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
   }) {
     return loading?.call(this);
   }
@@ -657,13 +715,13 @@ class _$LoadingPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -682,33 +740,38 @@ abstract class LoadingPreflightInspectionCheckListByCategoryState
 
 /// @nodoc
 abstract class _$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWith<
-    $Res> {
+  $Res
+> {
   factory _$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWith(
-          _$ErrorPreflightInspectionCheckListByCategoryStateImpl value,
-          $Res Function(_$ErrorPreflightInspectionCheckListByCategoryStateImpl)
-              then) =
+    _$ErrorPreflightInspectionCheckListByCategoryStateImpl value,
+    $Res Function(_$ErrorPreflightInspectionCheckListByCategoryStateImpl) then,
+  ) =
       __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-          $Res>;
+        $Res
+      >;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
-        _$ErrorPreflightInspectionCheckListByCategoryStateImpl>
+    extends
+        _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$ErrorPreflightInspectionCheckListByCategoryStateImpl
+        >
     implements
         _$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWith<$Res> {
   __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl(
-      _$ErrorPreflightInspectionCheckListByCategoryStateImpl _value,
-      $Res Function(_$ErrorPreflightInspectionCheckListByCategoryStateImpl)
-          _then)
-      : super(_value, _then);
+    _$ErrorPreflightInspectionCheckListByCategoryStateImpl _value,
+    $Res Function(_$ErrorPreflightInspectionCheckListByCategoryStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -721,28 +784,30 @@ class __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorPreflightInspectionCheckListByCategoryStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorPreflightInspectionCheckListByCategoryStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -750,13 +815,13 @@ class __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<$Res>
 
 class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
     extends ErrorPreflightInspectionCheckListByCategoryState {
-  const _$ErrorPreflightInspectionCheckListByCategoryStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorPreflightInspectionCheckListByCategoryStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -792,8 +857,14 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -801,28 +872,40 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWith<
-          _$ErrorPreflightInspectionCheckListByCategoryStateImpl>
-      get copyWith =>
-          __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-                  _$ErrorPreflightInspectionCheckListByCategoryStateImpl>(
-              this, _$identity);
+    _$ErrorPreflightInspectionCheckListByCategoryStateImpl
+  >
+  get copyWith =>
+      __$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
+        _$ErrorPreflightInspectionCheckListByCategoryStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -830,21 +913,28 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -852,23 +942,30 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -877,17 +974,21 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            LoadingPreflightInspectionCheckListByCategoryState value)
-        loading,
+      LoadingPreflightInspectionCheckListByCategoryState value,
+    )
+    loading,
     required TResult Function(
-            ErrorPreflightInspectionCheckListByCategoryState value)
-        error,
+      ErrorPreflightInspectionCheckListByCategoryState value,
+    )
+    error,
     required TResult Function(
-            SuccessPreflightInspectionCheckListByCategoryState value)
-        success,
+      SuccessPreflightInspectionCheckListByCategoryState value,
+    )
+    success,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryState value)
-        initial,
+      InitialPreflightInspectionCheckListByCategoryState value,
+    )
+    initial,
   }) {
     return error(this);
   }
@@ -896,13 +997,13 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult? Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult? Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
   }) {
     return error?.call(this);
   }
@@ -911,13 +1012,13 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -929,13 +1030,13 @@ class _$ErrorPreflightInspectionCheckListByCategoryStateImpl
 
 abstract class ErrorPreflightInspectionCheckListByCategoryState
     extends PreflightInspectionCheckListByCategoryState {
-  const factory ErrorPreflightInspectionCheckListByCategoryState(
-          {final String? errorFromApi,
-          required final String errorForUser,
-          final String? statusCode,
-          final StackTrace? stackTrace,
-          final String? responseMessage}) =
-      _$ErrorPreflightInspectionCheckListByCategoryStateImpl;
+  const factory ErrorPreflightInspectionCheckListByCategoryState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorPreflightInspectionCheckListByCategoryStateImpl;
   const ErrorPreflightInspectionCheckListByCategoryState._() : super._();
 
   String? get errorFromApi;
@@ -948,40 +1049,49 @@ abstract class ErrorPreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorPreflightInspectionCheckListByCategoryStateImplCopyWith<
-          _$ErrorPreflightInspectionCheckListByCategoryStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$ErrorPreflightInspectionCheckListByCategoryStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWith<
-    $Res> {
+  $Res
+> {
   factory _$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWith(
-          _$SuccessPreflightInspectionCheckListByCategoryStateImpl value,
-          $Res Function(
-                  _$SuccessPreflightInspectionCheckListByCategoryStateImpl)
-              then) =
+    _$SuccessPreflightInspectionCheckListByCategoryStateImpl value,
+    $Res Function(_$SuccessPreflightInspectionCheckListByCategoryStateImpl)
+    then,
+  ) =
       __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-          $Res>;
+        $Res
+      >;
   @useResult
-  $Res call(
-      {List<PreflightInspectionCheckListEntity>
-          preflightInspectionCheckListByCategory,
-      int index});
+  $Res call({
+    List<PreflightInspectionCheckListEntity>
+    preflightInspectionCheckListByCategory,
+    int index,
+  });
 }
 
 /// @nodoc
 class __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-        $Res>
-    extends _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
-        _$SuccessPreflightInspectionCheckListByCategoryStateImpl>
+  $Res
+>
+    extends
+        _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$SuccessPreflightInspectionCheckListByCategoryStateImpl
+        >
     implements
         _$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWith<
-            $Res> {
+          $Res
+        > {
   __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl(
-      _$SuccessPreflightInspectionCheckListByCategoryStateImpl _value,
-      $Res Function(_$SuccessPreflightInspectionCheckListByCategoryStateImpl)
-          _then)
-      : super(_value, _then);
+    _$SuccessPreflightInspectionCheckListByCategoryStateImpl _value,
+    $Res Function(_$SuccessPreflightInspectionCheckListByCategoryStateImpl)
+    _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -991,17 +1101,19 @@ class __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
     Object? preflightInspectionCheckListByCategory = null,
     Object? index = null,
   }) {
-    return _then(_$SuccessPreflightInspectionCheckListByCategoryStateImpl(
-      preflightInspectionCheckListByCategory: null ==
-              preflightInspectionCheckListByCategory
-          ? _value._preflightInspectionCheckListByCategory
-          : preflightInspectionCheckListByCategory // ignore: cast_nullable_to_non_nullable
-              as List<PreflightInspectionCheckListEntity>,
-      index: null == index
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$SuccessPreflightInspectionCheckListByCategoryStateImpl(
+        preflightInspectionCheckListByCategory:
+            null == preflightInspectionCheckListByCategory
+            ? _value._preflightInspectionCheckListByCategory
+            : preflightInspectionCheckListByCategory // ignore: cast_nullable_to_non_nullable
+                  as List<PreflightInspectionCheckListEntity>,
+        index: null == index
+            ? _value.index
+            : index // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -1009,19 +1121,19 @@ class __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
 
 class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
     extends SuccessPreflightInspectionCheckListByCategoryState {
-  const _$SuccessPreflightInspectionCheckListByCategoryStateImpl(
-      {required final List<PreflightInspectionCheckListEntity>
-          preflightInspectionCheckListByCategory,
-      required this.index})
-      : _preflightInspectionCheckListByCategory =
-            preflightInspectionCheckListByCategory,
-        super._();
+  const _$SuccessPreflightInspectionCheckListByCategoryStateImpl({
+    required final List<PreflightInspectionCheckListEntity>
+    preflightInspectionCheckListByCategory,
+    required this.index,
+  }) : _preflightInspectionCheckListByCategory =
+           preflightInspectionCheckListByCategory,
+       super._();
 
   final List<PreflightInspectionCheckListEntity>
-      _preflightInspectionCheckListByCategory;
+  _preflightInspectionCheckListByCategory;
   @override
   List<PreflightInspectionCheckListEntity>
-      get preflightInspectionCheckListByCategory {
+  get preflightInspectionCheckListByCategory {
     if (_preflightInspectionCheckListByCategory is EqualUnmodifiableListView)
       return _preflightInspectionCheckListByCategory;
     // ignore: implicit_dynamic_type
@@ -1042,17 +1154,20 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
         (other.runtimeType == runtimeType &&
             other is _$SuccessPreflightInspectionCheckListByCategoryStateImpl &&
             const DeepCollectionEquality().equals(
-                other._preflightInspectionCheckListByCategory,
-                _preflightInspectionCheckListByCategory) &&
+              other._preflightInspectionCheckListByCategory,
+              _preflightInspectionCheckListByCategory,
+            ) &&
             (identical(other.index, index) || other.index == index));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality()
-          .hash(_preflightInspectionCheckListByCategory),
-      index);
+    runtimeType,
+    const DeepCollectionEquality().hash(
+      _preflightInspectionCheckListByCategory,
+    ),
+    index,
+  );
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -1060,24 +1175,31 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWith<
-          _$SuccessPreflightInspectionCheckListByCategoryStateImpl>
-      get copyWith =>
-          __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-                  _$SuccessPreflightInspectionCheckListByCategoryStateImpl>(
-              this, _$identity);
+    _$SuccessPreflightInspectionCheckListByCategoryStateImpl
+  >
+  get copyWith =>
+      __$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
+        _$SuccessPreflightInspectionCheckListByCategoryStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return success(preflightInspectionCheckListByCategory, index);
@@ -1088,17 +1210,19 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return success?.call(preflightInspectionCheckListByCategory, index);
@@ -1109,17 +1233,19 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
@@ -1133,17 +1259,21 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            LoadingPreflightInspectionCheckListByCategoryState value)
-        loading,
+      LoadingPreflightInspectionCheckListByCategoryState value,
+    )
+    loading,
     required TResult Function(
-            ErrorPreflightInspectionCheckListByCategoryState value)
-        error,
+      ErrorPreflightInspectionCheckListByCategoryState value,
+    )
+    error,
     required TResult Function(
-            SuccessPreflightInspectionCheckListByCategoryState value)
-        success,
+      SuccessPreflightInspectionCheckListByCategoryState value,
+    )
+    success,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryState value)
-        initial,
+      InitialPreflightInspectionCheckListByCategoryState value,
+    )
+    initial,
   }) {
     return success(this);
   }
@@ -1152,13 +1282,13 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult? Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult? Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
   }) {
     return success?.call(this);
   }
@@ -1167,13 +1297,13 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -1185,50 +1315,58 @@ class _$SuccessPreflightInspectionCheckListByCategoryStateImpl
 
 abstract class SuccessPreflightInspectionCheckListByCategoryState
     extends PreflightInspectionCheckListByCategoryState {
-  const factory SuccessPreflightInspectionCheckListByCategoryState(
-          {required final List<PreflightInspectionCheckListEntity>
-              preflightInspectionCheckListByCategory,
-          required final int index}) =
-      _$SuccessPreflightInspectionCheckListByCategoryStateImpl;
+  const factory SuccessPreflightInspectionCheckListByCategoryState({
+    required final List<PreflightInspectionCheckListEntity>
+    preflightInspectionCheckListByCategory,
+    required final int index,
+  }) = _$SuccessPreflightInspectionCheckListByCategoryStateImpl;
   const SuccessPreflightInspectionCheckListByCategoryState._() : super._();
 
   List<PreflightInspectionCheckListEntity>
-      get preflightInspectionCheckListByCategory;
+  get preflightInspectionCheckListByCategory;
   int get index;
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessPreflightInspectionCheckListByCategoryStateImplCopyWith<
-          _$SuccessPreflightInspectionCheckListByCategoryStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessPreflightInspectionCheckListByCategoryStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$InitialPreflightInspectionCheckListByCategoryStateImplCopyWith<
-    $Res> {
+  $Res
+> {
   factory _$$InitialPreflightInspectionCheckListByCategoryStateImplCopyWith(
-          _$InitialPreflightInspectionCheckListByCategoryStateImpl value,
-          $Res Function(
-                  _$InitialPreflightInspectionCheckListByCategoryStateImpl)
-              then) =
+    _$InitialPreflightInspectionCheckListByCategoryStateImpl value,
+    $Res Function(_$InitialPreflightInspectionCheckListByCategoryStateImpl)
+    then,
+  ) =
       __$$InitialPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-          $Res>;
+        $Res
+      >;
 }
 
 /// @nodoc
 class __$$InitialPreflightInspectionCheckListByCategoryStateImplCopyWithImpl<
-        $Res>
-    extends _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<$Res,
-        _$InitialPreflightInspectionCheckListByCategoryStateImpl>
+  $Res
+>
+    extends
+        _$PreflightInspectionCheckListByCategoryStateCopyWithImpl<
+          $Res,
+          _$InitialPreflightInspectionCheckListByCategoryStateImpl
+        >
     implements
         _$$InitialPreflightInspectionCheckListByCategoryStateImplCopyWith<
-            $Res> {
+          $Res
+        > {
   __$$InitialPreflightInspectionCheckListByCategoryStateImplCopyWithImpl(
-      _$InitialPreflightInspectionCheckListByCategoryStateImpl _value,
-      $Res Function(_$InitialPreflightInspectionCheckListByCategoryStateImpl)
-          _then)
-      : super(_value, _then);
+    _$InitialPreflightInspectionCheckListByCategoryStateImpl _value,
+    $Res Function(_$InitialPreflightInspectionCheckListByCategoryStateImpl)
+    _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCheckListByCategoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -1259,14 +1397,20 @@ class _$InitialPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )
+    success,
     required TResult Function() initial,
   }) {
     return initial();
@@ -1277,17 +1421,19 @@ class _$InitialPreflightInspectionCheckListByCategoryStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult? Function()? initial,
   }) {
     return initial?.call();
@@ -1298,17 +1444,19 @@ class _$InitialPreflightInspectionCheckListByCategoryStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(
-            List<PreflightInspectionCheckListEntity>
-                preflightInspectionCheckListByCategory,
-            int index)?
-        success,
+      List<PreflightInspectionCheckListEntity>
+      preflightInspectionCheckListByCategory,
+      int index,
+    )?
+    success,
     TResult Function()? initial,
     required TResult orElse(),
   }) {
@@ -1322,17 +1470,21 @@ class _$InitialPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(
-            LoadingPreflightInspectionCheckListByCategoryState value)
-        loading,
+      LoadingPreflightInspectionCheckListByCategoryState value,
+    )
+    loading,
     required TResult Function(
-            ErrorPreflightInspectionCheckListByCategoryState value)
-        error,
+      ErrorPreflightInspectionCheckListByCategoryState value,
+    )
+    error,
     required TResult Function(
-            SuccessPreflightInspectionCheckListByCategoryState value)
-        success,
+      SuccessPreflightInspectionCheckListByCategoryState value,
+    )
+    success,
     required TResult Function(
-            InitialPreflightInspectionCheckListByCategoryState value)
-        initial,
+      InitialPreflightInspectionCheckListByCategoryState value,
+    )
+    initial,
   }) {
     return initial(this);
   }
@@ -1341,13 +1493,13 @@ class _$InitialPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult? Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult? Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult? Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
   }) {
     return initial?.call(this);
   }
@@ -1356,13 +1508,13 @@ class _$InitialPreflightInspectionCheckListByCategoryStateImpl
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPreflightInspectionCheckListByCategoryState value)?
-        loading,
+    loading,
     TResult Function(ErrorPreflightInspectionCheckListByCategoryState value)?
-        error,
+    error,
     TResult Function(SuccessPreflightInspectionCheckListByCategoryState value)?
-        success,
+    success,
     TResult Function(InitialPreflightInspectionCheckListByCategoryState value)?
-        initial,
+    initial,
     required TResult orElse(),
   }) {
     if (initial != null) {

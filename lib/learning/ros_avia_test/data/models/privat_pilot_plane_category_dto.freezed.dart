@@ -12,10 +12,12 @@ part of 'privat_pilot_plane_category_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PrivatPilotPlaneCategoryDto _$PrivatPilotPlaneCategoryDtoFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _PrivatPilotPlaneCategoryDto.fromJson(json);
 }
 
@@ -33,23 +35,28 @@ mixin _$PrivatPilotPlaneCategoryDto {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $PrivatPilotPlaneCategoryDtoCopyWith<PrivatPilotPlaneCategoryDto>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PrivatPilotPlaneCategoryDtoCopyWith<$Res> {
   factory $PrivatPilotPlaneCategoryDtoCopyWith(
-          PrivatPilotPlaneCategoryDto value,
-          $Res Function(PrivatPilotPlaneCategoryDto) then) =
-      _$PrivatPilotPlaneCategoryDtoCopyWithImpl<$Res,
-          PrivatPilotPlaneCategoryDto>;
+    PrivatPilotPlaneCategoryDto value,
+    $Res Function(PrivatPilotPlaneCategoryDto) then,
+  ) =
+      _$PrivatPilotPlaneCategoryDtoCopyWithImpl<
+        $Res,
+        PrivatPilotPlaneCategoryDto
+      >;
   @useResult
   $Res call({int id, String title, String image, int typeCertificatesId});
 }
 
 /// @nodoc
-class _$PrivatPilotPlaneCategoryDtoCopyWithImpl<$Res,
-        $Val extends PrivatPilotPlaneCategoryDto>
+class _$PrivatPilotPlaneCategoryDtoCopyWithImpl<
+  $Res,
+  $Val extends PrivatPilotPlaneCategoryDto
+>
     implements $PrivatPilotPlaneCategoryDtoCopyWith<$Res> {
   _$PrivatPilotPlaneCategoryDtoCopyWithImpl(this._value, this._then);
 
@@ -68,24 +75,27 @@ class _$PrivatPilotPlaneCategoryDtoCopyWithImpl<$Res,
     Object? image = null,
     Object? typeCertificatesId = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-      typeCertificatesId: null == typeCertificatesId
-          ? _value.typeCertificatesId
-          : typeCertificatesId // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            image: null == image
+                ? _value.image
+                : image // ignore: cast_nullable_to_non_nullable
+                      as String,
+            typeCertificatesId: null == typeCertificatesId
+                ? _value.typeCertificatesId
+                : typeCertificatesId // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -93,9 +103,9 @@ class _$PrivatPilotPlaneCategoryDtoCopyWithImpl<$Res,
 abstract class _$$PrivatPilotPlaneCategoryDtoImplCopyWith<$Res>
     implements $PrivatPilotPlaneCategoryDtoCopyWith<$Res> {
   factory _$$PrivatPilotPlaneCategoryDtoImplCopyWith(
-          _$PrivatPilotPlaneCategoryDtoImpl value,
-          $Res Function(_$PrivatPilotPlaneCategoryDtoImpl) then) =
-      __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<$Res>;
+    _$PrivatPilotPlaneCategoryDtoImpl value,
+    $Res Function(_$PrivatPilotPlaneCategoryDtoImpl) then,
+  ) = __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String title, String image, int typeCertificatesId});
@@ -103,13 +113,16 @@ abstract class _$$PrivatPilotPlaneCategoryDtoImplCopyWith<$Res>
 
 /// @nodoc
 class __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<$Res>
-    extends _$PrivatPilotPlaneCategoryDtoCopyWithImpl<$Res,
-        _$PrivatPilotPlaneCategoryDtoImpl>
+    extends
+        _$PrivatPilotPlaneCategoryDtoCopyWithImpl<
+          $Res,
+          _$PrivatPilotPlaneCategoryDtoImpl
+        >
     implements _$$PrivatPilotPlaneCategoryDtoImplCopyWith<$Res> {
   __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl(
-      _$PrivatPilotPlaneCategoryDtoImpl _value,
-      $Res Function(_$PrivatPilotPlaneCategoryDtoImpl) _then)
-      : super(_value, _then);
+    _$PrivatPilotPlaneCategoryDtoImpl _value,
+    $Res Function(_$PrivatPilotPlaneCategoryDtoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PrivatPilotPlaneCategoryDto
   /// with the given fields replaced by the non-null parameter values.
@@ -121,24 +134,26 @@ class __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<$Res>
     Object? image = null,
     Object? typeCertificatesId = null,
   }) {
-    return _then(_$PrivatPilotPlaneCategoryDtoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-      typeCertificatesId: null == typeCertificatesId
-          ? _value.typeCertificatesId
-          : typeCertificatesId // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$PrivatPilotPlaneCategoryDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        image: null == image
+            ? _value.image
+            : image // ignore: cast_nullable_to_non_nullable
+                  as String,
+        typeCertificatesId: null == typeCertificatesId
+            ? _value.typeCertificatesId
+            : typeCertificatesId // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -147,15 +162,16 @@ class __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$PrivatPilotPlaneCategoryDtoImpl
     implements _PrivatPilotPlaneCategoryDto {
-  const _$PrivatPilotPlaneCategoryDtoImpl(
-      {required this.id,
-      required this.title,
-      required this.image,
-      required this.typeCertificatesId});
+  const _$PrivatPilotPlaneCategoryDtoImpl({
+    required this.id,
+    required this.title,
+    required this.image,
+    required this.typeCertificatesId,
+  });
 
   factory _$PrivatPilotPlaneCategoryDtoImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$PrivatPilotPlaneCategoryDtoImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$PrivatPilotPlaneCategoryDtoImplFromJson(json);
 
   @override
   final int id;
@@ -194,25 +210,25 @@ class _$PrivatPilotPlaneCategoryDtoImpl
   @override
   @pragma('vm:prefer-inline')
   _$$PrivatPilotPlaneCategoryDtoImplCopyWith<_$PrivatPilotPlaneCategoryDtoImpl>
-      get copyWith => __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<
-          _$PrivatPilotPlaneCategoryDtoImpl>(this, _$identity);
+  get copyWith =>
+      __$$PrivatPilotPlaneCategoryDtoImplCopyWithImpl<
+        _$PrivatPilotPlaneCategoryDtoImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PrivatPilotPlaneCategoryDtoImplToJson(
-      this,
-    );
+    return _$$PrivatPilotPlaneCategoryDtoImplToJson(this);
   }
 }
 
 abstract class _PrivatPilotPlaneCategoryDto
     implements PrivatPilotPlaneCategoryDto {
-  const factory _PrivatPilotPlaneCategoryDto(
-          {required final int id,
-          required final String title,
-          required final String image,
-          required final int typeCertificatesId}) =
-      _$PrivatPilotPlaneCategoryDtoImpl;
+  const factory _PrivatPilotPlaneCategoryDto({
+    required final int id,
+    required final String title,
+    required final String image,
+    required final int typeCertificatesId,
+  }) = _$PrivatPilotPlaneCategoryDtoImpl;
 
   factory _PrivatPilotPlaneCategoryDto.fromJson(Map<String, dynamic> json) =
       _$PrivatPilotPlaneCategoryDtoImpl.fromJson;
@@ -231,5 +247,5 @@ abstract class _PrivatPilotPlaneCategoryDto
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PrivatPilotPlaneCategoryDtoImplCopyWith<_$PrivatPilotPlaneCategoryDtoImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

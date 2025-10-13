@@ -12,7 +12,8 @@ part of 'video_for_students_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$VideoForStudentsEvent {
@@ -20,52 +21,49 @@ mixin _$VideoForStudentsEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() get,
     required TResult Function(int id) getById,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? get,
     TResult? Function(int id)? getById,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? get,
     TResult Function(int id)? getById,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetVideoForStudentsEvent value) get,
     required TResult Function(GetByIdVideoForStudentsEvent value) getById,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetVideoForStudentsEvent value)? get,
     TResult? Function(GetByIdVideoForStudentsEvent value)? getById,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetVideoForStudentsEvent value)? get,
     TResult Function(GetByIdVideoForStudentsEvent value)? getById,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $VideoForStudentsEventCopyWith<$Res> {
-  factory $VideoForStudentsEventCopyWith(VideoForStudentsEvent value,
-          $Res Function(VideoForStudentsEvent) then) =
-      _$VideoForStudentsEventCopyWithImpl<$Res, VideoForStudentsEvent>;
+  factory $VideoForStudentsEventCopyWith(
+    VideoForStudentsEvent value,
+    $Res Function(VideoForStudentsEvent) then,
+  ) = _$VideoForStudentsEventCopyWithImpl<$Res, VideoForStudentsEvent>;
 }
 
 /// @nodoc
-class _$VideoForStudentsEventCopyWithImpl<$Res,
-        $Val extends VideoForStudentsEvent>
+class _$VideoForStudentsEventCopyWithImpl<
+  $Res,
+  $Val extends VideoForStudentsEvent
+>
     implements $VideoForStudentsEventCopyWith<$Res> {
   _$VideoForStudentsEventCopyWithImpl(this._value, this._then);
 
@@ -81,20 +79,23 @@ class _$VideoForStudentsEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetVideoForStudentsEventImplCopyWith<$Res> {
   factory _$$GetVideoForStudentsEventImplCopyWith(
-          _$GetVideoForStudentsEventImpl value,
-          $Res Function(_$GetVideoForStudentsEventImpl) then) =
-      __$$GetVideoForStudentsEventImplCopyWithImpl<$Res>;
+    _$GetVideoForStudentsEventImpl value,
+    $Res Function(_$GetVideoForStudentsEventImpl) then,
+  ) = __$$GetVideoForStudentsEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetVideoForStudentsEventImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsEventCopyWithImpl<$Res,
-        _$GetVideoForStudentsEventImpl>
+    extends
+        _$VideoForStudentsEventCopyWithImpl<
+          $Res,
+          _$GetVideoForStudentsEventImpl
+        >
     implements _$$GetVideoForStudentsEventImplCopyWith<$Res> {
   __$$GetVideoForStudentsEventImplCopyWithImpl(
-      _$GetVideoForStudentsEventImpl _value,
-      $Res Function(_$GetVideoForStudentsEventImpl) _then)
-      : super(_value, _then);
+    _$GetVideoForStudentsEventImpl _value,
+    $Res Function(_$GetVideoForStudentsEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -191,36 +192,39 @@ abstract class GetVideoForStudentsEvent extends VideoForStudentsEvent {
 /// @nodoc
 abstract class _$$GetByIdVideoForStudentsEventImplCopyWith<$Res> {
   factory _$$GetByIdVideoForStudentsEventImplCopyWith(
-          _$GetByIdVideoForStudentsEventImpl value,
-          $Res Function(_$GetByIdVideoForStudentsEventImpl) then) =
-      __$$GetByIdVideoForStudentsEventImplCopyWithImpl<$Res>;
+    _$GetByIdVideoForStudentsEventImpl value,
+    $Res Function(_$GetByIdVideoForStudentsEventImpl) then,
+  ) = __$$GetByIdVideoForStudentsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int id});
 }
 
 /// @nodoc
 class __$$GetByIdVideoForStudentsEventImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsEventCopyWithImpl<$Res,
-        _$GetByIdVideoForStudentsEventImpl>
+    extends
+        _$VideoForStudentsEventCopyWithImpl<
+          $Res,
+          _$GetByIdVideoForStudentsEventImpl
+        >
     implements _$$GetByIdVideoForStudentsEventImplCopyWith<$Res> {
   __$$GetByIdVideoForStudentsEventImplCopyWithImpl(
-      _$GetByIdVideoForStudentsEventImpl _value,
-      $Res Function(_$GetByIdVideoForStudentsEventImpl) _then)
-      : super(_value, _then);
+    _$GetByIdVideoForStudentsEventImpl _value,
+    $Res Function(_$GetByIdVideoForStudentsEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-  }) {
-    return _then(_$GetByIdVideoForStudentsEventImpl(
-      null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? id = null}) {
+    return _then(
+      _$GetByIdVideoForStudentsEventImpl(
+        null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -254,9 +258,12 @@ class _$GetByIdVideoForStudentsEventImpl extends GetByIdVideoForStudentsEvent {
   @override
   @pragma('vm:prefer-inline')
   _$$GetByIdVideoForStudentsEventImplCopyWith<
-          _$GetByIdVideoForStudentsEventImpl>
-      get copyWith => __$$GetByIdVideoForStudentsEventImplCopyWithImpl<
-          _$GetByIdVideoForStudentsEventImpl>(this, _$identity);
+    _$GetByIdVideoForStudentsEventImpl
+  >
+  get copyWith =>
+      __$$GetByIdVideoForStudentsEventImplCopyWithImpl<
+        _$GetByIdVideoForStudentsEventImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -332,8 +339,9 @@ abstract class GetByIdVideoForStudentsEvent extends VideoForStudentsEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetByIdVideoForStudentsEventImplCopyWith<
-          _$GetByIdVideoForStudentsEventImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$GetByIdVideoForStudentsEventImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -341,57 +349,60 @@ mixin _$VideoForStudentsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<VideoForStudentsEntity> videoForStudents)
-        success,
+    success,
     required TResult Function(VideoForStudentsEntity videoForStudents)
-        successById,
+    successById,
     required TResult Function() done,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult? Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult? Function()? done,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult Function()? done,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingVideoForStudentsState value) loading,
     required TResult Function(ErrorVideoForStudentsState value) error,
     required TResult Function(SuccessVideoForStudentsState value) success,
     required TResult Function(SuccessByIdVideoForStudentsState value)
-        successById,
+    successById,
     required TResult Function(DoneVideoForStudentsState value) done,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingVideoForStudentsState value)? loading,
@@ -399,8 +410,7 @@ mixin _$VideoForStudentsState {
     TResult? Function(SuccessVideoForStudentsState value)? success,
     TResult? Function(SuccessByIdVideoForStudentsState value)? successById,
     TResult? Function(DoneVideoForStudentsState value)? done,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingVideoForStudentsState value)? loading,
@@ -409,20 +419,22 @@ mixin _$VideoForStudentsState {
     TResult Function(SuccessByIdVideoForStudentsState value)? successById,
     TResult Function(DoneVideoForStudentsState value)? done,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $VideoForStudentsStateCopyWith<$Res> {
-  factory $VideoForStudentsStateCopyWith(VideoForStudentsState value,
-          $Res Function(VideoForStudentsState) then) =
-      _$VideoForStudentsStateCopyWithImpl<$Res, VideoForStudentsState>;
+  factory $VideoForStudentsStateCopyWith(
+    VideoForStudentsState value,
+    $Res Function(VideoForStudentsState) then,
+  ) = _$VideoForStudentsStateCopyWithImpl<$Res, VideoForStudentsState>;
 }
 
 /// @nodoc
-class _$VideoForStudentsStateCopyWithImpl<$Res,
-        $Val extends VideoForStudentsState>
+class _$VideoForStudentsStateCopyWithImpl<
+  $Res,
+  $Val extends VideoForStudentsState
+>
     implements $VideoForStudentsStateCopyWith<$Res> {
   _$VideoForStudentsStateCopyWithImpl(this._value, this._then);
 
@@ -438,20 +450,23 @@ class _$VideoForStudentsStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingVideoForStudentsStateImplCopyWith<$Res> {
   factory _$$LoadingVideoForStudentsStateImplCopyWith(
-          _$LoadingVideoForStudentsStateImpl value,
-          $Res Function(_$LoadingVideoForStudentsStateImpl) then) =
-      __$$LoadingVideoForStudentsStateImplCopyWithImpl<$Res>;
+    _$LoadingVideoForStudentsStateImpl value,
+    $Res Function(_$LoadingVideoForStudentsStateImpl) then,
+  ) = __$$LoadingVideoForStudentsStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingVideoForStudentsStateImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsStateCopyWithImpl<$Res,
-        _$LoadingVideoForStudentsStateImpl>
+    extends
+        _$VideoForStudentsStateCopyWithImpl<
+          $Res,
+          _$LoadingVideoForStudentsStateImpl
+        >
     implements _$$LoadingVideoForStudentsStateImplCopyWith<$Res> {
   __$$LoadingVideoForStudentsStateImplCopyWithImpl(
-      _$LoadingVideoForStudentsStateImpl _value,
-      $Res Function(_$LoadingVideoForStudentsStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingVideoForStudentsStateImpl _value,
+    $Res Function(_$LoadingVideoForStudentsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
@@ -481,13 +496,18 @@ class _$LoadingVideoForStudentsStateImpl extends LoadingVideoForStudentsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<VideoForStudentsEntity> videoForStudents)
-        success,
+    success,
     required TResult Function(VideoForStudentsEntity videoForStudents)
-        successById,
+    successById,
     required TResult Function() done,
   }) {
     return loading();
@@ -498,12 +518,13 @@ class _$LoadingVideoForStudentsStateImpl extends LoadingVideoForStudentsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult? Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult? Function()? done,
@@ -516,12 +537,13 @@ class _$LoadingVideoForStudentsStateImpl extends LoadingVideoForStudentsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult Function()? done,
@@ -540,7 +562,7 @@ class _$LoadingVideoForStudentsStateImpl extends LoadingVideoForStudentsState {
     required TResult Function(ErrorVideoForStudentsState value) error,
     required TResult Function(SuccessVideoForStudentsState value) success,
     required TResult Function(SuccessByIdVideoForStudentsState value)
-        successById,
+    successById,
     required TResult Function(DoneVideoForStudentsState value) done,
   }) {
     return loading(this);
@@ -584,27 +606,31 @@ abstract class LoadingVideoForStudentsState extends VideoForStudentsState {
 /// @nodoc
 abstract class _$$ErrorVideoForStudentsStateImplCopyWith<$Res> {
   factory _$$ErrorVideoForStudentsStateImplCopyWith(
-          _$ErrorVideoForStudentsStateImpl value,
-          $Res Function(_$ErrorVideoForStudentsStateImpl) then) =
-      __$$ErrorVideoForStudentsStateImplCopyWithImpl<$Res>;
+    _$ErrorVideoForStudentsStateImpl value,
+    $Res Function(_$ErrorVideoForStudentsStateImpl) then,
+  ) = __$$ErrorVideoForStudentsStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorVideoForStudentsStateImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsStateCopyWithImpl<$Res,
-        _$ErrorVideoForStudentsStateImpl>
+    extends
+        _$VideoForStudentsStateCopyWithImpl<
+          $Res,
+          _$ErrorVideoForStudentsStateImpl
+        >
     implements _$$ErrorVideoForStudentsStateImplCopyWith<$Res> {
   __$$ErrorVideoForStudentsStateImplCopyWithImpl(
-      _$ErrorVideoForStudentsStateImpl _value,
-      $Res Function(_$ErrorVideoForStudentsStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorVideoForStudentsStateImpl _value,
+    $Res Function(_$ErrorVideoForStudentsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
@@ -617,41 +643,43 @@ class __$$ErrorVideoForStudentsStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorVideoForStudentsStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorVideoForStudentsStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
-  const _$ErrorVideoForStudentsStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+  const _$ErrorVideoForStudentsStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -687,8 +715,14 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    errorFromApi,
+    errorForUser,
+    statusCode,
+    stackTrace,
+    responseMessage,
+  );
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
@@ -696,24 +730,36 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorVideoForStudentsStateImplCopyWith<_$ErrorVideoForStudentsStateImpl>
-      get copyWith => __$$ErrorVideoForStudentsStateImplCopyWithImpl<
-          _$ErrorVideoForStudentsStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$ErrorVideoForStudentsStateImplCopyWithImpl<
+        _$ErrorVideoForStudentsStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<VideoForStudentsEntity> videoForStudents)
-        success,
+    success,
     required TResult Function(VideoForStudentsEntity videoForStudents)
-        successById,
+    successById,
     required TResult Function() done,
   }) {
     return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -721,18 +767,24 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult? Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult? Function()? done,
   }) {
     return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      errorFromApi,
+      errorForUser,
+      statusCode,
+      stackTrace,
+      responseMessage,
+    );
   }
 
   @override
@@ -740,12 +792,13 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult Function()? done,
@@ -753,7 +806,12 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
   }) {
     if (error != null) {
       return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+        errorFromApi,
+        errorForUser,
+        statusCode,
+        stackTrace,
+        responseMessage,
+      );
     }
     return orElse();
   }
@@ -765,7 +823,7 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
     required TResult Function(ErrorVideoForStudentsState value) error,
     required TResult Function(SuccessVideoForStudentsState value) success,
     required TResult Function(SuccessByIdVideoForStudentsState value)
-        successById,
+    successById,
     required TResult Function(DoneVideoForStudentsState value) done,
   }) {
     return error(this);
@@ -801,12 +859,13 @@ class _$ErrorVideoForStudentsStateImpl extends ErrorVideoForStudentsState {
 }
 
 abstract class ErrorVideoForStudentsState extends VideoForStudentsState {
-  const factory ErrorVideoForStudentsState(
-      {final String? errorFromApi,
-      required final String errorForUser,
-      final String? statusCode,
-      final StackTrace? stackTrace,
-      final String? responseMessage}) = _$ErrorVideoForStudentsStateImpl;
+  const factory ErrorVideoForStudentsState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorVideoForStudentsStateImpl;
   const ErrorVideoForStudentsState._() : super._();
 
   String? get errorFromApi;
@@ -819,52 +878,55 @@ abstract class ErrorVideoForStudentsState extends VideoForStudentsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorVideoForStudentsStateImplCopyWith<_$ErrorVideoForStudentsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessVideoForStudentsStateImplCopyWith<$Res> {
   factory _$$SuccessVideoForStudentsStateImplCopyWith(
-          _$SuccessVideoForStudentsStateImpl value,
-          $Res Function(_$SuccessVideoForStudentsStateImpl) then) =
-      __$$SuccessVideoForStudentsStateImplCopyWithImpl<$Res>;
+    _$SuccessVideoForStudentsStateImpl value,
+    $Res Function(_$SuccessVideoForStudentsStateImpl) then,
+  ) = __$$SuccessVideoForStudentsStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<VideoForStudentsEntity> videoForStudents});
 }
 
 /// @nodoc
 class __$$SuccessVideoForStudentsStateImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsStateCopyWithImpl<$Res,
-        _$SuccessVideoForStudentsStateImpl>
+    extends
+        _$VideoForStudentsStateCopyWithImpl<
+          $Res,
+          _$SuccessVideoForStudentsStateImpl
+        >
     implements _$$SuccessVideoForStudentsStateImplCopyWith<$Res> {
   __$$SuccessVideoForStudentsStateImplCopyWithImpl(
-      _$SuccessVideoForStudentsStateImpl _value,
-      $Res Function(_$SuccessVideoForStudentsStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessVideoForStudentsStateImpl _value,
+    $Res Function(_$SuccessVideoForStudentsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? videoForStudents = null,
-  }) {
-    return _then(_$SuccessVideoForStudentsStateImpl(
-      videoForStudents: null == videoForStudents
-          ? _value._videoForStudents
-          : videoForStudents // ignore: cast_nullable_to_non_nullable
-              as List<VideoForStudentsEntity>,
-    ));
+  $Res call({Object? videoForStudents = null}) {
+    return _then(
+      _$SuccessVideoForStudentsStateImpl(
+        videoForStudents: null == videoForStudents
+            ? _value._videoForStudents
+            : videoForStudents // ignore: cast_nullable_to_non_nullable
+                  as List<VideoForStudentsEntity>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
-  const _$SuccessVideoForStudentsStateImpl(
-      {required final List<VideoForStudentsEntity> videoForStudents})
-      : _videoForStudents = videoForStudents,
-        super._();
+  const _$SuccessVideoForStudentsStateImpl({
+    required final List<VideoForStudentsEntity> videoForStudents,
+  }) : _videoForStudents = videoForStudents,
+       super._();
 
   final List<VideoForStudentsEntity> _videoForStudents;
   @override
@@ -885,13 +947,17 @@ class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuccessVideoForStudentsStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._videoForStudents, _videoForStudents));
+            const DeepCollectionEquality().equals(
+              other._videoForStudents,
+              _videoForStudents,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_videoForStudents));
+    runtimeType,
+    const DeepCollectionEquality().hash(_videoForStudents),
+  );
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
@@ -899,21 +965,29 @@ class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessVideoForStudentsStateImplCopyWith<
-          _$SuccessVideoForStudentsStateImpl>
-      get copyWith => __$$SuccessVideoForStudentsStateImplCopyWithImpl<
-          _$SuccessVideoForStudentsStateImpl>(this, _$identity);
+    _$SuccessVideoForStudentsStateImpl
+  >
+  get copyWith =>
+      __$$SuccessVideoForStudentsStateImplCopyWithImpl<
+        _$SuccessVideoForStudentsStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<VideoForStudentsEntity> videoForStudents)
-        success,
+    success,
     required TResult Function(VideoForStudentsEntity videoForStudents)
-        successById,
+    successById,
     required TResult Function() done,
   }) {
     return success(videoForStudents);
@@ -924,12 +998,13 @@ class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult? Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult? Function()? done,
@@ -942,12 +1017,13 @@ class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult Function()? done,
@@ -966,7 +1042,7 @@ class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
     required TResult Function(ErrorVideoForStudentsState value) error,
     required TResult Function(SuccessVideoForStudentsState value) success,
     required TResult Function(SuccessByIdVideoForStudentsState value)
-        successById,
+    successById,
     required TResult Function(DoneVideoForStudentsState value) done,
   }) {
     return success(this);
@@ -1002,9 +1078,9 @@ class _$SuccessVideoForStudentsStateImpl extends SuccessVideoForStudentsState {
 }
 
 abstract class SuccessVideoForStudentsState extends VideoForStudentsState {
-  const factory SuccessVideoForStudentsState(
-          {required final List<VideoForStudentsEntity> videoForStudents}) =
-      _$SuccessVideoForStudentsStateImpl;
+  const factory SuccessVideoForStudentsState({
+    required final List<VideoForStudentsEntity> videoForStudents,
+  }) = _$SuccessVideoForStudentsStateImpl;
   const SuccessVideoForStudentsState._() : super._();
 
   List<VideoForStudentsEntity> get videoForStudents;
@@ -1013,43 +1089,47 @@ abstract class SuccessVideoForStudentsState extends VideoForStudentsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessVideoForStudentsStateImplCopyWith<
-          _$SuccessVideoForStudentsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessVideoForStudentsStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessByIdVideoForStudentsStateImplCopyWith<$Res> {
   factory _$$SuccessByIdVideoForStudentsStateImplCopyWith(
-          _$SuccessByIdVideoForStudentsStateImpl value,
-          $Res Function(_$SuccessByIdVideoForStudentsStateImpl) then) =
-      __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl<$Res>;
+    _$SuccessByIdVideoForStudentsStateImpl value,
+    $Res Function(_$SuccessByIdVideoForStudentsStateImpl) then,
+  ) = __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({VideoForStudentsEntity videoForStudents});
 }
 
 /// @nodoc
 class __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsStateCopyWithImpl<$Res,
-        _$SuccessByIdVideoForStudentsStateImpl>
+    extends
+        _$VideoForStudentsStateCopyWithImpl<
+          $Res,
+          _$SuccessByIdVideoForStudentsStateImpl
+        >
     implements _$$SuccessByIdVideoForStudentsStateImplCopyWith<$Res> {
   __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl(
-      _$SuccessByIdVideoForStudentsStateImpl _value,
-      $Res Function(_$SuccessByIdVideoForStudentsStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessByIdVideoForStudentsStateImpl _value,
+    $Res Function(_$SuccessByIdVideoForStudentsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? videoForStudents = null,
-  }) {
-    return _then(_$SuccessByIdVideoForStudentsStateImpl(
-      videoForStudents: null == videoForStudents
-          ? _value.videoForStudents
-          : videoForStudents // ignore: cast_nullable_to_non_nullable
-              as VideoForStudentsEntity,
-    ));
+  $Res call({Object? videoForStudents = null}) {
+    return _then(
+      _$SuccessByIdVideoForStudentsStateImpl(
+        videoForStudents: null == videoForStudents
+            ? _value.videoForStudents
+            : videoForStudents // ignore: cast_nullable_to_non_nullable
+                  as VideoForStudentsEntity,
+      ),
+    );
   }
 }
 
@@ -1058,7 +1138,7 @@ class __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl<$Res>
 class _$SuccessByIdVideoForStudentsStateImpl
     extends SuccessByIdVideoForStudentsState {
   const _$SuccessByIdVideoForStudentsStateImpl({required this.videoForStudents})
-      : super._();
+    : super._();
 
   @override
   final VideoForStudentsEntity videoForStudents;
@@ -1086,21 +1166,29 @@ class _$SuccessByIdVideoForStudentsStateImpl
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessByIdVideoForStudentsStateImplCopyWith<
-          _$SuccessByIdVideoForStudentsStateImpl>
-      get copyWith => __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl<
-          _$SuccessByIdVideoForStudentsStateImpl>(this, _$identity);
+    _$SuccessByIdVideoForStudentsStateImpl
+  >
+  get copyWith =>
+      __$$SuccessByIdVideoForStudentsStateImplCopyWithImpl<
+        _$SuccessByIdVideoForStudentsStateImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<VideoForStudentsEntity> videoForStudents)
-        success,
+    success,
     required TResult Function(VideoForStudentsEntity videoForStudents)
-        successById,
+    successById,
     required TResult Function() done,
   }) {
     return successById(videoForStudents);
@@ -1111,12 +1199,13 @@ class _$SuccessByIdVideoForStudentsStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult? Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult? Function()? done,
@@ -1129,12 +1218,13 @@ class _$SuccessByIdVideoForStudentsStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult Function()? done,
@@ -1153,7 +1243,7 @@ class _$SuccessByIdVideoForStudentsStateImpl
     required TResult Function(ErrorVideoForStudentsState value) error,
     required TResult Function(SuccessVideoForStudentsState value) success,
     required TResult Function(SuccessByIdVideoForStudentsState value)
-        successById,
+    successById,
     required TResult Function(DoneVideoForStudentsState value) done,
   }) {
     return successById(this);
@@ -1189,9 +1279,9 @@ class _$SuccessByIdVideoForStudentsStateImpl
 }
 
 abstract class SuccessByIdVideoForStudentsState extends VideoForStudentsState {
-  const factory SuccessByIdVideoForStudentsState(
-          {required final VideoForStudentsEntity videoForStudents}) =
-      _$SuccessByIdVideoForStudentsStateImpl;
+  const factory SuccessByIdVideoForStudentsState({
+    required final VideoForStudentsEntity videoForStudents,
+  }) = _$SuccessByIdVideoForStudentsStateImpl;
   const SuccessByIdVideoForStudentsState._() : super._();
 
   VideoForStudentsEntity get videoForStudents;
@@ -1200,27 +1290,31 @@ abstract class SuccessByIdVideoForStudentsState extends VideoForStudentsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessByIdVideoForStudentsStateImplCopyWith<
-          _$SuccessByIdVideoForStudentsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SuccessByIdVideoForStudentsStateImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$DoneVideoForStudentsStateImplCopyWith<$Res> {
   factory _$$DoneVideoForStudentsStateImplCopyWith(
-          _$DoneVideoForStudentsStateImpl value,
-          $Res Function(_$DoneVideoForStudentsStateImpl) then) =
-      __$$DoneVideoForStudentsStateImplCopyWithImpl<$Res>;
+    _$DoneVideoForStudentsStateImpl value,
+    $Res Function(_$DoneVideoForStudentsStateImpl) then,
+  ) = __$$DoneVideoForStudentsStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$DoneVideoForStudentsStateImplCopyWithImpl<$Res>
-    extends _$VideoForStudentsStateCopyWithImpl<$Res,
-        _$DoneVideoForStudentsStateImpl>
+    extends
+        _$VideoForStudentsStateCopyWithImpl<
+          $Res,
+          _$DoneVideoForStudentsStateImpl
+        >
     implements _$$DoneVideoForStudentsStateImplCopyWith<$Res> {
   __$$DoneVideoForStudentsStateImplCopyWithImpl(
-      _$DoneVideoForStudentsStateImpl _value,
-      $Res Function(_$DoneVideoForStudentsStateImpl) _then)
-      : super(_value, _then);
+    _$DoneVideoForStudentsStateImpl _value,
+    $Res Function(_$DoneVideoForStudentsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VideoForStudentsState
   /// with the given fields replaced by the non-null parameter values.
@@ -1250,13 +1344,18 @@ class _$DoneVideoForStudentsStateImpl extends DoneVideoForStudentsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
+    required TResult Function(
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
     required TResult Function(List<VideoForStudentsEntity> videoForStudents)
-        success,
+    success,
     required TResult Function(VideoForStudentsEntity videoForStudents)
-        successById,
+    successById,
     required TResult Function() done,
   }) {
     return done();
@@ -1267,12 +1366,13 @@ class _$DoneVideoForStudentsStateImpl extends DoneVideoForStudentsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult? Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult? Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult? Function()? done,
@@ -1285,12 +1385,13 @@ class _$DoneVideoForStudentsStateImpl extends DoneVideoForStudentsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
     TResult Function(List<VideoForStudentsEntity> videoForStudents)? success,
     TResult Function(VideoForStudentsEntity videoForStudents)? successById,
     TResult Function()? done,
@@ -1309,7 +1410,7 @@ class _$DoneVideoForStudentsStateImpl extends DoneVideoForStudentsState {
     required TResult Function(ErrorVideoForStudentsState value) error,
     required TResult Function(SuccessVideoForStudentsState value) success,
     required TResult Function(SuccessByIdVideoForStudentsState value)
-        successById,
+    successById,
     required TResult Function(DoneVideoForStudentsState value) done,
   }) {
     return done(this);
