@@ -22,20 +22,12 @@ class ApiDatasourceDio extends ApiDatasource {
   /// baseUrl - базовая ссылка на API
   /// dio - экземпляр [Dio]
   /// interceptors - интерсепторы для [Dio]
-  ApiDatasourceDio({
-    required this.baseUrl,
-    Dio? dio,
-    this.interceptors,
-  }) {
+  ApiDatasourceDio({required this.baseUrl, Dio? dio, this.interceptors}) {
     _dio = dio ?? Dio();
     _dio
       ..options.baseUrl = baseUrl
-      ..options.connectTimeout = const Duration(
-        milliseconds: _defaultConnectTimeout,
-      )
-      ..options.receiveTimeout = const Duration(
-        milliseconds: _defaultRecieveTimeout,
-      )
+      ..options.connectTimeout = const Duration(milliseconds: _defaultConnectTimeout)
+      ..options.receiveTimeout = const Duration(milliseconds: _defaultRecieveTimeout)
       ..httpClientAdapter
       ..options.headers = {'Content-type': 'application/json; charset=UTF-8'};
 
@@ -54,12 +46,7 @@ class ApiDatasourceDio extends ApiDatasource {
 
   // Метод для установки обоих токенов
   @override
-  void setAuthTokens({
-    required String accessToken,
-    required String refreshToken,
-    Future<String?> Function()? onRefresh,
-    void Function()? onLogout,
-  }) {
+  void setAuthTokens({required String accessToken, required String refreshToken, Future<String?> Function()? onRefresh, void Function()? onLogout}) {
     _accessToken = accessToken;
     _refreshToken = refreshToken;
     _onRefresh = onRefresh;
@@ -80,17 +67,7 @@ class ApiDatasourceDio extends ApiDatasource {
   }
 
   void _addloggerInterseptor() {
-    _dio.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        responseHeader: true,
-        error: false,
-        compact: true,
-        maxWidth: 90,
-      ),
-    );
+    _dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: false, responseHeader: true, error: false, compact: true, maxWidth: 90));
   }
 
   Dio get dio => _dio;
@@ -127,10 +104,7 @@ class ApiDatasourceDio extends ApiDatasource {
                   // Повторяем оригинальный запрос с новым токеном
                   final cloneReq = await _dio.request<dynamic>(
                     error.requestOptions.path,
-                    options: Options(
-                      method: error.requestOptions.method,
-                      headers: error.requestOptions.headers,
-                    ),
+                    options: Options(method: error.requestOptions.method, headers: error.requestOptions.headers),
                     data: error.requestOptions.data,
                     queryParameters: error.requestOptions.queryParameters,
                   );
@@ -161,21 +135,9 @@ class ApiDatasourceDio extends ApiDatasource {
   }
 
   @override
-  Future<T?> get<T>(
-    String uri, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onReceiveProgress,
-  }) async {
+  Future<T?> get<T>(String uri, {Map<String, dynamic>? queryParameters, Options? options, CancelToken? cancelToken, ProgressCallback? onReceiveProgress}) async {
     try {
-      final response = await _dio.get<T>(
-        uri,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress,
-      );
+      final response = await _dio.get<T>(uri, queryParameters: queryParameters, options: options, cancelToken: cancelToken, onReceiveProgress: onReceiveProgress);
 
       return response.data;
     } on FormatException catch (_) {
@@ -273,21 +235,9 @@ class ApiDatasourceDio extends ApiDatasource {
   }
 
   @override
-  Future<T?> delete<T>(
-    String uri, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
+  Future<T?> delete<T>(String uri, {dynamic data, Map<String, dynamic>? queryParameters, Options? options, CancelToken? cancelToken}) async {
     try {
-      final response = await _dio.delete<T>(
-        uri,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
+      final response = await _dio.delete<T>(uri, data: data, queryParameters: queryParameters, options: options, cancelToken: cancelToken);
 
       return response.data;
     } on FormatException catch (_) {

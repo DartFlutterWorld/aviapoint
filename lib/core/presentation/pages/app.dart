@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/sms_bloc.dart';
+import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/routes/route_observer.dart';
@@ -18,6 +19,7 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/pre
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_by_category_bloc.dart';
 import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/app_settings_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
@@ -46,9 +48,7 @@ import 'package:provider/provider.dart';
 /// Корень приложения.
 @immutable
 class App extends StatefulWidget {
-  const App({
-    super.key,
-  });
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -68,112 +68,47 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppState>(
-          create: (context) => getIt<AppState>(),
-        ),
-        BlocProvider<VideoForStudentsBloc>(
-          create: (context) => VideoForStudentsBloc(
-            videoForStudentsRepository: getIt<VideoForStudentsRepository>(),
-          ),
-        ),
-        BlocProvider<HandBookMainCategoriesBloc>(
-          create: (context) => HandBookMainCategoriesBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-          ),
-        ),
-        BlocProvider<PreflightInspectionCategoriesBloc>(
-          create: (context) => PreflightInspectionCategoriesBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-          ),
-        ),
+        ChangeNotifierProvider<AppState>(create: (context) => getIt<AppState>()),
+        BlocProvider<VideoForStudentsBloc>(create: (context) => VideoForStudentsBloc(videoForStudentsRepository: getIt<VideoForStudentsRepository>())),
+        BlocProvider<HandBookMainCategoriesBloc>(create: (context) => HandBookMainCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<PreflightInspectionCategoriesBloc>(create: (context) => PreflightInspectionCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
         BlocProvider<PreflightInspectionCheckListByCategoryBloc>(
-          create: (context) => PreflightInspectionCheckListByCategoryBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-            preflightCheckedCubit: getIt<PreflightCheckedCubit>(),
-          ),
+          create: (context) => PreflightInspectionCheckListByCategoryBloc(handBookRepository: getIt<HandBookRepository>(), preflightCheckedCubit: getIt<PreflightCheckedCubit>()),
           lazy: false,
         ),
-        BlocProvider<PreflightInspectionCheckListBloc>(
-          create: (context) => PreflightInspectionCheckListBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-          ),
-        ),
-        BlocProvider<PreflightCheckedCubit>(
-          create: (context) => getIt<PreflightCheckedCubit>(),
-        ),
-        BlocProvider<NormalCategoriesBloc>(
-          create: (context) => NormalCategoriesBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-          ),
-        ),
+        BlocProvider<PreflightInspectionCheckListBloc>(create: (context) => PreflightInspectionCheckListBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<PreflightCheckedCubit>(create: (context) => getIt<PreflightCheckedCubit>()),
+        BlocProvider<NormalCategoriesBloc>(create: (context) => NormalCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
         BlocProvider<NormalCheckListByCategoryBloc>(
-          create: (context) => NormalCheckListByCategoryBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-            normalCheckedCubit: getIt<NormalCheckedCubit>(),
-          ),
+          create: (context) => NormalCheckListByCategoryBloc(handBookRepository: getIt<HandBookRepository>(), normalCheckedCubit: getIt<NormalCheckedCubit>()),
           lazy: false,
         ),
-        BlocProvider<NormalCheckListBloc>(
-          create: (context) => NormalCheckListBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-          ),
-        ),
-        BlocProvider<NormalCheckedCubit>(
-          create: (context) => getIt<NormalCheckedCubit>(),
-        ),
-        BlocProvider<EmergencyCategoriesBloc>(
-          create: (context) => EmergencyCategoriesBloc(
-            handBookRepository: getIt<HandBookRepository>(),
-          ),
-        ),
-        BlocProvider<SmsBloc>(
-          create: (context) => SmsBloc(authRepository: getIt<AuthRepository>()),
-        ),
+        BlocProvider<NormalCheckListBloc>(create: (context) => NormalCheckListBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<NormalCheckedCubit>(create: (context) => getIt<NormalCheckedCubit>()),
+        BlocProvider<EmergencyCategoriesBloc>(create: (context) => EmergencyCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<SmsBloc>(create: (context) => SmsBloc(authRepository: getIt<AuthRepository>())),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository: getIt<AuthRepository>(), appState: getIt<AppState>()),
         ),
-        BlocProvider<CacheManagerBloc>(
-          create: (context) => CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent()),
-        ),
+        BlocProvider<CacheManagerBloc>(create: (context) => CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent())),
         BlocProvider<ProfileBloc>(
-          create: (context) => ProfileBloc(
-            profileRepository: getIt<ProfileRepository>(),
-            initState: getIt<AppState>(),
-          ),
+          create: (context) => ProfileBloc(profileRepository: getIt<ProfileRepository>(), initState: getIt<AppState>()),
         ),
-        BlocProvider<StoryCubit>(
-          create: (context) => StoryCubit(),
+        BlocProvider<StoryCubit>(create: (context) => StoryCubit()),
+        BlocProvider<DetailStoryBloc>(create: (context) => DetailStoryBloc(storyRepository: getIt<StoryRepository>())),
+        BlocProvider<DetailNewsBloc>(create: (context) => DetailNewsBloc(newsRepository: getIt<NewsRepository>())),
+        BlocProvider<NewsBloc>(create: (context) => NewsBloc(newsRepository: getIt<NewsRepository>())),
+        BlocProvider<CategoryNewsBloc>(create: (context) => CategoryNewsBloc(newsRepository: getIt<NewsRepository>())),
+        BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
+        BlocProvider<TypeSertificatesBloc>(create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<TypeCorrectAnswersBloc>(create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<CategoriesWithListQuestionsBloc>(create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<CategoriesBloc>(create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<AppSettingsBloc>(
+          create: (context) => AppSettingsBloc(db: getIt<AppDb>(), rosAviaTestCubit: getIt<RosAviaTestCubit>())..add(SetAppSettingsEvent()),
+          lazy: false,
         ),
-        BlocProvider<DetailStoryBloc>(
-          create: (context) => DetailStoryBloc(storyRepository: getIt<StoryRepository>()),
-        ),
-        BlocProvider<DetailNewsBloc>(
-          create: (context) => DetailNewsBloc(newsRepository: getIt<NewsRepository>()),
-        ),
-        BlocProvider<NewsBloc>(
-          create: (context) => NewsBloc(newsRepository: getIt<NewsRepository>()),
-        ),
-        BlocProvider<CategoryNewsBloc>(
-          create: (context) => CategoryNewsBloc(newsRepository: getIt<NewsRepository>()),
-        ),
-        BlocProvider<NewsCubit>(
-          create: (context) => NewsCubit(),
-        ),
-        BlocProvider<TypeSertificatesBloc>(
-          create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
-        ),
-        BlocProvider<TypeCorrectAnswersBloc>(
-          create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
-        ),
-        BlocProvider<CategoriesWithListQuestionsBloc>(
-          create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
-        ),
-        BlocProvider<CategoriesBloc>(
-          create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
-        ),
-        BlocProvider<RosAviaTestCubit>(
-          create: (context) => RosAviaTestCubit(),
-        ),
+        BlocProvider<RosAviaTestCubit>(create: (context) => getIt<RosAviaTestCubit>()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
@@ -181,9 +116,7 @@ class _AppState extends State<App> {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         title: 'AviaPoint',
-        routerDelegate: getIt<AppRouter>().delegate(
-          navigatorObservers: () => [MyRouteObserver()],
-        ),
+        routerDelegate: getIt<AppRouter>().delegate(navigatorObservers: () => [MyRouteObserver()]),
         routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
       ),
     );

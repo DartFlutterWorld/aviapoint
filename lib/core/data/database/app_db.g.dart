@@ -51,21 +51,43 @@ class $AppSettingsTable extends AppSettings
     ),
     defaultValue: const Constant(true),
   );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedColumnWithTypeConverter<List<int>, String>
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _imageMeta = const VerificationMeta('image');
+  @override
+  late final GeneratedColumn<String> image = GeneratedColumn<String>(
+    'image',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<Set<int>, String>
   selectedCategoryIds = GeneratedColumn<String>(
     'selected_category_ids',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
-    defaultValue: const Constant('[]'),
-  ).withConverter<List<int>>($AppSettingsTable.$converterselectedCategoryIds);
+    defaultValue: const Constant('{}'),
+  ).withConverter<Set<int>>($AppSettingsTable.$converterselectedCategoryIds);
   @override
   List<GeneratedColumn> get $columns => [
     certificateTypeId,
     mixAnswers,
     buttonHint,
+    title,
+    image,
     selectedCategoryIds,
   ];
   @override
@@ -101,6 +123,18 @@ class $AppSettingsTable extends AppSettings
         buttonHint.isAcceptableOrUnknown(data['button_hint']!, _buttonHintMeta),
       );
     }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    }
+    if (data.containsKey('image')) {
+      context.handle(
+        _imageMeta,
+        image.isAcceptableOrUnknown(data['image']!, _imageMeta),
+      );
+    }
     return context;
   }
 
@@ -122,6 +156,14 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.bool,
         data['${effectivePrefix}button_hint'],
       )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      image: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image'],
+      )!,
       selectedCategoryIds: $AppSettingsTable.$converterselectedCategoryIds
           .fromSql(
             attachedDatabase.typeMapping.read(
@@ -137,7 +179,7 @@ class $AppSettingsTable extends AppSettings
     return $AppSettingsTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<List<int>, String> $converterselectedCategoryIds =
+  static TypeConverter<Set<int>, String> $converterselectedCategoryIds =
       const IntListJson();
 }
 
@@ -145,11 +187,15 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   final int certificateTypeId;
   final bool mixAnswers;
   final bool buttonHint;
-  final List<int> selectedCategoryIds;
+  final String title;
+  final String image;
+  final Set<int> selectedCategoryIds;
   const AppSetting({
     required this.certificateTypeId,
     required this.mixAnswers,
     required this.buttonHint,
+    required this.title,
+    required this.image,
     required this.selectedCategoryIds,
   });
   @override
@@ -158,6 +204,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     map['certificate_type_id'] = Variable<int>(certificateTypeId);
     map['mix_answers'] = Variable<bool>(mixAnswers);
     map['button_hint'] = Variable<bool>(buttonHint);
+    map['title'] = Variable<String>(title);
+    map['image'] = Variable<String>(image);
     {
       map['selected_category_ids'] = Variable<String>(
         $AppSettingsTable.$converterselectedCategoryIds.toSql(
@@ -173,6 +221,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       certificateTypeId: Value(certificateTypeId),
       mixAnswers: Value(mixAnswers),
       buttonHint: Value(buttonHint),
+      title: Value(title),
+      image: Value(image),
       selectedCategoryIds: Value(selectedCategoryIds),
     );
   }
@@ -186,7 +236,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       certificateTypeId: serializer.fromJson<int>(json['certificateTypeId']),
       mixAnswers: serializer.fromJson<bool>(json['mixAnswers']),
       buttonHint: serializer.fromJson<bool>(json['buttonHint']),
-      selectedCategoryIds: serializer.fromJson<List<int>>(
+      title: serializer.fromJson<String>(json['title']),
+      image: serializer.fromJson<String>(json['image']),
+      selectedCategoryIds: serializer.fromJson<Set<int>>(
         json['selectedCategoryIds'],
       ),
     );
@@ -198,7 +250,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'certificateTypeId': serializer.toJson<int>(certificateTypeId),
       'mixAnswers': serializer.toJson<bool>(mixAnswers),
       'buttonHint': serializer.toJson<bool>(buttonHint),
-      'selectedCategoryIds': serializer.toJson<List<int>>(selectedCategoryIds),
+      'title': serializer.toJson<String>(title),
+      'image': serializer.toJson<String>(image),
+      'selectedCategoryIds': serializer.toJson<Set<int>>(selectedCategoryIds),
     };
   }
 
@@ -206,11 +260,15 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     int? certificateTypeId,
     bool? mixAnswers,
     bool? buttonHint,
-    List<int>? selectedCategoryIds,
+    String? title,
+    String? image,
+    Set<int>? selectedCategoryIds,
   }) => AppSetting(
     certificateTypeId: certificateTypeId ?? this.certificateTypeId,
     mixAnswers: mixAnswers ?? this.mixAnswers,
     buttonHint: buttonHint ?? this.buttonHint,
+    title: title ?? this.title,
+    image: image ?? this.image,
     selectedCategoryIds: selectedCategoryIds ?? this.selectedCategoryIds,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
@@ -224,6 +282,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       buttonHint: data.buttonHint.present
           ? data.buttonHint.value
           : this.buttonHint,
+      title: data.title.present ? data.title.value : this.title,
+      image: data.image.present ? data.image.value : this.image,
       selectedCategoryIds: data.selectedCategoryIds.present
           ? data.selectedCategoryIds.value
           : this.selectedCategoryIds,
@@ -236,6 +296,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('certificateTypeId: $certificateTypeId, ')
           ..write('mixAnswers: $mixAnswers, ')
           ..write('buttonHint: $buttonHint, ')
+          ..write('title: $title, ')
+          ..write('image: $image, ')
           ..write('selectedCategoryIds: $selectedCategoryIds')
           ..write(')'))
         .toString();
@@ -246,6 +308,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     certificateTypeId,
     mixAnswers,
     buttonHint,
+    title,
+    image,
     selectedCategoryIds,
   );
   @override
@@ -255,6 +319,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.certificateTypeId == this.certificateTypeId &&
           other.mixAnswers == this.mixAnswers &&
           other.buttonHint == this.buttonHint &&
+          other.title == this.title &&
+          other.image == this.image &&
           other.selectedCategoryIds == this.selectedCategoryIds);
 }
 
@@ -262,29 +328,39 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<int> certificateTypeId;
   final Value<bool> mixAnswers;
   final Value<bool> buttonHint;
-  final Value<List<int>> selectedCategoryIds;
+  final Value<String> title;
+  final Value<String> image;
+  final Value<Set<int>> selectedCategoryIds;
   const AppSettingsCompanion({
     this.certificateTypeId = const Value.absent(),
     this.mixAnswers = const Value.absent(),
     this.buttonHint = const Value.absent(),
+    this.title = const Value.absent(),
+    this.image = const Value.absent(),
     this.selectedCategoryIds = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.certificateTypeId = const Value.absent(),
     this.mixAnswers = const Value.absent(),
     this.buttonHint = const Value.absent(),
+    this.title = const Value.absent(),
+    this.image = const Value.absent(),
     this.selectedCategoryIds = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
     Expression<int>? certificateTypeId,
     Expression<bool>? mixAnswers,
     Expression<bool>? buttonHint,
+    Expression<String>? title,
+    Expression<String>? image,
     Expression<String>? selectedCategoryIds,
   }) {
     return RawValuesInsertable({
       if (certificateTypeId != null) 'certificate_type_id': certificateTypeId,
       if (mixAnswers != null) 'mix_answers': mixAnswers,
       if (buttonHint != null) 'button_hint': buttonHint,
+      if (title != null) 'title': title,
+      if (image != null) 'image': image,
       if (selectedCategoryIds != null)
         'selected_category_ids': selectedCategoryIds,
     });
@@ -294,12 +370,16 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<int>? certificateTypeId,
     Value<bool>? mixAnswers,
     Value<bool>? buttonHint,
-    Value<List<int>>? selectedCategoryIds,
+    Value<String>? title,
+    Value<String>? image,
+    Value<Set<int>>? selectedCategoryIds,
   }) {
     return AppSettingsCompanion(
       certificateTypeId: certificateTypeId ?? this.certificateTypeId,
       mixAnswers: mixAnswers ?? this.mixAnswers,
       buttonHint: buttonHint ?? this.buttonHint,
+      title: title ?? this.title,
+      image: image ?? this.image,
       selectedCategoryIds: selectedCategoryIds ?? this.selectedCategoryIds,
     );
   }
@@ -315,6 +395,12 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     }
     if (buttonHint.present) {
       map['button_hint'] = Variable<bool>(buttonHint.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (image.present) {
+      map['image'] = Variable<String>(image.value);
     }
     if (selectedCategoryIds.present) {
       map['selected_category_ids'] = Variable<String>(
@@ -332,6 +418,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('certificateTypeId: $certificateTypeId, ')
           ..write('mixAnswers: $mixAnswers, ')
           ..write('buttonHint: $buttonHint, ')
+          ..write('title: $title, ')
+          ..write('image: $image, ')
           ..write('selectedCategoryIds: $selectedCategoryIds')
           ..write(')'))
         .toString();
@@ -755,14 +843,18 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<int> certificateTypeId,
       Value<bool> mixAnswers,
       Value<bool> buttonHint,
-      Value<List<int>> selectedCategoryIds,
+      Value<String> title,
+      Value<String> image,
+      Value<Set<int>> selectedCategoryIds,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
       Value<int> certificateTypeId,
       Value<bool> mixAnswers,
       Value<bool> buttonHint,
-      Value<List<int>> selectedCategoryIds,
+      Value<String> title,
+      Value<String> image,
+      Value<Set<int>> selectedCategoryIds,
     });
 
 class $$AppSettingsTableFilterComposer
@@ -789,7 +881,17 @@ class $$AppSettingsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<List<int>, List<int>, String>
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get image => $composableBuilder(
+    column: $table.image,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<Set<int>, Set<int>, String>
   get selectedCategoryIds => $composableBuilder(
     column: $table.selectedCategoryIds,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -817,6 +919,16 @@ class $$AppSettingsTableOrderingComposer
 
   ColumnOrderings<bool> get buttonHint => $composableBuilder(
     column: $table.buttonHint,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get image => $composableBuilder(
+    column: $table.image,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -850,7 +962,13 @@ class $$AppSettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumnWithTypeConverter<List<int>, String> get selectedCategoryIds =>
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get image =>
+      $composableBuilder(column: $table.image, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Set<int>, String> get selectedCategoryIds =>
       $composableBuilder(
         column: $table.selectedCategoryIds,
         builder: (column) => column,
@@ -888,11 +1006,15 @@ class $$AppSettingsTableTableManager
                 Value<int> certificateTypeId = const Value.absent(),
                 Value<bool> mixAnswers = const Value.absent(),
                 Value<bool> buttonHint = const Value.absent(),
-                Value<List<int>> selectedCategoryIds = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> image = const Value.absent(),
+                Value<Set<int>> selectedCategoryIds = const Value.absent(),
               }) => AppSettingsCompanion(
                 certificateTypeId: certificateTypeId,
                 mixAnswers: mixAnswers,
                 buttonHint: buttonHint,
+                title: title,
+                image: image,
                 selectedCategoryIds: selectedCategoryIds,
               ),
           createCompanionCallback:
@@ -900,11 +1022,15 @@ class $$AppSettingsTableTableManager
                 Value<int> certificateTypeId = const Value.absent(),
                 Value<bool> mixAnswers = const Value.absent(),
                 Value<bool> buttonHint = const Value.absent(),
-                Value<List<int>> selectedCategoryIds = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> image = const Value.absent(),
+                Value<Set<int>> selectedCategoryIds = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 certificateTypeId: certificateTypeId,
                 mixAnswers: mixAnswers,
                 buttonHint: buttonHint,
+                title: title,
+                image: image,
                 selectedCategoryIds: selectedCategoryIds,
               ),
           withReferenceMapper: (p0) => p0

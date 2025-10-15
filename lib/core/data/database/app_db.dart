@@ -11,9 +11,11 @@ class AppSettings extends Table {
   IntColumn get certificateTypeId => integer().withDefault(const Constant(1))(); // тип сертификата (твоя специализация)
   BoolColumn get mixAnswers => boolean().withDefault(const Constant(true))();
   BoolColumn get buttonHint => boolean().withDefault(const Constant(true))();
+  TextColumn get title => text().withDefault(const Constant(''))();
+  TextColumn get image => text().withDefault(const Constant(''))();
 
   // JSON-список выбранных категорий
-  TextColumn get selectedCategoryIds => text().map(const IntListJson()).withDefault(const Constant('[]'))();
+  TextColumn get selectedCategoryIds => text().map(const IntListJson()).withDefault(const Constant('{}'))();
 
   @override
   Set<Column> get primaryKey => {certificateTypeId};
@@ -34,21 +36,80 @@ class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(onCreate: (m) async => m.createAll());
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) async => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 3) {
+        await m.addColumn(appSettings, appSettings.title);
+        await m.addColumn(appSettings, appSettings.image);
+      }
+    },
+  );
 
   // ---------------- SETTINGS ----------------
   Future<AppSetting?> getSettings() async => (await (select(appSettings)).getSingleOrNull());
 
   /// Настройки для конкретного типа свидетельства
   Future<AppSetting?> getSettingsForCertificate({required int certificateTypeId}) async {
-    return (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).getSingleOrNull();
+    print('getSettingsForCertificate: searching for certificateTypeId = $certificateTypeId');
+
+    // Сначала проверим, есть ли вообще записи в таблице
+    final allSettings = await select(appSettings).get();
+    print('getSettingsForCertificate: all settings in DB = $allSettings');
+
+    final result = (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).getSingleOrNull();
+    print('getSettingsForCertificate: result = $result');
+
+    return result;
   }
 
-  Future<void> saveSettings({required int certificateTypeId, required bool mixAnswers, required bool buttonHint, required List<int> selectedCategoryIds}) async {
-    await into(appSettings).insertOnConflictUpdate(AppSetting(certificateTypeId: certificateTypeId, mixAnswers: mixAnswers, buttonHint: buttonHint, selectedCategoryIds: selectedCategoryIds));
+  Future<void> saveSettings({
+    required int certificateTypeId,
+    required bool mixAnswers,
+    required bool buttonHint,
+    required Set<int> selectedCategoryIds,
+    required String title,
+    required String image,
+  }) async {
+    print('saveSettings: saving for certificateTypeId = $certificateTypeId');
+    print('saveSettings: mixAnswers = $mixAnswers, buttonHint = $buttonHint');
+    print('saveSettings: selectedCategoryIds = $selectedCategoryIds');
+
+    // Проверим, есть ли записи перед удалением
+    final existingRecords = await (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
+    print('saveSettings: existing records before delete = $existingRecords');
+
+    // Сначала удаляем существующую запись для данного certificateTypeId
+    await (delete(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
+    print('saveSettings: deleted records for certificateTypeId = $certificateTypeId');
+
+    // Проверим, что записи действительно удалены
+    final recordsAfterDelete = await (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
+    print('saveSettings: records after delete = $recordsAfterDelete');
+
+    // Затем вставляем новую запись
+    try {
+      await into(
+        appSettings,
+      ).insert(AppSetting(certificateTypeId: certificateTypeId, mixAnswers: mixAnswers, buttonHint: buttonHint, selectedCategoryIds: selectedCategoryIds, title: title, image: image));
+
+      print('saveSettings: inserted new record');
+
+      // Проверим, что запись действительно сохранилась
+      final savedRecord = await getSettingsForCertificate(certificateTypeId: certificateTypeId);
+      print('saveSettings: verification - saved record = $savedRecord');
+
+      // Также проверим все записи в таблице
+      final allRecords = await select(appSettings).get();
+      print('saveSettings: all records in table = $allRecords');
+    } catch (e, stackTrace) {
+      print('saveSettings: ERROR during insert: $e');
+      print('saveSettings: Stack trace: $stackTrace');
+      rethrow;
+    }
   }
 
   // ---------------- ANSWERS (без попыток) ----------------

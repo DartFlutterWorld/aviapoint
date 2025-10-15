@@ -16,6 +16,7 @@ import 'package:aviapoint/learning/hand_book/repositories/hand_book_repository.d
 import 'package:aviapoint/learning/ros_avia_test/data/datasources/ros_avia_test_service.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/repositories/ros_avia_test_repository_impl.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/video_for_students_page/data/datasources/video_for_students_service.dart';
 import 'package:aviapoint/learning/video_for_students_page/data/repositories/video_for_students_repository_impl.dart';
 import 'package:aviapoint/learning/video_for_students_page/domain/repositories/video_for_students_repository.dart';
@@ -43,54 +44,26 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<MyRouteObserver>(MyRouteObserver());
 
   // Сначала регистрируем AuthRepository
-  getIt.registerSingleton<AuthRepository>(
-    AuthRepositoryImpl(
-      authService: AuthService(dataSource.dio),
-      apiDatasource: getIt.get<ApiDatasource>(),
-    ),
-  );
+  getIt.registerSingleton<AuthRepository>(AuthRepositoryImpl(authService: AuthService(dataSource.dio), apiDatasource: getIt.get<ApiDatasource>()));
 
   // Теперь создаём AppState, используя зарегистрированный AuthRepository
   final appState = AppState(authRepository: getIt<AuthRepository>());
   getIt.registerSingleton<AppState>(appState);
 
   // Регистрируем остальные зависимости
-  getIt.registerSingleton<ProfileRepository>(
-    ProfileRepositoryImpl(
-      profileService: ProfileService(dataSource.dio),
-    ),
-  );
+  getIt.registerSingleton<ProfileRepository>(ProfileRepositoryImpl(profileService: ProfileService(dataSource.dio)));
 
-  getIt.registerSingleton<VideoForStudentsRepository>(
-    VideoForStudentsRepositoryImpl(
-      videoForStudentsService: VideoForStudentsService(dataSource.dio),
-    ),
-  );
+  getIt.registerSingleton<VideoForStudentsRepository>(VideoForStudentsRepositoryImpl(videoForStudentsService: VideoForStudentsService(dataSource.dio)));
 
-  getIt.registerSingleton<HandBookRepository>(
-    HandBookRepositoryImpl(
-      handBookService: HandBookService(dataSource.dio),
-    ),
-  );
+  getIt.registerSingleton<HandBookRepository>(HandBookRepositoryImpl(handBookService: HandBookService(dataSource.dio)));
 
-  getIt.registerSingleton<DefaultCacheManager>(
-    DefaultCacheManager(),
-  );
-  getIt.registerSingleton<PreflightCheckedCubit>(
-    PreflightCheckedCubit(),
-  );
-  getIt.registerSingleton<NormalCheckedCubit>(
-    NormalCheckedCubit(),
-  );
-  getIt.registerSingleton<StoryRepository>(
-    StoryRepositoryImpl(storyService: StoryService(dataSource.dio)),
-  );
-  getIt.registerSingleton<NewsRepository>(
-    NewsRepositoryImpl(newsService: NewsService(dataSource.dio)),
-  );
+  getIt.registerSingleton<DefaultCacheManager>(DefaultCacheManager());
+  getIt.registerSingleton<PreflightCheckedCubit>(PreflightCheckedCubit());
+  getIt.registerSingleton<NormalCheckedCubit>(NormalCheckedCubit());
+  getIt.registerSingleton<StoryRepository>(StoryRepositoryImpl(storyService: StoryService(dataSource.dio)));
+  getIt.registerSingleton<NewsRepository>(NewsRepositoryImpl(newsService: NewsService(dataSource.dio)));
 
-  getIt.registerSingleton<RosAviaTestRepository>(
-    RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)),
-  );
+  getIt.registerSingleton<RosAviaTestRepository>(RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)));
   getIt.registerSingleton<AppDb>(AppDb());
+  getIt.registerSingleton<RosAviaTestCubit>(RosAviaTestCubit());
 }

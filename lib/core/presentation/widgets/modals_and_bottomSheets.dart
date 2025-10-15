@@ -19,7 +19,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
 
 Future<void> checkList({required BuildContext context, required List<NormalCheckListEntity> checkList}) async {
   return await showModalBottomSheet<void>(
@@ -149,7 +148,7 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
 }
 
 Future<void> selectTopics({required BuildContext context}) async {
-  final result = await showModalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int>)>(
+  final result = await showModalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image)>(
     useRootNavigator: true,
     isDismissible: true,
     context: context,
@@ -166,7 +165,7 @@ Future<void> selectTopics({required BuildContext context}) async {
     },
   );
   if (result != null) {
-    await getIt<AppDb>().saveSettings(certificateTypeId: result.$1, mixAnswers: result.$2, buttonHint: result.$3, selectedCategoryIds: result.$4.toList());
+    await getIt<AppDb>().saveSettings(certificateTypeId: result.$1, mixAnswers: result.$2, buttonHint: result.$3, selectedCategoryIds: result.$4, title: result.$5, image: result.$6);
   }
 }
 

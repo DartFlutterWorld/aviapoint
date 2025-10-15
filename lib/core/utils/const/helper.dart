@@ -69,15 +69,15 @@ enum Screens {
   selectTopicsScreen, // Выбор сертификата и тем в боттом шите тестирования
 }
 
-class IntListJson extends TypeConverter<List<int>, String> {
+class IntListJson extends TypeConverter<Set<int>, String> {
   const IntListJson();
   @override
-  List<int> fromSql(String fromDb) {
-    if (fromDb.isEmpty) return const [];
+  Set<int> fromSql(String fromDb) {
+    if (fromDb.isEmpty) return const {};
     final raw = jsonDecode(fromDb);
-    return (raw as List).map((e) => (e as num).toInt()).toList();
+    return (raw as List).map((e) => (e as num).toInt()).toSet();
   }
 
   @override
-  String toSql(List<int> value) => jsonEncode(value);
+  String toSql(Set<int> value) => jsonEncode(value.toList());
 }
