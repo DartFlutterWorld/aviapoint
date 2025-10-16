@@ -161,7 +161,7 @@ class _Success extends StatelessWidget {
                   child: RosAviaTestCategoryWidget(
                     title: bigFirstSymbol(categoryWithQuestions[index].categoryTitle),
                     subTitle: '',
-                    clearCategory: () {},
+
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [

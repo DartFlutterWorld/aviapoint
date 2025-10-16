@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/questions_by_type_certificate_and_categories_bloc.dart';
@@ -57,7 +60,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
 
   /// ValueNotifier для отслеживания изменений в состояниях ответов
   /// Позволяет перестраивать UI при изменении выбора пользователя
-  final ValueNotifier<int> answerStateChanged = ValueNotifier<int>(0);
+  final ValueNotifier<bool> answerStateChanged = ValueNotifier<bool>(false);
 
   /// Карта для сохранения состояния ответов по индексам вопросов
   ///
@@ -118,6 +121,11 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                   child: ValueListenableBuilder(
                     valueListenable: indexQuestion,
                     builder: (_, indexQuestionValue, __) {
+                      /// Проверяем, что индекс в допустимых пределах
+                      if (indexQuestionValue >= value.questionsWithAnswers.length) {
+                        return const SizedBox.shrink();
+                      }
+
                       /// Получаем сохраненное состояние для текущего вопроса
                       /// Если состояние существует, восстанавливаем выбранный ответ и результаты
                       final savedState = answerStateMap[indexQuestionValue];
@@ -133,12 +141,31 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                         initialShowResults: savedState?.showResults ?? false,
 
                         /// Сохраняем состояние при изменении выбора
-                        onStateChanged: (selectedAnswerIndex, showResults) {
+                        onStateChanged: (selectedAnswerIndex, showResults) async {
                           answerStateMap[indexQuestionValue] = (selectedAnswerIndex: selectedAnswerIndex, showResults: showResults);
 
+                          /// Сохраняем ответ в локальную БД
+                          if (selectedAnswerIndex != null && indexQuestionValue < value.questionsWithAnswers.length) {
+                            final question = value.questionsWithAnswers[indexQuestionValue];
+                            final certificateTypeId = BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id;
+
+                            try {
+                              await getIt<AppDb>().upsertAnswer(
+                                certificateTypeId: certificateTypeId,
+                                categoryId: 0, // Используем 0 так как categoryId нет в QuestionWithAnswersEntity
+                                categoryName: question.categoryTitle ?? 'Без категории',
+                                questionId: question.questionId,
+                                selectedAnswerIds: [selectedAnswerIndex],
+                                isCorrect: question.answers[selectedAnswerIndex].isCorrect,
+                              );
+                              AppTalker.good('Answer saved: Q${question.questionId}, A${selectedAnswerIndex}');
+                            } catch (e, stackTrace) {
+                              AppTalker.error('Error saving answer', e, stackTrace);
+                            }
+                          }
+
                           /// Уведомляем слушателей об изменении состояния ответа
-                          /// Просто изменяем значение чтобы ValueNotifier уведомил слушателей
-                          answerStateChanged.value++;
+                          answerStateChanged.value = true;
                         },
                       );
                     },
@@ -167,25 +194,59 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                         title: 'Следующий',
                         verticalPadding: 8.h,
                         onPressed: isAnswerSelected
-                            ? () {
+                            ? () async {
                                 /// Логика навигации к следующему вопросу
+                                AppTalker.info('=== Next button pressed ===');
+                                AppTalker.info('Current question index: $currentIndexQuestion');
+
                                 final state = questionsByTypeCertificateAndCategoriesBloc.state;
                                 state.map(
-                                  loading: (value) => null,
-                                  error: (value) => null,
+                                  loading: (value) {
+                                    AppTalker.warning('State is loading');
+                                    return null;
+                                  },
+                                  error: (value) {
+                                    AppTalker.error('State is error');
+                                    return null;
+                                  },
                                   success: (value) {
+                                    final totalQuestions = value.questionsWithAnswers.length;
+                                    AppTalker.info('Total questions: $totalQuestions');
+                                    AppTalker.info('Next question index would be: ${currentIndexQuestion + 1}');
+                                    AppTalker.info('Has next: ${currentIndexQuestion + 1 < totalQuestions}');
+
                                     /// Проверяем, есть ли следующий вопрос
-                                    if (currentIndexQuestion + 1 < value.questionsWithAnswers.length) {
+                                    if (currentIndexQuestion + 1 < totalQuestions) {
+                                      AppTalker.info('Navigating to next question');
+
                                       /// Очищаем состояние для следующего вопроса
-                                      /// Это нужно для того чтобы при переходе вперед показывались чистые ответы
                                       answerStateMap.remove(currentIndexQuestion + 1);
 
                                       /// Уведомляем об изменении перед переходом
-                                      answerStateChanged.value++;
+                                      answerStateChanged.value = !answerStateChanged.value;
                                       indexQuestion.value++;
                                     } else {
-                                      /// Если это последний вопрос, возвращаемся на предыдущий экран
-                                      context.router.maybePop();
+                                      AppTalker.info('=== LAST QUESTION REACHED ===');
+                                      AppTalker.info('Preparing to navigate to results');
+
+                                      final certificateTypeId = BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id;
+                                      AppTalker.info('Certificate Type ID: $certificateTypeId');
+                                      AppTalker.info('Context mounted: ${context.mounted}');
+
+                                      if (context.mounted) {
+                                        AppTalker.info('Scheduling navigation after delay');
+                                        Future<void>.delayed(const Duration(milliseconds: 500)).then((_) {
+                                          AppTalker.info('Delay complete, checking context');
+                                          if (context.mounted) {
+                                            AppTalker.good('NAVIGATING TO RESULTS SCREEN');
+                                            context.router.push(TestResultsRoute(certificateTypeId: certificateTypeId));
+                                          } else {
+                                            AppTalker.error('Context lost after delay');
+                                          }
+                                        });
+                                      } else {
+                                        AppTalker.error('Context not mounted at navigation time');
+                                      }
                                     }
                                     return null;
                                   },

@@ -1570,6 +1570,59 @@ class TestByModeRouteArgs {
 }
 
 /// generated route for
+/// [TestResultsScreen]
+class TestResultsRoute extends PageRouteInfo<TestResultsRouteArgs> {
+  TestResultsRoute({
+    required int certificateTypeId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TestResultsRoute.name,
+         args: TestResultsRouteArgs(
+           certificateTypeId: certificateTypeId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'TestResultsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TestResultsRouteArgs>();
+      return TestResultsScreen(
+        certificateTypeId: args.certificateTypeId,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class TestResultsRouteArgs {
+  const TestResultsRouteArgs({required this.certificateTypeId, this.key});
+
+  final int certificateTypeId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'TestResultsRouteArgs{certificateTypeId: $certificateTypeId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TestResultsRouteArgs) return false;
+    return certificateTypeId == other.certificateTypeId && key == other.key;
+  }
+
+  @override
+  int get hashCode => certificateTypeId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [VacuumSystemFailureScreen]
 class VacuumSystemFailureRoute extends PageRouteInfo<void> {
   const VacuumSystemFailureRoute({List<PageRouteInfo>? children})

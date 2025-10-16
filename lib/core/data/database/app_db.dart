@@ -25,11 +25,15 @@ class AppSettings extends Table {
 /// Ответы пользователя БЕЗ попыток.
 /// Храним последний ответ для пары (certificateTypeId, questionId).
 class UserAnswers extends Table {
-  IntColumn? get certificateTypeId => integer()(); // тип сертификата (твоя специализация)
+  IntColumn get certificateTypeId => integer()(); // тип сертификата (твоя специализация)
   IntColumn? get categoryId => integer()(); // для фильтрации по выбранным темам
-  IntColumn? get questionId => integer()(); // ID вопроса
+  TextColumn? get categoryName => text()(); // название категории для группировки
+  IntColumn get questionId => integer()(); // ID вопроса
   TextColumn? get selectedAnswerIdsJson => text()(); // JSON: [id1, id2, ...]
   BoolColumn? get isCorrect => boolean().nullable()(); // можно заполнять сразу/позже
+
+  @override
+  Set<Column> get primaryKey => {certificateTypeId, questionId};
 }
 
 @DriftDatabase(tables: [AppSettings, UserAnswers])
@@ -37,7 +41,7 @@ class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -46,6 +50,17 @@ class AppDb extends _$AppDb {
       if (from < 3) {
         await m.addColumn(appSettings, appSettings.title);
         await m.addColumn(appSettings, appSettings.image);
+      }
+      if (from < 4) {
+        // Пересоздаем таблицу userAnswers с первичным ключом
+        // Это необходимо для работы insertOnConflictUpdate()
+        await m.deleteTable('user_answers');
+        await m.createTable(userAnswers);
+      }
+      if (from < 5) {
+        // Пересоздаем таблицу userAnswers чтобы добавить столбец categoryName
+        await m.deleteTable('user_answers');
+        await m.createTable(userAnswers);
       }
     },
   );
@@ -115,9 +130,24 @@ class AppDb extends _$AppDb {
   // ---------------- ANSWERS (без попыток) ----------------
 
   /// Upsert: пишет последний ответ пользователя на вопрос
-  Future<void> upsertAnswer({required int certificateTypeId, required int categoryId, required int questionId, required List<int> selectedAnswerIds, bool? isCorrect, int timeSpentSec = 0}) async {
+  Future<void> upsertAnswer({
+    required int certificateTypeId,
+    required int categoryId,
+    required String categoryName,
+    required int questionId,
+    required List<int> selectedAnswerIds,
+    bool? isCorrect,
+    int timeSpentSec = 0,
+  }) async {
     await into(userAnswers).insertOnConflictUpdate(
-      UserAnswer(certificateTypeId: certificateTypeId, categoryId: categoryId, questionId: questionId, selectedAnswerIdsJson: jsonEncode(selectedAnswerIds), isCorrect: isCorrect),
+      UserAnswer(
+        certificateTypeId: certificateTypeId,
+        categoryId: categoryId,
+        categoryName: categoryName,
+        questionId: questionId,
+        selectedAnswerIdsJson: jsonEncode(selectedAnswerIds),
+        isCorrect: isCorrect,
+      ),
     );
   }
 
@@ -136,6 +166,9 @@ class AppDb extends _$AppDb {
   /// Сброс ответов (например, начать «с чистого листа» по выбранным темам)
   Future<int> resetAnswersForCategories({required int certificateTypeId, required Iterable<int> categoryIds}) =>
       (delete(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId) & u.categoryId.isIn(categoryIds.toList()))).go();
+
+  /// Удаляем все ответы для типа сертификата
+  Future<int> clearAllAnswers({required int certificateTypeId}) => (delete(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId))).go();
 
   /// Быстрая статистика по выбранным темам
   Future<({int answered, int correct})> getStats({required int certificateTypeId, required Iterable<int> categoryIds}) async {

@@ -7,39 +7,25 @@ import 'package:flutter_svg/svg.dart';
 class RosAviaTestCategoryWidget extends StatelessWidget {
   final String title;
   final String subTitle;
-
+  final bool withArrow;
   final Widget? child;
 
-  final VoidCallback? clearCategory;
-
-  const RosAviaTestCategoryWidget({
-    super.key,
-    required this.title,
-    required this.subTitle,
-    this.child,
-    this.clearCategory,
-  });
+  const RosAviaTestCategoryWidget({super.key, required this.title, required this.subTitle, this.child, this.withArrow = true});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(16.r),
-      ),
+      borderRadius: BorderRadius.all(Radius.circular(16.r)),
       child: Stack(
         children: [
           Container(
             padding: const EdgeInsets.only(left: 15, right: 15, top: 11, bottom: 11),
-            decoration: BoxDecoration(border: Border.all(color: const Color(0xFFE3F1FF), width: 1), borderRadius: BorderRadius.all(Radius.circular(16.r)), color: Colors.white, boxShadow: [
-              BoxShadow(
-                color: Color(0xFF045EC5).withOpacity(0.08),
-                blurRadius: 9.3,
-                offset: Offset(
-                  0.0,
-                  4.0,
-                ),
-              ),
-            ]),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFFE3F1FF), width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(16.r)),
+              color: Colors.white,
+              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0))],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               // mainAxisAlignment: MainAxisAlignment.center,
@@ -49,12 +35,7 @@ class RosAviaTestCategoryWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text(
-                        title,
-                        style: AppStyles.semibpld14s.copyWith(
-                          color: Color(0xFF374151),
-                        ),
-                      ),
+                      child: Text(title, style: AppStyles.semibpld14s.copyWith(color: Color(0xFF374151))),
                     ),
                     SizedBox(width: 20),
                   ],
@@ -65,7 +46,7 @@ class RosAviaTestCategoryWidget extends StatelessWidget {
               ],
             ),
           ),
-          Align(alignment: Alignment.topRight, child: SvgPicture.asset(Pictures.lableArrowRight)),
+          if (withArrow) Align(alignment: Alignment.topRight, child: SvgPicture.asset(Pictures.lableArrowRight)),
         ],
       ),
     );

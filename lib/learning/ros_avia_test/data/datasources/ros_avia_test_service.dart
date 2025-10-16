@@ -43,7 +43,7 @@ abstract class RosAviaTestService {
   @GET('/learning/ros_avia_test/questions/{typeCertificateId}')
   Future<List<QuestionWithAnswersDto>> fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
     @Path('typeCertificateId') String typeCertificateId,
-    @Query('categoryIds') List<int> categoryIds,
+    @Query('categoryIds') String categoryIds,
     @Query('mixAnswers') bool mixAnswers,
   );
 

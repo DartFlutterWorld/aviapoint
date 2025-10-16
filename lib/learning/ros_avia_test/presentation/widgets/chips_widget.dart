@@ -5,29 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChipsWidget extends StatelessWidget {
-  const ChipsWidget({
-    super.key,
-    required this.questionWithAnswers,
-  });
+  const ChipsWidget({super.key, required this.questionWithAnswers, this.colorBackground, this.colorTitle});
 
   final QuestionWithAnswersEntity questionWithAnswers;
+  final Color? colorBackground;
+  final Color? colorTitle;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 55.w,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: getColors(questionWithAnswers.correctAnswer ?? 0).$1,
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: colorBackground ?? getColors(questionWithAnswers.correctAnswer ?? 0).$1),
       child: Center(
-        child: Text(
-          questionWithAnswers.questionId.toString(),
-          style: AppStyles.regular13s.copyWith(
-            color: getColors(questionWithAnswers.correctAnswer ?? 0).$2,
-          ),
-        ),
+        child: Text(questionWithAnswers.questionId.toString(), style: AppStyles.regular13s.copyWith(color: colorTitle ?? getColors(questionWithAnswers.correctAnswer ?? 0).$2)),
       ),
     );
   }

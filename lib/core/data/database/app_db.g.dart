@@ -454,6 +454,17 @@ class $UserAnswersTable extends UserAnswers
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _categoryNameMeta = const VerificationMeta(
+    'categoryName',
+  );
+  @override
+  late final GeneratedColumn<String> categoryName = GeneratedColumn<String>(
+    'category_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _questionIdMeta = const VerificationMeta(
     'questionId',
   );
@@ -494,6 +505,7 @@ class $UserAnswersTable extends UserAnswers
   List<GeneratedColumn> get $columns => [
     certificateTypeId,
     categoryId,
+    categoryName,
     questionId,
     selectedAnswerIdsJson,
     isCorrect,
@@ -529,6 +541,17 @@ class $UserAnswersTable extends UserAnswers
     } else if (isInserting) {
       context.missing(_categoryIdMeta);
     }
+    if (data.containsKey('category_name')) {
+      context.handle(
+        _categoryNameMeta,
+        categoryName.isAcceptableOrUnknown(
+          data['category_name']!,
+          _categoryNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryNameMeta);
+    }
     if (data.containsKey('question_id')) {
       context.handle(
         _questionIdMeta,
@@ -558,7 +581,7 @@ class $UserAnswersTable extends UserAnswers
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {certificateTypeId, questionId};
   @override
   UserAnswer map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -570,6 +593,10 @@ class $UserAnswersTable extends UserAnswers
       categoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}category_id'],
+      )!,
+      categoryName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_name'],
       )!,
       questionId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -595,12 +622,14 @@ class $UserAnswersTable extends UserAnswers
 class UserAnswer extends DataClass implements Insertable<UserAnswer> {
   final int certificateTypeId;
   final int categoryId;
+  final String categoryName;
   final int questionId;
   final String selectedAnswerIdsJson;
   final bool? isCorrect;
   const UserAnswer({
     required this.certificateTypeId,
     required this.categoryId,
+    required this.categoryName,
     required this.questionId,
     required this.selectedAnswerIdsJson,
     this.isCorrect,
@@ -610,6 +639,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
     final map = <String, Expression>{};
     map['certificate_type_id'] = Variable<int>(certificateTypeId);
     map['category_id'] = Variable<int>(categoryId);
+    map['category_name'] = Variable<String>(categoryName);
     map['question_id'] = Variable<int>(questionId);
     map['selected_answer_ids_json'] = Variable<String>(selectedAnswerIdsJson);
     if (!nullToAbsent || isCorrect != null) {
@@ -622,6 +652,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
     return UserAnswersCompanion(
       certificateTypeId: Value(certificateTypeId),
       categoryId: Value(categoryId),
+      categoryName: Value(categoryName),
       questionId: Value(questionId),
       selectedAnswerIdsJson: Value(selectedAnswerIdsJson),
       isCorrect: isCorrect == null && nullToAbsent
@@ -638,6 +669,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
     return UserAnswer(
       certificateTypeId: serializer.fromJson<int>(json['certificateTypeId']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
+      categoryName: serializer.fromJson<String>(json['categoryName']),
       questionId: serializer.fromJson<int>(json['questionId']),
       selectedAnswerIdsJson: serializer.fromJson<String>(
         json['selectedAnswerIdsJson'],
@@ -651,6 +683,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
     return <String, dynamic>{
       'certificateTypeId': serializer.toJson<int>(certificateTypeId),
       'categoryId': serializer.toJson<int>(categoryId),
+      'categoryName': serializer.toJson<String>(categoryName),
       'questionId': serializer.toJson<int>(questionId),
       'selectedAnswerIdsJson': serializer.toJson<String>(selectedAnswerIdsJson),
       'isCorrect': serializer.toJson<bool?>(isCorrect),
@@ -660,12 +693,14 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
   UserAnswer copyWith({
     int? certificateTypeId,
     int? categoryId,
+    String? categoryName,
     int? questionId,
     String? selectedAnswerIdsJson,
     Value<bool?> isCorrect = const Value.absent(),
   }) => UserAnswer(
     certificateTypeId: certificateTypeId ?? this.certificateTypeId,
     categoryId: categoryId ?? this.categoryId,
+    categoryName: categoryName ?? this.categoryName,
     questionId: questionId ?? this.questionId,
     selectedAnswerIdsJson: selectedAnswerIdsJson ?? this.selectedAnswerIdsJson,
     isCorrect: isCorrect.present ? isCorrect.value : this.isCorrect,
@@ -678,6 +713,9 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
       categoryId: data.categoryId.present
           ? data.categoryId.value
           : this.categoryId,
+      categoryName: data.categoryName.present
+          ? data.categoryName.value
+          : this.categoryName,
       questionId: data.questionId.present
           ? data.questionId.value
           : this.questionId,
@@ -693,6 +731,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
     return (StringBuffer('UserAnswer(')
           ..write('certificateTypeId: $certificateTypeId, ')
           ..write('categoryId: $categoryId, ')
+          ..write('categoryName: $categoryName, ')
           ..write('questionId: $questionId, ')
           ..write('selectedAnswerIdsJson: $selectedAnswerIdsJson, ')
           ..write('isCorrect: $isCorrect')
@@ -704,6 +743,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
   int get hashCode => Object.hash(
     certificateTypeId,
     categoryId,
+    categoryName,
     questionId,
     selectedAnswerIdsJson,
     isCorrect,
@@ -714,6 +754,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
       (other is UserAnswer &&
           other.certificateTypeId == this.certificateTypeId &&
           other.categoryId == this.categoryId &&
+          other.categoryName == this.categoryName &&
           other.questionId == this.questionId &&
           other.selectedAnswerIdsJson == this.selectedAnswerIdsJson &&
           other.isCorrect == this.isCorrect);
@@ -722,6 +763,7 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
 class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
   final Value<int> certificateTypeId;
   final Value<int> categoryId;
+  final Value<String> categoryName;
   final Value<int> questionId;
   final Value<String> selectedAnswerIdsJson;
   final Value<bool?> isCorrect;
@@ -729,6 +771,7 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
   const UserAnswersCompanion({
     this.certificateTypeId = const Value.absent(),
     this.categoryId = const Value.absent(),
+    this.categoryName = const Value.absent(),
     this.questionId = const Value.absent(),
     this.selectedAnswerIdsJson = const Value.absent(),
     this.isCorrect = const Value.absent(),
@@ -737,17 +780,20 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
   UserAnswersCompanion.insert({
     required int certificateTypeId,
     required int categoryId,
+    required String categoryName,
     required int questionId,
     required String selectedAnswerIdsJson,
     this.isCorrect = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : certificateTypeId = Value(certificateTypeId),
        categoryId = Value(categoryId),
+       categoryName = Value(categoryName),
        questionId = Value(questionId),
        selectedAnswerIdsJson = Value(selectedAnswerIdsJson);
   static Insertable<UserAnswer> custom({
     Expression<int>? certificateTypeId,
     Expression<int>? categoryId,
+    Expression<String>? categoryName,
     Expression<int>? questionId,
     Expression<String>? selectedAnswerIdsJson,
     Expression<bool>? isCorrect,
@@ -756,6 +802,7 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
     return RawValuesInsertable({
       if (certificateTypeId != null) 'certificate_type_id': certificateTypeId,
       if (categoryId != null) 'category_id': categoryId,
+      if (categoryName != null) 'category_name': categoryName,
       if (questionId != null) 'question_id': questionId,
       if (selectedAnswerIdsJson != null)
         'selected_answer_ids_json': selectedAnswerIdsJson,
@@ -767,6 +814,7 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
   UserAnswersCompanion copyWith({
     Value<int>? certificateTypeId,
     Value<int>? categoryId,
+    Value<String>? categoryName,
     Value<int>? questionId,
     Value<String>? selectedAnswerIdsJson,
     Value<bool?>? isCorrect,
@@ -775,6 +823,7 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
     return UserAnswersCompanion(
       certificateTypeId: certificateTypeId ?? this.certificateTypeId,
       categoryId: categoryId ?? this.categoryId,
+      categoryName: categoryName ?? this.categoryName,
       questionId: questionId ?? this.questionId,
       selectedAnswerIdsJson:
           selectedAnswerIdsJson ?? this.selectedAnswerIdsJson,
@@ -791,6 +840,9 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
     }
     if (categoryId.present) {
       map['category_id'] = Variable<int>(categoryId.value);
+    }
+    if (categoryName.present) {
+      map['category_name'] = Variable<String>(categoryName.value);
     }
     if (questionId.present) {
       map['question_id'] = Variable<int>(questionId.value);
@@ -814,6 +866,7 @@ class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
     return (StringBuffer('UserAnswersCompanion(')
           ..write('certificateTypeId: $certificateTypeId, ')
           ..write('categoryId: $categoryId, ')
+          ..write('categoryName: $categoryName, ')
           ..write('questionId: $questionId, ')
           ..write('selectedAnswerIdsJson: $selectedAnswerIdsJson, ')
           ..write('isCorrect: $isCorrect, ')
@@ -1059,6 +1112,7 @@ typedef $$UserAnswersTableCreateCompanionBuilder =
     UserAnswersCompanion Function({
       required int certificateTypeId,
       required int categoryId,
+      required String categoryName,
       required int questionId,
       required String selectedAnswerIdsJson,
       Value<bool?> isCorrect,
@@ -1068,6 +1122,7 @@ typedef $$UserAnswersTableUpdateCompanionBuilder =
     UserAnswersCompanion Function({
       Value<int> certificateTypeId,
       Value<int> categoryId,
+      Value<String> categoryName,
       Value<int> questionId,
       Value<String> selectedAnswerIdsJson,
       Value<bool?> isCorrect,
@@ -1090,6 +1145,11 @@ class $$UserAnswersTableFilterComposer
 
   ColumnFilters<int> get categoryId => $composableBuilder(
     column: $table.categoryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get categoryName => $composableBuilder(
+    column: $table.categoryName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1128,6 +1188,11 @@ class $$UserAnswersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get categoryName => $composableBuilder(
+    column: $table.categoryName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get questionId => $composableBuilder(
     column: $table.questionId,
     builder: (column) => ColumnOrderings(column),
@@ -1160,6 +1225,11 @@ class $$UserAnswersTableAnnotationComposer
 
   GeneratedColumn<int> get categoryId => $composableBuilder(
     column: $table.categoryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get categoryName => $composableBuilder(
+    column: $table.categoryName,
     builder: (column) => column,
   );
 
@@ -1207,6 +1277,7 @@ class $$UserAnswersTableTableManager
               ({
                 Value<int> certificateTypeId = const Value.absent(),
                 Value<int> categoryId = const Value.absent(),
+                Value<String> categoryName = const Value.absent(),
                 Value<int> questionId = const Value.absent(),
                 Value<String> selectedAnswerIdsJson = const Value.absent(),
                 Value<bool?> isCorrect = const Value.absent(),
@@ -1214,6 +1285,7 @@ class $$UserAnswersTableTableManager
               }) => UserAnswersCompanion(
                 certificateTypeId: certificateTypeId,
                 categoryId: categoryId,
+                categoryName: categoryName,
                 questionId: questionId,
                 selectedAnswerIdsJson: selectedAnswerIdsJson,
                 isCorrect: isCorrect,
@@ -1223,6 +1295,7 @@ class $$UserAnswersTableTableManager
               ({
                 required int certificateTypeId,
                 required int categoryId,
+                required String categoryName,
                 required int questionId,
                 required String selectedAnswerIdsJson,
                 Value<bool?> isCorrect = const Value.absent(),
@@ -1230,6 +1303,7 @@ class $$UserAnswersTableTableManager
               }) => UserAnswersCompanion.insert(
                 certificateTypeId: certificateTypeId,
                 categoryId: categoryId,
+                categoryName: categoryName,
                 questionId: questionId,
                 selectedAnswerIdsJson: selectedAnswerIdsJson,
                 isCorrect: isCorrect,

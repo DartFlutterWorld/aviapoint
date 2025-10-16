@@ -6,6 +6,7 @@ import 'package:aviapoint/learning/ros_avia_test/data/mappers/ros_avia_test_cate
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/ros_avia_test_category_with_questions_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/type_correct_answer_mapper.dart';
 import 'package:aviapoint/learning/ros_avia_test/data/mappers/type_sertificates_mapper.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/privat_pilot_plane_category_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_area_category_entity.dart';
@@ -141,14 +142,16 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
     required bool mixAnswers,
   }) async {
     try {
-      final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
-        typeSsertificatesId.toString(),
-        categoryIds.toList(),
-        mixAnswers,
-      );
+      final categoryIdsList = categoryIds.toList();
+      final categoryIdsString = categoryIdsList.join(','); // Преобразуем в "15,5"
+      AppTalker.info('Fetching questions: typeSsertificatesId=$typeSsertificatesId, categoryIds=$categoryIdsString, mixAnswers=$mixAnswers');
 
+      final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(typeSsertificatesId.toString(), categoryIdsString, mixAnswers);
+
+      AppTalker.good('Received ${response.length} questions');
       return right(QuestionWithAnswersMapper.toEntities(response));
     } on DioException catch (e) {
+      AppTalker.error('DioException fetching questions', e, StackTrace.current);
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }

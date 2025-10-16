@@ -198,16 +198,47 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                 backgroundColor: Color(0xFF0A6EFA),
                 onPressed: () {
                   if (selectedCategoryId.value.isNotEmpty) {
-                    context.router.pop((
-                      context.read<RosAviaTestCubit>().state.typeSertificate.id,
-                      settingsTest.value.mixAnswers,
-                      settingsTest.value.buttonHint,
-                      selectedCategoryId.value,
-                      context.read<RosAviaTestCubit>().state.typeSertificate.title,
-                      context.read<RosAviaTestCubit>().state.typeSertificate.image,
-                    ));
+                    /// Сохраняем выбранные категории в БД перед началом теста
+                    final db = getIt<AppDb>();
+                    final certificateTypeId = context.read<RosAviaTestCubit>().state.typeSertificate.id;
+
+                    AppTalker.info('Selected categories: ${selectedCategoryId.value}');
+
+                    db
+                        .saveSettings(
+                          certificateTypeId: certificateTypeId,
+                          mixAnswers: settingsTest.value.mixAnswers,
+                          buttonHint: settingsTest.value.buttonHint,
+                          selectedCategoryIds: selectedCategoryId.value,
+                          title: context.read<RosAviaTestCubit>().state.typeSertificate.title,
+                          image: context.read<RosAviaTestCubit>().state.typeSertificate.image,
+                        )
+                        .then((_) {
+                          /// После сохранения возвращаем результат
+                          context.router.pop((
+                            certificateTypeId,
+                            settingsTest.value.mixAnswers,
+                            settingsTest.value.buttonHint,
+                            selectedCategoryId.value,
+                            context.read<RosAviaTestCubit>().state.typeSertificate.title,
+                            context.read<RosAviaTestCubit>().state.typeSertificate.image,
+                          ));
+                        })
+                        .catchError((Object e) {
+                          AppTalker.error('Error saving settings', e);
+
+                          /// Все равно продолжаем если была ошибка
+                          context.router.pop((
+                            certificateTypeId,
+                            settingsTest.value.mixAnswers,
+                            settingsTest.value.buttonHint,
+                            selectedCategoryId.value,
+                            context.read<RosAviaTestCubit>().state.typeSertificate.title,
+                            context.read<RosAviaTestCubit>().state.typeSertificate.image,
+                          ));
+                        });
                   } else {
-                    showDialog(
+                    showDialog<void>(
                       context: context,
                       builder: (context) => Material(
                         type: MaterialType.transparency,

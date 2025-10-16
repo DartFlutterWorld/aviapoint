@@ -186,7 +186,7 @@ class _RosAviaTestService implements RosAviaTestService {
   Future<List<QuestionWithAnswersDto>>
   fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
     String typeCertificateId,
-    List<int> categoryIds,
+    String categoryIds,
     bool mixAnswers,
   ) async {
     final _extra = <String, dynamic>{};
