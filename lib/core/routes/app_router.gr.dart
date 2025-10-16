@@ -1511,6 +1511,65 @@ class StaticSourceBlockageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TestByModeScreen]
+class TestByModeRoute extends PageRouteInfo<TestByModeRouteArgs> {
+  TestByModeRoute({
+    Key? key,
+    required int typeCertificateId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TestByModeRoute.name,
+         args: TestByModeRouteArgs(
+           key: key,
+           typeCertificateId: typeCertificateId,
+         ),
+         rawPathParams: {'typeCertificateId': typeCertificateId},
+         initialChildren: children,
+       );
+
+  static const String name = 'TestByModeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<TestByModeRouteArgs>(
+        orElse: () => TestByModeRouteArgs(
+          typeCertificateId: pathParams.getInt('typeCertificateId'),
+        ),
+      );
+      return TestByModeScreen(
+        key: args.key,
+        typeCertificateId: args.typeCertificateId,
+      );
+    },
+  );
+}
+
+class TestByModeRouteArgs {
+  const TestByModeRouteArgs({this.key, required this.typeCertificateId});
+
+  final Key? key;
+
+  final int typeCertificateId;
+
+  @override
+  String toString() {
+    return 'TestByModeRouteArgs{key: $key, typeCertificateId: $typeCertificateId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TestByModeRouteArgs) return false;
+    return key == other.key && typeCertificateId == other.typeCertificateId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ typeCertificateId.hashCode;
+}
+
+/// generated route for
 /// [VacuumSystemFailureScreen]
 class VacuumSystemFailureRoute extends PageRouteInfo<void> {
   const VacuumSystemFailureRoute({List<PageRouteInfo>? children})

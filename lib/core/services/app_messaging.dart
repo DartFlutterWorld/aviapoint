@@ -18,20 +18,10 @@ class AppMessaging {
   Future<void> init() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    NotificationSettings settings = await messaging.requestPermission(alert: true, announcement: false, badge: true, carPlay: false, criticalAlert: false, provisional: false, sound: true);
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      if (kDebugMode) {
-        print('User granted permission');
-      }
+      if (kDebugMode) {}
 
       if (Platform.isIOS) {
         String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
@@ -43,11 +33,7 @@ class AppMessaging {
         } else {
           debugPrint("APNS Token not available, waiting ...");
 
-          await Future<void>.delayed(
-            const Duration(
-              seconds: 3,
-            ),
-          );
+          await Future<void>.delayed(const Duration(seconds: 3));
 
           apnsToken = await FirebaseMessaging.instance.getAPNSToken();
 
@@ -71,17 +57,11 @@ class AppMessaging {
       }
 
       log("PUSH Token: $fcmToken");
-      if (kDebugMode) {
-        print("PUSH Token: $fcmToken");
-      }
+      if (kDebugMode) {}
     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      if (kDebugMode) {
-        print('User granted provisional permission');
-      }
+      if (kDebugMode) {}
     } else {
-      if (kDebugMode) {
-        print('User declined or has not accepted permission');
-      }
+      if (kDebugMode) {}
     }
 
     //ServiceLocator.instance.get<PushHandlerRepository>()

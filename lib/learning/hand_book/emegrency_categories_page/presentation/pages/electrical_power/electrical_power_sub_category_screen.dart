@@ -12,10 +12,7 @@ import 'package:flutter/material.dart';
 @RoutePage()
 class ElectricalPowerSubCategoryScreen extends StatefulWidget {
   final String nameCategory;
-  const ElectricalPowerSubCategoryScreen({
-    super.key,
-    @PathParam('nameCategory') required this.nameCategory,
-  });
+  const ElectricalPowerSubCategoryScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
 
   @override
   State<ElectricalPowerSubCategoryScreen> createState() => _ElectricalPowerSubCategoryScreenState();
@@ -23,33 +20,9 @@ class ElectricalPowerSubCategoryScreen extends StatefulWidget {
 
 class _ElectricalPowerSubCategoryScreenState extends State<ElectricalPowerSubCategoryScreen> {
   List<EmergencyCategoriesEntity> subCategory = [
-    EmergencyCategoriesEntity(
-      id: 1,
-      title: 'high_volts_annunciator_comes_on_or_m_batt_amps_more_than_40'.tr(),
-      subTitle: '',
-      subTitleEng: '',
-      mainCategoryId: 0,
-      titleEng: '',
-      picture: '',
-    ),
-    EmergencyCategoriesEntity(
-      id: 2,
-      title: 'low_volts_annunciator_comes_on_bellow_1000_rpm'.tr(),
-      subTitle: '',
-      subTitleEng: '',
-      mainCategoryId: 0,
-      titleEng: '',
-      picture: '',
-    ),
-    EmergencyCategoriesEntity(
-      id: 3,
-      title: 'low_volts_annunciator_comes_on_or_does_not_go_off_at_higher_rpm'.tr(),
-      subTitle: '',
-      subTitleEng: '',
-      mainCategoryId: 0,
-      titleEng: '',
-      picture: '',
-    ),
+    EmergencyCategoriesEntity(id: 1, title: 'high_volts_annunciator_comes_on_or_m_batt_amps_more_than_40'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
+    EmergencyCategoriesEntity(id: 2, title: 'low_volts_annunciator_comes_on_bellow_1000_rpm'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
+    EmergencyCategoriesEntity(id: 3, title: 'low_volts_annunciator_comes_on_or_does_not_go_off_at_higher_rpm'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
   ];
 
   @override
@@ -85,7 +58,6 @@ class _Success extends StatelessWidget {
         return LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute();
 
       default:
-        print("число не равно 1, 2, 3");
     }
     return BaseRoute();
   }

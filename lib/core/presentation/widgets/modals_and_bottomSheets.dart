@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/clear_progress.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
+import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
@@ -166,12 +167,14 @@ Future<void> selectTopics({required BuildContext context}) async {
   );
   if (result != null) {
     await getIt<AppDb>().saveSettings(certificateTypeId: result.$1, mixAnswers: result.$2, buttonHint: result.$3, selectedCategoryIds: result.$4, title: result.$5, image: result.$6);
+
+    context.router.push(TestByModeRoute(typeCertificateId: result.$1));
   }
 }
 
 // Модалка выбор режима тестирования
 Future<void> testingModeDialog({required BuildContext context}) async {
-  final result = await showDialog<Enum?>(
+  final result = await showDialog<TestMode?>(
     context: context,
     // barrierColor: Color(0xFF1F2937),
     builder: (BuildContext context) {
@@ -180,6 +183,7 @@ Future<void> testingModeDialog({required BuildContext context}) async {
   );
 
   if (result != null) {
+    BlocProvider.of<RosAviaTestCubit>(context).setTestMode(result);
     selectTopics(context: context);
   }
 }

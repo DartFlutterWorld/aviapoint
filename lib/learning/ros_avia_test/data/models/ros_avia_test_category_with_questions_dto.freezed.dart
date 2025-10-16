@@ -340,6 +340,7 @@ mixin _$QuestionWithAnswersDto {
   String? get explanation => throw _privateConstructorUsedError;
   int? get correctAnswer => throw _privateConstructorUsedError;
   List<AnswerDto> get answers => throw _privateConstructorUsedError;
+  String? get categoryTitle => throw _privateConstructorUsedError;
 
   /// Serializes this QuestionWithAnswersDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -364,6 +365,7 @@ abstract class $QuestionWithAnswersDtoCopyWith<$Res> {
     String? explanation,
     int? correctAnswer,
     List<AnswerDto> answers,
+    String? categoryTitle,
   });
 }
 
@@ -390,6 +392,7 @@ class _$QuestionWithAnswersDtoCopyWithImpl<
     Object? explanation = freezed,
     Object? correctAnswer = freezed,
     Object? answers = null,
+    Object? categoryTitle = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -413,6 +416,10 @@ class _$QuestionWithAnswersDtoCopyWithImpl<
                 ? _value.answers
                 : answers // ignore: cast_nullable_to_non_nullable
                       as List<AnswerDto>,
+            categoryTitle: freezed == categoryTitle
+                ? _value.categoryTitle
+                : categoryTitle // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -434,6 +441,7 @@ abstract class _$$QuestionWithAnswersDtoImplCopyWith<$Res>
     String? explanation,
     int? correctAnswer,
     List<AnswerDto> answers,
+    String? categoryTitle,
   });
 }
 
@@ -457,6 +465,7 @@ class __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>
     Object? explanation = freezed,
     Object? correctAnswer = freezed,
     Object? answers = null,
+    Object? categoryTitle = freezed,
   }) {
     return _then(
       _$QuestionWithAnswersDtoImpl(
@@ -480,6 +489,10 @@ class __$$QuestionWithAnswersDtoImplCopyWithImpl<$Res>
             ? _value._answers
             : answers // ignore: cast_nullable_to_non_nullable
                   as List<AnswerDto>,
+        categoryTitle: freezed == categoryTitle
+            ? _value.categoryTitle
+            : categoryTitle // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -495,6 +508,7 @@ class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
     this.explanation,
     this.correctAnswer,
     required final List<AnswerDto> answers,
+    this.categoryTitle,
   }) : _answers = answers;
 
   factory _$QuestionWithAnswersDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -517,8 +531,11 @@ class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
   }
 
   @override
+  final String? categoryTitle;
+
+  @override
   String toString() {
-    return 'QuestionWithAnswersDto(questionId: $questionId, questionText: $questionText, explanation: $explanation, correctAnswer: $correctAnswer, answers: $answers)';
+    return 'QuestionWithAnswersDto(questionId: $questionId, questionText: $questionText, explanation: $explanation, correctAnswer: $correctAnswer, answers: $answers, categoryTitle: $categoryTitle)';
   }
 
   @override
@@ -534,7 +551,9 @@ class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
                 other.explanation == explanation) &&
             (identical(other.correctAnswer, correctAnswer) ||
                 other.correctAnswer == correctAnswer) &&
-            const DeepCollectionEquality().equals(other._answers, _answers));
+            const DeepCollectionEquality().equals(other._answers, _answers) &&
+            (identical(other.categoryTitle, categoryTitle) ||
+                other.categoryTitle == categoryTitle));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -546,6 +565,7 @@ class _$QuestionWithAnswersDtoImpl implements _QuestionWithAnswersDto {
     explanation,
     correctAnswer,
     const DeepCollectionEquality().hash(_answers),
+    categoryTitle,
   );
 
   /// Create a copy of QuestionWithAnswersDto
@@ -573,6 +593,7 @@ abstract class _QuestionWithAnswersDto implements QuestionWithAnswersDto {
     final String? explanation,
     final int? correctAnswer,
     required final List<AnswerDto> answers,
+    final String? categoryTitle,
   }) = _$QuestionWithAnswersDtoImpl;
 
   factory _QuestionWithAnswersDto.fromJson(Map<String, dynamic> json) =
@@ -588,6 +609,8 @@ abstract class _QuestionWithAnswersDto implements QuestionWithAnswersDto {
   int? get correctAnswer;
   @override
   List<AnswerDto> get answers;
+  @override
+  String? get categoryTitle;
 
   /// Create a copy of QuestionWithAnswersDto
   /// with the given fields replaced by the non-null parameter values.

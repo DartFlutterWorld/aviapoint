@@ -20,6 +20,7 @@ mixin _$RosAviaTestState {
   String get typeCertificateName => throw _privateConstructorUsedError;
   TypeSertificatesEntity get typeSertificate =>
       throw _privateConstructorUsedError;
+  TestMode get testMode => throw _privateConstructorUsedError;
 
   /// Create a copy of RosAviaTestState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,6 +39,7 @@ abstract class $RosAviaTestStateCopyWith<$Res> {
   $Res call({
     String typeCertificateName,
     TypeSertificatesEntity typeSertificate,
+    TestMode testMode,
   });
 }
 
@@ -58,6 +60,7 @@ class _$RosAviaTestStateCopyWithImpl<$Res, $Val extends RosAviaTestState>
   $Res call({
     Object? typeCertificateName = null,
     Object? typeSertificate = null,
+    Object? testMode = null,
   }) {
     return _then(
       _value.copyWith(
@@ -69,6 +72,10 @@ class _$RosAviaTestStateCopyWithImpl<$Res, $Val extends RosAviaTestState>
                 ? _value.typeSertificate
                 : typeSertificate // ignore: cast_nullable_to_non_nullable
                       as TypeSertificatesEntity,
+            testMode: null == testMode
+                ? _value.testMode
+                : testMode // ignore: cast_nullable_to_non_nullable
+                      as TestMode,
           )
           as $Val,
     );
@@ -87,6 +94,7 @@ abstract class _$$RosAviaTestStateImplCopyWith<$Res>
   $Res call({
     String typeCertificateName,
     TypeSertificatesEntity typeSertificate,
+    TestMode testMode,
   });
 }
 
@@ -106,6 +114,7 @@ class __$$RosAviaTestStateImplCopyWithImpl<$Res>
   $Res call({
     Object? typeCertificateName = null,
     Object? typeSertificate = null,
+    Object? testMode = null,
   }) {
     return _then(
       _$RosAviaTestStateImpl(
@@ -117,6 +126,10 @@ class __$$RosAviaTestStateImplCopyWithImpl<$Res>
             ? _value.typeSertificate
             : typeSertificate // ignore: cast_nullable_to_non_nullable
                   as TypeSertificatesEntity,
+        testMode: null == testMode
+            ? _value.testMode
+            : testMode // ignore: cast_nullable_to_non_nullable
+                  as TestMode,
       ),
     );
   }
@@ -132,6 +145,7 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
       title: 'Частный пилот (самолет)',
       image: '',
     ),
+    this.testMode = TestMode.training,
   });
 
   @override
@@ -140,10 +154,13 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
   @override
   @JsonKey()
   final TypeSertificatesEntity typeSertificate;
+  @override
+  @JsonKey()
+  final TestMode testMode;
 
   @override
   String toString() {
-    return 'RosAviaTestState(typeCertificateName: $typeCertificateName, typeSertificate: $typeSertificate)';
+    return 'RosAviaTestState(typeCertificateName: $typeCertificateName, typeSertificate: $typeSertificate, testMode: $testMode)';
   }
 
   @override
@@ -154,12 +171,14 @@ class _$RosAviaTestStateImpl implements _RosAviaTestState {
             (identical(other.typeCertificateName, typeCertificateName) ||
                 other.typeCertificateName == typeCertificateName) &&
             (identical(other.typeSertificate, typeSertificate) ||
-                other.typeSertificate == typeSertificate));
+                other.typeSertificate == typeSertificate) &&
+            (identical(other.testMode, testMode) ||
+                other.testMode == testMode));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, typeCertificateName, typeSertificate);
+      Object.hash(runtimeType, typeCertificateName, typeSertificate, testMode);
 
   /// Create a copy of RosAviaTestState
   /// with the given fields replaced by the non-null parameter values.
@@ -177,12 +196,15 @@ abstract class _RosAviaTestState implements RosAviaTestState {
   const factory _RosAviaTestState({
     final String typeCertificateName,
     final TypeSertificatesEntity typeSertificate,
+    final TestMode testMode,
   }) = _$RosAviaTestStateImpl;
 
   @override
   String get typeCertificateName;
   @override
   TypeSertificatesEntity get typeSertificate;
+  @override
+  TestMode get testMode;
 
   /// Create a copy of RosAviaTestState
   /// with the given fields replaced by the non-null parameter values.

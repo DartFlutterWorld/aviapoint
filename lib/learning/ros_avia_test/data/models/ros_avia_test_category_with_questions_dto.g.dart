@@ -42,6 +42,7 @@ _$QuestionWithAnswersDtoImpl _$$QuestionWithAnswersDtoImplFromJson(
   answers: (json['answers'] as List<dynamic>)
       .map((e) => AnswerDto.fromJson(e as Map<String, dynamic>))
       .toList(),
+  categoryTitle: json['category_title'] as String?,
 );
 
 Map<String, dynamic> _$$QuestionWithAnswersDtoImplToJson(
@@ -52,6 +53,7 @@ Map<String, dynamic> _$$QuestionWithAnswersDtoImplToJson(
   'explanation': instance.explanation,
   'correct_answer': instance.correctAnswer,
   'answers': instance.answers,
+  'category_title': instance.categoryTitle,
 };
 
 _$AnswerDtoImpl _$$AnswerDtoImplFromJson(Map<String, dynamic> json) =>

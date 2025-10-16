@@ -77,74 +77,45 @@ class StoryScreenElement extends StatelessWidget {
                   child: GestureDetector(
                     onLongPress: onLongPress,
                     onLongPressEnd: onLongPressEnd,
-                    child: CachedNetworkImage(
-                      imageUrl: '$backUrl${story.image}',
-                      fit: BoxFit.cover,
-                      cacheManager: getIt<DefaultCacheManager>(),
-                      cacheKey: '$backUrl${story.image}',
-                    ),
+                    child: CachedNetworkImage(imageUrl: '$backUrl${story.image}', fit: BoxFit.cover, cacheManager: getIt<DefaultCacheManager>(), cacheKey: '$backUrl${story.image}'),
                   ),
                 ),
               )
             : (videoController != null && videoController!.value.isInitialized)
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: AspectRatio(
-                      aspectRatio: videoController!.value.aspectRatio,
-                      child: GestureDetector(
-                        onLongPress: onLongPress,
-                        onLongPressEnd: onLongPressEnd,
-                        child: CachedVideoPlayerPlus(
-                          videoController!,
-                        ),
-                      ),
-                    ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(12).r,
-                    child: AspectRatio(
-                      aspectRatio: 9 / 16,
-                      child: Stack(
-                        children: [
-                          CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: '$backUrl${story.image}',
-                            cacheManager: getIt<DefaultCacheManager>(),
-                            cacheKey: '$backUrl${story.image}',
-                          ),
-                          const Center(child: LoadingCustom()),
-                        ],
-                      ),
-                    ),
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: AspectRatio(
+                  aspectRatio: videoController!.value.aspectRatio,
+                  child: GestureDetector(onLongPress: onLongPress, onLongPressEnd: onLongPressEnd, child: CachedVideoPlayerPlus(videoController!)),
+                ),
+              )
+            : ClipRRect(
+                borderRadius: BorderRadius.circular(12).r,
+                child: AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: Stack(
+                    children: [
+                      CachedNetworkImage(fit: BoxFit.cover, imageUrl: '$backUrl${story.image}', cacheManager: getIt<DefaultCacheManager>(), cacheKey: '$backUrl${story.image}'),
+                      const Center(child: LoadingCustom()),
+                    ],
                   ),
+                ),
+              ),
         Positioned.fill(
           child: Padding(
             padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
             child: Column(
               children: <Widget>[
-                Row(children: [
-                  ...stories.asMap().map((index, e) {
-                    return MapEntry(
-                      index,
-                      animController != null
-                          ? AnimatedBar(
-                              animController: animController!,
-                              position: index,
-                              currentIndex: currentIndex,
-                            )
-                          : const SizedBox(),
-                    );
-                  }).values,
-                  SizedBox(width: 13),
-                  // TODO. Не работает кнопка закрыть сторик
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => AutoRouter.of(context).maybePop(),
-                    child: SvgPicture.asset(
-                      Pictures.closeStory,
-                    ),
-                  ),
-                ]),
+                Row(
+                  children: [
+                    ...stories.asMap().map((index, e) {
+                      return MapEntry(index, animController != null ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex) : const SizedBox());
+                    }).values,
+                    SizedBox(width: 13),
+                    // TODO. Не работает кнопка закрыть сторик
+                    GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => AutoRouter.of(context).maybePop(), child: SvgPicture.asset(Pictures.closeStory)),
+                  ],
+                ),
               ],
             ),
           ),
@@ -162,12 +133,7 @@ class StoryScreenElement extends StatelessWidget {
                   replacement: const SizedBox.expand(),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 11),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: SvgPicture.asset(
-                        Pictures.rightArrow,
-                      ),
-                    ),
+                    child: Align(alignment: Alignment.centerRight, child: SvgPicture.asset(Pictures.rightArrow)),
                   ),
                 ),
               ),
@@ -187,12 +153,7 @@ class StoryScreenElement extends StatelessWidget {
                   replacement: const SizedBox.expand(),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 11),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: SvgPicture.asset(
-                        Pictures.leftArrow,
-                      ),
-                    ),
+                    child: Align(alignment: Alignment.centerLeft, child: SvgPicture.asset(Pictures.leftArrow)),
                   ),
                 ),
               ),
@@ -223,44 +184,43 @@ class StoryScreenElement extends StatelessWidget {
         // ),
         if (story.textButton.isNotEmpty)
           Positioned.fill(
-            child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-              // print(constraints.);
-              return Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 45, left: 21, right: 21).r,
-                  child: UpAnimation(
-                    withFadeTransition: true,
-                    milSecDuration: 300,
-                    delay: 0,
-                    begin: const Offset(0, 0),
-                    end: Offset.zero,
-                    curve: Curves.ease,
-                    child: SizedBox(
-                      // height: 50.h,
-                      height: kIsWeb ? constraints.maxHeight / 60 + 50 : 50.h,
-                      child: CustomButton(
-                        title: story.textButton,
-                        backgroundColor: Color(
-                          int.parse('0xFF$buttonColor'),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 45, left: 21, right: 21).r,
+                    child: UpAnimation(
+                      withFadeTransition: true,
+                      milSecDuration: 300,
+                      delay: 0,
+                      begin: const Offset(0, 0),
+                      end: Offset.zero,
+                      curve: Curves.ease,
+                      child: SizedBox(
+                        // height: 50.h,
+                        height: kIsWeb ? constraints.maxHeight / 60 + 50 : 50.h,
+                        child: CustomButton(
+                          title: story.textButton,
+                          backgroundColor: Color(int.parse('0xFF$buttonColor')),
+                          onPressed: () {
+                            // AutoRouter.of(context).maybePop();
+                            videoController?.pause();
+                            animController?.stop();
+                            Navigator.pop(context);
+                            // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);
+                            startUrl(url: story.hyperlink, context: context);
+                          },
+                          textStyle: AppStyles.button.copyWith(color: Color(int.parse('0xFF$textColor')), overflow: TextOverflow.ellipsis),
+                          borderColor: Color(int.parse('0xFF$buttonColor')),
+                          boxShadow: const [],
                         ),
-                        onPressed: () {
-                          // AutoRouter.of(context).maybePop();
-                          videoController?.pause();
-                          animController?.stop();
-                          Navigator.pop(context);
-                          // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);
-                          startUrl(url: story.hyperlink, context: context);
-                        },
-                        textStyle: AppStyles.button.copyWith(color: Color(int.parse('0xFF$textColor')), overflow: TextOverflow.ellipsis),
-                        borderColor: Color(int.parse('0xFF$buttonColor')),
-                        boxShadow: const [],
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           ),
       ],
     );

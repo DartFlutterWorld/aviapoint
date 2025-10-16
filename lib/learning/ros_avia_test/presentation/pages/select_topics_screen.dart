@@ -4,6 +4,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
@@ -56,9 +57,6 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
               settingsTest.value = (mixAnswers: s.mixAnswers, buttonHint: s.buttonHint);
               selectedCategoryId.value.clear();
               selectedCategoryId.value.addAll(s.selectedCategoryIds);
-              print('Loaded settings: mixAnswers=${s.mixAnswers}, buttonHint=${s.buttonHint}, selectedCategories=${s.selectedCategoryIds}');
-              print('Available categories: ${state.categories.map((e) => e.id).toSet()}');
-              print('Selected categories after load: ${selectedCategoryId.value}');
 
               // Принудительно обновляем UI
               if (mounted) {
@@ -67,17 +65,14 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
             } else {
               // Если нет сохраненных настроек, выбираем все категории по умолчанию
               selectedCategoryId.value = state.categories.map((e) => e.id).toSet();
-              print('No settings found, selecting all categories by default');
-              print('Available categories: ${state.categories.map((e) => e.id).toSet()}');
-              print('Selected categories after default: ${selectedCategoryId.value}');
 
               // Принудительно обновляем UI
               if (mounted) {
                 setState(() {});
               }
             }
-          } catch (e) {
-            print('Error loading settings: $e');
+          } catch (e, stackTrace) {
+            AppTalker.error('Error loading settings', e, stackTrace);
             // В случае ошибки тоже выбираем все категории
             selectedCategoryId.value = state.categories.map((e) => e.id).toSet();
 
@@ -94,16 +89,21 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
           children: [
             BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
               builder: (context, state) => state.map(
-                loading: (value) => Shimmer(
-                  duration: const Duration(milliseconds: 1000),
-                  interval: Duration(milliseconds: 0),
-                  color: const Color(0xFF8D66FE),
-                  colorOpacity: 0.5,
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    height: 97.7,
-                    width: double.infinity,
-                    decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
+                loading: (value) => ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Shimmer(
+                    child: Shimmer(
+                      duration: const Duration(milliseconds: 1000),
+                      interval: Duration(milliseconds: 0),
+                      color: const Color(0xFF8D66FE),
+                      colorOpacity: 0.5,
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        height: 97.7,
+                        width: double.infinity,
+                        decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
                   ),
                 ),
                 error: (value) => SizedBox(),

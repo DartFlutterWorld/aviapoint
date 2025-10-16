@@ -29,20 +29,11 @@ class AppFirebase {
 
   Future<void> init() async {
     if (kIsWeb) {
-      await Firebase.initializeApp(
-        options: web,
-      );
+      await Firebase.initializeApp(options: web);
     } else {
-      await Firebase.initializeApp(
-        name: 'aviapoint',
-        options: DefaultFirebaseOptions.currentPlatform,
-      ).whenComplete(
-        () {
-          if (kDebugMode) {
-            print('FIREBASE INITIALIZED================>');
-          }
-        },
-      );
+      await Firebase.initializeApp(name: 'aviapoint', options: DefaultFirebaseOptions.currentPlatform).whenComplete(() {
+        if (kDebugMode) {}
+      });
 
       /// Инициализация Crashlytics.
       await AppCrashlytics().init();

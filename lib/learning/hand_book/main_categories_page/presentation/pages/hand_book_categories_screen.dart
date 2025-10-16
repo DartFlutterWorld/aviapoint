@@ -33,10 +33,7 @@ class _HandBookMainCategoriesScreenState extends State<HandBookMainCategoriesScr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Учебное пособие',
-        withBack: true,
-      ),
+      appBar: const CustomAppBar(title: 'Учебное пособие', withBack: true),
       backgroundColor: AppColors.background,
       body: BlocBuilder<HandBookMainCategoriesBloc, HandBookMainCategoriesState>(
         builder: (context, state) => state.map(
@@ -68,7 +65,6 @@ class _Success extends StatelessWidget {
       case 3:
         return EmergencyCategoriesRoute(nameCategory: 'Аварийные процедуры');
       default:
-        print("число не равно 1, 2, 3");
     }
     return BaseRoute();
   }
@@ -86,9 +82,7 @@ class _Success extends StatelessWidget {
             background: Pictures.preflightBackground,
             picturePlane: Pictures.preflightPlane,
             imageHeight: 137.h,
-            onTap: () => context.router.push(
-              selectSubCategory(1),
-            ),
+            onTap: () => context.router.push(selectSubCategory(1)),
           ),
           SizedBox(height: 8),
           CategoryHandBookLongWidget(
@@ -97,9 +91,7 @@ class _Success extends StatelessWidget {
             background: Pictures.preflightBackground,
             picturePlane: Pictures.normalPlane,
             imageHeight: 130.h,
-            onTap: () => context.router.push(
-              selectSubCategory(2),
-            ),
+            onTap: () => context.router.push(selectSubCategory(2)),
           ),
           SizedBox(height: 8),
           Row(
@@ -114,9 +106,7 @@ class _Success extends StatelessWidget {
                   background: Pictures.limitationBackground,
                   picturePlane: Pictures.limitationPlane,
                   imageHeight: 121.h,
-                  onTap: () => context.router.push(
-                    selectSubCategory(0),
-                  ),
+                  onTap: () => context.router.push(selectSubCategory(0)),
                   aligmentPlane: Alignment.bottomLeft,
                 ),
               ),
@@ -129,9 +119,7 @@ class _Success extends StatelessWidget {
                   background: Pictures.perfomanceBackground,
                   picturePlane: Pictures.perfomancePlane,
                   imageHeight: 107.h,
-                  onTap: () => context.router.push(
-                    selectSubCategory(0),
-                  ),
+                  onTap: () => context.router.push(selectSubCategory(0)),
                   aligmentPlane: Alignment.bottomRight,
                 ),
               ),
@@ -144,9 +132,7 @@ class _Success extends StatelessWidget {
             background: Pictures.preflightBackground,
             picturePlane: Pictures.emergencyPlane,
             imageHeight: 137.h,
-            onTap: () => context.router.push(
-              selectSubCategory(3),
-            ),
+            onTap: () => context.router.push(selectSubCategory(3)),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:aviapoint/core/presentation/pages/app.dart';
+import 'package:aviapoint/core/presentation/widgets/app_wrapper.dart';
 import 'package:aviapoint/core/services/app_firebase.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/foundation.dart';
@@ -11,8 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:aviapoint/core/domain/app_bloc_observer.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class SSlHttpOverrides extends HttpOverrides {
   @override
@@ -32,18 +35,13 @@ class StringStackTrace implements StackTrace {
 // ignore: long-method
 Future<void> main() async {
   FlutterError.onError = (FlutterErrorDetails details) async {
-    Zone.current.handleUncaughtError(
-      details.exception,
-      details.stack ?? StringStackTrace(details.stack.toString()),
-    );
+    AppTalker.error('Flutter Error', details.exception, details.stack);
+    Zone.current.handleUncaughtError(details.exception, details.stack ?? StringStackTrace(details.stack.toString()));
   };
 
-  runZonedGuarded<void>(
-    _run,
-    (error, stackTrace) async {
-      // logger.e('Unexpected error: $error\n$stackTrace');
-    },
-  );
+  runZonedGuarded<void>(_run, (error, stackTrace) async {
+    AppTalker.error('Unexpected error', error, stackTrace);
+  });
 }
 
 Future<void> _run() async {
@@ -54,13 +52,7 @@ Future<void> _run() async {
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   /// Задаем цвета статусбара.
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark,
-    ),
-  );
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark));
 
   /// Задаем обработку SSL.
   HttpOverrides.global = SSlHttpOverrides();
@@ -81,19 +73,19 @@ Future<void> _run() async {
   setPathUrlStrategy();
 
   runApp(
-    ScreenUtilInit(
-      enableScaleWH: () => kIsWeb ? false : true,
-      enableScaleText: () => kIsWeb ? false : true,
-      designSize: const Size(375, 812),
-      child: EasyLocalization(
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('ru', 'RU'),
-        ],
-        path: 'assets/translations',
-        // startLocale: Locale('en', 'EN'),
-        startLocale: Locale('ru', 'RU'),
-        child: const App(),
+    TalkerWrapper(
+      talker: AppTalker.instance,
+      child: ScreenUtilInit(
+        enableScaleWH: () => kIsWeb ? false : true,
+        enableScaleText: () => kIsWeb ? false : true,
+        designSize: const Size(375, 812),
+        child: EasyLocalization(
+          supportedLocales: [Locale('en', 'US'), Locale('ru', 'RU')],
+          path: 'assets/translations',
+          // startLocale: Locale('en', 'EN'),
+          startLocale: Locale('ru', 'RU'),
+          child: AppWrapper(child: const App()),
+        ),
       ),
     ),
   );

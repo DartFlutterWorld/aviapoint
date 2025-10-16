@@ -15,10 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 @RoutePage()
 class EmergencyCategoriesScreen extends StatefulWidget {
   final String nameCategory;
-  const EmergencyCategoriesScreen({
-    super.key,
-    @PathParam('nameCategory') required this.nameCategory,
-  });
+  const EmergencyCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
 
   @override
   State<EmergencyCategoriesScreen> createState() => _EmergencyCategoriesScreenState();
@@ -99,7 +96,6 @@ class _Success extends StatelessWidget {
       case 15:
         return HighCarbonMonoxideCoLevelAdvisoryRoute();
       default:
-        print("число не равно 1, 2, 3");
     }
     return BaseRoute();
   }

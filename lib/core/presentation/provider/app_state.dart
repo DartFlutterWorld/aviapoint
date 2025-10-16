@@ -16,7 +16,7 @@ class AppState extends ChangeNotifier {
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
 
-// Разобраться постоянно логаут
+  // Разобраться постоянно логаут
   Future<bool> checkAuthStatus() async {
     try {
       final tokens = await TokenStorage.getTokens();
@@ -45,7 +45,6 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       // В случае любой ошибки выходим из системы
       await _logout();
-      print('выход из за ошибки токена');
     }
 
     notifyListeners();

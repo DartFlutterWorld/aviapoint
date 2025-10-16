@@ -12,10 +12,7 @@ import 'package:flutter/material.dart';
 @RoutePage()
 class ForcedLandingsSubCategoriesScreen extends StatefulWidget {
   final String nameCategory;
-  const ForcedLandingsSubCategoriesScreen({
-    super.key,
-    @PathParam('nameCategory') required this.nameCategory,
-  });
+  const ForcedLandingsSubCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
 
   @override
   State<ForcedLandingsSubCategoriesScreen> createState() => _ForcedLandingsSubCategoriesScreenState();
@@ -23,33 +20,9 @@ class ForcedLandingsSubCategoriesScreen extends StatefulWidget {
 
 class _ForcedLandingsSubCategoriesScreenState extends State<ForcedLandingsSubCategoriesScreen> {
   List<EmergencyCategoriesEntity> subCategory = [
-    EmergencyCategoriesEntity(
-      id: 1,
-      title: 'emergency_landing_without_engine_power'.tr(),
-      subTitle: '',
-      subTitleEng: '',
-      mainCategoryId: 0,
-      titleEng: '',
-      picture: '',
-    ),
-    EmergencyCategoriesEntity(
-      id: 2,
-      title: 'emergency_landing_with_engine_power'.tr(),
-      subTitle: '',
-      subTitleEng: '',
-      mainCategoryId: 0,
-      titleEng: '',
-      picture: '',
-    ),
-    EmergencyCategoriesEntity(
-      id: 3,
-      title: 'ditching'.tr(),
-      subTitle: '',
-      subTitleEng: '',
-      mainCategoryId: 0,
-      titleEng: '',
-      picture: '',
-    )
+    EmergencyCategoriesEntity(id: 1, title: 'emergency_landing_without_engine_power'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
+    EmergencyCategoriesEntity(id: 2, title: 'emergency_landing_with_engine_power'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
+    EmergencyCategoriesEntity(id: 3, title: 'ditching'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
   ];
 
   @override
@@ -84,7 +57,6 @@ class _Success extends StatelessWidget {
       case 3:
         return DitchingRoute();
       default:
-        print("число не равно 1, 2, 3");
     }
     return BaseRoute();
   }

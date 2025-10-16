@@ -1,3 +1,4 @@
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -15,7 +16,9 @@ class RosAviaTestCubit extends Cubit<RosAviaTestState> {
     emit(state.copyWith(typeCertificateName: typeCertificateName));
   }
 
-  // Добавляем id просмотренных сториков в лист
+  void setTestMode(TestMode testMode) {
+    emit(state.copyWith(testMode: testMode));
+  }
 }
 
 @freezed
@@ -23,5 +26,6 @@ class RosAviaTestState with _$RosAviaTestState {
   const factory RosAviaTestState({
     @Default('Частный пилот (самолет)') String typeCertificateName,
     @Default(TypeSertificatesEntity(id: 1, title: 'Частный пилот (самолет)', image: '')) TypeSertificatesEntity typeSertificate,
+    @Default(TestMode.training) TestMode testMode,
   }) = _RosAviaTestState;
 }

@@ -1,6 +1,7 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_area_category_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/check_box_row.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,6 @@ class SelectTopicsTestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('SelectTopicsTestWidget: categories=${categories.map((e) => e.id).toList()}');
-    print('SelectTopicsTestWidget: selectedCategoryId=$selectedCategoryId');
     final allSelected = selectedCategoryId.length == categories.length && categories.isNotEmpty;
 
     return Container(

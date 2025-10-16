@@ -38,9 +38,9 @@ class AppCrashlytics {
 
       FirebaseCrashlytics.instance.setCustomKey('environment', environment.name);
 
-      print('Crashlytics initialized successfully - Environment.${environment.name}');
+      // Crashlytics initialized successfully
     } catch (e) {
-      print('Failed to initialize Crashlytics: $e');
+      // Failed to initialize Crashlytics
     }
   }
 }

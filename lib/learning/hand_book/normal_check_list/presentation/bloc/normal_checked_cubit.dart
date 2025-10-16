@@ -19,16 +19,11 @@ class NormalCheckedCubit extends Cubit<NormalCheckedState> {
       // Если CheckProgress найден, создаем новый объект с обновленным checkedIds
       // Удаляем старый объект, без этой штуки не обновляется состояние, кубит не видит изменений
       checkProgress.remove(checkProgressByIdCategory);
-      checkProgress.add(
-        checkProgressByIdCategory.copyWith(
-          checkedIds: Set.from(checkProgressByIdCategory.checkedIds)..add(idCheck),
-        ),
-      );
+      checkProgress.add(checkProgressByIdCategory.copyWith(checkedIds: Set.from(checkProgressByIdCategory.checkedIds)..add(idCheck)));
     } else {
       // Если CheckProgress не найден, добавляем новый объект с начальным idCheck
       checkProgress.add(CheckProgress(idCategory: idCategory, checkedIds: {idCheck}));
     }
-    print(checkProgress);
 
     emit(state.copyWith(checkProgress: checkProgress));
   }
@@ -52,9 +47,7 @@ class NormalCheckedCubit extends Cubit<NormalCheckedState> {
 
 @freezed
 class NormalCheckedState with _$NormalCheckedState {
-  const factory NormalCheckedState({
-    @Default({}) Set<CheckProgress> checkProgress,
-  }) = _NormalCheckedState;
+  const factory NormalCheckedState({@Default({}) Set<CheckProgress> checkProgress}) = _NormalCheckedState;
 }
 
 class CheckProgress extends Equatable {
@@ -65,10 +58,7 @@ class CheckProgress extends Equatable {
 
   // Метод copyWith для создания нового объекта с обновленными данными
   CheckProgress copyWith({int? idCategory, Set<int>? checkedIds}) {
-    return CheckProgress(
-      idCategory: idCategory ?? this.idCategory,
-      checkedIds: checkedIds ?? this.checkedIds,
-    );
+    return CheckProgress(idCategory: idCategory ?? this.idCategory, checkedIds: checkedIds ?? this.checkedIds);
   }
 
   @override

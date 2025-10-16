@@ -39,6 +39,14 @@ abstract class RosAviaTestService {
   @GET('/learning/ros_avia_test/categories/{typeCertificateId}')
   Future<List<RosAviaTestCategoryDto>> fetchRosAviaTestCategory(@Path('typeCertificateId') String typeCertificateId);
 
+  // Получение всех вопросов по выбранному сертификату и темам
+  @GET('/learning/ros_avia_test/questions/{typeCertificateId}')
+  Future<List<QuestionWithAnswersDto>> fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
+    @Path('typeCertificateId') String typeCertificateId,
+    @Query('categoryIds') List<int> categoryIds,
+    @Query('mixAnswers') bool mixAnswers,
+  );
+
   // @GET('/learning/hand_book/normal_categories/check_list')
   // Future<List<NormalCheckListDto>> fetchNormalCheckList();
 

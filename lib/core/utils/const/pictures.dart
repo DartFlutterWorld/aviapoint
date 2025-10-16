@@ -44,7 +44,7 @@ class Pictures {
   static const String pilotRta2 = 'assets/png/pilot_rat2.png';
   static const String pilotWithFon = 'assets/png/pilot_with_fon.png';
   static const String backgroundRta = 'assets/png/background_rta.png';
-  static const String arrowDown = 'assets/svg/arrow-down.svg';
+  static const String arrowDown = 'assets/svg/arrow_down.svg';
   static const String lableArrowRight = 'assets/svg/lable_arrow_right.svg';
   static const String pilotsIcon = 'assets/svg/pilots_icon.svg';
   static const String bortIngener = 'assets/svg/bort_ingener.svg';

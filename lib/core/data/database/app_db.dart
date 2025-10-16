@@ -1,6 +1,7 @@
 // lib/data/app_db.dart
 import 'dart:convert';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:drift/drift.dart';
 import 'package:aviapoint/core/data/database/connection/connection.dart' as conn;
 
@@ -54,14 +55,14 @@ class AppDb extends _$AppDb {
 
   /// Настройки для конкретного типа свидетельства
   Future<AppSetting?> getSettingsForCertificate({required int certificateTypeId}) async {
-    print('getSettingsForCertificate: searching for certificateTypeId = $certificateTypeId');
+    AppTalker.debug('getSettingsForCertificate: searching for certificateTypeId = $certificateTypeId');
 
     // Сначала проверим, есть ли вообще записи в таблице
     final allSettings = await select(appSettings).get();
-    print('getSettingsForCertificate: all settings in DB = $allSettings');
+    AppTalker.debug('getSettingsForCertificate: all settings in DB = $allSettings');
 
     final result = (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).getSingleOrNull();
-    print('getSettingsForCertificate: result = $result');
+    AppTalker.debug('getSettingsForCertificate: result = $result');
 
     return result;
   }
@@ -74,21 +75,21 @@ class AppDb extends _$AppDb {
     required String title,
     required String image,
   }) async {
-    print('saveSettings: saving for certificateTypeId = $certificateTypeId');
-    print('saveSettings: mixAnswers = $mixAnswers, buttonHint = $buttonHint');
-    print('saveSettings: selectedCategoryIds = $selectedCategoryIds');
+    AppTalker.info('saveSettings: saving for certificateTypeId = $certificateTypeId');
+    AppTalker.debug('saveSettings: mixAnswers = $mixAnswers, buttonHint = $buttonHint');
+    AppTalker.debug('saveSettings: selectedCategoryIds = $selectedCategoryIds');
 
     // Проверим, есть ли записи перед удалением
     final existingRecords = await (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
-    print('saveSettings: existing records before delete = $existingRecords');
+    AppTalker.debug('saveSettings: existing records before delete = $existingRecords');
 
     // Сначала удаляем существующую запись для данного certificateTypeId
     await (delete(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
-    print('saveSettings: deleted records for certificateTypeId = $certificateTypeId');
+    AppTalker.debug('saveSettings: deleted records for certificateTypeId = $certificateTypeId');
 
     // Проверим, что записи действительно удалены
     final recordsAfterDelete = await (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
-    print('saveSettings: records after delete = $recordsAfterDelete');
+    AppTalker.debug('saveSettings: records after delete = $recordsAfterDelete');
 
     // Затем вставляем новую запись
     try {
@@ -96,18 +97,17 @@ class AppDb extends _$AppDb {
         appSettings,
       ).insert(AppSetting(certificateTypeId: certificateTypeId, mixAnswers: mixAnswers, buttonHint: buttonHint, selectedCategoryIds: selectedCategoryIds, title: title, image: image));
 
-      print('saveSettings: inserted new record');
+      AppTalker.good('saveSettings: inserted new record');
 
       // Проверим, что запись действительно сохранилась
       final savedRecord = await getSettingsForCertificate(certificateTypeId: certificateTypeId);
-      print('saveSettings: verification - saved record = $savedRecord');
+      AppTalker.debug('saveSettings: verification - saved record = $savedRecord');
 
       // Также проверим все записи в таблице
       final allRecords = await select(appSettings).get();
-      print('saveSettings: all records in table = $allRecords');
+      AppTalker.debug('saveSettings: all records in table = $allRecords');
     } catch (e, stackTrace) {
-      print('saveSettings: ERROR during insert: $e');
-      print('saveSettings: Stack trace: $stackTrace');
+      AppTalker.error('saveSettings: ERROR during insert', e, stackTrace);
       rethrow;
     }
   }
