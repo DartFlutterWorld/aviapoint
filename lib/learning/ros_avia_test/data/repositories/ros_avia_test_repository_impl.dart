@@ -140,13 +140,14 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
     required int typeSsertificatesId,
     required Set<int> categoryIds,
     required bool mixAnswers,
+    required bool mixQuestions,
   }) async {
     try {
       final categoryIdsList = categoryIds.toList();
       final categoryIdsString = categoryIdsList.join(','); // Преобразуем в "15,5"
-      AppTalker.info('Fetching questions: typeSsertificatesId=$typeSsertificatesId, categoryIds=$categoryIdsString, mixAnswers=$mixAnswers');
+      AppTalker.info('Fetching questions: typeSsertificatesId=$typeSsertificatesId, categoryIds=$categoryIdsString, mixAnswers=$mixAnswers, mixQuestions=$mixQuestions');
 
-      final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(typeSsertificatesId.toString(), categoryIdsString, mixAnswers);
+      final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(typeSsertificatesId.toString(), categoryIdsString, mixAnswers, mixQuestions);
 
       AppTalker.good('Received ${response.length} questions');
       return right(QuestionWithAnswersMapper.toEntities(response));

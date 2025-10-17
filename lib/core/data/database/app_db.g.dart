@@ -36,6 +36,21 @@ class $AppSettingsTable extends AppSettings
     ),
     defaultValue: const Constant(true),
   );
+  static const VerificationMeta _mixQuestionsMeta = const VerificationMeta(
+    'mixQuestions',
+  );
+  @override
+  late final GeneratedColumn<bool> mixQuestions = GeneratedColumn<bool>(
+    'mix_questions',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("mix_questions" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _buttonHintMeta = const VerificationMeta(
     'buttonHint',
   );
@@ -85,6 +100,7 @@ class $AppSettingsTable extends AppSettings
   List<GeneratedColumn> get $columns => [
     certificateTypeId,
     mixAnswers,
+    mixQuestions,
     buttonHint,
     title,
     image,
@@ -115,6 +131,15 @@ class $AppSettingsTable extends AppSettings
       context.handle(
         _mixAnswersMeta,
         mixAnswers.isAcceptableOrUnknown(data['mix_answers']!, _mixAnswersMeta),
+      );
+    }
+    if (data.containsKey('mix_questions')) {
+      context.handle(
+        _mixQuestionsMeta,
+        mixQuestions.isAcceptableOrUnknown(
+          data['mix_questions']!,
+          _mixQuestionsMeta,
+        ),
       );
     }
     if (data.containsKey('button_hint')) {
@@ -152,6 +177,10 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.bool,
         data['${effectivePrefix}mix_answers'],
       )!,
+      mixQuestions: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}mix_questions'],
+      )!,
       buttonHint: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}button_hint'],
@@ -186,6 +215,7 @@ class $AppSettingsTable extends AppSettings
 class AppSetting extends DataClass implements Insertable<AppSetting> {
   final int certificateTypeId;
   final bool mixAnswers;
+  final bool mixQuestions;
   final bool buttonHint;
   final String title;
   final String image;
@@ -193,6 +223,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   const AppSetting({
     required this.certificateTypeId,
     required this.mixAnswers,
+    required this.mixQuestions,
     required this.buttonHint,
     required this.title,
     required this.image,
@@ -203,6 +234,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     final map = <String, Expression>{};
     map['certificate_type_id'] = Variable<int>(certificateTypeId);
     map['mix_answers'] = Variable<bool>(mixAnswers);
+    map['mix_questions'] = Variable<bool>(mixQuestions);
     map['button_hint'] = Variable<bool>(buttonHint);
     map['title'] = Variable<String>(title);
     map['image'] = Variable<String>(image);
@@ -220,6 +252,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return AppSettingsCompanion(
       certificateTypeId: Value(certificateTypeId),
       mixAnswers: Value(mixAnswers),
+      mixQuestions: Value(mixQuestions),
       buttonHint: Value(buttonHint),
       title: Value(title),
       image: Value(image),
@@ -235,6 +268,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return AppSetting(
       certificateTypeId: serializer.fromJson<int>(json['certificateTypeId']),
       mixAnswers: serializer.fromJson<bool>(json['mixAnswers']),
+      mixQuestions: serializer.fromJson<bool>(json['mixQuestions']),
       buttonHint: serializer.fromJson<bool>(json['buttonHint']),
       title: serializer.fromJson<String>(json['title']),
       image: serializer.fromJson<String>(json['image']),
@@ -249,6 +283,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return <String, dynamic>{
       'certificateTypeId': serializer.toJson<int>(certificateTypeId),
       'mixAnswers': serializer.toJson<bool>(mixAnswers),
+      'mixQuestions': serializer.toJson<bool>(mixQuestions),
       'buttonHint': serializer.toJson<bool>(buttonHint),
       'title': serializer.toJson<String>(title),
       'image': serializer.toJson<String>(image),
@@ -259,6 +294,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   AppSetting copyWith({
     int? certificateTypeId,
     bool? mixAnswers,
+    bool? mixQuestions,
     bool? buttonHint,
     String? title,
     String? image,
@@ -266,6 +302,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   }) => AppSetting(
     certificateTypeId: certificateTypeId ?? this.certificateTypeId,
     mixAnswers: mixAnswers ?? this.mixAnswers,
+    mixQuestions: mixQuestions ?? this.mixQuestions,
     buttonHint: buttonHint ?? this.buttonHint,
     title: title ?? this.title,
     image: image ?? this.image,
@@ -279,6 +316,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       mixAnswers: data.mixAnswers.present
           ? data.mixAnswers.value
           : this.mixAnswers,
+      mixQuestions: data.mixQuestions.present
+          ? data.mixQuestions.value
+          : this.mixQuestions,
       buttonHint: data.buttonHint.present
           ? data.buttonHint.value
           : this.buttonHint,
@@ -295,6 +335,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return (StringBuffer('AppSetting(')
           ..write('certificateTypeId: $certificateTypeId, ')
           ..write('mixAnswers: $mixAnswers, ')
+          ..write('mixQuestions: $mixQuestions, ')
           ..write('buttonHint: $buttonHint, ')
           ..write('title: $title, ')
           ..write('image: $image, ')
@@ -307,6 +348,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   int get hashCode => Object.hash(
     certificateTypeId,
     mixAnswers,
+    mixQuestions,
     buttonHint,
     title,
     image,
@@ -318,6 +360,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       (other is AppSetting &&
           other.certificateTypeId == this.certificateTypeId &&
           other.mixAnswers == this.mixAnswers &&
+          other.mixQuestions == this.mixQuestions &&
           other.buttonHint == this.buttonHint &&
           other.title == this.title &&
           other.image == this.image &&
@@ -327,6 +370,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<int> certificateTypeId;
   final Value<bool> mixAnswers;
+  final Value<bool> mixQuestions;
   final Value<bool> buttonHint;
   final Value<String> title;
   final Value<String> image;
@@ -334,6 +378,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   const AppSettingsCompanion({
     this.certificateTypeId = const Value.absent(),
     this.mixAnswers = const Value.absent(),
+    this.mixQuestions = const Value.absent(),
     this.buttonHint = const Value.absent(),
     this.title = const Value.absent(),
     this.image = const Value.absent(),
@@ -342,6 +387,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   AppSettingsCompanion.insert({
     this.certificateTypeId = const Value.absent(),
     this.mixAnswers = const Value.absent(),
+    this.mixQuestions = const Value.absent(),
     this.buttonHint = const Value.absent(),
     this.title = const Value.absent(),
     this.image = const Value.absent(),
@@ -350,6 +396,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   static Insertable<AppSetting> custom({
     Expression<int>? certificateTypeId,
     Expression<bool>? mixAnswers,
+    Expression<bool>? mixQuestions,
     Expression<bool>? buttonHint,
     Expression<String>? title,
     Expression<String>? image,
@@ -358,6 +405,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     return RawValuesInsertable({
       if (certificateTypeId != null) 'certificate_type_id': certificateTypeId,
       if (mixAnswers != null) 'mix_answers': mixAnswers,
+      if (mixQuestions != null) 'mix_questions': mixQuestions,
       if (buttonHint != null) 'button_hint': buttonHint,
       if (title != null) 'title': title,
       if (image != null) 'image': image,
@@ -369,6 +417,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   AppSettingsCompanion copyWith({
     Value<int>? certificateTypeId,
     Value<bool>? mixAnswers,
+    Value<bool>? mixQuestions,
     Value<bool>? buttonHint,
     Value<String>? title,
     Value<String>? image,
@@ -377,6 +426,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     return AppSettingsCompanion(
       certificateTypeId: certificateTypeId ?? this.certificateTypeId,
       mixAnswers: mixAnswers ?? this.mixAnswers,
+      mixQuestions: mixQuestions ?? this.mixQuestions,
       buttonHint: buttonHint ?? this.buttonHint,
       title: title ?? this.title,
       image: image ?? this.image,
@@ -392,6 +442,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     }
     if (mixAnswers.present) {
       map['mix_answers'] = Variable<bool>(mixAnswers.value);
+    }
+    if (mixQuestions.present) {
+      map['mix_questions'] = Variable<bool>(mixQuestions.value);
     }
     if (buttonHint.present) {
       map['button_hint'] = Variable<bool>(buttonHint.value);
@@ -417,6 +470,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     return (StringBuffer('AppSettingsCompanion(')
           ..write('certificateTypeId: $certificateTypeId, ')
           ..write('mixAnswers: $mixAnswers, ')
+          ..write('mixQuestions: $mixQuestions, ')
           ..write('buttonHint: $buttonHint, ')
           ..write('title: $title, ')
           ..write('image: $image, ')
@@ -895,6 +949,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
     AppSettingsCompanion Function({
       Value<int> certificateTypeId,
       Value<bool> mixAnswers,
+      Value<bool> mixQuestions,
       Value<bool> buttonHint,
       Value<String> title,
       Value<String> image,
@@ -904,6 +959,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
       Value<int> certificateTypeId,
       Value<bool> mixAnswers,
+      Value<bool> mixQuestions,
       Value<bool> buttonHint,
       Value<String> title,
       Value<String> image,
@@ -926,6 +982,11 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<bool> get mixAnswers => $composableBuilder(
     column: $table.mixAnswers,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get mixQuestions => $composableBuilder(
+    column: $table.mixQuestions,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -970,6 +1031,11 @@ class $$AppSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get mixQuestions => $composableBuilder(
+    column: $table.mixQuestions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get buttonHint => $composableBuilder(
     column: $table.buttonHint,
     builder: (column) => ColumnOrderings(column),
@@ -1007,6 +1073,11 @@ class $$AppSettingsTableAnnotationComposer
 
   GeneratedColumn<bool> get mixAnswers => $composableBuilder(
     column: $table.mixAnswers,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get mixQuestions => $composableBuilder(
+    column: $table.mixQuestions,
     builder: (column) => column,
   );
 
@@ -1058,6 +1129,7 @@ class $$AppSettingsTableTableManager
               ({
                 Value<int> certificateTypeId = const Value.absent(),
                 Value<bool> mixAnswers = const Value.absent(),
+                Value<bool> mixQuestions = const Value.absent(),
                 Value<bool> buttonHint = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String> image = const Value.absent(),
@@ -1065,6 +1137,7 @@ class $$AppSettingsTableTableManager
               }) => AppSettingsCompanion(
                 certificateTypeId: certificateTypeId,
                 mixAnswers: mixAnswers,
+                mixQuestions: mixQuestions,
                 buttonHint: buttonHint,
                 title: title,
                 image: image,
@@ -1074,6 +1147,7 @@ class $$AppSettingsTableTableManager
               ({
                 Value<int> certificateTypeId = const Value.absent(),
                 Value<bool> mixAnswers = const Value.absent(),
+                Value<bool> mixQuestions = const Value.absent(),
                 Value<bool> buttonHint = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String> image = const Value.absent(),
@@ -1081,6 +1155,7 @@ class $$AppSettingsTableTableManager
               }) => AppSettingsCompanion.insert(
                 certificateTypeId: certificateTypeId,
                 mixAnswers: mixAnswers,
+                mixQuestions: mixQuestions,
                 buttonHint: buttonHint,
                 title: title,
                 image: image,

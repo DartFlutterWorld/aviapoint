@@ -15,27 +15,19 @@ class TestingModeDialog extends StatelessWidget {
     return Center(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 30),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.r),
-          ),
-        ),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20.r))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 11),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
                   // padding: const EdgeInsets.only(top: 8),
-                  icon: SvgPicture.asset(
-                    Pictures.closeAuth,
-                    alignment: Alignment.centerRight,
-                  ),
+                  icon: SvgPicture.asset(Pictures.closeAuth, alignment: Alignment.centerRight),
                   onPressed: () => context.router.pop(),
                 ),
               ),

@@ -149,7 +149,7 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
 }
 
 Future<void> selectTopics({required BuildContext context}) async {
-  final result = await showModalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image)>(
+  final result = await showModalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
     useRootNavigator: true,
     isDismissible: true,
     context: context,
@@ -166,7 +166,15 @@ Future<void> selectTopics({required BuildContext context}) async {
     },
   );
   if (result != null) {
-    await getIt<AppDb>().saveSettings(certificateTypeId: result.$1, mixAnswers: result.$2, buttonHint: result.$3, selectedCategoryIds: result.$4, title: result.$5, image: result.$6);
+    await getIt<AppDb>().saveSettings(
+      certificateTypeId: result.$1,
+      mixAnswers: result.$2,
+      buttonHint: result.$3,
+      selectedCategoryIds: result.$4,
+      title: result.$5,
+      image: result.$6,
+      mixQuestions: result.$7,
+    );
 
     context.router.push(TestByModeRoute(typeCertificateId: result.$1));
   }

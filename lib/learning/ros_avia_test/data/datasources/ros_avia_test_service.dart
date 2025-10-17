@@ -45,6 +45,7 @@ abstract class RosAviaTestService {
     @Path('typeCertificateId') String typeCertificateId,
     @Query('categoryIds') String categoryIds,
     @Query('mixAnswers') bool mixAnswers,
+    @Query('mixQuestions') bool mixQuestions,
   );
 
   // @GET('/learning/hand_book/normal_categories/check_list')

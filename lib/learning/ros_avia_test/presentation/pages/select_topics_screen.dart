@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-typedef SettingsTest = ({bool mixAnswers, bool buttonHint});
+typedef SettingsTest = ({bool mixAnswers, bool mixQuestions, bool buttonHint});
 
 class SelectTopicsScreen extends StatefulWidget {
   const SelectTopicsScreen({super.key});
@@ -30,7 +30,7 @@ class SelectTopicsScreen extends StatefulWidget {
 class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
   final ValueNotifier<Set<int>> selectedCategoryId = ValueNotifier<Set<int>>({});
   final ValueNotifier<int> categoriesLenght = ValueNotifier<int>(0);
-  final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((mixAnswers: true, buttonHint: true));
+  final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((mixAnswers: true, mixQuestions: true, buttonHint: true));
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
 
             if (s != null) {
               // Загружаем сохраненные настройки
-              settingsTest.value = (mixAnswers: s.mixAnswers, buttonHint: s.buttonHint);
+              settingsTest.value = (mixAnswers: s.mixAnswers, mixQuestions: s.mixQuestions, buttonHint: s.buttonHint);
               selectedCategoryId.value.clear();
               selectedCategoryId.value.addAll(s.selectedCategoryIds);
 
@@ -129,12 +129,16 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                     builder: (context, value, child) {
                       return CheckboxWithTitle(
                         isSelectMixAnswers: value.mixAnswers,
+                        isSelectMixQuestions: value.mixQuestions,
                         isSelectButtonHint: value.buttonHint,
                         onToggleMixAnswers: () {
-                          settingsTest.value = (mixAnswers: !value.mixAnswers, buttonHint: value.buttonHint);
+                          settingsTest.value = (mixAnswers: !value.mixAnswers, mixQuestions: value.mixQuestions, buttonHint: value.buttonHint);
+                        },
+                        onToggleMixQuestions: () {
+                          settingsTest.value = (mixAnswers: value.mixAnswers, mixQuestions: !value.mixQuestions, buttonHint: value.buttonHint);
                         },
                         onToggleButtonHint: () {
-                          settingsTest.value = (mixAnswers: value.mixAnswers, buttonHint: !value.buttonHint);
+                          settingsTest.value = (mixAnswers: value.mixAnswers, mixQuestions: value.mixQuestions, buttonHint: !value.buttonHint);
                         },
                       );
                     },
@@ -198,45 +202,20 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                 backgroundColor: Color(0xFF0A6EFA),
                 onPressed: () {
                   if (selectedCategoryId.value.isNotEmpty) {
-                    /// Сохраняем выбранные категории в БД перед началом теста
-                    final db = getIt<AppDb>();
+                    /// Возвращаем результат выбранных категорий и настроек
                     final certificateTypeId = context.read<RosAviaTestCubit>().state.typeSertificate.id;
+                    final typeSertificate = context.read<RosAviaTestCubit>().state.typeSertificate;
+                    final testSettings = settingsTest.value;
 
-                    AppTalker.info('Selected categories: ${selectedCategoryId.value}');
-
-                    db
-                        .saveSettings(
-                          certificateTypeId: certificateTypeId,
-                          mixAnswers: settingsTest.value.mixAnswers,
-                          buttonHint: settingsTest.value.buttonHint,
-                          selectedCategoryIds: selectedCategoryId.value,
-                          title: context.read<RosAviaTestCubit>().state.typeSertificate.title,
-                          image: context.read<RosAviaTestCubit>().state.typeSertificate.image,
-                        )
-                        .then((_) {
-                          /// После сохранения возвращаем результат
-                          context.router.pop((
-                            certificateTypeId,
-                            settingsTest.value.mixAnswers,
-                            settingsTest.value.buttonHint,
-                            selectedCategoryId.value,
-                            context.read<RosAviaTestCubit>().state.typeSertificate.title,
-                            context.read<RosAviaTestCubit>().state.typeSertificate.image,
-                          ));
-                        })
-                        .catchError((Object e) {
-                          AppTalker.error('Error saving settings', e);
-
-                          /// Все равно продолжаем если была ошибка
-                          context.router.pop((
-                            certificateTypeId,
-                            settingsTest.value.mixAnswers,
-                            settingsTest.value.buttonHint,
-                            selectedCategoryId.value,
-                            context.read<RosAviaTestCubit>().state.typeSertificate.title,
-                            context.read<RosAviaTestCubit>().state.typeSertificate.image,
-                          ));
-                        });
+                    context.router.pop((
+                      certificateTypeId,
+                      testSettings.mixAnswers,
+                      testSettings.buttonHint,
+                      selectedCategoryId.value,
+                      typeSertificate.title,
+                      typeSertificate.image,
+                      testSettings.mixQuestions,
+                    ));
                   } else {
                     showDialog<void>(
                       context: context,

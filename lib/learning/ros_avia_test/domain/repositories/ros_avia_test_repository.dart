@@ -19,6 +19,7 @@ abstract class RosAviaTestRepository {
     required int typeSsertificatesId,
     required Set<int> categoryIds,
     required bool mixAnswers,
+    required bool mixQuestions,
   });
 }
 // List<QuestionWithAnswersModel>

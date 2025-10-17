@@ -188,11 +188,13 @@ class _RosAviaTestService implements RosAviaTestService {
     String typeCertificateId,
     String categoryIds,
     bool mixAnswers,
+    bool mixQuestions,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'categoryIds': categoryIds,
       r'mixAnswers': mixAnswers,
+      r'mixQuestions': mixQuestions,
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;

@@ -45,6 +45,7 @@ class QuestionsByTypeCertificateAndCategoriesBloc extends Bloc<QuestionsByTypeCe
       typeSsertificatesId: event.typeSsertificatesId,
       categoryIds: s?.selectedCategoryIds ?? {},
       mixAnswers: s?.mixAnswers ?? true,
+      mixQuestions: s?.mixQuestions ?? true,
     );
     response.fold(
       (l) {

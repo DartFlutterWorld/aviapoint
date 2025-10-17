@@ -11,6 +11,7 @@ part 'app_db.g.dart';
 class AppSettings extends Table {
   IntColumn get certificateTypeId => integer().withDefault(const Constant(1))(); // тип сертификата (твоя специализация)
   BoolColumn get mixAnswers => boolean().withDefault(const Constant(true))();
+  BoolColumn get mixQuestions => boolean().withDefault(const Constant(true))();
   BoolColumn get buttonHint => boolean().withDefault(const Constant(true))();
   TextColumn get title => text().withDefault(const Constant(''))();
   TextColumn get image => text().withDefault(const Constant(''))();
@@ -41,7 +42,7 @@ class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -61,6 +62,11 @@ class AppDb extends _$AppDb {
         // Пересоздаем таблицу userAnswers чтобы добавить столбец categoryName
         await m.deleteTable('user_answers');
         await m.createTable(userAnswers);
+      }
+      if (from < 6) {
+        // Пересоздаем таблицу appSettings чтобы добавить столбец mixQuestions
+        await m.deleteTable('app_settings');
+        await m.createTable(appSettings);
       }
     },
   );
@@ -85,44 +91,33 @@ class AppDb extends _$AppDb {
   Future<void> saveSettings({
     required int certificateTypeId,
     required bool mixAnswers,
+    required bool mixQuestions,
     required bool buttonHint,
     required Set<int> selectedCategoryIds,
     required String title,
     required String image,
   }) async {
     AppTalker.info('saveSettings: saving for certificateTypeId = $certificateTypeId');
-    AppTalker.debug('saveSettings: mixAnswers = $mixAnswers, buttonHint = $buttonHint');
-    AppTalker.debug('saveSettings: selectedCategoryIds = $selectedCategoryIds');
-
-    // Проверим, есть ли записи перед удалением
-    final existingRecords = await (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
-    AppTalker.debug('saveSettings: existing records before delete = $existingRecords');
 
     // Сначала удаляем существующую запись для данного certificateTypeId
     await (delete(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
-    AppTalker.debug('saveSettings: deleted records for certificateTypeId = $certificateTypeId');
-
-    // Проверим, что записи действительно удалены
-    final recordsAfterDelete = await (select(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
-    AppTalker.debug('saveSettings: records after delete = $recordsAfterDelete');
 
     // Затем вставляем новую запись
     try {
-      await into(
-        appSettings,
-      ).insert(AppSetting(certificateTypeId: certificateTypeId, mixAnswers: mixAnswers, buttonHint: buttonHint, selectedCategoryIds: selectedCategoryIds, title: title, image: image));
-
-      AppTalker.good('saveSettings: inserted new record');
-
-      // Проверим, что запись действительно сохранилась
-      final savedRecord = await getSettingsForCertificate(certificateTypeId: certificateTypeId);
-      AppTalker.debug('saveSettings: verification - saved record = $savedRecord');
-
-      // Также проверим все записи в таблице
-      final allRecords = await select(appSettings).get();
-      AppTalker.debug('saveSettings: all records in table = $allRecords');
+      await into(appSettings).insert(
+        AppSetting(
+          certificateTypeId: certificateTypeId,
+          mixAnswers: mixAnswers,
+          mixQuestions: mixQuestions,
+          buttonHint: buttonHint,
+          selectedCategoryIds: selectedCategoryIds,
+          title: title,
+          image: image,
+        ),
+      );
+      AppTalker.good('saveSettings: saved successfully');
     } catch (e, stackTrace) {
-      AppTalker.error('saveSettings: ERROR during insert', e, stackTrace);
+      AppTalker.error('saveSettings error', e, stackTrace);
       rethrow;
     }
   }
