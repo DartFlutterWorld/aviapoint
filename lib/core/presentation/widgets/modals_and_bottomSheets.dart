@@ -23,7 +23,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> checkList({required BuildContext context, required List<NormalCheckListEntity> checkList}) async {
   return await showModalBottomSheet<void>(
-    useRootNavigator: true,
+    useRootNavigator: false,
     isDismissible: false,
     context: context,
     isScrollControlled: true,
@@ -124,7 +124,7 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
 }
 
 Future<void> openQuestion({required BuildContext context, required QuestionWithAnswersEntity? question, required int questionId, required String? categoryTitle}) async {
-  final result = await showModalBottomSheet<TypeSertificatesEntity>(
+  await showModalBottomSheet<void>(
     useRootNavigator: true,
     isDismissible: true,
     context: context,
@@ -133,19 +133,16 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
     barrierColor: AppColors.bgOverlay,
     backgroundColor: AppColors.background,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-    builder: (context) {
+    builder: (bottomSheetContext) {
       return ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height - 100,
+          height: MediaQuery.of(bottomSheetContext).size.height - 100,
           child: DetailQuestionScreen(questionId: questionId, categoryTitle: categoryTitle, question: question, withClose: true),
         ),
       );
     },
   );
-  if (result != null) {
-    BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
-  }
 }
 
 Future<void> selectTopics({required BuildContext context}) async {

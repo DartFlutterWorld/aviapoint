@@ -10,7 +10,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_bl
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/checkbox_with_title.dart';
-import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/select_topics_test_widget..dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/select_topics_test_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/select_topics_warning_dialog.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/your_specialization_widget.dart';
 import 'package:flutter/material.dart';
@@ -167,8 +167,9 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                             valueListenable: selectedCategoryId,
                             builder: (context, selected, child) {
                               final allIds = state.categories.map((e) => e.id).toSet();
+                              final sortedCategories = [...state.categories]..sort((a, b) => a.id.compareTo(b.id));
                               return SelectTopicsTestWidget(
-                                categories: state.categories,
+                                categories: sortedCategories,
                                 selectedCategoryId: selected,
                                 onToggle: (int id) {
                                   final next = Set<int>.from(selected);

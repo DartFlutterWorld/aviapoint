@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 
 /// Экран результатов тестирования
 /// Отображает таблицу с ответами пользователя и правильными ответами
@@ -34,11 +36,14 @@ class TestResultsScreen extends StatefulWidget {
 
 class _TestResultsScreenState extends State<TestResultsScreen> {
   late Future<List<UserAnswer>> _answersFuture;
+  Map<int, QuestionWithAnswersEntity> _questionsMap = {}; // Кэш вопросов по ID
 
   @override
   void initState() {
     super.initState();
     _answersFuture = _loadAnswers();
+    // Загружаем категории с вопросами чтобы получить доступ к вопросам
+    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: context.read<RosAviaTestCubit>().state.typeSertificate.id));
   }
 
   /// Загружаем ответы из БД для текущего типа сертификата
@@ -107,10 +112,30 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                   runSpacing: 8,
                   children: categoryAnswers.map((answer) {
                     final isCorrect = answer.isCorrect == true;
-                    return ChipsWidget(
-                      questionWithAnswers: QuestionWithAnswersEntity(questionId: answer.questionId, questionText: '', answers: []),
-                      colorBackground: isCorrect ? const Color(0xFFD8F9EC) : const Color(0xFFFFE0E0),
-                      colorTitle: isCorrect ? const Color(0xFF15D585) : const Color(0xFFFF6B6B),
+                    return GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        try {
+                          openQuestion(
+                            context: context,
+                            question: _questionsMap[answer.questionId], // Берем вопрос из кэша
+                            questionId: answer.questionId,
+                            categoryTitle: answer.categoryName,
+                          ).catchError((Object error) {
+                            print('Error opening question modal: $error');
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка при открытии вопроса')));
+                            }
+                          });
+                        } catch (e) {
+                          print('Error in onTap: $e');
+                        }
+                      },
+                      child: ChipsWidget(
+                        questionWithAnswers: QuestionWithAnswersEntity(questionId: answer.questionId, questionText: '', answers: []),
+                        colorBackground: isCorrect ? const Color(0xFFD8F9EC) : const Color(0xFFFFE0E0),
+                        colorTitle: isCorrect ? const Color(0xFF15D585) : const Color(0xFFFF6B6B),
+                      ),
                     );
                   }).toList(),
                 ),
@@ -125,115 +150,130 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: CustomAppBar(title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}', titleTextAlign: TextAlign.center, withBack: false),
-      body: FutureBuilder<List<UserAnswer>>(
-        future: _answersFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return BlocListener<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
+      listener: (context, state) {
+        state.maybeMap(
+          success: (value) {
+            // Заполняем кэш вопросов из загруженных категорий
+            for (final category in value.categoryWithQuestions) {
+              for (final question in category.questionsWithAnswers) {
+                _questionsMap[question.questionId] = question;
+              }
+            }
+          },
+          orElse: () {},
+        );
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: CustomAppBar(title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}', titleTextAlign: TextAlign.center, withBack: false),
+        body: FutureBuilder<List<UserAnswer>>(
+          future: _answersFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Ошибка: ${snapshot.error}'));
-          }
+            if (snapshot.hasError) {
+              return Center(child: Text('Ошибка: ${snapshot.error}'));
+            }
 
-          final answers = snapshot.data ?? [];
+            final answers = snapshot.data ?? [];
 
-          if (answers.isEmpty) {
-            return const Center(child: Text('Нет результатов'));
-          }
+            if (answers.isEmpty) {
+              return const Center(child: Text('Нет результатов'));
+            }
 
-          final stats = _calculateStats(answers);
-          final correctCount = stats['correct']!;
-          final totalCount = stats['total']!;
-          final percentage = _formatPercentage(correctCount, totalCount);
+            final stats = _calculateStats(answers);
+            final correctCount = stats['correct']!;
+            final totalCount = stats['total']!;
+            final percentage = _formatPercentage(correctCount, totalCount);
 
-          return Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          spacing: 12.w,
-                          children: [
-                            DiagramWidget(
-                              percent: percentage / 100, // 80%
-                              width: 160.w, // подгоните под ваш дизайн
-                              strokeWidth: 30,
-                              gradientColors: const [
-                                Color(0xFF2F7C5A), // тёмно-зелёный
-                                Color(0xFF78FBAE), // мятный
-                              ],
-                              trackColor: const Color(0xFFE8EFFF), // светло-голубой фон дуги
-                              // Кастомный центр (если хотите заменить дефолтный текст):
-                              centerBuilder: (ctx, p) => Padding(
-                                padding: const EdgeInsets.only(top: 50.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [Text('${percentage.toInt().toString()}%', style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76)))],
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            spacing: 12.w,
+                            children: [
+                              DiagramWidget(
+                                percent: percentage / 100, // 80%
+                                width: 160.w, // подгоните под ваш дизайн
+                                strokeWidth: 30,
+                                gradientColors: const [
+                                  Color(0xFF2F7C5A), // тёмно-зелёный
+                                  Color(0xFF78FBAE), // мятный
+                                ],
+                                trackColor: const Color(0xFFE8EFFF), // светло-голубой фон дуги
+                                // Кастомный центр (если хотите заменить дефолтный текст):
+                                centerBuilder: (ctx, p) => Padding(
+                                  padding: const EdgeInsets.only(top: 50.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [Text('${percentage.toInt().toString()}%', style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76)))],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text('Тем: ${_buildCategorizedResults(answers).length}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
-                                  SizedBox(height: 8.h),
-                                  Text('Вопросов: ${totalCount}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
-                                  SizedBox(height: 8.h),
-                                  ChipsWithTitleWidget(title: 'правильных ${correctCount}', colorBackground: const Color(0xFFD8F9EC), colorTitle: const Color(0xFF15D585)),
-                                  SizedBox(height: 8.h),
-                                  ChipsWithTitleWidget(title: 'неправильных ${totalCount - correctCount}', colorBackground: const Color(0xFFFFE0E0), colorTitle: const Color(0xFFFF6B6B)),
-                                ],
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('Тем: ${_buildCategorizedResults(answers).length}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    SizedBox(height: 8.h),
+                                    Text('Вопросов: ${totalCount}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    SizedBox(height: 8.h),
+                                    ChipsWithTitleWidget(title: 'правильных ${correctCount}', colorBackground: const Color(0xFFD8F9EC), colorTitle: const Color(0xFF15D585)),
+                                    SizedBox(height: 8.h),
+                                    ChipsWithTitleWidget(title: 'неправильных ${totalCount - correctCount}', colorBackground: const Color(0xFFFFE0E0), colorTitle: const Color(0xFFFF6B6B)),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
 
-                        SizedBox(height: 24.h),
+                          SizedBox(height: 24.h),
 
-                        // Таблица результатов, сгруппированная по категориям
-                        ..._buildCategorizedResults(answers),
-                        SizedBox(height: 24.h),
-                      ],
+                          // Таблица результатов, сгруппированная по категориям
+                          ..._buildCategorizedResults(answers),
+                          SizedBox(height: 24.h),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              // Кнопка завершения - прибита к низу
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16),
-                child: Center(
-                  child: SizedBox(
-                    // width: 200,
-                    child: CustomButton(
-                      title: 'Завершить',
-                      verticalPadding: 8.h,
-                      onPressed: () {
-                        final db = getIt<AppDb>();
-                        db.clearAllAnswers(certificateTypeId: context.read<RosAviaTestCubit>().state.typeSertificate.id);
-                        context.router.push(const LearningRoute());
-                      },
-                      boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: const Offset(0.0, 7.0))],
-                      textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-                      borderColor: Colors.transparent,
-                      backgroundColor: const Color(0xFF0A6EFA),
-                      borderRadius: 46,
+                // Кнопка завершения - прибита к низу
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16),
+                  child: Center(
+                    child: SizedBox(
+                      // width: 200,
+                      child: CustomButton(
+                        title: 'Завершить',
+                        verticalPadding: 8.h,
+                        onPressed: () {
+                          final db = getIt<AppDb>();
+                          db.clearAllAnswers(certificateTypeId: context.read<RosAviaTestCubit>().state.typeSertificate.id);
+                          context.router.push(const LearningRoute());
+                        },
+                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: const Offset(0.0, 7.0))],
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                        borderColor: Colors.transparent,
+                        backgroundColor: const Color(0xFF0A6EFA),
+                        borderRadius: 46,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
