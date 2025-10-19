@@ -8,14 +8,11 @@ import 'package:flutter_svg/svg.dart';
 
 class CheckBoxRow extends StatelessWidget {
   final String title;
+  final String questionCount;
   final bool active;
   final VoidCallback onTap;
 
-  const CheckBoxRow({
-    required this.title,
-    required this.active,
-    required this.onTap,
-  });
+  const CheckBoxRow({required this.title, required this.questionCount, required this.active, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +26,15 @@ class CheckBoxRow extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 13, horizontal: 0.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
-              ),
-              child: SvgPicture.asset(
-                active ? Pictures.checkBoxActive : Pictures.checkBox,
-                fit: BoxFit.cover,
-              ),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),
+              child: SvgPicture.asset(active ? Pictures.checkBoxActive : Pictures.checkBox, fit: BoxFit.cover),
             ),
             SizedBox(width: 8.w),
-            Flexible(
-              child: Text(
-                title,
-                style: AppStyles.regular12s.copyWith(color: const Color(0xFF4B5767)),
-              ),
+            Expanded(
+              child: Text(title, style: AppStyles.regular12s.copyWith(color: const Color(0xFF4B5767))),
             ),
+            SizedBox(width: 8),
+            Text('($questionCount)', style: AppStyles.medium10s.copyWith(color: const Color(0xFF9CA5AF))),
           ],
         ),
       ),

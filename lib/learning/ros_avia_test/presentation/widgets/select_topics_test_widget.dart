@@ -1,15 +1,14 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/core/utils/talker_config.dart';
-import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_area_category_entity.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/check_box_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SelectTopicsTestWidget extends StatelessWidget {
-  final List<RosAviaTestCategoryEntity> categories;
+  final List<RosAviaTestCategoryWithQuestionsEntity> categories;
   final Set<int> selectedCategoryId;
   final void Function(int id) onToggle;
   final VoidCallback onToggleAll;
@@ -18,7 +17,8 @@ class SelectTopicsTestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final allSelected = selectedCategoryId.length == categories.length && categories.isNotEmpty;
+    final allIds = categories.map((e) => e.categoryId).toSet();
+    final allSelected = selectedCategoryId.length == allIds.length && allIds.isNotEmpty && selectedCategoryId.containsAll(allIds);
 
     return Container(
       padding: const EdgeInsets.only(top: 10, left: 12, right: 12, bottom: 16),
@@ -43,7 +43,10 @@ class SelectTopicsTestWidget extends StatelessWidget {
                 children: [
                   SvgPicture.asset(allSelected ? Pictures.checkBoxActive : Pictures.checkBox),
                   SizedBox(width: 8.w),
-                  Text('Выбрать все темы', style: AppStyles.regular12s.copyWith(color: const Color(0xFF4B5767))),
+                  Expanded(
+                    child: Text('Выбрать все темы', style: AppStyles.regular12s.copyWith(color: const Color(0xFF4B5767))),
+                  ),
+                  Text('(${categories.fold<int>(0, (sum, cat) => sum + cat.questionCount)})', style: AppStyles.medium10s.copyWith(color: const Color(0xFF9CA5AF))),
                 ],
               ),
             ),
@@ -58,8 +61,8 @@ class SelectTopicsTestWidget extends StatelessWidget {
               itemCount: categories.length,
               itemBuilder: (context, index) {
                 final cat = categories[index];
-                final active = selectedCategoryId.contains(cat.id);
-                return CheckBoxRow(title: bigFirstSymbol(cat.title), active: active, onTap: () => onToggle(cat.id));
+                final active = selectedCategoryId.contains(cat.categoryId);
+                return CheckBoxRow(title: bigFirstSymbol(cat.categoryTitle), active: active, onTap: () => onToggle(cat.categoryId), questionCount: cat.questionCount.toString());
               },
             ),
           ),

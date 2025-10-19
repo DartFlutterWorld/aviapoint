@@ -99,12 +99,8 @@ class AppDb extends _$AppDb {
   }) async {
     AppTalker.info('saveSettings: saving for certificateTypeId = $certificateTypeId');
 
-    // Сначала удаляем существующую запись для данного certificateTypeId
-    await (delete(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
-
-    // Затем вставляем новую запись
     try {
-      await into(appSettings).insert(
+      await into(appSettings).insertOnConflictUpdate(
         AppSetting(
           certificateTypeId: certificateTypeId,
           mixAnswers: mixAnswers,
