@@ -24,20 +24,26 @@ class ApiDatasourceDio extends ApiDatasource {
   /// interceptors - интерсепторы для [Dio]
   ApiDatasourceDio({required this.baseUrl, Dio? dio, this.interceptors}) {
     _dio = dio ?? Dio();
+
+    // На веб платформе используем больший timeout
+    final connectTimeout = kIsWeb ? const Duration(seconds: 30) : const Duration(milliseconds: _defaultConnectTimeout);
+    final receiveTimeout = kIsWeb ? const Duration(seconds: 30) : const Duration(milliseconds: _defaultRecieveTimeout);
+
     _dio
       ..options.baseUrl = baseUrl
-      ..options.connectTimeout = const Duration(milliseconds: _defaultConnectTimeout)
-      ..options.receiveTimeout = const Duration(milliseconds: _defaultRecieveTimeout)
+      ..options.connectTimeout = connectTimeout
+      ..options.receiveTimeout = receiveTimeout
       ..httpClientAdapter
       ..options.headers = {'Content-type': 'application/json; charset=UTF-8'};
 
-    // if (Platform.isAndroid) {
-    //   (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
-    //     client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-
-    //     return client;
-    //   };
-    // }
+    // На мобильных платформах обходим SSL проверку для самоподписанных сертификатов
+    if (!kIsWeb) {
+      try {
+        _setupHttpClientSSL();
+      } catch (_) {
+        // Игнорируем ошибки на других платформах
+      }
+    }
 
     _addRefreshInterseptor();
     // Отключение показа ответов сервера на запрос в консоли
@@ -77,6 +83,29 @@ class ApiDatasourceDio extends ApiDatasource {
     _dio.interceptors.add(
       QueuedInterceptorsWrapper(
         onError: (error, handler) async {
+          // Обработка SSL ошибок на всех платформах (особенно для самоподписанных сертификатов)
+          if (error.type == DioExceptionType.badCertificate ||
+              error.type == DioExceptionType.connectionTimeout ||
+              error.type == DioExceptionType.receiveTimeout ||
+              (error.error is String && (error.error as String).contains('SSL'))) {
+            // Логируем ошибку для отладки
+            print('SSL/Connection error detected: ${error.message}');
+
+            // Пытаемся повторить запрос
+            try {
+              final response = await _dio.request<dynamic>(
+                error.requestOptions.path,
+                options: Options(method: error.requestOptions.method, headers: error.requestOptions.headers),
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
+              );
+              return handler.resolve(response);
+            } catch (e) {
+              print('Retry failed: $e');
+              return handler.reject(error);
+            }
+          }
+
           if (error.response?.statusCode == 401) {
             final onRefresh = _onRefresh;
             final onLogout = _onLogout;
@@ -245,5 +274,21 @@ class ApiDatasourceDio extends ApiDatasource {
     } catch (e) {
       rethrow;
     }
+  }
+
+  // Этот метод будет только в мобильной версии во время runtime
+  void _setupHttpClientSSL() {
+    try {
+      final adapter = _dio.httpClientAdapter as dynamic;
+      adapter.onHttpClientCreate = (dynamic client) {
+        try {
+          // Используем имя типа как строку чтобы избежать compile time issues
+          if (client.runtimeType.toString().contains('HttpClient')) {
+            client.badCertificateCallback = (_, __, ___) => true;
+          }
+        } catch (_) {}
+        return client;
+      };
+    } catch (_) {}
   }
 }

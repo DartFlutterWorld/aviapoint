@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true" />
+    <!-- Разрешаем cleartext (HTTP) для локальной разработки -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <!-- Доверяем системным сертификатам -->
+            <certificates src="system" />
+            <!-- Доверяем пользовательским сертификатам -->
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Специальная конфигурация для хостинга с самоподписанным сертификатом -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">83.166.246.205</domain>
+        <domain includeSubdomains="true">your-domain.com</domain>
+        <trust-anchors>
+            <!-- Доверяем системным сертификатам -->
+            <certificates src="system" />
+            <!-- Доверяем пользовательским/самоподписанным сертификатам -->
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Для локальной разработки на эмуляторе -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
 </network-security-config>

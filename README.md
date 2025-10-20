@@ -5,3 +5,4 @@ fvm dart pub run build_runner build --delete-conflicting-outputs
 
 # Генерация иконок для андройд
 https://iconnaut.com/android.php#ready
+flutter build web --release
