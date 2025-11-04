@@ -60,7 +60,7 @@ void logOut(BuildContext context) async {
   }
 }
 
-final emptyQuestion = QuestionWithAnswersEntity(answers: List.empty(), questionId: 0, questionText: '');
+final emptyQuestion = QuestionWithAnswersEntity(answers: List.empty(), questionId: 0, questionText: '', categoryTitle: '', categoryId: 0);
 
 enum TestMode { training, standart }
 

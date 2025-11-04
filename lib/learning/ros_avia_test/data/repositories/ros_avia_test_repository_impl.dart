@@ -154,25 +154,6 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
       // Маппируем через стандартный маппер
       var entities = QuestionWithAnswersMapper.toEntities(response);
 
-      // Если у вопроса нет categoryId, берем из выбранных категорий
-      if (categoryIdsList.isNotEmpty) {
-        final defaultCategoryId = categoryIdsList.first;
-        entities = entities.map((e) {
-          if (e.categoryId == null) {
-            return QuestionWithAnswersEntity(
-              questionId: e.questionId,
-              questionText: e.questionText,
-              answers: e.answers,
-              explanation: e.explanation,
-              correctAnswer: e.correctAnswer,
-              categoryTitle: e.categoryTitle,
-              categoryId: defaultCategoryId,
-            );
-          }
-          return e;
-        }).toList();
-      }
-
       return right(entities);
     } on DioException catch (e) {
       AppTalker.error('DioException fetching questions', e, StackTrace.current);

@@ -42,8 +42,8 @@ _$QuestionWithAnswersDtoImpl _$$QuestionWithAnswersDtoImplFromJson(
   answers: (json['answers'] as List<dynamic>)
       .map((e) => AnswerDto.fromJson(e as Map<String, dynamic>))
       .toList(),
-  categoryTitle: json['category_title'] as String?,
-  categoryId: (json['category_id'] as num?)?.toInt(),
+  categoryTitle: json['category_title'] as String,
+  categoryId: (json['category_id'] as num).toInt(),
 );
 
 Map<String, dynamic> _$$QuestionWithAnswersDtoImplToJson(

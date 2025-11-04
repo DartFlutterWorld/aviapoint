@@ -27,8 +27,8 @@ abstract class QuestionWithAnswersDto with _$QuestionWithAnswersDto {
     String? explanation,
     int? correctAnswer,
     required List<AnswerDto> answers,
-    String? categoryTitle,
-    int? categoryId,
+    required String categoryTitle,
+    required int categoryId,
   }) = _QuestionWithAnswersDto;
 
   factory QuestionWithAnswersDto.fromJson(Map<String, dynamic> json) => _$QuestionWithAnswersDtoFromJson(json);

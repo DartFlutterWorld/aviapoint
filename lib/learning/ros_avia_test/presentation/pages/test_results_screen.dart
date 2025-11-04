@@ -6,7 +6,6 @@ import 'package:aviapoint/core/presentation/widgets/diagram_widget.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
-import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
@@ -73,12 +72,6 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
       // Сначала загружаем все категории чтобы заполнить кэш
       await _loadCategoriesCache();
 
-      // Проверим есть ли вообще ответы в БД
-      final hasActive = await db.hasActiveTest(certificateTypeId);
-
-      // Проверим что в SelectedQuestions
-      final selectedQuestions = await db.getSelectedQuestions(certificateTypeId);
-
       final answers = await db.getAnswersByCertificateType(certificateTypeId);
 
       return answers;
@@ -108,13 +101,14 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
     final grouped = <String, List<TestAnswer>>{};
 
     for (final answer in answers) {
-      // Получаем название категории из кэша вопросов по questionId
+      // Получаем название категории из кэша по questionId
       final question = _questionsMap[answer.questionId];
-      final categoryName = question?.categoryTitle ?? 'Без категории';
+      final categoryKey = question?.categoryTitle ?? 'Категория ${answer.categoryId}';
 
-      grouped.putIfAbsent(categoryName, () => []);
-      grouped[categoryName]!.add(answer);
+      grouped.putIfAbsent(categoryKey, () => []);
+      grouped[categoryKey]!.add(answer);
     }
+
     return grouped;
   }
 
@@ -155,17 +149,20 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             questionId: answer.questionId,
                             categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Без категории',
                           ).catchError((Object error) {
-                            print('Error opening question modal: $error');
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка при открытии вопроса')));
                             }
                           });
-                        } catch (e) {
-                          print('Error in onTap: $e');
-                        }
+                        } catch (e) {}
                       },
                       child: ChipsWidget(
-                        questionWithAnswers: QuestionWithAnswersEntity(questionId: answer.questionId, questionText: '', answers: []),
+                        questionWithAnswers: QuestionWithAnswersEntity(
+                          questionId: answer.questionId,
+                          questionText: '',
+                          answers: [],
+                          categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Категория ${answer.categoryId}',
+                          categoryId: answer.categoryId,
+                        ),
                         colorBackground: isCorrect ? const Color(0xFFD8F9EC) : const Color(0xFFFFE0E0),
                         colorTitle: isCorrect ? const Color(0xFF15D585) : const Color(0xFFFF6B6B),
                       ),

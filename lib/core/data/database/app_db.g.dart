@@ -772,9 +772,9 @@ class $TestAnswersTable extends TestAnswers
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
     'category_id',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.int,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _isCorrectMeta = const VerificationMeta(
     'isCorrect',
@@ -849,6 +849,8 @@ class $TestAnswersTable extends TestAnswers
         _categoryIdMeta,
         categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_categoryIdMeta);
     }
     if (data.containsKey('is_correct')) {
       context.handle(
@@ -888,7 +890,7 @@ class $TestAnswersTable extends TestAnswers
       categoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}category_id'],
-      ),
+      )!,
       isCorrect: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_correct'],
@@ -907,14 +909,14 @@ class TestAnswer extends DataClass implements Insertable<TestAnswer> {
   final int certificateTypeId;
   final int questionId;
   final int selectedAnswerId;
-  final int? categoryId;
+  final int categoryId;
   final bool? isCorrect;
   const TestAnswer({
     required this.id,
     required this.certificateTypeId,
     required this.questionId,
     required this.selectedAnswerId,
-    this.categoryId,
+    required this.categoryId,
     this.isCorrect,
   });
   @override
@@ -924,9 +926,7 @@ class TestAnswer extends DataClass implements Insertable<TestAnswer> {
     map['certificate_type_id'] = Variable<int>(certificateTypeId);
     map['question_id'] = Variable<int>(questionId);
     map['selected_answer_id'] = Variable<int>(selectedAnswerId);
-    if (!nullToAbsent || categoryId != null) {
-      map['category_id'] = Variable<int>(categoryId);
-    }
+    map['category_id'] = Variable<int>(categoryId);
     if (!nullToAbsent || isCorrect != null) {
       map['is_correct'] = Variable<bool>(isCorrect);
     }
@@ -939,9 +939,7 @@ class TestAnswer extends DataClass implements Insertable<TestAnswer> {
       certificateTypeId: Value(certificateTypeId),
       questionId: Value(questionId),
       selectedAnswerId: Value(selectedAnswerId),
-      categoryId: categoryId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(categoryId),
+      categoryId: Value(categoryId),
       isCorrect: isCorrect == null && nullToAbsent
           ? const Value.absent()
           : Value(isCorrect),
@@ -958,7 +956,7 @@ class TestAnswer extends DataClass implements Insertable<TestAnswer> {
       certificateTypeId: serializer.fromJson<int>(json['certificateTypeId']),
       questionId: serializer.fromJson<int>(json['questionId']),
       selectedAnswerId: serializer.fromJson<int>(json['selectedAnswerId']),
-      categoryId: serializer.fromJson<int?>(json['categoryId']),
+      categoryId: serializer.fromJson<int>(json['categoryId']),
       isCorrect: serializer.fromJson<bool?>(json['isCorrect']),
     );
   }
@@ -970,7 +968,7 @@ class TestAnswer extends DataClass implements Insertable<TestAnswer> {
       'certificateTypeId': serializer.toJson<int>(certificateTypeId),
       'questionId': serializer.toJson<int>(questionId),
       'selectedAnswerId': serializer.toJson<int>(selectedAnswerId),
-      'categoryId': serializer.toJson<int?>(categoryId),
+      'categoryId': serializer.toJson<int>(categoryId),
       'isCorrect': serializer.toJson<bool?>(isCorrect),
     };
   }
@@ -980,14 +978,14 @@ class TestAnswer extends DataClass implements Insertable<TestAnswer> {
     int? certificateTypeId,
     int? questionId,
     int? selectedAnswerId,
-    Value<int?> categoryId = const Value.absent(),
+    int? categoryId,
     Value<bool?> isCorrect = const Value.absent(),
   }) => TestAnswer(
     id: id ?? this.id,
     certificateTypeId: certificateTypeId ?? this.certificateTypeId,
     questionId: questionId ?? this.questionId,
     selectedAnswerId: selectedAnswerId ?? this.selectedAnswerId,
-    categoryId: categoryId.present ? categoryId.value : this.categoryId,
+    categoryId: categoryId ?? this.categoryId,
     isCorrect: isCorrect.present ? isCorrect.value : this.isCorrect,
   );
   TestAnswer copyWithCompanion(TestAnswersCompanion data) {
@@ -1048,7 +1046,7 @@ class TestAnswersCompanion extends UpdateCompanion<TestAnswer> {
   final Value<int> certificateTypeId;
   final Value<int> questionId;
   final Value<int> selectedAnswerId;
-  final Value<int?> categoryId;
+  final Value<int> categoryId;
   final Value<bool?> isCorrect;
   const TestAnswersCompanion({
     this.id = const Value.absent(),
@@ -1063,11 +1061,12 @@ class TestAnswersCompanion extends UpdateCompanion<TestAnswer> {
     required int certificateTypeId,
     required int questionId,
     required int selectedAnswerId,
-    this.categoryId = const Value.absent(),
+    required int categoryId,
     this.isCorrect = const Value.absent(),
   }) : certificateTypeId = Value(certificateTypeId),
        questionId = Value(questionId),
-       selectedAnswerId = Value(selectedAnswerId);
+       selectedAnswerId = Value(selectedAnswerId),
+       categoryId = Value(categoryId);
   static Insertable<TestAnswer> custom({
     Expression<int>? id,
     Expression<int>? certificateTypeId,
@@ -1091,7 +1090,7 @@ class TestAnswersCompanion extends UpdateCompanion<TestAnswer> {
     Value<int>? certificateTypeId,
     Value<int>? questionId,
     Value<int>? selectedAnswerId,
-    Value<int?>? categoryId,
+    Value<int>? categoryId,
     Value<bool?>? isCorrect,
   }) {
     return TestAnswersCompanion(
@@ -1556,7 +1555,7 @@ typedef $$TestAnswersTableCreateCompanionBuilder =
       required int certificateTypeId,
       required int questionId,
       required int selectedAnswerId,
-      Value<int?> categoryId,
+      required int categoryId,
       Value<bool?> isCorrect,
     });
 typedef $$TestAnswersTableUpdateCompanionBuilder =
@@ -1565,7 +1564,7 @@ typedef $$TestAnswersTableUpdateCompanionBuilder =
       Value<int> certificateTypeId,
       Value<int> questionId,
       Value<int> selectedAnswerId,
-      Value<int?> categoryId,
+      Value<int> categoryId,
       Value<bool?> isCorrect,
     });
 
@@ -1717,7 +1716,7 @@ class $$TestAnswersTableTableManager
                 Value<int> certificateTypeId = const Value.absent(),
                 Value<int> questionId = const Value.absent(),
                 Value<int> selectedAnswerId = const Value.absent(),
-                Value<int?> categoryId = const Value.absent(),
+                Value<int> categoryId = const Value.absent(),
                 Value<bool?> isCorrect = const Value.absent(),
               }) => TestAnswersCompanion(
                 id: id,
@@ -1733,7 +1732,7 @@ class $$TestAnswersTableTableManager
                 required int certificateTypeId,
                 required int questionId,
                 required int selectedAnswerId,
-                Value<int?> categoryId = const Value.absent(),
+                required int categoryId,
                 Value<bool?> isCorrect = const Value.absent(),
               }) => TestAnswersCompanion.insert(
                 id: id,

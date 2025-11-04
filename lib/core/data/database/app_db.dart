@@ -39,7 +39,7 @@ class TestAnswers extends Table {
   IntColumn get certificateTypeId => integer()();
   IntColumn get questionId => integer()();
   IntColumn get selectedAnswerId => integer()();
-  IntColumn? get categoryId => integer().nullable()(); // Сделано nullable для миграции
+  IntColumn get categoryId => integer()(); // categoryId теперь обязательное поле
   BoolColumn? get isCorrect => boolean().nullable()();
 
   @override
@@ -53,7 +53,7 @@ class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -89,6 +89,11 @@ class AppDb extends _$AppDb {
       }
       if (from < 12) {
         // Пересоздаем testAnswers с новым полем categoryId
+        await m.deleteTable('test_answers');
+        await m.createTable(testAnswers);
+      }
+      if (from < 13) {
+        // Пересоздаем testAnswers чтобы сделать categoryId обязательным (non-nullable)
         await m.deleteTable('test_answers');
         await m.createTable(testAnswers);
       }
@@ -146,8 +151,17 @@ class AppDb extends _$AppDb {
   /// Сохранить выбранные вопросы для теста
   Future<void> saveSelectedQuestions({required int certificateTypeId, required List<int> questionIds}) async {
     await delete(selectedQuestions).go();
-    for (final questionId in questionIds) {
-      await into(selectedQuestions).insert(SelectedQuestionsCompanion(certificateTypeId: Value(certificateTypeId), questionId: Value(questionId)));
+
+    // Удаляем дубликаты из списка
+    final uniqueQuestionIds = questionIds.toSet().toList();
+
+    for (final questionId in uniqueQuestionIds) {
+      try {
+        await into(selectedQuestions).insert(SelectedQuestionsCompanion(certificateTypeId: Value(certificateTypeId), questionId: Value(questionId)));
+      } catch (e) {
+        // Игнорируем ошибку дубликата если она все же возникнет
+        continue;
+      }
     }
   }
 
@@ -160,12 +174,12 @@ class AppDb extends _$AppDb {
   // ---------------- TEST ANSWERS ----------------
 
   /// Сохранить ответ на вопрос
-  Future<int> saveTestAnswer({required int certificateTypeId, required int questionId, required int selectedAnswerId, int? categoryId, required bool? isCorrect}) async {
+  Future<int> saveTestAnswer({required int certificateTypeId, required int questionId, required int selectedAnswerId, required int categoryId, required bool? isCorrect}) async {
     final existingAnswer = await getAnswerForQuestion(certificateTypeId: certificateTypeId, questionId: questionId);
 
     if (existingAnswer != null) {
       await (update(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).write(
-        TestAnswersCompanion(selectedAnswerId: Value(selectedAnswerId), categoryId: categoryId != null ? Value(categoryId) : const Value.absent(), isCorrect: Value(isCorrect)),
+        TestAnswersCompanion(selectedAnswerId: Value(selectedAnswerId), categoryId: Value(categoryId), isCorrect: Value(isCorrect)),
       );
       return existingAnswer.id;
     } else {
@@ -174,7 +188,7 @@ class AppDb extends _$AppDb {
           certificateTypeId: Value(certificateTypeId),
           questionId: Value(questionId),
           selectedAnswerId: Value(selectedAnswerId),
-          categoryId: categoryId != null ? Value(categoryId) : const Value.absent(),
+          categoryId: Value(categoryId),
           isCorrect: Value(isCorrect),
         ),
       );

@@ -18,7 +18,7 @@ class AppState with ChangeNotifier {
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
 
-  bool _useLocalServer = false;
+  bool _useLocalServer = true;
 
   bool get useLocalServer => _useLocalServer;
 

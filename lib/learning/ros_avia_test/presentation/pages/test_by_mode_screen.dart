@@ -31,6 +31,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   late QuestionsByTypeCertificateAndCategoriesBloc questionsByTypeCertificateAndCategoriesBloc;
 
   final ValueNotifier<int> indexQuestion = ValueNotifier<int>(0);
+  int? currentSelectedAnswerIndex; // Отслеживаем выбранный ответ для текущего вопроса
 
   @override
   void initState() {
@@ -111,17 +112,9 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                               question: filteredQuestions[indexQuestionValue],
                               testMode: BlocProvider.of<RosAviaTestCubit>(context).state.testMode,
                               buttonHint: value.buttonHint,
-                              onStateChanged: (selectedAnswerIndex, showResults) async {
-                                if (selectedAnswerIndex != null) {
-                                  final question = filteredQuestions[indexQuestionValue];
-                                  await getIt<AppDb>().saveTestAnswer(
-                                    certificateTypeId: widget.typeCertificateId,
-                                    questionId: question.questionId,
-                                    selectedAnswerId: selectedAnswerIndex,
-                                    categoryId: question.categoryId ?? 0,
-                                    isCorrect: question.answers[selectedAnswerIndex].isCorrect,
-                                  );
-                                }
+                              onStateChanged: (selectedAnswerIndex, showResults) {
+                                // Только сохраняем выбранный ответ в памяти (не в БД)
+                                currentSelectedAnswerIndex = selectedAnswerIndex;
                               },
                             );
                           },
@@ -136,7 +129,21 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                               title: 'Следующий',
                               verticalPadding: 8.h,
                               onPressed: () async {
+                                // Сохраняем ответ в БД перед переходом к следующему вопросу
+                                if (currentSelectedAnswerIndex != null) {
+                                  final question = filteredQuestions[indexQuestion.value];
+                                  await getIt<AppDb>().saveTestAnswer(
+                                    certificateTypeId: widget.typeCertificateId,
+                                    questionId: question.questionId,
+                                    selectedAnswerId: currentSelectedAnswerIndex!,
+                                    categoryId: question.categoryId,
+                                    isCorrect: question.answers[currentSelectedAnswerIndex!].isCorrect,
+                                  );
+                                }
+
+                                // Переходим к следующему вопросу
                                 if (indexQuestion.value + 1 < filteredQuestions.length) {
+                                  currentSelectedAnswerIndex = null; // Сбрасываем выбор для нового вопроса
                                   indexQuestion.value++;
                                 } else {
                                   // Все вопросы ответлены - переходим на результаты БЕЗ очистки
