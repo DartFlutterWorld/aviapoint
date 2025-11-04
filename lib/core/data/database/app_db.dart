@@ -1,5 +1,4 @@
 // lib/data/app_db.dart
-import 'dart:convert';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:drift/drift.dart';
@@ -23,26 +22,38 @@ class AppSettings extends Table {
   Set<Column> get primaryKey => {certificateTypeId};
 }
 
-/// Ответы пользователя БЕЗ попыток.
-/// Храним последний ответ для пары (certificateTypeId, questionId).
-class UserAnswers extends Table {
-  IntColumn get certificateTypeId => integer()(); // тип сертификата (твоя специализация)
-  IntColumn? get categoryId => integer()(); // для фильтрации по выбранным темам
-  TextColumn? get categoryName => text()(); // название категории для группировки
-  IntColumn get questionId => integer()(); // ID вопроса
-  TextColumn? get selectedAnswerIdsJson => text()(); // JSON: [id1, id2, ...]
-  BoolColumn? get isCorrect => boolean().nullable()(); // можно заполнять сразу/позже
+/// Выбранные вопросы для текущего теста
+class SelectedQuestions extends Table {
+  IntColumn get certificateTypeId => integer()();
+  IntColumn get questionId => integer()();
 
   @override
-  Set<Column> get primaryKey => {certificateTypeId, questionId};
+  List<Set<Column>> get uniqueKeys => [
+    {certificateTypeId, questionId},
+  ];
 }
 
-@DriftDatabase(tables: [AppSettings, UserAnswers])
+/// Ответы на вопросы тестирования
+class TestAnswers extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get certificateTypeId => integer()();
+  IntColumn get questionId => integer()();
+  IntColumn get selectedAnswerId => integer()();
+  IntColumn? get categoryId => integer().nullable()(); // Сделано nullable для миграции
+  BoolColumn? get isCorrect => boolean().nullable()();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {certificateTypeId, questionId},
+  ];
+}
+
+@DriftDatabase(tables: [AppSettings, SelectedQuestions, TestAnswers])
 class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -53,26 +64,38 @@ class AppDb extends _$AppDb {
         await m.addColumn(appSettings, appSettings.image);
       }
       if (from < 4) {
-        // Пересоздаем таблицу userAnswers с первичным ключом
-        // Это необходимо для работы insertOnConflictUpdate()
-        await m.deleteTable('user_answers');
-        await m.createTable(userAnswers);
-      }
-      if (from < 5) {
-        // Пересоздаем таблицу userAnswers чтобы добавить столбец categoryName
-        await m.deleteTable('user_answers');
-        await m.createTable(userAnswers);
-      }
-      if (from < 6) {
         // Пересоздаем таблицу appSettings чтобы добавить столбец mixQuestions
         await m.deleteTable('app_settings');
         await m.createTable(appSettings);
+      }
+      if (from < 5) {
+        // Создаем новые таблицы для сессий и ответов
+        await m.createTable(selectedQuestions);
+        await m.createTable(testAnswers);
+      }
+      if (from < 9) {
+        // Пересоздаем таблицу testAnswers с упрощенной структурой
+        await m.deleteTable('test_answers');
+        await m.createTable(testAnswers);
+      }
+      if (from < 10) {
+        // Удаляем testSessions и создаем selectedQuestions
+        await m.deleteTable('test_sessions');
+        await m.createTable(selectedQuestions);
+      }
+      if (from < 11) {
+        // Добавляем categoryId в TestAnswers
+        await m.addColumn(testAnswers, testAnswers.categoryId);
+      }
+      if (from < 12) {
+        // Пересоздаем testAnswers с новым полем categoryId
+        await m.deleteTable('test_answers');
+        await m.createTable(testAnswers);
       }
     },
   );
 
   // ---------------- SETTINGS ----------------
-  Future<AppSetting?> getSettings() async => (await (select(appSettings)).getSingleOrNull());
 
   /// Настройки для конкретного типа свидетельства
   Future<AppSetting?> getSettingsForCertificate({required int certificateTypeId}) async {
@@ -118,54 +141,93 @@ class AppDb extends _$AppDb {
     }
   }
 
-  // ---------------- ANSWERS (без попыток) ----------------
+  // ---- SELECTED QUESTIONS ----
 
-  /// Upsert: пишет последний ответ пользователя на вопрос
-  Future<void> upsertAnswer({
-    required int certificateTypeId,
-    required int categoryId,
-    required String categoryName,
-    required int questionId,
-    required List<int> selectedAnswerIds,
-    bool? isCorrect,
-    int timeSpentSec = 0,
-  }) async {
-    await into(userAnswers).insertOnConflictUpdate(
-      UserAnswer(
-        certificateTypeId: certificateTypeId,
-        categoryId: categoryId,
-        categoryName: categoryName,
-        questionId: questionId,
-        selectedAnswerIdsJson: jsonEncode(selectedAnswerIds),
-        isCorrect: isCorrect,
-      ),
-    );
+  /// Сохранить выбранные вопросы для теста
+  Future<void> saveSelectedQuestions({required int certificateTypeId, required List<int> questionIds}) async {
+    await delete(selectedQuestions).go();
+    for (final questionId in questionIds) {
+      await into(selectedQuestions).insert(SelectedQuestionsCompanion(certificateTypeId: Value(certificateTypeId), questionId: Value(questionId)));
+    }
   }
 
-  /// Ответ по конкретному вопросу (для префилла UI)
-  Future<UserAnswer?> getAnswer({required int certificateTypeId, required int questionId}) =>
-      (select(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId) & u.questionId.equals(questionId))).getSingleOrNull();
+  /// Получить все выбранные вопросы
+  Future<List<SelectedQuestion>> getSelectedQuestions(int certificateTypeId) => (select(selectedQuestions)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
 
-  /// Все ответы по выбранным категориям
-  Future<List<UserAnswer>> getAnswersForCategories({required int certificateTypeId, required Iterable<int> categoryIds}) =>
-      (select(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId) & u.categoryId.isIn(categoryIds.toList()))).get();
+  /// Удалить все выбранные вопросы
+  Future<int> deleteSelectedQuestions(int certificateTypeId) => (delete(selectedQuestions)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
 
-  /// Стрим ответов по выбранным категориям (удобно для живой статистики)
-  Stream<List<UserAnswer>> watchAnswersForCategories({required int certificateTypeId, required Iterable<int> categoryIds}) =>
-      (select(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId) & u.categoryId.isIn(categoryIds.toList()))).watch();
+  // ---------------- TEST ANSWERS ----------------
 
-  /// Сброс ответов (например, начать «с чистого листа» по выбранным темам)
-  Future<int> resetAnswersForCategories({required int certificateTypeId, required Iterable<int> categoryIds}) =>
-      (delete(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId) & u.categoryId.isIn(categoryIds.toList()))).go();
+  /// Сохранить ответ на вопрос
+  Future<int> saveTestAnswer({required int certificateTypeId, required int questionId, required int selectedAnswerId, int? categoryId, required bool? isCorrect}) async {
+    final existingAnswer = await getAnswerForQuestion(certificateTypeId: certificateTypeId, questionId: questionId);
 
-  /// Удаляем все ответы для типа сертификата
-  Future<int> clearAllAnswers({required int certificateTypeId}) => (delete(userAnswers)..where((u) => u.certificateTypeId.equals(certificateTypeId))).go();
+    if (existingAnswer != null) {
+      await (update(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).write(
+        TestAnswersCompanion(selectedAnswerId: Value(selectedAnswerId), categoryId: categoryId != null ? Value(categoryId) : const Value.absent(), isCorrect: Value(isCorrect)),
+      );
+      return existingAnswer.id;
+    } else {
+      return into(testAnswers).insert(
+        TestAnswersCompanion(
+          certificateTypeId: Value(certificateTypeId),
+          questionId: Value(questionId),
+          selectedAnswerId: Value(selectedAnswerId),
+          categoryId: categoryId != null ? Value(categoryId) : const Value.absent(),
+          isCorrect: Value(isCorrect),
+        ),
+      );
+    }
+  }
 
-  /// Быстрая статистика по выбранным темам
-  Future<({int answered, int correct})> getStats({required int certificateTypeId, required Iterable<int> categoryIds}) async {
-    final list = await getAnswersForCategories(certificateTypeId: certificateTypeId, categoryIds: categoryIds);
-    final answered = list.length;
-    final correct = list.where((a) => a.isCorrect == true).length;
-    return (answered: answered, correct: correct);
+  /// Получить все ответы по типу сертификата
+  Future<List<TestAnswer>> getAnswersByCertificateType(int certificateTypeId) => (select(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
+
+  /// Проверить есть ли хоть какие-то ответы (активный тест)
+  Future<bool> hasActiveTest(int certificateTypeId) async {
+    final answers = await (select(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
+    AppTalker.error('🔴 hasActiveTest: certificateTypeId=$certificateTypeId, found=${answers.length} answers');
+    return answers.isNotEmpty;
+  }
+
+  /// Получить количество неотвеченных вопросов
+  Future<int> getUnansweredQuestionsCount(int certificateTypeId) async {
+    final selectedQuestions = await getSelectedQuestions(certificateTypeId);
+    AppTalker.error('🔴 getUnansweredQuestionsCount: selectedQuestions=${selectedQuestions.length}');
+
+    final answeredQuestions = await getAnswersByCertificateType(certificateTypeId);
+    AppTalker.error('🔴 getUnansweredQuestionsCount: answeredQuestions=${answeredQuestions.length}');
+
+    final answeredIds = answeredQuestions.map((a) => a.questionId).toSet();
+    final unanswered = selectedQuestions.where((q) => !answeredIds.contains(q.questionId)).length;
+    AppTalker.error('🔴 getUnansweredQuestionsCount: unanswered=$unanswered');
+
+    return unanswered;
+  }
+
+  /// Получить ответ на конкретный вопрос
+  Future<TestAnswer?> getAnswerForQuestion({required int certificateTypeId, required int questionId}) =>
+      (select(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).getSingleOrNull();
+
+  /// Удалить все ответы для типа сертификата
+  Future<int> deleteAnswersByCertificateType(int certificateTypeId) async {
+    AppTalker.error('🔴 deleteAnswersByCertificateType: Deleting answers for certificateTypeId=$certificateTypeId');
+    final deletedCount = await (delete(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
+    AppTalker.error('🔴 deleteAnswersByCertificateType: Deleted $deletedCount answer(s)');
+    return deletedCount;
+  }
+
+  /// Очистить всю БД (удалить все вопросы и ответы)
+  Future<void> clearAllData() async {
+    AppTalker.error('🔴 clearAllData: Starting database clear...');
+
+    final deletedAnswers = await delete(testAnswers).go();
+    AppTalker.error('🔴 clearAllData: Deleted $deletedAnswers test answers');
+
+    final deletedQuestions = await delete(selectedQuestions).go();
+    AppTalker.error('🔴 clearAllData: Deleted $deletedQuestions selected questions');
+
+    AppTalker.error('🔴 clearAllData: Database cleared! Total deletions - Answers: $deletedAnswers, Questions: $deletedQuestions');
   }
 }

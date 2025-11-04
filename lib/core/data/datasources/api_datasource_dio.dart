@@ -1,14 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
-
-const _defaultConnectTimeout = Duration.millisecondsPerMinute;
-const _defaultRecieveTimeout = Duration.millisecondsPerMinute;
+import 'dart:io';
 
 /// [Dio] реализация поставщика данных API.
 class ApiDatasourceDio extends ApiDatasource {
-  late Dio _dio;
   final String baseUrl;
   final List<Interceptor>? interceptors;
   Future<String?> Function()? _onRefresh;
@@ -16,55 +12,56 @@ class ApiDatasourceDio extends ApiDatasource {
   DateTime? updateTokenTime;
   String? updatedToken;
 
-  String? _accessToken;
   String? _refreshToken;
 
+  /// Dio client
+  late final Dio _dio;
+
   /// baseUrl - базовая ссылка на API
-  /// dio - экземпляр [Dio]
-  /// interceptors - интерсепторы для [Dio]
+  /// dio - already configured Dio instance
+  /// interceptors - list of interceptors
   ApiDatasourceDio({required this.baseUrl, Dio? dio, this.interceptors}) {
     _dio = dio ?? Dio();
+    _dio.options
+      ..baseUrl = baseUrl
+      ..connectTimeout = const Duration(seconds: 10)
+      ..receiveTimeout = const Duration(seconds: 10);
 
-    // На веб платформе используем больший timeout
-    final connectTimeout = kIsWeb ? const Duration(seconds: 30) : const Duration(milliseconds: _defaultConnectTimeout);
-    final receiveTimeout = kIsWeb ? const Duration(seconds: 30) : const Duration(milliseconds: _defaultRecieveTimeout);
-
-    _dio
-      ..options.baseUrl = baseUrl
-      ..options.connectTimeout = connectTimeout
-      ..options.receiveTimeout = receiveTimeout
-      ..httpClientAdapter
-      ..options.headers = {'Content-type': 'application/json; charset=UTF-8'};
-
-    // На мобильных платформах обходим SSL проверку для самоподписанных сертификатов
-    if (!kIsWeb) {
-      try {
-        _setupHttpClientSSL();
-      } catch (_) {
-        // Игнорируем ошибки на других платформах
-      }
+    if (kDebugMode) {
+      _dio.interceptors.add(LogInterceptor(responseBody: true, requestBody: true));
     }
 
-    _addRefreshInterseptor();
-    // Отключение показа ответов сервера на запрос в консоли
-    _addloggerInterseptor();
+    if (interceptors?.isNotEmpty == true) {
+      _dio.interceptors.addAll(interceptors!);
+    }
+
+    if (kDebugMode) {
+      final adapter = _dio.httpClientAdapter as dynamic;
+      adapter?.onHttpClientCreate = (HttpClient client) {
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    }
+  }
+
+  /// Метод для переключения базового URL
+  void switchBaseUrl(String newBaseUrl) {
+    _dio.options.baseUrl = newBaseUrl;
   }
 
   // Метод для установки обоих токенов
   @override
   void setAuthTokens({required String accessToken, required String refreshToken, Future<String?> Function()? onRefresh, void Function()? onLogout}) {
-    _accessToken = accessToken;
+    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
     _refreshToken = refreshToken;
     _onRefresh = onRefresh;
     _onLogout = onLogout;
-    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
   }
 
   // Метод для обновления токенов
   @override
   void updateTokens({String? accessToken, String? refreshToken}) {
     if (accessToken != null) {
-      _accessToken = accessToken;
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
     }
     if (refreshToken != null) {
@@ -72,91 +69,7 @@ class ApiDatasourceDio extends ApiDatasource {
     }
   }
 
-  void _addloggerInterseptor() {
-    _dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: false, responseHeader: true, error: false, compact: true, maxWidth: 90));
-  }
-
   Dio get dio => _dio;
-
-  void _addRefreshInterseptor() {
-    _dio.interceptors.clear();
-    _dio.interceptors.add(
-      QueuedInterceptorsWrapper(
-        onError: (error, handler) async {
-          // Обработка SSL ошибок на всех платформах (особенно для самоподписанных сертификатов)
-          if (error.type == DioExceptionType.badCertificate ||
-              error.type == DioExceptionType.connectionTimeout ||
-              error.type == DioExceptionType.receiveTimeout ||
-              (error.error is String && (error.error as String).contains('SSL'))) {
-            // Логируем ошибку для отладки
-            print('SSL/Connection error detected: ${error.message}');
-
-            // Пытаемся повторить запрос
-            try {
-              final response = await _dio.request<dynamic>(
-                error.requestOptions.path,
-                options: Options(method: error.requestOptions.method, headers: error.requestOptions.headers),
-                data: error.requestOptions.data,
-                queryParameters: error.requestOptions.queryParameters,
-              );
-              return handler.resolve(response);
-            } catch (e) {
-              print('Retry failed: $e');
-              return handler.reject(error);
-            }
-          }
-
-          if (error.response?.statusCode == 401) {
-            final onRefresh = _onRefresh;
-            final onLogout = _onLogout;
-            final refreshToken = _refreshToken;
-
-            // Проверяем, что это не запрос на обновление токена
-            if (error.requestOptions.path.contains('/refresh')) {
-              onLogout?.call();
-              return handler.reject(error);
-            }
-
-            // Блокируем другие запросы пока обновляем токен
-            _onRefresh = null;
-            try {
-              if (onRefresh != null && refreshToken != null) {
-                // Проверяем, не пытаемся ли мы уже обновить токен
-                if (updateTokenTime == null || (updateTokenTime != null && DateTime.now().difference(updateTokenTime!).inMinutes > 1)) {
-                  updatedToken = await onRefresh();
-                }
-
-                if (updatedToken != null) {
-                  updateTokenTime = DateTime.now();
-                  error.requestOptions.headers["Authorization"] = _dio.options.headers['Authorization'] = 'Bearer $updatedToken';
-
-                  // Повторяем оригинальный запрос с новым токеном
-                  final cloneReq = await _dio.request<dynamic>(
-                    error.requestOptions.path,
-                    options: Options(method: error.requestOptions.method, headers: error.requestOptions.headers),
-                    data: error.requestOptions.data,
-                    queryParameters: error.requestOptions.queryParameters,
-                  );
-
-                  _onRefresh = onRefresh; // Восстанавливаем callback
-                  return handler.resolve(cloneReq);
-                }
-              }
-              onLogout?.call();
-              return handler.reject(error);
-            } catch (exc, stack) {
-              // logger.e("Error refresh token", exc, stack);
-              onLogout?.call();
-              return handler.reject(error);
-            } finally {
-              _onRefresh = onRefresh; // Всегда восстанавливаем callback
-            }
-          }
-          return handler.reject(error);
-        },
-      ),
-    );
-  }
 
   @override
   void delAuthHeader() {
@@ -274,21 +187,5 @@ class ApiDatasourceDio extends ApiDatasource {
     } catch (e) {
       rethrow;
     }
-  }
-
-  // Этот метод будет только в мобильной версии во время runtime
-  void _setupHttpClientSSL() {
-    try {
-      final adapter = _dio.httpClientAdapter as dynamic;
-      adapter.onHttpClientCreate = (dynamic client) {
-        try {
-          // Используем имя типа как строку чтобы избежать compile time issues
-          if (client.runtimeType.toString().contains('HttpClient')) {
-            client.badCertificateCallback = (_, __, ___) => true;
-          }
-        } catch (_) {}
-        return client;
-      };
-    } catch (_) {}
   }
 }

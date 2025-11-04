@@ -18,13 +18,7 @@ abstract class CategoriesEvent with _$CategoriesEvent {
 abstract class CategoriesState with _$CategoriesState {
   const CategoriesState._();
   const factory CategoriesState.loading() = LoadingCategoriesState;
-  const factory CategoriesState.error({
-    String? errorFromApi,
-    required String errorForUser,
-    String? statusCode,
-    StackTrace? stackTrace,
-    String? responseMessage,
-  }) = ErrorCategoriesState;
+  const factory CategoriesState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorCategoriesState;
   const factory CategoriesState.success({required List<RosAviaTestCategoryEntity> categories}) = SuccessCategoriesState;
   // const factory CategoriesState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdCategoriesState;
   // const factory CategoriesState.done() = DoneCategoriesState;
@@ -33,9 +27,7 @@ abstract class CategoriesState with _$CategoriesState {
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   final RosAviaTestRepository _rosAviaTestRepository;
 
-  CategoriesBloc({required RosAviaTestRepository rosAviaTestRepository})
-      : _rosAviaTestRepository = rosAviaTestRepository,
-        super(const LoadingCategoriesState()) {
+  CategoriesBloc({required RosAviaTestRepository rosAviaTestRepository}) : _rosAviaTestRepository = rosAviaTestRepository, super(const LoadingCategoriesState()) {
     on<CategoriesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -60,9 +52,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         );
       },
       (r) {
-        emit(
-          SuccessCategoriesState(categories: r),
-        );
+        emit(SuccessCategoriesState(categories: r));
       },
     );
   }

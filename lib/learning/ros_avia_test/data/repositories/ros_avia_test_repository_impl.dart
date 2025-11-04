@@ -144,13 +144,36 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
   }) async {
     try {
       final categoryIdsList = categoryIds.toList();
-      final categoryIdsString = categoryIdsList.join(','); // Преобразуем в "15,5"
+      final categoryIdsString = categoryIdsList.join(',');
       AppTalker.info('Fetching questions: typeSsertificatesId=$typeSsertificatesId, categoryIds=$categoryIdsString, mixAnswers=$mixAnswers, mixQuestions=$mixQuestions');
 
       final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(typeSsertificatesId.toString(), categoryIdsString, mixAnswers, mixQuestions);
 
       AppTalker.good('Received ${response.length} questions');
-      return right(QuestionWithAnswersMapper.toEntities(response));
+
+      // Маппируем через стандартный маппер
+      var entities = QuestionWithAnswersMapper.toEntities(response);
+
+      // Если у вопроса нет categoryId, берем из выбранных категорий
+      if (categoryIdsList.isNotEmpty) {
+        final defaultCategoryId = categoryIdsList.first;
+        entities = entities.map((e) {
+          if (e.categoryId == null) {
+            return QuestionWithAnswersEntity(
+              questionId: e.questionId,
+              questionText: e.questionText,
+              answers: e.answers,
+              explanation: e.explanation,
+              correctAnswer: e.correctAnswer,
+              categoryTitle: e.categoryTitle,
+              categoryId: defaultCategoryId,
+            );
+          }
+          return e;
+        }).toList();
+      }
+
+      return right(entities);
     } on DioException catch (e) {
       AppTalker.error('DioException fetching questions', e, StackTrace.current);
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));

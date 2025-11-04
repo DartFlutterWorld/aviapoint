@@ -47,6 +47,7 @@ class QuestionsByTypeCertificateAndCategoriesBloc extends Bloc<QuestionsByTypeCe
       mixAnswers: s?.mixAnswers ?? true,
       mixQuestions: s?.mixQuestions ?? true,
     );
+
     response.fold(
       (l) {
         emit(

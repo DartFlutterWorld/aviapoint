@@ -53,10 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Row(
                   children: [
                     SizedBox(width: 12.w),
-                    SvgPicture.asset(
-                      Pictures.arrowCircleLeft,
-                      height: 24,
-                    ),
+                    SvgPicture.asset(Pictures.arrowCircleLeft, height: 24),
                   ],
                 ),
               ),
@@ -68,14 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       shadowColor: kIsWeb ? null : shadowColor ?? const Color(0xFFA8A39C).withValues(alpha: 0.12),
       title: withLogo
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgPicture.asset(Pictures.logoTitle),
-              ],
-            )
+          ? Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [SvgPicture.asset(Pictures.logoTitle)])
           : Text(
               title,
               style: TextStyle(color: Color(0xFF223B76), fontSize: 14.sp, fontFamily: 'Geologica-Medium', fontWeight: FontWeight.bold),

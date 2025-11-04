@@ -61,12 +61,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         children: [
           Container(
             decoration: const BoxDecoration(color: Color(0xFFF9FDFF)),
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 16,
-              bottom: 30,
-            ),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -77,22 +72,15 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                     BlocProvider.of<AuthBloc>(context).add(const InitialAuthEvent());
                     AutoRouter.of(context).maybePop();
                   },
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: SvgPicture.asset(Pictures.closeAuth),
-                  ),
+                  child: Align(alignment: Alignment.topRight, child: SvgPicture.asset(Pictures.closeAuth)),
                 ),
                 Text(
                   'Авторизоваться',
-                  style: AppStyles.bold20s.copyWith(
-                    color: Color(0xFF2B373E),
-                  ),
+                  style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E)),
                   textAlign: TextAlign.center,
                 ),
                 // const SizedBox(height: 30),
-                PhoneFormField(
-                  onChange: handleChangePhone,
-                ),
+                PhoneFormField(onChange: handleChangePhone),
                 BlocBuilder<SmsBloc, SmsState>(
                   builder: (context, state) {
                     if (state is LoadingSmsState) {
@@ -112,25 +100,13 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                             textStyle: AppStyles.bold16s.copyWith(color: (phone.isEmpty || phone.length < 15 ? true : false) ? Colors.white.withOpacity(0.5) : Colors.white),
                             borderColor: Color(0xFF0A6EFA),
                             borderRadius: 46,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xff0064D6).withOpacity(0.25),
-                                blurRadius: 4,
-                                spreadRadius: 0,
-                                offset: Offset(
-                                  0.0,
-                                  7.0,
-                                ),
-                              ),
-                            ],
+                            boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                             onPressed: (phone.isEmpty || phone.length < 15 ? true : false)
                                 ? null
                                 : () {
-                                    BlocProvider.of<SmsBloc>(context).add(
-                                      GetSmsEvent(
-                                        phone: ('+7$phone').replaceAll(r'-', '').replaceAll(r'(', '').replaceAll(r')', '').replaceAll(r'(', '').replaceAll(r' ', ''),
-                                      ),
-                                    );
+                                    BlocProvider.of<SmsBloc>(
+                                      context,
+                                    ).add(GetSmsEvent(phone: ('+7$phone').replaceAll(r'-', '').replaceAll(r'(', '').replaceAll(r')', '').replaceAll(r'(', '').replaceAll(r' ', '')));
                                   },
                           ),
                         ],
@@ -229,26 +205,13 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                             textStyle: AppStyles.bold16s.copyWith(color: (phone.isEmpty || phone.length < 15 ? true : false) ? Colors.white.withOpacity(0.5) : Colors.white),
                             borderColor: Color(0xFF0A6EFA),
                             borderRadius: 46,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xff0064D6).withOpacity(0.25),
-                                blurRadius: 4,
-                                spreadRadius: 0,
-                                offset: Offset(
-                                  0.0,
-                                  7.0,
-                                ),
-                              ),
-                            ],
+                            boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                             onPressed: (phone.isEmpty || phone.length < 15 ? true : false || code.length != 4)
                                 ? null
                                 : () {
-                                    BlocProvider.of<AuthBloc>(context).add(
-                                      GetAuthEvent(
-                                        phone: ('+7$phone').replaceAll(r'-', '').replaceAll(r'(', '').replaceAll(r')', '').replaceAll(r'(', '').replaceAll(r' ', ''),
-                                        sms: code,
-                                      ),
-                                    );
+                                    BlocProvider.of<AuthBloc>(
+                                      context,
+                                    ).add(GetAuthEvent(phone: ('+7$phone').replaceAll(r'-', '').replaceAll(r'(', '').replaceAll(r')', '').replaceAll(r'(', '').replaceAll(r' ', ''), sms: code));
                                   },
                           ),
                         ],
@@ -258,13 +221,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(top: 16),
                         child: Column(
-                          children: [
-                            Text(
-                              state.errorForUser,
-                              style: AppStyles.bold15s,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                          children: [Text(state.errorForUser, style: AppStyles.bold15s, textAlign: TextAlign.center)],
                         ),
                       );
                     }

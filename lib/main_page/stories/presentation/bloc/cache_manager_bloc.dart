@@ -1,9 +1,5 @@
-import 'package:aviapoint/core/domain/entities/exception_network.dart';
-import 'package:aviapoint/core/domain/service_locator.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/bloc/emergency_categories_bloc.dart';
-import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/domain/repositories/story_repository.dart';
 import 'package:flutter/foundation.dart';
@@ -24,13 +20,7 @@ class CacheManagerEvent with _$CacheManagerEvent {
 class CacheManagerState with _$CacheManagerState {
   const CacheManagerState._();
   const factory CacheManagerState.loading() = LoadingCacheManagerState;
-  const factory CacheManagerState.error({
-    String? errorFromApi,
-    required String errorForUser,
-    String? statusCode,
-    StackTrace? stackTrace,
-    String? responseMessage,
-  }) = ErrorCacheManagerState;
+  const factory CacheManagerState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorCacheManagerState;
   const factory CacheManagerState.success({required List<StoryEntity> story}) = SuccessCacheManagerState;
 }
 
@@ -40,14 +30,8 @@ class CacheManagerBloc extends Bloc<CacheManagerEvent, CacheManagerState> {
   Set<int> allIdStories = {};
   final List<StoryEntity> stories = [];
 
-  CacheManagerBloc({required StoryRepository storyRepository})
-      : _storyRepository = storyRepository,
-        super(const LoadingCacheManagerState()) {
-    on<CacheManagerEvent>(
-      (event, emitter) => event.map(
-        getStories: (event) => _getStories(event, emitter),
-      ),
-    );
+  CacheManagerBloc({required StoryRepository storyRepository}) : _storyRepository = storyRepository, super(const LoadingCacheManagerState()) {
+    on<CacheManagerEvent>((event, emitter) => event.map(getStories: (event) => _getStories(event, emitter)));
   }
 
   Future<void> _getStories(GetStoriesCacheManagerEvent event, Emitter<CacheManagerState> emit) async {
@@ -129,8 +113,9 @@ class CacheManagerBloc extends Bloc<CacheManagerEvent, CacheManagerState> {
   }
 
   void cacheStor(List<StoryEntity> data) async {
+    final appState = getIt<AppState>();
     for (var it in data) {
-      await getIt<DefaultCacheManager>().getSingleFile('$backUrl${it.image}');
+      await getIt<DefaultCacheManager>().getSingleFile('${appState.currentServerUrl}${it.image}');
       debugPrint('Фото сторик загружен ${it.image}');
     }
   }

@@ -31,12 +31,13 @@ import 'package:aviapoint/profile_page/profile/data/repositories/profile_reposit
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get_it/get_it.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/questions_by_type_certificate_and_categories_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   final appRouter = AppRouter();
-  final dataSource = ApiDatasourceDio(baseUrl: '$backUrl');
+  final dataSource = ApiDatasourceDio(baseUrl: getBackUrl());
 
   // Регистрируем ApiDatasource и другие зависимости, которые не зависят от AuthRepository
   getIt.registerSingleton<ApiDatasource>(dataSource);

@@ -1,13 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:aviapoint/auth_page/data/tokens/token_storage.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
+import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 
-class AppState extends ChangeNotifier {
+class AppState with ChangeNotifier {
   final AuthRepository _authRepository;
   AppState({required AuthRepository authRepository}) : _authRepository = authRepository {
     checkAuthStatus();
@@ -15,6 +17,28 @@ class AppState extends ChangeNotifier {
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
+
+  bool _useLocalServer = false;
+
+  bool get useLocalServer => _useLocalServer;
+
+  void setUseLocalServer(bool value) {
+    _useLocalServer = value;
+
+    // Переключаем URL в API datasource
+    final dataSource = getIt.get<ApiDatasource>() as ApiDatasourceDio;
+    final newUrl = value ? localServerUrl : remoteServerUrl;
+    dataSource.switchBaseUrl(newUrl);
+
+    notifyListeners();
+  }
+
+  String get currentServerUrl {
+    if (_useLocalServer) {
+      return localServerUrl;
+    }
+    return remoteServerUrl;
+  }
 
   // Разобраться постоянно логаут
   Future<bool> checkAuthStatus() async {

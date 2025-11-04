@@ -20,10 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 @RoutePage()
 class NormalCategoriesScreen extends StatefulWidget {
   final String nameCategory;
-  const NormalCategoriesScreen({
-    super.key,
-    @PathParam('nameCategory') required this.nameCategory,
-  });
+  const NormalCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
 
   @override
   State<NormalCategoriesScreen> createState() => _NormalCategoriesScreenState();
@@ -43,12 +40,7 @@ class _NormalCategoriesScreenState extends State<NormalCategoriesScreen> {
       appBar: CustomAppBar(
         title: widget.nameCategory,
         withBack: true,
-        actions: [
-          IconButton(
-            onPressed: () => context.read<NormalCheckedCubit>().clearAllCategory(),
-            icon: SvgPicture.asset(Pictures.round_clear2),
-          ),
-        ],
+        actions: [IconButton(onPressed: () => context.read<NormalCheckedCubit>().clearAllCategory(), icon: SvgPicture.asset(Pictures.round_clear2))],
       ),
       backgroundColor: AppColors.background,
       body: BlocBuilder<NormalCategoriesBloc, NormalCategoriesState>(
@@ -76,9 +68,7 @@ class _Success extends StatelessWidget {
     final state = BlocProvider.of<NormalCheckedCubit>(context).state;
     final checksLenght = BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length;
 
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
-      (e) => e.idCategory == index + 1,
-    );
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1);
     if (checkProgressByIdCategory != null) {
       if (checkProgressByIdCategory.checkedIds.length == checksLenght) {
         return Pictures.checkOk;
@@ -92,19 +82,14 @@ class _Success extends StatelessWidget {
     final checksLenght = BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length;
 
     // Если Выполнено всё то не даём провлиться в катгорию, иначе может провалиться в категорию и закончить проведение проверок
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
-      (e) => e.idCategory == index + 1,
-    );
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1);
     if (checkProgressByIdCategory != null) {
       if (checkProgressByIdCategory.checkedIds.length == checksLenght) {
         return;
       }
     }
 
-    AutoRouter.of(context).push(NormalCheckListRoute(
-      normalCategoryId: (normalCategories[index].id).toString(),
-      nameCategory: normalCategories[index].title,
-    ));
+    AutoRouter.of(context).push(NormalCheckListRoute(normalCategoryId: (normalCategories[index].id).toString(), nameCategory: normalCategories[index].title));
   }
 
   @override
@@ -127,13 +112,14 @@ class _Success extends StatelessWidget {
                     BlocProvider.of<NormalCheckedCubit>(context).clearCategory(idCategory: normalCategories[index].id);
                   },
                   child: BlocBuilder<NormalCheckListBloc, NormalCheckListState>(
-                      builder: (context, state) => state.maybeMap(
-                            success: (value) => ProgressWidget(
-                              from: normalCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.length ?? 0,
-                              to: BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length,
-                            ),
-                            orElse: () => SizedBox.shrink(),
-                          )),
+                    builder: (context, state) => state.maybeMap(
+                      success: (value) => ProgressWidget(
+                        from: normalCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.length ?? 0,
+                        to: BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length,
+                      ),
+                      orElse: () => SizedBox.shrink(),
+                    ),
+                  ),
                 ),
               ),
             );

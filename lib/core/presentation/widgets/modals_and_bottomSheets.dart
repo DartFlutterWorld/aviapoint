@@ -6,6 +6,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
@@ -145,7 +146,7 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
   );
 }
 
-Future<void> selectTopics({required BuildContext context}) async {
+Future<void> selectTopics({required BuildContext context, TestMode? testMode}) async {
   final result = await showModalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
     useRootNavigator: true,
     isDismissible: true,
@@ -162,7 +163,12 @@ Future<void> selectTopics({required BuildContext context}) async {
       );
     },
   );
+
   if (result != null) {
+    // Очистить старые ответы и выбранные вопросы перед новым тестом
+    await getIt<AppDb>().deleteAnswersByCertificateType(result.$1);
+    await getIt<AppDb>().deleteSelectedQuestions(result.$1);
+
     await getIt<AppDb>().saveSettings(
       certificateTypeId: result.$1,
       mixAnswers: result.$2,
@@ -173,7 +179,80 @@ Future<void> selectTopics({required BuildContext context}) async {
       mixQuestions: result.$7,
     );
 
-    context.router.push(TestByModeRoute(typeCertificateId: result.$1));
+    // Установить режим тестирования если он был передан
+    if (testMode != null && context.mounted) {
+      BlocProvider.of<RosAviaTestCubit>(context).setTestMode(testMode);
+    }
+
+    // Переходим на экран тестирования
+    if (context.mounted) {
+      context.router.push(TestByModeRoute(typeCertificateId: result.$1));
+    }
+  }
+}
+
+/// Новая логика: проверить есть ли активный тест и показать соответствующий диалог
+Future<void> startTestingFlowNew({required BuildContext context}) async {
+  final rosAviaTestCubit = context.read<RosAviaTestCubit>();
+  final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
+  final db = getIt<AppDb>();
+
+  // Проверяем есть ли активный тест (ответы в БД)
+  final hasActive = await db.hasActiveTest(certificateTypeId);
+
+  if (!context.mounted) return;
+
+  if (hasActive) {
+    // Есть активный тест - показываем диалог продолжения
+    final certificateSettings = await db.getSettingsForCertificate(certificateTypeId: certificateTypeId);
+    final unansweredCount = await db.getUnansweredQuestionsCount(certificateTypeId);
+
+    if (!context.mounted) return;
+
+    // Если нет неотвеченных вопросов - значит тест завершен, не показываем модалку
+    if (unansweredCount == 0) {
+      if (context.mounted) {
+        testingModeDialog(context: context);
+      }
+    } else {
+      // Есть неотвеченные вопросы - показываем диалог продолжения
+      await showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (dialogContext) => AlertDialog(
+          title: Text('${certificateSettings?.title ?? 'Тестирование'} в процессе'),
+          content: Text('У вас осталось $unansweredCount вопросов. Продолжить?'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Отмена')),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(dialogContext);
+                // Очистить ответы и начать заново
+                await db.deleteAnswersByCertificateType(certificateTypeId);
+                await db.deleteSelectedQuestions(certificateTypeId);
+                if (context.mounted) {
+                  testingModeDialog(context: context);
+                }
+              },
+              child: const Text('Начать сначала'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                // Продолжить тест
+                context.router.push(TestByModeRoute(typeCertificateId: certificateTypeId));
+              },
+              child: const Text('Продолжить'),
+            ),
+          ],
+        ),
+      );
+    }
+  } else {
+    // Нет активного теста - показываем выбор режима
+    if (context.mounted) {
+      testingModeDialog(context: context);
+    }
   }
 }
 
@@ -183,12 +262,20 @@ Future<void> testingModeDialog({required BuildContext context}) async {
     context: context,
     // barrierColor: Color(0xFF1F2937),
     builder: (BuildContext context) {
-      return TestingModeDialog();
+      return BlocProvider.value(value: getIt<RosAviaTestCubit>(), child: TestingModeDialog());
     },
   );
 
-  if (result != null) {
-    BlocProvider.of<RosAviaTestCubit>(context).setTestMode(result);
-    selectTopics(context: context);
+  if (result != null && context.mounted) {
+    final rosAviaTestCubit = BlocProvider.of<RosAviaTestCubit>(context);
+    rosAviaTestCubit.setTestMode(result);
+
+    // Проверяем что context все еще валиден после await
+    if (!context.mounted) return;
+
+    // Нет активной сессии, открыть selectTopics для выбора категорий
+    if (context.mounted) {
+      selectTopics(context: context, testMode: result);
+    }
   }
 }

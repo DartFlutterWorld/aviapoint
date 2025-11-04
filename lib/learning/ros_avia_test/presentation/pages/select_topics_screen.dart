@@ -59,17 +59,15 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                 loading: (value) => ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Shimmer(
-                    child: Shimmer(
-                      duration: const Duration(milliseconds: 1000),
-                      interval: Duration(milliseconds: 0),
-                      color: const Color(0xFF8D66FE),
-                      colorOpacity: 0.5,
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        height: 97.7,
-                        width: double.infinity,
-                        decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
-                      ),
+                    duration: const Duration(milliseconds: 1000),
+                    interval: Duration(milliseconds: 0),
+                    color: const Color(0xFF8D66FE),
+                    colorOpacity: 0.5,
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      height: 97.7,
+                      width: double.infinity,
+                      decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
                     ),
                   ),
                 ),
@@ -148,16 +146,19 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                     SizedBox(height: 8.h),
                     BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
                       builder: (context, state) => state.map(
-                        loading: (value) => Shimmer(
-                          duration: const Duration(milliseconds: 1000),
-                          interval: Duration(milliseconds: 0),
-                          color: const Color(0xFF8D66FE),
-                          colorOpacity: 0.5,
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            height: 1000,
-                            width: double.infinity,
-                            decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
+                        loading: (value) => ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Shimmer(
+                            duration: const Duration(milliseconds: 1000),
+                            interval: Duration(milliseconds: 0),
+                            color: const Color(0xFF8D66FE),
+                            colorOpacity: 0.5,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              height: 1000,
+                              width: double.infinity,
+                              decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
+                            ),
                           ),
                         ),
                         error: (value) => SizedBox(),

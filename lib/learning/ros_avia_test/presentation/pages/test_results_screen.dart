@@ -6,6 +6,7 @@ import 'package:aviapoint/core/presentation/widgets/diagram_widget.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
+import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
 
 /// Экран результатов тестирования
 /// Отображает таблицу с ответами пользователя и правильными ответами
@@ -35,31 +37,58 @@ class TestResultsScreen extends StatefulWidget {
 }
 
 class _TestResultsScreenState extends State<TestResultsScreen> {
-  late Future<List<UserAnswer>> _answersFuture;
+  late Future<List<TestAnswer>> _answersFuture;
   Map<int, QuestionWithAnswersEntity> _questionsMap = {}; // Кэш вопросов по ID
 
   @override
   void initState() {
     super.initState();
     _answersFuture = _loadAnswers();
-    // Загружаем категории с вопросами чтобы получить доступ к вопросам
-    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: context.read<RosAviaTestCubit>().state.typeSertificate.id));
   }
 
-  /// Загружаем ответы из БД для текущего типа сертификата
-  Future<List<UserAnswer>> _loadAnswers() async {
+  /// Загружаем все категории и заполняем кэш
+  Future<void> _loadCategoriesCache() async {
+    try {
+      final rosAviaTestRepository = getIt<RosAviaTestRepository>();
+      final certificateTypeId = context.read<RosAviaTestCubit>().state.typeSertificate.id;
+
+      final categoriesResult = await rosAviaTestRepository.fetchRosAviaTestCategoryWithQuestions(certificateTypeId);
+
+      categoriesResult.fold((failure) {}, (categories) {
+        for (final category in categories) {
+          for (final question in category.questionsWithAnswers) {
+            _questionsMap[question.questionId] = question;
+          }
+        }
+      });
+    } catch (e) {}
+  }
+
+  /// Загружаем ответы из таблицы TestAnswers
+  Future<List<TestAnswer>> _loadAnswers() async {
     try {
       final db = getIt<AppDb>();
-      final answers = await (db.select(db.userAnswers)..where((tbl) => tbl.certificateTypeId.equals(widget.certificateTypeId))).get();
+      final certificateTypeId = context.read<RosAviaTestCubit>().state.typeSertificate.id;
+
+      // Сначала загружаем все категории чтобы заполнить кэш
+      await _loadCategoriesCache();
+
+      // Проверим есть ли вообще ответы в БД
+      final hasActive = await db.hasActiveTest(certificateTypeId);
+
+      // Проверим что в SelectedQuestions
+      final selectedQuestions = await db.getSelectedQuestions(certificateTypeId);
+
+      final answers = await db.getAnswersByCertificateType(certificateTypeId);
+
       return answers;
     } catch (e) {
-      print('Error loading answers: $e');
       return [];
     }
   }
 
   /// Вычисляем статистику
-  Map<String, int> _calculateStats(List<UserAnswer> answers) {
+  Map<String, int> _calculateStats(List<TestAnswer> answers) {
     int correct = 0;
     int incorrect = 0;
 
@@ -75,12 +104,16 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
   }
 
   /// Группируем ответы по категориям
-  Map<String, List<UserAnswer>> _groupAnswersByCategory(List<UserAnswer> answers) {
-    final grouped = <String, List<UserAnswer>>{};
+  Map<String, List<TestAnswer>> _groupAnswersByCategory(List<TestAnswer> answers) {
+    final grouped = <String, List<TestAnswer>>{};
+
     for (final answer in answers) {
-      final category = answer.categoryName;
-      grouped.putIfAbsent(category, () => []);
-      grouped[category]!.add(answer);
+      // Получаем название категории из кэша вопросов по questionId
+      final question = _questionsMap[answer.questionId];
+      final categoryName = question?.categoryTitle ?? 'Без категории';
+
+      grouped.putIfAbsent(categoryName, () => []);
+      grouped[categoryName]!.add(answer);
     }
     return grouped;
   }
@@ -92,7 +125,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
   }
 
   /// Строит список ответов, сгруппированных по категориям
-  List<Widget> _buildCategorizedResults(List<UserAnswer> answers) {
+  List<Widget> _buildCategorizedResults(List<TestAnswer> answers) {
     final grouped = _groupAnswersByCategory(answers);
     final List<Widget> result = [];
 
@@ -120,7 +153,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             context: context,
                             question: _questionsMap[answer.questionId], // Берем вопрос из кэша
                             questionId: answer.questionId,
-                            categoryTitle: answer.categoryName,
+                            categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Без категории',
                           ).catchError((Object error) {
                             print('Error opening question modal: $error');
                             if (context.mounted) {
@@ -167,7 +200,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: CustomAppBar(title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}', titleTextAlign: TextAlign.center, withBack: false),
-        body: FutureBuilder<List<UserAnswer>>(
+        body: FutureBuilder<List<TestAnswer>>(
           future: _answersFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -188,6 +221,8 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
             final correctCount = stats['correct']!;
             final totalCount = stats['total']!;
             final percentage = _formatPercentage(correctCount, totalCount);
+
+            final categorizedResults = _buildCategorizedResults(answers);
 
             return Column(
               children: [
@@ -224,7 +259,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   // mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('Тем: ${_buildCategorizedResults(answers).length}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    Text('Тем: ${categorizedResults.length}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
                                     SizedBox(height: 8.h),
                                     Text('Вопросов: ${totalCount}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
                                     SizedBox(height: 8.h),
@@ -240,7 +275,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                           SizedBox(height: 24.h),
 
                           // Таблица результатов, сгруппированная по категориям
-                          ..._buildCategorizedResults(answers),
+                          ...categorizedResults,
                           SizedBox(height: 24.h),
                         ],
                       ),
@@ -256,10 +291,13 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                       child: CustomButton(
                         title: 'Завершить',
                         verticalPadding: 8.h,
-                        onPressed: () {
-                          final db = getIt<AppDb>();
-                          db.clearAllAnswers(certificateTypeId: context.read<RosAviaTestCubit>().state.typeSertificate.id);
-                          context.router.push(const LearningRoute());
+                        onPressed: () async {
+                          // Очистить ответы и выбранные вопросы перед уходом
+                          await getIt<AppDb>().deleteAnswersByCertificateType(widget.certificateTypeId);
+                          await getIt<AppDb>().deleteSelectedQuestions(widget.certificateTypeId);
+                          if (mounted) {
+                            context.router.push(const LearningRoute());
+                          }
                         },
                         boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: const Offset(0.0, 7.0))],
                         textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),

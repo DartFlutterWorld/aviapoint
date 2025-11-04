@@ -38,60 +38,17 @@ class BanerWidget extends StatelessWidget {
     this.heightPicture = 134,
     this.titleButton2,
     this.onTap2,
-    this.titleButtonStyle = const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-      color: Color(0xFF0A6EFA),
-    ),
-    this.titleButtonStyle2 = const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-      color: Colors.white,
-    ),
+    this.titleButtonStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0A6EFA)),
+    this.titleButtonStyle2 = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     this.backgroundColor = Colors.white,
     this.backgroundColor2 = const Color(0xFF0A6EFA),
     this.borderColor = Colors.white,
     this.borderColor2 = const Color(0xFF0A6EFA),
-    this.boxShadowContainer = const [
-      BoxShadow(
-        color: Color(0xff045EC5),
-        blurRadius: 9.3,
-        spreadRadius: 0,
-        offset: Offset(
-          0.0,
-          4.0,
-        ),
-      ),
-    ],
-    this.boxShadowButton = const [
-      BoxShadow(
-        color: Color(0xff045EC5),
-        blurRadius: 9.3,
-        spreadRadius: 0,
-        offset: Offset(
-          0.0,
-          4.0,
-        ),
-      ),
-    ],
-    this.boxShadowButton2 = const [
-      BoxShadow(
-        color: Color(0xff045EC5),
-        blurRadius: 9.3,
-        spreadRadius: 0,
-        offset: Offset(
-          0.0,
-          4.0,
-        ),
-      ),
-    ],
+    this.boxShadowContainer = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+    this.boxShadowButton = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+    this.boxShadowButton2 = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
     this.titleStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
-    this.descStyle = const TextStyle(
-      fontWeight: FontWeight.normal,
-      fontSize: 13,
-      height: 1.3,
-      color: Color(0xFFF1F7FF),
-    ),
+    this.descStyle = const TextStyle(fontWeight: FontWeight.normal, fontSize: 13, height: 1.3, color: Color(0xFFF1F7FF)),
   });
 
   @override
@@ -102,28 +59,17 @@ class BanerWidget extends StatelessWidget {
         height: 190,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18.r),
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage(background),
-            isAntiAlias: true,
-          ),
+          image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background), isAntiAlias: true),
           boxShadow: boxShadowContainer,
         ),
         child: Stack(
           children: [
             Align(
               alignment: alignPicture,
-              child: Image.asset(
-                picture,
-                fit: BoxFit.contain,
-                height: heightPicture,
-              ),
+              child: Image.asset(picture, fit: BoxFit.contain, height: heightPicture),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 14.w,
-                vertical: 12.h,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
               child: Column(
                 children: [
                   Row(

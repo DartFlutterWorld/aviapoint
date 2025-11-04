@@ -30,11 +30,7 @@ class DitchingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'radio', 'transmit_mayday_on_125_mhz_give_location_intensions_and_squawk_7700'),
@@ -65,22 +61,15 @@ class DitchingScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

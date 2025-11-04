@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/story_cubit.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:provider/provider.dart';
 
 class ListStoriesWidget extends StatefulWidget {
   const ListStoriesWidget({super.key});
@@ -70,7 +71,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
                       child: CachedNetworkImage(
-                        imageUrl: backUrl + state.story[index].logoStory,
+                        imageUrl: Provider.of<AppState>(context).currentServerUrl + state.story[index].logoStory,
                         fit: BoxFit.fill,
                         placeholder: (context, url) => Shimmer(
                           duration: const Duration(milliseconds: 1000),
@@ -81,7 +82,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                         height: 100.h,
                         width: 100.w,
                         cacheManager: getIt<DefaultCacheManager>(),
-                        cacheKey: backUrl + state.story[index].logoStory,
+                        cacheKey: Provider.of<AppState>(context).currentServerUrl + state.story[index].logoStory,
                       ),
                     ),
                   ),

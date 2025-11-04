@@ -7,10 +7,7 @@ final defaultPinTheme = PinTheme(
   width: 58,
   height: 71,
   textStyle: AppStyles.extraBold.copyWith(color: Color(0xFF2B373E)),
-  decoration: const BoxDecoration(
-    color: Color(0xFFE3F1FF),
-    borderRadius: BorderRadius.all(Radius.circular(12)),
-  ),
+  decoration: const BoxDecoration(color: Color(0xFFE3F1FF), borderRadius: BorderRadius.all(Radius.circular(12))),
 );
 
 final disabledPinTheme = defaultPinTheme.copyWith();

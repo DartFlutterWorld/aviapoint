@@ -10,15 +10,7 @@ class BottomBarItem extends StatelessWidget {
   final void Function() onPressed;
   final bool isActive;
 
-  const BottomBarItem({
-    super.key,
-    required this.icon,
-    required this.text,
-    required this.activeColor,
-    required this.textColor,
-    required this.onPressed,
-    required this.isActive,
-  });
+  const BottomBarItem({super.key, required this.icon, required this.text, required this.activeColor, required this.textColor, required this.onPressed, required this.isActive});
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +41,8 @@ class BottomBarItem extends StatelessWidget {
           children: [
             Column(
               children: [
-                SvgPicture.asset(
-                  icon,
-                  height: 24,
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
+                SvgPicture.asset(icon, height: 24),
+                const SizedBox(height: 6),
                 Text(
                   text,
                   style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 10),

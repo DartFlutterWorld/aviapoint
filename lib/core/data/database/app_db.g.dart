@@ -480,12 +480,12 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 }
 
-class $UserAnswersTable extends UserAnswers
-    with TableInfo<$UserAnswersTable, UserAnswer> {
+class $SelectedQuestionsTable extends SelectedQuestions
+    with TableInfo<$SelectedQuestionsTable, SelectedQuestion> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserAnswersTable(this.attachedDatabase, [this._alias]);
+  $SelectedQuestionsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _certificateTypeIdMeta = const VerificationMeta(
     'certificateTypeId',
   );
@@ -495,28 +495,6 @@ class $UserAnswersTable extends UserAnswers
     aliasedName,
     false,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
-    'categoryId',
-  );
-  @override
-  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-    'category_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _categoryNameMeta = const VerificationMeta(
-    'categoryName',
-  );
-  @override
-  late final GeneratedColumn<String> categoryName = GeneratedColumn<String>(
-    'category_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _questionIdMeta = const VerificationMeta(
@@ -530,17 +508,274 @@ class $UserAnswersTable extends UserAnswers
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _selectedAnswerIdsJsonMeta =
-      const VerificationMeta('selectedAnswerIdsJson');
   @override
-  late final GeneratedColumn<String> selectedAnswerIdsJson =
-      GeneratedColumn<String>(
-        'selected_answer_ids_json',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
+  List<GeneratedColumn> get $columns => [certificateTypeId, questionId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'selected_questions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SelectedQuestion> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('certificate_type_id')) {
+      context.handle(
+        _certificateTypeIdMeta,
+        certificateTypeId.isAcceptableOrUnknown(
+          data['certificate_type_id']!,
+          _certificateTypeIdMeta,
+        ),
       );
+    } else if (isInserting) {
+      context.missing(_certificateTypeIdMeta);
+    }
+    if (data.containsKey('question_id')) {
+      context.handle(
+        _questionIdMeta,
+        questionId.isAcceptableOrUnknown(data['question_id']!, _questionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_questionIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {certificateTypeId, questionId},
+  ];
+  @override
+  SelectedQuestion map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SelectedQuestion(
+      certificateTypeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}certificate_type_id'],
+      )!,
+      questionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}question_id'],
+      )!,
+    );
+  }
+
+  @override
+  $SelectedQuestionsTable createAlias(String alias) {
+    return $SelectedQuestionsTable(attachedDatabase, alias);
+  }
+}
+
+class SelectedQuestion extends DataClass
+    implements Insertable<SelectedQuestion> {
+  final int certificateTypeId;
+  final int questionId;
+  const SelectedQuestion({
+    required this.certificateTypeId,
+    required this.questionId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['certificate_type_id'] = Variable<int>(certificateTypeId);
+    map['question_id'] = Variable<int>(questionId);
+    return map;
+  }
+
+  SelectedQuestionsCompanion toCompanion(bool nullToAbsent) {
+    return SelectedQuestionsCompanion(
+      certificateTypeId: Value(certificateTypeId),
+      questionId: Value(questionId),
+    );
+  }
+
+  factory SelectedQuestion.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SelectedQuestion(
+      certificateTypeId: serializer.fromJson<int>(json['certificateTypeId']),
+      questionId: serializer.fromJson<int>(json['questionId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'certificateTypeId': serializer.toJson<int>(certificateTypeId),
+      'questionId': serializer.toJson<int>(questionId),
+    };
+  }
+
+  SelectedQuestion copyWith({int? certificateTypeId, int? questionId}) =>
+      SelectedQuestion(
+        certificateTypeId: certificateTypeId ?? this.certificateTypeId,
+        questionId: questionId ?? this.questionId,
+      );
+  SelectedQuestion copyWithCompanion(SelectedQuestionsCompanion data) {
+    return SelectedQuestion(
+      certificateTypeId: data.certificateTypeId.present
+          ? data.certificateTypeId.value
+          : this.certificateTypeId,
+      questionId: data.questionId.present
+          ? data.questionId.value
+          : this.questionId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SelectedQuestion(')
+          ..write('certificateTypeId: $certificateTypeId, ')
+          ..write('questionId: $questionId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(certificateTypeId, questionId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SelectedQuestion &&
+          other.certificateTypeId == this.certificateTypeId &&
+          other.questionId == this.questionId);
+}
+
+class SelectedQuestionsCompanion extends UpdateCompanion<SelectedQuestion> {
+  final Value<int> certificateTypeId;
+  final Value<int> questionId;
+  final Value<int> rowid;
+  const SelectedQuestionsCompanion({
+    this.certificateTypeId = const Value.absent(),
+    this.questionId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SelectedQuestionsCompanion.insert({
+    required int certificateTypeId,
+    required int questionId,
+    this.rowid = const Value.absent(),
+  }) : certificateTypeId = Value(certificateTypeId),
+       questionId = Value(questionId);
+  static Insertable<SelectedQuestion> custom({
+    Expression<int>? certificateTypeId,
+    Expression<int>? questionId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (certificateTypeId != null) 'certificate_type_id': certificateTypeId,
+      if (questionId != null) 'question_id': questionId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SelectedQuestionsCompanion copyWith({
+    Value<int>? certificateTypeId,
+    Value<int>? questionId,
+    Value<int>? rowid,
+  }) {
+    return SelectedQuestionsCompanion(
+      certificateTypeId: certificateTypeId ?? this.certificateTypeId,
+      questionId: questionId ?? this.questionId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (certificateTypeId.present) {
+      map['certificate_type_id'] = Variable<int>(certificateTypeId.value);
+    }
+    if (questionId.present) {
+      map['question_id'] = Variable<int>(questionId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SelectedQuestionsCompanion(')
+          ..write('certificateTypeId: $certificateTypeId, ')
+          ..write('questionId: $questionId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TestAnswersTable extends TestAnswers
+    with TableInfo<$TestAnswersTable, TestAnswer> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TestAnswersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _certificateTypeIdMeta = const VerificationMeta(
+    'certificateTypeId',
+  );
+  @override
+  late final GeneratedColumn<int> certificateTypeId = GeneratedColumn<int>(
+    'certificate_type_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _questionIdMeta = const VerificationMeta(
+    'questionId',
+  );
+  @override
+  late final GeneratedColumn<int> questionId = GeneratedColumn<int>(
+    'question_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _selectedAnswerIdMeta = const VerificationMeta(
+    'selectedAnswerId',
+  );
+  @override
+  late final GeneratedColumn<int> selectedAnswerId = GeneratedColumn<int>(
+    'selected_answer_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
+    'categoryId',
+  );
+  @override
+  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
+    'category_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _isCorrectMeta = const VerificationMeta(
     'isCorrect',
   );
@@ -557,25 +792,28 @@ class $UserAnswersTable extends UserAnswers
   );
   @override
   List<GeneratedColumn> get $columns => [
+    id,
     certificateTypeId,
-    categoryId,
-    categoryName,
     questionId,
-    selectedAnswerIdsJson,
+    selectedAnswerId,
+    categoryId,
     isCorrect,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'user_answers';
+  static const String $name = 'test_answers';
   @override
   VerificationContext validateIntegrity(
-    Insertable<UserAnswer> instance, {
+    Insertable<TestAnswer> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     if (data.containsKey('certificate_type_id')) {
       context.handle(
         _certificateTypeIdMeta,
@@ -587,25 +825,6 @@ class $UserAnswersTable extends UserAnswers
     } else if (isInserting) {
       context.missing(_certificateTypeIdMeta);
     }
-    if (data.containsKey('category_id')) {
-      context.handle(
-        _categoryIdMeta,
-        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
-    }
-    if (data.containsKey('category_name')) {
-      context.handle(
-        _categoryNameMeta,
-        categoryName.isAcceptableOrUnknown(
-          data['category_name']!,
-          _categoryNameMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_categoryNameMeta);
-    }
     if (data.containsKey('question_id')) {
       context.handle(
         _questionIdMeta,
@@ -614,16 +833,22 @@ class $UserAnswersTable extends UserAnswers
     } else if (isInserting) {
       context.missing(_questionIdMeta);
     }
-    if (data.containsKey('selected_answer_ids_json')) {
+    if (data.containsKey('selected_answer_id')) {
       context.handle(
-        _selectedAnswerIdsJsonMeta,
-        selectedAnswerIdsJson.isAcceptableOrUnknown(
-          data['selected_answer_ids_json']!,
-          _selectedAnswerIdsJsonMeta,
+        _selectedAnswerIdMeta,
+        selectedAnswerId.isAcceptableOrUnknown(
+          data['selected_answer_id']!,
+          _selectedAnswerIdMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_selectedAnswerIdsJsonMeta);
+      context.missing(_selectedAnswerIdMeta);
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+        _categoryIdMeta,
+        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
+      );
     }
     if (data.containsKey('is_correct')) {
       context.handle(
@@ -635,31 +860,35 @@ class $UserAnswersTable extends UserAnswers
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {certificateTypeId, questionId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  UserAnswer map(Map<String, dynamic> data, {String? tablePrefix}) {
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {certificateTypeId, questionId},
+  ];
+  @override
+  TestAnswer map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserAnswer(
+    return TestAnswer(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
       certificateTypeId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}certificate_type_id'],
-      )!,
-      categoryId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}category_id'],
-      )!,
-      categoryName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}category_name'],
       )!,
       questionId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}question_id'],
       )!,
-      selectedAnswerIdsJson: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}selected_answer_ids_json'],
+      selectedAnswerId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}selected_answer_id'],
       )!,
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}category_id'],
+      ),
       isCorrect: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_correct'],
@@ -668,66 +897,68 @@ class $UserAnswersTable extends UserAnswers
   }
 
   @override
-  $UserAnswersTable createAlias(String alias) {
-    return $UserAnswersTable(attachedDatabase, alias);
+  $TestAnswersTable createAlias(String alias) {
+    return $TestAnswersTable(attachedDatabase, alias);
   }
 }
 
-class UserAnswer extends DataClass implements Insertable<UserAnswer> {
+class TestAnswer extends DataClass implements Insertable<TestAnswer> {
+  final int id;
   final int certificateTypeId;
-  final int categoryId;
-  final String categoryName;
   final int questionId;
-  final String selectedAnswerIdsJson;
+  final int selectedAnswerId;
+  final int? categoryId;
   final bool? isCorrect;
-  const UserAnswer({
+  const TestAnswer({
+    required this.id,
     required this.certificateTypeId,
-    required this.categoryId,
-    required this.categoryName,
     required this.questionId,
-    required this.selectedAnswerIdsJson,
+    required this.selectedAnswerId,
+    this.categoryId,
     this.isCorrect,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
     map['certificate_type_id'] = Variable<int>(certificateTypeId);
-    map['category_id'] = Variable<int>(categoryId);
-    map['category_name'] = Variable<String>(categoryName);
     map['question_id'] = Variable<int>(questionId);
-    map['selected_answer_ids_json'] = Variable<String>(selectedAnswerIdsJson);
+    map['selected_answer_id'] = Variable<int>(selectedAnswerId);
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<int>(categoryId);
+    }
     if (!nullToAbsent || isCorrect != null) {
       map['is_correct'] = Variable<bool>(isCorrect);
     }
     return map;
   }
 
-  UserAnswersCompanion toCompanion(bool nullToAbsent) {
-    return UserAnswersCompanion(
+  TestAnswersCompanion toCompanion(bool nullToAbsent) {
+    return TestAnswersCompanion(
+      id: Value(id),
       certificateTypeId: Value(certificateTypeId),
-      categoryId: Value(categoryId),
-      categoryName: Value(categoryName),
       questionId: Value(questionId),
-      selectedAnswerIdsJson: Value(selectedAnswerIdsJson),
+      selectedAnswerId: Value(selectedAnswerId),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
       isCorrect: isCorrect == null && nullToAbsent
           ? const Value.absent()
           : Value(isCorrect),
     );
   }
 
-  factory UserAnswer.fromJson(
+  factory TestAnswer.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UserAnswer(
+    return TestAnswer(
+      id: serializer.fromJson<int>(json['id']),
       certificateTypeId: serializer.fromJson<int>(json['certificateTypeId']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
-      categoryName: serializer.fromJson<String>(json['categoryName']),
       questionId: serializer.fromJson<int>(json['questionId']),
-      selectedAnswerIdsJson: serializer.fromJson<String>(
-        json['selectedAnswerIdsJson'],
-      ),
+      selectedAnswerId: serializer.fromJson<int>(json['selectedAnswerId']),
+      categoryId: serializer.fromJson<int?>(json['categoryId']),
       isCorrect: serializer.fromJson<bool?>(json['isCorrect']),
     );
   }
@@ -735,59 +966,57 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
       'certificateTypeId': serializer.toJson<int>(certificateTypeId),
-      'categoryId': serializer.toJson<int>(categoryId),
-      'categoryName': serializer.toJson<String>(categoryName),
       'questionId': serializer.toJson<int>(questionId),
-      'selectedAnswerIdsJson': serializer.toJson<String>(selectedAnswerIdsJson),
+      'selectedAnswerId': serializer.toJson<int>(selectedAnswerId),
+      'categoryId': serializer.toJson<int?>(categoryId),
       'isCorrect': serializer.toJson<bool?>(isCorrect),
     };
   }
 
-  UserAnswer copyWith({
+  TestAnswer copyWith({
+    int? id,
     int? certificateTypeId,
-    int? categoryId,
-    String? categoryName,
     int? questionId,
-    String? selectedAnswerIdsJson,
+    int? selectedAnswerId,
+    Value<int?> categoryId = const Value.absent(),
     Value<bool?> isCorrect = const Value.absent(),
-  }) => UserAnswer(
+  }) => TestAnswer(
+    id: id ?? this.id,
     certificateTypeId: certificateTypeId ?? this.certificateTypeId,
-    categoryId: categoryId ?? this.categoryId,
-    categoryName: categoryName ?? this.categoryName,
     questionId: questionId ?? this.questionId,
-    selectedAnswerIdsJson: selectedAnswerIdsJson ?? this.selectedAnswerIdsJson,
+    selectedAnswerId: selectedAnswerId ?? this.selectedAnswerId,
+    categoryId: categoryId.present ? categoryId.value : this.categoryId,
     isCorrect: isCorrect.present ? isCorrect.value : this.isCorrect,
   );
-  UserAnswer copyWithCompanion(UserAnswersCompanion data) {
-    return UserAnswer(
+  TestAnswer copyWithCompanion(TestAnswersCompanion data) {
+    return TestAnswer(
+      id: data.id.present ? data.id.value : this.id,
       certificateTypeId: data.certificateTypeId.present
           ? data.certificateTypeId.value
           : this.certificateTypeId,
-      categoryId: data.categoryId.present
-          ? data.categoryId.value
-          : this.categoryId,
-      categoryName: data.categoryName.present
-          ? data.categoryName.value
-          : this.categoryName,
       questionId: data.questionId.present
           ? data.questionId.value
           : this.questionId,
-      selectedAnswerIdsJson: data.selectedAnswerIdsJson.present
-          ? data.selectedAnswerIdsJson.value
-          : this.selectedAnswerIdsJson,
+      selectedAnswerId: data.selectedAnswerId.present
+          ? data.selectedAnswerId.value
+          : this.selectedAnswerId,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
       isCorrect: data.isCorrect.present ? data.isCorrect.value : this.isCorrect,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('UserAnswer(')
+    return (StringBuffer('TestAnswer(')
+          ..write('id: $id, ')
           ..write('certificateTypeId: $certificateTypeId, ')
-          ..write('categoryId: $categoryId, ')
-          ..write('categoryName: $categoryName, ')
           ..write('questionId: $questionId, ')
-          ..write('selectedAnswerIdsJson: $selectedAnswerIdsJson, ')
+          ..write('selectedAnswerId: $selectedAnswerId, ')
+          ..write('categoryId: $categoryId, ')
           ..write('isCorrect: $isCorrect')
           ..write(')'))
         .toString();
@@ -795,136 +1024,119 @@ class UserAnswer extends DataClass implements Insertable<UserAnswer> {
 
   @override
   int get hashCode => Object.hash(
+    id,
     certificateTypeId,
-    categoryId,
-    categoryName,
     questionId,
-    selectedAnswerIdsJson,
+    selectedAnswerId,
+    categoryId,
     isCorrect,
   );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UserAnswer &&
+      (other is TestAnswer &&
+          other.id == this.id &&
           other.certificateTypeId == this.certificateTypeId &&
-          other.categoryId == this.categoryId &&
-          other.categoryName == this.categoryName &&
           other.questionId == this.questionId &&
-          other.selectedAnswerIdsJson == this.selectedAnswerIdsJson &&
+          other.selectedAnswerId == this.selectedAnswerId &&
+          other.categoryId == this.categoryId &&
           other.isCorrect == this.isCorrect);
 }
 
-class UserAnswersCompanion extends UpdateCompanion<UserAnswer> {
+class TestAnswersCompanion extends UpdateCompanion<TestAnswer> {
+  final Value<int> id;
   final Value<int> certificateTypeId;
-  final Value<int> categoryId;
-  final Value<String> categoryName;
   final Value<int> questionId;
-  final Value<String> selectedAnswerIdsJson;
+  final Value<int> selectedAnswerId;
+  final Value<int?> categoryId;
   final Value<bool?> isCorrect;
-  final Value<int> rowid;
-  const UserAnswersCompanion({
+  const TestAnswersCompanion({
+    this.id = const Value.absent(),
     this.certificateTypeId = const Value.absent(),
-    this.categoryId = const Value.absent(),
-    this.categoryName = const Value.absent(),
     this.questionId = const Value.absent(),
-    this.selectedAnswerIdsJson = const Value.absent(),
+    this.selectedAnswerId = const Value.absent(),
+    this.categoryId = const Value.absent(),
     this.isCorrect = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
-  UserAnswersCompanion.insert({
+  TestAnswersCompanion.insert({
+    this.id = const Value.absent(),
     required int certificateTypeId,
-    required int categoryId,
-    required String categoryName,
     required int questionId,
-    required String selectedAnswerIdsJson,
+    required int selectedAnswerId,
+    this.categoryId = const Value.absent(),
     this.isCorrect = const Value.absent(),
-    this.rowid = const Value.absent(),
   }) : certificateTypeId = Value(certificateTypeId),
-       categoryId = Value(categoryId),
-       categoryName = Value(categoryName),
        questionId = Value(questionId),
-       selectedAnswerIdsJson = Value(selectedAnswerIdsJson);
-  static Insertable<UserAnswer> custom({
+       selectedAnswerId = Value(selectedAnswerId);
+  static Insertable<TestAnswer> custom({
+    Expression<int>? id,
     Expression<int>? certificateTypeId,
-    Expression<int>? categoryId,
-    Expression<String>? categoryName,
     Expression<int>? questionId,
-    Expression<String>? selectedAnswerIdsJson,
+    Expression<int>? selectedAnswerId,
+    Expression<int>? categoryId,
     Expression<bool>? isCorrect,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (certificateTypeId != null) 'certificate_type_id': certificateTypeId,
-      if (categoryId != null) 'category_id': categoryId,
-      if (categoryName != null) 'category_name': categoryName,
       if (questionId != null) 'question_id': questionId,
-      if (selectedAnswerIdsJson != null)
-        'selected_answer_ids_json': selectedAnswerIdsJson,
+      if (selectedAnswerId != null) 'selected_answer_id': selectedAnswerId,
+      if (categoryId != null) 'category_id': categoryId,
       if (isCorrect != null) 'is_correct': isCorrect,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  UserAnswersCompanion copyWith({
+  TestAnswersCompanion copyWith({
+    Value<int>? id,
     Value<int>? certificateTypeId,
-    Value<int>? categoryId,
-    Value<String>? categoryName,
     Value<int>? questionId,
-    Value<String>? selectedAnswerIdsJson,
+    Value<int>? selectedAnswerId,
+    Value<int?>? categoryId,
     Value<bool?>? isCorrect,
-    Value<int>? rowid,
   }) {
-    return UserAnswersCompanion(
+    return TestAnswersCompanion(
+      id: id ?? this.id,
       certificateTypeId: certificateTypeId ?? this.certificateTypeId,
-      categoryId: categoryId ?? this.categoryId,
-      categoryName: categoryName ?? this.categoryName,
       questionId: questionId ?? this.questionId,
-      selectedAnswerIdsJson:
-          selectedAnswerIdsJson ?? this.selectedAnswerIdsJson,
+      selectedAnswerId: selectedAnswerId ?? this.selectedAnswerId,
+      categoryId: categoryId ?? this.categoryId,
       isCorrect: isCorrect ?? this.isCorrect,
-      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     if (certificateTypeId.present) {
       map['certificate_type_id'] = Variable<int>(certificateTypeId.value);
-    }
-    if (categoryId.present) {
-      map['category_id'] = Variable<int>(categoryId.value);
-    }
-    if (categoryName.present) {
-      map['category_name'] = Variable<String>(categoryName.value);
     }
     if (questionId.present) {
       map['question_id'] = Variable<int>(questionId.value);
     }
-    if (selectedAnswerIdsJson.present) {
-      map['selected_answer_ids_json'] = Variable<String>(
-        selectedAnswerIdsJson.value,
-      );
+    if (selectedAnswerId.present) {
+      map['selected_answer_id'] = Variable<int>(selectedAnswerId.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<int>(categoryId.value);
     }
     if (isCorrect.present) {
       map['is_correct'] = Variable<bool>(isCorrect.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('UserAnswersCompanion(')
+    return (StringBuffer('TestAnswersCompanion(')
+          ..write('id: $id, ')
           ..write('certificateTypeId: $certificateTypeId, ')
-          ..write('categoryId: $categoryId, ')
-          ..write('categoryName: $categoryName, ')
           ..write('questionId: $questionId, ')
-          ..write('selectedAnswerIdsJson: $selectedAnswerIdsJson, ')
-          ..write('isCorrect: $isCorrect, ')
-          ..write('rowid: $rowid')
+          ..write('selectedAnswerId: $selectedAnswerId, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('isCorrect: $isCorrect')
           ..write(')'))
         .toString();
   }
@@ -934,14 +1146,17 @@ abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
   $AppDbManager get managers => $AppDbManager(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
-  late final $UserAnswersTable userAnswers = $UserAnswersTable(this);
+  late final $SelectedQuestionsTable selectedQuestions =
+      $SelectedQuestionsTable(this);
+  late final $TestAnswersTable testAnswers = $TestAnswersTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     appSettings,
-    userAnswers,
+    selectedQuestions,
+    testAnswers,
   ];
 }
 
@@ -1183,30 +1398,22 @@ typedef $$AppSettingsTableProcessedTableManager =
       AppSetting,
       PrefetchHooks Function()
     >;
-typedef $$UserAnswersTableCreateCompanionBuilder =
-    UserAnswersCompanion Function({
+typedef $$SelectedQuestionsTableCreateCompanionBuilder =
+    SelectedQuestionsCompanion Function({
       required int certificateTypeId,
-      required int categoryId,
-      required String categoryName,
       required int questionId,
-      required String selectedAnswerIdsJson,
-      Value<bool?> isCorrect,
       Value<int> rowid,
     });
-typedef $$UserAnswersTableUpdateCompanionBuilder =
-    UserAnswersCompanion Function({
+typedef $$SelectedQuestionsTableUpdateCompanionBuilder =
+    SelectedQuestionsCompanion Function({
       Value<int> certificateTypeId,
-      Value<int> categoryId,
-      Value<String> categoryName,
       Value<int> questionId,
-      Value<String> selectedAnswerIdsJson,
-      Value<bool?> isCorrect,
       Value<int> rowid,
     });
 
-class $$UserAnswersTableFilterComposer
-    extends Composer<_$AppDb, $UserAnswersTable> {
-  $$UserAnswersTableFilterComposer({
+class $$SelectedQuestionsTableFilterComposer
+    extends Composer<_$AppDb, $SelectedQuestionsTable> {
+  $$SelectedQuestionsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1218,35 +1425,15 @@ class $$UserAnswersTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get categoryId => $composableBuilder(
-    column: $table.categoryId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get categoryName => $composableBuilder(
-    column: $table.categoryName,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get questionId => $composableBuilder(
     column: $table.questionId,
     builder: (column) => ColumnFilters(column),
   );
-
-  ColumnFilters<String> get selectedAnswerIdsJson => $composableBuilder(
-    column: $table.selectedAnswerIdsJson,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get isCorrect => $composableBuilder(
-    column: $table.isCorrect,
-    builder: (column) => ColumnFilters(column),
-  );
 }
 
-class $$UserAnswersTableOrderingComposer
-    extends Composer<_$AppDb, $UserAnswersTable> {
-  $$UserAnswersTableOrderingComposer({
+class $$SelectedQuestionsTableOrderingComposer
+    extends Composer<_$AppDb, $SelectedQuestionsTable> {
+  $$SelectedQuestionsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1258,35 +1445,15 @@ class $$UserAnswersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get categoryId => $composableBuilder(
-    column: $table.categoryId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get categoryName => $composableBuilder(
-    column: $table.categoryName,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get questionId => $composableBuilder(
     column: $table.questionId,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<String> get selectedAnswerIdsJson => $composableBuilder(
-    column: $table.selectedAnswerIdsJson,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<bool> get isCorrect => $composableBuilder(
-    column: $table.isCorrect,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
-class $$UserAnswersTableAnnotationComposer
-    extends Composer<_$AppDb, $UserAnswersTable> {
-  $$UserAnswersTableAnnotationComposer({
+class $$SelectedQuestionsTableAnnotationComposer
+    extends Composer<_$AppDb, $SelectedQuestionsTable> {
+  $$SelectedQuestionsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1298,90 +1465,64 @@ class $$UserAnswersTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get categoryId => $composableBuilder(
-    column: $table.categoryId,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get categoryName => $composableBuilder(
-    column: $table.categoryName,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<int> get questionId => $composableBuilder(
     column: $table.questionId,
     builder: (column) => column,
   );
-
-  GeneratedColumn<String> get selectedAnswerIdsJson => $composableBuilder(
-    column: $table.selectedAnswerIdsJson,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<bool> get isCorrect =>
-      $composableBuilder(column: $table.isCorrect, builder: (column) => column);
 }
 
-class $$UserAnswersTableTableManager
+class $$SelectedQuestionsTableTableManager
     extends
         RootTableManager<
           _$AppDb,
-          $UserAnswersTable,
-          UserAnswer,
-          $$UserAnswersTableFilterComposer,
-          $$UserAnswersTableOrderingComposer,
-          $$UserAnswersTableAnnotationComposer,
-          $$UserAnswersTableCreateCompanionBuilder,
-          $$UserAnswersTableUpdateCompanionBuilder,
-          (UserAnswer, BaseReferences<_$AppDb, $UserAnswersTable, UserAnswer>),
-          UserAnswer,
+          $SelectedQuestionsTable,
+          SelectedQuestion,
+          $$SelectedQuestionsTableFilterComposer,
+          $$SelectedQuestionsTableOrderingComposer,
+          $$SelectedQuestionsTableAnnotationComposer,
+          $$SelectedQuestionsTableCreateCompanionBuilder,
+          $$SelectedQuestionsTableUpdateCompanionBuilder,
+          (
+            SelectedQuestion,
+            BaseReferences<_$AppDb, $SelectedQuestionsTable, SelectedQuestion>,
+          ),
+          SelectedQuestion,
           PrefetchHooks Function()
         > {
-  $$UserAnswersTableTableManager(_$AppDb db, $UserAnswersTable table)
-    : super(
+  $$SelectedQuestionsTableTableManager(
+    _$AppDb db,
+    $SelectedQuestionsTable table,
+  ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$UserAnswersTableFilterComposer($db: db, $table: table),
+              $$SelectedQuestionsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$UserAnswersTableOrderingComposer($db: db, $table: table),
+              $$SelectedQuestionsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$UserAnswersTableAnnotationComposer($db: db, $table: table),
+              $$SelectedQuestionsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
           updateCompanionCallback:
               ({
                 Value<int> certificateTypeId = const Value.absent(),
-                Value<int> categoryId = const Value.absent(),
-                Value<String> categoryName = const Value.absent(),
                 Value<int> questionId = const Value.absent(),
-                Value<String> selectedAnswerIdsJson = const Value.absent(),
-                Value<bool?> isCorrect = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => UserAnswersCompanion(
+              }) => SelectedQuestionsCompanion(
                 certificateTypeId: certificateTypeId,
-                categoryId: categoryId,
-                categoryName: categoryName,
                 questionId: questionId,
-                selectedAnswerIdsJson: selectedAnswerIdsJson,
-                isCorrect: isCorrect,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required int certificateTypeId,
-                required int categoryId,
-                required String categoryName,
                 required int questionId,
-                required String selectedAnswerIdsJson,
-                Value<bool?> isCorrect = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => UserAnswersCompanion.insert(
+              }) => SelectedQuestionsCompanion.insert(
                 certificateTypeId: certificateTypeId,
-                categoryId: categoryId,
-                categoryName: categoryName,
                 questionId: questionId,
-                selectedAnswerIdsJson: selectedAnswerIdsJson,
-                isCorrect: isCorrect,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -1392,18 +1533,236 @@ class $$UserAnswersTableTableManager
       );
 }
 
-typedef $$UserAnswersTableProcessedTableManager =
+typedef $$SelectedQuestionsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDb,
-      $UserAnswersTable,
-      UserAnswer,
-      $$UserAnswersTableFilterComposer,
-      $$UserAnswersTableOrderingComposer,
-      $$UserAnswersTableAnnotationComposer,
-      $$UserAnswersTableCreateCompanionBuilder,
-      $$UserAnswersTableUpdateCompanionBuilder,
-      (UserAnswer, BaseReferences<_$AppDb, $UserAnswersTable, UserAnswer>),
-      UserAnswer,
+      $SelectedQuestionsTable,
+      SelectedQuestion,
+      $$SelectedQuestionsTableFilterComposer,
+      $$SelectedQuestionsTableOrderingComposer,
+      $$SelectedQuestionsTableAnnotationComposer,
+      $$SelectedQuestionsTableCreateCompanionBuilder,
+      $$SelectedQuestionsTableUpdateCompanionBuilder,
+      (
+        SelectedQuestion,
+        BaseReferences<_$AppDb, $SelectedQuestionsTable, SelectedQuestion>,
+      ),
+      SelectedQuestion,
+      PrefetchHooks Function()
+    >;
+typedef $$TestAnswersTableCreateCompanionBuilder =
+    TestAnswersCompanion Function({
+      Value<int> id,
+      required int certificateTypeId,
+      required int questionId,
+      required int selectedAnswerId,
+      Value<int?> categoryId,
+      Value<bool?> isCorrect,
+    });
+typedef $$TestAnswersTableUpdateCompanionBuilder =
+    TestAnswersCompanion Function({
+      Value<int> id,
+      Value<int> certificateTypeId,
+      Value<int> questionId,
+      Value<int> selectedAnswerId,
+      Value<int?> categoryId,
+      Value<bool?> isCorrect,
+    });
+
+class $$TestAnswersTableFilterComposer
+    extends Composer<_$AppDb, $TestAnswersTable> {
+  $$TestAnswersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get certificateTypeId => $composableBuilder(
+    column: $table.certificateTypeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get questionId => $composableBuilder(
+    column: $table.questionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get selectedAnswerId => $composableBuilder(
+    column: $table.selectedAnswerId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isCorrect => $composableBuilder(
+    column: $table.isCorrect,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TestAnswersTableOrderingComposer
+    extends Composer<_$AppDb, $TestAnswersTable> {
+  $$TestAnswersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get certificateTypeId => $composableBuilder(
+    column: $table.certificateTypeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get questionId => $composableBuilder(
+    column: $table.questionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get selectedAnswerId => $composableBuilder(
+    column: $table.selectedAnswerId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isCorrect => $composableBuilder(
+    column: $table.isCorrect,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TestAnswersTableAnnotationComposer
+    extends Composer<_$AppDb, $TestAnswersTable> {
+  $$TestAnswersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get certificateTypeId => $composableBuilder(
+    column: $table.certificateTypeId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get questionId => $composableBuilder(
+    column: $table.questionId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get selectedAnswerId => $composableBuilder(
+    column: $table.selectedAnswerId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isCorrect =>
+      $composableBuilder(column: $table.isCorrect, builder: (column) => column);
+}
+
+class $$TestAnswersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDb,
+          $TestAnswersTable,
+          TestAnswer,
+          $$TestAnswersTableFilterComposer,
+          $$TestAnswersTableOrderingComposer,
+          $$TestAnswersTableAnnotationComposer,
+          $$TestAnswersTableCreateCompanionBuilder,
+          $$TestAnswersTableUpdateCompanionBuilder,
+          (TestAnswer, BaseReferences<_$AppDb, $TestAnswersTable, TestAnswer>),
+          TestAnswer,
+          PrefetchHooks Function()
+        > {
+  $$TestAnswersTableTableManager(_$AppDb db, $TestAnswersTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TestAnswersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TestAnswersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TestAnswersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> certificateTypeId = const Value.absent(),
+                Value<int> questionId = const Value.absent(),
+                Value<int> selectedAnswerId = const Value.absent(),
+                Value<int?> categoryId = const Value.absent(),
+                Value<bool?> isCorrect = const Value.absent(),
+              }) => TestAnswersCompanion(
+                id: id,
+                certificateTypeId: certificateTypeId,
+                questionId: questionId,
+                selectedAnswerId: selectedAnswerId,
+                categoryId: categoryId,
+                isCorrect: isCorrect,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int certificateTypeId,
+                required int questionId,
+                required int selectedAnswerId,
+                Value<int?> categoryId = const Value.absent(),
+                Value<bool?> isCorrect = const Value.absent(),
+              }) => TestAnswersCompanion.insert(
+                id: id,
+                certificateTypeId: certificateTypeId,
+                questionId: questionId,
+                selectedAnswerId: selectedAnswerId,
+                categoryId: categoryId,
+                isCorrect: isCorrect,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TestAnswersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDb,
+      $TestAnswersTable,
+      TestAnswer,
+      $$TestAnswersTableFilterComposer,
+      $$TestAnswersTableOrderingComposer,
+      $$TestAnswersTableAnnotationComposer,
+      $$TestAnswersTableCreateCompanionBuilder,
+      $$TestAnswersTableUpdateCompanionBuilder,
+      (TestAnswer, BaseReferences<_$AppDb, $TestAnswersTable, TestAnswer>),
+      TestAnswer,
       PrefetchHooks Function()
     >;
 
@@ -1412,6 +1771,8 @@ class $AppDbManager {
   $AppDbManager(this._db);
   $$AppSettingsTableTableManager get appSettings =>
       $$AppSettingsTableTableManager(_db, _db.appSettings);
-  $$UserAnswersTableTableManager get userAnswers =>
-      $$UserAnswersTableTableManager(_db, _db.userAnswers);
+  $$SelectedQuestionsTableTableManager get selectedQuestions =>
+      $$SelectedQuestionsTableTableManager(_db, _db.selectedQuestions);
+  $$TestAnswersTableTableManager get testAnswers =>
+      $$TestAnswersTableTableManager(_db, _db.testAnswers);
 }

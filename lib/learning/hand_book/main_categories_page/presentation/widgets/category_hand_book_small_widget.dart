@@ -36,58 +36,30 @@ class CategoryHandBookSmallWidget extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            padding: EdgeInsets.only(
-              top: 8,
-            ),
+            padding: EdgeInsets.only(top: 8),
             height: height,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFF045EC5).withOpacity(0.08),
-                  blurRadius: 9.3,
-                  offset: Offset(
-                    0.0,
-                    4.0,
-                  ),
-                ),
-              ],
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(background),
-              ),
+              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0))],
+              image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    title,
-                    style: AppStyles.bold15s.copyWith(
-                        color: Color(
-                          0xFF1F2937,
-                        ),
-                        height: 1),
-                  ),
+                  child: Text(title, style: AppStyles.bold15s.copyWith(color: Color(0xFF1F2937), height: 1)),
                 ),
                 SizedBox(height: 5),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    subTitle,
-                    style: AppStyles.regular13s.copyWith(color: Color(0xFF4B5767), height: 1),
-                  ),
+                  child: Text(subTitle, style: AppStyles.regular13s.copyWith(color: Color(0xFF4B5767), height: 1)),
                 ),
-                Image.asset(
-                  picturePlane,
-                  height: imageHeight,
-                  alignment: aligmentPlane,
-                ),
+                Image.asset(picturePlane, height: imageHeight, alignment: aligmentPlane),
               ],
             ),
           ),
-          Positioned(bottom: 8, right: 11, child: SvgPicture.asset(Pictures.book))
+          Positioned(bottom: 8, right: 11, child: SvgPicture.asset(Pictures.book)),
         ],
       ),
     );

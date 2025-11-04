@@ -1,20 +1,17 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/domain/service_locator.dart';
-import 'package:aviapoint/core/presentation/pages/app.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
-import 'package:aviapoint/core/routes/app_router.dart';
-import 'package:aviapoint/core/routes/route_observer.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/bloc/video_for_students_bloc.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class VideoForStudentsScreen extends StatefulWidget {
@@ -51,26 +48,17 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
   }
 
   void _loadVideo(String url) async {
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(backUrl + url));
-    await Future.wait([
-      _videoPlayerController!.initialize(),
-    ]);
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(Provider.of<AppState>(context, listen: false).currentServerUrl + url));
+    await Future.wait([_videoPlayerController!.initialize()]);
 
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController!,
-      autoPlay: false,
-      looping: true,
-    );
+    _chewieController = ChewieController(videoPlayerController: _videoPlayerController!, autoPlay: false, looping: true);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Учебное пособие',
-        withBack: true,
-      ),
+      appBar: const CustomAppBar(title: 'Учебное пособие', withBack: true),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: BlocConsumer<VideoForStudentsBloc, VideoForStudentsState>(
@@ -112,17 +100,13 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
                               }
                             }
                           },
-                          child: Chewie(
-                            controller: _chewieController,
-                          ),
+                          child: Chewie(controller: _chewieController),
                         ),
                       ),
                     ),
                   )
                 : SizedBox(),
-            success: (value) => Column(
-              children: value.videoForStudents.map((e) => Text(e.fileName)).toList(),
-            ),
+            success: (value) => Column(children: value.videoForStudents.map((e) => Text(e.fileName)).toList()),
           ),
         ),
       ),

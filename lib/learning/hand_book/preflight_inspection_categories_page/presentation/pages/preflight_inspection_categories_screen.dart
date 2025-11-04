@@ -23,10 +23,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 @RoutePage()
 class PreflightInspectionCategoriesScreen extends StatefulWidget {
   final String nameCategory;
-  const PreflightInspectionCategoriesScreen({
-    super.key,
-    @PathParam('nameCategory') required this.nameCategory,
-  });
+  const PreflightInspectionCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
 
   @override
   State<PreflightInspectionCategoriesScreen> createState() => _PreflightInspectionCategoriesScreenState();
@@ -46,12 +43,7 @@ class _PreflightInspectionCategoriesScreenState extends State<PreflightInspectio
       appBar: CustomAppBar(
         title: widget.nameCategory,
         withBack: true,
-        actions: [
-          IconButton(
-            onPressed: () => context.read<PreflightCheckedCubit>().clearAllCategory(),
-            icon: SvgPicture.asset(Pictures.round_clear2),
-          ),
-        ],
+        actions: [IconButton(onPressed: () => context.read<PreflightCheckedCubit>().clearAllCategory(), icon: SvgPicture.asset(Pictures.round_clear2))],
       ),
       backgroundColor: AppColors.background,
       body: BlocBuilder<PreflightInspectionCategoriesBloc, PreflightInspectionCategoriesState>(
@@ -79,9 +71,7 @@ class _Success extends StatelessWidget {
     final state = BlocProvider.of<PreflightCheckedCubit>(context).state;
     final checksLenght = BlocProvider.of<PreflightInspectionCheckListBloc>(context).preflightInspectionCheckList.where((e) => e.preflightInspectionCategoryId == index + 1).length;
 
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
-      (e) => e.idCategory == index + 1,
-    );
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1);
     if (checkProgressByIdCategory != null) {
       if (checkProgressByIdCategory.checkedIds.length == checksLenght) {
         return true;
@@ -95,19 +85,16 @@ class _Success extends StatelessWidget {
     final checksLenght = BlocProvider.of<PreflightInspectionCheckListBloc>(context).preflightInspectionCheckList.where((e) => e.preflightInspectionCategoryId == index + 1).length;
 
     // Если Выполнено всё то не даём провлиться в катгорию, иначе может провалиться в категорию и закончить проведение проверок
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
-      (e) => e.idCategory == index + 1,
-    );
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1);
     if (checkProgressByIdCategory != null) {
       if (checkProgressByIdCategory.checkedIds.length == checksLenght) {
         return;
       }
     }
 
-    AutoRouter.of(context).push(PreflightInspectionCheckListRoute(
-      preflihgtInspectionCategoryId: (preflightInspectionCategories[index].id).toString(),
-      nameCategory: preflightInspectionCategories[index].title,
-    ));
+    AutoRouter.of(
+      context,
+    ).push(PreflightInspectionCheckListRoute(preflihgtInspectionCategoryId: (preflightInspectionCategories[index].id).toString(), nameCategory: preflightInspectionCategories[index].title));
   }
 
   @override
@@ -128,9 +115,7 @@ class _Success extends StatelessWidget {
                   subTitle: preflightInspectionCategories[index].subTitle,
                   withClear: preflightCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.isNotEmpty ?? false,
                   clearCategory: () async {
-                    final bool? result = await showDialogCustom(
-                      context: context,
-                    );
+                    final bool? result = await showDialogCustom(context: context);
                     if (result == true) {
                       BlocProvider.of<PreflightCheckedCubit>(context).clearCategory(idCategory: preflightInspectionCategories[index].id);
                     }

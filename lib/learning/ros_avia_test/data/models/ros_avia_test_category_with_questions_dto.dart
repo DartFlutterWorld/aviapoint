@@ -21,8 +21,15 @@ abstract class RosAviaTestCategoryWithQuestionsDto with _$RosAviaTestCategoryWit
 @freezed
 abstract class QuestionWithAnswersDto with _$QuestionWithAnswersDto {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory QuestionWithAnswersDto({required int questionId, required String questionText, String? explanation, int? correctAnswer, required List<AnswerDto> answers, String? categoryTitle}) =
-      _QuestionWithAnswersDto;
+  const factory QuestionWithAnswersDto({
+    required int questionId,
+    required String questionText,
+    String? explanation,
+    int? correctAnswer,
+    required List<AnswerDto> answers,
+    String? categoryTitle,
+    int? categoryId,
+  }) = _QuestionWithAnswersDto;
 
   factory QuestionWithAnswersDto.fromJson(Map<String, dynamic> json) => _$QuestionWithAnswersDtoFromJson(json);
 }

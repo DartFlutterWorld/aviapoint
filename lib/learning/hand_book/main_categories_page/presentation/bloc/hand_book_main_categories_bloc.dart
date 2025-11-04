@@ -20,13 +20,8 @@ abstract class HandBookMainCategoriesEvent with _$HandBookMainCategoriesEvent {
 abstract class HandBookMainCategoriesState with _$HandBookMainCategoriesState {
   const HandBookMainCategoriesState._();
   const factory HandBookMainCategoriesState.loading() = LoadingHandBookMainCategoriesState;
-  const factory HandBookMainCategoriesState.error({
-    String? errorFromApi,
-    required String errorForUser,
-    String? statusCode,
-    StackTrace? stackTrace,
-    String? responseMessage,
-  }) = ErrorHandBookMainCategoriesState;
+  const factory HandBookMainCategoriesState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) =
+      ErrorHandBookMainCategoriesState;
   const factory HandBookMainCategoriesState.success({required List<HandBookMainCategoriesEntity> handBookCategories}) = SuccessHandBookMainCategoriesState;
   // const factory HandBookMainCategoriesState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdHandBookMainCategoriesState;
   // const factory HandBookMainCategoriesState.done() = DoneHandBookMainCategoriesState;
@@ -35,9 +30,7 @@ abstract class HandBookMainCategoriesState with _$HandBookMainCategoriesState {
 class HandBookMainCategoriesBloc extends Bloc<HandBookMainCategoriesEvent, HandBookMainCategoriesState> {
   final HandBookRepository _handBookRepository;
 
-  HandBookMainCategoriesBloc({required HandBookRepository handBookRepository})
-      : _handBookRepository = handBookRepository,
-        super(const LoadingHandBookMainCategoriesState()) {
+  HandBookMainCategoriesBloc({required HandBookRepository handBookRepository}) : _handBookRepository = handBookRepository, super(const LoadingHandBookMainCategoriesState()) {
     on<HandBookMainCategoriesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -62,9 +55,7 @@ class HandBookMainCategoriesBloc extends Bloc<HandBookMainCategoriesEvent, HandB
         );
       },
       (r) {
-        emit(
-          SuccessHandBookMainCategoriesState(handBookCategories: r),
-        );
+        emit(SuccessHandBookMainCategoriesState(handBookCategories: r));
       },
     );
   }

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class DetailStoryScreen extends StatefulWidget {
@@ -19,12 +20,7 @@ class DetailStoryScreen extends StatefulWidget {
   final int currentIndex;
   final List<StoryEntity> stories;
 
-  const DetailStoryScreen({
-    super.key,
-    @PathParam('id') required this.idStory,
-    required this.stories,
-    required this.currentIndex,
-  });
+  const DetailStoryScreen({super.key, @PathParam('id') required this.idStory, required this.stories, required this.currentIndex});
 
   @override
   State<DetailStoryScreen> createState() => _DetailStoryScreenState();
@@ -74,22 +70,23 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
       _videoController?.dispose();
       _videoController = null;
 
-      _videoController = kIsWeb
-          ? CachedVideoPlayerPlusController.networkUrl(Uri.parse('$backUrl${story.video}'))
-          : CachedVideoPlayerPlusController.file(await getIt<DefaultCacheManager>().getSingleFile('$backUrl${story.video}'))
-        // _videoController = CachedVideoPlayerPlusController.networkUrl(Uri.parse('$backUrl${miniStory.video}'))
-        ..initialize().then((_) {
-          if (mounted) {
-            setState(() {});
+      _videoController =
+          kIsWeb
+                ? CachedVideoPlayerPlusController.networkUrl(Uri.parse('${Provider.of<AppState>(context, listen: false).currentServerUrl}${story.video}'))
+                : CachedVideoPlayerPlusController.file(await getIt<DefaultCacheManager>().getSingleFile('${Provider.of<AppState>(context, listen: false).currentServerUrl}${story.video}'))
+            // _videoController = CachedVideoPlayerPlusController.networkUrl(Uri.parse('$backUrl${miniStory.video}'))
+            ..initialize().then((_) {
+              if (mounted) {
+                setState(() {});
 
-            if (_videoController!.value.isInitialized) {
-              _animController?.duration = _videoController?.value.duration;
-              // _animController?.duration = Duration(seconds: 2);
-              _videoController?.play();
-              _animController?.forward();
-            }
-          }
-        });
+                if (_videoController!.value.isInitialized) {
+                  _animController?.duration = _videoController?.value.duration;
+                  // _animController?.duration = Duration(seconds: 2);
+                  _videoController?.play();
+                  _animController?.forward();
+                }
+              }
+            });
     }
   }
 
@@ -192,13 +189,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
             );
           }
 
-          return const Center(
-            child: SizedBox(
-              height: 100,
-              width: 100,
-              child: LoadingCustom(),
-            ),
-          );
+          return const Center(child: SizedBox(height: 100, width: 100, child: LoadingCustom()));
         },
       ),
     );

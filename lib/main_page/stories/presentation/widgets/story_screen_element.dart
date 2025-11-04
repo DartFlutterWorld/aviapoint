@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 
 class StoryScreenElement extends StatelessWidget {
   final List<StoryEntity> stories;
@@ -77,7 +78,12 @@ class StoryScreenElement extends StatelessWidget {
                   child: GestureDetector(
                     onLongPress: onLongPress,
                     onLongPressEnd: onLongPressEnd,
-                    child: CachedNetworkImage(imageUrl: '$backUrl${story.image}', fit: BoxFit.cover, cacheManager: getIt<DefaultCacheManager>(), cacheKey: '$backUrl${story.image}'),
+                    child: CachedNetworkImage(
+                      imageUrl: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
+                      fit: BoxFit.cover,
+                      cacheManager: getIt<DefaultCacheManager>(),
+                      cacheKey: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
+                    ),
                   ),
                 ),
               )
@@ -95,7 +101,12 @@ class StoryScreenElement extends StatelessWidget {
                   aspectRatio: 9 / 16,
                   child: Stack(
                     children: [
-                      CachedNetworkImage(fit: BoxFit.cover, imageUrl: '$backUrl${story.image}', cacheManager: getIt<DefaultCacheManager>(), cacheKey: '$backUrl${story.image}'),
+                      CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
+                        cacheManager: getIt<DefaultCacheManager>(),
+                        cacheKey: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
+                      ),
                       const Center(child: LoadingCustom()),
                     ],
                   ),

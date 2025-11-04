@@ -11,6 +11,7 @@ class QuestionWithAnswersMapper {
       explanation: model.explanation,
       correctAnswer: model.correctAnswer,
       categoryTitle: model.categoryTitle,
+      categoryId: model.categoryId,
     );
   }
 

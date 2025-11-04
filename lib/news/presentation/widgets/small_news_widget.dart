@@ -1,5 +1,5 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,12 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:provider/provider.dart';
 
 class SmallNewsWidget extends StatelessWidget {
-  const SmallNewsWidget({
-    super.key,
-    required this.news,
-  });
+  const SmallNewsWidget({super.key, required this.news});
 
   final NewsEntity news;
 
@@ -27,9 +25,7 @@ class SmallNewsWidget extends StatelessWidget {
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Color(0xFFD9E6F8),
-        ),
+        border: Border.all(color: Color(0xFFD9E6F8)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,15 +33,13 @@ class SmallNewsWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: CachedNetworkImage(
-              imageUrl: backUrl + news.pictureMini,
+              imageUrl: Provider.of<AppState>(context).currentServerUrl + news.pictureMini,
               fit: BoxFit.fill,
               placeholder: (context, url) => Shimmer(
                 duration: const Duration(milliseconds: 1000),
                 color: const Color(0xFF8D66FE),
                 colorOpacity: 0.2,
-                child: Container(
-                  decoration: const BoxDecoration(),
-                ),
+                child: Container(decoration: const BoxDecoration()),
               ),
               height: 75.h,
               width: 75.w,
@@ -64,23 +58,13 @@ class SmallNewsWidget extends StatelessWidget {
                       getTitleCstegory(categoryId: news.categoryId, context: context).toUpperCase(),
                       style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF)),
                     ),
-                    Text(
-                      news.date,
-                      style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF)),
-                    ),
+                    Text(news.date, style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF))),
                   ],
                 ),
                 SizedBox(height: 5),
-                Text(
-                  news.title,
-                  style: AppStyles.medium14s.copyWith(color: Color(0xFF374151)),
-                ),
+                Text(news.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 5),
-                if (news.subTitle.isNotEmpty)
-                  Text(
-                    news.subTitle,
-                    style: AppStyles.light10s.copyWith(color: Color(0xFF374151)),
-                  ),
+                if (news.subTitle.isNotEmpty) Text(news.subTitle, style: AppStyles.light10s.copyWith(color: Color(0xFF374151))),
               ],
             ),
           ),
