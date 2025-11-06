@@ -6,9 +6,23 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mo
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
+import 'package:aviapoint/injection_container.dart';
+import 'package:aviapoint/core/data/database/app_db.dart';
 
-class TestingModeDialog extends StatelessWidget {
+class TestingModeDialog extends StatefulWidget {
   const TestingModeDialog({super.key});
+
+  @override
+  State<TestingModeDialog> createState() => _TestingModeDialogState();
+}
+
+class _TestingModeDialogState extends State<TestingModeDialog> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +50,7 @@ class TestingModeDialog extends StatelessWidget {
                 style: AppStyles.regular15s.copyWith(color: Color(0xFF6E7A89), height: 1),
                 textAlign: TextAlign.center,
               ),
+
               SizedBox(height: 16.h),
               TestingModeElement(
                 title: 'Тренировочный\nрежим',

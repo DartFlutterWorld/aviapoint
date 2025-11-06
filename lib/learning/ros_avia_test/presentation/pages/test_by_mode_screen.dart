@@ -6,6 +6,7 @@ import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
@@ -31,7 +32,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   late QuestionsByTypeCertificateAndCategoriesBloc questionsByTypeCertificateAndCategoriesBloc;
 
   final ValueNotifier<int> indexQuestion = ValueNotifier<int>(0);
-  int? currentSelectedAnswerIndex; // Отслеживаем выбранный ответ для текущего вопроса
+  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(null); // Отслеживаем выбранный ответ для текущего вопроса
 
   @override
   void initState() {
@@ -58,12 +59,16 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
     return unanswered;
   }
 
+  String getNameOfTestMode(TestMode testMode) {
+    return testMode.name == TestMode.training.name ? 'Тренировочный режим' : 'Стандартный тест';
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: questionsByTypeCertificateAndCategoriesBloc..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
       child: Scaffold(
-        appBar: CustomAppBar(title: '${context.read<RosAviaTestCubit>().state.testMode.name}', withBack: true),
+        appBar: CustomAppBar(title: getNameOfTestMode(context.read<RosAviaTestCubit>().state.testMode), withBack: true),
         backgroundColor: AppColors.background,
         body: BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
           builder: (context, state) => state.map(
@@ -114,7 +119,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                               buttonHint: value.buttonHint,
                               onStateChanged: (selectedAnswerIndex, showResults) {
                                 // Только сохраняем выбранный ответ в памяти (не в БД)
-                                currentSelectedAnswerIndex = selectedAnswerIndex;
+                                currentSelectedAnswerIndex.value = selectedAnswerIndex;
                               },
                             );
                           },
@@ -125,40 +130,47 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                         child: Center(
                           child: SizedBox(
                             width: 200,
-                            child: CustomButton(
-                              title: 'Следующий',
-                              verticalPadding: 8.h,
-                              onPressed: () async {
-                                // Сохраняем ответ в БД перед переходом к следующему вопросу
-                                if (currentSelectedAnswerIndex != null) {
-                                  final question = filteredQuestions[indexQuestion.value];
-                                  await getIt<AppDb>().saveTestAnswer(
-                                    certificateTypeId: widget.typeCertificateId,
-                                    questionId: question.questionId,
-                                    selectedAnswerId: currentSelectedAnswerIndex!,
-                                    categoryId: question.categoryId,
-                                    isCorrect: question.answers[currentSelectedAnswerIndex!].isCorrect,
-                                  );
-                                }
+                            child: ValueListenableBuilder<int?>(
+                              valueListenable: currentSelectedAnswerIndex,
+                              builder: (context, selectedIndex, _) {
+                                return CustomButton(
+                                  title: 'Следующий',
+                                  verticalPadding: 8.h,
+                                  onPressed: selectedIndex != null
+                                      ? () async {
+                                          // Сохраняем ответ в БД перед переходом к следующему вопросу
+                                          if (currentSelectedAnswerIndex.value != null) {
+                                            final question = filteredQuestions[indexQuestion.value];
+                                            await getIt<AppDb>().saveTestAnswer(
+                                              certificateTypeId: widget.typeCertificateId,
+                                              questionId: question.questionId,
+                                              selectedAnswerId: currentSelectedAnswerIndex.value!,
+                                              categoryId: question.categoryId,
+                                              isCorrect: question.answers[currentSelectedAnswerIndex.value!].isCorrect,
+                                            );
+                                          }
 
-                                // Переходим к следующему вопросу
-                                if (indexQuestion.value + 1 < filteredQuestions.length) {
-                                  currentSelectedAnswerIndex = null; // Сбрасываем выбор для нового вопроса
-                                  indexQuestion.value++;
-                                } else {
-                                  // Все вопросы ответлены - переходим на результаты БЕЗ очистки
-                                  // Очистка будет при нажатии "Завершить" на экране результатов
-                                  if (mounted) {
-                                    context.router.push(TestResultsRoute(certificateTypeId: widget.typeCertificateId));
-                                  }
-                                }
+                                          // Переходим к следующему вопросу
+                                          if (indexQuestion.value + 1 < filteredQuestions.length) {
+                                            currentSelectedAnswerIndex.value = null; // Сбрасываем выбор для нового вопроса
+                                            indexQuestion.value++;
+                                          } else {
+                                            // Все вопросы ответчены - переходим на результаты БЕЗ очистки
+                                            // Очистка будет при нажатии "Завершить" на экране результатов
+                                            if (mounted) {
+                                              context.router.push(TestResultsRoute(certificateTypeId: widget.typeCertificateId));
+                                            }
+                                          }
+                                        }
+                                      : null, // Кнопка неактивна если ответ не выбран
+                                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                  textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                                  borderColor: Colors.transparent,
+                                  backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,
+                                  borderRadius: 46,
+                                  rightSvg: Pictures.rightArrowMini,
+                                );
                               },
-                              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                              textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-                              borderColor: Colors.transparent,
-                              backgroundColor: Color(0xFF0A6EFA),
-                              borderRadius: 46,
-                              rightSvg: Pictures.rightArrowMini,
                             ),
                           ),
                         ),

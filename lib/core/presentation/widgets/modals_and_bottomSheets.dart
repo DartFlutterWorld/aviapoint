@@ -6,6 +6,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
@@ -21,6 +22,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 Future<void> checkList({required BuildContext context, required List<NormalCheckListEntity> checkList}) async {
   return await showModalBottomSheet<void>(
@@ -216,35 +218,69 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
       }
     } else {
       // Есть неотвеченные вопросы - показываем диалог продолжения
+      final testModeName = certificateSettings?.testMode == 'training' ? 'тренировочном режиме' : 'стандартном тесте';
+
       await showDialog<void>(
         context: context,
         barrierDismissible: true,
-        builder: (dialogContext) => AlertDialog(
-          title: Text('${certificateSettings?.title ?? 'Тестирование'} в процессе'),
-          content: Text('У вас осталось $unansweredCount вопросов. Продолжить?'),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Отмена')),
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(dialogContext);
-                // Очистить ответы и начать заново
-                await db.deleteAnswersByCertificateType(certificateTypeId);
-                await db.deleteSelectedQuestions(certificateTypeId);
-                if (context.mounted) {
-                  testingModeDialog(context: context);
-                }
+        builder: (dialogContext) => ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          child: AlertDialog(
+            icon: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                AutoRouter.of(context).maybePop();
               },
-              child: const Text('Начать сначала'),
+              child: Align(alignment: Alignment.topRight, child: SvgPicture.asset(Pictures.closeAuth)),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-                // Продолжить тест
-                context.router.push(TestByModeRoute(typeCertificateId: certificateTypeId));
-              },
-              child: const Text('Продолжить'),
+            iconPadding: EdgeInsets.all(8),
+            backgroundColor: Colors.white,
+            title: Text(
+              'У вас есть незаконченный тест!',
+              style: AppStyles.bold14s.copyWith(color: Color(0xFF223B76)),
+              textAlign: TextAlign.center,
             ),
-          ],
+            content: Text(
+              'В $testModeName у вас осталось $unansweredCount вопросов. Хотите продолжить?',
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              CustomButton(
+                verticalPadding: 4,
+                backgroundColor: Color(0xFF0A6EFA),
+                title: 'Продолжить',
+                textStyle: AppStyles.bold15s.copyWith(color: Colors.white),
+                borderColor: Color(0xFF0A6EFA),
+                borderRadius: 46,
+                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                onPressed: () {
+                  Navigator.pop(dialogContext);
+                  // Продолжить тест
+                  context.router.push(TestByModeRoute(typeCertificateId: certificateTypeId));
+                },
+              ),
+              SizedBox(height: 16),
+              CustomButton(
+                verticalPadding: 4,
+                backgroundColor: Colors.white,
+                title: 'Начать сначала',
+                textStyle: AppStyles.bold15s.copyWith(color: Color(0xFF0A6EFA)),
+                borderColor: Color(0xFF0A6EFA),
+                borderRadius: 46,
+                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                onPressed: () async {
+                  Navigator.pop(dialogContext);
+                  // Очистить ответы и начать заново
+                  await db.deleteAnswersByCertificateType(certificateTypeId);
+                  await db.deleteSelectedQuestions(certificateTypeId);
+                  if (context.mounted) {
+                    testingModeDialog(context: context);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -272,6 +308,12 @@ Future<void> testingModeDialog({required BuildContext context}) async {
 
     // Проверяем что context все еще валиден после await
     if (!context.mounted) return;
+
+    // Сохраняем выбранный режим в БД
+    final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
+    final db = getIt<AppDb>();
+    final testModeString = result.name; // 'training' или 'standart'
+    await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: testModeString);
 
     // Нет активной сессии, открыть selectTopics для выбора категорий
     if (context.mounted) {

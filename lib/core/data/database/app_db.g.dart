@@ -96,6 +96,18 @@ class $AppSettingsTable extends AppSettings
     requiredDuringInsert: false,
     defaultValue: const Constant('{}'),
   ).withConverter<Set<int>>($AppSettingsTable.$converterselectedCategoryIds);
+  static const VerificationMeta _testModeMeta = const VerificationMeta(
+    'testMode',
+  );
+  @override
+  late final GeneratedColumn<String> testMode = GeneratedColumn<String>(
+    'test_mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('training'),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     certificateTypeId,
@@ -105,6 +117,7 @@ class $AppSettingsTable extends AppSettings
     title,
     image,
     selectedCategoryIds,
+    testMode,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -160,6 +173,12 @@ class $AppSettingsTable extends AppSettings
         image.isAcceptableOrUnknown(data['image']!, _imageMeta),
       );
     }
+    if (data.containsKey('test_mode')) {
+      context.handle(
+        _testModeMeta,
+        testMode.isAcceptableOrUnknown(data['test_mode']!, _testModeMeta),
+      );
+    }
     return context;
   }
 
@@ -200,6 +219,10 @@ class $AppSettingsTable extends AppSettings
               data['${effectivePrefix}selected_category_ids'],
             )!,
           ),
+      testMode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}test_mode'],
+      )!,
     );
   }
 
@@ -220,6 +243,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   final String title;
   final String image;
   final Set<int> selectedCategoryIds;
+  final String testMode;
   const AppSetting({
     required this.certificateTypeId,
     required this.mixAnswers,
@@ -228,6 +252,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     required this.title,
     required this.image,
     required this.selectedCategoryIds,
+    required this.testMode,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -245,6 +270,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
         ),
       );
     }
+    map['test_mode'] = Variable<String>(testMode);
     return map;
   }
 
@@ -257,6 +283,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       title: Value(title),
       image: Value(image),
       selectedCategoryIds: Value(selectedCategoryIds),
+      testMode: Value(testMode),
     );
   }
 
@@ -275,6 +302,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       selectedCategoryIds: serializer.fromJson<Set<int>>(
         json['selectedCategoryIds'],
       ),
+      testMode: serializer.fromJson<String>(json['testMode']),
     );
   }
   @override
@@ -288,6 +316,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'title': serializer.toJson<String>(title),
       'image': serializer.toJson<String>(image),
       'selectedCategoryIds': serializer.toJson<Set<int>>(selectedCategoryIds),
+      'testMode': serializer.toJson<String>(testMode),
     };
   }
 
@@ -299,6 +328,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     String? title,
     String? image,
     Set<int>? selectedCategoryIds,
+    String? testMode,
   }) => AppSetting(
     certificateTypeId: certificateTypeId ?? this.certificateTypeId,
     mixAnswers: mixAnswers ?? this.mixAnswers,
@@ -307,6 +337,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     title: title ?? this.title,
     image: image ?? this.image,
     selectedCategoryIds: selectedCategoryIds ?? this.selectedCategoryIds,
+    testMode: testMode ?? this.testMode,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
@@ -327,6 +358,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       selectedCategoryIds: data.selectedCategoryIds.present
           ? data.selectedCategoryIds.value
           : this.selectedCategoryIds,
+      testMode: data.testMode.present ? data.testMode.value : this.testMode,
     );
   }
 
@@ -339,7 +371,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('buttonHint: $buttonHint, ')
           ..write('title: $title, ')
           ..write('image: $image, ')
-          ..write('selectedCategoryIds: $selectedCategoryIds')
+          ..write('selectedCategoryIds: $selectedCategoryIds, ')
+          ..write('testMode: $testMode')
           ..write(')'))
         .toString();
   }
@@ -353,6 +386,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     title,
     image,
     selectedCategoryIds,
+    testMode,
   );
   @override
   bool operator ==(Object other) =>
@@ -364,7 +398,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.buttonHint == this.buttonHint &&
           other.title == this.title &&
           other.image == this.image &&
-          other.selectedCategoryIds == this.selectedCategoryIds);
+          other.selectedCategoryIds == this.selectedCategoryIds &&
+          other.testMode == this.testMode);
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
@@ -375,6 +410,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<String> title;
   final Value<String> image;
   final Value<Set<int>> selectedCategoryIds;
+  final Value<String> testMode;
   const AppSettingsCompanion({
     this.certificateTypeId = const Value.absent(),
     this.mixAnswers = const Value.absent(),
@@ -383,6 +419,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.title = const Value.absent(),
     this.image = const Value.absent(),
     this.selectedCategoryIds = const Value.absent(),
+    this.testMode = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.certificateTypeId = const Value.absent(),
@@ -392,6 +429,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.title = const Value.absent(),
     this.image = const Value.absent(),
     this.selectedCategoryIds = const Value.absent(),
+    this.testMode = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
     Expression<int>? certificateTypeId,
@@ -401,6 +439,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<String>? title,
     Expression<String>? image,
     Expression<String>? selectedCategoryIds,
+    Expression<String>? testMode,
   }) {
     return RawValuesInsertable({
       if (certificateTypeId != null) 'certificate_type_id': certificateTypeId,
@@ -411,6 +450,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       if (image != null) 'image': image,
       if (selectedCategoryIds != null)
         'selected_category_ids': selectedCategoryIds,
+      if (testMode != null) 'test_mode': testMode,
     });
   }
 
@@ -422,6 +462,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<String>? title,
     Value<String>? image,
     Value<Set<int>>? selectedCategoryIds,
+    Value<String>? testMode,
   }) {
     return AppSettingsCompanion(
       certificateTypeId: certificateTypeId ?? this.certificateTypeId,
@@ -431,6 +472,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       title: title ?? this.title,
       image: image ?? this.image,
       selectedCategoryIds: selectedCategoryIds ?? this.selectedCategoryIds,
+      testMode: testMode ?? this.testMode,
     );
   }
 
@@ -462,6 +504,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
         ),
       );
     }
+    if (testMode.present) {
+      map['test_mode'] = Variable<String>(testMode.value);
+    }
     return map;
   }
 
@@ -474,7 +519,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('buttonHint: $buttonHint, ')
           ..write('title: $title, ')
           ..write('image: $image, ')
-          ..write('selectedCategoryIds: $selectedCategoryIds')
+          ..write('selectedCategoryIds: $selectedCategoryIds, ')
+          ..write('testMode: $testMode')
           ..write(')'))
         .toString();
   }
@@ -1168,6 +1214,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<String> title,
       Value<String> image,
       Value<Set<int>> selectedCategoryIds,
+      Value<String> testMode,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
@@ -1178,6 +1225,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<String> title,
       Value<String> image,
       Value<Set<int>> selectedCategoryIds,
+      Value<String> testMode,
     });
 
 class $$AppSettingsTableFilterComposer
@@ -1224,6 +1272,11 @@ class $$AppSettingsTableFilterComposer
     column: $table.selectedCategoryIds,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
+
+  ColumnFilters<String> get testMode => $composableBuilder(
+    column: $table.testMode,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$AppSettingsTableOrderingComposer
@@ -1269,6 +1322,11 @@ class $$AppSettingsTableOrderingComposer
     column: $table.selectedCategoryIds,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get testMode => $composableBuilder(
+    column: $table.testMode,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppSettingsTableAnnotationComposer
@@ -1311,6 +1369,9 @@ class $$AppSettingsTableAnnotationComposer
         column: $table.selectedCategoryIds,
         builder: (column) => column,
       );
+
+  GeneratedColumn<String> get testMode =>
+      $composableBuilder(column: $table.testMode, builder: (column) => column);
 }
 
 class $$AppSettingsTableTableManager
@@ -1348,6 +1409,7 @@ class $$AppSettingsTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<String> image = const Value.absent(),
                 Value<Set<int>> selectedCategoryIds = const Value.absent(),
+                Value<String> testMode = const Value.absent(),
               }) => AppSettingsCompanion(
                 certificateTypeId: certificateTypeId,
                 mixAnswers: mixAnswers,
@@ -1356,6 +1418,7 @@ class $$AppSettingsTableTableManager
                 title: title,
                 image: image,
                 selectedCategoryIds: selectedCategoryIds,
+                testMode: testMode,
               ),
           createCompanionCallback:
               ({
@@ -1366,6 +1429,7 @@ class $$AppSettingsTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<String> image = const Value.absent(),
                 Value<Set<int>> selectedCategoryIds = const Value.absent(),
+                Value<String> testMode = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 certificateTypeId: certificateTypeId,
                 mixAnswers: mixAnswers,
@@ -1374,6 +1438,7 @@ class $$AppSettingsTableTableManager
                 title: title,
                 image: image,
                 selectedCategoryIds: selectedCategoryIds,
+                testMode: testMode,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

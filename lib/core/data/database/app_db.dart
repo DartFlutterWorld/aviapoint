@@ -18,6 +18,9 @@ class AppSettings extends Table {
   // JSON-список выбранных категорий
   TextColumn get selectedCategoryIds => text().map(const IntListJson()).withDefault(const Constant('{}'))();
 
+  // Сохраненный режим тестирования (training или standart)
+  TextColumn get testMode => text().withDefault(const Constant('training'))();
+
   @override
   Set<Column> get primaryKey => {certificateTypeId};
 }
@@ -53,7 +56,7 @@ class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -97,6 +100,10 @@ class AppDb extends _$AppDb {
         await m.deleteTable('test_answers');
         await m.createTable(testAnswers);
       }
+      if (from < 14) {
+        // Добавляем testMode в AppSettings
+        await m.addColumn(appSettings, appSettings.testMode);
+      }
     },
   );
 
@@ -124,9 +131,8 @@ class AppDb extends _$AppDb {
     required Set<int> selectedCategoryIds,
     required String title,
     required String image,
+    String testMode = 'training',
   }) async {
-    AppTalker.info('saveSettings: saving for certificateTypeId = $certificateTypeId');
-
     try {
       await into(appSettings).insertOnConflictUpdate(
         AppSetting(
@@ -137,11 +143,33 @@ class AppDb extends _$AppDb {
           selectedCategoryIds: selectedCategoryIds,
           title: title,
           image: image,
+          testMode: testMode,
         ),
       );
       AppTalker.good('saveSettings: saved successfully');
     } catch (e, stackTrace) {
       AppTalker.error('saveSettings error', e, stackTrace);
+      rethrow;
+    }
+  }
+
+  /// Сохранить только режим тестирования для типа сертификата
+  Future<void> saveTestMode({required int certificateTypeId, required String testMode}) async {
+    try {
+      final existing = await getSettingsForCertificate(certificateTypeId: certificateTypeId);
+
+      if (existing != null) {
+        // Обновляем существующую запись
+        await (update(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).write(AppSettingsCompanion(testMode: Value(testMode)));
+      } else {
+        // Создаем новую запись с дефолтными значениями
+        await into(
+          appSettings,
+        ).insert(AppSetting(certificateTypeId: certificateTypeId, testMode: testMode, mixAnswers: true, mixQuestions: true, buttonHint: true, selectedCategoryIds: const {}, title: '', image: ''));
+      }
+      AppTalker.good('saveTestMode: saved successfully for certificateTypeId=$certificateTypeId, testMode=$testMode');
+    } catch (e, stackTrace) {
+      AppTalker.error('saveTestMode error', e, stackTrace);
       rethrow;
     }
   }

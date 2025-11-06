@@ -23,6 +23,7 @@ class TestingModeElement extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               boxShadow: [BoxShadow(color: Color(0xff045EC5).withOpacity(0.08), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+              borderRadius: BorderRadius.circular(12),
             ),
             child: SvgPicture.asset(bg, height: 80.h),
           ),
@@ -37,6 +38,8 @@ class TestingModeElement extends StatelessWidget {
             left: 14,
             child: Text(subTitle, style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
           ),
+
+          // Checkmark для выбранного режима
         ],
       ),
     );
