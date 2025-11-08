@@ -7,6 +7,7 @@ import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/domain/entities/preflight_inspection_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_checked_cubit.dart';
@@ -186,7 +187,7 @@ class _SuccessState extends State<_Success> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: CachedNetworkImage(
-                  imageUrl: Provider.of<AppState>(context).currentServerUrl + widget.preflightInspectionCheck[indexCheck].picture!,
+                  imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture),
                   placeholder: (context, url) => LoadingCustom(),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),

@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:aviapoint/auth_page/data/tokens/token_storage.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
+import 'package:aviapoint/config/environment.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
 
 class AppState with ChangeNotifier {
   final AuthRepository _authRepository;
@@ -27,17 +27,16 @@ class AppState with ChangeNotifier {
 
     // Переключаем URL в API datasource
     final dataSource = getIt.get<ApiDatasource>() as ApiDatasourceDio;
-    final newUrl = value ? localServerUrl : remoteServerUrl;
+    // Используем Environment.apiUrl для обоих случаев (он сам определит окружение)
+    final newUrl = Environment.apiUrl;
     dataSource.switchBaseUrl(newUrl);
 
     notifyListeners();
   }
 
   String get currentServerUrl {
-    if (_useLocalServer) {
-      return localServerUrl;
-    }
-    return remoteServerUrl;
+    // Всегда используем Environment.apiUrl
+    return Environment.apiUrl;
   }
 
   // Разобраться постоянно логаут

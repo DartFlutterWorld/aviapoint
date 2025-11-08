@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
@@ -72,8 +73,8 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
 
       _videoController =
           kIsWeb
-                ? CachedVideoPlayerPlusController.networkUrl(Uri.parse('${Provider.of<AppState>(context, listen: false).currentServerUrl}${story.video}'))
-                : CachedVideoPlayerPlusController.file(await getIt<DefaultCacheManager>().getSingleFile('${Provider.of<AppState>(context, listen: false).currentServerUrl}${story.video}'))
+                ? CachedVideoPlayerPlusController.networkUrl(Uri.parse(getImageUrl(story.video)))
+                : CachedVideoPlayerPlusController.file(await getIt<DefaultCacheManager>().getSingleFile(getImageUrl(story.video)))
             // _videoController = CachedVideoPlayerPlusController.networkUrl(Uri.parse('$backUrl${miniStory.video}'))
             ..initialize().then((_) {
               if (mounted) {

@@ -8,6 +8,7 @@ import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_check_list_by_category_bloc.dart';
@@ -200,7 +201,7 @@ class _SuccessState extends State<_Success> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: CachedNetworkImage(
-                  imageUrl: Provider.of<AppState>(context).currentServerUrl + normalCheck[indexCheck].picture!,
+                  imageUrl: getImageUrl(normalCheck[indexCheck].picture),
                   placeholder: (context, url) => LoadingCustom(),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),

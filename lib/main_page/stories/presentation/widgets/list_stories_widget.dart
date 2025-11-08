@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/story_cubit.dart';
@@ -71,7 +72,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
                       child: CachedNetworkImage(
-                        imageUrl: Provider.of<AppState>(context).currentServerUrl + state.story[index].logoStory,
+                        imageUrl: getImageUrl(state.story[index].logoStory),
                         fit: BoxFit.fill,
                         placeholder: (context, url) => Shimmer(
                           duration: const Duration(milliseconds: 1000),
@@ -82,7 +83,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                         height: 100.h,
                         width: 100.w,
                         cacheManager: getIt<DefaultCacheManager>(),
-                        cacheKey: Provider.of<AppState>(context).currentServerUrl + state.story[index].logoStory,
+                        cacheKey: getImageUrl(state.story[index].logoStory),
                       ),
                     ),
                   ),

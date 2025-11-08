@@ -4,6 +4,7 @@ import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/presentation/widgets/story_player.dart';
@@ -78,12 +79,7 @@ class StoryScreenElement extends StatelessWidget {
                   child: GestureDetector(
                     onLongPress: onLongPress,
                     onLongPressEnd: onLongPressEnd,
-                    child: CachedNetworkImage(
-                      imageUrl: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
-                      fit: BoxFit.cover,
-                      cacheManager: getIt<DefaultCacheManager>(),
-                      cacheKey: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
-                    ),
+                    child: CachedNetworkImage(imageUrl: getImageUrl(story.image), fit: BoxFit.cover, cacheManager: getIt<DefaultCacheManager>(), cacheKey: getImageUrl(story.image)),
                   ),
                 ),
               )
@@ -101,12 +97,7 @@ class StoryScreenElement extends StatelessWidget {
                   aspectRatio: 9 / 16,
                   child: Stack(
                     children: [
-                      CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
-                        cacheManager: getIt<DefaultCacheManager>(),
-                        cacheKey: '${Provider.of<AppState>(context).currentServerUrl}${story.image}',
-                      ),
+                      CachedNetworkImage(fit: BoxFit.cover, imageUrl: getImageUrl(story.image), cacheManager: getIt<DefaultCacheManager>(), cacheKey: getImageUrl(story.image)),
                       const Center(child: LoadingCustom()),
                     ],
                   ),

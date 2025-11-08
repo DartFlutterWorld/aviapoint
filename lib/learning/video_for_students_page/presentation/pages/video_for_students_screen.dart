@@ -5,6 +5,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/bloc/video_for_students_bloc.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
   }
 
   void _loadVideo(String url) async {
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(Provider.of<AppState>(context, listen: false).currentServerUrl + url));
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(getImageUrl(url)));
     await Future.wait([_videoPlayerController!.initialize()]);
 
     _chewieController = ChewieController(videoPlayerController: _videoPlayerController!, autoPlay: false, looping: true);

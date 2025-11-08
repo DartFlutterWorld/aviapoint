@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -49,7 +50,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
             ClipRRect(
               borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
               child: CachedNetworkImage(
-                imageUrl: Provider.of<AppState>(context).currentServerUrl + widget.news.pictureBig,
+                imageUrl: getImageUrl(widget.news.pictureBig),
                 fit: BoxFit.fill,
                 placeholder: (context, url) => Shimmer(
                   duration: const Duration(milliseconds: 1000),

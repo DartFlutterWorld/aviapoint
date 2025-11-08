@@ -1,20 +1,44 @@
-// Тест.
-// Web
-// const backUrl = 'http://localhost:8080/';
-
-// Ios
-// const backUrl = 'http://0.0.0.0:8080/';
-
-//Android
-// const backUrl = 'http://10.0.2.2:8080/';
+// Импортируем Environment
+import 'package:aviapoint/config/environment.dart';
 
 // ===== ПЕРЕКЛЮЧАТЕЛЬ СЕРВЕРА =====
-// Локальные и удаленные URL серверов
-// const String localServerUrl = 'http://10.0.2.2:8080/'; // Android
-const String localServerUrl = 'http://0.0.0.0:8080/'; // iOS
-// const String localServerUrl = 'http://localhost:8080/'; // Web
+// Окружения контролируются через build flags в Environment
+//
+// Development (по умолчанию):
+// flutter run -d chrome
+// flutter build web --release
+//
+// Production (для VPS):
+// flutter build web --release --dart-define=isDevelopment=false
+//
+// Локальные и удаленные URL серверов (для совместимости)
+const String localServerUrl = 'http://0.0.0.0:8080/'; // Development
+const String remoteServerUrl = 'https://avia-point.com/'; // Production
 
-const String remoteServerUrl = 'http://83.166.246.205:8080/';
+// Получить текущий URL на основе Environment
+// Параметр useLocal игнорируется, всегда используется Environment.apiUrl
+String getBackUrl({bool useLocal = true}) {
+  return Environment.apiUrl;
+}
 
-// Получить текущий URL на основе состояния (используется при инициализации)
-String getBackUrl({bool useLocal = false}) => useLocal ? localServerUrl : remoteServerUrl;
+/// Получить URL для изображения/видео из папки public
+/// Если путь уже начинается с /public/, возвращает как есть
+/// Если нет, добавляет префикс /public/
+String getImageUrl(String? imagePath) {
+  if (imagePath == null || imagePath.isEmpty) {
+    return '';
+  }
+
+  // Если путь уже начинается с /public/, возвращаем как есть
+  if (imagePath.startsWith('/public/')) {
+    return Environment.apiUrl + imagePath;
+  }
+
+  // Если путь начинается с /, но не с /public/, добавляем /public/
+  if (imagePath.startsWith('/')) {
+    return Environment.apiUrl + '/public' + imagePath;
+  }
+
+  // Если путь не начинается с /, добавляем /public/
+  return Environment.apiUrl + '/public/' + imagePath;
+}

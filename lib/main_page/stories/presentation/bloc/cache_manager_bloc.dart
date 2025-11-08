@@ -1,4 +1,5 @@
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/domain/repositories/story_repository.dart';
@@ -115,7 +116,7 @@ class CacheManagerBloc extends Bloc<CacheManagerEvent, CacheManagerState> {
   void cacheStor(List<StoryEntity> data) async {
     final appState = getIt<AppState>();
     for (var it in data) {
-      await getIt<DefaultCacheManager>().getSingleFile('${appState.currentServerUrl}${it.image}');
+      await getIt<DefaultCacheManager>().getSingleFile(getImageUrl(it.image));
       debugPrint('Фото сторик загружен ${it.image}');
     }
   }

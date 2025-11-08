@@ -1,5 +1,6 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,7 +33,7 @@ class BigNewsWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             child: CachedNetworkImage(
-              imageUrl: Provider.of<AppState>(context).currentServerUrl + news.pictureBig,
+              imageUrl: getImageUrl(news.pictureBig),
               fit: BoxFit.fill,
               placeholder: (context, url) => Shimmer(
                 duration: const Duration(milliseconds: 1000),
