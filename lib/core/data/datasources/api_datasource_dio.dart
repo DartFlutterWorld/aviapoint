@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
-import 'dart:io';
 
 /// [Dio] реализация поставщика данных API.
 class ApiDatasourceDio extends ApiDatasource {
@@ -35,12 +34,19 @@ class ApiDatasourceDio extends ApiDatasource {
       _dio.interceptors.addAll(interceptors!);
     }
 
-    if (kDebugMode) {
-      final adapter = _dio.httpClientAdapter as dynamic;
-      adapter?.onHttpClientCreate = (HttpClient client) {
-        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-        return client;
-      };
+    // onHttpClientCreate доступен только на мобильных платформах (IOHttpClientAdapter),
+    // но не на веб-платформе (BrowserHttpClientAdapter)
+    if (kDebugMode && !kIsWeb) {
+      try {
+        final adapter = _dio.httpClientAdapter as dynamic;
+        // Используем dynamic для типов, так как dart:io недоступен на веб-платформе
+        adapter?.onHttpClientCreate = (dynamic client) {
+          client.badCertificateCallback = (dynamic cert, String host, int port) => true;
+          return client;
+        };
+      } catch (e) {
+        // Игнорируем ошибки на платформах, где это не поддерживается (например, веб)
+      }
     }
   }
 

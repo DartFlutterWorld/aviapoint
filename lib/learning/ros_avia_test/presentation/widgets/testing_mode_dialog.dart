@@ -28,7 +28,8 @@ class _TestingModeDialogState extends State<TestingModeDialog> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
+        height: 300,
+        width: 350,
         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20.r))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 11),
