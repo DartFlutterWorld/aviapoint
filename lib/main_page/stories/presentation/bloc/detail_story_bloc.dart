@@ -6,37 +6,25 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'detail_story_bloc.freezed.dart';
 
 @freezed
-class DetailStoryEvent with _$DetailStoryEvent {
+abstract class DetailStoryEvent with _$DetailStoryEvent {
   const DetailStoryEvent._();
 
   const factory DetailStoryEvent.get({required int id}) = GetDetailStoryEvent;
 }
 
 @freezed
-class DetailStoryState with _$DetailStoryState {
+abstract class DetailStoryState with _$DetailStoryState {
   const DetailStoryState._();
   const factory DetailStoryState.loading() = LoadingDetailStoryState;
-  const factory DetailStoryState.error({
-    String? errorFromApi,
-    required String errorForUser,
-    String? statusCode,
-    StackTrace? stackTrace,
-    String? responseMessage,
-  }) = ErrorDetailStoryState;
+  const factory DetailStoryState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorDetailStoryState;
   const factory DetailStoryState.success({required StoryEntity detailstory}) = SuccessDetailStoryState;
 }
 
 class DetailStoryBloc extends Bloc<DetailStoryEvent, DetailStoryState> {
   final StoryRepository _storyRepository;
 
-  DetailStoryBloc({required StoryRepository storyRepository})
-      : _storyRepository = storyRepository,
-        super(const LoadingDetailStoryState()) {
-    on<DetailStoryEvent>(
-      (event, emitter) => event.map(
-        get: (event) => _get(event, emitter),
-      ),
-    );
+  DetailStoryBloc({required StoryRepository storyRepository}) : _storyRepository = storyRepository, super(const LoadingDetailStoryState()) {
+    on<DetailStoryEvent>((event, emitter) => event.map(get: (event) => _get(event, emitter)));
   }
 
   Future<void> _get(GetDetailStoryEvent event, Emitter<DetailStoryState> emit) async {

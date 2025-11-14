@@ -6,16 +6,14 @@ part of 'auth_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AuthDtoImpl _$$AuthDtoImplFromJson(Map<String, dynamic> json) =>
-    _$AuthDtoImpl(
-      token: json['token'] as String,
-      refreshToken: json['refresh_token'] as String,
-      profile: ProfileDto.fromJson(json['profile'] as Map<String, dynamic>),
-    );
+_AuthDto _$AuthDtoFromJson(Map<String, dynamic> json) => _AuthDto(
+  token: json['token'] as String,
+  refreshToken: json['refresh_token'] as String,
+  profile: ProfileDto.fromJson(json['profile'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$$AuthDtoImplToJson(_$AuthDtoImpl instance) =>
-    <String, dynamic>{
-      'token': instance.token,
-      'refresh_token': instance.refreshToken,
-      'profile': instance.profile,
-    };
+Map<String, dynamic> _$AuthDtoToJson(_AuthDto instance) => <String, dynamic>{
+  'token': instance.token,
+  'refresh_token': instance.refreshToken,
+  'profile': instance.profile,
+};

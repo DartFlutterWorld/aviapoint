@@ -11,14 +11,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'cache_manager_bloc.freezed.dart';
 
 @freezed
-class CacheManagerEvent with _$CacheManagerEvent {
+abstract class CacheManagerEvent with _$CacheManagerEvent {
   const CacheManagerEvent._();
 
   const factory CacheManagerEvent.getStories() = GetStoriesCacheManagerEvent;
 }
 
 @freezed
-class CacheManagerState with _$CacheManagerState {
+abstract class CacheManagerState with _$CacheManagerState {
   const CacheManagerState._();
   const factory CacheManagerState.loading() = LoadingCacheManagerState;
   const factory CacheManagerState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorCacheManagerState;

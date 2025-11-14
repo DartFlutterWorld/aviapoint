@@ -7,12 +7,10 @@ class StoryCubit extends Cubit<StoryState> {
   StoryCubit() : super(StoryState());
 
   void setCurrentIndex(int currentIndex) {
-    emit(state.copyWith(
-      currentIndex: currentIndex,
-    ));
+    emit(state.copyWith(currentIndex: currentIndex));
   }
 
-// Добавляем id просмотренных сториков в лист
+  // Добавляем id просмотренных сториков в лист
   void setShowStory({required int id}) {
     // Создаем новый Set из текущего состояния
     List<int> listStories = List.from(state.listStories);
@@ -30,9 +28,6 @@ class StoryCubit extends Cubit<StoryState> {
 }
 
 @freezed
-class StoryState with _$StoryState {
-  const factory StoryState({
-    @Default(0) int currentIndex,
-    @Default([]) List<int> listStories,
-  }) = _StoryState;
+abstract class StoryState with _$StoryState {
+  const factory StoryState({@Default(0) int currentIndex, @Default([]) List<int> listStories}) = _StoryState;
 }

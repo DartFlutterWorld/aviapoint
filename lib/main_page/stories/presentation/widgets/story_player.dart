@@ -9,7 +9,7 @@ class StoryPlayer extends StatefulWidget {
   final String buttonColor;
   final String textColor;
   final AnimationController? animController;
-  final CachedVideoPlayerPlusController? videoController;
+  final CachedVideoPlayerPlus? videoPlayer;
   final VoidCallback onTapScreenRight;
   final VoidCallback onTapScreenLeft;
   final VoidCallback onLongPress;
@@ -23,7 +23,7 @@ class StoryPlayer extends StatefulWidget {
     required this.buttonColor,
     required this.textColor,
     required this.animController,
-    required this.videoController,
+    required this.videoPlayer,
     required this.onTapScreenRight,
     required this.onTapScreenLeft,
     required this.currentIndex,
@@ -67,7 +67,7 @@ class _StoryPlayerState extends State<StoryPlayer> {
         onTapScreenLeft: widget.onTapScreenLeft,
         currentIndex: widget.currentIndex,
         isVisible: isVisible,
-        videoController: widget.videoController,
+        videoPlayer: widget.videoPlayer,
         animController: widget.animController,
         onLongPress: widget.onLongPress,
         onLongPressEnd: widget.onLongPressEnd,
@@ -81,12 +81,7 @@ class AnimatedBar extends StatelessWidget {
   final int position;
   final int currentIndex;
 
-  const AnimatedBar({
-    super.key,
-    required this.animController,
-    required this.position,
-    required this.currentIndex,
-  });
+  const AnimatedBar({super.key, required this.animController, required this.position, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -97,18 +92,12 @@ class AnimatedBar extends StatelessWidget {
           builder: (context, constraints) {
             return Stack(
               children: <Widget>[
-                _buildContainer(
-                  double.infinity,
-                  position < currentIndex ? Colors.white : Colors.white.withValues(alpha: 0.5),
-                ),
+                _buildContainer(double.infinity, position < currentIndex ? Colors.white : Colors.white.withValues(alpha: 0.5)),
                 position == currentIndex
                     ? AnimatedBuilder(
                         animation: animController,
                         builder: (context, child) {
-                          return _buildContainer(
-                            constraints.maxWidth * animController.value,
-                            Colors.white,
-                          );
+                          return _buildContainer(constraints.maxWidth * animController.value, Colors.white);
                         },
                       )
                     : const SizedBox.shrink(),
@@ -124,10 +113,7 @@ class AnimatedBar extends StatelessWidget {
     return Container(
       height: 5.0,
       width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(7.0),
-      ),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(7.0)),
     );
   }
 }

@@ -7,7 +7,6 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
@@ -390,16 +389,7 @@ Future<void> testingModeDialog({required BuildContext context}) async {
       final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
       final db = getIt<AppDb>();
       final testModeString = result.name; // 'training' или 'standart'
-
-      // Пытаемся сохранить режим в БД, но не блокируем открытие bottom sheet при ошибке
-      try {
-        await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: testModeString);
-        _log('✅ Режим тестирования сохранен в БД: $testModeString');
-      } catch (e, stackTrace) {
-        _log('⚠️ Ошибка при сохранении режима в БД: $e');
-        _log('StackTrace: $stackTrace');
-        // Не прерываем выполнение - продолжаем открывать bottom sheet
-      }
+      await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: testModeString);
 
       // Нет активной сессии, открыть selectTopics для выбора категорий
       // На веб-платформе используем более длительную задержку для production

@@ -6,19 +6,19 @@ part of 'preflight_inspection_categories_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PreflightInspectionCategoriesDtoImpl
-_$$PreflightInspectionCategoriesDtoImplFromJson(Map<String, dynamic> json) =>
-    _$PreflightInspectionCategoriesDtoImpl(
-      id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      subTitle: json['sub_title'] as String,
-      mainCategoryId: (json['main_category_id'] as num).toInt(),
-      titleEng: json['title_eng'] as String,
-      picture: json['picture'] as String,
-    );
+_PreflightInspectionCategoriesDto _$PreflightInspectionCategoriesDtoFromJson(
+  Map<String, dynamic> json,
+) => _PreflightInspectionCategoriesDto(
+  id: (json['id'] as num).toInt(),
+  title: json['title'] as String,
+  subTitle: json['sub_title'] as String,
+  mainCategoryId: (json['main_category_id'] as num).toInt(),
+  titleEng: json['title_eng'] as String,
+  picture: json['picture'] as String,
+);
 
-Map<String, dynamic> _$$PreflightInspectionCategoriesDtoImplToJson(
-  _$PreflightInspectionCategoriesDtoImpl instance,
+Map<String, dynamic> _$PreflightInspectionCategoriesDtoToJson(
+  _PreflightInspectionCategoriesDto instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'title': instance.title,

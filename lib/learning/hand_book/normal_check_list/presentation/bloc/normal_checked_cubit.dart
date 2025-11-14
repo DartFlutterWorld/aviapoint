@@ -46,7 +46,7 @@ class NormalCheckedCubit extends Cubit<NormalCheckedState> {
 }
 
 @freezed
-class NormalCheckedState with _$NormalCheckedState {
+abstract class NormalCheckedState with _$NormalCheckedState {
   const factory NormalCheckedState({@Default({}) Set<CheckProgress> checkProgress}) = _NormalCheckedState;
 }
 

@@ -15,7 +15,7 @@ class StoryScreenWidget extends StatelessWidget {
   final String buttonColor;
   final String textColor;
   final AnimationController? animController;
-  final CachedVideoPlayerPlusController? videoController;
+  final CachedVideoPlayerPlus? videoPlayer;
   final VoidCallback onTapScreenRight;
   final VoidCallback onTapScreenLeft;
   final VoidCallback onLongPress;
@@ -29,7 +29,7 @@ class StoryScreenWidget extends StatelessWidget {
     required this.buttonColor,
     required this.textColor,
     this.animController,
-    this.videoController,
+    this.videoPlayer,
     required this.onTapScreenRight,
     required this.onTapScreenLeft,
     required this.currentIndex,
@@ -72,26 +72,12 @@ class StoryScreenWidget extends StatelessWidget {
                             // width: 110,
                             width: size.width * 0.1,
                             height: 200,
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/svg/left_arrow.svg',
-                              ),
-                            ),
+                            child: Center(child: SvgPicture.asset('assets/svg/left_arrow.svg')),
                           ),
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey[850]!,
-                                blurRadius: 150.0,
-                                blurStyle: BlurStyle.outer,
-                                offset: const Offset(
-                                  0.0,
-                                  0.0,
-                                ),
-                              ),
-                            ],
+                            boxShadow: [BoxShadow(color: Colors.grey[850]!, blurRadius: 150.0, blurStyle: BlurStyle.outer, offset: const Offset(0.0, 0.0))],
                           ),
                           child: StoryScreenElement(
                             stories: stories,
@@ -102,7 +88,7 @@ class StoryScreenWidget extends StatelessWidget {
                             onTapScreenLeft: onTapScreenLeft,
                             currentIndex: currentIndex,
                             isVisible: false,
-                            videoController: videoController,
+                            videoPlayer: videoPlayer,
                             animController: animController,
                             onLongPress: onLongPress,
                             onLongPressEnd: onLongPressEnd,
@@ -117,11 +103,7 @@ class StoryScreenWidget extends StatelessWidget {
                                 child: SizedBox(
                                   width: size.width * 0.1,
                                   height: 200,
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      'assets/svg/right_arrow.svg',
-                                    ),
-                                  ),
+                                  child: Center(child: SvgPicture.asset('assets/svg/right_arrow.svg')),
                                 ),
                               ),
                             ),
@@ -158,9 +140,7 @@ class StoryScreenWidget extends StatelessWidget {
           )
         : LayoutBuilder(
             builder: (context, constraints) => Padding(
-              padding: EdgeInsets.only(
-                top: kIsWeb ? 16 : MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single).padding.top + 16,
-              ),
+              padding: EdgeInsets.only(top: kIsWeb ? 16 : MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single).padding.top + 16),
               child: Column(
                 // mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,7 +156,7 @@ class StoryScreenWidget extends StatelessWidget {
                       onTapScreenLeft: onTapScreenLeft,
                       currentIndex: currentIndex,
                       isVisible: isVisible,
-                      videoController: videoController,
+                      videoPlayer: videoPlayer,
                       animController: animController,
                       onLongPress: onLongPress,
                       onLongPressEnd: onLongPressEnd,
@@ -196,12 +176,7 @@ class StoryScreenWidget extends StatelessWidget {
                           color: Colors.transparent,
                           width: double.infinity,
                           child: Center(
-                            child: Transform.rotate(
-                              angle: 90 * (pi / 180),
-                              child: SvgPicture.asset(
-                                Pictures.rightArrow,
-                              ),
-                            ),
+                            child: Transform.rotate(angle: 90 * (pi / 180), child: SvgPicture.asset(Pictures.rightArrow)),
                           ),
                         ),
                       ),

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,260 +9,281 @@ part of 'profile_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) {
-  return _ProfileDto.fromJson(json);
-}
 
 /// @nodoc
 mixin _$ProfileDto {
-  int get id => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'first_name')
-  String? get firstName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'last_name')
-  String? get lastName => throw _privateConstructorUsedError;
+
+ int get id; String get phone; String? get email;@JsonKey(name: 'first_name') String? get firstName;@JsonKey(name: 'last_name') String? get lastName;
+/// Create a copy of ProfileDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProfileDtoCopyWith<ProfileDto> get copyWith => _$ProfileDtoCopyWithImpl<ProfileDto>(this as ProfileDto, _$identity);
 
   /// Serializes this ProfileDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of ProfileDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ProfileDtoCopyWith<ProfileDto> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,phone,email,firstName,lastName);
+
+@override
+String toString() {
+  return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ProfileDtoCopyWith<$Res> {
-  factory $ProfileDtoCopyWith(
-    ProfileDto value,
-    $Res Function(ProfileDto) then,
-  ) = _$ProfileDtoCopyWithImpl<$Res, ProfileDto>;
-  @useResult
-  $Res call({
-    int id,
-    String phone,
-    String? email,
-    @JsonKey(name: 'first_name') String? firstName,
-    @JsonKey(name: 'last_name') String? lastName,
-  });
-}
+abstract mixin class $ProfileDtoCopyWith<$Res>  {
+  factory $ProfileDtoCopyWith(ProfileDto value, $Res Function(ProfileDto) _then) = _$ProfileDtoCopyWithImpl;
+@useResult
+$Res call({
+ int id, String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName
+});
 
+
+
+
+}
 /// @nodoc
-class _$ProfileDtoCopyWithImpl<$Res, $Val extends ProfileDto>
+class _$ProfileDtoCopyWithImpl<$Res>
     implements $ProfileDtoCopyWith<$Res> {
-  _$ProfileDtoCopyWithImpl(this._value, this._then);
+  _$ProfileDtoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ProfileDto _self;
+  final $Res Function(ProfileDto) _then;
 
-  /// Create a copy of ProfileDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? phone = null,
-    Object? email = freezed,
-    Object? firstName = freezed,
-    Object? lastName = freezed,
-  }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as int,
-            phone: null == phone
-                ? _value.phone
-                : phone // ignore: cast_nullable_to_non_nullable
-                      as String,
-            email: freezed == email
-                ? _value.email
-                : email // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            firstName: freezed == firstName
-                ? _value.firstName
-                : firstName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            lastName: freezed == lastName
-                ? _value.lastName
-                : lastName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of ProfileDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phone = null,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,firstName: freezed == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
+as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$ProfileDtoImplCopyWith<$Res>
-    implements $ProfileDtoCopyWith<$Res> {
-  factory _$$ProfileDtoImplCopyWith(
-    _$ProfileDtoImpl value,
-    $Res Function(_$ProfileDtoImpl) then,
-  ) = __$$ProfileDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({
-    int id,
-    String phone,
-    String? email,
-    @JsonKey(name: 'first_name') String? firstName,
-    @JsonKey(name: 'last_name') String? lastName,
-  });
 }
 
-/// @nodoc
-class __$$ProfileDtoImplCopyWithImpl<$Res>
-    extends _$ProfileDtoCopyWithImpl<$Res, _$ProfileDtoImpl>
-    implements _$$ProfileDtoImplCopyWith<$Res> {
-  __$$ProfileDtoImplCopyWithImpl(
-    _$ProfileDtoImpl _value,
-    $Res Function(_$ProfileDtoImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of ProfileDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? phone = null,
-    Object? email = freezed,
-    Object? firstName = freezed,
-    Object? lastName = freezed,
-  }) {
-    return _then(
-      _$ProfileDtoImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as int,
-        phone: null == phone
-            ? _value.phone
-            : phone // ignore: cast_nullable_to_non_nullable
-                  as String,
-        email: freezed == email
-            ? _value.email
-            : email // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        firstName: freezed == firstName
-            ? _value.firstName
-            : firstName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        lastName: freezed == lastName
-            ? _value.lastName
-            : lastName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [ProfileDto].
+extension ProfileDtoPatterns on ProfileDto {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ProfileDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ProfileDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ProfileDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _ProfileDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ProfileDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ProfileDto() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ProfileDto() when $default != null:
+return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName)  $default,) {final _that = this;
+switch (_that) {
+case _ProfileDto():
+return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName)?  $default,) {final _that = this;
+switch (_that) {
+case _ProfileDto() when $default != null:
+return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ProfileDtoImpl implements _ProfileDto {
-  const _$ProfileDtoImpl({
-    required this.id,
-    required this.phone,
-    this.email,
-    @JsonKey(name: 'first_name') this.firstName,
-    @JsonKey(name: 'last_name') this.lastName,
-  });
 
-  factory _$ProfileDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ProfileDtoImplFromJson(json);
+class _ProfileDto implements ProfileDto {
+  const _ProfileDto({required this.id, required this.phone, this.email, @JsonKey(name: 'first_name') this.firstName, @JsonKey(name: 'last_name') this.lastName});
+  factory _ProfileDto.fromJson(Map<String, dynamic> json) => _$ProfileDtoFromJson(json);
 
-  @override
-  final int id;
-  @override
-  final String phone;
-  @override
-  final String? email;
-  @override
-  @JsonKey(name: 'first_name')
-  final String? firstName;
-  @override
-  @JsonKey(name: 'last_name')
-  final String? lastName;
+@override final  int id;
+@override final  String phone;
+@override final  String? email;
+@override@JsonKey(name: 'first_name') final  String? firstName;
+@override@JsonKey(name: 'last_name') final  String? lastName;
 
-  @override
-  String toString() {
-    return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName)';
-  }
+/// Create a copy of ProfileDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ProfileDtoCopyWith<_ProfileDto> get copyWith => __$ProfileDtoCopyWithImpl<_ProfileDto>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ProfileDtoImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.phone, phone) || other.phone == phone) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.firstName, firstName) ||
-                other.firstName == firstName) &&
-            (identical(other.lastName, lastName) ||
-                other.lastName == lastName));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, phone, email, firstName, lastName);
-
-  /// Create a copy of ProfileDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ProfileDtoImplCopyWith<_$ProfileDtoImpl> get copyWith =>
-      __$$ProfileDtoImplCopyWithImpl<_$ProfileDtoImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ProfileDtoImplToJson(this);
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$ProfileDtoToJson(this, );
 }
 
-abstract class _ProfileDto implements ProfileDto {
-  const factory _ProfileDto({
-    required final int id,
-    required final String phone,
-    final String? email,
-    @JsonKey(name: 'first_name') final String? firstName,
-    @JsonKey(name: 'last_name') final String? lastName,
-  }) = _$ProfileDtoImpl;
-
-  factory _ProfileDto.fromJson(Map<String, dynamic> json) =
-      _$ProfileDtoImpl.fromJson;
-
-  @override
-  int get id;
-  @override
-  String get phone;
-  @override
-  String? get email;
-  @override
-  @JsonKey(name: 'first_name')
-  String? get firstName;
-  @override
-  @JsonKey(name: 'last_name')
-  String? get lastName;
-
-  /// Create a copy of ProfileDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ProfileDtoImplCopyWith<_$ProfileDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,phone,email,firstName,lastName);
+
+@override
+String toString() {
+  return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ProfileDtoCopyWith<$Res> implements $ProfileDtoCopyWith<$Res> {
+  factory _$ProfileDtoCopyWith(_ProfileDto value, $Res Function(_ProfileDto) _then) = __$ProfileDtoCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName
+});
+
+
+
+
+}
+/// @nodoc
+class __$ProfileDtoCopyWithImpl<$Res>
+    implements _$ProfileDtoCopyWith<$Res> {
+  __$ProfileDtoCopyWithImpl(this._self, this._then);
+
+  final _ProfileDto _self;
+  final $Res Function(_ProfileDto) _then;
+
+/// Create a copy of ProfileDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phone = null,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,}) {
+  return _then(_ProfileDto(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,firstName: freezed == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
+as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

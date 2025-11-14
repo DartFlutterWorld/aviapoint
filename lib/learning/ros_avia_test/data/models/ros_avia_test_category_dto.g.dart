@@ -6,16 +6,16 @@ part of 'ros_avia_test_category_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$RosAviaTestCategoryDtoImpl _$$RosAviaTestCategoryDtoImplFromJson(
+_RosAviaTestCategoryDto _$RosAviaTestCategoryDtoFromJson(
   Map<String, dynamic> json,
-) => _$RosAviaTestCategoryDtoImpl(
+) => _RosAviaTestCategoryDto(
   id: (json['id'] as num).toInt(),
   title: json['title'] as String,
   image: json['image'] as String,
 );
 
-Map<String, dynamic> _$$RosAviaTestCategoryDtoImplToJson(
-  _$RosAviaTestCategoryDtoImpl instance,
+Map<String, dynamic> _$RosAviaTestCategoryDtoToJson(
+  _RosAviaTestCategoryDto instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'title': instance.title,

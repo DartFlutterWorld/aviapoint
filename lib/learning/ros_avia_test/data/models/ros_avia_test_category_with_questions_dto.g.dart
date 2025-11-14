@@ -6,9 +6,9 @@ part of 'ros_avia_test_category_with_questions_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$RosAviaTestCategoryWithQuestionsDtoImpl
-_$$RosAviaTestCategoryWithQuestionsDtoImplFromJson(Map<String, dynamic> json) =>
-    _$RosAviaTestCategoryWithQuestionsDtoImpl(
+_RosAviaTestCategoryWithQuestionsDto
+_$RosAviaTestCategoryWithQuestionsDtoFromJson(Map<String, dynamic> json) =>
+    _RosAviaTestCategoryWithQuestionsDto(
       categoryId: (json['category_id'] as num).toInt(),
       categoryTitle: json['category_title'] as String,
       categoryImage: json['category_image'] as String?,
@@ -21,8 +21,8 @@ _$$RosAviaTestCategoryWithQuestionsDtoImplFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$RosAviaTestCategoryWithQuestionsDtoImplToJson(
-  _$RosAviaTestCategoryWithQuestionsDtoImpl instance,
+Map<String, dynamic> _$RosAviaTestCategoryWithQuestionsDtoToJson(
+  _RosAviaTestCategoryWithQuestionsDto instance,
 ) => <String, dynamic>{
   'category_id': instance.categoryId,
   'category_title': instance.categoryTitle,
@@ -32,9 +32,9 @@ Map<String, dynamic> _$$RosAviaTestCategoryWithQuestionsDtoImplToJson(
   'questions_with_answers': instance.questionsWithAnswers,
 };
 
-_$QuestionWithAnswersDtoImpl _$$QuestionWithAnswersDtoImplFromJson(
+_QuestionWithAnswersDto _$QuestionWithAnswersDtoFromJson(
   Map<String, dynamic> json,
-) => _$QuestionWithAnswersDtoImpl(
+) => _QuestionWithAnswersDto(
   questionId: (json['question_id'] as num).toInt(),
   questionText: json['question_text'] as String,
   explanation: json['explanation'] as String?,
@@ -46,8 +46,8 @@ _$QuestionWithAnswersDtoImpl _$$QuestionWithAnswersDtoImplFromJson(
   categoryId: (json['category_id'] as num).toInt(),
 );
 
-Map<String, dynamic> _$$QuestionWithAnswersDtoImplToJson(
-  _$QuestionWithAnswersDtoImpl instance,
+Map<String, dynamic> _$QuestionWithAnswersDtoToJson(
+  _QuestionWithAnswersDto instance,
 ) => <String, dynamic>{
   'question_id': instance.questionId,
   'question_text': instance.questionText,
@@ -58,16 +58,15 @@ Map<String, dynamic> _$$QuestionWithAnswersDtoImplToJson(
   'category_id': instance.categoryId,
 };
 
-_$AnswerDtoImpl _$$AnswerDtoImplFromJson(Map<String, dynamic> json) =>
-    _$AnswerDtoImpl(
-      answerId: (json['answer_id'] as num).toInt(),
-      answerText: json['answer_text'] as String,
-      isCorrect: json['is_correct'] as bool,
-      isOfficial: json['is_official'] as bool,
-      position: (json['position'] as num).toInt(),
-    );
+_AnswerDto _$AnswerDtoFromJson(Map<String, dynamic> json) => _AnswerDto(
+  answerId: (json['answer_id'] as num).toInt(),
+  answerText: json['answer_text'] as String,
+  isCorrect: json['is_correct'] as bool,
+  isOfficial: json['is_official'] as bool,
+  position: (json['position'] as num).toInt(),
+);
 
-Map<String, dynamic> _$$AnswerDtoImplToJson(_$AnswerDtoImpl instance) =>
+Map<String, dynamic> _$AnswerDtoToJson(_AnswerDto instance) =>
     <String, dynamic>{
       'answer_id': instance.answerId,
       'answer_text': instance.answerText,

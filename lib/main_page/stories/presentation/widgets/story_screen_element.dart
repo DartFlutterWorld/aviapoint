@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,7 +27,7 @@ class StoryScreenElement extends StatelessWidget {
   final String buttonColor;
   final String textColor;
   final AnimationController? animController;
-  final CachedVideoPlayerPlusController? videoController;
+  final CachedVideoPlayerPlus? videoPlayer;
   final VoidCallback onTapScreenRight;
   final VoidCallback onTapScreenLeft;
   final VoidCallback onLongPress;
@@ -40,7 +41,7 @@ class StoryScreenElement extends StatelessWidget {
     required this.buttonColor,
     required this.textColor,
     this.animController,
-    this.videoController,
+    this.videoPlayer,
     required this.onTapScreenRight,
     required this.onTapScreenLeft,
     required this.currentIndex,
@@ -83,12 +84,12 @@ class StoryScreenElement extends StatelessWidget {
                   ),
                 ),
               )
-            : (videoController != null && videoController!.value.isInitialized)
+            : (videoPlayer != null && videoPlayer!.controller.value.isInitialized)
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
-                  aspectRatio: videoController!.value.aspectRatio,
-                  child: GestureDetector(onLongPress: onLongPress, onLongPressEnd: onLongPressEnd, child: CachedVideoPlayerPlus(videoController!)),
+                  aspectRatio: videoPlayer!.controller.value.aspectRatio,
+                  child: GestureDetector(onLongPress: onLongPress, onLongPressEnd: onLongPressEnd, child: VideoPlayer(videoPlayer!.controller)),
                 ),
               )
             : ClipRRect(
@@ -207,7 +208,7 @@ class StoryScreenElement extends StatelessWidget {
                           backgroundColor: Color(int.parse('0xFF$buttonColor')),
                           onPressed: () {
                             // AutoRouter.of(context).maybePop();
-                            videoController?.pause();
+                            videoPlayer?.controller.pause();
                             animController?.stop();
                             Navigator.pop(context);
                             // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);

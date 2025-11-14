@@ -371,7 +371,7 @@ class DetailStoryRouteArgs {
     if (other is! DetailStoryRouteArgs) return false;
     return key == other.key &&
         idStory == other.idStory &&
-        const ListEquality().equals(stories, other.stories) &&
+        const ListEquality<StoryEntity>().equals(stories, other.stories) &&
         currentIndex == other.currentIndex;
   }
 
@@ -379,7 +379,7 @@ class DetailStoryRouteArgs {
   int get hashCode =>
       key.hashCode ^
       idStory.hashCode ^
-      const ListEquality().hash(stories) ^
+      const ListEquality<StoryEntity>().hash(stories) ^
       currentIndex.hashCode;
 }
 
@@ -971,7 +971,7 @@ class ListQuestionByCategoryRouteArgs {
     if (other is! ListQuestionByCategoryRouteArgs) return false;
     return key == other.key &&
         categoryId == other.categoryId &&
-        const ListEquality().equals(
+        const ListEquality<QuestionWithAnswersEntity>().equals(
           questionWithAnswersList,
           other.questionWithAnswersList,
         ) &&
@@ -982,7 +982,9 @@ class ListQuestionByCategoryRouteArgs {
   int get hashCode =>
       key.hashCode ^
       categoryId.hashCode ^
-      const ListEquality().hash(questionWithAnswersList) ^
+      const ListEquality<QuestionWithAnswersEntity>().hash(
+        questionWithAnswersList,
+      ) ^
       categoryTitle.hashCode;
 }
 

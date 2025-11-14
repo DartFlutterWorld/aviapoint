@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,1136 +9,615 @@ part of 'questions_by_type_certificate_and_categories_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
 /// @nodoc
 mixin _$QuestionsByTypeCertificateAndCategories {
-  int get typeSsertificatesId => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int typeSsertificatesId) get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int typeSsertificatesId)? get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int typeSsertificatesId)? get,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetQuestionsByTypeCertificateAndCategories value)
-    get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetQuestionsByTypeCertificateAndCategories value)? get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetQuestionsByTypeCertificateAndCategories value)? get,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategories
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $QuestionsByTypeCertificateAndCategoriesCopyWith<
-    QuestionsByTypeCertificateAndCategories
-  >
-  get copyWith => throw _privateConstructorUsedError;
+ int get typeSsertificatesId;
+/// Create a copy of QuestionsByTypeCertificateAndCategories
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$QuestionsByTypeCertificateAndCategoriesCopyWith<QuestionsByTypeCertificateAndCategories> get copyWith => _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl<QuestionsByTypeCertificateAndCategories>(this as QuestionsByTypeCertificateAndCategories, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuestionsByTypeCertificateAndCategories&&(identical(other.typeSsertificatesId, typeSsertificatesId) || other.typeSsertificatesId == typeSsertificatesId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,typeSsertificatesId);
+
+@override
+String toString() {
+  return 'QuestionsByTypeCertificateAndCategories(typeSsertificatesId: $typeSsertificatesId)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $QuestionsByTypeCertificateAndCategoriesCopyWith<$Res> {
-  factory $QuestionsByTypeCertificateAndCategoriesCopyWith(
-    QuestionsByTypeCertificateAndCategories value,
-    $Res Function(QuestionsByTypeCertificateAndCategories) then,
-  ) =
-      _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl<
-        $Res,
-        QuestionsByTypeCertificateAndCategories
-      >;
-  @useResult
-  $Res call({int typeSsertificatesId});
-}
+abstract mixin class $QuestionsByTypeCertificateAndCategoriesCopyWith<$Res>  {
+  factory $QuestionsByTypeCertificateAndCategoriesCopyWith(QuestionsByTypeCertificateAndCategories value, $Res Function(QuestionsByTypeCertificateAndCategories) _then) = _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl;
+@useResult
+$Res call({
+ int typeSsertificatesId
+});
 
+
+
+
+}
 /// @nodoc
-class _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl<
-  $Res,
-  $Val extends QuestionsByTypeCertificateAndCategories
->
+class _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl<$Res>
     implements $QuestionsByTypeCertificateAndCategoriesCopyWith<$Res> {
-  _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl(
-    this._value,
-    this._then,
-  );
+  _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final QuestionsByTypeCertificateAndCategories _self;
+  final $Res Function(QuestionsByTypeCertificateAndCategories) _then;
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategories
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? typeSsertificatesId = null}) {
-    return _then(
-      _value.copyWith(
-            typeSsertificatesId: null == typeSsertificatesId
-                ? _value.typeSsertificatesId
-                : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
-                      as int,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of QuestionsByTypeCertificateAndCategories
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? typeSsertificatesId = null,}) {
+  return _then(_self.copyWith(
+typeSsertificatesId: null == typeSsertificatesId ? _self.typeSsertificatesId : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [QuestionsByTypeCertificateAndCategories].
+extension QuestionsByTypeCertificateAndCategoriesPatterns on QuestionsByTypeCertificateAndCategories {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetQuestionsByTypeCertificateAndCategories value)?  get,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case GetQuestionsByTypeCertificateAndCategories() when get != null:
+return get(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetQuestionsByTypeCertificateAndCategories value)  get,}){
+final _that = this;
+switch (_that) {
+case GetQuestionsByTypeCertificateAndCategories():
+return get(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetQuestionsByTypeCertificateAndCategories value)?  get,}){
+final _that = this;
+switch (_that) {
+case GetQuestionsByTypeCertificateAndCategories() when get != null:
+return get(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int typeSsertificatesId)?  get,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case GetQuestionsByTypeCertificateAndCategories() when get != null:
+return get(_that.typeSsertificatesId);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int typeSsertificatesId)  get,}) {final _that = this;
+switch (_that) {
+case GetQuestionsByTypeCertificateAndCategories():
+return get(_that.typeSsertificatesId);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int typeSsertificatesId)?  get,}) {final _that = this;
+switch (_that) {
+case GetQuestionsByTypeCertificateAndCategories() when get != null:
+return get(_that.typeSsertificatesId);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWith<$Res>
-    implements $QuestionsByTypeCertificateAndCategoriesCopyWith<$Res> {
-  factory _$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWith(
-    _$GetQuestionsByTypeCertificateAndCategoriesImpl value,
-    $Res Function(_$GetQuestionsByTypeCertificateAndCategoriesImpl) then,
-  ) = __$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int typeSsertificatesId});
+
+
+class GetQuestionsByTypeCertificateAndCategories extends QuestionsByTypeCertificateAndCategories {
+  const GetQuestionsByTypeCertificateAndCategories({required this.typeSsertificatesId}): super._();
+  
+
+@override final  int typeSsertificatesId;
+
+/// Create a copy of QuestionsByTypeCertificateAndCategories
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetQuestionsByTypeCertificateAndCategoriesCopyWith<GetQuestionsByTypeCertificateAndCategories> get copyWith => _$GetQuestionsByTypeCertificateAndCategoriesCopyWithImpl<GetQuestionsByTypeCertificateAndCategories>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetQuestionsByTypeCertificateAndCategories&&(identical(other.typeSsertificatesId, typeSsertificatesId) || other.typeSsertificatesId == typeSsertificatesId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,typeSsertificatesId);
+
+@override
+String toString() {
+  return 'QuestionsByTypeCertificateAndCategories.get(typeSsertificatesId: $typeSsertificatesId)';
+}
+
+
 }
 
 /// @nodoc
-class __$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWithImpl<$Res>
-    extends
-        _$QuestionsByTypeCertificateAndCategoriesCopyWithImpl<
-          $Res,
-          _$GetQuestionsByTypeCertificateAndCategoriesImpl
-        >
-    implements _$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWith<$Res> {
-  __$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWithImpl(
-    _$GetQuestionsByTypeCertificateAndCategoriesImpl _value,
-    $Res Function(_$GetQuestionsByTypeCertificateAndCategoriesImpl) _then,
-  ) : super(_value, _then);
+abstract mixin class $GetQuestionsByTypeCertificateAndCategoriesCopyWith<$Res> implements $QuestionsByTypeCertificateAndCategoriesCopyWith<$Res> {
+  factory $GetQuestionsByTypeCertificateAndCategoriesCopyWith(GetQuestionsByTypeCertificateAndCategories value, $Res Function(GetQuestionsByTypeCertificateAndCategories) _then) = _$GetQuestionsByTypeCertificateAndCategoriesCopyWithImpl;
+@override @useResult
+$Res call({
+ int typeSsertificatesId
+});
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategories
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? typeSsertificatesId = null}) {
-    return _then(
-      _$GetQuestionsByTypeCertificateAndCategoriesImpl(
-        typeSsertificatesId: null == typeSsertificatesId
-            ? _value.typeSsertificatesId
-            : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
-                  as int,
-      ),
-    );
-  }
+
+
+
 }
-
 /// @nodoc
+class _$GetQuestionsByTypeCertificateAndCategoriesCopyWithImpl<$Res>
+    implements $GetQuestionsByTypeCertificateAndCategoriesCopyWith<$Res> {
+  _$GetQuestionsByTypeCertificateAndCategoriesCopyWithImpl(this._self, this._then);
 
-class _$GetQuestionsByTypeCertificateAndCategoriesImpl
-    extends GetQuestionsByTypeCertificateAndCategories {
-  const _$GetQuestionsByTypeCertificateAndCategoriesImpl({
-    required this.typeSsertificatesId,
-  }) : super._();
+  final GetQuestionsByTypeCertificateAndCategories _self;
+  final $Res Function(GetQuestionsByTypeCertificateAndCategories) _then;
 
-  @override
-  final int typeSsertificatesId;
-
-  @override
-  String toString() {
-    return 'QuestionsByTypeCertificateAndCategories.get(typeSsertificatesId: $typeSsertificatesId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GetQuestionsByTypeCertificateAndCategoriesImpl &&
-            (identical(other.typeSsertificatesId, typeSsertificatesId) ||
-                other.typeSsertificatesId == typeSsertificatesId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, typeSsertificatesId);
-
-  /// Create a copy of QuestionsByTypeCertificateAndCategories
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWith<
-    _$GetQuestionsByTypeCertificateAndCategoriesImpl
-  >
-  get copyWith =>
-      __$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWithImpl<
-        _$GetQuestionsByTypeCertificateAndCategoriesImpl
-      >(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int typeSsertificatesId) get,
-  }) {
-    return get(typeSsertificatesId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int typeSsertificatesId)? get,
-  }) {
-    return get?.call(typeSsertificatesId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int typeSsertificatesId)? get,
-    required TResult orElse(),
-  }) {
-    if (get != null) {
-      return get(typeSsertificatesId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetQuestionsByTypeCertificateAndCategories value)
-    get,
-  }) {
-    return get(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetQuestionsByTypeCertificateAndCategories value)? get,
-  }) {
-    return get?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetQuestionsByTypeCertificateAndCategories value)? get,
-    required TResult orElse(),
-  }) {
-    if (get != null) {
-      return get(this);
-    }
-    return orElse();
-  }
+/// Create a copy of QuestionsByTypeCertificateAndCategories
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? typeSsertificatesId = null,}) {
+  return _then(GetQuestionsByTypeCertificateAndCategories(
+typeSsertificatesId: null == typeSsertificatesId ? _self.typeSsertificatesId : typeSsertificatesId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
 }
 
-abstract class GetQuestionsByTypeCertificateAndCategories
-    extends QuestionsByTypeCertificateAndCategories {
-  const factory GetQuestionsByTypeCertificateAndCategories({
-    required final int typeSsertificatesId,
-  }) = _$GetQuestionsByTypeCertificateAndCategoriesImpl;
-  const GetQuestionsByTypeCertificateAndCategories._() : super._();
 
-  @override
-  int get typeSsertificatesId;
-
-  /// Create a copy of QuestionsByTypeCertificateAndCategories
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$GetQuestionsByTypeCertificateAndCategoriesImplCopyWith<
-    _$GetQuestionsByTypeCertificateAndCategoriesImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 mixin _$QuestionsByTypeCertificateAndCategoriesState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )
-    success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    loading,
-    required TResult Function(
-      ErrorQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    error,
-    required TResult Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    loading,
-    TResult? Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult? Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingQuestionsByTypeCertificateAndCategoriesState value)?
-    loading,
-    TResult Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult Function(SuccessQuestionsByTypeCertificateAndCategoriesState value)?
-    success,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuestionsByTypeCertificateAndCategoriesState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'QuestionsByTypeCertificateAndCategoriesState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $QuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> {
-  factory $QuestionsByTypeCertificateAndCategoriesStateCopyWith(
-    QuestionsByTypeCertificateAndCategoriesState value,
-    $Res Function(QuestionsByTypeCertificateAndCategoriesState) then,
-  ) =
-      _$QuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<
-        $Res,
-        QuestionsByTypeCertificateAndCategoriesState
-      >;
+class $QuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res>  {
+$QuestionsByTypeCertificateAndCategoriesStateCopyWith(QuestionsByTypeCertificateAndCategoriesState _, $Res Function(QuestionsByTypeCertificateAndCategoriesState) __);
 }
 
-/// @nodoc
-class _$QuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<
-  $Res,
-  $Val extends QuestionsByTypeCertificateAndCategoriesState
->
-    implements $QuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> {
-  _$QuestionsByTypeCertificateAndCategoriesStateCopyWithImpl(
-    this._value,
-    this._then,
-  );
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [QuestionsByTypeCertificateAndCategoriesState].
+extension QuestionsByTypeCertificateAndCategoriesStatePatterns on QuestionsByTypeCertificateAndCategoriesState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadingQuestionsByTypeCertificateAndCategoriesState value)?  loading,TResult Function( ErrorQuestionsByTypeCertificateAndCategoriesState value)?  error,TResult Function( SuccessQuestionsByTypeCertificateAndCategoriesState value)?  success,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case LoadingQuestionsByTypeCertificateAndCategoriesState() when loading != null:
+return loading(_that);case ErrorQuestionsByTypeCertificateAndCategoriesState() when error != null:
+return error(_that);case SuccessQuestionsByTypeCertificateAndCategoriesState() when success != null:
+return success(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadingQuestionsByTypeCertificateAndCategoriesState value)  loading,required TResult Function( ErrorQuestionsByTypeCertificateAndCategoriesState value)  error,required TResult Function( SuccessQuestionsByTypeCertificateAndCategoriesState value)  success,}){
+final _that = this;
+switch (_that) {
+case LoadingQuestionsByTypeCertificateAndCategoriesState():
+return loading(_that);case ErrorQuestionsByTypeCertificateAndCategoriesState():
+return error(_that);case SuccessQuestionsByTypeCertificateAndCategoriesState():
+return success(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadingQuestionsByTypeCertificateAndCategoriesState value)?  loading,TResult? Function( ErrorQuestionsByTypeCertificateAndCategoriesState value)?  error,TResult? Function( SuccessQuestionsByTypeCertificateAndCategoriesState value)?  success,}){
+final _that = this;
+switch (_that) {
+case LoadingQuestionsByTypeCertificateAndCategoriesState() when loading != null:
+return loading(_that);case ErrorQuestionsByTypeCertificateAndCategoriesState() when error != null:
+return error(_that);case SuccessQuestionsByTypeCertificateAndCategoriesState() when success != null:
+return success(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<QuestionWithAnswersEntity> questionsWithAnswers,  bool buttonHint)?  success,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case LoadingQuestionsByTypeCertificateAndCategoriesState() when loading != null:
+return loading();case ErrorQuestionsByTypeCertificateAndCategoriesState() when error != null:
+return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessQuestionsByTypeCertificateAndCategoriesState() when success != null:
+return success(_that.questionsWithAnswers,_that.buttonHint);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<QuestionWithAnswersEntity> questionsWithAnswers,  bool buttonHint)  success,}) {final _that = this;
+switch (_that) {
+case LoadingQuestionsByTypeCertificateAndCategoriesState():
+return loading();case ErrorQuestionsByTypeCertificateAndCategoriesState():
+return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessQuestionsByTypeCertificateAndCategoriesState():
+return success(_that.questionsWithAnswers,_that.buttonHint);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<QuestionWithAnswersEntity> questionsWithAnswers,  bool buttonHint)?  success,}) {final _that = this;
+switch (_that) {
+case LoadingQuestionsByTypeCertificateAndCategoriesState() when loading != null:
+return loading();case ErrorQuestionsByTypeCertificateAndCategoriesState() when error != null:
+return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessQuestionsByTypeCertificateAndCategoriesState() when success != null:
+return success(_that.questionsWithAnswers,_that.buttonHint);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$LoadingQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-  $Res
-> {
-  factory _$$LoadingQuestionsByTypeCertificateAndCategoriesStateImplCopyWith(
-    _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl value,
-    $Res Function(_$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl)
-    then,
-  ) =
-      __$$LoadingQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-        $Res
-      >;
-}
-
-/// @nodoc
-class __$$LoadingQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-  $Res
->
-    extends
-        _$QuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<
-          $Res,
-          _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl
-        >
-    implements
-        _$$LoadingQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-          $Res
-        > {
-  __$$LoadingQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl(
-    _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl _value,
-    $Res Function(_$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl)
-    _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl
-    extends LoadingQuestionsByTypeCertificateAndCategoriesState {
-  const _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl() : super._();
-
-  @override
-  String toString() {
-    return 'QuestionsByTypeCertificateAndCategoriesState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )
-    success,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    loading,
-    required TResult Function(
-      ErrorQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    error,
-    required TResult Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    success,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    loading,
-    TResult? Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult? Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    success,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingQuestionsByTypeCertificateAndCategoriesState value)?
-    loading,
-    TResult Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult Function(SuccessQuestionsByTypeCertificateAndCategoriesState value)?
-    success,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LoadingQuestionsByTypeCertificateAndCategoriesState
-    extends QuestionsByTypeCertificateAndCategoriesState {
-  const factory LoadingQuestionsByTypeCertificateAndCategoriesState() =
-      _$LoadingQuestionsByTypeCertificateAndCategoriesStateImpl;
-  const LoadingQuestionsByTypeCertificateAndCategoriesState._() : super._();
-}
-
-/// @nodoc
-abstract class _$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-  $Res
-> {
-  factory _$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWith(
-    _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl value,
-    $Res Function(_$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl) then,
-  ) =
-      __$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-        $Res
-      >;
-  @useResult
-  $Res call({
-    String? errorFromApi,
-    String errorForUser,
-    String? statusCode,
-    StackTrace? stackTrace,
-    String? responseMessage,
-  });
-}
-
-/// @nodoc
-class __$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-  $Res
->
-    extends
-        _$QuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<
-          $Res,
-          _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl
-        >
-    implements
-        _$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<$Res> {
-  __$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl(
-    _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl _value,
-    $Res Function(_$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl)
-    _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? errorFromApi = freezed,
-    Object? errorForUser = null,
-    Object? statusCode = freezed,
-    Object? stackTrace = freezed,
-    Object? responseMessage = freezed,
-  }) {
-    return _then(
-      _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl(
-        errorFromApi: freezed == errorFromApi
-            ? _value.errorFromApi
-            : errorFromApi // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        errorForUser: null == errorForUser
-            ? _value.errorForUser
-            : errorForUser // ignore: cast_nullable_to_non_nullable
-                  as String,
-        statusCode: freezed == statusCode
-            ? _value.statusCode
-            : statusCode // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        stackTrace: freezed == stackTrace
-            ? _value.stackTrace
-            : stackTrace // ignore: cast_nullable_to_non_nullable
-                  as StackTrace?,
-        responseMessage: freezed == responseMessage
-            ? _value.responseMessage
-            : responseMessage // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl
-    extends ErrorQuestionsByTypeCertificateAndCategoriesState {
-  const _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl({
-    this.errorFromApi,
-    required this.errorForUser,
-    this.statusCode,
-    this.stackTrace,
-    this.responseMessage,
-  }) : super._();
 
-  @override
-  final String? errorFromApi;
-  @override
-  final String errorForUser;
-  @override
-  final String? statusCode;
-  @override
-  final StackTrace? stackTrace;
-  @override
-  final String? responseMessage;
+class LoadingQuestionsByTypeCertificateAndCategoriesState extends QuestionsByTypeCertificateAndCategoriesState {
+  const LoadingQuestionsByTypeCertificateAndCategoriesState(): super._();
+  
 
-  @override
-  String toString() {
-    return 'QuestionsByTypeCertificateAndCategoriesState.error(errorFromApi: $errorFromApi, errorForUser: $errorForUser, statusCode: $statusCode, stackTrace: $stackTrace, responseMessage: $responseMessage)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl &&
-            (identical(other.errorFromApi, errorFromApi) ||
-                other.errorFromApi == errorFromApi) &&
-            (identical(other.errorForUser, errorForUser) ||
-                other.errorForUser == errorForUser) &&
-            (identical(other.statusCode, statusCode) ||
-                other.statusCode == statusCode) &&
-            (identical(other.stackTrace, stackTrace) ||
-                other.stackTrace == stackTrace) &&
-            (identical(other.responseMessage, responseMessage) ||
-                other.responseMessage == responseMessage));
-  }
 
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    errorFromApi,
-    errorForUser,
-    statusCode,
-    stackTrace,
-    responseMessage,
-  );
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-    _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl
-  >
-  get copyWith =>
-      __$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-        _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl
-      >(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )
-    success,
-  }) {
-    return error(
-      errorFromApi,
-      errorForUser,
-      statusCode,
-      stackTrace,
-      responseMessage,
-    );
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-  }) {
-    return error?.call(
-      errorFromApi,
-      errorForUser,
-      statusCode,
-      stackTrace,
-      responseMessage,
-    );
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(
-        errorFromApi,
-        errorForUser,
-        statusCode,
-        stackTrace,
-        responseMessage,
-      );
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    loading,
-    required TResult Function(
-      ErrorQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    error,
-    required TResult Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    success,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    loading,
-    TResult? Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult? Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    success,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingQuestionsByTypeCertificateAndCategoriesState value)?
-    loading,
-    TResult Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult Function(SuccessQuestionsByTypeCertificateAndCategoriesState value)?
-    success,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingQuestionsByTypeCertificateAndCategoriesState);
 }
 
-abstract class ErrorQuestionsByTypeCertificateAndCategoriesState
-    extends QuestionsByTypeCertificateAndCategoriesState {
-  const factory ErrorQuestionsByTypeCertificateAndCategoriesState({
-    final String? errorFromApi,
-    required final String errorForUser,
-    final String? statusCode,
-    final StackTrace? stackTrace,
-    final String? responseMessage,
-  }) = _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl;
-  const ErrorQuestionsByTypeCertificateAndCategoriesState._() : super._();
 
-  String? get errorFromApi;
-  String get errorForUser;
-  String? get statusCode;
-  StackTrace? get stackTrace;
-  String? get responseMessage;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ErrorQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-    _$ErrorQuestionsByTypeCertificateAndCategoriesStateImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'QuestionsByTypeCertificateAndCategoriesState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ErrorQuestionsByTypeCertificateAndCategoriesState extends QuestionsByTypeCertificateAndCategoriesState {
+  const ErrorQuestionsByTypeCertificateAndCategoriesState({this.errorFromApi, required this.errorForUser, this.statusCode, this.stackTrace, this.responseMessage}): super._();
+  
+
+ final  String? errorFromApi;
+ final  String errorForUser;
+ final  String? statusCode;
+ final  StackTrace? stackTrace;
+ final  String? responseMessage;
+
+/// Create a copy of QuestionsByTypeCertificateAndCategoriesState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWith<ErrorQuestionsByTypeCertificateAndCategoriesState> get copyWith => _$ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<ErrorQuestionsByTypeCertificateAndCategoriesState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ErrorQuestionsByTypeCertificateAndCategoriesState&&(identical(other.errorFromApi, errorFromApi) || other.errorFromApi == errorFromApi)&&(identical(other.errorForUser, errorForUser) || other.errorForUser == errorForUser)&&(identical(other.statusCode, statusCode) || other.statusCode == statusCode)&&(identical(other.stackTrace, stackTrace) || other.stackTrace == stackTrace)&&(identical(other.responseMessage, responseMessage) || other.responseMessage == responseMessage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,errorFromApi,errorForUser,statusCode,stackTrace,responseMessage);
+
+@override
+String toString() {
+  return 'QuestionsByTypeCertificateAndCategoriesState.error(errorFromApi: $errorFromApi, errorForUser: $errorForUser, statusCode: $statusCode, stackTrace: $stackTrace, responseMessage: $responseMessage)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-  $Res
-> {
-  factory _$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWith(
-    _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl value,
-    $Res Function(_$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl)
-    then,
-  ) =
-      __$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-        $Res
-      >;
-  @useResult
-  $Res call({
-    List<QuestionWithAnswersEntity> questionsWithAnswers,
-    bool buttonHint,
-  });
+abstract mixin class $ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> implements $QuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> {
+  factory $ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWith(ErrorQuestionsByTypeCertificateAndCategoriesState value, $Res Function(ErrorQuestionsByTypeCertificateAndCategoriesState) _then) = _$ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl;
+@useResult
+$Res call({
+ String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage
+});
+
+
+
+
+}
+/// @nodoc
+class _$ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<$Res>
+    implements $ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> {
+  _$ErrorQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl(this._self, this._then);
+
+  final ErrorQuestionsByTypeCertificateAndCategoriesState _self;
+  final $Res Function(ErrorQuestionsByTypeCertificateAndCategoriesState) _then;
+
+/// Create a copy of QuestionsByTypeCertificateAndCategoriesState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? errorFromApi = freezed,Object? errorForUser = null,Object? statusCode = freezed,Object? stackTrace = freezed,Object? responseMessage = freezed,}) {
+  return _then(ErrorQuestionsByTypeCertificateAndCategoriesState(
+errorFromApi: freezed == errorFromApi ? _self.errorFromApi : errorFromApi // ignore: cast_nullable_to_non_nullable
+as String?,errorForUser: null == errorForUser ? _self.errorForUser : errorForUser // ignore: cast_nullable_to_non_nullable
+as String,statusCode: freezed == statusCode ? _self.statusCode : statusCode // ignore: cast_nullable_to_non_nullable
+as String?,stackTrace: freezed == stackTrace ? _self.stackTrace : stackTrace // ignore: cast_nullable_to_non_nullable
+as StackTrace?,responseMessage: freezed == responseMessage ? _self.responseMessage : responseMessage // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-class __$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-  $Res
->
-    extends
-        _$QuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<
-          $Res,
-          _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl
-        >
-    implements
-        _$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-          $Res
-        > {
-  __$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl(
-    _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl _value,
-    $Res Function(_$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl)
-    _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? questionsWithAnswers = null, Object? buttonHint = null}) {
-    return _then(
-      _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl(
-        questionsWithAnswers: null == questionsWithAnswers
-            ? _value._questionsWithAnswers
-            : questionsWithAnswers // ignore: cast_nullable_to_non_nullable
-                  as List<QuestionWithAnswersEntity>,
-        buttonHint: null == buttonHint
-            ? _value.buttonHint
-            : buttonHint // ignore: cast_nullable_to_non_nullable
-                  as bool,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl
-    extends SuccessQuestionsByTypeCertificateAndCategoriesState {
-  const _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl({
-    required final List<QuestionWithAnswersEntity> questionsWithAnswers,
-    required this.buttonHint,
-  }) : _questionsWithAnswers = questionsWithAnswers,
-       super._();
 
-  final List<QuestionWithAnswersEntity> _questionsWithAnswers;
-  @override
-  List<QuestionWithAnswersEntity> get questionsWithAnswers {
-    if (_questionsWithAnswers is EqualUnmodifiableListView)
-      return _questionsWithAnswers;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_questionsWithAnswers);
-  }
+class SuccessQuestionsByTypeCertificateAndCategoriesState extends QuestionsByTypeCertificateAndCategoriesState {
+  const SuccessQuestionsByTypeCertificateAndCategoriesState({required final  List<QuestionWithAnswersEntity> questionsWithAnswers, required this.buttonHint}): _questionsWithAnswers = questionsWithAnswers,super._();
+  
 
-  @override
-  final bool buttonHint;
-
-  @override
-  String toString() {
-    return 'QuestionsByTypeCertificateAndCategoriesState.success(questionsWithAnswers: $questionsWithAnswers, buttonHint: $buttonHint)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other
-                is _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl &&
-            const DeepCollectionEquality().equals(
-              other._questionsWithAnswers,
-              _questionsWithAnswers,
-            ) &&
-            (identical(other.buttonHint, buttonHint) ||
-                other.buttonHint == buttonHint));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(_questionsWithAnswers),
-    buttonHint,
-  );
-
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-    _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl
-  >
-  get copyWith =>
-      __$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWithImpl<
-        _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl
-      >(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )
-    success,
-  }) {
-    return success(questionsWithAnswers, buttonHint);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-  }) {
-    return success?.call(questionsWithAnswers, buttonHint);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(
-      List<QuestionWithAnswersEntity> questionsWithAnswers,
-      bool buttonHint,
-    )?
-    success,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(questionsWithAnswers, buttonHint);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    loading,
-    required TResult Function(
-      ErrorQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    error,
-    required TResult Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )
-    success,
-  }) {
-    return success(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(
-      LoadingQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    loading,
-    TResult? Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult? Function(
-      SuccessQuestionsByTypeCertificateAndCategoriesState value,
-    )?
-    success,
-  }) {
-    return success?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingQuestionsByTypeCertificateAndCategoriesState value)?
-    loading,
-    TResult Function(ErrorQuestionsByTypeCertificateAndCategoriesState value)?
-    error,
-    TResult Function(SuccessQuestionsByTypeCertificateAndCategoriesState value)?
-    success,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(this);
-    }
-    return orElse();
-  }
+ final  List<QuestionWithAnswersEntity> _questionsWithAnswers;
+ List<QuestionWithAnswersEntity> get questionsWithAnswers {
+  if (_questionsWithAnswers is EqualUnmodifiableListView) return _questionsWithAnswers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_questionsWithAnswers);
 }
 
-abstract class SuccessQuestionsByTypeCertificateAndCategoriesState
-    extends QuestionsByTypeCertificateAndCategoriesState {
-  const factory SuccessQuestionsByTypeCertificateAndCategoriesState({
-    required final List<QuestionWithAnswersEntity> questionsWithAnswers,
-    required final bool buttonHint,
-  }) = _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl;
-  const SuccessQuestionsByTypeCertificateAndCategoriesState._() : super._();
+ final  bool buttonHint;
 
-  List<QuestionWithAnswersEntity> get questionsWithAnswers;
-  bool get buttonHint;
+/// Create a copy of QuestionsByTypeCertificateAndCategoriesState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWith<SuccessQuestionsByTypeCertificateAndCategoriesState> get copyWith => _$SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<SuccessQuestionsByTypeCertificateAndCategoriesState>(this, _$identity);
 
-  /// Create a copy of QuestionsByTypeCertificateAndCategoriesState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SuccessQuestionsByTypeCertificateAndCategoriesStateImplCopyWith<
-    _$SuccessQuestionsByTypeCertificateAndCategoriesStateImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessQuestionsByTypeCertificateAndCategoriesState&&const DeepCollectionEquality().equals(other._questionsWithAnswers, _questionsWithAnswers)&&(identical(other.buttonHint, buttonHint) || other.buttonHint == buttonHint));
 }
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_questionsWithAnswers),buttonHint);
+
+@override
+String toString() {
+  return 'QuestionsByTypeCertificateAndCategoriesState.success(questionsWithAnswers: $questionsWithAnswers, buttonHint: $buttonHint)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> implements $QuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> {
+  factory $SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWith(SuccessQuestionsByTypeCertificateAndCategoriesState value, $Res Function(SuccessQuestionsByTypeCertificateAndCategoriesState) _then) = _$SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl;
+@useResult
+$Res call({
+ List<QuestionWithAnswersEntity> questionsWithAnswers, bool buttonHint
+});
+
+
+
+
+}
+/// @nodoc
+class _$SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl<$Res>
+    implements $SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWith<$Res> {
+  _$SuccessQuestionsByTypeCertificateAndCategoriesStateCopyWithImpl(this._self, this._then);
+
+  final SuccessQuestionsByTypeCertificateAndCategoriesState _self;
+  final $Res Function(SuccessQuestionsByTypeCertificateAndCategoriesState) _then;
+
+/// Create a copy of QuestionsByTypeCertificateAndCategoriesState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? questionsWithAnswers = null,Object? buttonHint = null,}) {
+  return _then(SuccessQuestionsByTypeCertificateAndCategoriesState(
+questionsWithAnswers: null == questionsWithAnswers ? _self._questionsWithAnswers : questionsWithAnswers // ignore: cast_nullable_to_non_nullable
+as List<QuestionWithAnswersEntity>,buttonHint: null == buttonHint ? _self.buttonHint : buttonHint // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+// dart format on

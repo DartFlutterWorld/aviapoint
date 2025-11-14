@@ -29,7 +29,7 @@ class DetailStoryScreen extends StatefulWidget {
 
 class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTickerProviderStateMixin {
   AnimationController? _animController;
-  CachedVideoPlayerPlusController? _videoController;
+  CachedVideoPlayerPlus? _videoPlayer;
   late StoryCubit storyCubit;
 
   @override
@@ -48,11 +48,11 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
         _animController?.stop();
         _animController?.reset();
         if (storyCubit.state.currentIndex < widget.stories.length - 1) {
-          _videoController?.pause();
+          _videoPlayer?.controller.pause();
           _loadStory(story: widget.stories[storyCubit.state.currentIndex + 1]);
           storyCubit.setCurrentIndex(storyCubit.state.currentIndex + 1);
         } else {
-          _videoController?.pause();
+          _videoPlayer?.controller.pause();
           Navigator.of(context).pop();
         }
       }
@@ -68,39 +68,36 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
       _animController?.forward();
     } else {
       BlocProvider.of<StoryCubit>(context).setShowStory(id: story.id);
-      _videoController?.dispose();
-      _videoController = null;
+      await _videoPlayer?.dispose();
+      _videoPlayer = null;
 
-      _videoController =
-          kIsWeb
-                ? CachedVideoPlayerPlusController.networkUrl(Uri.parse(getImageUrl(story.video)))
-                : CachedVideoPlayerPlusController.file(await getIt<DefaultCacheManager>().getSingleFile(getImageUrl(story.video)))
-            // _videoController = CachedVideoPlayerPlusController.networkUrl(Uri.parse('$backUrl${miniStory.video}'))
-            ..initialize().then((_) {
-              if (mounted) {
-                setState(() {});
+      _videoPlayer = kIsWeb
+          ? CachedVideoPlayerPlus.networkUrl(Uri.parse(getImageUrl(story.video)))
+          : CachedVideoPlayerPlus.file(await getIt<DefaultCacheManager>().getSingleFile(getImageUrl(story.video)));
 
-                if (_videoController!.value.isInitialized) {
-                  _animController?.duration = _videoController?.value.duration;
-                  // _animController?.duration = Duration(seconds: 2);
-                  _videoController?.play();
-                  _animController?.forward();
-                }
-              }
-            });
+      await _videoPlayer!.initialize();
+      if (mounted) {
+        setState(() {});
+
+        if (_videoPlayer!.controller.value.isInitialized) {
+          _animController?.duration = _videoPlayer!.controller.value.duration;
+          _videoPlayer!.controller.play();
+          _animController?.forward();
+        }
+      }
     }
   }
 
-  void _onTapScreen(String side, List<StoryEntity> miniStories, BuildContext context) {
+  Future<void> _onTapScreen(String side, List<StoryEntity> miniStories, BuildContext context) async {
     if (side == 'left') {
-      _videoController?.pause(); // Если нажали на левом экране то остановить видео, чтоб не было звука на предыдущих сторях
+      _videoPlayer?.controller.pause(); // Если нажали на левом экране то остановить видео, чтоб не было звука на предыдущих сторях
 
       // Если смотрим первый стори и первый министорик и нажимае назад то выходим из сторей
       if (storyCubit.state.currentIndex == 0) {
         Navigator.of(context).pop();
         // Если находимся не на первой сторе и смотрим первый министорик и при нажтии назад подгружаем педыдущую сторю со сториками
       } else if (storyCubit.state.currentIndex > 0 && widget.stories.length != storyCubit.state.currentIndex - 1) {
-        _videoController?.pause();
+        _videoPlayer?.controller.pause();
 
         _loadStory(story: widget.stories[storyCubit.state.currentIndex - 1]);
         storyCubit.setCurrentIndex(storyCubit.state.currentIndex - 1);
@@ -108,31 +105,31 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
     }
     if (side == 'right') {
       if (storyCubit.state.currentIndex < widget.stories.length - 1) {
-        _videoController?.pause(); // Если нажали на правом экране то остановить видео, чтоб не было звука на предыдущих сторях
+        _videoPlayer?.controller.pause(); // Если нажали на правом экране то остановить видео, чтоб не было звука на предыдущих сторях
 
         _loadStory(story: widget.stories[storyCubit.state.currentIndex + 1]);
         storyCubit.setCurrentIndex(storyCubit.state.currentIndex + 1);
       } else {
-        _videoController?.pause();
+        _videoPlayer?.controller.pause();
         Navigator.of(context).pop();
       }
     }
 
     if (side == 'onLongPress') {
-      if (_videoController != null && _videoController!.value.isPlaying) {
-        _videoController?.pause();
+      if (_videoPlayer != null && _videoPlayer!.controller.value.isPlaying) {
+        _videoPlayer?.controller.pause();
         _animController?.stop();
       } else {
-        _videoController?.dispose();
+        await _videoPlayer?.dispose();
         _animController?.stop();
       }
     }
     if (side == 'onLongPressEnd') {
-      if (_videoController != null && !_videoController!.value.isPlaying) {
-        _videoController?.play();
+      if (_videoPlayer != null && !_videoPlayer!.controller.value.isPlaying) {
+        _videoPlayer?.controller.play();
         _animController?.forward();
       } else {
-        _videoController?.dispose();
+        await _videoPlayer?.dispose();
         _animController?.forward();
       }
     }
@@ -154,7 +151,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
   void dispose() {
     _animController?.dispose();
 
-    _videoController?.dispose();
+    _videoPlayer?.dispose();
 
     super.dispose();
   }
@@ -179,7 +176,7 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
                   buttonColor: state.detailstory.colorButton,
                   textColor: state.detailstory.textColor,
                   animController: _animController,
-                  videoController: _videoController,
+                  videoPlayer: _videoPlayer,
                   onTapScreenRight: () => _onTapScreen('right', BlocProvider.of<CacheManagerBloc>(context).stories, context),
                   onTapScreenLeft: () => _onTapScreen('left', BlocProvider.of<CacheManagerBloc>(context).stories, context),
                   onLongPress: () => _onTapScreen('onLongPress', BlocProvider.of<CacheManagerBloc>(context).stories, context),

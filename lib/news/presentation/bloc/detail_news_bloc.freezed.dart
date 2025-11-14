@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,883 +9,607 @@ part of 'detail_news_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
 /// @nodoc
 mixin _$DetailNewsEvent {
-  int get id => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int id) get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int id)? get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int id)? get,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetDetailNewsEvent value) get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetDetailNewsEvent value)? get,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetDetailNewsEvent value)? get,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
 
-  /// Create a copy of DetailNewsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DetailNewsEventCopyWith<DetailNewsEvent> get copyWith =>
-      throw _privateConstructorUsedError;
+ int get id;
+/// Create a copy of DetailNewsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DetailNewsEventCopyWith<DetailNewsEvent> get copyWith => _$DetailNewsEventCopyWithImpl<DetailNewsEvent>(this as DetailNewsEvent, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DetailNewsEvent&&(identical(other.id, id) || other.id == id));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id);
+
+@override
+String toString() {
+  return 'DetailNewsEvent(id: $id)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DetailNewsEventCopyWith<$Res> {
-  factory $DetailNewsEventCopyWith(
-    DetailNewsEvent value,
-    $Res Function(DetailNewsEvent) then,
-  ) = _$DetailNewsEventCopyWithImpl<$Res, DetailNewsEvent>;
-  @useResult
-  $Res call({int id});
-}
+abstract mixin class $DetailNewsEventCopyWith<$Res>  {
+  factory $DetailNewsEventCopyWith(DetailNewsEvent value, $Res Function(DetailNewsEvent) _then) = _$DetailNewsEventCopyWithImpl;
+@useResult
+$Res call({
+ int id
+});
 
+
+
+
+}
 /// @nodoc
-class _$DetailNewsEventCopyWithImpl<$Res, $Val extends DetailNewsEvent>
+class _$DetailNewsEventCopyWithImpl<$Res>
     implements $DetailNewsEventCopyWith<$Res> {
-  _$DetailNewsEventCopyWithImpl(this._value, this._then);
+  _$DetailNewsEventCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final DetailNewsEvent _self;
+  final $Res Function(DetailNewsEvent) _then;
 
-  /// Create a copy of DetailNewsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? id = null}) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as int,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of DetailNewsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [DetailNewsEvent].
+extension DetailNewsEventPatterns on DetailNewsEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetDetailNewsEvent value)?  get,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case GetDetailNewsEvent() when get != null:
+return get(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetDetailNewsEvent value)  get,}){
+final _that = this;
+switch (_that) {
+case GetDetailNewsEvent():
+return get(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetDetailNewsEvent value)?  get,}){
+final _that = this;
+switch (_that) {
+case GetDetailNewsEvent() when get != null:
+return get(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  get,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case GetDetailNewsEvent() when get != null:
+return get(_that.id);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  get,}) {final _that = this;
+switch (_that) {
+case GetDetailNewsEvent():
+return get(_that.id);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  get,}) {final _that = this;
+switch (_that) {
+case GetDetailNewsEvent() when get != null:
+return get(_that.id);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$GetDetailNewsEventImplCopyWith<$Res>
-    implements $DetailNewsEventCopyWith<$Res> {
-  factory _$$GetDetailNewsEventImplCopyWith(
-    _$GetDetailNewsEventImpl value,
-    $Res Function(_$GetDetailNewsEventImpl) then,
-  ) = __$$GetDetailNewsEventImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int id});
+
+
+class GetDetailNewsEvent extends DetailNewsEvent {
+  const GetDetailNewsEvent({required this.id}): super._();
+  
+
+@override final  int id;
+
+/// Create a copy of DetailNewsEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetDetailNewsEventCopyWith<GetDetailNewsEvent> get copyWith => _$GetDetailNewsEventCopyWithImpl<GetDetailNewsEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetDetailNewsEvent&&(identical(other.id, id) || other.id == id));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id);
+
+@override
+String toString() {
+  return 'DetailNewsEvent.get(id: $id)';
+}
+
+
 }
 
 /// @nodoc
-class __$$GetDetailNewsEventImplCopyWithImpl<$Res>
-    extends _$DetailNewsEventCopyWithImpl<$Res, _$GetDetailNewsEventImpl>
-    implements _$$GetDetailNewsEventImplCopyWith<$Res> {
-  __$$GetDetailNewsEventImplCopyWithImpl(
-    _$GetDetailNewsEventImpl _value,
-    $Res Function(_$GetDetailNewsEventImpl) _then,
-  ) : super(_value, _then);
+abstract mixin class $GetDetailNewsEventCopyWith<$Res> implements $DetailNewsEventCopyWith<$Res> {
+  factory $GetDetailNewsEventCopyWith(GetDetailNewsEvent value, $Res Function(GetDetailNewsEvent) _then) = _$GetDetailNewsEventCopyWithImpl;
+@override @useResult
+$Res call({
+ int id
+});
 
-  /// Create a copy of DetailNewsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? id = null}) {
-    return _then(
-      _$GetDetailNewsEventImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as int,
-      ),
-    );
-  }
+
+
+
 }
-
 /// @nodoc
+class _$GetDetailNewsEventCopyWithImpl<$Res>
+    implements $GetDetailNewsEventCopyWith<$Res> {
+  _$GetDetailNewsEventCopyWithImpl(this._self, this._then);
 
-class _$GetDetailNewsEventImpl extends GetDetailNewsEvent {
-  const _$GetDetailNewsEventImpl({required this.id}) : super._();
+  final GetDetailNewsEvent _self;
+  final $Res Function(GetDetailNewsEvent) _then;
 
-  @override
-  final int id;
-
-  @override
-  String toString() {
-    return 'DetailNewsEvent.get(id: $id)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GetDetailNewsEventImpl &&
-            (identical(other.id, id) || other.id == id));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, id);
-
-  /// Create a copy of DetailNewsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GetDetailNewsEventImplCopyWith<_$GetDetailNewsEventImpl> get copyWith =>
-      __$$GetDetailNewsEventImplCopyWithImpl<_$GetDetailNewsEventImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int id) get,
-  }) {
-    return get(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int id)? get,
-  }) {
-    return get?.call(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int id)? get,
-    required TResult orElse(),
-  }) {
-    if (get != null) {
-      return get(id);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetDetailNewsEvent value) get,
-  }) {
-    return get(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetDetailNewsEvent value)? get,
-  }) {
-    return get?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetDetailNewsEvent value)? get,
-    required TResult orElse(),
-  }) {
-    if (get != null) {
-      return get(this);
-    }
-    return orElse();
-  }
+/// Create a copy of DetailNewsEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,}) {
+  return _then(GetDetailNewsEvent(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
 }
 
-abstract class GetDetailNewsEvent extends DetailNewsEvent {
-  const factory GetDetailNewsEvent({required final int id}) =
-      _$GetDetailNewsEventImpl;
-  const GetDetailNewsEvent._() : super._();
 
-  @override
-  int get id;
-
-  /// Create a copy of DetailNewsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$GetDetailNewsEventImplCopyWith<_$GetDetailNewsEventImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 mixin _$DetailNewsState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(NewsEntity news) success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(NewsEntity news)? success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(NewsEntity news)? success,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoadingDetailNewsState value) loading,
-    required TResult Function(ErrorDetailNewsState value) error,
-    required TResult Function(SuccessDetailNewsState value) success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoadingDetailNewsState value)? loading,
-    TResult? Function(ErrorDetailNewsState value)? error,
-    TResult? Function(SuccessDetailNewsState value)? success,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingDetailNewsState value)? loading,
-    TResult Function(ErrorDetailNewsState value)? error,
-    TResult Function(SuccessDetailNewsState value)? success,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DetailNewsState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'DetailNewsState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DetailNewsStateCopyWith<$Res> {
-  factory $DetailNewsStateCopyWith(
-    DetailNewsState value,
-    $Res Function(DetailNewsState) then,
-  ) = _$DetailNewsStateCopyWithImpl<$Res, DetailNewsState>;
+class $DetailNewsStateCopyWith<$Res>  {
+$DetailNewsStateCopyWith(DetailNewsState _, $Res Function(DetailNewsState) __);
 }
 
-/// @nodoc
-class _$DetailNewsStateCopyWithImpl<$Res, $Val extends DetailNewsState>
-    implements $DetailNewsStateCopyWith<$Res> {
-  _$DetailNewsStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [DetailNewsState].
+extension DetailNewsStatePatterns on DetailNewsState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadingDetailNewsState value)?  loading,TResult Function( ErrorDetailNewsState value)?  error,TResult Function( SuccessDetailNewsState value)?  success,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case LoadingDetailNewsState() when loading != null:
+return loading(_that);case ErrorDetailNewsState() when error != null:
+return error(_that);case SuccessDetailNewsState() when success != null:
+return success(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadingDetailNewsState value)  loading,required TResult Function( ErrorDetailNewsState value)  error,required TResult Function( SuccessDetailNewsState value)  success,}){
+final _that = this;
+switch (_that) {
+case LoadingDetailNewsState():
+return loading(_that);case ErrorDetailNewsState():
+return error(_that);case SuccessDetailNewsState():
+return success(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadingDetailNewsState value)?  loading,TResult? Function( ErrorDetailNewsState value)?  error,TResult? Function( SuccessDetailNewsState value)?  success,}){
+final _that = this;
+switch (_that) {
+case LoadingDetailNewsState() when loading != null:
+return loading(_that);case ErrorDetailNewsState() when error != null:
+return error(_that);case SuccessDetailNewsState() when success != null:
+return success(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( NewsEntity news)?  success,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case LoadingDetailNewsState() when loading != null:
+return loading();case ErrorDetailNewsState() when error != null:
+return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessDetailNewsState() when success != null:
+return success(_that.news);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( NewsEntity news)  success,}) {final _that = this;
+switch (_that) {
+case LoadingDetailNewsState():
+return loading();case ErrorDetailNewsState():
+return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessDetailNewsState():
+return success(_that.news);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( NewsEntity news)?  success,}) {final _that = this;
+switch (_that) {
+case LoadingDetailNewsState() when loading != null:
+return loading();case ErrorDetailNewsState() when error != null:
+return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessDetailNewsState() when success != null:
+return success(_that.news);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$LoadingDetailNewsStateImplCopyWith<$Res> {
-  factory _$$LoadingDetailNewsStateImplCopyWith(
-    _$LoadingDetailNewsStateImpl value,
-    $Res Function(_$LoadingDetailNewsStateImpl) then,
-  ) = __$$LoadingDetailNewsStateImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadingDetailNewsStateImplCopyWithImpl<$Res>
-    extends _$DetailNewsStateCopyWithImpl<$Res, _$LoadingDetailNewsStateImpl>
-    implements _$$LoadingDetailNewsStateImplCopyWith<$Res> {
-  __$$LoadingDetailNewsStateImplCopyWithImpl(
-    _$LoadingDetailNewsStateImpl _value,
-    $Res Function(_$LoadingDetailNewsStateImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LoadingDetailNewsStateImpl extends LoadingDetailNewsState {
-  const _$LoadingDetailNewsStateImpl() : super._();
-
-  @override
-  String toString() {
-    return 'DetailNewsState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoadingDetailNewsStateImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(NewsEntity news) success,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(NewsEntity news)? success,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(NewsEntity news)? success,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoadingDetailNewsState value) loading,
-    required TResult Function(ErrorDetailNewsState value) error,
-    required TResult Function(SuccessDetailNewsState value) success,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoadingDetailNewsState value)? loading,
-    TResult? Function(ErrorDetailNewsState value)? error,
-    TResult? Function(SuccessDetailNewsState value)? success,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingDetailNewsState value)? loading,
-    TResult Function(ErrorDetailNewsState value)? error,
-    TResult Function(SuccessDetailNewsState value)? success,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LoadingDetailNewsState extends DetailNewsState {
-  const factory LoadingDetailNewsState() = _$LoadingDetailNewsStateImpl;
-  const LoadingDetailNewsState._() : super._();
-}
-
-/// @nodoc
-abstract class _$$ErrorDetailNewsStateImplCopyWith<$Res> {
-  factory _$$ErrorDetailNewsStateImplCopyWith(
-    _$ErrorDetailNewsStateImpl value,
-    $Res Function(_$ErrorDetailNewsStateImpl) then,
-  ) = __$$ErrorDetailNewsStateImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({
-    String? errorFromApi,
-    String errorForUser,
-    String? statusCode,
-    StackTrace? stackTrace,
-    String? responseMessage,
-  });
-}
-
-/// @nodoc
-class __$$ErrorDetailNewsStateImplCopyWithImpl<$Res>
-    extends _$DetailNewsStateCopyWithImpl<$Res, _$ErrorDetailNewsStateImpl>
-    implements _$$ErrorDetailNewsStateImplCopyWith<$Res> {
-  __$$ErrorDetailNewsStateImplCopyWithImpl(
-    _$ErrorDetailNewsStateImpl _value,
-    $Res Function(_$ErrorDetailNewsStateImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? errorFromApi = freezed,
-    Object? errorForUser = null,
-    Object? statusCode = freezed,
-    Object? stackTrace = freezed,
-    Object? responseMessage = freezed,
-  }) {
-    return _then(
-      _$ErrorDetailNewsStateImpl(
-        errorFromApi: freezed == errorFromApi
-            ? _value.errorFromApi
-            : errorFromApi // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        errorForUser: null == errorForUser
-            ? _value.errorForUser
-            : errorForUser // ignore: cast_nullable_to_non_nullable
-                  as String,
-        statusCode: freezed == statusCode
-            ? _value.statusCode
-            : statusCode // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        stackTrace: freezed == stackTrace
-            ? _value.stackTrace
-            : stackTrace // ignore: cast_nullable_to_non_nullable
-                  as StackTrace?,
-        responseMessage: freezed == responseMessage
-            ? _value.responseMessage
-            : responseMessage // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$ErrorDetailNewsStateImpl extends ErrorDetailNewsState {
-  const _$ErrorDetailNewsStateImpl({
-    this.errorFromApi,
-    required this.errorForUser,
-    this.statusCode,
-    this.stackTrace,
-    this.responseMessage,
-  }) : super._();
 
-  @override
-  final String? errorFromApi;
-  @override
-  final String errorForUser;
-  @override
-  final String? statusCode;
-  @override
-  final StackTrace? stackTrace;
-  @override
-  final String? responseMessage;
+class LoadingDetailNewsState extends DetailNewsState {
+  const LoadingDetailNewsState(): super._();
+  
 
-  @override
-  String toString() {
-    return 'DetailNewsState.error(errorFromApi: $errorFromApi, errorForUser: $errorForUser, statusCode: $statusCode, stackTrace: $stackTrace, responseMessage: $responseMessage)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorDetailNewsStateImpl &&
-            (identical(other.errorFromApi, errorFromApi) ||
-                other.errorFromApi == errorFromApi) &&
-            (identical(other.errorForUser, errorForUser) ||
-                other.errorForUser == errorForUser) &&
-            (identical(other.statusCode, statusCode) ||
-                other.statusCode == statusCode) &&
-            (identical(other.stackTrace, stackTrace) ||
-                other.stackTrace == stackTrace) &&
-            (identical(other.responseMessage, responseMessage) ||
-                other.responseMessage == responseMessage));
-  }
 
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    errorFromApi,
-    errorForUser,
-    statusCode,
-    stackTrace,
-    responseMessage,
-  );
 
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorDetailNewsStateImplCopyWith<_$ErrorDetailNewsStateImpl>
-  get copyWith =>
-      __$$ErrorDetailNewsStateImplCopyWithImpl<_$ErrorDetailNewsStateImpl>(
-        this,
-        _$identity,
-      );
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(NewsEntity news) success,
-  }) {
-    return error(
-      errorFromApi,
-      errorForUser,
-      statusCode,
-      stackTrace,
-      responseMessage,
-    );
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(NewsEntity news)? success,
-  }) {
-    return error?.call(
-      errorFromApi,
-      errorForUser,
-      statusCode,
-      stackTrace,
-      responseMessage,
-    );
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(NewsEntity news)? success,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(
-        errorFromApi,
-        errorForUser,
-        statusCode,
-        stackTrace,
-        responseMessage,
-      );
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoadingDetailNewsState value) loading,
-    required TResult Function(ErrorDetailNewsState value) error,
-    required TResult Function(SuccessDetailNewsState value) success,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoadingDetailNewsState value)? loading,
-    TResult? Function(ErrorDetailNewsState value)? error,
-    TResult? Function(SuccessDetailNewsState value)? success,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingDetailNewsState value)? loading,
-    TResult Function(ErrorDetailNewsState value)? error,
-    TResult Function(SuccessDetailNewsState value)? success,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingDetailNewsState);
 }
 
-abstract class ErrorDetailNewsState extends DetailNewsState {
-  const factory ErrorDetailNewsState({
-    final String? errorFromApi,
-    required final String errorForUser,
-    final String? statusCode,
-    final StackTrace? stackTrace,
-    final String? responseMessage,
-  }) = _$ErrorDetailNewsStateImpl;
-  const ErrorDetailNewsState._() : super._();
 
-  String? get errorFromApi;
-  String get errorForUser;
-  String? get statusCode;
-  StackTrace? get stackTrace;
-  String? get responseMessage;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ErrorDetailNewsStateImplCopyWith<_$ErrorDetailNewsStateImpl>
-  get copyWith => throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'DetailNewsState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ErrorDetailNewsState extends DetailNewsState {
+  const ErrorDetailNewsState({this.errorFromApi, required this.errorForUser, this.statusCode, this.stackTrace, this.responseMessage}): super._();
+  
+
+ final  String? errorFromApi;
+ final  String errorForUser;
+ final  String? statusCode;
+ final  StackTrace? stackTrace;
+ final  String? responseMessage;
+
+/// Create a copy of DetailNewsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ErrorDetailNewsStateCopyWith<ErrorDetailNewsState> get copyWith => _$ErrorDetailNewsStateCopyWithImpl<ErrorDetailNewsState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ErrorDetailNewsState&&(identical(other.errorFromApi, errorFromApi) || other.errorFromApi == errorFromApi)&&(identical(other.errorForUser, errorForUser) || other.errorForUser == errorForUser)&&(identical(other.statusCode, statusCode) || other.statusCode == statusCode)&&(identical(other.stackTrace, stackTrace) || other.stackTrace == stackTrace)&&(identical(other.responseMessage, responseMessage) || other.responseMessage == responseMessage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,errorFromApi,errorForUser,statusCode,stackTrace,responseMessage);
+
+@override
+String toString() {
+  return 'DetailNewsState.error(errorFromApi: $errorFromApi, errorForUser: $errorForUser, statusCode: $statusCode, stackTrace: $stackTrace, responseMessage: $responseMessage)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$SuccessDetailNewsStateImplCopyWith<$Res> {
-  factory _$$SuccessDetailNewsStateImplCopyWith(
-    _$SuccessDetailNewsStateImpl value,
-    $Res Function(_$SuccessDetailNewsStateImpl) then,
-  ) = __$$SuccessDetailNewsStateImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({NewsEntity news});
+abstract mixin class $ErrorDetailNewsStateCopyWith<$Res> implements $DetailNewsStateCopyWith<$Res> {
+  factory $ErrorDetailNewsStateCopyWith(ErrorDetailNewsState value, $Res Function(ErrorDetailNewsState) _then) = _$ErrorDetailNewsStateCopyWithImpl;
+@useResult
+$Res call({
+ String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage
+});
+
+
+
+
+}
+/// @nodoc
+class _$ErrorDetailNewsStateCopyWithImpl<$Res>
+    implements $ErrorDetailNewsStateCopyWith<$Res> {
+  _$ErrorDetailNewsStateCopyWithImpl(this._self, this._then);
+
+  final ErrorDetailNewsState _self;
+  final $Res Function(ErrorDetailNewsState) _then;
+
+/// Create a copy of DetailNewsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? errorFromApi = freezed,Object? errorForUser = null,Object? statusCode = freezed,Object? stackTrace = freezed,Object? responseMessage = freezed,}) {
+  return _then(ErrorDetailNewsState(
+errorFromApi: freezed == errorFromApi ? _self.errorFromApi : errorFromApi // ignore: cast_nullable_to_non_nullable
+as String?,errorForUser: null == errorForUser ? _self.errorForUser : errorForUser // ignore: cast_nullable_to_non_nullable
+as String,statusCode: freezed == statusCode ? _self.statusCode : statusCode // ignore: cast_nullable_to_non_nullable
+as String?,stackTrace: freezed == stackTrace ? _self.stackTrace : stackTrace // ignore: cast_nullable_to_non_nullable
+as StackTrace?,responseMessage: freezed == responseMessage ? _self.responseMessage : responseMessage // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-class __$$SuccessDetailNewsStateImplCopyWithImpl<$Res>
-    extends _$DetailNewsStateCopyWithImpl<$Res, _$SuccessDetailNewsStateImpl>
-    implements _$$SuccessDetailNewsStateImplCopyWith<$Res> {
-  __$$SuccessDetailNewsStateImplCopyWithImpl(
-    _$SuccessDetailNewsStateImpl _value,
-    $Res Function(_$SuccessDetailNewsStateImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? news = null}) {
-    return _then(
-      _$SuccessDetailNewsStateImpl(
-        news: null == news
-            ? _value.news
-            : news // ignore: cast_nullable_to_non_nullable
-                  as NewsEntity,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$SuccessDetailNewsStateImpl extends SuccessDetailNewsState {
-  const _$SuccessDetailNewsStateImpl({required this.news}) : super._();
 
-  @override
-  final NewsEntity news;
+class SuccessDetailNewsState extends DetailNewsState {
+  const SuccessDetailNewsState({required this.news}): super._();
+  
 
-  @override
-  String toString() {
-    return 'DetailNewsState.success(news: $news)';
-  }
+ final  NewsEntity news;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SuccessDetailNewsStateImpl &&
-            (identical(other.news, news) || other.news == news));
-  }
+/// Create a copy of DetailNewsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SuccessDetailNewsStateCopyWith<SuccessDetailNewsState> get copyWith => _$SuccessDetailNewsStateCopyWithImpl<SuccessDetailNewsState>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, news);
 
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SuccessDetailNewsStateImplCopyWith<_$SuccessDetailNewsStateImpl>
-  get copyWith =>
-      __$$SuccessDetailNewsStateImplCopyWithImpl<_$SuccessDetailNewsStateImpl>(
-        this,
-        _$identity,
-      );
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )
-    error,
-    required TResult Function(NewsEntity news) success,
-  }) {
-    return success(news);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult? Function(NewsEntity news)? success,
-  }) {
-    return success?.call(news);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(
-      String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage,
-    )?
-    error,
-    TResult Function(NewsEntity news)? success,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(news);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoadingDetailNewsState value) loading,
-    required TResult Function(ErrorDetailNewsState value) error,
-    required TResult Function(SuccessDetailNewsState value) success,
-  }) {
-    return success(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoadingDetailNewsState value)? loading,
-    TResult? Function(ErrorDetailNewsState value)? error,
-    TResult? Function(SuccessDetailNewsState value)? success,
-  }) {
-    return success?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadingDetailNewsState value)? loading,
-    TResult Function(ErrorDetailNewsState value)? error,
-    TResult Function(SuccessDetailNewsState value)? success,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessDetailNewsState&&(identical(other.news, news) || other.news == news));
 }
 
-abstract class SuccessDetailNewsState extends DetailNewsState {
-  const factory SuccessDetailNewsState({required final NewsEntity news}) =
-      _$SuccessDetailNewsStateImpl;
-  const SuccessDetailNewsState._() : super._();
 
-  NewsEntity get news;
+@override
+int get hashCode => Object.hash(runtimeType,news);
 
-  /// Create a copy of DetailNewsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SuccessDetailNewsStateImplCopyWith<_$SuccessDetailNewsStateImpl>
-  get copyWith => throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'DetailNewsState.success(news: $news)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class $SuccessDetailNewsStateCopyWith<$Res> implements $DetailNewsStateCopyWith<$Res> {
+  factory $SuccessDetailNewsStateCopyWith(SuccessDetailNewsState value, $Res Function(SuccessDetailNewsState) _then) = _$SuccessDetailNewsStateCopyWithImpl;
+@useResult
+$Res call({
+ NewsEntity news
+});
+
+
+
+
+}
+/// @nodoc
+class _$SuccessDetailNewsStateCopyWithImpl<$Res>
+    implements $SuccessDetailNewsStateCopyWith<$Res> {
+  _$SuccessDetailNewsStateCopyWithImpl(this._self, this._then);
+
+  final SuccessDetailNewsState _self;
+  final $Res Function(SuccessDetailNewsState) _then;
+
+/// Create a copy of DetailNewsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? news = null,}) {
+  return _then(SuccessDetailNewsState(
+news: null == news ? _self.news : news // ignore: cast_nullable_to_non_nullable
+as NewsEntity,
+  ));
+}
+
+
+}
+
+// dart format on
