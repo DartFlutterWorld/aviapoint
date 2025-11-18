@@ -18,7 +18,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_quest
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/select_topics_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mode_dialog.dart';
-import 'dart:html' as html if (dart.library.html) 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -217,12 +216,8 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode}) a
 
 // Вспомогательная функция для логирования (работает и в production)
 void _log(String message) {
-  if (kIsWeb) {
-    html.window.console.log(message);
-  } else {
-    if (kDebugMode) {
-      print(message);
-    }
+  if (kDebugMode) {
+    print(message);
   }
 }
 

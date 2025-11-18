@@ -198,12 +198,15 @@ class _SuccessState extends State<_Success> {
             ),
             SizedBox(height: 24),
             if (normalCheck[indexCheck].picture != null && normalCheck[indexCheck].picture!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: CachedNetworkImage(
-                  imageUrl: getImageUrl(normalCheck[indexCheck].picture),
-                  placeholder: (context, url) => LoadingCustom(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: CachedNetworkImage(
+                    imageUrl: getImageUrl(normalCheck[indexCheck].picture),
+                    placeholder: (context, url) => LoadingCustom(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    width: 700,
+                  ),
                 ),
               ),
             Spacer(),
