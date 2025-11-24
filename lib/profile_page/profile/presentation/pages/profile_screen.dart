@@ -145,38 +145,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-              // Переключатель сервера
-              Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Сервер', style: AppStyles.bold14s),
-                        Text(
-                          Provider.of<AppState>(context, listen: true).useLocalServer ? 'Локальный (локалхост)' : 'Удаленный (production)',
-                          style: AppStyles.regular12s.copyWith(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    Switch(
-                      value: Provider.of<AppState>(context, listen: true).useLocalServer,
-                      onChanged: (value) {
-                        Provider.of<AppState>(context, listen: false).setUseLocalServer(value);
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(value ? 'Переключился на локальный сервер' : 'Переключился на удаленный сервер'), duration: Duration(seconds: 2)));
-                      },
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),

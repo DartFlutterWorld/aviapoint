@@ -2,11 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'story_dto.g.dart';
 
-@JsonSerializable(
-  includeIfNull: false,
-  fieldRename: FieldRename.snake,
-  createToJson: false,
-)
+@JsonSerializable(includeIfNull: false, fieldRename: FieldRename.snake, createToJson: false)
 class StoryDto {
   final int id;
   final String? image;
@@ -18,6 +14,7 @@ class StoryDto {
   final String colorButton;
   final String logoStory;
   final String textColor;
+  final String title;
 
   StoryDto({
     required this.id,
@@ -30,6 +27,7 @@ class StoryDto {
     required this.colorButton,
     required this.logoStory,
     required this.textColor,
+    required this.title,
   });
 
   factory StoryDto.fromJson(Map<String, dynamic> json) => _$StoryDtoFromJson(json);

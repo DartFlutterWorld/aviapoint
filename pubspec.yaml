@@ -147,6 +147,7 @@ flutter:
     - assets/mp4/
     - assets/translations/
     - assets/logo/
+    - assets/splash/
 
   fonts:
     - family: Geologica

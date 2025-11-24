@@ -9,6 +9,7 @@ class StoryEntity {
   final String colorButton;
   final String logoStory;
   final String textColor;
+  final String title;
 
   StoryEntity({
     required this.id,
@@ -21,5 +22,6 @@ class StoryEntity {
     required this.colorButton,
     required this.logoStory,
     required this.textColor,
+    required this.title,
   });
 }

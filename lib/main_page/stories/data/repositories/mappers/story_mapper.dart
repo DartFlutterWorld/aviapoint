@@ -14,6 +14,7 @@ class StoryMapper {
       colorButton: model.colorButton,
       logoStory: model.logoStory,
       textColor: model.textColor,
+      title: model.title,
     );
   }
 

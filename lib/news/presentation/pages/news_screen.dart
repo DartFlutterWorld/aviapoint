@@ -5,7 +5,6 @@ import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/news/domain/entities/category_news_entity.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
@@ -13,11 +12,9 @@ import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
 import 'package:aviapoint/news/presentation/cubit/news_cubit.dart';
 import 'package:aviapoint/news/presentation/widgets/big_news_widget.dart';
 import 'package:aviapoint/news/presentation/widgets/small_news_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 @RoutePage()
 class NewsScreen extends StatefulWidget {
@@ -39,51 +36,39 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Новости авиации',
-        withBack: false,
-      ),
+      appBar: CustomAppBar(title: 'Новости авиации', withBack: false),
       backgroundColor: AppColors.background,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 8),
-            BlocBuilder<CategoryNewsBloc, CategoryNewsState>(
-              builder: (context, state) => state.map(
-                loading: (state) => SizedBox(),
-                error: (state) => ErrorCustom(
-                  textError: state.errorForUser,
-                  repeat: () {
-                    BlocProvider.of<CategoryNewsBloc>(context).add(GetCategoryNewsEvent());
-                    BlocProvider.of<NewsBloc>(context).add(GetNewsEvent());
-                  },
-                ),
-                success: (state) => _CategorySuccess(
-                  category: state.categoryNews,
-                ),
+      body: ListView(
+        children: [
+          SizedBox(height: 8),
+          BlocBuilder<CategoryNewsBloc, CategoryNewsState>(
+            builder: (context, state) => state.map(
+              loading: (state) => SizedBox(),
+              error: (state) => ErrorCustom(
+                textError: state.errorForUser,
+                repeat: () {
+                  BlocProvider.of<CategoryNewsBloc>(context).add(GetCategoryNewsEvent());
+                  BlocProvider.of<NewsBloc>(context).add(GetNewsEvent());
+                },
               ),
+              success: (state) => _CategorySuccess(category: state.categoryNews),
             ),
-            SizedBox(height: 12),
-            BlocBuilder<NewsBloc, NewsState>(
-              builder: (context, state) => state.map(
-                error: (state) => ErrorCustom(
-                  textError: state.errorForUser,
-                  repeat: () {
-                    BlocProvider.of<CategoryNewsBloc>(context).add(GetCategoryNewsEvent());
-                    BlocProvider.of<NewsBloc>(context).add(GetNewsEvent());
-                  },
-                ),
-                loading: (state) => LoadingCustom(
-                  paddingTop: MediaQuery.of(context).size.height / 4,
-                ),
-                success: (state) => _Success(
-                  news: state.news,
-                ),
+          ),
+          SizedBox(height: 12),
+          BlocBuilder<NewsBloc, NewsState>(
+            builder: (context, state) => state.map(
+              error: (state) => ErrorCustom(
+                textError: state.errorForUser,
+                repeat: () {
+                  BlocProvider.of<CategoryNewsBloc>(context).add(GetCategoryNewsEvent());
+                  BlocProvider.of<NewsBloc>(context).add(GetNewsEvent());
+                },
               ),
+              loading: (state) => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
+              success: (state) => _Success(news: state.news),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -131,24 +116,12 @@ class _CategorySuccessState extends State<_CategorySuccess> {
                 color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index ? Color(0xFF0A6EFA) : Color(0xFFD9E6F8),
                 borderRadius: BorderRadius.circular(5),
                 boxShadow: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index
-                    ? [
-                        BoxShadow(
-                          color: Color(0xff0A6EFA).withOpacity(0.25),
-                          blurRadius: 4,
-                          spreadRadius: 0,
-                          offset: Offset(
-                            0.0,
-                            4.0,
-                          ),
-                        ),
-                      ]
+                    ? [BoxShadow(color: Color(0xff0A6EFA).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))]
                     : [],
               ),
               child: Text(
                 widget.category[index].title,
-                style: AppStyles.mediumItalic13s.copyWith(
-                  color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index ? Color(0xFFFFFFFF) : Color(0xFF0A6EFA),
-                ),
+                style: AppStyles.mediumItalic13s.copyWith(color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index ? Color(0xFFFFFFFF) : Color(0xFF0A6EFA)),
               ),
             ),
           ),
@@ -166,11 +139,10 @@ class _Success extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: news.length,
       itemBuilder: (context, index) => GestureDetector(
-        onTap: () => AutoRouter.of(context).push(
-          DetailNewsRoute(news: news[index], newsId: news[index].id),
-        ),
+        onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: news[index], newsId: news[index].id)),
         child: news[index].isBigNews ? BigNewsWidget(news: news[index]) : SmallNewsWidget(news: news[index]),
       ),
     );

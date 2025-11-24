@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
@@ -51,8 +52,8 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
       builder: (context, state) {
         if (state is SuccessCacheManagerState && state.story.isNotEmpty) {
           return SizedBox(
-            height: 100,
-            width: 100,
+            height: 100.h,
+            width: 100.w,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: state.story.length,
@@ -71,19 +72,30 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
-                      child: CachedNetworkImage(
-                        imageUrl: getImageUrl(state.story[index].logoStory),
-                        fit: BoxFit.fill,
-                        placeholder: (context, url) => Shimmer(
-                          duration: const Duration(milliseconds: 1000),
-                          color: const Color(0xFF8D66FE),
-                          colorOpacity: 0.2,
-                          child: Container(decoration: const BoxDecoration()),
-                        ),
-                        height: 100.h,
-                        width: 100.w,
-                        cacheManager: getIt<DefaultCacheManager>(),
-                        cacheKey: getImageUrl(state.story[index].logoStory),
+                      child: Stack(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: getImageUrl(state.story[index].logoStory),
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Shimmer(
+                              duration: const Duration(milliseconds: 1000),
+                              color: const Color(0xFF8D66FE),
+                              colorOpacity: 0.2,
+                              child: Container(decoration: const BoxDecoration()),
+                            ),
+                            height: 100.h,
+                            width: 100.w,
+                            cacheManager: getIt<DefaultCacheManager>(),
+                            cacheKey: getImageUrl(state.story[index].logoStory),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(state.story[index].title, style: AppStyles.regular13s.copyWith(color: Color(0xFF374151))),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

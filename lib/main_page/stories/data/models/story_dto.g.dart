@@ -17,4 +17,5 @@ StoryDto _$StoryDtoFromJson(Map<String, dynamic> json) => StoryDto(
   colorButton: json['color_button'] as String,
   logoStory: json['logo_story'] as String,
   textColor: json['text_color'] as String,
+  title: json['title'] as String,
 );

@@ -41,6 +41,7 @@ class Pictures {
   static const String planeProgress = 'assets/png/plane_progress.png';
   static const String refresh = 'assets/svg/refresh.svg';
   static const String pilotRta = 'assets/png/pilot_rat.png';
+  static const String pilotRatBanner = 'assets/png/pilot_rat_banner.png';
   static const String pilotRta2 = 'assets/png/pilot_rat2.png';
   static const String pilotWithFon = 'assets/png/pilot_with_fon.png';
   static const String backgroundRta = 'assets/png/background_rta.png';
@@ -63,4 +64,10 @@ class Pictures {
   static const String testMySelfBg = 'assets/svg/test_my_self_bg.svg';
   static const String zamok = 'assets/png/zamok.png';
   static const String mozgi = 'assets/png/mozgi.png';
+  static const String leaningBackgroundBanner = 'assets/png/leaning_background_banner.png';
+  static const String backgroundRat = 'assets/png/background_rat.png';
+  static const String planeRatBaner = 'assets/png/plane_rat_baner.png';
+  static const String whatsapp = 'assets/svg/whatsapp.svg';
+  static const String telegramm = 'assets/svg/telegramm.svg';
+  static const String zapp = 'assets/png/zapp.png';
 }
