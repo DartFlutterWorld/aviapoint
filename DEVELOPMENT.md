@@ -72,12 +72,19 @@ flutter run -d ios --dart-define=isDevelopment=false
 flutter build web --release --dart-define=isDevelopment=false
 ```
 
-### Android:
+### Android App Bundle (для Google Play Store):
 ```bash
-flutter build apk --release --dart-define=isDevelopment=false
-# или для App Bundle
 flutter build appbundle --release --dart-define=isDevelopment=false
 ```
+Файл будет создан в: `build/app/outputs/bundle/release/app-release.aab`
+
+### Android APK (для прямого распространения):
+```bash
+flutter build apk --release --dart-define=isDevelopment=false
+```
+Файл будет создан в: `build/app/outputs/flutter-apk/app-release.apk`
+
+**Примечание:** Для публикации в Google Play Store используйте **App Bundle** (`.aab`), а не APK.
 
 ### iOS:
 ```bash

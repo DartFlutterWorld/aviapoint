@@ -6,6 +6,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
@@ -59,92 +60,113 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             children: [
-              Provider.of<AppState>(context, listen: true).isAuthenticated
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Image.asset(Pictures.pilot, height: 63, width: 63),
-                            BlocBuilder<ProfileBloc, ProfileState>(
-                              builder: (context, state) => state.map(
-                                success: (state) => Padding(
-                                  padding: const EdgeInsets.only(left: 12.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                                      Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                      Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                    ],
-                                  ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Provider.of<AppState>(context, listen: true).isAuthenticated
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Image.asset(Pictures.pilot, height: 63, width: 63),
+                                    BlocBuilder<ProfileBloc, ProfileState>(
+                                      builder: (context, state) => state.map(
+                                        success: (state) => Padding(
+                                          padding: const EdgeInsets.only(left: 12.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                                              Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                              Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                            ],
+                                          ),
+                                        ),
+                                        error: (state) => ErrorCustom(
+                                          textError: state.errorForUser,
+                                          repeat: () {
+                                            if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
+                                              BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+                                            }
+                                          },
+                                        ),
+                                        loading: (state) => LoadingCustom(),
+                                        initial: (state) => SizedBox(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                error: (state) => ErrorCustom(
-                                  textError: state.errorForUser,
-                                  repeat: () {
-                                    if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
-                                      BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
-                                    }
+                                SizedBox(height: 16),
+                                // Кнопка очистки БД
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog<void>(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: Text('Очистить прогресс?'),
+                                        content: Text('Это удалит все сохраненные сессии тестирования и прогресс. Это действие нельзя отменить.'),
+                                        actions: [
+                                          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Отмена')),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              Navigator.pop(ctx);
+                                              await getIt<AppDb>().clearAllData();
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Прогресс очищен')));
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                            child: Text('Очистить', style: TextStyle(color: Colors.white)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
                                   },
+                                  icon: Icon(Icons.delete_outline),
+                                  label: Text('Очистить прогресс'),
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
                                 ),
-                                loading: (state) => LoadingCustom(),
-                                initial: (state) => SizedBox(),
-                              ),
+                                SizedBox(height: 16),
+                              ],
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(Pictures.planeProfile, height: 374, width: 286),
+                                SizedBox(height: 16),
+                                CustomButton(
+                                  verticalPadding: 8,
+                                  backgroundColor: Color(0xFF0A6EFA),
+                                  title: 'Войти в профиль',
+                                  textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                  borderColor: Color(0xFF0A6EFA),
+                                  borderRadius: 46,
+                                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                  onPressed: () => showLogin(context),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        // Кнопка очистки БД
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog<void>(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                title: Text('Очистить прогресс?'),
-                                content: Text('Это удалит все сохраненные сессии тестирования и прогресс. Это действие нельзя отменить.'),
-                                actions: [
-                                  TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Отмена')),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      Navigator.pop(ctx);
-                                      await getIt<AppDb>().clearAllData();
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Прогресс очищен')));
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                    child: Text('Очистить', style: TextStyle(color: Colors.white)),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.delete_outline),
-                          label: Text('Очистить прогресс'),
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
-                        ),
-                        SizedBox(height: 16),
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(Pictures.planeProfile, height: 374, width: 286),
-                        SizedBox(height: 16),
-                        CustomButton(
-                          verticalPadding: 8,
-                          backgroundColor: Color(0xFF0A6EFA),
-                          title: 'Войти в профиль',
-                          textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                          borderColor: Color(0xFF0A6EFA),
-                          borderRadius: 46,
-                          boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                          onPressed: () => showLogin(context),
-                        ),
-                      ],
-                    ),
+                    ],
+                  ),
+                ),
+              ),
+              // Ссылка на политику конфиденциальности внизу
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: TextButton(
+                  onPressed: () {
+                    context.router.push(const PrivacyPolicyRoute());
+                  },
+                  child: Text(
+                    'Политика конфиденциальности',
+                    style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

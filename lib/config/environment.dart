@@ -11,7 +11,10 @@ abstract class Environment {
   // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '172.20.10.11');
 
   // Дома Вайфай
-  static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.159');
+  // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.159');
+
+  // Кардон Вайфай
+  static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.105');
 
   /// API базовый URL
   static String get apiUrl {
@@ -25,9 +28,16 @@ abstract class Environment {
         return 'http://$localServerIp:8080/';
       }
     } else {
-      // Production окружение (относительный путь, Nginx проксирует на backend)
-      // Nginx конфиг обрабатывает: /api, /stories, /news, /auth, /learning, /profiles, /openapi
-      return '';
+      // Production окружение
+      // На веб-платформе: относительный путь (Nginx проксирует на backend)
+      // На мобильных: полный URL продакшн сервера
+      if (kIsWeb) {
+        // Nginx конфиг обрабатывает: /api, /stories, /news, /auth, /learning, /profiles, /openapi
+        return '';
+      } else {
+        // Для мобильных приложений нужен полный URL
+        return 'https://avia-point.com/';
+      }
     }
   }
 

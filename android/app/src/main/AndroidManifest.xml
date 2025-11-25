@@ -25,7 +25,6 @@ xmlns:tools="http://schemas.android.com/tools"
         android:requestLegacyExternalStorage="true"
         android:extractNativeLibs="true"
         android:usesCleartextTraffic="true"
-
         android:fullBackupContent="false"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"

@@ -67,6 +67,7 @@ import 'package:aviapoint/price_page/prices_screen.dart';
 import 'package:aviapoint/price_page/prices_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_screen.dart';
+import 'package:aviapoint/profile_page/profile/presentation/pages/privacy_policy_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 part 'app_router.gr.dart';
@@ -197,6 +198,7 @@ class AppRouter extends RootStackRouter {
               // guards: [AuthGuard()],
               page: ProfileRoute.page,
             ),
+            AutoRoute(path: 'privacy-policy', page: PrivacyPolicyRoute.page),
           ],
         ),
         AutoRoute(
