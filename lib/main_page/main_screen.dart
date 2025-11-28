@@ -53,12 +53,12 @@ class _MainScreenState extends State<MainScreen> {
         withBack: false,
         withLogo: true,
         actions: [
-          Provider.of<AppState>(context, listen: true).isAuthenticated
-              ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))
-              : IconButton(
-                  onPressed: () => showLogin(context, callback: () => AutoRouter.of(context).navigate(const ProfileNavigationRoute())),
-                  icon: Icon(Icons.login),
-                ),
+          // Provider.of<AppState>(context, listen: true).isAuthenticated
+          //     ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))
+          //     : IconButton(
+          //         onPressed: () => showLogin(context, callback: () => AutoRouter.of(context).navigate(const ProfileNavigationRoute())),
+          //         icon: Icon(Icons.login),
+          //       ),
         ],
       ),
       body: ListView(

@@ -65,6 +65,8 @@ import 'package:aviapoint/main_page/main_navigation_screen.dart';
 import 'package:aviapoint/main_page/main_screen.dart';
 import 'package:aviapoint/price_page/prices_screen.dart';
 import 'package:aviapoint/price_page/prices_navigation_screen.dart';
+import 'package:aviapoint/payment/presentation/pages/payment_screen.dart';
+import 'package:aviapoint/payment/presentation/pages/payment_webview_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/privacy_policy_screen.dart';
@@ -214,6 +216,8 @@ class AppRouter extends RootStackRouter {
           page: MarketNavigationRoute.page,
           children: [AutoRoute(initial: true, page: MarketRoute.page)],
         ),
+        AutoRoute(path: 'payment', page: PaymentRoute.page),
+        AutoRoute(path: 'payment/webview', page: PaymentWebViewRoute.page),
       ],
     ),
 

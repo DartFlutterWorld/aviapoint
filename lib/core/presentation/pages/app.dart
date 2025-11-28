@@ -37,6 +37,9 @@ import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
 import 'package:aviapoint/news/presentation/cubit/news_cubit.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/core/presentation/widgets/max_width_container.dart';
+import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
+import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
+import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -102,6 +105,7 @@ class _AppState extends State<App> {
         BlocProvider<TypeSertificatesBloc>(create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
         BlocProvider<TypeCorrectAnswersBloc>(create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
         BlocProvider<CategoriesWithListQuestionsBloc>(create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<PaymentBloc>(create: (context) => PaymentBloc(paymentRepository: getIt<PaymentRepository>())),
         BlocProvider<CategoriesBloc>(create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
         BlocProvider<AppSettingsBloc>(
           create: (context) => AppSettingsBloc(db: getIt<AppDb>(), rosAviaTestCubit: getIt<RosAviaTestCubit>())..add(SetAppSettingsEvent()),

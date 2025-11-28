@@ -1258,6 +1258,180 @@ class NormalCheckListRouteArgs {
 }
 
 /// generated route for
+/// [PaymentScreen]
+class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
+  PaymentRoute({
+    Key? key,
+    required double amount,
+    String currency = 'RUB',
+    required String description,
+    String? returnUrl,
+    String? cancelUrl,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PaymentRoute.name,
+         args: PaymentRouteArgs(
+           key: key,
+           amount: amount,
+           currency: currency,
+           description: description,
+           returnUrl: returnUrl,
+           cancelUrl: cancelUrl,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'PaymentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PaymentRouteArgs>();
+      return PaymentScreen(
+        key: args.key,
+        amount: args.amount,
+        currency: args.currency,
+        description: args.description,
+        returnUrl: args.returnUrl,
+        cancelUrl: args.cancelUrl,
+      );
+    },
+  );
+}
+
+class PaymentRouteArgs {
+  const PaymentRouteArgs({
+    this.key,
+    required this.amount,
+    this.currency = 'RUB',
+    required this.description,
+    this.returnUrl,
+    this.cancelUrl,
+  });
+
+  final Key? key;
+
+  final double amount;
+
+  final String currency;
+
+  final String description;
+
+  final String? returnUrl;
+
+  final String? cancelUrl;
+
+  @override
+  String toString() {
+    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, returnUrl: $returnUrl, cancelUrl: $cancelUrl}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PaymentRouteArgs) return false;
+    return key == other.key &&
+        amount == other.amount &&
+        currency == other.currency &&
+        description == other.description &&
+        returnUrl == other.returnUrl &&
+        cancelUrl == other.cancelUrl;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      amount.hashCode ^
+      currency.hashCode ^
+      description.hashCode ^
+      returnUrl.hashCode ^
+      cancelUrl.hashCode;
+}
+
+/// generated route for
+/// [PaymentWebViewScreen]
+class PaymentWebViewRoute extends PageRouteInfo<PaymentWebViewRouteArgs> {
+  PaymentWebViewRoute({
+    Key? key,
+    required String paymentUrl,
+    VoidCallback? onSuccess,
+    VoidCallback? onCancel,
+    VoidCallback? onFailure,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PaymentWebViewRoute.name,
+         args: PaymentWebViewRouteArgs(
+           key: key,
+           paymentUrl: paymentUrl,
+           onSuccess: onSuccess,
+           onCancel: onCancel,
+           onFailure: onFailure,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'PaymentWebViewRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PaymentWebViewRouteArgs>();
+      return PaymentWebViewScreen(
+        key: args.key,
+        paymentUrl: args.paymentUrl,
+        onSuccess: args.onSuccess,
+        onCancel: args.onCancel,
+        onFailure: args.onFailure,
+      );
+    },
+  );
+}
+
+class PaymentWebViewRouteArgs {
+  const PaymentWebViewRouteArgs({
+    this.key,
+    required this.paymentUrl,
+    this.onSuccess,
+    this.onCancel,
+    this.onFailure,
+  });
+
+  final Key? key;
+
+  final String paymentUrl;
+
+  final VoidCallback? onSuccess;
+
+  final VoidCallback? onCancel;
+
+  final VoidCallback? onFailure;
+
+  @override
+  String toString() {
+    return 'PaymentWebViewRouteArgs{key: $key, paymentUrl: $paymentUrl, onSuccess: $onSuccess, onCancel: $onCancel, onFailure: $onFailure}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PaymentWebViewRouteArgs) return false;
+    return key == other.key &&
+        paymentUrl == other.paymentUrl &&
+        onSuccess == other.onSuccess &&
+        onCancel == other.onCancel &&
+        onFailure == other.onFailure;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      paymentUrl.hashCode ^
+      onSuccess.hashCode ^
+      onCancel.hashCode ^
+      onFailure.hashCode;
+}
+
+/// generated route for
 /// [PreflightInspectionCategoriesScreen]
 class PreflightInspectionCategoriesRoute
     extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {

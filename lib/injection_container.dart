@@ -26,6 +26,9 @@ import 'package:aviapoint/main_page/stories/domain/repositories/story_repository
 import 'package:aviapoint/news/data/datasources/news_service.dart';
 import 'package:aviapoint/news/data/repositories/news_repository_impl.dart';
 import 'package:aviapoint/news/domain/repositories/news_repository.dart';
+import 'package:aviapoint/payment/data/datasources/payment_service.dart';
+import 'package:aviapoint/payment/data/repositories/payment_repository_impl.dart';
+import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/profile_page/profile/data/datasources/profile_service.dart';
 import 'package:aviapoint/profile_page/profile/data/repositories/profile_repository_impl.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
@@ -66,4 +69,7 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<RosAviaTestRepository>(RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)));
   getIt.registerSingleton<AppDb>(AppDb());
   getIt.registerSingleton<RosAviaTestCubit>(RosAviaTestCubit());
+
+  // Payment
+  getIt.registerSingleton<PaymentRepository>(PaymentRepositoryImpl(paymentService: PaymentService(dataSource.dio)));
 }

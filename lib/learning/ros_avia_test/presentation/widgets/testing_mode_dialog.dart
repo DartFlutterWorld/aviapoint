@@ -54,7 +54,7 @@ class _TestingModeDialogState extends State<TestingModeDialog> {
 
               SizedBox(height: 16.h),
               TestingModeElement(
-                title: 'Тренировочный\nрежим',
+                title: 'Тренировочный\nрежим (Подписка 700 ₽)',
                 subTitle: 'Правильные ответы появляются сразу',
                 onTap: () => context.router.pop(TestMode.training),
                 image: Pictures.zamok,

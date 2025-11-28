@@ -94,37 +94,37 @@ class _Success extends StatelessWidget {
             onTap: () => context.router.push(selectSubCategory(2)),
           ),
           SizedBox(height: 8),
-          Row(
-            spacing: 12.w,
-            children: [
-              Flexible(
-                child: CategoryHandBookSmallWidget(
-                  height: 190.h,
-                  width: 100,
-                  title: handBookCategories[3].title,
-                  subTitle: handBookCategories[3].subTitle,
-                  background: Pictures.limitationBackground,
-                  picturePlane: Pictures.limitationPlane,
-                  imageHeight: 121.h,
-                  onTap: () => context.router.push(selectSubCategory(0)),
-                  aligmentPlane: Alignment.bottomLeft,
-                ),
-              ),
-              Flexible(
-                child: CategoryHandBookSmallWidget(
-                  height: 190.h,
-                  width: 100,
-                  title: handBookCategories[4].title,
-                  subTitle: handBookCategories[4].subTitle,
-                  background: Pictures.perfomanceBackground,
-                  picturePlane: Pictures.perfomancePlane,
-                  imageHeight: 107.h,
-                  onTap: () => context.router.push(selectSubCategory(0)),
-                  aligmentPlane: Alignment.bottomRight,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   spacing: 12.w,
+          //   children: [
+          //     Flexible(
+          //       child: CategoryHandBookSmallWidget(
+          //         height: 190.h,
+          //         width: 100,
+          //         title: handBookCategories[3].title,
+          //         subTitle: handBookCategories[3].subTitle,
+          //         background: Pictures.limitationBackground,
+          //         picturePlane: Pictures.limitationPlane,
+          //         imageHeight: 121.h,
+          //         onTap: () => context.router.push(selectSubCategory(0)),
+          //         aligmentPlane: Alignment.bottomLeft,
+          //       ),
+          //     ),
+          //     Flexible(
+          //       child: CategoryHandBookSmallWidget(
+          //         height: 190.h,
+          //         width: 100,
+          //         title: handBookCategories[4].title,
+          //         subTitle: handBookCategories[4].subTitle,
+          //         background: Pictures.perfomanceBackground,
+          //         picturePlane: Pictures.perfomancePlane,
+          //         imageHeight: 107.h,
+          //         onTap: () => context.router.push(selectSubCategory(0)),
+          //         aligmentPlane: Alignment.bottomRight,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           SizedBox(height: 8),
           CategoryHandBookLongWidget(
             title: handBookCategories[2].title,

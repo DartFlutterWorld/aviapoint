@@ -49,7 +49,7 @@ class BannerMainWidget extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.bottomCenter,
-              child: Image.asset(picture, height: 178.h, alignment: Alignment.bottomRight),
+              child: Image.asset(picture, height: 170.h, alignment: Alignment.bottomRight),
             ),
             Padding(
               padding: EdgeInsets.all(16.h),
