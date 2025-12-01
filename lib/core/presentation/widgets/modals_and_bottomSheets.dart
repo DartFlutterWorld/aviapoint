@@ -17,7 +17,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/select_topics_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
-import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mode_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -350,7 +349,7 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
   }
 }
 
-// Модалка выбор режима тестирования
+// Экран выбора режима тестирования
 Future<void> testingModeDialog({required BuildContext context}) async {
   try {
     if (!context.mounted) {
@@ -358,63 +357,18 @@ Future<void> testingModeDialog({required BuildContext context}) async {
       return;
     }
 
-    _log('🔵 testingModeDialog: открываю диалог');
+    _log('🔵 testingModeDialog: открываю экран выбора режима');
 
-    final result = await showDialog<TestMode?>(
-      context: context,
-      useRootNavigator: true,
-      barrierDismissible: true,
-      // barrierColor: Color(0xFF1F2937),
-      builder: (BuildContext context) {
-        return BlocProvider.value(value: getIt<RosAviaTestCubit>(), child: TestingModeDialog());
-      },
+    // Просто открываем экран, вся логика теперь в TestingModeScreen
+    await context.router.push(
+      BaseRoute(
+        children: [
+          LearningNavigationRoute(children: [TestingModeRoute()]),
+        ],
+      ),
     );
 
-    _log('🔵 testingModeDialog: диалог закрыт, result: $result');
-
-    if (result != null && context.mounted) {
-      _log('🔵 testingModeDialog: result не null, продолжаем');
-      final rosAviaTestCubit = BlocProvider.of<RosAviaTestCubit>(context);
-      rosAviaTestCubit.setTestMode(result);
-
-      // Проверяем что context все еще валиден после await
-      if (!context.mounted) return;
-
-      // Сохраняем выбранный режим в БД
-      final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
-      final db = getIt<AppDb>();
-      final testModeString = result.name; // 'training' или 'standart'
-      await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: testModeString);
-
-      // Нет активной сессии, открыть selectTopics для выбора категорий
-      // На веб-платформе используем более длительную задержку для production
-      if (kIsWeb) {
-        _log('🔵 testingModeDialog: веб-платформа, ждем 300ms');
-        // Используем Future.delayed с большей задержкой для production
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
-        // Пытаемся получить root контекст
-        final rootContext = navigatorKey.currentContext;
-        _log('🔵 testingModeDialog: rootContext = ${rootContext != null ? "есть" : "null"}, mounted = ${rootContext?.mounted ?? false}');
-        _log('🔵 testingModeDialog: context.mounted = ${context.mounted}');
-
-        if (rootContext != null && rootContext.mounted) {
-          _log('🔵 testingModeDialog: вызываю selectTopics с rootContext');
-          await selectTopics(context: rootContext, testMode: result);
-        } else if (context.mounted) {
-          _log('🔵 testingModeDialog: вызываю selectTopics с context');
-          await selectTopics(context: context, testMode: result);
-        } else {
-          _log('⚠️ Ошибка: контекст недоступен для открытия selectTopics');
-        }
-      } else {
-        if (context.mounted) {
-          await selectTopics(context: context, testMode: result);
-        }
-      }
-    } else {
-      _log('⚠️ testingModeDialog: result null или context не mounted');
-    }
+    _log('🔵 testingModeDialog: экран закрыт');
   } catch (e, stackTrace) {
     // Обработка ошибок
     _log('❌ Ошибка в testingModeDialog: $e');

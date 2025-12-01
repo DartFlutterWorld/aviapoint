@@ -1,3 +1,4 @@
+import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_event.freezed.dart';
@@ -5,7 +6,17 @@ part 'payment_event.freezed.dart';
 @freezed
 class PaymentEvent with _$PaymentEvent {
   /// Создание платежа
-  const factory PaymentEvent.createPayment({required double amount, required String currency, required String description, String? returnUrl, String? cancelUrl}) = CreatePaymentEvent;
+  const factory PaymentEvent.createPayment({
+    required double amount,
+    required String currency,
+    required String description,
+    required int userId,
+    required SubscriptionType subscriptionType,
+    required int periodDays,
+    String? customerPhone,
+    String? returnUrl,
+    String? cancelUrl,
+  }) = CreatePaymentEvent;
 
   /// Проверка статуса платежа
   const factory PaymentEvent.checkPaymentStatus(String paymentId) = CheckPaymentStatusEvent;

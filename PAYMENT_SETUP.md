@@ -94,7 +94,9 @@ Webhook от ЮKassa для уведомления о статусе плате�
 
 ### 5. Настройка Deep Links (для возврата в приложение)
 
-Для iOS добавьте в `ios/Runner/Info.plist`:
+✅ **Готово!** Deep links уже настроены в проекте:
+
+**iOS** (`ios/Runner/Info.plist`):
 ```xml
 <key>CFBundleURLTypes</key>
 <array>
@@ -109,15 +111,18 @@ Webhook от ЮKassa для уведомления о статусе плате�
 </array>
 ```
 
-Для Android добавьте в `android/app/src/main/AndroidManifest.xml`:
+**Android** (`android/app/src/main/AndroidManifest.xml`):
 ```xml
+<!-- Deep link для платежей: aviapoint://payment/success и aviapoint://payment/cancel -->
 <intent-filter>
-  <action android:name="android.intent.action.VIEW" />
-  <category android:name="android.intent.category.DEFAULT" />
-  <category android:name="android.intent.category.BROWSABLE" />
-  <data android:scheme="aviapoint" />
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="aviapoint" />
 </intent-filter>
 ```
+
+Deep links обрабатываются автоматически в `PaymentWebViewScreen` через метод `_handleUrl()`.
 
 ### 6. Использование в приложении
 

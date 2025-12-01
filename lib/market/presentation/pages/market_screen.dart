@@ -80,7 +80,7 @@ class MarketScreen extends StatelessWidget {
                       children: [
                         SvgPicture.asset(Pictures.telegramm),
                         SizedBox(width: 6.w),
-                        Text('Telegramm', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
+                        Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
                       ],
                     ),
                   ),

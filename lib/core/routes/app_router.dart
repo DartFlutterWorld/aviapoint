@@ -43,6 +43,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/pages/base_questio
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/list_question_by_category_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/test_by_mode_screen.dart';
+import 'package:aviapoint/learning/ros_avia_test/presentation/pages/testing_mode_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/test_results_screen.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/pages/video_for_students_screen.dart';
@@ -54,6 +55,7 @@ import 'package:aviapoint/news/presentation/pages/news_navigation_screen.dart';
 import 'package:aviapoint/news/presentation/pages/news_screen.dart';
 import 'package:aviapoint/market/presentation/pages/market_navigation_screen.dart';
 import 'package:aviapoint/market/presentation/pages/market_screen.dart';
+import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/sale/sale_request_navigation_screen.dart';
 import 'package:aviapoint/sale/sale_request_screen.dart';
 import 'package:collection/collection.dart';
@@ -186,6 +188,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(path: 'base_questions', page: BaseQuestionsRoute.page),
             AutoRoute(path: 'base_questions/:categoryId', page: ListQuestionByCategoryRoute.page),
             AutoRoute(path: 'type_sertificates/:typeCertificate/:questionId', page: DetailQuestionRoute.page),
+            AutoRoute(path: 'testing_mode', page: TestingModeRoute.page),
             AutoRoute(path: 'test_by_mode/:typeCertificateId', page: TestByModeRoute.page),
             AutoRoute(path: 'test_results', page: TestResultsRoute.page),
           ],

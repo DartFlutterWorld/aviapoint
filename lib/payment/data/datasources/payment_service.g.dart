@@ -20,11 +20,12 @@ class _PaymentService implements PaymentService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<PaymentDto> createPayment(CreatePaymentRequestDto request) async {
+  Future<PaymentDto> createPayment(Map<String, dynamic> request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = request;
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
     final _options = _setStreamType<PaymentDto>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -66,6 +67,33 @@ class _PaymentService implements PaymentService {
     late PaymentDto _value;
     try {
       _value = PaymentDto.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<SubscriptionDto> getSubscriptionStatus() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<SubscriptionDto>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/subscriptions/active',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SubscriptionDto _value;
+    try {
+      _value = SubscriptionDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

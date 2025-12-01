@@ -15,7 +15,17 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   Future<void> _onCreatePayment(CreatePaymentEvent event, Emitter<PaymentState> emit) async {
     emit(const PaymentState.loading());
     try {
-      final payment = await _paymentRepository.createPayment(amount: event.amount, currency: event.currency, description: event.description, returnUrl: event.returnUrl, cancelUrl: event.cancelUrl);
+      final payment = await _paymentRepository.createPayment(
+        amount: event.amount,
+        currency: event.currency,
+        description: event.description,
+        userId: event.userId,
+        subscriptionType: event.subscriptionType,
+        periodDays: event.periodDays,
+        customerPhone: event.customerPhone,
+        returnUrl: event.returnUrl,
+        cancelUrl: event.cancelUrl,
+      );
       emit(PaymentState.success(payment));
     } catch (e) {
       emit(PaymentState.failure(e.toString()));

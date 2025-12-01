@@ -294,7 +294,14 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                           await getIt<AppDb>().deleteAnswersByCertificateType(widget.certificateTypeId);
                           await getIt<AppDb>().deleteSelectedQuestions(widget.certificateTypeId);
                           if (mounted) {
-                            context.router.push(const LearningRoute());
+                            // Возвращаемся на экран выбора режима тестирования
+                            context.router.push(
+                              BaseRoute(
+                                children: [
+                                  LearningNavigationRoute(children: [TestingModeRoute()]),
+                                ],
+                              ),
+                            );
                           }
                         },
                         boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: const Offset(0.0, 7.0))],

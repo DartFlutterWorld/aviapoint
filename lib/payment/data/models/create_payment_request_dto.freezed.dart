@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreatePaymentRequestDto {
 
- double get amount; String get currency; String get description;@JsonKey(name: 'return_url') String? get returnUrl;@JsonKey(name: 'cancel_url') String? get cancelUrl;
+ double get amount; String get currency; String get description;@JsonKey(name: 'user_id') int get userId;@JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson) SubscriptionType get subscriptionType;@JsonKey(name: 'period_days') int get periodDays;@JsonKey(name: 'customer_phone') String? get customerPhone;@JsonKey(name: 'return_url') String? get returnUrl;@JsonKey(name: 'cancel_url') String? get cancelUrl;
 /// Create a copy of CreatePaymentRequestDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CreatePaymentRequestDtoCopyWith<CreatePaymentRequestDto> get copyWith => _$Crea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreatePaymentRequestDto&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.description, description) || other.description == description)&&(identical(other.returnUrl, returnUrl) || other.returnUrl == returnUrl)&&(identical(other.cancelUrl, cancelUrl) || other.cancelUrl == cancelUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreatePaymentRequestDto&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.description, description) || other.description == description)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.subscriptionType, subscriptionType) || other.subscriptionType == subscriptionType)&&(identical(other.periodDays, periodDays) || other.periodDays == periodDays)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.returnUrl, returnUrl) || other.returnUrl == returnUrl)&&(identical(other.cancelUrl, cancelUrl) || other.cancelUrl == cancelUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,amount,currency,description,returnUrl,cancelUrl);
+int get hashCode => Object.hash(runtimeType,amount,currency,description,userId,subscriptionType,periodDays,customerPhone,returnUrl,cancelUrl);
 
 @override
 String toString() {
-  return 'CreatePaymentRequestDto(amount: $amount, currency: $currency, description: $description, returnUrl: $returnUrl, cancelUrl: $cancelUrl)';
+  return 'CreatePaymentRequestDto(amount: $amount, currency: $currency, description: $description, userId: $userId, subscriptionType: $subscriptionType, periodDays: $periodDays, customerPhone: $customerPhone, returnUrl: $returnUrl, cancelUrl: $cancelUrl)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CreatePaymentRequestDtoCopyWith<$Res>  {
   factory $CreatePaymentRequestDtoCopyWith(CreatePaymentRequestDto value, $Res Function(CreatePaymentRequestDto) _then) = _$CreatePaymentRequestDtoCopyWithImpl;
 @useResult
 $Res call({
- double amount, String currency, String description,@JsonKey(name: 'return_url') String? returnUrl,@JsonKey(name: 'cancel_url') String? cancelUrl
+ double amount, String currency, String description,@JsonKey(name: 'user_id') int userId,@JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson) SubscriptionType subscriptionType,@JsonKey(name: 'period_days') int periodDays,@JsonKey(name: 'customer_phone') String? customerPhone,@JsonKey(name: 'return_url') String? returnUrl,@JsonKey(name: 'cancel_url') String? cancelUrl
 });
 
 
@@ -65,12 +65,16 @@ class _$CreatePaymentRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of CreatePaymentRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? amount = null,Object? currency = null,Object? description = null,Object? returnUrl = freezed,Object? cancelUrl = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? amount = null,Object? currency = null,Object? description = null,Object? userId = null,Object? subscriptionType = null,Object? periodDays = null,Object? customerPhone = freezed,Object? returnUrl = freezed,Object? cancelUrl = freezed,}) {
   return _then(_self.copyWith(
 amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,returnUrl: freezed == returnUrl ? _self.returnUrl : returnUrl // ignore: cast_nullable_to_non_nullable
+as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int,subscriptionType: null == subscriptionType ? _self.subscriptionType : subscriptionType // ignore: cast_nullable_to_non_nullable
+as SubscriptionType,periodDays: null == periodDays ? _self.periodDays : periodDays // ignore: cast_nullable_to_non_nullable
+as int,customerPhone: freezed == customerPhone ? _self.customerPhone : customerPhone // ignore: cast_nullable_to_non_nullable
+as String?,returnUrl: freezed == returnUrl ? _self.returnUrl : returnUrl // ignore: cast_nullable_to_non_nullable
 as String?,cancelUrl: freezed == cancelUrl ? _self.cancelUrl : cancelUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -157,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double amount,  String currency,  String description, @JsonKey(name: 'return_url')  String? returnUrl, @JsonKey(name: 'cancel_url')  String? cancelUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double amount,  String currency,  String description, @JsonKey(name: 'user_id')  int userId, @JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson)  SubscriptionType subscriptionType, @JsonKey(name: 'period_days')  int periodDays, @JsonKey(name: 'customer_phone')  String? customerPhone, @JsonKey(name: 'return_url')  String? returnUrl, @JsonKey(name: 'cancel_url')  String? cancelUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreatePaymentRequestDto() when $default != null:
-return $default(_that.amount,_that.currency,_that.description,_that.returnUrl,_that.cancelUrl);case _:
+return $default(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionType,_that.periodDays,_that.customerPhone,_that.returnUrl,_that.cancelUrl);case _:
   return orElse();
 
 }
@@ -178,10 +182,10 @@ return $default(_that.amount,_that.currency,_that.description,_that.returnUrl,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double amount,  String currency,  String description, @JsonKey(name: 'return_url')  String? returnUrl, @JsonKey(name: 'cancel_url')  String? cancelUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double amount,  String currency,  String description, @JsonKey(name: 'user_id')  int userId, @JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson)  SubscriptionType subscriptionType, @JsonKey(name: 'period_days')  int periodDays, @JsonKey(name: 'customer_phone')  String? customerPhone, @JsonKey(name: 'return_url')  String? returnUrl, @JsonKey(name: 'cancel_url')  String? cancelUrl)  $default,) {final _that = this;
 switch (_that) {
 case _CreatePaymentRequestDto():
-return $default(_that.amount,_that.currency,_that.description,_that.returnUrl,_that.cancelUrl);case _:
+return $default(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionType,_that.periodDays,_that.customerPhone,_that.returnUrl,_that.cancelUrl);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +202,10 @@ return $default(_that.amount,_that.currency,_that.description,_that.returnUrl,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double amount,  String currency,  String description, @JsonKey(name: 'return_url')  String? returnUrl, @JsonKey(name: 'cancel_url')  String? cancelUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double amount,  String currency,  String description, @JsonKey(name: 'user_id')  int userId, @JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson)  SubscriptionType subscriptionType, @JsonKey(name: 'period_days')  int periodDays, @JsonKey(name: 'customer_phone')  String? customerPhone, @JsonKey(name: 'return_url')  String? returnUrl, @JsonKey(name: 'cancel_url')  String? cancelUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _CreatePaymentRequestDto() when $default != null:
-return $default(_that.amount,_that.currency,_that.description,_that.returnUrl,_that.cancelUrl);case _:
+return $default(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionType,_that.periodDays,_that.customerPhone,_that.returnUrl,_that.cancelUrl);case _:
   return null;
 
 }
@@ -213,12 +217,16 @@ return $default(_that.amount,_that.currency,_that.description,_that.returnUrl,_t
 @JsonSerializable()
 
 class _CreatePaymentRequestDto implements CreatePaymentRequestDto {
-  const _CreatePaymentRequestDto({required this.amount, required this.currency, required this.description, @JsonKey(name: 'return_url') this.returnUrl, @JsonKey(name: 'cancel_url') this.cancelUrl});
+  const _CreatePaymentRequestDto({required this.amount, required this.currency, required this.description, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson) required this.subscriptionType, @JsonKey(name: 'period_days') required this.periodDays, @JsonKey(name: 'customer_phone') this.customerPhone, @JsonKey(name: 'return_url') this.returnUrl, @JsonKey(name: 'cancel_url') this.cancelUrl});
   factory _CreatePaymentRequestDto.fromJson(Map<String, dynamic> json) => _$CreatePaymentRequestDtoFromJson(json);
 
 @override final  double amount;
 @override final  String currency;
 @override final  String description;
+@override@JsonKey(name: 'user_id') final  int userId;
+@override@JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson) final  SubscriptionType subscriptionType;
+@override@JsonKey(name: 'period_days') final  int periodDays;
+@override@JsonKey(name: 'customer_phone') final  String? customerPhone;
 @override@JsonKey(name: 'return_url') final  String? returnUrl;
 @override@JsonKey(name: 'cancel_url') final  String? cancelUrl;
 
@@ -235,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreatePaymentRequestDto&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.description, description) || other.description == description)&&(identical(other.returnUrl, returnUrl) || other.returnUrl == returnUrl)&&(identical(other.cancelUrl, cancelUrl) || other.cancelUrl == cancelUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreatePaymentRequestDto&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.description, description) || other.description == description)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.subscriptionType, subscriptionType) || other.subscriptionType == subscriptionType)&&(identical(other.periodDays, periodDays) || other.periodDays == periodDays)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.returnUrl, returnUrl) || other.returnUrl == returnUrl)&&(identical(other.cancelUrl, cancelUrl) || other.cancelUrl == cancelUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,amount,currency,description,returnUrl,cancelUrl);
+int get hashCode => Object.hash(runtimeType,amount,currency,description,userId,subscriptionType,periodDays,customerPhone,returnUrl,cancelUrl);
 
 @override
 String toString() {
-  return 'CreatePaymentRequestDto(amount: $amount, currency: $currency, description: $description, returnUrl: $returnUrl, cancelUrl: $cancelUrl)';
+  return 'CreatePaymentRequestDto(amount: $amount, currency: $currency, description: $description, userId: $userId, subscriptionType: $subscriptionType, periodDays: $periodDays, customerPhone: $customerPhone, returnUrl: $returnUrl, cancelUrl: $cancelUrl)';
 }
 
 
@@ -255,7 +263,7 @@ abstract mixin class _$CreatePaymentRequestDtoCopyWith<$Res> implements $CreateP
   factory _$CreatePaymentRequestDtoCopyWith(_CreatePaymentRequestDto value, $Res Function(_CreatePaymentRequestDto) _then) = __$CreatePaymentRequestDtoCopyWithImpl;
 @override @useResult
 $Res call({
- double amount, String currency, String description,@JsonKey(name: 'return_url') String? returnUrl,@JsonKey(name: 'cancel_url') String? cancelUrl
+ double amount, String currency, String description,@JsonKey(name: 'user_id') int userId,@JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson) SubscriptionType subscriptionType,@JsonKey(name: 'period_days') int periodDays,@JsonKey(name: 'customer_phone') String? customerPhone,@JsonKey(name: 'return_url') String? returnUrl,@JsonKey(name: 'cancel_url') String? cancelUrl
 });
 
 
@@ -272,12 +280,16 @@ class __$CreatePaymentRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of CreatePaymentRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? amount = null,Object? currency = null,Object? description = null,Object? returnUrl = freezed,Object? cancelUrl = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? amount = null,Object? currency = null,Object? description = null,Object? userId = null,Object? subscriptionType = null,Object? periodDays = null,Object? customerPhone = freezed,Object? returnUrl = freezed,Object? cancelUrl = freezed,}) {
   return _then(_CreatePaymentRequestDto(
 amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,returnUrl: freezed == returnUrl ? _self.returnUrl : returnUrl // ignore: cast_nullable_to_non_nullable
+as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int,subscriptionType: null == subscriptionType ? _self.subscriptionType : subscriptionType // ignore: cast_nullable_to_non_nullable
+as SubscriptionType,periodDays: null == periodDays ? _self.periodDays : periodDays // ignore: cast_nullable_to_non_nullable
+as int,customerPhone: freezed == customerPhone ? _self.customerPhone : customerPhone // ignore: cast_nullable_to_non_nullable
+as String?,returnUrl: freezed == returnUrl ? _self.returnUrl : returnUrl // ignore: cast_nullable_to_non_nullable
 as String?,cancelUrl: freezed == cancelUrl ? _self.cancelUrl : cancelUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

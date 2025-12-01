@@ -17,30 +17,29 @@ class TestingModeElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Stack(
-        fit: StackFit.loose,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Color(0xff045EC5).withOpacity(0.08), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: SvgPicture.asset(bg, height: 80.h),
-          ),
-          Positioned(right: 20, top: 20, child: Image.asset(image, height: 55.h, width: 84)),
-          Positioned(
-            top: 15,
-            left: 14,
-            child: Text(title, style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937), height: 1)),
-          ),
-          Positioned(
-            top: 53,
-            left: 14,
-            child: Text(subTitle, style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
-          ),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+        decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color: Color(0xff045EC5).withOpacity(0.08), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(image: AssetImage(bg), fit: BoxFit.cover),
+        ),
+        width: double.infinity,
 
-          // Checkmark для выбранного режима
-        ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937), height: 1)),
+                SizedBox(height: 6.h),
+                Text(subTitle, style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+              ],
+            ),
+            Image.asset(image, height: 55.h, width: 84),
+          ],
+        ),
       ),
     );
   }

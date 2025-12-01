@@ -34,11 +34,10 @@ class TestMySelfWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 12),
-            Flexible(
-              child: Text(Provider.of<RosAviaTestCubit>(context).state.typeSertificate.title, style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937))),
-            ),
-            Text('Проверьте себя', style: AppStyles.regular13s.copyWith(color: Color(0xFF6E7A89))),
+            SizedBox(height: 12.h),
+            Text(Provider.of<RosAviaTestCubit>(context).state.typeSertificate.title, style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937))),
+            SizedBox(height: 4.h),
+            Text('Подготовьтесь к экзамену', style: AppStyles.regular13s.copyWith(color: Color(0xFF6E7A89))),
             Spacer(),
             CustomButton(
               title: 'Тестирование',

@@ -48,11 +48,28 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
 
   void _handleUrl(String url) {
     // Обработка возврата из платежной системы
-    // ЮKassa может вернуть на returnUrl или cancelUrl
-    if (url.contains('payment/success') || url.contains('payment_status=succeeded')) {
+    // ЮKassa перенаправляет на returnUrl или cancelUrl (HTTP URL на бэкенде)
+    // Бэкенд может передать payment_id в query string для быстрой проверки статуса
+    final uri = Uri.parse(url);
+
+    // Проверяем, является ли URL одним из наших return/cancel URL
+    // ЮKassa может передать параметры:
+    // - payment_id - ID платежа (если бэкенд добавил в return_url)
+    // - payment_status - статус (если бэкенд добавил)
+    final isReturnUrl = uri.path.contains('/payments/return') || uri.path.contains('/payments/success') || url.contains('payment_status=succeeded');
+
+    final isCancelUrl = uri.path.contains('/payments/cancel') || url.contains('payment_status=canceled');
+
+    if (isReturnUrl) {
+      // Если есть payment_id в query string, можно использовать его для проверки статуса
+      final paymentId = uri.queryParameters['payment_id'];
+      if (paymentId != null) {
+        print('🔵 Получен payment_id из return_url: $paymentId');
+      }
+
       widget.onSuccess?.call();
       Navigator.of(context).pop(true);
-    } else if (url.contains('payment/cancel') || url.contains('payment_status=canceled')) {
+    } else if (isCancelUrl) {
       widget.onCancel?.call();
       Navigator.of(context).pop(false);
     }

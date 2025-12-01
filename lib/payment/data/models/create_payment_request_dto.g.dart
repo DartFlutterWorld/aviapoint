@@ -12,6 +12,12 @@ _CreatePaymentRequestDto _$CreatePaymentRequestDtoFromJson(
   amount: (json['amount'] as num).toDouble(),
   currency: json['currency'] as String,
   description: json['description'] as String,
+  userId: (json['user_id'] as num).toInt(),
+  subscriptionType: _subscriptionTypeFromJson(
+    json['subscription_type'] as String,
+  ),
+  periodDays: (json['period_days'] as num).toInt(),
+  customerPhone: json['customer_phone'] as String?,
   returnUrl: json['return_url'] as String?,
   cancelUrl: json['cancel_url'] as String?,
 );
@@ -22,6 +28,10 @@ Map<String, dynamic> _$CreatePaymentRequestDtoToJson(
   'amount': instance.amount,
   'currency': instance.currency,
   'description': instance.description,
+  'user_id': instance.userId,
+  'subscription_type': _subscriptionTypeToJson(instance.subscriptionType),
+  'period_days': instance.periodDays,
+  'customer_phone': instance.customerPhone,
   'return_url': instance.returnUrl,
   'cancel_url': instance.cancelUrl,
 };

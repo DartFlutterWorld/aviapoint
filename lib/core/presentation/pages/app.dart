@@ -39,7 +39,6 @@ import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repos
 import 'package:aviapoint/core/presentation/widgets/max_width_container.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
-import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -57,6 +56,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  bool _profileRequested = false;
+
   @override
   void initState() {
     super.initState();
@@ -113,17 +114,48 @@ class _AppState extends State<App> {
         ),
         BlocProvider<RosAviaTestCubit>(create: (context) => getIt<RosAviaTestCubit>()),
       ],
-      child: MaxWidthContainer(
-        maxWidth: 834.0, // iPhone 13 Pro Max ширина
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          title: 'AviaPoint',
-          theme: ThemeData(fontFamily: 'Geologica'),
-          routerDelegate: getIt<AppRouter>().delegate(navigatorObservers: () => [MyRouteObserver()]),
-          routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          // При успешной авторизации запрашиваем профиль
+          if (state is SuccessAuthState) {
+            _profileRequested = true;
+            context.read<ProfileBloc>().add(const GetProfileEvent());
+          }
+        },
+        child: Consumer<AppState>(
+          builder: (context, appState, child) {
+            // Слушаем изменения AppState.isAuthenticated
+            // Если пользователь авторизован, но профиль еще не загружен, запрашиваем его
+            if (appState.isAuthenticated && !_profileRequested) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                final profileBloc = context.read<ProfileBloc>();
+                final profileState = profileBloc.state;
+                // Запрашиваем профиль только если он еще не загружен (initial или error состояние)
+                if (profileState is InitialProfileState || (profileState is ErrorProfileState)) {
+                  _profileRequested = true;
+                  profileBloc.add(const GetProfileEvent());
+                }
+              });
+            } else if (!appState.isAuthenticated) {
+              // Сбрасываем флаг при выходе из системы
+              _profileRequested = false;
+            }
+            return child!;
+          },
+          child: MaxWidthContainer(
+            maxWidth: 834.0, // iPhone 13 Pro Max ширина
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              title: 'AviaPoint',
+              theme: ThemeData(fontFamily: 'Geologica'),
+              routerDelegate: getIt<AppRouter>().delegate(navigatorObservers: () => [MyRouteObserver()]),
+              routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
+            ),
+          ),
         ),
       ),
     );

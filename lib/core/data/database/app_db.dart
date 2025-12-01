@@ -56,7 +56,7 @@ class AppDb extends _$AppDb {
   AppDb() : super(conn.openConnection());
 
   @override
-  int get schemaVersion => 14;
+  int get schemaVersion => 15;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -86,12 +86,9 @@ class AppDb extends _$AppDb {
         await m.deleteTable('test_sessions');
         await m.createTable(selectedQuestions);
       }
-      if (from < 11) {
-        // Добавляем categoryId в TestAnswers
-        await m.addColumn(testAnswers, testAnswers.categoryId);
-      }
       if (from < 12) {
         // Пересоздаем testAnswers с новым полем categoryId
+        // Версия 11 пропущена, так как версия 12 пересоздает таблицу полностью
         await m.deleteTable('test_answers');
         await m.createTable(testAnswers);
       }
@@ -103,6 +100,12 @@ class AppDb extends _$AppDb {
       if (from < 14) {
         // Добавляем testMode в AppSettings
         await m.addColumn(appSettings, appSettings.testMode);
+      }
+      if (from < 15) {
+        // Исправление: пересоздаем testAnswers чтобы гарантировать правильную структуру
+        // Это исправляет проблему с дублированием category_id
+        await m.deleteTable('test_answers');
+        await m.createTable(testAnswers);
       }
     },
   );

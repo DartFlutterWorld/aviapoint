@@ -11,6 +11,7 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/main_page/stories/presentation/widgets/list_stories_widget.dart';
 import 'package:aviapoint/main_page/widgets/banner_main_widget.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
@@ -74,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                 descriptionColor: Color(0XFF4B5767),
                 description: 'Экзаменационные билеты для пилотов и авиаперсонала в 2025 г.',
                 picture: Pictures.pilotRatBanner,
-                onTap: () => AutoRouter.of(context).push(const BaseRoute(children: [LearningNavigationRoute()])),
+                onTap: () => startTestingFlowNew(context: context),
                 background: Pictures.backgroundRat,
                 titleButton: 'Тестирование',
                 backgroundColorButton: Colors.white,

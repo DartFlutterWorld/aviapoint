@@ -44,6 +44,7 @@ class _ErrorCustomState extends State<ErrorCustom> {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 150,
@@ -54,11 +55,7 @@ class _ErrorCustomState extends State<ErrorCustom> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    Text(
-                      widget.textError,
-                      style: AppStyles.medium14s.copyWith(height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(widget.textError, style: AppStyles.medium14s.copyWith(height: 1.5), textAlign: TextAlign.center),
                     SizedBox(height: 16),
                     if (widget.repeat != null)
                       CustomButton(
@@ -68,17 +65,7 @@ class _ErrorCustomState extends State<ErrorCustom> {
                         textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                         borderColor: Color(0xFF0A6EFA),
                         borderRadius: 46,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xff0064D6).withOpacity(0.25),
-                            blurRadius: 4,
-                            spreadRadius: 0,
-                            offset: Offset(
-                              0.0,
-                              7.0,
-                            ),
-                          ),
-                        ],
+                        boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                         onPressed: widget.repeat,
                       ),
                   ],

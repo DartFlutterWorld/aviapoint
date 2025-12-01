@@ -61,7 +61,9 @@ class Pictures {
   static const String checkBox = 'assets/svg/check_box.svg';
   static const String checkBoxActive = 'assets/svg/check_box_active.svg';
   static const String traningTestBg = 'assets/svg/training_test_bg.svg';
+  static const String traningTestBgPng = 'assets/png/training_test_bg.png';
   static const String testMySelfBg = 'assets/svg/test_my_self_bg.svg';
+  static const String testMySelfBgPng = 'assets/png/test_my_self_bg.png';
   static const String zamok = 'assets/png/zamok.png';
   static const String mozgi = 'assets/png/mozgi.png';
   static const String leaningBackgroundBanner = 'assets/png/leaning_background_banner.png';

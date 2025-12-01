@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/auth_page/presentation/bloc/auth_bloc.dart';
-import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
@@ -12,10 +11,15 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
+import 'package:aviapoint/payment/data/models/subscription_dto.dart';
+import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
+import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
+import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -27,65 +31,122 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  SubscriptionDto? _subscription;
+  double? _subscriptionAmount;
+  bool _isLoadingSubscription = false;
+  String? _subscriptionError;
+
   @override
   void initState() {
+    super.initState();
     if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
       BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+      _loadSubscription();
+    }
+  }
+
+  Future<void> _loadSubscription() async {
+    if (!Provider.of<AppState>(context, listen: false).isAuthenticated) {
+      return;
     }
 
-    super.initState();
+    setState(() {
+      _isLoadingSubscription = true;
+      _subscriptionError = null;
+    });
+
+    try {
+      final paymentRepository = getIt<PaymentRepository>();
+      final subscription = await paymentRepository.getSubscriptionStatus();
+
+      // Пытаемся получить стоимость из payment_id
+      double? amount;
+      if (subscription != null) {
+        try {
+          final payment = await paymentRepository.getPaymentStatus(subscription.paymentId);
+          amount = payment.amount;
+        } catch (e) {
+          // Если не удалось получить стоимость, просто игнорируем ошибку
+          print('Не удалось получить стоимость платежа: $e');
+        }
+      }
+
+      setState(() {
+        _subscription = subscription;
+        _subscriptionAmount = amount;
+        _isLoadingSubscription = false;
+      });
+    } catch (e) {
+      setState(() {
+        _subscriptionError = e.toString();
+        _isLoadingSubscription = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is SuccessAuthState) {
-          BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
-        }
+    return BlocListener<PaymentBloc, PaymentState>(
+      listener: (context, paymentState) {
+        // Если платеж успешен, обновляем информацию о подписке
+        paymentState.maybeWhen(
+          success: (payment) {
+            if (payment.isSucceeded) {
+              // Обновляем информацию о подписке после успешной оплаты
+              _loadSubscription();
+            }
+          },
+          orElse: () {},
+        );
       },
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Профиль',
-          withBack: false,
-          // backgroundColor: AppColors.background,
-          actions: [
-            Provider.of<AppState>(context, listen: true).isAuthenticated
-                ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))
-                : IconButton(onPressed: () => showLogin(context), icon: Icon(Icons.login)),
-          ],
-        ),
-        backgroundColor: AppColors.background,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Provider.of<AppState>(context, listen: true).isAuthenticated
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                SizedBox(height: 16),
-                                Row(
-                                  children: [
-                                    Image.asset(Pictures.pilot, height: 63, width: 63),
-                                    BlocBuilder<ProfileBloc, ProfileState>(
-                                      builder: (context, state) => state.map(
-                                        success: (state) => Padding(
-                                          padding: const EdgeInsets.only(left: 12.0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                                              Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                              Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                            ],
-                                          ),
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is SuccessAuthState) {
+            BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+            _loadSubscription();
+          }
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: 'Профиль',
+            withBack: false,
+            // backgroundColor: AppColors.background,
+            actions: [
+              Provider.of<AppState>(context, listen: true).isAuthenticated
+                  ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))
+                  : IconButton(onPressed: () => showLogin(context), icon: Icon(Icons.login)),
+            ],
+          ),
+          backgroundColor: AppColors.background,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Provider.of<AppState>(context, listen: true).isAuthenticated
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  SizedBox(height: 16),
+                                  Image.asset(Pictures.pilot, height: 63, width: 63),
+                                  BlocBuilder<ProfileBloc, ProfileState>(
+                                    builder: (context, state) => state.map(
+                                      success: (state) => Padding(
+                                        padding: const EdgeInsets.only(left: 12.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                                            Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                            Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                          ],
                                         ),
-                                        error: (state) => ErrorCustom(
+                                      ),
+                                      error: (state) => Center(
+                                        child: ErrorCustom(
                                           textError: state.errorForUser,
                                           repeat: () {
                                             if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
@@ -93,84 +154,189 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             }
                                           },
                                         ),
-                                        loading: (state) => LoadingCustom(),
-                                        initial: (state) => SizedBox(),
                                       ),
+                                      loading: (state) => LoadingCustom(),
+                                      initial: (state) => SizedBox(),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                // Кнопка очистки БД
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    showDialog<void>(
-                                      context: context,
-                                      builder: (ctx) => AlertDialog(
-                                        title: Text('Очистить прогресс?'),
-                                        content: Text('Это удалит все сохраненные сессии тестирования и прогресс. Это действие нельзя отменить.'),
-                                        actions: [
-                                          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Отмена')),
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              Navigator.pop(ctx);
-                                              await getIt<AppDb>().clearAllData();
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Прогресс очищен')));
-                                              }
-                                            },
-                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                            child: Text('Очистить', style: TextStyle(color: Colors.white)),
+                                  ),
+                                  SizedBox(height: 16),
+                                  // Информация о подписке
+                                  if (_isLoadingSubscription)
+                                    const Padding(padding: EdgeInsets.symmetric(vertical: 16.0), child: LoadingCustom())
+                                  else if (_subscriptionError != null)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                      child: Column(
+                                        children: [
+                                          Text('Ошибка загрузки подписки: $_subscriptionError', style: AppStyles.regular14s.copyWith(color: Colors.red)),
+                                          const SizedBox(height: 8),
+                                          ElevatedButton(onPressed: _loadSubscription, child: const Text('Повторить')),
+                                        ],
+                                      ),
+                                    )
+                                  else if (_subscription != null && _subscription!.isActive && _subscription!.endDate.isAfter(DateTime.now()))
+                                    Container(
+                                      padding: const EdgeInsets.all(16.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.green.withOpacity(0.3)),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(Icons.check_circle, color: Colors.green, size: 20),
+                                              const SizedBox(width: 8),
+                                              Text('Подписка активна', style: AppStyles.bold16s.copyWith(color: Colors.green)),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 12),
+                                          if (_subscriptionAmount != null) ...[_buildSubscriptionInfoRow('Стоимость:', '${_subscriptionAmount!.toStringAsFixed(2)} ₽'), const SizedBox(height: 8)],
+                                          _buildSubscriptionInfoRow('Дата начала:', DateFormat('dd.MM.yyyy').format(_subscription!.startDate)),
+                                          const SizedBox(height: 8),
+                                          _buildSubscriptionInfoRow('Дата окончания:', DateFormat('dd.MM.yyyy').format(_subscription!.endDate)),
+                                          const SizedBox(height: 8),
+                                          _buildSubscriptionInfoRow('Период:', '${_subscription!.periodDays} дней'),
+                                        ],
+                                      ),
+                                    )
+                                  else if (_subscription != null)
+                                    Container(
+                                      padding: const EdgeInsets.all(16.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(Icons.info_outline, color: Colors.orange, size: 20),
+                                              const SizedBox(width: 8),
+                                              Text('Подписка неактивна', style: AppStyles.bold16s.copyWith(color: Colors.orange)),
+                                            ],
+                                          ),
+                                          if (_subscription!.endDate.isBefore(DateTime.now())) ...[
+                                            const SizedBox(height: 8),
+                                            Text('Подписка истекла ${DateFormat('dd.MM.yyyy').format(_subscription!.endDate)}', style: AppStyles.regular14s.copyWith(color: Colors.orange)),
+                                          ],
+                                        ],
+                                      ),
+                                    )
+                                  else
+                                    // Подписки нет
+                                    Container(
+                                      padding: const EdgeInsets.all(16.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(Icons.subscriptions_outlined, color: Colors.grey, size: 20),
+                                              const SizedBox(width: 8),
+                                              Text('Подписка отсутствует', style: AppStyles.bold16s.copyWith(color: Colors.grey)),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            'У вас нет активной подписки. Для доступа к тренировочному режиму необходимо оформить подписку.',
+                                            style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
                                           ),
                                         ],
                                       ),
-                                    );
-                                  },
-                                  icon: Icon(Icons.delete_outline),
-                                  label: Text('Очистить прогресс'),
-                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
-                                ),
-                                SizedBox(height: 16),
-                              ],
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(Pictures.planeProfile, height: 374, width: 286),
-                                SizedBox(height: 16),
-                                CustomButton(
-                                  verticalPadding: 8,
-                                  backgroundColor: Color(0xFF0A6EFA),
-                                  title: 'Войти в профиль',
-                                  textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                                  borderColor: Color(0xFF0A6EFA),
-                                  borderRadius: 46,
-                                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                                  onPressed: () => showLogin(context),
-                                ),
-                              ],
-                            ),
-                    ],
+                                    ),
+                                  SizedBox(height: 16),
+                                  // Кнопка очистки БД
+                                  // ElevatedButton.icon(
+                                  //   onPressed: () {
+                                  //     showDialog<void>(
+                                  //       context: context,
+                                  //       builder: (ctx) => AlertDialog(
+                                  //         title: Text('Очистить прогресс?'),
+                                  //         content: Text('Это удалит все сохраненные сессии тестирования и прогресс. Это действие нельзя отменить.'),
+                                  //         actions: [
+                                  //           TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Отмена')),
+                                  //           ElevatedButton(
+                                  //             onPressed: () async {
+                                  //               Navigator.pop(ctx);
+                                  //               await getIt<AppDb>().clearAllData();
+                                  //               if (context.mounted) {
+                                  //                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Прогресс очищен')));
+                                  //               }
+                                  //             },
+                                  //             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                  //             child: Text('Очистить', style: TextStyle(color: Colors.white)),
+                                  //           ),
+                                  //         ],
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  //   icon: Icon(Icons.delete_outline),
+                                  //   label: Text('Очистить прогресс'),
+                                  //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
+                                  // ),
+                                  // SizedBox(height: 16),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(Pictures.planeProfile, height: 374, width: 286),
+                                  SizedBox(height: 16),
+                                  CustomButton(
+                                    verticalPadding: 8,
+                                    backgroundColor: Color(0xFF0A6EFA),
+                                    title: 'Войти в профиль',
+                                    textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                    borderColor: Color(0xFF0A6EFA),
+                                    borderRadius: 46,
+                                    boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                    onPressed: () => showLogin(context),
+                                  ),
+                                ],
+                              ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              // Ссылка на политику конфиденциальности внизу
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: TextButton(
-                  onPressed: () {
-                    context.router.push(const PrivacyPolicyRoute());
-                  },
-                  child: Text(
-                    'Политика конфиденциальности',
-                    style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                // Ссылка на политику конфиденциальности внизу
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: TextButton(
+                    onPressed: () {
+                      context.router.push(const PrivacyPolicyRoute());
+                    },
+                    child: Text(
+                      'Политика конфиденциальности',
+                      style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSubscriptionInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+        Text(value, style: AppStyles.bold14s.copyWith(color: Color(0xFF2B373E))),
+      ],
     );
   }
 }

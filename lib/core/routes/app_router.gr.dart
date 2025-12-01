@@ -1265,6 +1265,8 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
     required double amount,
     String currency = 'RUB',
     required String description,
+    SubscriptionType subscriptionType = SubscriptionType.yearly,
+    int periodDays = 365,
     String? returnUrl,
     String? cancelUrl,
     List<PageRouteInfo>? children,
@@ -1275,6 +1277,8 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
            amount: amount,
            currency: currency,
            description: description,
+           subscriptionType: subscriptionType,
+           periodDays: periodDays,
            returnUrl: returnUrl,
            cancelUrl: cancelUrl,
          ),
@@ -1292,6 +1296,8 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
         amount: args.amount,
         currency: args.currency,
         description: args.description,
+        subscriptionType: args.subscriptionType,
+        periodDays: args.periodDays,
         returnUrl: args.returnUrl,
         cancelUrl: args.cancelUrl,
       );
@@ -1305,6 +1311,8 @@ class PaymentRouteArgs {
     required this.amount,
     this.currency = 'RUB',
     required this.description,
+    this.subscriptionType = SubscriptionType.yearly,
+    this.periodDays = 365,
     this.returnUrl,
     this.cancelUrl,
   });
@@ -1317,13 +1325,17 @@ class PaymentRouteArgs {
 
   final String description;
 
+  final SubscriptionType subscriptionType;
+
+  final int periodDays;
+
   final String? returnUrl;
 
   final String? cancelUrl;
 
   @override
   String toString() {
-    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, returnUrl: $returnUrl, cancelUrl: $cancelUrl}';
+    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, subscriptionType: $subscriptionType, periodDays: $periodDays, returnUrl: $returnUrl, cancelUrl: $cancelUrl}';
   }
 
   @override
@@ -1334,6 +1346,8 @@ class PaymentRouteArgs {
         amount == other.amount &&
         currency == other.currency &&
         description == other.description &&
+        subscriptionType == other.subscriptionType &&
+        periodDays == other.periodDays &&
         returnUrl == other.returnUrl &&
         cancelUrl == other.cancelUrl;
   }
@@ -1344,6 +1358,8 @@ class PaymentRouteArgs {
       amount.hashCode ^
       currency.hashCode ^
       description.hashCode ^
+      subscriptionType.hashCode ^
+      periodDays.hashCode ^
       returnUrl.hashCode ^
       cancelUrl.hashCode;
 }
@@ -1812,6 +1828,22 @@ class TestResultsRouteArgs {
 
   @override
   int get hashCode => certificateTypeId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [TestingModeScreen]
+class TestingModeRoute extends PageRouteInfo<void> {
+  const TestingModeRoute({List<PageRouteInfo>? children})
+    : super(TestingModeRoute.name, initialChildren: children);
+
+  static const String name = 'TestingModeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TestingModeScreen();
+    },
+  );
 }
 
 /// generated route for
