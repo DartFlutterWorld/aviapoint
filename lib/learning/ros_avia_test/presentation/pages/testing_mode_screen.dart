@@ -87,6 +87,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
           ),
         );
       }
+      // Если paymentStatus == 'pending' или null - не показываем сообщение
     } catch (e) {
       // Игнорируем ошибки парсинга URL
       print('Ошибка при обработке редиректа: $e');
