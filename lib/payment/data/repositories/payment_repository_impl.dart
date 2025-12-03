@@ -81,30 +81,17 @@ class PaymentRepositoryImpl implements PaymentRepository {
   @override
   Future<List<SubscriptionDto>> getSubscriptionStatus() async {
     try {
-      final responseData = await _paymentService.getSubscriptionStatus();
+      final response = await _paymentService.getSubscriptionStatus();
 
-      if (responseData.isEmpty) {
+      if (response.subscriptions.isEmpty) {
         return [];
       }
 
-      // Бэкенд возвращает {"subscriptions": [...]} - массив подписок
-      if (responseData.containsKey('subscriptions') && responseData['subscriptions'] is List) {
-        final subscriptionsList = responseData['subscriptions'] as List;
-        if (subscriptionsList.isEmpty) {
-          return [];
-        }
+      // Сортируем по end_date (самая поздняя первая)
+      final subscriptions = List<SubscriptionDto>.from(response.subscriptions);
+      subscriptions.sort((a, b) => b.endDate.compareTo(a.endDate));
 
-        // Преобразуем все подписки в DTO
-        final subscriptions = subscriptionsList.map((json) => SubscriptionDto.fromJson(json as Map<String, dynamic>)).toList();
-
-        // Сортируем по end_date (самая поздняя первая)
-        subscriptions.sort((a, b) => b.endDate.compareTo(a.endDate));
-
-        return subscriptions;
-      }
-
-      // Если формат неожиданный, пытаемся распарсить как один объект
-      return [SubscriptionDto.fromJson(responseData)];
+      return subscriptions;
     } on DioException catch (e) {
       // Если подписка не найдена (404) - возвращаем пустой список
       if (e.response?.statusCode == 404) {
