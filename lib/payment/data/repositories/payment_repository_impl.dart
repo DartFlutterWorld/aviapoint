@@ -93,8 +93,8 @@ class PaymentRepositoryImpl implements PaymentRepository {
 
       return subscriptions;
     } on DioException catch (e) {
-      // Если подписка не найдена (404) - возвращаем пустой список
-      if (e.response?.statusCode == 404) {
+      // Если подписка не найдена (404) или пользователь не авторизован (401) - возвращаем пустой список
+      if (e.response?.statusCode == 404 || e.response?.statusCode == 401) {
         return [];
       }
 

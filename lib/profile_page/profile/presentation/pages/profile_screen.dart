@@ -17,6 +17,7 @@ import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -41,6 +42,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
       BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
       _loadSubscription();
+    }
+
+    // Обрабатываем параметры из URL (для редиректа после оплаты)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handlePaymentRedirect();
+    });
+  }
+
+  void _handlePaymentRedirect() {
+    if (!kIsWeb) {
+      // На мобильных WebView сам обработает через _handleUrl в PaymentWebViewScreen
+      return;
+    }
+
+    try {
+      // На веб получаем параметры из window.location через условный импорт
+      // Используем прямой доступ к window.location через dart:html
+      // Но нужно использовать условный импорт правильно
+      // Для упрощения используем Uri.base на веб
+      final uri = Uri.base;
+      final paymentStatus = uri.queryParameters['payment'];
+
+      if (paymentStatus == 'success') {
+        // Показываем сообщение об успешной оплате
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен!'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
+        // Обновляем информацию о подписке
+        _loadSubscription();
+      } else if (paymentStatus == 'cancel') {
+        // Показываем сообщение об отмене
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+      }
+    } catch (e) {
+      // Игнорируем ошибки парсинга URL
+      print('Ошибка при обработке редиректа: $e');
     }
   }
 

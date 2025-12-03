@@ -33,7 +33,7 @@ flutter pub get
 # 2. Генерация кода (если нужно)
 fvm dart pub run build_runner build --delete-conflicting-outputs
 
-# 3. Сборка production версии
+# 3. Сборка production версии WEB
 flutter build web --release --dart-define=isDevelopment=false
 
 # 4. Копирование на VPS
@@ -59,8 +59,7 @@ ssh root@83.166.246.205 'docker restart aviapoint-nginx'
 ## Обновление docker-compose.prod.yaml
 
 Если изменился `docker-compose.prod.yaml` в проекте `aviapoint_server`:
-
-```bash
+  ```bash
 # 1. Скопировать файл на VPS
 scp docker-compose.prod.yaml root@83.166.246.205:/home/aviapoint_server/
 

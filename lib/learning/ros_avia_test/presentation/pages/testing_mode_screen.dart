@@ -15,13 +15,58 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/presentation/pages/payment_screen.dart';
 import 'package:aviapoint/payment/utils/payment_url_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
-class TestingModeScreen extends StatelessWidget {
+class TestingModeScreen extends StatefulWidget {
   const TestingModeScreen({super.key});
+
+  @override
+  State<TestingModeScreen> createState() => _TestingModeScreenState();
+}
+
+class _TestingModeScreenState extends State<TestingModeScreen> {
+  bool _hasActiveSubscription = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkSubscription();
+  }
+
+  Future<void> _checkSubscription() async {
+    try {
+      final appState = Provider.of<AppState>(context, listen: false);
+      if (!appState.isAuthenticated) {
+        if (mounted) {
+          setState(() {
+            _hasActiveSubscription = false;
+          });
+        }
+        return;
+      }
+
+      final paymentRepository = getIt<PaymentRepository>();
+      final subscriptions = await paymentRepository.getSubscriptionStatus();
+
+      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+
+      if (mounted) {
+        setState(() {
+          _hasActiveSubscription = hasActive;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _hasActiveSubscription = false;
+        });
+      }
+    }
+  }
 
   Future<void> _handleTrainingModePayment(BuildContext context) async {
     // Проверяем статус авторизации
@@ -54,6 +99,13 @@ class TestingModeScreen extends StatelessWidget {
       final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
 
       if (hasActiveSubscription) {
+        // Обновляем состояние подписки в UI
+        if (mounted) {
+          setState(() {
+            _hasActiveSubscription = true;
+          });
+        }
+
         // Подписка активна - открываем боттом шит с настройками
         final rosAviaTestCubit = context.read<RosAviaTestCubit>();
         rosAviaTestCubit.setTestMode(TestMode.training);
@@ -88,15 +140,56 @@ class TestingModeScreen extends StatelessWidget {
   Future<void> _navigateToPayment(BuildContext context) async {
     print('🔵 _navigateToPayment: начинаем навигацию');
 
+    // Добавляем небольшую задержку для стабилизации UI
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
     // Используем Navigator напрямую для модального экрана
     // Это обходит проблему с табами и открывает экран поверх всего
-    if (context.mounted) {
+    if (!context.mounted) {
+      print('⚠️  Контекст не mounted, используем rootNavigator');
+      final rootContext = navigatorKey.currentContext;
+      if (rootContext != null && rootContext.mounted) {
+        await _openPaymentScreen(rootContext);
+      }
+      return;
+    }
+
+    await _openPaymentScreen(context);
+  }
+
+  Future<void> _openPaymentScreen(BuildContext context) async {
+    try {
+      print('🔵 Открываем PaymentScreen через Navigator');
+
+      // Используем SchedulerBinding для отложенной навигации
+      await SchedulerBinding.instance.endOfFrame;
+
+      if (!context.mounted) return;
+
+      await Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute<dynamic>(
+          builder: (_) => PaymentScreen(
+            amount: 1000.0,
+            currency: 'RUB',
+            description: 'Оплата подписки на 1 год - РосАвиаТест - тренировочный режим',
+            subscriptionType: SubscriptionType.yearly,
+            periodDays: SubscriptionType.yearly.periodDays,
+            returnUrl: PaymentUrlHelper.buildReturnUrl(),
+            cancelUrl: PaymentUrlHelper.buildCancelUrl(),
+          ),
+        ),
+      );
+      print('✅ PaymentScreen открыт');
+    } catch (e, stackTrace) {
+      print('❌ Ошибка при открытии PaymentScreen: $e');
+      print('StackTrace: $stackTrace');
+
+      // Пробуем альтернативный способ через router
       try {
-        print('🔵 Открываем PaymentScreen через Navigator');
-        await Navigator.of(context, rootNavigator: true).push(
-          MaterialPageRoute<dynamic>(
-            builder: (_) => PaymentScreen(
-              amount: 1.0,
+        if (context.mounted) {
+          await context.router.push(
+            PaymentRoute(
+              amount: 1000.0,
               currency: 'RUB',
               description: 'Оплата подписки на 1 год - РосАвиаТест - тренировочный режим',
               subscriptionType: SubscriptionType.yearly,
@@ -104,12 +197,10 @@ class TestingModeScreen extends StatelessWidget {
               returnUrl: PaymentUrlHelper.buildReturnUrl(),
               cancelUrl: PaymentUrlHelper.buildCancelUrl(),
             ),
-          ),
-        );
-        print('✅ PaymentScreen открыт');
-      } catch (e, stackTrace) {
-        print('❌ Ошибка при открытии PaymentScreen: $e');
-        print('StackTrace: $stackTrace');
+          );
+        }
+      } catch (e2) {
+        print('❌ Ошибка при открытии PaymentScreen через router: $e2');
       }
     }
   }
@@ -138,6 +229,9 @@ class TestingModeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Формируем title в зависимости от наличия активной подписки
+    final trainingModeTitle = _hasActiveSubscription ? 'Тренировочный\nрежим' : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
+
     return BlocProvider.value(
       value: getIt<RosAviaTestCubit>(),
       child: Scaffold(
@@ -151,7 +245,7 @@ class TestingModeScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 16.h),
                 TestingModeElement(
-                  title: 'Тренировочный\nрежим (Подписка 700 ₽/год)',
+                  title: trainingModeTitle,
                   subTitle: 'Правильные ответы появляются сразу',
                   onTap: () => _handleTrainingModePayment(context),
                   image: Pictures.zamok,
