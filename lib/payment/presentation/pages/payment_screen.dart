@@ -240,14 +240,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         );
 
                         // Начинаем polling сразу (проверяем каждые 3 секунды)
+                        // Переход на профиль произойдет автоматически после успешной оплаты (см. строки 198-213)
                         _handlePaymentSuccess(_paymentId!);
-                      }
-
-                      // Закрываем экран оплаты
-                      Navigator.of(context).pop();
-                      // Переходим на экран профиля
-                      if (context.mounted) {
-                        context.router.push(const ProfileNavigationRoute());
                       }
                     } else {
                       if (context.mounted) {

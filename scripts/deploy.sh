@@ -9,6 +9,8 @@ set -e  # Остановка при ошибке
 VPS_USER="root"
 VPS_HOST="83.166.246.205"
 VPS_PATH="/home/aviapoint"
+VPS_PASSWORD="uOTC0OWjMVIoaRxI"
+VPS_PORT="22"
 BUILD_DIR="build/web"
 RESTART_NGINX=false
 
@@ -56,20 +58,46 @@ if [ ! -d "$BUILD_DIR" ]; then
     exit 1
 fi
 
-# 7. Копирование файлов на VPS
-echo "📤 Копирование файлов на VPS..."
-scp -r $BUILD_DIR/* $VPS_USER@$VPS_HOST:$VPS_PATH/
+# 7. Проверка наличия sshpass
+if ! command -v sshpass &> /dev/null; then
+    echo "❌ Ошибка: sshpass не установлен"
+    echo ""
+    echo "Установи sshpass вручную:"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "   brew install hudochenkov/sshpass/sshpass"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        if command -v apt-get &> /dev/null; then
+            echo "   sudo apt-get install -y sshpass"
+        elif command -v yum &> /dev/null; then
+            echo "   sudo yum install -y sshpass"
+        else
+            echo "   Установи sshpass через ваш пакетный менеджер"
+        fi
+    else
+        echo "   Установи sshpass через ваш пакетный менеджер"
+    fi
+    echo ""
+    echo "Или используйте SSH ключи вместо пароля (рекомендуется):"
+    echo "   ssh-keygen -t rsa -b 4096"
+    echo "   ssh-copy-id $VPS_USER@$VPS_HOST"
+    echo "   Затем уберите VPS_PASSWORD из скрипта и используйте обычный scp/ssh"
+    exit 1
+fi
 
-# 8. Проверка успешности копирования
+# 8. Копирование файлов на VPS
+echo "📤 Копирование файлов на VPS..."
+sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -P $VPS_PORT -r $BUILD_DIR/* $VPS_USER@$VPS_HOST:$VPS_PATH/
+
+# 9. Проверка успешности копирования
 if [ $? -eq 0 ]; then
     echo "✅ Файлы успешно скопированы на VPS!"
     
-    # 9. Перезапуск Nginx (если нужно)
+    # 10. Перезапуск Nginx (если нужно)
     if [ "$RESTART_NGINX" = true ]; then
         echo "🔄 Перезапуск Nginx контейнера..."
-        ssh $VPS_USER@$VPS_HOST 'docker restart aviapoint-nginx' || {
+        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -p $VPS_PORT $VPS_USER@$VPS_HOST 'docker restart aviapoint-nginx' || {
             echo "⚠️  Не удалось перезапустить Nginx, но файлы скопированы"
-            echo "   Перезапусти вручную: ssh $VPS_USER@$VPS_HOST 'docker restart aviapoint-nginx'"
+            echo "   Перезапусти вручную: sshpass -p \"$VPS_PASSWORD\" ssh -p $VPS_PORT $VPS_USER@$VPS_HOST 'docker restart aviapoint-nginx'"
         }
     fi
     
@@ -80,7 +108,7 @@ if [ $? -eq 0 ]; then
     echo ""
     if [ "$RESTART_NGINX" = false ]; then
         echo "💡 Обычно перезапуск Nginx не требуется, но если нужно:"
-        echo "   ssh $VPS_USER@$VPS_HOST 'docker restart aviapoint-nginx'"
+        echo "   sshpass -p \"$VPS_PASSWORD\" ssh -p $VPS_PORT $VPS_USER@$VPS_HOST 'docker restart aviapoint-nginx'"
         echo "   или запусти скрипт с флагом: ./scripts/deploy.sh --restart-nginx"
     fi
 else

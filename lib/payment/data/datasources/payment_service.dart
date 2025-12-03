@@ -1,5 +1,4 @@
 import 'package:aviapoint/payment/data/models/payment_dto.dart';
-import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -19,5 +18,5 @@ abstract class PaymentService {
 
   /// Проверка статуса подписки пользователя
   @GET('/subscriptions/active')
-  Future<SubscriptionDto> getSubscriptionStatus();
+  Future<Map<String, dynamic>> getSubscriptionStatus();
 }

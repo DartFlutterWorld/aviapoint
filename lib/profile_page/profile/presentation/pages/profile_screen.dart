@@ -31,8 +31,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  SubscriptionDto? _subscription;
-  double? _subscriptionAmount;
+  List<SubscriptionDto> _subscriptions = [];
   bool _isLoadingSubscription = false;
   String? _subscriptionError;
 
@@ -57,30 +56,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       final paymentRepository = getIt<PaymentRepository>();
-      final subscription = await paymentRepository.getSubscriptionStatus();
-
-      // Пытаемся получить стоимость из payment_id
-      double? amount;
-      if (subscription != null) {
-        try {
-          final payment = await paymentRepository.getPaymentStatus(subscription.paymentId);
-          amount = payment.amount;
-        } catch (e) {
-          // Если не удалось получить стоимость, просто игнорируем ошибку
-          print('Не удалось получить стоимость платежа: $e');
-        }
-      }
+      final subscriptions = await paymentRepository.getSubscriptionStatus();
 
       setState(() {
-        _subscription = subscription;
-        _subscriptionAmount = amount;
+        _subscriptions = subscriptions;
         _isLoadingSubscription = false;
       });
     } catch (e) {
-      setState(() {
-        _subscriptionError = e.toString();
-        _isLoadingSubscription = false;
-      });
+      // Не показываем технические ошибки пользователю
+      // Если это ошибка парсинга HTML (SPA роутинг), просто не показываем подписку
+      final errorString = e.toString();
+      if (errorString.contains('type \'String\' is not a subtype of type \'Map') || errorString.contains('<!DOCTYPE html>') || errorString.contains('DioException [unknown]')) {
+        // Это ошибка SPA роутинга - просто не показываем подписку
+        setState(() {
+          _subscriptions = [];
+          _subscriptionError = null;
+          _isLoadingSubscription = false;
+        });
+      } else {
+        // Для других ошибок показываем сообщение
+        setState(() {
+          _subscriptionError = 'Не удалось загрузить информацию о подписке';
+          _isLoadingSubscription = false;
+        });
+      }
     }
   }
 
@@ -174,58 +173,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ],
                                       ),
                                     )
-                                  else if (_subscription != null && _subscription!.isActive && _subscription!.endDate.isAfter(DateTime.now()))
-                                    Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: Colors.green.withOpacity(0.3)),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                  else if (_subscriptions.isNotEmpty)
+                                    // Отображаем все подписки
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: _subscriptions.map((subscription) {
+                                        final isActive = subscription.isActive && subscription.endDate.isAfter(DateTime.now());
+                                        final isExpired = subscription.endDate.isBefore(DateTime.now());
+
+                                        return Container(
+                                          margin: const EdgeInsets.only(bottom: 12),
+                                          padding: const EdgeInsets.all(16.0),
+                                          decoration: BoxDecoration(
+                                            color: isActive
+                                                ? Colors.green.withOpacity(0.1)
+                                                : isExpired
+                                                ? Colors.orange.withOpacity(0.1)
+                                                : Colors.grey.withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: isActive
+                                                  ? Colors.green.withOpacity(0.3)
+                                                  : isExpired
+                                                  ? Colors.orange.withOpacity(0.3)
+                                                  : Colors.grey.withOpacity(0.3),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.check_circle, color: Colors.green, size: 20),
-                                              const SizedBox(width: 8),
-                                              Text('Подписка активна', style: AppStyles.bold16s.copyWith(color: Colors.green)),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    isActive ? Icons.check_circle : Icons.info_outline,
+                                                    color: isActive
+                                                        ? Colors.green
+                                                        : isExpired
+                                                        ? Colors.orange
+                                                        : Colors.grey,
+                                                    size: 20,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    isActive
+                                                        ? 'Подписка активна'
+                                                        : isExpired
+                                                        ? 'Подписка истекла'
+                                                        : 'Подписка неактивна',
+                                                    style: AppStyles.bold16s.copyWith(
+                                                      color: isActive
+                                                          ? Colors.green
+                                                          : isExpired
+                                                          ? Colors.orange
+                                                          : Colors.grey,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 12),
+                                              _buildSubscriptionInfoRow('Стоимость:', '${subscription.amount.toStringAsFixed(2)} ₽'),
+                                              const SizedBox(height: 8),
+                                              _buildSubscriptionInfoRow('Дата начала:', DateFormat('dd.MM.yyyy').format(subscription.startDate)),
+                                              const SizedBox(height: 8),
+                                              _buildSubscriptionInfoRow('Дата окончания:', DateFormat('dd.MM.yyyy').format(subscription.endDate)),
+                                              const SizedBox(height: 8),
+                                              _buildSubscriptionInfoRow('Период:', '${subscription.periodDays} дней'),
                                             ],
                                           ),
-                                          const SizedBox(height: 12),
-                                          if (_subscriptionAmount != null) ...[_buildSubscriptionInfoRow('Стоимость:', '${_subscriptionAmount!.toStringAsFixed(2)} ₽'), const SizedBox(height: 8)],
-                                          _buildSubscriptionInfoRow('Дата начала:', DateFormat('dd.MM.yyyy').format(_subscription!.startDate)),
-                                          const SizedBox(height: 8),
-                                          _buildSubscriptionInfoRow('Дата окончания:', DateFormat('dd.MM.yyyy').format(_subscription!.endDate)),
-                                          const SizedBox(height: 8),
-                                          _buildSubscriptionInfoRow('Период:', '${_subscription!.periodDays} дней'),
-                                        ],
-                                      ),
-                                    )
-                                  else if (_subscription != null)
-                                    Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: Colors.orange.withOpacity(0.3)),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.info_outline, color: Colors.orange, size: 20),
-                                              const SizedBox(width: 8),
-                                              Text('Подписка неактивна', style: AppStyles.bold16s.copyWith(color: Colors.orange)),
-                                            ],
-                                          ),
-                                          if (_subscription!.endDate.isBefore(DateTime.now())) ...[
-                                            const SizedBox(height: 8),
-                                            Text('Подписка истекла ${DateFormat('dd.MM.yyyy').format(_subscription!.endDate)}', style: AppStyles.regular14s.copyWith(color: Colors.orange)),
-                                          ],
-                                        ],
-                                      ),
+                                        );
+                                      }).toList(),
                                     )
                                   else
                                     // Подписки нет

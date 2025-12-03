@@ -20,5 +20,6 @@ abstract class PaymentRepository {
   Future<PaymentEntity> getPaymentStatus(String paymentId);
 
   /// Проверка статуса подписки пользователя
-  Future<SubscriptionDto?> getSubscriptionStatus();
+  /// Возвращает список всех подписок пользователя
+  Future<List<SubscriptionDto>> getSubscriptionStatus();
 }

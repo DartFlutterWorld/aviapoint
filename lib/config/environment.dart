@@ -14,10 +14,10 @@ abstract class Environment {
   // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.159');
 
   // Кардон Вайфай
-  static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.105');
+  // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.105');
 
   // Megafon phone
-  // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '172.20.10.11');
+  static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '172.20.10.11');
 
   /// API базовый URL
   static String get apiUrl {
@@ -35,7 +35,8 @@ abstract class Environment {
       // На веб-платформе: относительный путь (Nginx проксирует на backend)
       // На мобильных: полный URL продакшн сервера
       if (kIsWeb) {
-        // Nginx конфиг обрабатывает: /api, /stories, /news, /auth, /learning, /profiles, /openapi
+        // Nginx конфиг использует универсальный прокси: все запросы (кроме статических файлов) проксируются на backend
+        // Статические файлы обрабатываются напрямую, остальное идет на backend через @backend
         return '';
       } else {
         // Для мобильных приложений нужен полный URL

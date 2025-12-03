@@ -48,9 +48,12 @@ class TestingModeScreen extends StatelessWidget {
     try {
       // Проверяем статус подписки на сервере
       final paymentRepository = getIt<PaymentRepository>();
-      final subscription = await paymentRepository.getSubscriptionStatus();
+      final subscriptions = await paymentRepository.getSubscriptionStatus();
 
-      if (subscription != null && subscription.isActive && subscription.endDate.isAfter(DateTime.now())) {
+      // Проверяем, есть ли хотя бы одна активная подписка
+      final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+
+      if (hasActiveSubscription) {
         // Подписка активна - открываем боттом шит с настройками
         final rosAviaTestCubit = context.read<RosAviaTestCubit>();
         rosAviaTestCubit.setTestMode(TestMode.training);

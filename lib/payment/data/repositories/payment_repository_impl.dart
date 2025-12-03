@@ -45,8 +45,24 @@ class PaymentRepositoryImpl implements PaymentRepository {
       // Удаляем null значения из JSON, чтобы бэкенд не получал null вместо строк
       jsonData.removeWhere((key, value) => value == null);
 
-      final dto = await _paymentService.createPayment(jsonData);
-      return _mapDtoToEntity(dto);
+      // Логируем запрос для отладки
+      print('🔵 Payment Request JSON:');
+      print(jsonData);
+      print('🔵 Subscription Type: ${request.subscriptionType.value}');
+      print('🔵 Return URL: ${request.returnUrl}');
+      print('🔵 Cancel URL: ${request.cancelUrl}');
+
+      try {
+        final dto = await _paymentService.createPayment(jsonData);
+        return _mapDtoToEntity(dto);
+      } on DioException catch (e) {
+        // Логируем детали ошибки для отладки
+        print('❌ Payment Error:');
+        print('   Status Code: ${e.response?.statusCode}');
+        print('   Response Data: ${e.response?.data}');
+        print('   Request Data: ${jsonData}');
+        rethrow;
+      }
     } catch (e) {
       rethrow;
     }
@@ -63,19 +79,71 @@ class PaymentRepositoryImpl implements PaymentRepository {
   }
 
   @override
-  Future<SubscriptionDto?> getSubscriptionStatus() async {
+  Future<List<SubscriptionDto>> getSubscriptionStatus() async {
     try {
-      return await _paymentService.getSubscriptionStatus();
-    } on DioException catch (e) {
-      // Если подписка не найдена (404) - возвращаем null
-      if (e.response?.statusCode == 404) {
-        return null;
+      final responseData = await _paymentService.getSubscriptionStatus();
+
+      if (responseData.isEmpty) {
+        return [];
       }
+
+      // Бэкенд возвращает {"subscriptions": [...]} - массив подписок
+      if (responseData.containsKey('subscriptions') && responseData['subscriptions'] is List) {
+        final subscriptionsList = responseData['subscriptions'] as List;
+        if (subscriptionsList.isEmpty) {
+          return [];
+        }
+
+        // Преобразуем все подписки в DTO
+        final subscriptions = subscriptionsList.map((json) => SubscriptionDto.fromJson(json as Map<String, dynamic>)).toList();
+
+        // Сортируем по end_date (самая поздняя первая)
+        subscriptions.sort((a, b) => b.endDate.compareTo(a.endDate));
+
+        return subscriptions;
+      }
+
+      // Если формат неожиданный, пытаемся распарсить как один объект
+      return [SubscriptionDto.fromJson(responseData)];
+    } on DioException catch (e) {
+      // Если подписка не найдена (404) - возвращаем пустой список
+      if (e.response?.statusCode == 404) {
+        return [];
+      }
+
+      // Если ошибка 400 (Bad Request) - вероятно проблема с сериализацией на бэкенде
+      if (e.response?.statusCode == 400) {
+        print('⚠️  Ошибка 400 при получении подписки. Возможно, проблема с сериализацией DateTime на бэкенде.');
+        print('   Ошибка: ${e.response?.data}');
+        return []; // Возвращаем пустой список вместо ошибки
+      }
+
+      // Проверяем, не вернул ли сервер HTML вместо JSON (SPA роутинг)
+      final responseData = e.response?.data;
+      if (responseData is String && responseData.contains('<!DOCTYPE html>')) {
+        print('⚠️  Сервер вернул HTML вместо JSON. Возможно, неправильный baseUrl или маршрут не проксируется.');
+        print('   URL: ${e.requestOptions.uri}');
+        print('   Base URL: ${e.requestOptions.baseUrl}');
+        return []; // Возвращаем пустой список вместо ошибки
+      }
+
       // Для других ошибок пробрасываем исключение
       rethrow;
-    } catch (e) {
-      // Для других типов ошибок возвращаем null
-      return null;
+    } catch (e, stackTrace) {
+      // Проверяем, не является ли ошибка попыткой распарсить HTML как JSON
+      final errorString = e.toString();
+      if (errorString.contains('type \'String\' is not a subtype of type \'Map') || errorString.contains('<!DOCTYPE html>') || errorString.contains('DioException [unknown]')) {
+        print('⚠️  Ошибка парсинга: сервер вернул HTML вместо JSON');
+        print('   Ошибка: $e');
+        return []; // Возвращаем пустой список вместо ошибки
+      }
+
+      // Логируем неожиданные ошибки для отладки
+      print('⚠️  Неожиданная ошибка при проверке подписки: $e');
+      print('   StackTrace: $stackTrace');
+
+      // Для других типов ошибок возвращаем пустой список (не показываем ошибку пользователю)
+      return [];
     }
   }
 

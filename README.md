@@ -38,7 +38,7 @@ flutter build web --release --dart-define=isDevelopment=false
 
 # 4. Копирование на VPS
 scp -r build/web/* root@83.166.246.205:/home/aviapoint/
-
+uOTC0OWjMVIoaRxI
 # 5. Перезапуск Nginx (обычно не требуется, но можно для надежности)
 ssh root@83.166.246.205 'docker restart aviapoint-nginx'
 ```
