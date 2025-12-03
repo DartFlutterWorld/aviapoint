@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PaymentDto {
 
- String get id; String get status; double get amount; String get currency; String? get description;@JsonKey(name: 'payment_url') String? get paymentUrl;@JsonKey(name: 'confirmation_token') String? get confirmationToken;@JsonKey(name: 'created_at') String? get createdAt;@JsonKey(name: 'paid') bool? get paid;
+ String get id; String get status;@JsonKey(fromJson: _amountFromJson) double get amount; String get currency; String? get description;@JsonKey(name: 'payment_url') String? get paymentUrl;@JsonKey(name: 'confirmation_token') String? get confirmationToken;@JsonKey(name: 'created_at') String? get createdAt;@JsonKey(name: 'paid') bool? get paid;
 /// Create a copy of PaymentDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PaymentDtoCopyWith<$Res>  {
   factory $PaymentDtoCopyWith(PaymentDto value, $Res Function(PaymentDto) _then) = _$PaymentDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String status, double amount, String currency, String? description,@JsonKey(name: 'payment_url') String? paymentUrl,@JsonKey(name: 'confirmation_token') String? confirmationToken,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'paid') bool? paid
+ String id, String status,@JsonKey(fromJson: _amountFromJson) double amount, String currency, String? description,@JsonKey(name: 'payment_url') String? paymentUrl,@JsonKey(name: 'confirmation_token') String? confirmationToken,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'paid') bool? paid
 });
 
 
@@ -161,7 +161,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String status,  double amount,  String currency,  String? description, @JsonKey(name: 'payment_url')  String? paymentUrl, @JsonKey(name: 'confirmation_token')  String? confirmationToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'paid')  bool? paid)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String status, @JsonKey(fromJson: _amountFromJson)  double amount,  String currency,  String? description, @JsonKey(name: 'payment_url')  String? paymentUrl, @JsonKey(name: 'confirmation_token')  String? confirmationToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'paid')  bool? paid)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PaymentDto() when $default != null:
 return $default(_that.id,_that.status,_that.amount,_that.currency,_that.description,_that.paymentUrl,_that.confirmationToken,_that.createdAt,_that.paid);case _:
@@ -182,7 +182,7 @@ return $default(_that.id,_that.status,_that.amount,_that.currency,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String status,  double amount,  String currency,  String? description, @JsonKey(name: 'payment_url')  String? paymentUrl, @JsonKey(name: 'confirmation_token')  String? confirmationToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'paid')  bool? paid)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String status, @JsonKey(fromJson: _amountFromJson)  double amount,  String currency,  String? description, @JsonKey(name: 'payment_url')  String? paymentUrl, @JsonKey(name: 'confirmation_token')  String? confirmationToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'paid')  bool? paid)  $default,) {final _that = this;
 switch (_that) {
 case _PaymentDto():
 return $default(_that.id,_that.status,_that.amount,_that.currency,_that.description,_that.paymentUrl,_that.confirmationToken,_that.createdAt,_that.paid);case _:
@@ -202,7 +202,7 @@ return $default(_that.id,_that.status,_that.amount,_that.currency,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String status,  double amount,  String currency,  String? description, @JsonKey(name: 'payment_url')  String? paymentUrl, @JsonKey(name: 'confirmation_token')  String? confirmationToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'paid')  bool? paid)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String status, @JsonKey(fromJson: _amountFromJson)  double amount,  String currency,  String? description, @JsonKey(name: 'payment_url')  String? paymentUrl, @JsonKey(name: 'confirmation_token')  String? confirmationToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'paid')  bool? paid)?  $default,) {final _that = this;
 switch (_that) {
 case _PaymentDto() when $default != null:
 return $default(_that.id,_that.status,_that.amount,_that.currency,_that.description,_that.paymentUrl,_that.confirmationToken,_that.createdAt,_that.paid);case _:
@@ -217,12 +217,12 @@ return $default(_that.id,_that.status,_that.amount,_that.currency,_that.descript
 @JsonSerializable()
 
 class _PaymentDto implements PaymentDto {
-  const _PaymentDto({required this.id, required this.status, required this.amount, required this.currency, this.description, @JsonKey(name: 'payment_url') this.paymentUrl, @JsonKey(name: 'confirmation_token') this.confirmationToken, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'paid') this.paid});
+  const _PaymentDto({required this.id, required this.status, @JsonKey(fromJson: _amountFromJson) required this.amount, required this.currency, this.description, @JsonKey(name: 'payment_url') this.paymentUrl, @JsonKey(name: 'confirmation_token') this.confirmationToken, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'paid') this.paid});
   factory _PaymentDto.fromJson(Map<String, dynamic> json) => _$PaymentDtoFromJson(json);
 
 @override final  String id;
 @override final  String status;
-@override final  double amount;
+@override@JsonKey(fromJson: _amountFromJson) final  double amount;
 @override final  String currency;
 @override final  String? description;
 @override@JsonKey(name: 'payment_url') final  String? paymentUrl;
@@ -263,7 +263,7 @@ abstract mixin class _$PaymentDtoCopyWith<$Res> implements $PaymentDtoCopyWith<$
   factory _$PaymentDtoCopyWith(_PaymentDto value, $Res Function(_PaymentDto) _then) = __$PaymentDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String status, double amount, String currency, String? description,@JsonKey(name: 'payment_url') String? paymentUrl,@JsonKey(name: 'confirmation_token') String? confirmationToken,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'paid') bool? paid
+ String id, String status,@JsonKey(fromJson: _amountFromJson) double amount, String currency, String? description,@JsonKey(name: 'payment_url') String? paymentUrl,@JsonKey(name: 'confirmation_token') String? confirmationToken,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'paid') bool? paid
 });
 
 

@@ -8,7 +8,7 @@ abstract class PaymentDto with _$PaymentDto {
   const factory PaymentDto({
     required String id,
     required String status,
-    required double amount,
+    @JsonKey(fromJson: _amountFromJson) required double amount,
     required String currency,
     String? description,
     @JsonKey(name: 'payment_url') String? paymentUrl,
@@ -18,6 +18,17 @@ abstract class PaymentDto with _$PaymentDto {
   }) = _PaymentDto;
 
   factory PaymentDto.fromJson(Map<String, dynamic> json) => _$PaymentDtoFromJson(json);
+}
+
+/// Конвертер для amount: обрабатывает и строки, и числа
+double _amountFromJson(dynamic value) {
+  if (value is num) {
+    return value.toDouble();
+  }
+  if (value is String) {
+    return double.parse(value);
+  }
+  throw ArgumentError('Cannot convert $value (${value.runtimeType}) to double');
 }
 
 /// Статусы платежа

@@ -9,7 +9,7 @@ part of 'payment_dto.dart';
 _PaymentDto _$PaymentDtoFromJson(Map<String, dynamic> json) => _PaymentDto(
   id: json['id'] as String,
   status: json['status'] as String,
-  amount: (json['amount'] as num).toDouble(),
+  amount: _amountFromJson(json['amount']),
   currency: json['currency'] as String,
   description: json['description'] as String?,
   paymentUrl: json['payment_url'] as String?,
