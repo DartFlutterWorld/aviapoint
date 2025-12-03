@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html' as html if (dart.library.io) 'dart:io';
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
@@ -13,7 +14,6 @@ import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.da
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class PaymentScreen extends StatefulWidget {
@@ -219,35 +219,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
               if (payment.paymentUrl != null) {
                 if (kIsWeb) {
-                  // На веб открываем платежную форму в новой вкладке
+                  // На веб открываем платежную форму в той же вкладке
+                  // После оплаты ЮKassa редиректит на /payments/return, который редиректит на профиль
                   try {
-                    final uri = Uri.parse(payment.paymentUrl!);
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri, mode: LaunchMode.externalApplication);
-
-                      // Сохраняем paymentId для проверки статуса
-                      if (_paymentId == null && payment.id.isNotEmpty) {
-                        setState(() {
-                          _paymentId = payment.id;
-                        });
-                      }
-
-                      // На веб начинаем polling для проверки статуса
-                      // Polling будет работать до получения succeeded или таймаута (10 минут)
-                      if (_paymentId != null && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Платежная форма открыта в новой вкладке. Проверяем статус платежа...'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)),
-                        );
-
-                        // Начинаем polling сразу (проверяем каждые 3 секунды)
-                        // Переход на профиль произойдет автоматически после успешной оплаты (см. строки 198-213)
-                        _handlePaymentSuccess(_paymentId!);
-                      }
-                    } else {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть платежную форму'), backgroundColor: Colors.red));
-                      }
+                    // Сохраняем paymentId для проверки статуса
+                    if (_paymentId == null && payment.id.isNotEmpty) {
+                      setState(() {
+                        _paymentId = payment.id;
+                      });
                     }
+
+                    // Используем прямой редирект через window.location для веб
+                    // Это гарантирует, что пользователь останется в той же вкладке
+                    html.window.location.href = payment.paymentUrl!;
                   } catch (e) {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: $e'), backgroundColor: Colors.red));
