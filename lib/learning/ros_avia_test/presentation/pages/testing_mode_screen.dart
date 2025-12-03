@@ -226,7 +226,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       await Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<dynamic>(
           builder: (_) => PaymentScreen(
-            amount: 1.0,
+            amount: 1000.0,
             currency: 'RUB',
             description: 'Оплата подписки на 1 год - РосАвиаТест - тренировочный режим',
             subscriptionType: SubscriptionType.yearly,
@@ -246,7 +246,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
         if (context.mounted) {
           await context.router.push(
             PaymentRoute(
-              amount: 1.0,
+              amount: 1000.0,
               currency: 'RUB',
               description: 'Оплата подписки на 1 год - РосАвиаТест - тренировочный режим',
               subscriptionType: SubscriptionType.yearly,

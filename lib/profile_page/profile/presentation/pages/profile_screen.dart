@@ -169,11 +169,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: 'Профиль',
             withBack: false,
             // backgroundColor: AppColors.background,
-            actions: [
-              Provider.of<AppState>(context, listen: true).isAuthenticated
-                  ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))
-                  : IconButton(onPressed: () => showLogin(context), icon: Icon(Icons.login)),
-            ],
           ),
           backgroundColor: AppColors.background,
           body: Padding(
@@ -368,22 +363,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   Image.asset(Pictures.planeProfile, height: 374, width: 286),
                                   SizedBox(height: 16),
-                                  CustomButton(
-                                    verticalPadding: 8,
-                                    backgroundColor: Color(0xFF0A6EFA),
-                                    title: 'Войти в профиль',
-                                    textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                                    borderColor: Color(0xFF0A6EFA),
-                                    borderRadius: 46,
-                                    boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                                    onPressed: () => showLogin(context),
-                                  ),
                                 ],
                               ),
                       ],
                     ),
                   ),
                 ),
+                // Кнопки входа и выхода (прижаты к низу)
+                if (Provider.of<AppState>(context, listen: true).isAuthenticated) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                    child: CustomButton(
+                      verticalPadding: 8,
+                      backgroundColor: Color(0xFFFF6B6B),
+                      title: 'Выйти',
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                      borderColor: Color(0xFFFF6B6B),
+                      borderRadius: 46,
+                      boxShadow: [BoxShadow(color: Color(0xFFE53E3E).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                      onPressed: () => logOut(context),
+                    ),
+                  ),
+                ] else ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                    child: CustomButton(
+                      verticalPadding: 8,
+                      backgroundColor: Color(0xFF0A6EFA),
+                      title: 'Войти в профиль',
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                      borderColor: Color(0xFF0A6EFA),
+                      borderRadius: 46,
+                      boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                      onPressed: () => showLogin(context),
+                    ),
+                  ),
+                ],
                 // Ссылка на политику конфиденциальности внизу
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
