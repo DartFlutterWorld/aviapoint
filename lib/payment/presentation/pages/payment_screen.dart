@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html' as html if (dart.library.io) 'dart:io';
+import 'payment_screen_stub.dart' if (dart.library.html) 'payment_screen_web.dart' as html;
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
@@ -231,7 +231,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
                     // Используем прямой редирект через window.location для веб
                     // Это гарантирует, что пользователь останется в той же вкладке
-                    html.window.location.href = payment.paymentUrl!;
+                    html.setWindowLocationHref(payment.paymentUrl!);
                   } catch (e) {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: $e'), backgroundColor: Colors.red));

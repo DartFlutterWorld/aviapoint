@@ -49,6 +49,12 @@ android {
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
+        // Поддержка 16 КБ страниц памяти для Google Play
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_SUPPORT_NATIVE_PAGE_SIZE=16384"
+            }
+        }
     }
 
     signingConfigs {

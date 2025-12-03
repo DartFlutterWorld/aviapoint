@@ -34,7 +34,10 @@ flutter pub get
 fvm dart pub run build_runner build --delete-conflicting-outputs
 
 # 3. Сборка production версии WEB
-flutter build web --release --dart-define=isDevelopment=false
+fvm flutter build web --release --dart-define=isDevelopment=false
+
+# 3. Сборка production версии appbundle
+fvm flutter build appbundle --release --dart-define=isDevelopment=false
 
 # 4. Копирование на VPS
 scp -r build/web/* root@83.166.246.205:/home/aviapoint/

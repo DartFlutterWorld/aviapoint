@@ -1,4 +1,4 @@
-import 'dart:html' as html if (dart.library.io) 'dart:io';
+import 'testing_mode_screen_stub.dart' if (dart.library.html) 'testing_mode_screen_web.dart' as html;
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
@@ -37,7 +37,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   void initState() {
     super.initState();
     _checkSubscription();
-    
+
     // Обрабатываем параметры из URL (для редиректа после оплаты)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handlePaymentRedirect();
@@ -54,12 +54,15 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       // На веб получаем параметры из window.location
       // При path-based routing параметры находятся в query string
       String? paymentStatus;
-      
+
       if (kIsWeb) {
         // Используем dart:html для получения URL
-        final uri = Uri.parse(html.window.location.href);
-        // При path-based routing параметры в query string
-        paymentStatus = uri.queryParameters['payment'];
+        final href = html.getWindowLocationHref();
+        if (href != null) {
+          final uri = Uri.parse(href);
+          // При path-based routing параметры в query string
+          paymentStatus = uri.queryParameters['payment'];
+        }
       } else {
         // На мобильных используем Uri.base
         final uri = Uri.base;
@@ -68,24 +71,12 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
       if (paymentStatus == 'success') {
         // Показываем сообщение об успешной оплате
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Платеж успешно выполнен! Подписка активирована.'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен! Подписка активирована.'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
         // Обновляем информацию о подписке
         _checkSubscription();
       } else if (paymentStatus == 'cancel') {
         // Показываем сообщение об отмене
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Оплата отменена'),
-            backgroundColor: Colors.orange,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
       }
       // Если paymentStatus == 'pending' или null - не показываем сообщение
     } catch (e) {

@@ -16,7 +16,7 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'dart:html' as html if (dart.library.io) 'dart:io';
+import 'profile_screen_stub.dart' if (dart.library.html) 'profile_screen_web.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -61,25 +61,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // На веб получаем параметры из window.location.href
       // Параметры могут быть в query string или в hash
       String? paymentStatus;
-      
+
       if (kIsWeb) {
         // Используем dart:html для получения полного URL
-        final fullUrl = html.window.location.href;
-        final uri = Uri.parse(fullUrl);
-        
-        // Пробуем получить из query параметров
-        paymentStatus = uri.queryParameters['payment'];
-        
-        // Если не нашли в query, пробуем из hash (для SPA роутинга)
-        // Формат: #/profile?payment=success
-        if (paymentStatus == null && uri.fragment.isNotEmpty) {
-          // Извлекаем query параметры из hash
-          final hash = uri.fragment;
-          final questionMarkIndex = hash.indexOf('?');
-          if (questionMarkIndex != -1) {
-            final queryString = hash.substring(questionMarkIndex + 1);
-            final hashUri = Uri.parse('?$queryString');
-            paymentStatus = hashUri.queryParameters['payment'];
+        final fullUrl = html.getWindowLocationHref();
+        if (fullUrl != null) {
+          final uri = Uri.parse(fullUrl);
+
+          // Пробуем получить из query параметров
+          paymentStatus = uri.queryParameters['payment'];
+
+          // Если не нашли в query, пробуем из hash (для SPA роутинга)
+          // Формат: #/profile?payment=success
+          if (paymentStatus == null && uri.fragment.isNotEmpty) {
+            // Извлекаем query параметры из hash
+            final hash = uri.fragment;
+            final questionMarkIndex = hash.indexOf('?');
+            if (questionMarkIndex != -1) {
+              final queryString = hash.substring(questionMarkIndex + 1);
+              final hashUri = Uri.parse('?$queryString');
+              paymentStatus = hashUri.queryParameters['payment'];
+            }
           }
         }
       } else {
@@ -360,10 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(Pictures.planeProfile, height: 374, width: 286),
-                                  SizedBox(height: 16),
-                                ],
+                                children: [Image.asset(Pictures.planeProfile, height: 374, width: 286), SizedBox(height: 16)],
                               ),
                       ],
                     ),
