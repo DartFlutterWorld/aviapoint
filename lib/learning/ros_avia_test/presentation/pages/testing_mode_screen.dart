@@ -1,3 +1,4 @@
+import 'dart:html' as html if (dart.library.io) 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
@@ -14,6 +15,7 @@ import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/presentation/pages/payment_screen.dart';
 import 'package:aviapoint/payment/utils/payment_url_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +37,60 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   void initState() {
     super.initState();
     _checkSubscription();
+    
+    // Обрабатываем параметры из URL (для редиректа после оплаты)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handlePaymentRedirect();
+    });
+  }
+
+  void _handlePaymentRedirect() {
+    if (!kIsWeb) {
+      // На мобильных WebView сам обработает через _handleUrl в PaymentWebViewScreen
+      return;
+    }
+
+    try {
+      // На веб получаем параметры из window.location
+      // При path-based routing параметры находятся в query string
+      String? paymentStatus;
+      
+      if (kIsWeb) {
+        // Используем dart:html для получения URL
+        final uri = Uri.parse(html.window.location.href);
+        // При path-based routing параметры в query string
+        paymentStatus = uri.queryParameters['payment'];
+      } else {
+        // На мобильных используем Uri.base
+        final uri = Uri.base;
+        paymentStatus = uri.queryParameters['payment'];
+      }
+
+      if (paymentStatus == 'success') {
+        // Показываем сообщение об успешной оплате
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Платеж успешно выполнен! Подписка активирована.'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        // Обновляем информацию о подписке
+        _checkSubscription();
+      } else if (paymentStatus == 'cancel') {
+        // Показываем сообщение об отмене
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Оплата отменена'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      // Игнорируем ошибки парсинга URL
+      print('Ошибка при обработке редиректа: $e');
+    }
   }
 
   Future<void> _checkSubscription() async {
