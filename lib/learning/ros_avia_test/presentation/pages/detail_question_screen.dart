@@ -8,6 +8,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widg
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 @RoutePage()
 class DetailQuestionScreen extends StatefulWidget {
@@ -126,7 +127,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xFFF1F7FF)),
-                    child: Text(widget.question?.explanation ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                    child: HtmlWidget(widget.question!.explanation!, textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
                   ),
               ],
             ),

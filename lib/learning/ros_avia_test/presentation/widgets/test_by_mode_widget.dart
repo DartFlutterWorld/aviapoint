@@ -7,6 +7,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widg
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 /// Виджет для отображения вопроса с вариантами ответов в тренировочном режиме
 ///
@@ -324,7 +325,9 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                               Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
-                                child: Text(widget.question.explanation ?? 'Скоро появится', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4)),
+                                child: widget.question.explanation != null
+                                    ? HtmlWidget(widget.question.explanation!, textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4))
+                                    : Text('Скоро появится', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4)),
                               ),
                           ],
                         ),

@@ -1,15 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
-import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class MarketScreen extends StatelessWidget {
@@ -55,33 +52,60 @@ class MarketScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
-                  child: Container(
-                    width: 147.w,
-                    padding: EdgeInsets.all(10.w),
-                    decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10.r)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(Pictures.whatsapp),
-                        SizedBox(width: 6.w),
-                        Text('Whatsapp', style: AppStyles.bold16s.copyWith(color: Color(0xFF01B40E))),
-                      ],
+                  child: GestureDetector(
+                    onTap: () async {
+                      // Формат: https://wa.me/79990697289 (без +)
+                      final uri = Uri.parse('https://wa.me/79990697289');
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      } else {
+                        // Если не удалось открыть, показываем сообщение
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: 147.w,
+                      padding: EdgeInsets.all(10.w),
+                      decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10.r)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(Pictures.whatsapp),
+                          SizedBox(width: 6.w),
+                          Text('Whatsapp', style: AppStyles.bold16s.copyWith(color: Color(0xFF01B40E))),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 16.w),
                 Flexible(
-                  child: Container(
-                    width: 147.w,
-                    padding: EdgeInsets.all(10.w),
-                    decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(Pictures.telegramm),
-                        SizedBox(width: 6.w),
-                        Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
-                      ],
+                  child: GestureDetector(
+                    onTap: () async {
+                      final uri = Uri.parse('https://t.me/dartflutterworld');
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      } else {
+                        // Если не удалось открыть, показываем сообщение
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: 147.w,
+                      padding: EdgeInsets.all(10.w),
+                      decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(Pictures.telegramm),
+                          SizedBox(width: 6.w),
+                          Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
+                        ],
+                      ),
                     ),
                   ),
                 ),
