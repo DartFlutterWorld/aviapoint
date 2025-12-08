@@ -1265,10 +1265,10 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
     required double amount,
     String currency = 'RUB',
     required String description,
-    SubscriptionType subscriptionType = SubscriptionType.yearly,
+    required int subscriptionTypeId,
     int periodDays = 365,
     String? returnUrl,
-    String? cancelUrl,
+    String? returnRouteSource,
     List<PageRouteInfo>? children,
   }) : super(
          PaymentRoute.name,
@@ -1277,10 +1277,10 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
            amount: amount,
            currency: currency,
            description: description,
-           subscriptionType: subscriptionType,
+           subscriptionTypeId: subscriptionTypeId,
            periodDays: periodDays,
            returnUrl: returnUrl,
-           cancelUrl: cancelUrl,
+           returnRouteSource: returnRouteSource,
          ),
          initialChildren: children,
        );
@@ -1296,10 +1296,10 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
         amount: args.amount,
         currency: args.currency,
         description: args.description,
-        subscriptionType: args.subscriptionType,
+        subscriptionTypeId: args.subscriptionTypeId,
         periodDays: args.periodDays,
         returnUrl: args.returnUrl,
-        cancelUrl: args.cancelUrl,
+        returnRouteSource: args.returnRouteSource,
       );
     },
   );
@@ -1311,10 +1311,10 @@ class PaymentRouteArgs {
     required this.amount,
     this.currency = 'RUB',
     required this.description,
-    this.subscriptionType = SubscriptionType.yearly,
+    required this.subscriptionTypeId,
     this.periodDays = 365,
     this.returnUrl,
-    this.cancelUrl,
+    this.returnRouteSource,
   });
 
   final Key? key;
@@ -1325,17 +1325,17 @@ class PaymentRouteArgs {
 
   final String description;
 
-  final SubscriptionType subscriptionType;
+  final int subscriptionTypeId;
 
   final int periodDays;
 
   final String? returnUrl;
 
-  final String? cancelUrl;
+  final String? returnRouteSource;
 
   @override
   String toString() {
-    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, subscriptionType: $subscriptionType, periodDays: $periodDays, returnUrl: $returnUrl, cancelUrl: $cancelUrl}';
+    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, subscriptionTypeId: $subscriptionTypeId, periodDays: $periodDays, returnUrl: $returnUrl, returnRouteSource: $returnRouteSource}';
   }
 
   @override
@@ -1346,10 +1346,10 @@ class PaymentRouteArgs {
         amount == other.amount &&
         currency == other.currency &&
         description == other.description &&
-        subscriptionType == other.subscriptionType &&
+        subscriptionTypeId == other.subscriptionTypeId &&
         periodDays == other.periodDays &&
         returnUrl == other.returnUrl &&
-        cancelUrl == other.cancelUrl;
+        returnRouteSource == other.returnRouteSource;
   }
 
   @override
@@ -1358,10 +1358,10 @@ class PaymentRouteArgs {
       amount.hashCode ^
       currency.hashCode ^
       description.hashCode ^
-      subscriptionType.hashCode ^
+      subscriptionTypeId.hashCode ^
       periodDays.hashCode ^
       returnUrl.hashCode ^
-      cancelUrl.hashCode;
+      returnRouteSource.hashCode;
 }
 
 /// generated route for

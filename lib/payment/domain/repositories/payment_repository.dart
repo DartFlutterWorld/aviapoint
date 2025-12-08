@@ -1,6 +1,6 @@
 import 'package:aviapoint/payment/domain/entities/payment_entity.dart';
-import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
+import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 
 abstract class PaymentRepository {
   /// Создание платежа
@@ -9,11 +9,10 @@ abstract class PaymentRepository {
     required String currency,
     required String description,
     required int userId,
-    required SubscriptionType subscriptionType,
+    required int subscriptionTypeId,
     required int periodDays,
     String? customerPhone,
     String? returnUrl,
-    String? cancelUrl,
   });
 
   /// Получение статуса платежа
@@ -22,4 +21,7 @@ abstract class PaymentRepository {
   /// Проверка статуса подписки пользователя
   /// Возвращает список всех подписок пользователя
   Future<List<SubscriptionDto>> getSubscriptionStatus();
+
+  /// Получение списка типов подписок
+  Future<List<SubscriptionTypeModel>> getSubscriptionTypes();
 }

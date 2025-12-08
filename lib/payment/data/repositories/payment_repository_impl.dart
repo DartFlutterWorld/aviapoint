@@ -3,8 +3,8 @@ import 'package:aviapoint/payment/data/datasources/payment_service.dart';
 import 'package:aviapoint/payment/data/models/create_payment_request_dto.dart';
 import 'package:aviapoint/payment/data/models/payment_dto.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
+import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/domain/entities/payment_entity.dart';
-import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 
 class PaymentRepositoryImpl implements PaymentRepository {
@@ -18,11 +18,10 @@ class PaymentRepositoryImpl implements PaymentRepository {
     required String currency,
     required String description,
     required int userId,
-    required SubscriptionType subscriptionType,
+    required int subscriptionTypeId,
     required int periodDays,
     String? customerPhone,
     String? returnUrl,
-    String? cancelUrl,
   }) async {
     try {
       // ЮKassa требует, чтобы return_url и cancel_url начинались с http:// или https://
@@ -32,11 +31,10 @@ class PaymentRepositoryImpl implements PaymentRepository {
         currency: currency,
         description: description,
         userId: userId,
-        subscriptionType: subscriptionType,
+        subscriptionTypeId: subscriptionTypeId,
         periodDays: periodDays,
         customerPhone: customerPhone,
         returnUrl: returnUrl,
-        cancelUrl: cancelUrl,
       );
 
       // Явно сериализуем в JSON перед отправкой
@@ -48,9 +46,8 @@ class PaymentRepositoryImpl implements PaymentRepository {
       // Логируем запрос для отладки
       print('🔵 Payment Request JSON:');
       print(jsonData);
-      print('🔵 Subscription Type: ${request.subscriptionType.value}');
+      print('🔵 Subscription Type ID: ${request.subscriptionTypeId}');
       print('🔵 Return URL: ${request.returnUrl}');
-      print('🔵 Cancel URL: ${request.cancelUrl}');
 
       try {
         final dto = await _paymentService.createPayment(jsonData);
@@ -83,6 +80,7 @@ class PaymentRepositoryImpl implements PaymentRepository {
     try {
       final response = await _paymentService.getSubscriptionStatus();
 
+      // Бэкенд теперь всегда возвращает успешный ответ с массивом (пустым или с данными)
       if (response.subscriptions.isEmpty) {
         return [];
       }
@@ -93,11 +91,6 @@ class PaymentRepositoryImpl implements PaymentRepository {
 
       return subscriptions;
     } on DioException catch (e) {
-      // Если подписка не найдена (404) или пользователь не авторизован (401) - возвращаем пустой список
-      if (e.response?.statusCode == 404 || e.response?.statusCode == 401) {
-        return [];
-      }
-
       // Если ошибка 400 (Bad Request) - вероятно проблема с сериализацией на бэкенде
       if (e.response?.statusCode == 400) {
         print('⚠️  Ошибка 400 при получении подписки. Возможно, проблема с сериализацией DateTime на бэкенде.');
@@ -131,6 +124,16 @@ class PaymentRepositoryImpl implements PaymentRepository {
 
       // Для других типов ошибок возвращаем пустой список (не показываем ошибку пользователю)
       return [];
+    }
+  }
+
+  @override
+  Future<List<SubscriptionTypeModel>> getSubscriptionTypes() async {
+    try {
+      final response = await _paymentService.getSubscriptionTypes();
+      return response.subscriptionTypes;
+    } catch (e) {
+      rethrow;
     }
   }
 

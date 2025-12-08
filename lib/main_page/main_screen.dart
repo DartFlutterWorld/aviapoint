@@ -81,6 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                 backgroundColorButton: Colors.white,
                 borderColorButton: Colors.white,
                 textColorButton: Color(0xFF0A6EFA),
+                pictureAlign: Alignment.center,
               ),
               SizedBox(width: 11.w),
               BannerMainWidget(
@@ -95,6 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                 backgroundColorButton: Color(0xFF0A6EFA),
                 borderColorButton: Color(0xFF0A6EFA),
                 textColorButton: Colors.white,
+                pictureAlign: Alignment.bottomRight,
               ),
             ],
           ),

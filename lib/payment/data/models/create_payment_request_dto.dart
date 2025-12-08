@@ -1,4 +1,3 @@
-import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'create_payment_request_dto.freezed.dart';
@@ -11,20 +10,11 @@ abstract class CreatePaymentRequestDto with _$CreatePaymentRequestDto {
     required String currency,
     required String description,
     @JsonKey(name: 'user_id') required int userId,
-    @JsonKey(name: 'subscription_type', fromJson: _subscriptionTypeFromJson, toJson: _subscriptionTypeToJson) required SubscriptionType subscriptionType,
+    @JsonKey(name: 'subscription_type_id') required int subscriptionTypeId,
     @JsonKey(name: 'period_days') required int periodDays,
     @JsonKey(name: 'customer_phone') String? customerPhone,
     @JsonKey(name: 'return_url') String? returnUrl,
-    @JsonKey(name: 'cancel_url') String? cancelUrl,
   }) = _CreatePaymentRequestDto;
 
   factory CreatePaymentRequestDto.fromJson(Map<String, dynamic> json) => _$CreatePaymentRequestDtoFromJson(json);
-}
-
-String _subscriptionTypeToJson(SubscriptionType type) {
-  return type.value;
-}
-
-SubscriptionType _subscriptionTypeFromJson(String value) {
-  return SubscriptionType.values.firstWhere((e) => e.value == value, orElse: () => SubscriptionType.yearly);
 }

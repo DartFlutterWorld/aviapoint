@@ -52,15 +52,32 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
     // Бэкенд может передать payment_id в query string для быстрой проверки статуса
     final uri = Uri.parse(url);
 
+    // Проверяем query параметры для определения статуса платежа
+    final paymentStatus = uri.queryParameters['payment'];
+    final paymentStatusParam = uri.queryParameters['payment_status'];
+
     // Проверяем, является ли URL одним из наших return/cancel URL
     // ЮKassa может передать параметры:
     // - payment_id - ID платежа (если бэкенд добавил в return_url)
     // - payment_status - статус (если бэкенд добавил)
-    final isReturnUrl = uri.path.contains('/payments/return') || uri.path.contains('/payments/success') || url.contains('payment_status=succeeded');
+    // - payment - наш параметр для определения статуса (success/cancel)
 
-    final isCancelUrl = uri.path.contains('/payments/cancel') || url.contains('payment_status=canceled');
+    // Сначала проверяем наш параметр payment
+    final isCancel = paymentStatus == 'cancel' || paymentStatusParam == 'canceled' || url.contains('payment_status=canceled');
+    final isSuccess = paymentStatus == 'success' || paymentStatusParam == 'succeeded' || url.contains('payment_status=succeeded');
 
-    if (isReturnUrl) {
+    // Также проверяем пути для обратной совместимости
+    final isReturnUrlPath = uri.path.contains('/payments/return') || uri.path.contains('/payments/success');
+    final isCancelUrlPath = uri.path.contains('/payments/cancel');
+
+    // Приоритет: сначала проверяем наш параметр payment, потом пути
+    if (isCancel || isCancelUrlPath) {
+      widget.onCancel?.call();
+      Navigator.of(context).pop(false);
+      return;
+    }
+
+    if (isSuccess || isReturnUrlPath) {
       // Если есть payment_id в query string, можно использовать его для проверки статуса
       final paymentId = uri.queryParameters['payment_id'];
       if (paymentId != null) {
@@ -69,9 +86,6 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
 
       widget.onSuccess?.call();
       Navigator.of(context).pop(true);
-    } else if (isCancelUrl) {
-      widget.onCancel?.call();
-      Navigator.of(context).pop(false);
     }
   }
 

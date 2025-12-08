@@ -13,6 +13,7 @@ class AppStyles {
   static TextStyle bold20s = const TextStyle(fontWeight: FontWeight.w700, fontSize: 20, height: 1);
   static TextStyle bold16s = const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, height: 1);
   static TextStyle bold15s = const TextStyle(fontWeight: FontWeight.w700, fontSize: 15, height: 1);
+  static TextStyle bold12s = const TextStyle(fontWeight: FontWeight.w700, fontSize: 12, height: 1);
   static TextStyle bold14s = const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, height: 1);
   static TextStyle extraBold = const TextStyle(fontWeight: FontWeight.w900, fontSize: 30, height: 1);
   static TextStyle regular15s = const TextStyle(fontWeight: FontWeight.w400, fontSize: 15, height: 1);

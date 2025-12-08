@@ -12,16 +12,18 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
+import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
+import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'profile_screen_stub.dart' if (dart.library.html) 'profile_screen_web.dart' as html;
+import 'package:aviapoint/profile_page/profile/presentation/widget/Subscribe_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/subscribe_widget_active.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -34,7 +36,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<SubscriptionDto> _subscriptions = [];
+  List<SubscriptionTypeModel> _subscriptionTypes = [];
   bool _isLoadingSubscription = false;
+  bool _isLoadingSubscriptionTypes = false;
   String? _subscriptionError;
 
   @override
@@ -43,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
       BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
       _loadSubscription();
+      _loadSubscriptionTypes();
     }
 
     // Обрабатываем параметры из URL (для редиректа после оплаты)
@@ -51,56 +56,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  void _handlePaymentRedirect() {
+  Future<void> _handlePaymentRedirect() async {
     if (!kIsWeb) {
       // На мобильных WebView сам обработает через _handleUrl в PaymentWebViewScreen
       return;
     }
 
     try {
-      // На веб получаем параметры из window.location.href
-      // Параметры могут быть в query string или в hash
-      String? paymentStatus;
+      // ЮKassa всегда возвращает на return_url, независимо от результата
+      // Проверяем наличие payment_id в localStorage и проверяем статус через API
+      final paymentId = await PaymentStorageHelper.getPaymentId();
 
-      if (kIsWeb) {
-        // Используем dart:html для получения полного URL
-        final fullUrl = html.getWindowLocationHref();
-        if (fullUrl != null) {
-          final uri = Uri.parse(fullUrl);
+      if (paymentId != null && paymentId.isNotEmpty) {
+        try {
+          // Проверяем статус платежа через API
+          final paymentRepository = getIt<PaymentRepository>();
+          final payment = await paymentRepository.getPaymentStatus(paymentId);
 
-          // Пробуем получить из query параметров
-          paymentStatus = uri.queryParameters['payment'];
+          // Очищаем payment_id из localStorage
+          await PaymentStorageHelper.clearPaymentId();
 
-          // Если не нашли в query, пробуем из hash (для SPA роутинга)
-          // Формат: #/profile?payment=success
-          if (paymentStatus == null && uri.fragment.isNotEmpty) {
-            // Извлекаем query параметры из hash
-            final hash = uri.fragment;
-            final questionMarkIndex = hash.indexOf('?');
-            if (questionMarkIndex != -1) {
-              final queryString = hash.substring(questionMarkIndex + 1);
-              final hashUri = Uri.parse('?$queryString');
-              paymentStatus = hashUri.queryParameters['payment'];
-            }
+          // Показываем сообщение в зависимости от реального статуса
+          if (payment.status == 'succeeded') {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен!'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
+            // Обновляем информацию о подписке
+            _loadSubscription();
+          } else if (payment.status == 'canceled') {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+          } else {
+            // pending или waiting_for_capture
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж обрабатывается...'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
           }
+        } catch (e) {
+          print('Ошибка при проверке статуса платежа: $e');
+          // Очищаем payment_id даже при ошибке
+          await PaymentStorageHelper.clearPaymentId();
+          // Показываем общее сообщение
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось проверить статус платежа'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         }
-      } else {
-        // На мобильных используем Uri.base
-        final uri = Uri.base;
-        paymentStatus = uri.queryParameters['payment'];
-      }
-
-      if (paymentStatus == 'success') {
-        // Показываем сообщение об успешной оплате
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен!'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
-        // Обновляем информацию о подписке
-        _loadSubscription();
-      } else if (paymentStatus == 'cancel') {
-        // Показываем сообщение об отмене
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
       }
     } catch (e) {
-      // Игнорируем ошибки парсинга URL
+      // Игнорируем ошибки
       print('Ошибка при обработке редиректа: $e');
     }
   }
@@ -117,15 +113,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       final paymentRepository = getIt<PaymentRepository>();
+      // Бэкенд теперь всегда возвращает успешный ответ с массивом (пустым или с данными)
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
       setState(() {
         _subscriptions = subscriptions;
         _isLoadingSubscription = false;
+        _subscriptionError = null;
       });
     } catch (e) {
-      // Не показываем технические ошибки пользователю
-      // Если это ошибка парсинга HTML (SPA роутинг), просто не показываем подписку
+      // Обрабатываем только реальные ошибки (сеть, парсинг и т.д.)
+      // PaymentRepositoryImpl в большинстве случаев возвращает пустой список вместо исключения
+      print('Ошибка при загрузке подписок: $e');
       final errorString = e.toString();
       if (errorString.contains('type \'String\' is not a subtype of type \'Map') || errorString.contains('<!DOCTYPE html>') || errorString.contains('DioException [unknown]')) {
         // Это ошибка SPA роутинга - просто не показываем подписку
@@ -141,6 +140,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _isLoadingSubscription = false;
         });
       }
+    }
+  }
+
+  Future<void> _loadSubscriptionTypes() async {
+    if (!Provider.of<AppState>(context, listen: false).isAuthenticated) {
+      print('⚠️ Пользователь не авторизован, пропускаем загрузку типов подписок');
+      return;
+    }
+
+    print('🔵 Начинаем загрузку типов подписок...');
+    setState(() {
+      _isLoadingSubscriptionTypes = true;
+    });
+
+    try {
+      final paymentRepository = getIt<PaymentRepository>();
+      final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
+      print('✅ Загружено типов подписок: ${subscriptionTypes.length}');
+
+      setState(() {
+        // Фильтруем только активные типы подписок
+        _subscriptionTypes = subscriptionTypes.where((type) => type.isActive).toList();
+        print('✅ Активных типов подписок: ${_subscriptionTypes.length}');
+        _isLoadingSubscriptionTypes = false;
+      });
+    } catch (e, stackTrace) {
+      print('❌ Ошибка при загрузке типов подписок: $e');
+      print('StackTrace: $stackTrace');
+      setState(() {
+        _subscriptionTypes = [];
+        _isLoadingSubscriptionTypes = false;
+      });
     }
   }
 
@@ -183,149 +214,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Provider.of<AppState>(context, listen: true).isAuthenticated
                             ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(height: 16),
-                                  Image.asset(Pictures.pilot, height: 63, width: 63),
-                                  BlocBuilder<ProfileBloc, ProfileState>(
-                                    builder: (context, state) => state.map(
-                                      success: (state) => Padding(
-                                        padding: const EdgeInsets.only(left: 12.0),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                                            Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                            Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                          ],
+                                  Row(
+                                    children: [
+                                      Image.asset(Pictures.pilot, height: 63, width: 63),
+
+                                      BlocBuilder<ProfileBloc, ProfileState>(
+                                        builder: (context, state) => state.map(
+                                          success: (state) => Padding(
+                                            padding: const EdgeInsets.only(left: 12.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                                              children: [
+                                                Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                                                Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                              ],
+                                            ),
+                                          ),
+                                          error: (state) => Center(
+                                            child: ErrorCustom(
+                                              textError: state.errorForUser,
+                                              repeat: () {
+                                                if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
+                                                  BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                          loading: (state) => LoadingCustom(),
+                                          initial: (state) => SizedBox(),
                                         ),
                                       ),
-                                      error: (state) => Center(
-                                        child: ErrorCustom(
-                                          textError: state.errorForUser,
-                                          repeat: () {
-                                            if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
-                                              BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      loading: (state) => LoadingCustom(),
-                                      initial: (state) => SizedBox(),
-                                    ),
+                                    ],
                                   ),
+
                                   SizedBox(height: 16),
                                   // Информация о подписке
                                   if (_isLoadingSubscription)
                                     const Padding(padding: EdgeInsets.symmetric(vertical: 16.0), child: LoadingCustom())
-                                  else if (_subscriptionError != null)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                                      child: Column(
-                                        children: [
-                                          Text('Ошибка загрузки подписки: $_subscriptionError', style: AppStyles.regular14s.copyWith(color: Colors.red)),
-                                          const SizedBox(height: 8),
-                                          ElevatedButton(onPressed: _loadSubscription, child: const Text('Повторить')),
-                                        ],
-                                      ),
-                                    )
                                   else if (_subscriptions.isNotEmpty)
                                     // Отображаем все подписки
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    Row(
+                                      // crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: _subscriptions.map((subscription) {
-                                        final isActive = subscription.isActive && subscription.endDate.isAfter(DateTime.now());
-                                        final isExpired = subscription.endDate.isBefore(DateTime.now());
+                                        // Находим соответствующий тип подписки по subscriptionTypeId
 
-                                        return Container(
-                                          margin: const EdgeInsets.only(bottom: 12),
-                                          padding: const EdgeInsets.all(16.0),
-                                          decoration: BoxDecoration(
-                                            color: isActive
-                                                ? Colors.green.withOpacity(0.1)
-                                                : isExpired
-                                                ? Colors.orange.withOpacity(0.1)
-                                                : Colors.grey.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(12),
-                                            border: Border.all(
-                                              color: isActive
-                                                  ? Colors.green.withOpacity(0.3)
-                                                  : isExpired
-                                                  ? Colors.orange.withOpacity(0.3)
-                                                  : Colors.grey.withOpacity(0.3),
-                                            ),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    isActive ? Icons.check_circle : Icons.info_outline,
-                                                    color: isActive
-                                                        ? Colors.green
-                                                        : isExpired
-                                                        ? Colors.orange
-                                                        : Colors.grey,
-                                                    size: 20,
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    isActive
-                                                        ? 'Подписка активна'
-                                                        : isExpired
-                                                        ? 'Подписка истекла'
-                                                        : 'Подписка неактивна',
-                                                    style: AppStyles.bold16s.copyWith(
-                                                      color: isActive
-                                                          ? Colors.green
-                                                          : isExpired
-                                                          ? Colors.orange
-                                                          : Colors.grey,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 12),
-                                              _buildSubscriptionInfoRow('Стоимость:', '${subscription.amount.toStringAsFixed(2)} ₽'),
-                                              const SizedBox(height: 8),
-                                              _buildSubscriptionInfoRow('Дата начала:', DateFormat('dd.MM.yyyy').format(subscription.startDate)),
-                                              const SizedBox(height: 8),
-                                              _buildSubscriptionInfoRow('Дата окончания:', DateFormat('dd.MM.yyyy').format(subscription.endDate)),
-                                              const SizedBox(height: 8),
-                                              _buildSubscriptionInfoRow('Период:', '${subscription.periodDays} дней'),
-                                            ],
-                                          ),
-                                        );
+                                        return SubscribeWidgetActive(subscription: subscription, fon: Pictures.podpiskaActiveFon);
                                       }).toList(),
                                     )
-                                  else
-                                    // Подписки нет
-                                    Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.subscriptions_outlined, color: Colors.grey, size: 20),
-                                              const SizedBox(width: 8),
-                                              Text('Подписка отсутствует', style: AppStyles.bold16s.copyWith(color: Colors.grey)),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            'У вас нет активной подписки. Для доступа к тренировочному режиму необходимо оформить подписку.',
-                                            style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                  else ...[
+                                    // Подписки нет - показываем виджет без подписки
+                                    if (_isLoadingSubscriptionTypes)
+                                      // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
+                                      const SizedBox(height: 225)
+                                    else if (_subscriptionTypes.isNotEmpty)
+                                      // Используем первый доступный тип подписки (приоритет yearly)
+                                      SubscribeWidget(
+                                        subscriptionType: _subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => _subscriptionTypes.first),
+                                        fon: Pictures.podpiskaNoActiveFon,
+                                      )
+                                    else
+                                      // Если типов подписок нет, показываем заглушку
+                                      const SizedBox(height: 225),
+                                  ],
                                   SizedBox(height: 16),
                                   // Кнопка очистки БД
                                   // ElevatedButton.icon(
@@ -416,16 +371,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSubscriptionInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-        Text(value, style: AppStyles.bold14s.copyWith(color: Color(0xFF2B373E))),
-      ],
     );
   }
 }

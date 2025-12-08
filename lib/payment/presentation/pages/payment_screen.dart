@@ -1,15 +1,14 @@
-import 'dart:async';
 import 'payment_screen_stub.dart' if (dart.library.html) 'payment_screen_web.dart' as html;
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
-import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_event.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/payment/presentation/pages/payment_webview_screen.dart';
 import 'package:aviapoint/payment/utils/payment_url_helper.dart';
+import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,20 +19,20 @@ class PaymentScreen extends StatefulWidget {
   final double amount;
   final String currency;
   final String description;
-  final SubscriptionType subscriptionType;
+  final int subscriptionTypeId;
   final int periodDays;
   final String? returnUrl;
-  final String? cancelUrl;
+  final String? returnRouteSource; // Источник, откуда пришел пользователь (например, 'profile' или 'testing_mode')
 
   const PaymentScreen({
     super.key,
     required this.amount,
     this.currency = 'RUB',
     required this.description,
-    this.subscriptionType = SubscriptionType.yearly,
+    required this.subscriptionTypeId,
     this.periodDays = 365,
     this.returnUrl,
-    this.cancelUrl,
+    this.returnRouteSource,
   });
 
   @override
@@ -42,99 +41,6 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   String? _paymentId;
-  bool _isCheckingStatus = false;
-  Timer? _pollingTimer;
-  DateTime? _pollingStartTime;
-  static const Duration _maxPollingDuration = Duration(minutes: 10); // Максимальное время polling
-
-  @override
-  void dispose() {
-    _pollingTimer?.cancel();
-    super.dispose();
-  }
-
-  Future<void> _checkPaymentStatusOnce(String paymentId) async {
-    if (!mounted) return;
-
-    final paymentBloc = context.read<PaymentBloc>();
-    if (paymentBloc.isClosed) return;
-
-    // Проверяем статус платежа один раз
-    paymentBloc.add(CheckPaymentStatusEvent(paymentId));
-  }
-
-  void _startPolling(String paymentId) {
-    if (_isCheckingStatus) return; // Уже проверяем статус
-
-    setState(() {
-      _isCheckingStatus = true;
-      _pollingStartTime = DateTime.now();
-    });
-
-    final paymentBloc = context.read<PaymentBloc>();
-
-    // Начинаем polling - проверяем статус каждые 3 секунды
-    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
-      // Проверяем, не истекло ли максимальное время
-      if (_pollingStartTime != null && DateTime.now().difference(_pollingStartTime!) > _maxPollingDuration) {
-        timer.cancel();
-        if (mounted) {
-          setState(() {
-            _isCheckingStatus = false;
-          });
-        }
-        return;
-      }
-
-      if (!mounted || paymentBloc.isClosed) {
-        timer.cancel();
-        if (mounted) {
-          setState(() {
-            _isCheckingStatus = false;
-          });
-        }
-        return;
-      }
-
-      // Проверяем статус платежа
-      await _checkPaymentStatusOnce(paymentId);
-    });
-  }
-
-  void _stopPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = null;
-    if (mounted) {
-      setState(() {
-        _isCheckingStatus = false;
-        _pollingStartTime = null;
-      });
-    }
-  }
-
-  Future<void> _handlePaymentSuccess(String paymentId) async {
-    // Начинаем polling для проверки статуса
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Проверяем статус платежа...'), backgroundColor: Colors.blue, duration: Duration(seconds: 2)));
-
-    // Начинаем периодическую проверку статуса
-    _startPolling(paymentId);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // На веб слушаем события фокуса окна для проверки статуса при возврате
-    if (kIsWeb) {
-      // Проверяем статус при возврате на страницу (когда окно получает фокус)
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Используем Visibility API для веб
-        // Это будет работать только если браузер поддерживает Page Visibility API
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,11 +70,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           currency: widget.currency,
           description: widget.description,
           userId: userId!,
-          subscriptionType: widget.subscriptionType,
+          subscriptionTypeId: widget.subscriptionTypeId,
           periodDays: widget.periodDays,
           customerPhone: customerPhone,
-          returnUrl: widget.returnUrl ?? PaymentUrlHelper.buildReturnUrl(),
-          cancelUrl: widget.cancelUrl ?? PaymentUrlHelper.buildCancelUrl(),
+          returnUrl: widget.returnUrl ?? PaymentUrlHelper.buildReturnUrl(source: widget.returnRouteSource),
         ),
       );
     } else if (userId == null) {
@@ -195,38 +100,47 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 });
               }
 
-              // Если платеж успешен (succeeded), переходим на профиль
+              // Если платеж успешен (succeeded), возвращаемся на исходный экран
               if (payment.isSucceeded && _paymentId != null && payment.id == _paymentId) {
-                // Останавливаем polling
-                _stopPolling();
-
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
                   // Закрываем экран оплаты
                   Navigator.of(context).pop();
-                  // Переходим на экран профиля
-                  if (context.mounted) {
-                    context.router.push(const ProfileNavigationRoute());
+                  // Возвращаемся на исходный экран, если указан
+                  if (context.mounted && widget.returnRouteSource != null) {
+                    if (widget.returnRouteSource == 'profile') {
+                      context.router.push(const ProfileNavigationRoute());
+                    } else if (widget.returnRouteSource == 'testing_mode') {
+                      context.router.push(const TestingModeRoute());
+                    }
+                    // Если returnRouteSource не распознан, просто закрываем экран (pop уже вызван выше)
                   }
                 }
                 return;
               }
 
-              // Если платеж отменен, останавливаем polling
+              // Если платеж отменен (canceled), показываем сообщение
               if (payment.isCanceled && _paymentId != null && payment.id == _paymentId) {
-                _stopPolling();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж отменен'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+                }
+                return;
               }
 
               if (payment.paymentUrl != null) {
                 if (kIsWeb) {
                   // На веб открываем платежную форму в той же вкладке
-                  // После оплаты ЮKassa редиректит на /payments/return, который редиректит на профиль
+                  // После оплаты ЮKassa редиректит на return_url
+                  // Важно: ЮKassa всегда возвращает на return_url, независимо от результата
+                  // Статус платежа нужно проверять через API после возврата
                   try {
-                    // Сохраняем paymentId для проверки статуса
+                    // Сохраняем paymentId для проверки статуса после возврата
                     if (_paymentId == null && payment.id.isNotEmpty) {
                       setState(() {
                         _paymentId = payment.id;
                       });
+                      // Сохраняем payment_id в localStorage перед редиректом
+                      await PaymentStorageHelper.savePaymentId(payment.id);
                     }
 
                     // Используем прямой редирект через window.location для веб
@@ -256,11 +170,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                   );
 
-                  // Если пользователь вернулся из WebView с успехом, проверяем статус платежа
+                  // Если пользователь вернулся из WebView, проверяем статус платежа один раз
                   if (result == true && context.mounted && _paymentId != null) {
-                    await _handlePaymentSuccess(_paymentId!);
+                    try {
+                      // Проверяем статус платежа через API
+                      final paymentBloc = context.read<PaymentBloc>();
+                      if (!paymentBloc.isClosed) {
+                        paymentBloc.add(CheckPaymentStatusEvent(_paymentId!));
+                      }
+                    } catch (e) {
+                      print('Ошибка при проверке статуса платежа: $e');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text('Не удалось проверить статус платежа'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+                      }
+                    }
                   } else if (result == false && context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж отменен'), backgroundColor: Colors.orange));
+                    // Пользователь отменил оплату в WebView
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж отменен'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
                   }
                 }
               }
@@ -296,11 +224,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   currency: widget.currency,
                                   description: widget.description,
                                   userId: profile.id,
-                                  subscriptionType: widget.subscriptionType,
+                                  subscriptionTypeId: widget.subscriptionTypeId,
                                   periodDays: widget.periodDays,
                                   customerPhone: profile.phone,
                                   returnUrl: widget.returnUrl,
-                                  cancelUrl: widget.cancelUrl,
                                 ),
                               );
                             },

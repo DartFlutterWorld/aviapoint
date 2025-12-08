@@ -72,4 +72,8 @@ class Pictures {
   static const String whatsapp = 'assets/svg/whatsapp.svg';
   static const String telegramm = 'assets/svg/telegramm.svg';
   static const String zapp = 'assets/png/zapp.png';
+  static const String lock = 'assets/png/lock.png';
+  static const String unlock = 'assets/png/unlock.png';
+  static const String podpiskaActiveFon = 'assets/png/podpiska_active_fon.png';
+  static const String podpiskaNoActiveFon = 'assets/png/podpiska_no_active_fon.png';
 }

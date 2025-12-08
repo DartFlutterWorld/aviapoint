@@ -19,6 +19,7 @@ class BannerMainWidget extends StatelessWidget {
   final Color backgroundColorButton;
   final Color borderColorButton;
   final Color textColorButton;
+  final AlignmentGeometry pictureAlign;
 
   const BannerMainWidget({
     super.key,
@@ -33,6 +34,7 @@ class BannerMainWidget extends StatelessWidget {
     required this.textColorButton,
     required this.titleColor,
     required this.descriptionColor,
+    required this.pictureAlign,
   });
 
   @override
@@ -48,7 +50,7 @@ class BannerMainWidget extends StatelessWidget {
           fit: StackFit.loose,
           children: [
             Align(
-              alignment: Alignment.bottomCenter,
+              alignment: pictureAlign,
               child: Image.asset(picture, height: 170.h, alignment: Alignment.bottomRight),
             ),
             Padding(

@@ -125,10 +125,10 @@ return reset(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( double amount,  String currency,  String description,  int userId,  SubscriptionType subscriptionType,  int periodDays,  String? customerPhone,  String? returnUrl,  String? cancelUrl)?  createPayment,TResult Function( String paymentId)?  checkPaymentStatus,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( double amount,  String currency,  String description,  int userId,  int subscriptionTypeId,  int periodDays,  String? customerPhone,  String? returnUrl)?  createPayment,TResult Function( String paymentId)?  checkPaymentStatus,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case CreatePaymentEvent() when createPayment != null:
-return createPayment(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionType,_that.periodDays,_that.customerPhone,_that.returnUrl,_that.cancelUrl);case CheckPaymentStatusEvent() when checkPaymentStatus != null:
+return createPayment(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionTypeId,_that.periodDays,_that.customerPhone,_that.returnUrl);case CheckPaymentStatusEvent() when checkPaymentStatus != null:
 return checkPaymentStatus(_that.paymentId);case ResetPaymentEvent() when reset != null:
 return reset();case _:
   return orElse();
@@ -148,10 +148,10 @@ return reset();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( double amount,  String currency,  String description,  int userId,  SubscriptionType subscriptionType,  int periodDays,  String? customerPhone,  String? returnUrl,  String? cancelUrl)  createPayment,required TResult Function( String paymentId)  checkPaymentStatus,required TResult Function()  reset,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( double amount,  String currency,  String description,  int userId,  int subscriptionTypeId,  int periodDays,  String? customerPhone,  String? returnUrl)  createPayment,required TResult Function( String paymentId)  checkPaymentStatus,required TResult Function()  reset,}) {final _that = this;
 switch (_that) {
 case CreatePaymentEvent():
-return createPayment(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionType,_that.periodDays,_that.customerPhone,_that.returnUrl,_that.cancelUrl);case CheckPaymentStatusEvent():
+return createPayment(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionTypeId,_that.periodDays,_that.customerPhone,_that.returnUrl);case CheckPaymentStatusEvent():
 return checkPaymentStatus(_that.paymentId);case ResetPaymentEvent():
 return reset();case _:
   throw StateError('Unexpected subclass');
@@ -170,10 +170,10 @@ return reset();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( double amount,  String currency,  String description,  int userId,  SubscriptionType subscriptionType,  int periodDays,  String? customerPhone,  String? returnUrl,  String? cancelUrl)?  createPayment,TResult? Function( String paymentId)?  checkPaymentStatus,TResult? Function()?  reset,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( double amount,  String currency,  String description,  int userId,  int subscriptionTypeId,  int periodDays,  String? customerPhone,  String? returnUrl)?  createPayment,TResult? Function( String paymentId)?  checkPaymentStatus,TResult? Function()?  reset,}) {final _that = this;
 switch (_that) {
 case CreatePaymentEvent() when createPayment != null:
-return createPayment(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionType,_that.periodDays,_that.customerPhone,_that.returnUrl,_that.cancelUrl);case CheckPaymentStatusEvent() when checkPaymentStatus != null:
+return createPayment(_that.amount,_that.currency,_that.description,_that.userId,_that.subscriptionTypeId,_that.periodDays,_that.customerPhone,_that.returnUrl);case CheckPaymentStatusEvent() when checkPaymentStatus != null:
 return checkPaymentStatus(_that.paymentId);case ResetPaymentEvent() when reset != null:
 return reset();case _:
   return null;
@@ -187,18 +187,17 @@ return reset();case _:
 
 
 class CreatePaymentEvent implements PaymentEvent {
-  const CreatePaymentEvent({required this.amount, required this.currency, required this.description, required this.userId, required this.subscriptionType, required this.periodDays, this.customerPhone, this.returnUrl, this.cancelUrl});
+  const CreatePaymentEvent({required this.amount, required this.currency, required this.description, required this.userId, required this.subscriptionTypeId, required this.periodDays, this.customerPhone, this.returnUrl});
   
 
  final  double amount;
  final  String currency;
  final  String description;
  final  int userId;
- final  SubscriptionType subscriptionType;
+ final  int subscriptionTypeId;
  final  int periodDays;
  final  String? customerPhone;
  final  String? returnUrl;
- final  String? cancelUrl;
 
 /// Create a copy of PaymentEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -210,16 +209,16 @@ $CreatePaymentEventCopyWith<CreatePaymentEvent> get copyWith => _$CreatePaymentE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreatePaymentEvent&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.description, description) || other.description == description)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.subscriptionType, subscriptionType) || other.subscriptionType == subscriptionType)&&(identical(other.periodDays, periodDays) || other.periodDays == periodDays)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.returnUrl, returnUrl) || other.returnUrl == returnUrl)&&(identical(other.cancelUrl, cancelUrl) || other.cancelUrl == cancelUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreatePaymentEvent&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.description, description) || other.description == description)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.subscriptionTypeId, subscriptionTypeId) || other.subscriptionTypeId == subscriptionTypeId)&&(identical(other.periodDays, periodDays) || other.periodDays == periodDays)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.returnUrl, returnUrl) || other.returnUrl == returnUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,amount,currency,description,userId,subscriptionType,periodDays,customerPhone,returnUrl,cancelUrl);
+int get hashCode => Object.hash(runtimeType,amount,currency,description,userId,subscriptionTypeId,periodDays,customerPhone,returnUrl);
 
 @override
 String toString() {
-  return 'PaymentEvent.createPayment(amount: $amount, currency: $currency, description: $description, userId: $userId, subscriptionType: $subscriptionType, periodDays: $periodDays, customerPhone: $customerPhone, returnUrl: $returnUrl, cancelUrl: $cancelUrl)';
+  return 'PaymentEvent.createPayment(amount: $amount, currency: $currency, description: $description, userId: $userId, subscriptionTypeId: $subscriptionTypeId, periodDays: $periodDays, customerPhone: $customerPhone, returnUrl: $returnUrl)';
 }
 
 
@@ -230,7 +229,7 @@ abstract mixin class $CreatePaymentEventCopyWith<$Res> implements $PaymentEventC
   factory $CreatePaymentEventCopyWith(CreatePaymentEvent value, $Res Function(CreatePaymentEvent) _then) = _$CreatePaymentEventCopyWithImpl;
 @useResult
 $Res call({
- double amount, String currency, String description, int userId, SubscriptionType subscriptionType, int periodDays, String? customerPhone, String? returnUrl, String? cancelUrl
+ double amount, String currency, String description, int userId, int subscriptionTypeId, int periodDays, String? customerPhone, String? returnUrl
 });
 
 
@@ -247,17 +246,16 @@ class _$CreatePaymentEventCopyWithImpl<$Res>
 
 /// Create a copy of PaymentEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? amount = null,Object? currency = null,Object? description = null,Object? userId = null,Object? subscriptionType = null,Object? periodDays = null,Object? customerPhone = freezed,Object? returnUrl = freezed,Object? cancelUrl = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? amount = null,Object? currency = null,Object? description = null,Object? userId = null,Object? subscriptionTypeId = null,Object? periodDays = null,Object? customerPhone = freezed,Object? returnUrl = freezed,}) {
   return _then(CreatePaymentEvent(
 amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as int,subscriptionType: null == subscriptionType ? _self.subscriptionType : subscriptionType // ignore: cast_nullable_to_non_nullable
-as SubscriptionType,periodDays: null == periodDays ? _self.periodDays : periodDays // ignore: cast_nullable_to_non_nullable
+as int,subscriptionTypeId: null == subscriptionTypeId ? _self.subscriptionTypeId : subscriptionTypeId // ignore: cast_nullable_to_non_nullable
+as int,periodDays: null == periodDays ? _self.periodDays : periodDays // ignore: cast_nullable_to_non_nullable
 as int,customerPhone: freezed == customerPhone ? _self.customerPhone : customerPhone // ignore: cast_nullable_to_non_nullable
 as String?,returnUrl: freezed == returnUrl ? _self.returnUrl : returnUrl // ignore: cast_nullable_to_non_nullable
-as String?,cancelUrl: freezed == cancelUrl ? _self.cancelUrl : cancelUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

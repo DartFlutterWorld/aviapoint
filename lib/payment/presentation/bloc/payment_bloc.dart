@@ -20,11 +20,10 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         currency: event.currency,
         description: event.description,
         userId: event.userId,
-        subscriptionType: event.subscriptionType,
+        subscriptionTypeId: event.subscriptionTypeId,
         periodDays: event.periodDays,
         customerPhone: event.customerPhone,
         returnUrl: event.returnUrl,
-        cancelUrl: event.cancelUrl,
       );
       emit(PaymentState.success(payment));
     } catch (e) {

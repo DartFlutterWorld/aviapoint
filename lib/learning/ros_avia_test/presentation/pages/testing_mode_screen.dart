@@ -11,8 +11,8 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mode_element.dart';
-import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
+import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/presentation/pages/payment_screen.dart';
 import 'package:aviapoint/payment/utils/payment_url_helper.dart';
 import 'package:flutter/foundation.dart';
@@ -32,10 +32,14 @@ class TestingModeScreen extends StatefulWidget {
 
 class _TestingModeScreenState extends State<TestingModeScreen> {
   bool _hasActiveSubscription = false;
+  bool? _previousAuthStatus;
 
   @override
   void initState() {
     super.initState();
+    // Инициализируем предыдущий статус авторизации
+    final appState = Provider.of<AppState>(context, listen: false);
+    _previousAuthStatus = appState.isAuthenticated;
     _checkSubscription();
 
     // Обрабатываем параметры из URL (для редиректа после оплаты)
@@ -44,43 +48,47 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     });
   }
 
-  void _handlePaymentRedirect() {
+  Future<void> _handlePaymentRedirect() async {
     if (!kIsWeb) {
       // На мобильных WebView сам обработает через _handleUrl в PaymentWebViewScreen
       return;
     }
 
     try {
-      // На веб получаем параметры из window.location
-      // При path-based routing параметры находятся в query string
-      String? paymentStatus;
+      // ЮKassa всегда возвращает на return_url, независимо от результата
+      // Проверяем наличие payment_id в localStorage и проверяем статус через API
+      final paymentId = await PaymentStorageHelper.getPaymentId();
 
-      if (kIsWeb) {
-        // Используем dart:html для получения URL
-        final href = html.getWindowLocationHref();
-        if (href != null) {
-          final uri = Uri.parse(href);
-          // При path-based routing параметры в query string
-          paymentStatus = uri.queryParameters['payment'];
+      if (paymentId != null && paymentId.isNotEmpty) {
+        try {
+          // Проверяем статус платежа через API
+          final paymentRepository = getIt<PaymentRepository>();
+          final payment = await paymentRepository.getPaymentStatus(paymentId);
+
+          // Очищаем payment_id из localStorage
+          await PaymentStorageHelper.clearPaymentId();
+
+          // Показываем сообщение в зависимости от реального статуса
+          if (payment.status == 'succeeded') {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен! Подписка активирована.'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
+            // Обновляем информацию о подписке
+            _checkSubscription();
+          } else if (payment.status == 'canceled') {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+          } else {
+            // pending или waiting_for_capture
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж обрабатывается...'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+          }
+        } catch (e) {
+          print('Ошибка при проверке статуса платежа: $e');
+          // Очищаем payment_id даже при ошибке
+          await PaymentStorageHelper.clearPaymentId();
+          // Показываем общее сообщение
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось проверить статус платежа'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         }
-      } else {
-        // На мобильных используем Uri.base
-        final uri = Uri.base;
-        paymentStatus = uri.queryParameters['payment'];
       }
-
-      if (paymentStatus == 'success') {
-        // Показываем сообщение об успешной оплате
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен! Подписка активирована.'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
-        // Обновляем информацию о подписке
-        _checkSubscription();
-      } else if (paymentStatus == 'cancel') {
-        // Показываем сообщение об отмене
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
-      }
-      // Если paymentStatus == 'pending' или null - не показываем сообщение
     } catch (e) {
-      // Игнорируем ошибки парсинга URL
+      // Игнорируем ошибки
       print('Ошибка при обработке редиректа: $e');
     }
   }
@@ -214,16 +222,23 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
       if (!context.mounted) return;
 
+      // Загружаем типы подписок и находим yearly
+      final paymentRepository = getIt<PaymentRepository>();
+      final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
+      final yearlyType = subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => throw Exception('Годовая подписка не найдена'));
+
+      if (!context.mounted) return;
+
       await Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<dynamic>(
           builder: (_) => PaymentScreen(
-            amount: 1000.0,
+            amount: yearlyType.price.toDouble(),
             currency: 'RUB',
-            description: 'Оплата подписки на 1 год - РосАвиаТест - тренировочный режим',
-            subscriptionType: SubscriptionType.yearly,
-            periodDays: SubscriptionType.yearly.periodDays,
-            returnUrl: PaymentUrlHelper.buildReturnUrl(),
-            cancelUrl: PaymentUrlHelper.buildCancelUrl(),
+            description: '${yearlyType.name}, ${yearlyType.description} на ${yearlyType.periodDays} дней',
+            subscriptionTypeId: yearlyType.id,
+            periodDays: yearlyType.periodDays,
+            returnUrl: PaymentUrlHelper.buildReturnUrl(source: 'testing_mode'),
+            returnRouteSource: 'testing_mode',
           ),
         ),
       );
@@ -231,24 +246,8 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     } catch (e, stackTrace) {
       print('❌ Ошибка при открытии PaymentScreen: $e');
       print('StackTrace: $stackTrace');
-
-      // Пробуем альтернативный способ через router
-      try {
-        if (context.mounted) {
-          await context.router.push(
-            PaymentRoute(
-              amount: 1000.0,
-              currency: 'RUB',
-              description: 'Оплата подписки на 1 год - РосАвиаТест - тренировочный режим',
-              subscriptionType: SubscriptionType.yearly,
-              periodDays: SubscriptionType.yearly.periodDays,
-              returnUrl: PaymentUrlHelper.buildReturnUrl(),
-              cancelUrl: PaymentUrlHelper.buildCancelUrl(),
-            ),
-          );
-        }
-      } catch (e2) {
-        print('❌ Ошибка при открытии PaymentScreen через router: $e2');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
       }
     }
   }
@@ -282,42 +281,58 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
     return BlocProvider.value(
       value: getIt<RosAviaTestCubit>(),
-      child: Scaffold(
-        appBar: CustomAppBar(title: 'Выберите режим тестирования', withBack: true),
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Consumer<AppState>(
+        builder: (context, appState, child) {
+          // Слушаем изменения isAuthenticated и обновляем подписку только при изменении
+          final currentAuthStatus = appState.isAuthenticated;
+          if (_previousAuthStatus != currentAuthStatus) {
+            _previousAuthStatus = currentAuthStatus;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                _checkSubscription();
+              }
+            });
+          }
+          return child!;
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(title: 'Выберите режим тестирования', withBack: true),
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 16.h),
-                TestingModeElement(
-                  title: trainingModeTitle,
-                  subTitle: 'Правильные ответы появляются сразу',
-                  onTap: () => _handleTrainingModePayment(context),
-                  image: Pictures.zamok,
-                  bg: Pictures.traningTestBgPng,
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',
-                  style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
-                ),
-                SizedBox(height: 16.h),
-                TestingModeElement(
-                  title: 'Стандартный\nтест',
-                  subTitle: 'Результаты появятся вконце теста',
-                  onTap: () => _handleModeSelection(context, TestMode.standart),
-                  image: Pictures.mozgi,
-                  bg: Pictures.testMySelfBgPng,
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'Стандартный режим позволит вам бесплатно готовиться к экзамену. Статистика по правильно отвечнным вопросам появится вконце всех вопросов',
-                  style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
-                ),
-              ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 16.h),
+                  TestingModeElement(
+                    title: trainingModeTitle,
+                    subTitle: 'Правильные ответы появляются сразу',
+                    onTap: () => _handleTrainingModePayment(context),
+                    image: Pictures.zamok,
+                    bg: Pictures.traningTestBgPng,
+                    isLock: !_hasActiveSubscription, // Показываем анимацию, если нет активной подписки
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',
+                    style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
+                  ),
+                  SizedBox(height: 16.h),
+                  TestingModeElement(
+                    title: 'Стандартный\nтест',
+                    subTitle: 'Результаты появятся вконце теста',
+                    onTap: () => _handleModeSelection(context, TestMode.standart),
+                    image: Pictures.mozgi,
+                    bg: Pictures.testMySelfBgPng,
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'Стандартный режим позволит вам бесплатно готовиться к экзамену. Статистика по правильно отвечнным вопросам появится вконце всех вопросов',
+                    style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
