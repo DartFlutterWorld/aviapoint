@@ -18,7 +18,7 @@ class PaymentUrlHelper {
       if (source == 'profile') {
         return '$origin/profile';
       } else if (source == 'testing_mode') {
-        return '$origin/testing_mode';
+        return '$origin/learning/testing_mode';
       }
       // По умолчанию возвращаем на профиль
       return '$origin/profile';

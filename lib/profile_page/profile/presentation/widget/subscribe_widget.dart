@@ -46,7 +46,6 @@ class SubscribeWidget extends StatelessWidget {
             currency: 'RUB',
             description: 'Оплата подписки - ${subscriptionType.name} - РосАвиаТест - тренировочный режим',
             subscriptionTypeId: subscriptionType.id,
-            periodDays: subscriptionType.periodDays,
             returnUrl: PaymentUrlHelper.buildReturnUrl(source: 'profile'),
             returnRouteSource: 'profile',
           ),

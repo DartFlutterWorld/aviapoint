@@ -20,20 +20,10 @@ class PaymentScreen extends StatefulWidget {
   final String currency;
   final String description;
   final int subscriptionTypeId;
-  final int periodDays;
   final String? returnUrl;
   final String? returnRouteSource; // Источник, откуда пришел пользователь (например, 'profile' или 'testing_mode')
 
-  const PaymentScreen({
-    super.key,
-    required this.amount,
-    this.currency = 'RUB',
-    required this.description,
-    required this.subscriptionTypeId,
-    this.periodDays = 365,
-    this.returnUrl,
-    this.returnRouteSource,
-  });
+  const PaymentScreen({super.key, required this.amount, this.currency = 'RUB', required this.description, required this.subscriptionTypeId, this.returnUrl, this.returnRouteSource});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -71,7 +61,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
           description: widget.description,
           userId: userId!,
           subscriptionTypeId: widget.subscriptionTypeId,
-          periodDays: widget.periodDays,
           customerPhone: customerPhone,
           returnUrl: widget.returnUrl ?? PaymentUrlHelper.buildReturnUrl(source: widget.returnRouteSource),
         ),
@@ -225,7 +214,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   description: widget.description,
                                   userId: profile.id,
                                   subscriptionTypeId: widget.subscriptionTypeId,
-                                  periodDays: widget.periodDays,
                                   customerPhone: profile.phone,
                                   returnUrl: widget.returnUrl,
                                 ),

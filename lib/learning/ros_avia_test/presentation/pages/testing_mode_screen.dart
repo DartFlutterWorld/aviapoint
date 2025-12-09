@@ -236,7 +236,6 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
             currency: 'RUB',
             description: '${yearlyType.name}, ${yearlyType.description} на ${yearlyType.periodDays} дней',
             subscriptionTypeId: yearlyType.id,
-            periodDays: yearlyType.periodDays,
             returnUrl: PaymentUrlHelper.buildReturnUrl(source: 'testing_mode'),
             returnRouteSource: 'testing_mode',
           ),

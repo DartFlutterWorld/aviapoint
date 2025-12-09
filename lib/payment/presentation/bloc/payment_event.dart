@@ -11,7 +11,6 @@ class PaymentEvent with _$PaymentEvent {
     required String description,
     required int userId,
     required int subscriptionTypeId,
-    required int periodDays,
     String? customerPhone,
     String? returnUrl,
   }) = CreatePaymentEvent;

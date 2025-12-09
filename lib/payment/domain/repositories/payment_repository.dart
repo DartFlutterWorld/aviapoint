@@ -10,7 +10,6 @@ abstract class PaymentRepository {
     required String description,
     required int userId,
     required int subscriptionTypeId,
-    required int periodDays,
     String? customerPhone,
     String? returnUrl,
   });

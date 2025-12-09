@@ -1266,7 +1266,6 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
     String currency = 'RUB',
     required String description,
     required int subscriptionTypeId,
-    int periodDays = 365,
     String? returnUrl,
     String? returnRouteSource,
     List<PageRouteInfo>? children,
@@ -1278,7 +1277,6 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
            currency: currency,
            description: description,
            subscriptionTypeId: subscriptionTypeId,
-           periodDays: periodDays,
            returnUrl: returnUrl,
            returnRouteSource: returnRouteSource,
          ),
@@ -1297,7 +1295,6 @@ class PaymentRoute extends PageRouteInfo<PaymentRouteArgs> {
         currency: args.currency,
         description: args.description,
         subscriptionTypeId: args.subscriptionTypeId,
-        periodDays: args.periodDays,
         returnUrl: args.returnUrl,
         returnRouteSource: args.returnRouteSource,
       );
@@ -1312,7 +1309,6 @@ class PaymentRouteArgs {
     this.currency = 'RUB',
     required this.description,
     required this.subscriptionTypeId,
-    this.periodDays = 365,
     this.returnUrl,
     this.returnRouteSource,
   });
@@ -1327,15 +1323,13 @@ class PaymentRouteArgs {
 
   final int subscriptionTypeId;
 
-  final int periodDays;
-
   final String? returnUrl;
 
   final String? returnRouteSource;
 
   @override
   String toString() {
-    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, subscriptionTypeId: $subscriptionTypeId, periodDays: $periodDays, returnUrl: $returnUrl, returnRouteSource: $returnRouteSource}';
+    return 'PaymentRouteArgs{key: $key, amount: $amount, currency: $currency, description: $description, subscriptionTypeId: $subscriptionTypeId, returnUrl: $returnUrl, returnRouteSource: $returnRouteSource}';
   }
 
   @override
@@ -1347,7 +1341,6 @@ class PaymentRouteArgs {
         currency == other.currency &&
         description == other.description &&
         subscriptionTypeId == other.subscriptionTypeId &&
-        periodDays == other.periodDays &&
         returnUrl == other.returnUrl &&
         returnRouteSource == other.returnRouteSource;
   }
@@ -1359,7 +1352,6 @@ class PaymentRouteArgs {
       currency.hashCode ^
       description.hashCode ^
       subscriptionTypeId.hashCode ^
-      periodDays.hashCode ^
       returnUrl.hashCode ^
       returnRouteSource.hashCode;
 }

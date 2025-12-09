@@ -14,7 +14,6 @@ _CreatePaymentRequestDto _$CreatePaymentRequestDtoFromJson(
   description: json['description'] as String,
   userId: (json['user_id'] as num).toInt(),
   subscriptionTypeId: (json['subscription_type_id'] as num).toInt(),
-  periodDays: (json['period_days'] as num).toInt(),
   customerPhone: json['customer_phone'] as String?,
   returnUrl: json['return_url'] as String?,
 );
@@ -27,7 +26,6 @@ Map<String, dynamic> _$CreatePaymentRequestDtoToJson(
   'description': instance.description,
   'user_id': instance.userId,
   'subscription_type_id': instance.subscriptionTypeId,
-  'period_days': instance.periodDays,
   'customer_phone': instance.customerPhone,
   'return_url': instance.returnUrl,
 };

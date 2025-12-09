@@ -21,7 +21,6 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         description: event.description,
         userId: event.userId,
         subscriptionTypeId: event.subscriptionTypeId,
-        periodDays: event.periodDays,
         customerPhone: event.customerPhone,
         returnUrl: event.returnUrl,
       );

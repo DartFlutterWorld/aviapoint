@@ -11,7 +11,6 @@ abstract class CreatePaymentRequestDto with _$CreatePaymentRequestDto {
     required String description,
     @JsonKey(name: 'user_id') required int userId,
     @JsonKey(name: 'subscription_type_id') required int subscriptionTypeId,
-    @JsonKey(name: 'period_days') required int periodDays,
     @JsonKey(name: 'customer_phone') String? customerPhone,
     @JsonKey(name: 'return_url') String? returnUrl,
   }) = _CreatePaymentRequestDto;
