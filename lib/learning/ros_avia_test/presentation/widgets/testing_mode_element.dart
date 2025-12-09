@@ -194,7 +194,7 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
         children: [
           // Основной контейнер с фоном и контентом
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
             decoration: BoxDecoration(
               boxShadow: [BoxShadow(color: Color(0xff045EC5).withOpacity(0.08), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
               borderRadius: BorderRadius.circular(12),

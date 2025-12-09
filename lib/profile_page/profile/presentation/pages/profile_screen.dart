@@ -15,6 +15,7 @@ import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
+import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
@@ -73,26 +74,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
           final paymentRepository = getIt<PaymentRepository>();
           final payment = await paymentRepository.getPaymentStatus(paymentId);
 
+          print('🔵 Статус платежа от API (веб): ${payment.status}, paid: ${payment.paid}');
+
           // Очищаем payment_id из localStorage
           await PaymentStorageHelper.clearPaymentId();
 
-          // Показываем сообщение в зависимости от реального статуса
+          // Логируем статус платежа (уведомления убраны, чтобы не вводить пользователя в заблуждение)
           if (payment.status == 'succeeded') {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен!'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
+            print('✅ Платеж успешно выполнен (веб)');
             // Обновляем информацию о подписке
             _loadSubscription();
+            // Навигируем на исходный экран используя ту же логику, что и при отмене
+            PaymentHelper.navigateToSource(context, 'profile');
           } else if (payment.status == 'canceled') {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+            print('⚠️ Платеж отменен (веб)');
+          } else if (payment.status == 'pending' || payment.status == 'waiting_for_capture') {
+            print('⏳ Платеж имеет статус ${payment.status} (веб)');
           } else {
-            // pending или waiting_for_capture
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж обрабатывается...'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+            print('⚠️ Неизвестный статус платежа: ${payment.status} (веб)');
           }
         } catch (e) {
           print('Ошибка при проверке статуса платежа: $e');
           // Очищаем payment_id даже при ошибке
           await PaymentStorageHelper.clearPaymentId();
-          // Показываем общее сообщение
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось проверить статус платежа'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         }
       }
     } catch (e) {

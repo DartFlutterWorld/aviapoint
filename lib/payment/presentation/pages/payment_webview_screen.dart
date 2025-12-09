@@ -5,11 +5,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 @RoutePage()
 class PaymentWebViewScreen extends StatefulWidget {
   final String paymentUrl;
+  final String? returnRouteSource;
+  final String? paymentId;
   final VoidCallback? onSuccess;
   final VoidCallback? onCancel;
   final VoidCallback? onFailure;
 
-  const PaymentWebViewScreen({super.key, required this.paymentUrl, this.onSuccess, this.onCancel, this.onFailure});
+  const PaymentWebViewScreen({super.key, required this.paymentUrl, this.returnRouteSource, this.paymentId, this.onSuccess, this.onCancel, this.onFailure});
 
   @override
   State<PaymentWebViewScreen> createState() => _PaymentWebViewScreenState();
@@ -22,70 +24,58 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
   @override
   void initState() {
     super.initState();
+    print('🔵 PaymentWebViewScreen initState: paymentUrl=${widget.paymentUrl}');
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
+            print('🔵 WebView onPageStarted: $url');
             setState(() {
               _isLoading = true;
             });
             _handleUrl(url);
           },
           onPageFinished: (String url) {
+            print('🔵 WebView onPageFinished: $url');
             setState(() {
               _isLoading = false;
             });
             _handleUrl(url);
           },
           onWebResourceError: (WebResourceError error) {
+            print('❌ WebView error: ${error.description}, code: ${error.errorCode}');
             widget.onFailure?.call();
           },
         ),
-      )
-      ..loadRequest(Uri.parse(widget.paymentUrl));
+      );
+
+    // Загружаем URL
+    print('🔵 Загружаем URL в WebView: ${widget.paymentUrl}');
+    _controller.loadRequest(Uri.parse(widget.paymentUrl));
   }
 
   void _handleUrl(String url) {
     // Обработка возврата из платежной системы
-    // ЮKassa перенаправляет на returnUrl или cancelUrl (HTTP URL на бэкенде)
-    // Бэкенд может передать payment_id в query string для быстрой проверки статуса
+    // ЮKassa всегда возвращает на return_url, независимо от результата
+    // Статус платежа проверяется через API, а не через URL параметры
     final uri = Uri.parse(url);
+    print('🔵 WebView URL изменен: $url');
 
-    // Проверяем query параметры для определения статуса платежа
-    final paymentStatus = uri.queryParameters['payment'];
-    final paymentStatusParam = uri.queryParameters['payment_status'];
+    // Проверяем, является ли URL нашим return_url
+    // Для мобильных return_url = https://avia-point.com/payments/return?source=...
+    final isReturnUrl = uri.path.contains('/payments/return');
 
-    // Проверяем, является ли URL одним из наших return/cancel URL
-    // ЮKassa может передать параметры:
-    // - payment_id - ID платежа (если бэкенд добавил в return_url)
-    // - payment_status - статус (если бэкенд добавил)
-    // - payment - наш параметр для определения статуса (success/cancel)
-
-    // Сначала проверяем наш параметр payment
-    final isCancel = paymentStatus == 'cancel' || paymentStatusParam == 'canceled' || url.contains('payment_status=canceled');
-    final isSuccess = paymentStatus == 'success' || paymentStatusParam == 'succeeded' || url.contains('payment_status=succeeded');
-
-    // Также проверяем пути для обратной совместимости
-    final isReturnUrlPath = uri.path.contains('/payments/return') || uri.path.contains('/payments/success');
-    final isCancelUrlPath = uri.path.contains('/payments/cancel');
-
-    // Приоритет: сначала проверяем наш параметр payment, потом пути
-    if (isCancel || isCancelUrlPath) {
-      widget.onCancel?.call();
-      Navigator.of(context).pop(false);
-      return;
-    }
-
-    if (isSuccess || isReturnUrlPath) {
-      // Если есть payment_id в query string, можно использовать его для проверки статуса
-      final paymentId = uri.queryParameters['payment_id'];
-      if (paymentId != null) {
-        print('🔵 Получен payment_id из return_url: $paymentId');
-      }
-
+    // Если это наш return_url, значит пользователь вернулся с ЮКассы
+    // Статус будет проверен через API в PaymentHelper
+    if (isReturnUrl) {
+      print('🔵 Обнаружен return_url, закрываем WebView для проверки статуса через API');
+      print('   URL: $url');
+      print('   returnRouteSource: ${widget.returnRouteSource}');
+      // Возвращаем true, чтобы PaymentHelper проверил статус через API
       widget.onSuccess?.call();
       Navigator.of(context).pop(true);
+      return;
     }
   }
 

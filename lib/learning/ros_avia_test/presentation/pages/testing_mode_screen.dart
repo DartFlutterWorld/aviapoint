@@ -1,4 +1,3 @@
-import 'testing_mode_screen_stub.dart' if (dart.library.html) 'testing_mode_screen_web.dart' as html;
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
@@ -13,11 +12,9 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mode_element.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
-import 'package:aviapoint/payment/presentation/pages/payment_screen.dart';
-import 'package:aviapoint/payment/utils/payment_url_helper.dart';
+import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -65,26 +62,29 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
           final paymentRepository = getIt<PaymentRepository>();
           final payment = await paymentRepository.getPaymentStatus(paymentId);
 
+          print('🔵 Статус платежа от API (веб): ${payment.status}, paid: ${payment.paid}');
+
           // Очищаем payment_id из localStorage
           await PaymentStorageHelper.clearPaymentId();
 
-          // Показываем сообщение в зависимости от реального статуса
+          // Логируем статус платежа (уведомления убраны, чтобы не вводить пользователя в заблуждение)
           if (payment.status == 'succeeded') {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен! Подписка активирована.'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
+            print('✅ Платеж успешно выполнен (веб)');
             // Обновляем информацию о подписке
             _checkSubscription();
+            // Навигируем на исходный экран используя ту же логику, что и при отмене
+            PaymentHelper.navigateToSource(context, 'testing_mode');
           } else if (payment.status == 'canceled') {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Оплата отменена'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+            print('⚠️ Платеж отменен (веб)');
+          } else if (payment.status == 'pending' || payment.status == 'waiting_for_capture') {
+            print('⏳ Платеж имеет статус ${payment.status} (веб)');
           } else {
-            // pending или waiting_for_capture
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж обрабатывается...'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+            print('⚠️ Неизвестный статус платежа: ${payment.status} (веб)');
           }
         } catch (e) {
           print('Ошибка при проверке статуса платежа: $e');
           // Очищаем payment_id даже при ошибке
           await PaymentStorageHelper.clearPaymentId();
-          // Показываем общее сообщение
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось проверить статус платежа'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         }
       }
     } catch (e) {
@@ -215,11 +215,6 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
   Future<void> _openPaymentScreen(BuildContext context) async {
     try {
-      print('🔵 Открываем PaymentScreen через Navigator');
-
-      // Используем SchedulerBinding для отложенной навигации
-      await SchedulerBinding.instance.endOfFrame;
-
       if (!context.mounted) return;
 
       // Загружаем типы подписок и находим yearly
@@ -229,21 +224,16 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
       if (!context.mounted) return;
 
-      await Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute<dynamic>(
-          builder: (_) => PaymentScreen(
-            amount: yearlyType.price.toDouble(),
-            currency: 'RUB',
-            description: '${yearlyType.name}, ${yearlyType.description} на ${yearlyType.periodDays} дней',
-            subscriptionTypeId: yearlyType.id,
-            returnUrl: PaymentUrlHelper.buildReturnUrl(source: 'testing_mode'),
-            returnRouteSource: 'testing_mode',
-          ),
-        ),
+      await PaymentHelper.createPaymentAndRedirect(
+        context: context,
+        amount: yearlyType.price.toDouble(),
+        currency: 'RUB',
+        description: '${yearlyType.name}, ${yearlyType.description} на ${yearlyType.periodDays} дней',
+        subscriptionTypeId: yearlyType.id,
+        returnRouteSource: 'testing_mode',
       );
-      print('✅ PaymentScreen открыт');
     } catch (e, stackTrace) {
-      print('❌ Ошибка при открытии PaymentScreen: $e');
+      print('❌ Ошибка при создании платежа: $e');
       print('StackTrace: $stackTrace');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
