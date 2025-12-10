@@ -24,7 +24,10 @@ class ApiDatasourceDio extends ApiDatasource {
     _dio.options
       ..baseUrl = baseUrl
       ..connectTimeout = const Duration(seconds: 10)
-      ..receiveTimeout = const Duration(seconds: 10);
+      ..receiveTimeout = const Duration(seconds: 10)
+      // Устанавливаем Accept: application/json для всех API запросов
+      // Это позволяет nginx различать API запросы от браузерных запросов
+      ..headers['Accept'] = 'application/json';
 
     if (kDebugMode) {
       _dio.interceptors.add(LogInterceptor(responseBody: true, requestBody: true));
