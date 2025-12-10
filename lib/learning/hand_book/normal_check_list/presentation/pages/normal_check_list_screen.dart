@@ -7,12 +7,12 @@ import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_check_list_by_category_bloc.dart';
 import 'package:aviapoint/learning/hand_book/normal_check_list/presentation/bloc/normal_checked_cubit.dart';
+import 'package:aviapoint/learning/hand_book/normal_categories_page/presentation/bloc/normal_categories_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +23,7 @@ import 'package:provider/provider.dart';
 @RoutePage()
 class NormalCheckListScreen extends StatefulWidget {
   final String normalCategoryId;
-  final String nameCategory;
-  const NormalCheckListScreen({super.key, @PathParam('normalCategoryId') required this.normalCategoryId, @PathParam('nameCategory') required this.nameCategory});
+  const NormalCheckListScreen({super.key, @PathParam('normalCategoryId') required this.normalCategoryId});
 
   @override
   State<NormalCheckListScreen> createState() => _NormalCheckListScreenState();
@@ -35,29 +34,49 @@ class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
   void initState() {
     super.initState();
     if (!mounted) return;
+    // Загружаем список категорий для получения названия
+    context.read<NormalCategoriesBloc>().add(GetNormalCategoriesEvent());
     context.read<NormalCheckListByCategoryBloc>().add(GetNormalCheckListByCategoryEvent(widget.normalCategoryId));
+  }
+
+  String _getCategoryName(BuildContext context) {
+    final categoriesState = context.read<NormalCategoriesBloc>().state;
+    return categoriesState.maybeWhen(
+      success: (categories) {
+        final categoryId = int.tryParse(widget.normalCategoryId);
+        if (categoryId != null) {
+          final category = categories.firstWhereOrNull((c) => c.id == categoryId);
+          return category?.title ?? 'Чек-лист';
+        }
+        return 'Чек-лист';
+      },
+      orElse: () => 'Чек-лист',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: widget.nameCategory, withBack: true),
-      backgroundColor: AppColors.background,
-      body: BlocBuilder<NormalCheckListByCategoryBloc, NormalCheckListByCategoryState>(
-        builder: (context, state) => state.map(
-          success: (value) {
-            return _Success(normalCheck: value.normalCheckListByCategory, indexCheck: value.index);
-          },
-          loading: (value) => LoadingCustom(),
-          error: (value) => ErrorCustom(
-            textError: value.errorForUser,
-            repeat: () {
-              context.read<NormalCheckListByCategoryBloc>().add(GetNormalCheckListByCategoryEvent(widget.normalCategoryId));
-            },
+    return BlocBuilder<NormalCategoriesBloc, NormalCategoriesState>(
+      builder: (context, categoriesState) {
+        final categoryName = _getCategoryName(context);
+        return Scaffold(
+          appBar: CustomAppBar(title: categoryName, withBack: true),
+          backgroundColor: AppColors.background,
+          body: BlocBuilder<NormalCheckListByCategoryBloc, NormalCheckListByCategoryState>(
+            builder: (context, state) => state.map(
+              success: (value) => _Success(normalCheck: value.normalCheckListByCategory, indexCheck: value.index, categoryName: categoryName, categoryId: widget.normalCategoryId),
+              loading: (value) => LoadingCustom(),
+              error: (value) => ErrorCustom(
+                textError: value.errorForUser,
+                repeat: () {
+                  context.read<NormalCheckListByCategoryBloc>().add(GetNormalCheckListByCategoryEvent(widget.normalCategoryId));
+                },
+              ),
+              initial: (value) => LoadingCustom(),
+            ),
           ),
-          initial: (value) => LoadingCustom(),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -65,8 +84,10 @@ class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
 class _Success extends StatefulWidget {
   final List<NormalCheckListEntity> normalCheck;
   final int indexCheck;
+  final String categoryName;
+  final String categoryId;
 
-  const _Success({required this.normalCheck, required this.indexCheck});
+  const _Success({required this.normalCheck, required this.indexCheck, required this.categoryName, required this.categoryId});
 
   @override
   State<_Success> createState() => _SuccessState();

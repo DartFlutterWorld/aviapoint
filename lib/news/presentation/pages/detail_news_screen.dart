@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/seo_helper.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
 
 @RoutePage()
 class DetailNewsScreen extends StatefulWidget {
@@ -37,6 +36,16 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
   @override
   void initState() {
     super.initState();
+    // Устанавливаем SEO метатеги для страницы новости
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SeoHelper.setNewsMetaTags(
+        title: widget.news.title,
+        description: widget.news.subTitle.isNotEmpty ? widget.news.subTitle : widget.news.title,
+        imageUrl: widget.news.pictureBig.isNotEmpty ? widget.news.pictureBig : null,
+        newsId: widget.newsId,
+        publishedAt: null, // NewsEntity не имеет поля createdAt
+      );
+    });
   }
 
   @override

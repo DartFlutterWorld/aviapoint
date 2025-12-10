@@ -89,7 +89,7 @@ class _Success extends StatelessWidget {
       }
     }
 
-    AutoRouter.of(context).push(NormalCheckListRoute(normalCategoryId: (normalCategories[index].id).toString(), nameCategory: normalCategories[index].title));
+    AutoRouter.of(context).push(NormalCheckListRoute(normalCategoryId: (normalCategories[index].id).toString()));
   }
 
   @override

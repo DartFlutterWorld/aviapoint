@@ -23,9 +23,12 @@ abstract class Environment {
   static String get apiUrl {
     if (isDevelopment) {
       // Development окружение (локальный)
-      // На веб-платформе используем 0.0.0.0, на мобильных - IP адрес компьютера
+      // На веб-платформе используем localhost:8080 для API (отдельный порт от Flutter Web)
+      // Flutter Web dev server обычно работает на другом порту (например, 51715)
+      // API должен работать на 8080
       if (kIsWeb) {
-        return 'http://0.0.0.0:8080/';
+        // Используем localhost вместо 0.0.0.0 для веб, чтобы избежать конфликтов с Flutter Web dev server
+        return 'http://localhost:8080/';
       } else {
         // На мобильных устройствах используем IP адрес компьютера в локальной сети
         return 'http://$localServerIp:8080/';

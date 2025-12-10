@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://avia-point.com/sitemap.xml
+
+# Запрещаем индексацию приватных страниц
+Disallow: /profile
+Disallow: /payment
+Disallow: /payment/webview
+Disallow: /learning/test_results
+Disallow: /learning/test_by_mode/
+

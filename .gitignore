@@ -86,3 +86,7 @@ tools/bricks/**/*.dill
 # Deploy related.
 .crashlytics
 secrets.yaml
+
+# Node.js dependencies (SEO scripts)
+scripts/node_modules/
+scripts/package-lock.json

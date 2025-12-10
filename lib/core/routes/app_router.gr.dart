@@ -1188,19 +1188,14 @@ class NormalCheckListRoute extends PageRouteInfo<NormalCheckListRouteArgs> {
   NormalCheckListRoute({
     Key? key,
     required String normalCategoryId,
-    required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
          NormalCheckListRoute.name,
          args: NormalCheckListRouteArgs(
            key: key,
            normalCategoryId: normalCategoryId,
-           nameCategory: nameCategory,
          ),
-         rawPathParams: {
-           'normalCategoryId': normalCategoryId,
-           'nameCategory': nameCategory,
-         },
+         rawPathParams: {'normalCategoryId': normalCategoryId},
          initialChildren: children,
        );
 
@@ -1213,48 +1208,37 @@ class NormalCheckListRoute extends PageRouteInfo<NormalCheckListRouteArgs> {
       final args = data.argsAs<NormalCheckListRouteArgs>(
         orElse: () => NormalCheckListRouteArgs(
           normalCategoryId: pathParams.getString('normalCategoryId'),
-          nameCategory: pathParams.getString('nameCategory'),
         ),
       );
       return NormalCheckListScreen(
         key: args.key,
         normalCategoryId: args.normalCategoryId,
-        nameCategory: args.nameCategory,
       );
     },
   );
 }
 
 class NormalCheckListRouteArgs {
-  const NormalCheckListRouteArgs({
-    this.key,
-    required this.normalCategoryId,
-    required this.nameCategory,
-  });
+  const NormalCheckListRouteArgs({this.key, required this.normalCategoryId});
 
   final Key? key;
 
   final String normalCategoryId;
 
-  final String nameCategory;
-
   @override
   String toString() {
-    return 'NormalCheckListRouteArgs{key: $key, normalCategoryId: $normalCategoryId, nameCategory: $nameCategory}';
+    return 'NormalCheckListRouteArgs{key: $key, normalCategoryId: $normalCategoryId}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! NormalCheckListRouteArgs) return false;
-    return key == other.key &&
-        normalCategoryId == other.normalCategoryId &&
-        nameCategory == other.nameCategory;
+    return key == other.key && normalCategoryId == other.normalCategoryId;
   }
 
   @override
-  int get hashCode =>
-      key.hashCode ^ normalCategoryId.hashCode ^ nameCategory.hashCode;
+  int get hashCode => key.hashCode ^ normalCategoryId.hashCode;
 }
 
 /// generated route for
@@ -1362,6 +1346,8 @@ class PaymentWebViewRoute extends PageRouteInfo<PaymentWebViewRouteArgs> {
   PaymentWebViewRoute({
     Key? key,
     required String paymentUrl,
+    String? returnRouteSource,
+    String? paymentId,
     VoidCallback? onSuccess,
     VoidCallback? onCancel,
     VoidCallback? onFailure,
@@ -1371,6 +1357,8 @@ class PaymentWebViewRoute extends PageRouteInfo<PaymentWebViewRouteArgs> {
          args: PaymentWebViewRouteArgs(
            key: key,
            paymentUrl: paymentUrl,
+           returnRouteSource: returnRouteSource,
+           paymentId: paymentId,
            onSuccess: onSuccess,
            onCancel: onCancel,
            onFailure: onFailure,
@@ -1387,6 +1375,8 @@ class PaymentWebViewRoute extends PageRouteInfo<PaymentWebViewRouteArgs> {
       return PaymentWebViewScreen(
         key: args.key,
         paymentUrl: args.paymentUrl,
+        returnRouteSource: args.returnRouteSource,
+        paymentId: args.paymentId,
         onSuccess: args.onSuccess,
         onCancel: args.onCancel,
         onFailure: args.onFailure,
@@ -1399,6 +1389,8 @@ class PaymentWebViewRouteArgs {
   const PaymentWebViewRouteArgs({
     this.key,
     required this.paymentUrl,
+    this.returnRouteSource,
+    this.paymentId,
     this.onSuccess,
     this.onCancel,
     this.onFailure,
@@ -1408,6 +1400,10 @@ class PaymentWebViewRouteArgs {
 
   final String paymentUrl;
 
+  final String? returnRouteSource;
+
+  final String? paymentId;
+
   final VoidCallback? onSuccess;
 
   final VoidCallback? onCancel;
@@ -1416,7 +1412,7 @@ class PaymentWebViewRouteArgs {
 
   @override
   String toString() {
-    return 'PaymentWebViewRouteArgs{key: $key, paymentUrl: $paymentUrl, onSuccess: $onSuccess, onCancel: $onCancel, onFailure: $onFailure}';
+    return 'PaymentWebViewRouteArgs{key: $key, paymentUrl: $paymentUrl, returnRouteSource: $returnRouteSource, paymentId: $paymentId, onSuccess: $onSuccess, onCancel: $onCancel, onFailure: $onFailure}';
   }
 
   @override
@@ -1425,6 +1421,8 @@ class PaymentWebViewRouteArgs {
     if (other is! PaymentWebViewRouteArgs) return false;
     return key == other.key &&
         paymentUrl == other.paymentUrl &&
+        returnRouteSource == other.returnRouteSource &&
+        paymentId == other.paymentId &&
         onSuccess == other.onSuccess &&
         onCancel == other.onCancel &&
         onFailure == other.onFailure;
@@ -1434,6 +1432,8 @@ class PaymentWebViewRouteArgs {
   int get hashCode =>
       key.hashCode ^
       paymentUrl.hashCode ^
+      returnRouteSource.hashCode ^
+      paymentId.hashCode ^
       onSuccess.hashCode ^
       onCancel.hashCode ^
       onFailure.hashCode;
@@ -1509,18 +1509,15 @@ class PreflightInspectionCheckListRoute
   PreflightInspectionCheckListRoute({
     Key? key,
     required String preflihgtInspectionCategoryId,
-    required String nameCategory,
     List<PageRouteInfo>? children,
   }) : super(
          PreflightInspectionCheckListRoute.name,
          args: PreflightInspectionCheckListRouteArgs(
            key: key,
            preflihgtInspectionCategoryId: preflihgtInspectionCategoryId,
-           nameCategory: nameCategory,
          ),
          rawPathParams: {
            'preflihgtInspectionCategoryId': preflihgtInspectionCategoryId,
-           'nameCategory': nameCategory,
          },
          initialChildren: children,
        );
@@ -1536,13 +1533,11 @@ class PreflightInspectionCheckListRoute
           preflihgtInspectionCategoryId: pathParams.getString(
             'preflihgtInspectionCategoryId',
           ),
-          nameCategory: pathParams.getString('nameCategory'),
         ),
       );
       return PreflightInspectionCheckListScreen(
         key: args.key,
         preflihgtInspectionCategoryId: args.preflihgtInspectionCategoryId,
-        nameCategory: args.nameCategory,
       );
     },
   );
@@ -1552,18 +1547,15 @@ class PreflightInspectionCheckListRouteArgs {
   const PreflightInspectionCheckListRouteArgs({
     this.key,
     required this.preflihgtInspectionCategoryId,
-    required this.nameCategory,
   });
 
   final Key? key;
 
   final String preflihgtInspectionCategoryId;
 
-  final String nameCategory;
-
   @override
   String toString() {
-    return 'PreflightInspectionCheckListRouteArgs{key: $key, preflihgtInspectionCategoryId: $preflihgtInspectionCategoryId, nameCategory: $nameCategory}';
+    return 'PreflightInspectionCheckListRouteArgs{key: $key, preflihgtInspectionCategoryId: $preflihgtInspectionCategoryId}';
   }
 
   @override
@@ -1571,15 +1563,11 @@ class PreflightInspectionCheckListRouteArgs {
     if (identical(this, other)) return true;
     if (other is! PreflightInspectionCheckListRouteArgs) return false;
     return key == other.key &&
-        preflihgtInspectionCategoryId == other.preflihgtInspectionCategoryId &&
-        nameCategory == other.nameCategory;
+        preflihgtInspectionCategoryId == other.preflihgtInspectionCategoryId;
   }
 
   @override
-  int get hashCode =>
-      key.hashCode ^
-      preflihgtInspectionCategoryId.hashCode ^
-      nameCategory.hashCode;
+  int get hashCode => key.hashCode ^ preflihgtInspectionCategoryId.hashCode;
 }
 
 /// generated route for

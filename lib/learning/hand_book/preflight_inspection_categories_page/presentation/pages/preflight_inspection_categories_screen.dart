@@ -92,9 +92,7 @@ class _Success extends StatelessWidget {
       }
     }
 
-    AutoRouter.of(
-      context,
-    ).push(PreflightInspectionCheckListRoute(preflihgtInspectionCategoryId: (preflightInspectionCategories[index].id).toString(), nameCategory: preflightInspectionCategories[index].title));
+    AutoRouter.of(context).push(PreflightInspectionCheckListRoute(preflihgtInspectionCategoryId: (preflightInspectionCategories[index].id).toString()));
   }
 
   @override

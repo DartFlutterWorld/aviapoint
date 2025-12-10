@@ -6,12 +6,12 @@ import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/domain/entities/preflight_inspection_categories_entity.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_checked_cubit.dart';
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/presentation/bloc/preflight_inspection_check_list_by_category_bloc.dart';
+import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/bloc/preflight_inspection_categories_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,8 +22,7 @@ import 'package:provider/provider.dart';
 @RoutePage()
 class PreflightInspectionCheckListScreen extends StatefulWidget {
   final String preflihgtInspectionCategoryId;
-  final String nameCategory;
-  const PreflightInspectionCheckListScreen({super.key, @PathParam('preflihgtInspectionCategoryId') required this.preflihgtInspectionCategoryId, @PathParam('nameCategory') required this.nameCategory});
+  const PreflightInspectionCheckListScreen({super.key, @PathParam('preflihgtInspectionCategoryId') required this.preflihgtInspectionCategoryId});
 
   @override
   State<PreflightInspectionCheckListScreen> createState() => _PreflightInspectionCheckListScreenState();
@@ -34,27 +33,54 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
   void initState() {
     super.initState();
     if (!mounted) return;
+    // Загружаем список категорий для получения названия
+    context.read<PreflightInspectionCategoriesBloc>().add(GetPreflightInspectionCategoriesEvent());
     context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
+  }
+
+  String _getCategoryName(BuildContext context) {
+    final categoriesState = context.read<PreflightInspectionCategoriesBloc>().state;
+    return categoriesState.maybeWhen(
+      success: (categories) {
+        final categoryId = int.tryParse(widget.preflihgtInspectionCategoryId);
+        if (categoryId != null) {
+          final category = categories.firstWhereOrNull((c) => c.id == categoryId);
+          return category?.title ?? 'Чек-лист';
+        }
+        return 'Чек-лист';
+      },
+      orElse: () => 'Чек-лист',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: widget.nameCategory, withBack: true),
-      backgroundColor: AppColors.background,
-      body: BlocBuilder<PreflightInspectionCheckListByCategoryBloc, PreflightInspectionCheckListByCategoryState>(
-        builder: (context, state) => state.map(
-          success: (value) => _Success(preflightInspectionCheck: value.preflightInspectionCheckListByCategory, indexCheck: value.index),
-          loading: (value) => LoadingCustom(),
-          error: (value) => ErrorCustom(
-            textError: value.errorForUser,
-            repeat: () {
-              context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
-            },
+    return BlocBuilder<PreflightInspectionCategoriesBloc, PreflightInspectionCategoriesState>(
+      builder: (context, categoriesState) {
+        final categoryName = _getCategoryName(context);
+        return Scaffold(
+          appBar: CustomAppBar(title: categoryName, withBack: true),
+          backgroundColor: AppColors.background,
+          body: BlocBuilder<PreflightInspectionCheckListByCategoryBloc, PreflightInspectionCheckListByCategoryState>(
+            builder: (context, state) => state.map(
+              success: (value) => _Success(
+                preflightInspectionCheck: value.preflightInspectionCheckListByCategory,
+                indexCheck: value.index,
+                categoryName: categoryName,
+                categoryId: widget.preflihgtInspectionCategoryId,
+              ),
+              loading: (value) => LoadingCustom(),
+              error: (value) => ErrorCustom(
+                textError: value.errorForUser,
+                repeat: () {
+                  context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
+                },
+              ),
+              initial: (value) => Center(child: LoadingCustom()),
+            ),
           ),
-          initial: (value) => Center(child: LoadingCustom()),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -62,8 +88,10 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
 class _Success extends StatefulWidget {
   final List<PreflightInspectionCheckListEntity> preflightInspectionCheck;
   final int indexCheck;
+  final String categoryName;
+  final String categoryId;
 
-  const _Success({required this.preflightInspectionCheck, required this.indexCheck});
+  const _Success({required this.preflightInspectionCheck, required this.indexCheck, required this.categoryName, required this.categoryId});
 
   @override
   State<_Success> createState() => _SuccessState();
