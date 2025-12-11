@@ -9,18 +9,12 @@ part 'auth_service.g.dart';
 abstract class AuthService {
   factory AuthService(Dio dio) = _AuthService;
 
-  @POST('/auth/sms')
-  Future<SmsDto> getSms(
-    @Body() Map<String, dynamic> body,
-  );
+  @POST('/api/auth/sms')
+  Future<SmsDto> getSms(@Body() Map<String, dynamic> body);
 
-  @POST('/auth/login')
-  Future<AuthDto> auth(
-    @Body() Map<String, dynamic> body,
-  );
+  @POST('/api/auth/login')
+  Future<AuthDto> auth(@Body() Map<String, dynamic> body);
 
-  @POST('/auth/refresh')
-  Future<AuthDto> refreshToken(
-    @Body() Map<String, dynamic> body,
-  );
+  @POST('/api/auth/refresh')
+  Future<AuthDto> refreshToken(@Body() Map<String, dynamic> body);
 }

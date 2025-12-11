@@ -70,7 +70,7 @@ Backend должен реализовать два endpoint:
 }
 ```
 
-#### 2. GET `/payments/{paymentId}/status`
+#### 2. GET `/api/payments/{paymentId}/status`
 
 Проверяет статус платежа.
 
@@ -87,9 +87,10 @@ Backend должен реализовать два endpoint:
 }
 ```
 
-#### 3. POST `/payments/webhook` (опционально, но рекомендуется)
+#### 3. POST `/api/payments/webhook` (опционально, но рекомендуется)
 
 Webhook от ЮKassa для уведомления о статусе платежа.
+**URL для настройки в ЮKassa:** `https://avia-point.com/api/payments/webhook`
 
 ### Шаг 4: Регистрация в ЮKassa
 
@@ -179,7 +180,7 @@ context.read<PaymentBloc>().add(
 
 - [ ] `flutter pub get` выполнен
 - [ ] `build_runner` запущен и сгенерировал файлы
-- [ ] Backend endpoints `/payments/create` и `/payments/{id}/status` реализованы
+- [ ] Backend endpoints `/api/payments/create` и `/api/payments/{id}/status` реализованы
 - [ ] Зарегистрирован аккаунт в ЮKassa
 - [ ] Получены `shopId` и `secretKey` (хранятся на backend)
 - [ ] Настроен webhook на backend

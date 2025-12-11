@@ -8,9 +8,9 @@ part 'story_service.g.dart';
 abstract class StoryService {
   factory StoryService(Dio dio) = _StoryService;
 
-  @GET('/stories')
+  @GET('/api/stories')
   Future<List<StoryDto>> getStories();
 
-  @GET('/stories/{id}')
+  @GET('/api/stories/{id}')
   Future<StoryDto> getStory(@Path('id') int id);
 }

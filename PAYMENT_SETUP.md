@@ -37,7 +37,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 Backend должен иметь следующие endpoints:
 
-#### POST `/payments/create`
+#### POST `/api/payments/create`
 Создает платеж в ЮKassa и возвращает paymentUrl.
 
 **Request:**
@@ -65,7 +65,7 @@ Backend должен иметь следующие endpoints:
 }
 ```
 
-#### GET `/payments/{paymentId}/status`
+#### GET `/api/payments/{paymentId}/status`
 Проверяет статус платежа.
 
 **Response:**
@@ -81,8 +81,9 @@ Backend должен иметь следующие endpoints:
 }
 ```
 
-#### POST `/payments/webhook` (на backend)
+#### POST `/api/payments/webhook` (на backend)
 Webhook от ЮKassa для уведомления о статусе платежа.
+**URL для настройки в ЮKassa:** `https://avia-point.com/api/payments/webhook`
 
 ### 4. Регистрация в ЮKassa
 
@@ -157,7 +158,7 @@ context.read<PaymentBloc>().add(
 
 - [ ] Запущен `flutter pub get`
 - [ ] Запущен `build_runner` для генерации кода
-- [ ] Backend настроен с endpoints `/payments/create` и `/payments/{id}/status`
+- [ ] Backend настроен с endpoints `/api/payments/create` и `/api/payments/{id}/status`
 - [ ] Зарегистрирован аккаунт в ЮKassa
 - [ ] Получены `shopId` и `secretKey` (хранятся на backend)
 - [ ] Настроен webhook на backend

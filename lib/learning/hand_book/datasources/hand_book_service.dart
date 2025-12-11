@@ -13,29 +13,29 @@ part 'hand_book_service.g.dart';
 abstract class HandBookService {
   factory HandBookService(Dio dio) = _HandBookService;
 
-  @GET('/learning/hand_book/main_categories')
+  @GET('/api/learning/hand_book/main_categories')
   Future<List<HandBookMainCategoriesDto>> fetchHandBookMainCategoties();
   // Получение категорий для Педполётных процедур
-  @GET('/learning/hand_book/preflight_inspection_categories')
+  @GET('/api/learning/hand_book/preflight_inspection_categories')
   Future<List<PreflightInspectionCategoriesDto>> fetchPreflightInspectionCategories();
 
-  @GET('/learning/hand_book/preflight_inspection_categories/check_list/{preflihgtInspectionCategoryId}')
+  @GET('/api/learning/hand_book/preflight_inspection_categories/check_list/{preflihgtInspectionCategoryId}')
   Future<List<PreflightInspectionCheckListDto>> fetchPreflightInspectionCheckListByCategory(@Path('preflihgtInspectionCategoryId') String preflihgtInspectionCategoryId);
 
-  @GET('/learning/hand_book/preflight_inspection_categories/check_list')
+  @GET('/api/learning/hand_book/preflight_inspection_categories/check_list')
   Future<List<PreflightInspectionCheckListDto>> fetchPreflightInspectionCheckList();
 
   // Получение категорий для Нормальных процедур
-  @GET('/learning/hand_book/normal_categories')
+  @GET('/api/learning/hand_book/normal_categories')
   Future<List<NormalCategoriesDto>> fetchNormalCategories();
 
-  @GET('/learning/hand_book/normal_categories/check_list/{normalCategoryId}')
+  @GET('/api/learning/hand_book/normal_categories/check_list/{normalCategoryId}')
   Future<List<NormalCheckListDto>> fetchNormalCheckListByCategory(@Path('normalCategoryId') String preflihgtInspectionCategoryId);
 
-  @GET('/learning/hand_book/normal_categories/check_list')
+  @GET('/api/learning/hand_book/normal_categories/check_list')
   Future<List<NormalCheckListDto>> fetchNormalCheckList();
 
   // Получение категорий для аварийных процедур
-  @GET('/learning/hand_book/emergency_categories')
+  @GET('/api/learning/hand_book/emergency_categories')
   Future<List<EmergencyCategoriesDto>> fetchEmergencyCategories();
 }

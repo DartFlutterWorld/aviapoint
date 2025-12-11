@@ -9,15 +9,15 @@ part 'news_service.g.dart';
 abstract class NewsService {
   factory NewsService(Dio dio) = _NewsService;
 
-  @GET('/news')
+  @GET('/api/news')
   Future<List<NewsDto>> getNews();
 
-  @GET('/news/{id}')
+  @GET('/api/news/{id}')
   Future<NewsDto> getNewsById(@Path('id') int id);
 
-  @GET('/category_news')
+  @GET('/api/category_news')
   Future<List<CategoryNewsDto>> getCategoryNews();
 
-  @GET('/news/category/{categoryId}')
+  @GET('/api/news/category/{categoryId}')
   Future<List<NewsDto>> getNewsByCategory(@Path('categoryId') int categoryId);
 }

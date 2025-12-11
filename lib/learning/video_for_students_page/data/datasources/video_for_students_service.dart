@@ -8,9 +8,9 @@ part 'video_for_students_service.g.dart';
 abstract class VideoForStudentsService {
   factory VideoForStudentsService(Dio dio) = _VideoForStudentsService;
 
-  @GET('/learning/video_for_students')
+  @GET('/api/learning/video_for_students')
   Future<List<VideoForStudentsDto>> fetchVideosForStudents();
 
-  @GET('/learning/video_for_students/{id}')
+  @GET('/api/learning/video_for_students/{id}')
   Future<VideoForStudentsDto> fetchVideoById(@Path('id') int id);
 }

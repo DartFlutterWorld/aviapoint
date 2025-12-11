@@ -11,18 +11,18 @@ abstract class PaymentService {
   factory PaymentService(Dio dio) = _PaymentService;
 
   /// Создание платежа
-  @POST('/payments/create')
+  @POST('/api/payments/create')
   Future<PaymentDto> createPayment(@Body() Map<String, dynamic> request);
 
   /// Проверка статуса платежа
-  @GET('/payments/{paymentId}/status')
+  @GET('/api/payments/{paymentId}/status')
   Future<PaymentDto> getPaymentStatus(@Path('paymentId') String paymentId);
 
   /// Проверка статуса подписки пользователя
-  @GET('/subscriptions/active')
+  @GET('/api/subscriptions/active')
   Future<SubscriptionsResponseDto> getSubscriptionStatus();
 
   /// Получение списка типов подписок
-  @GET('/subscriptions/types')
+  @GET('/api/subscriptions/types')
   Future<SubscriptionTypesResponseDto> getSubscriptionTypes();
 }

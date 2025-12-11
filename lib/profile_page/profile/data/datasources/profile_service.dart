@@ -8,11 +8,11 @@ part 'profile_service.g.dart';
 abstract class ProfileService {
   factory ProfileService(Dio dio) = _ProfileService;
 
-  @GET('/profiles')
+  @GET('/api/profiles')
   Future<List<ProfileDto>> fetchProfilesList();
 
-  @POST('/profile')
+  @POST('/api/profile')
   Future<ProfileDto> fetchProfile(
-      // @Body() Map<String, dynamic> body,
-      );
+    // @Body() Map<String, dynamic> body,
+  );
 }

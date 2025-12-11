@@ -12,15 +12,15 @@ part 'ros_avia_test_service.g.dart';
 abstract class RosAviaTestService {
   factory RosAviaTestService(Dio dio) = _RosAviaTestService;
 
-  @GET('/learning/ros_avia_test/type_sertificates')
+  @GET('/api/learning/ros_avia_test/type_sertificates')
   Future<List<TypeSertificatesDto>> fetchTypeSertificates();
 
   //Получение всех типов корректности ответа
-  @GET('/learning/ros_avia_test/type_correct_answers')
+  @GET('/api/learning/ros_avia_test/type_correct_answers')
   Future<List<TypeCorrectAnswerDto>> fetchTypeCorrectAnswer();
 
   // Получение категорий для Педполётных процедур
-  @GET('/learning/ros_avia_test/privat_pilot_plane_category')
+  @GET('/api/learning/ros_avia_test/privat_pilot_plane_category')
   Future<List<PrivatPilotPlaneCategoryDto>> fetchPrivatPilotPlaneCategory();
 
   // @GET('/learning/hand_book/preflight_inspection_categories/check_list/{preflihgtInspectionCategoryId}')
@@ -33,14 +33,14 @@ abstract class RosAviaTestService {
   // @GET('/learning/hand_book/normal_categories')
   // Future<List<NormalCategoriesDto>> fetchNormalCategories();
 
-  @GET('/learning/ros_avia_test/{typeCertificateId}')
+  @GET('/api/learning/ros_avia_test/{typeCertificateId}')
   Future<List<RosAviaTestCategoryWithQuestionsDto>> fetchRosAviaTestCategoryWithQuestions(@Path('typeCertificateId') String typeCertificateId);
 
-  @GET('/learning/ros_avia_test/categories/{typeCertificateId}')
+  @GET('/api/learning/ros_avia_test/categories/{typeCertificateId}')
   Future<List<RosAviaTestCategoryDto>> fetchRosAviaTestCategory(@Path('typeCertificateId') String typeCertificateId);
 
   // Получение всех вопросов по выбранному сертификату и темам
-  @GET('/learning/ros_avia_test/questions/{typeCertificateId}')
+  @GET('/api/learning/ros_avia_test/questions/{typeCertificateId}')
   Future<List<QuestionWithAnswersDto>> fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
     @Path('typeCertificateId') String typeCertificateId,
     @Query('categoryIds') String categoryIds,

@@ -49,7 +49,7 @@ const staticPages = [
 // Получение всех новостей
 async function getNewsIds() {
     try {
-        const news = await fetch(`${API_URL}/news`);
+        const news = await fetch(`${API_URL}/api/news`);
         return news.map(item => `/news/${item.id}`);
     } catch (error) {
         console.error('Error fetching news:', error.message);
@@ -60,7 +60,7 @@ async function getNewsIds() {
 // Получение всех категорий предполетного осмотра
 async function getPreflightInspectionCategoryIds() {
     try {
-        const categories = await fetch(`${API_URL}/learning/hand_book/preflight_inspection_categories`);
+        const categories = await fetch(`${API_URL}/api/learning/hand_book/preflight_inspection_categories`);
         console.error(`   Получено категорий из API: ${categories.length}`);
         const urls = [];
 
@@ -87,7 +87,7 @@ async function getPreflightInspectionCategoryIds() {
 // Получение всех категорий нормальных процедур
 async function getNormalCategoryIds() {
     try {
-        const categories = await fetch(`${API_URL}/learning/hand_book/normal_categories`);
+        const categories = await fetch(`${API_URL}/api/learning/hand_book/normal_categories`);
         console.error(`   Получено категорий из API: ${categories.length}`);
         const urls = [];
 
@@ -116,7 +116,7 @@ async function getBaseQuestionCategoryIds() {
     try {
         // Предполагаем, что есть эндпоинт для получения категорий
         // Если нет, можно получить через /learning/base_questions и парсить
-        const categories = await fetch(`${API_URL}/learning/ros_avia_test/categories/1`); // Пример
+        const categories = await fetch(`${API_URL}/api/learning/ros_avia_test/categories/1`); // Пример
         return categories.map(cat => `/learning/base_questions/${cat.id}`);
     } catch (error) {
         console.error('Error fetching base question categories:', error.message);
@@ -127,7 +127,7 @@ async function getBaseQuestionCategoryIds() {
 // Получение всех типов сертификатов и вопросов
 async function getTypeCertificatesAndQuestions() {
     try {
-        const typeCertificates = await fetch(`${API_URL}/learning/ros_avia_test/type_sertificates`);
+        const typeCertificates = await fetch(`${API_URL}/api/learning/ros_avia_test/type_sertificates`);
         console.error(`   Найдено типов сертификатов: ${typeCertificates.length}`);
         const urls = [];
         const questionIds = new Set(); // Для отслеживания уникальных вопросов
@@ -137,13 +137,13 @@ async function getTypeCertificatesAndQuestions() {
 
             // Получаем категории для каждого типа сертификата
             try {
-                const categories = await fetch(`${API_URL}/learning/ros_avia_test/categories/${cert.id}`);
+                const categories = await fetch(`${API_URL}/api/learning/ros_avia_test/categories/${cert.id}`);
                 console.error(`     Найдено категорий: ${categories.length}`);
 
                 for (const category of categories) {
                     // Получаем вопросы для категории
                     try {
-                        const questions = await fetch(`${API_URL}/learning/ros_avia_test/questions/${cert.id}?categoryIds=${category.id}&mixAnswers=false&mixQuestions=false`);
+                        const questions = await fetch(`${API_URL}/api/learning/ros_avia_test/questions/${cert.id}?categoryIds=${category.id}&mixAnswers=false&mixQuestions=false`);
                         console.error(`       Категория ${category.id}: найдено вопросов: ${questions.length}`);
 
                         for (const question of questions) {
