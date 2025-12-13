@@ -30,7 +30,7 @@ class _PaymentService implements PaymentService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/payments/create',
+            '/api/payments/create',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -57,7 +57,7 @@ class _PaymentService implements PaymentService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/payments/${paymentId}/status',
+            '/api/payments/${paymentId}/status',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -84,7 +84,7 @@ class _PaymentService implements PaymentService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/subscriptions/active',
+            '/api/subscriptions/active',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -111,7 +111,7 @@ class _PaymentService implements PaymentService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/subscriptions/types',
+            '/api/subscriptions/types',
             queryParameters: queryParameters,
             data: _data,
           )

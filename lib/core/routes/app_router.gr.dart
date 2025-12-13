@@ -333,7 +333,14 @@ class DetailStoryRoute extends PageRouteInfo<DetailStoryRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<DetailStoryRouteArgs>();
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<DetailStoryRouteArgs>(
+        orElse: () => DetailStoryRouteArgs(
+          idStory: pathParams.getInt('id', 0),
+          stories: const [],
+          currentIndex: 0,
+        ),
+      );
       return DetailStoryScreen(
         key: args.key,
         idStory: args.idStory,
@@ -445,7 +452,6 @@ class ElectricalPowerSubCategoryRoute
            key: key,
            nameCategory: nameCategory,
          ),
-         rawPathParams: {'nameCategory': nameCategory},
          initialChildren: children,
        );
 
@@ -454,10 +460,9 @@ class ElectricalPowerSubCategoryRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
       final args = data.argsAs<ElectricalPowerSubCategoryRouteArgs>(
         orElse: () => ElectricalPowerSubCategoryRouteArgs(
-          nameCategory: pathParams.getString('nameCategory'),
+          nameCategory: 'Неисправности системы электроснабжения',
         ),
       );
       return ElectricalPowerSubCategoryScreen(
@@ -518,35 +523,15 @@ class ElectricalPowerSupplySystemMalfunctionsRoute extends PageRouteInfo<void> {
 /// [EmergencyCategoriesScreen]
 class EmergencyCategoriesRoute
     extends PageRouteInfo<EmergencyCategoriesRouteArgs> {
-  EmergencyCategoriesRoute({
-    Key? key,
-    required String nameCategory,
-    List<PageRouteInfo>? children,
-  }) : super(
-         EmergencyCategoriesRoute.name,
-         args: EmergencyCategoriesRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+  EmergencyCategoriesRoute({Key? key, List<PageRouteInfo>? children})
+    : super(EmergencyCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'EmergencyCategoriesRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
-      final args = data.argsAs<EmergencyCategoriesRouteArgs>(
-        orElse: () => EmergencyCategoriesRouteArgs(
-          nameCategory: pathParams.getString('nameCategory'),
-        ),
-      );
-      return EmergencyCategoriesScreen(
-        key: args.key,
-        nameCategory: args.nameCategory,
-      );
+      return EmergencyCategoriesScreen();
     },
   );
 }
@@ -706,7 +691,6 @@ class FiresSubCategoriesRoute
            key: key,
            nameCategory: nameCategory,
          ),
-         rawPathParams: {'nameCategory': nameCategory},
          initialChildren: children,
        );
 
@@ -715,11 +699,8 @@ class FiresSubCategoriesRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
       final args = data.argsAs<FiresSubCategoriesRouteArgs>(
-        orElse: () => FiresSubCategoriesRouteArgs(
-          nameCategory: pathParams.getString('nameCategory'),
-        ),
+        orElse: () => FiresSubCategoriesRouteArgs(nameCategory: 'Пожар'),
       );
       return FiresSubCategoriesScreen(
         key: args.key,
@@ -766,7 +747,6 @@ class ForcedLandingsSubCategoriesRoute
            key: key,
            nameCategory: nameCategory,
          ),
-         rawPathParams: {'nameCategory': nameCategory},
          initialChildren: children,
        );
 
@@ -775,10 +755,9 @@ class ForcedLandingsSubCategoriesRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
       final args = data.argsAs<ForcedLandingsSubCategoriesRouteArgs>(
         orElse: () => ForcedLandingsSubCategoriesRouteArgs(
-          nameCategory: pathParams.getString('nameCategory'),
+          nameCategory: 'Вынужденная посадка',
         ),
       );
       return ForcedLandingsSubCategoriesScreen(
@@ -1129,32 +1108,15 @@ class NewsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [NormalCategoriesScreen]
 class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
-  NormalCategoriesRoute({
-    Key? key,
-    required String nameCategory,
-    List<PageRouteInfo>? children,
-  }) : super(
-         NormalCategoriesRoute.name,
-         args: NormalCategoriesRouteArgs(key: key, nameCategory: nameCategory),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+  NormalCategoriesRoute({Key? key, List<PageRouteInfo>? children})
+    : super(NormalCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'NormalCategoriesRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
-      final args = data.argsAs<NormalCategoriesRouteArgs>(
-        orElse: () => NormalCategoriesRouteArgs(
-          nameCategory: pathParams.getString('nameCategory'),
-        ),
-      );
-      return NormalCategoriesScreen(
-        key: args.key,
-        nameCategory: args.nameCategory,
-      );
+      return NormalCategoriesScreen();
     },
   );
 }
@@ -1443,35 +1405,15 @@ class PaymentWebViewRouteArgs {
 /// [PreflightInspectionCategoriesScreen]
 class PreflightInspectionCategoriesRoute
     extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
-  PreflightInspectionCategoriesRoute({
-    Key? key,
-    required String nameCategory,
-    List<PageRouteInfo>? children,
-  }) : super(
-         PreflightInspectionCategoriesRoute.name,
-         args: PreflightInspectionCategoriesRouteArgs(
-           key: key,
-           nameCategory: nameCategory,
-         ),
-         rawPathParams: {'nameCategory': nameCategory},
-         initialChildren: children,
-       );
+  PreflightInspectionCategoriesRoute({Key? key, List<PageRouteInfo>? children})
+    : super(PreflightInspectionCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'PreflightInspectionCategoriesRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
-      final args = data.argsAs<PreflightInspectionCategoriesRouteArgs>(
-        orElse: () => PreflightInspectionCategoriesRouteArgs(
-          nameCategory: pathParams.getString('nameCategory'),
-        ),
-      );
-      return PreflightInspectionCategoriesScreen(
-        key: args.key,
-        nameCategory: args.nameCategory,
-      );
+      return PreflightInspectionCategoriesScreen();
     },
   );
 }

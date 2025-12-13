@@ -29,7 +29,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/main_categories',
+            '/api/learning/hand_book/main_categories',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -62,7 +62,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/preflight_inspection_categories',
+            '/api/learning/hand_book/preflight_inspection_categories',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -98,7 +98,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/preflight_inspection_categories/check_list/${preflihgtInspectionCategoryId}',
+            '/api/learning/hand_book/preflight_inspection_categories/check_list/${preflihgtInspectionCategoryId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -132,7 +132,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/preflight_inspection_categories/check_list',
+            '/api/learning/hand_book/preflight_inspection_categories/check_list',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -165,7 +165,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/normal_categories',
+            '/api/learning/hand_book/normal_categories',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -199,7 +199,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/normal_categories/check_list/${preflihgtInspectionCategoryId}',
+            '/api/learning/hand_book/normal_categories/check_list/${preflihgtInspectionCategoryId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -231,7 +231,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/normal_categories/check_list',
+            '/api/learning/hand_book/normal_categories/check_list',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -263,7 +263,7 @@ class _HandBookService implements HandBookService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/hand_book/emergency_categories',
+            '/api/learning/hand_book/emergency_categories',
             queryParameters: queryParameters,
             data: _data,
           )

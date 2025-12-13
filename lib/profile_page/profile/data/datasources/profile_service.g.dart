@@ -29,7 +29,7 @@ class _ProfileService implements ProfileService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/profiles',
+            '/api/profiles',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -58,7 +58,7 @@ class _ProfileService implements ProfileService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/profile',
+            '/api/profile',
             queryParameters: queryParameters,
             data: _data,
           )

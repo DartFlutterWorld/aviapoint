@@ -30,7 +30,7 @@ class _AuthService implements AuthService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/sms',
+            '/api/auth/sms',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -58,7 +58,7 @@ class _AuthService implements AuthService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/login',
+            '/api/auth/login',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -86,7 +86,7 @@ class _AuthService implements AuthService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/refresh',
+            '/api/auth/refresh',
             queryParameters: queryParameters,
             data: _data,
           )

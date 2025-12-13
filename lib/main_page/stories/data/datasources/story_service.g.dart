@@ -29,7 +29,7 @@ class _StoryService implements StoryService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/stories',
+            '/api/stories',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -58,7 +58,7 @@ class _StoryService implements StoryService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/stories/${id}',
+            '/api/stories/${id}',
             queryParameters: queryParameters,
             data: _data,
           )

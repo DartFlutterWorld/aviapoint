@@ -19,8 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
 class NormalCategoriesScreen extends StatefulWidget {
-  final String nameCategory;
-  const NormalCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
+  const NormalCategoriesScreen({super.key});
 
   @override
   State<NormalCategoriesScreen> createState() => _NormalCategoriesScreenState();
@@ -38,7 +37,7 @@ class _NormalCategoriesScreenState extends State<NormalCategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: widget.nameCategory,
+        title: 'Нормальные процедуры',
         withBack: true,
         actions: [IconButton(onPressed: () => context.read<NormalCheckedCubit>().clearAllCategory(), icon: SvgPicture.asset(Pictures.round_clear2))],
       ),

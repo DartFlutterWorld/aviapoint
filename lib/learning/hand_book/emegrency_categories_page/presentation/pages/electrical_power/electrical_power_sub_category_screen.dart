@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 @RoutePage()
 class ElectricalPowerSubCategoryScreen extends StatefulWidget {
   final String nameCategory;
-  const ElectricalPowerSubCategoryScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
+  const ElectricalPowerSubCategoryScreen({super.key, required this.nameCategory});
 
   @override
   State<ElectricalPowerSubCategoryScreen> createState() => _ElectricalPowerSubCategoryScreenState();

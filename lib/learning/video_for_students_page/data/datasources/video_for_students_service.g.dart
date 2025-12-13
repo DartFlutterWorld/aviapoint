@@ -29,7 +29,7 @@ class _VideoForStudentsService implements VideoForStudentsService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/video_for_students',
+            '/api/learning/video_for_students',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -61,7 +61,7 @@ class _VideoForStudentsService implements VideoForStudentsService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/video_for_students/${id}',
+            '/api/learning/video_for_students/${id}',
             queryParameters: queryParameters,
             data: _data,
           )

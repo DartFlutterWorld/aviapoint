@@ -59,11 +59,11 @@ class _Success extends StatelessWidget {
   PageRouteInfo<Object?> selectSubCategory(int category) {
     switch (category) {
       case 1:
-        return PreflightInspectionCategoriesRoute(nameCategory: 'Предполётные процедуры');
+        return PreflightInspectionCategoriesRoute();
       case 2:
-        return NormalCategoriesRoute(nameCategory: 'Нормальные процедуры');
+        return NormalCategoriesRoute();
       case 3:
-        return EmergencyCategoriesRoute(nameCategory: 'Аварийные процедуры');
+        return EmergencyCategoriesRoute();
       default:
     }
     return BaseRoute();

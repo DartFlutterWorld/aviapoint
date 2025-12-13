@@ -1,21 +1,21 @@
-# Flutter Web SPA routing configuration
-# Все запросы должны обрабатываться через index.html для правильной работы роутинга
+# # Flutter Web SPA routing configuration
+# # Все запросы должны обрабатываться через index.html для правильной работы роутинга
 
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteBase /
   
-  # Не перенаправляем запросы к статическим файлам
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
+#   # Не перенаправляем запросы к статическим файлам
+#   RewriteCond %{REQUEST_FILENAME} !-f
+#   RewriteCond %{REQUEST_FILENAME} !-d
   
-  # Не перенаправляем запросы к API (если они начинаются с /api или содержат /learning/)
-  # Но только если это не запрос к Flutter приложению
-  RewriteCond %{REQUEST_URI} !^/api/
-  RewriteCond %{REQUEST_URI} !^/learning/hand_book/preflight_inspection_categories/check_list/
-  RewriteCond %{REQUEST_URI} !^/learning/hand_book/normal_categories/check_list/
+#   # Не перенаправляем запросы к API (если они начинаются с /api или содержат /learning/)
+#   # Но только если это не запрос к Flutter приложению
+#   RewriteCond %{REQUEST_URI} !^/api/
+#   RewriteCond %{REQUEST_URI} !^/learning/hand_book/preflight_inspection_categories/check_list/
+#   RewriteCond %{REQUEST_URI} !^/learning/hand_book/normal_categories/check_list/
   
-  # Все остальные запросы перенаправляем на index.html
-  RewriteRule ^(.*)$ /index.html [QSA,L]
-</IfModule>
+#   # Все остальные запросы перенаправляем на index.html
+#   RewriteRule ^(.*)$ /index.html [QSA,L]
+# </IfModule>
 

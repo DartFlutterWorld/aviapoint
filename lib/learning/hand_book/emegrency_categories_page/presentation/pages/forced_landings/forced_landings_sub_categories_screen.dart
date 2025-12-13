@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 @RoutePage()
 class ForcedLandingsSubCategoriesScreen extends StatefulWidget {
   final String nameCategory;
-  const ForcedLandingsSubCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
+  const ForcedLandingsSubCategoriesScreen({super.key, required this.nameCategory});
 
   @override
   State<ForcedLandingsSubCategoriesScreen> createState() => _ForcedLandingsSubCategoriesScreenState();

@@ -5,7 +5,7 @@ class Pictures {
   static const String strelka_vpravo = 'assets/png/strelka_vpravo.png';
   static const String strelka = 'assets/png/strelka.png';
   static const String checkOk = 'assets/png/check_ok.png';
-  static const String round_clear2 = 'assets/png/round_clear2.png';
+  static const String round_clear2 = 'assets/svg/round_clear2.svg';
   //NavBar
   static const String bookNavbar = 'assets/svg/book_navbar.svg';
   static const String marketNavbar = 'assets/svg/market_navbar.svg';

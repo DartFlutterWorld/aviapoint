@@ -25,6 +25,7 @@ class TestingModeElement extends StatefulWidget {
 class _TestingModeElementState extends State<TestingModeElement> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool _hasActiveSubscription = false;
+  bool _isCheckingSubscription = false; // Флаг для предотвращения параллельных вызовов
 
   // Состояния анимации: 0 = обычное, 1 = lock, 2 = unlock
   int _currentStage = 0;
@@ -46,9 +47,14 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
   }
 
   Future<void> _checkSubscription() async {
-    if (!mounted) return;
+    // Предотвращаем параллельные вызовы
+    if (_isCheckingSubscription || !mounted) return;
+
+    _isCheckingSubscription = true;
 
     try {
+      if (!mounted) return;
+
       final appState = Provider.of<AppState>(context, listen: false);
       if (!appState.isAuthenticated) {
         if (mounted) {
@@ -75,11 +81,17 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
       }
     } catch (e) {
       // Игнорируем ошибки проверки подписки, просто не показываем анимацию
+      // Логируем ошибку для отладки, но не прерываем выполнение
+      debugPrint('Error checking subscription: $e');
       if (mounted) {
         setState(() {
           _hasActiveSubscription = false;
         });
         _updateAnimationState();
+      }
+    } finally {
+      if (mounted) {
+        _isCheckingSubscription = false;
       }
     }
   }
@@ -173,9 +185,15 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
     super.didChangeDependencies();
     // Проверяем подписку при изменении зависимостей (например, после авторизации)
     // Используем WidgetsBinding для безопасного вызова после построения
+    // Добавляем небольшую задержку, чтобы избежать множественных вызовов
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _checkSubscription();
+      if (mounted && !_isCheckingSubscription) {
+        // Используем Future.microtask для отложенного выполнения
+        Future.microtask(() {
+          if (mounted) {
+            _checkSubscription();
+          }
+        });
       }
     });
   }

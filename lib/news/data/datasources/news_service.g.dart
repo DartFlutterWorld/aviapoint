@@ -29,7 +29,7 @@ class _NewsService implements NewsService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/news',
+            '/api/news',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -58,7 +58,7 @@ class _NewsService implements NewsService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/news/${id}',
+            '/api/news/${id}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -85,7 +85,7 @@ class _NewsService implements NewsService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/category_news',
+            '/api/category_news',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -116,7 +116,7 @@ class _NewsService implements NewsService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/news/category/${categoryId}',
+            '/api/news/category/${categoryId}',
             queryParameters: queryParameters,
             data: _data,
           )

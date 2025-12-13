@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
-import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:provider/provider.dart';
 
 @RoutePage()
 class DetailStoryScreen extends StatefulWidget {
@@ -48,11 +46,15 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
         _animController?.stop();
         _animController?.reset();
         if (storyCubit.state.currentIndex < widget.stories.length - 1) {
-          _videoPlayer?.controller.pause();
+          if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized) {
+            _videoPlayer!.controller.pause();
+          }
           _loadStory(story: widget.stories[storyCubit.state.currentIndex + 1]);
           storyCubit.setCurrentIndex(storyCubit.state.currentIndex + 1);
         } else {
-          _videoPlayer?.controller.pause();
+          if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized) {
+            _videoPlayer!.controller.pause();
+          }
           Navigator.of(context).pop();
         }
       }
@@ -90,14 +92,19 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
 
   Future<void> _onTapScreen(String side, List<StoryEntity> miniStories, BuildContext context) async {
     if (side == 'left') {
-      _videoPlayer?.controller.pause(); // Если нажали на левом экране то остановить видео, чтоб не было звука на предыдущих сторях
+      // Если нажали на левом экране то остановить видео, чтоб не было звука на предыдущих сторях
+      if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized) {
+        _videoPlayer!.controller.pause();
+      }
 
       // Если смотрим первый стори и первый министорик и нажимае назад то выходим из сторей
       if (storyCubit.state.currentIndex == 0) {
         Navigator.of(context).pop();
         // Если находимся не на первой сторе и смотрим первый министорик и при нажтии назад подгружаем педыдущую сторю со сториками
       } else if (storyCubit.state.currentIndex > 0 && widget.stories.length != storyCubit.state.currentIndex - 1) {
-        _videoPlayer?.controller.pause();
+        if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized) {
+          _videoPlayer!.controller.pause();
+        }
 
         _loadStory(story: widget.stories[storyCubit.state.currentIndex - 1]);
         storyCubit.setCurrentIndex(storyCubit.state.currentIndex - 1);
@@ -105,19 +112,24 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
     }
     if (side == 'right') {
       if (storyCubit.state.currentIndex < widget.stories.length - 1) {
-        _videoPlayer?.controller.pause(); // Если нажали на правом экране то остановить видео, чтоб не было звука на предыдущих сторях
+        // Если нажали на правом экране то остановить видео, чтоб не было звука на предыдущих сторях
+        if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized) {
+          _videoPlayer!.controller.pause();
+        }
 
         _loadStory(story: widget.stories[storyCubit.state.currentIndex + 1]);
         storyCubit.setCurrentIndex(storyCubit.state.currentIndex + 1);
       } else {
-        _videoPlayer?.controller.pause();
+        if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized) {
+          _videoPlayer!.controller.pause();
+        }
         Navigator.of(context).pop();
       }
     }
 
     if (side == 'onLongPress') {
-      if (_videoPlayer != null && _videoPlayer!.controller.value.isPlaying) {
-        _videoPlayer?.controller.pause();
+      if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized && _videoPlayer!.controller.value.isPlaying) {
+        _videoPlayer!.controller.pause();
         _animController?.stop();
       } else {
         await _videoPlayer?.dispose();
@@ -125,8 +137,8 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
       }
     }
     if (side == 'onLongPressEnd') {
-      if (_videoPlayer != null && !_videoPlayer!.controller.value.isPlaying) {
-        _videoPlayer?.controller.play();
+      if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized && !_videoPlayer!.controller.value.isPlaying) {
+        _videoPlayer!.controller.play();
         _animController?.forward();
       } else {
         await _videoPlayer?.dispose();

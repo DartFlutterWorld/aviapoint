@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
 
 class StoryScreenElement extends StatelessWidget {
   final List<StoryEntity> stories;
@@ -66,9 +64,21 @@ class StoryScreenElement extends StatelessWidget {
   //   });
   // }
 
+  // Безопасная проверка инициализации видеоплеера
+  bool _isVideoPlayerInitialized() {
+    if (videoPlayer == null) return false;
+    try {
+      return videoPlayer!.controller.value.isInitialized;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final StoryEntity story = stories[currentIndex];
+    final isVideoInitialized = _isVideoPlayerInitialized();
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -84,7 +94,7 @@ class StoryScreenElement extends StatelessWidget {
                   ),
                 ),
               )
-            : (videoPlayer != null && videoPlayer!.controller.value.isInitialized)
+            : isVideoInitialized
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
@@ -104,6 +114,7 @@ class StoryScreenElement extends StatelessWidget {
                   ),
                 ),
               ),
+        // Прогресс-бары для сторисов
         Positioned.fill(
           child: Padding(
             padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
@@ -115,14 +126,15 @@ class StoryScreenElement extends StatelessWidget {
                       return MapEntry(index, animController != null ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex) : const SizedBox());
                     }).values,
                     SizedBox(width: 13),
-                    // TODO. Не работает кнопка закрыть сторик
-                    GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => AutoRouter.of(context).maybePop(), child: SvgPicture.asset(Pictures.closeStory)),
+                    // Заглушка для кнопки закрытия (чтобы не было прыжков в layout)
+                    Opacity(opacity: 0, child: SvgPicture.asset(Pictures.closeStory)),
                   ],
                 ),
               ],
             ),
           ),
         ),
+        // Стрелки навигации (внизу в Stack, чтобы не перекрывать кнопку закрытия)
         Positioned.fill(
           child: Align(
             alignment: Alignment.centerRight,
@@ -161,6 +173,16 @@ class StoryScreenElement extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+        // Кнопка закрытия (в конце Stack, чтобы была поверх всех элементов)
+        Positioned(
+          top: 16,
+          right: 16,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => AutoRouter.of(context).maybePop(),
+            child: Container(padding: const EdgeInsets.all(8), child: SvgPicture.asset(Pictures.closeStory)),
           ),
         ),
         // Positioned.fill(
@@ -208,7 +230,9 @@ class StoryScreenElement extends StatelessWidget {
                           backgroundColor: Color(int.parse('0xFF$buttonColor')),
                           onPressed: () {
                             // AutoRouter.of(context).maybePop();
-                            videoPlayer?.controller.pause();
+                            if (videoPlayer != null && videoPlayer!.controller.value.isInitialized) {
+                              videoPlayer!.controller.pause();
+                            }
                             animController?.stop();
                             Navigator.pop(context);
                             // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);

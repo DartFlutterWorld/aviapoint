@@ -22,8 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
 class PreflightInspectionCategoriesScreen extends StatefulWidget {
-  final String nameCategory;
-  const PreflightInspectionCategoriesScreen({super.key, @PathParam('nameCategory') required this.nameCategory});
+  const PreflightInspectionCategoriesScreen({super.key});
 
   @override
   State<PreflightInspectionCategoriesScreen> createState() => _PreflightInspectionCategoriesScreenState();
@@ -41,7 +40,7 @@ class _PreflightInspectionCategoriesScreenState extends State<PreflightInspectio
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: widget.nameCategory,
+        title: 'Предполётные процедуры',
         withBack: true,
         actions: [IconButton(onPressed: () => context.read<PreflightCheckedCubit>().clearAllCategory(), icon: SvgPicture.asset(Pictures.round_clear2))],
       ),

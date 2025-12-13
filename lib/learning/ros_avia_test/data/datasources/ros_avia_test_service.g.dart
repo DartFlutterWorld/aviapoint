@@ -29,7 +29,7 @@ class _RosAviaTestService implements RosAviaTestService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/ros_avia_test/type_sertificates',
+            '/api/learning/ros_avia_test/type_sertificates',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -61,7 +61,7 @@ class _RosAviaTestService implements RosAviaTestService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/ros_avia_test/type_correct_answers',
+            '/api/learning/ros_avia_test/type_correct_answers',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -94,7 +94,7 @@ class _RosAviaTestService implements RosAviaTestService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/ros_avia_test/privat_pilot_plane_category',
+            '/api/learning/ros_avia_test/privat_pilot_plane_category',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -127,7 +127,7 @@ class _RosAviaTestService implements RosAviaTestService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/ros_avia_test/${typeCertificateId}',
+            '/api/learning/ros_avia_test/${typeCertificateId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -162,7 +162,7 @@ class _RosAviaTestService implements RosAviaTestService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/ros_avia_test/categories/${typeCertificateId}',
+            '/api/learning/ros_avia_test/categories/${typeCertificateId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -204,7 +204,7 @@ class _RosAviaTestService implements RosAviaTestService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/learning/ros_avia_test/questions/${typeCertificateId}',
+            '/api/learning/ros_avia_test/questions/${typeCertificateId}',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
-import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +36,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(height);
 
-  void _pop(BuildContext context) {
-    AutoRouter.of(context).maybePop();
+  // void _pop(BuildContext context) {
+  //   AutoRouter.of(context).maybePop();
+  // }
+
+  void _pop(BuildContext context) async {
+    final bool result = await AutoRouter.of(context).maybePop();
+
+    if (!result && context.mounted) {
+      AutoRouter.of(context).push(const BaseRoute(children: [MainNavigationRoute()]));
+    }
   }
 
   @override
