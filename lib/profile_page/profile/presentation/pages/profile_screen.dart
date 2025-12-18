@@ -5,6 +5,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
@@ -20,11 +21,13 @@ import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/Subscribe_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/profile_data_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/subscribe_widget_active.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -315,61 +318,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   //   label: Text('Очистить прогресс'),
                                   //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
                                   // ),
-                                  // SizedBox(height: 16),
+                                  SizedBox(height: 16),
+                                  ProfileDataWidget(
+                                    title: 'Изменить данные',
+                                    icon: Pictures.user,
+                                    onTap: () => openProfileEdit(context: context),
+                                  ),
+                                  Divider(height: 18.h),
+                                  ProfileDataWidget(title: 'Политика конфиденциальности', icon: Pictures.securitySafe, onTap: () => context.router.push(const PrivacyPolicyRoute())),
+                                  Divider(height: 18.h),
+                                  ProfileDataWidget(
+                                    title: 'Связаться с нами',
+                                    icon: Pictures.smsEdit,
+                                    onTap: () => openContactUs(context: context),
+                                  ),
+                                  Divider(height: 18.h),
+                                  ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
                                 ],
                               )
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [Image.asset(Pictures.planeProfile, height: 374, width: 286), SizedBox(height: 16)],
+                            : Center(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(Pictures.planeProfile, height: 374, width: 286),
+                                    SizedBox(height: 16),
+
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                                      child: CustomButton(
+                                        verticalPadding: 8,
+                                        backgroundColor: Color(0xFF0A6EFA),
+                                        title: 'Войти в профиль',
+                                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                        borderColor: Color(0xFF0A6EFA),
+                                        borderRadius: 46,
+                                        boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                        onPressed: () => showLogin(context),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                       ],
                     ),
                   ),
                 ),
                 // Кнопки входа и выхода (прижаты к низу)
-                if (Provider.of<AppState>(context, listen: true).isAuthenticated) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                    child: CustomButton(
-                      verticalPadding: 8,
-                      backgroundColor: Color(0xFFFF6B6B),
-                      title: 'Выйти',
-                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                      borderColor: Color(0xFFFF6B6B),
-                      borderRadius: 46,
-                      boxShadow: [BoxShadow(color: Color(0xFFE53E3E).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                      onPressed: () => logOut(context),
-                    ),
-                  ),
-                ] else ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                    child: CustomButton(
-                      verticalPadding: 8,
-                      backgroundColor: Color(0xFF0A6EFA),
-                      title: 'Войти в профиль',
-                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                      borderColor: Color(0xFF0A6EFA),
-                      borderRadius: 46,
-                      boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                      onPressed: () => showLogin(context),
-                    ),
-                  ),
+                // if (Provider.of<AppState>(context, listen: true).isAuthenticated) ...[
+                //   Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                //     child: CustomButton(
+                //       verticalPadding: 8,
+                //       backgroundColor: Color(0xFFFF6B6B),
+                //       title: 'Выйти',
+                //       textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                //       borderColor: Color(0xFFFF6B6B),
+                //       borderRadius: 46,
+                //       boxShadow: [BoxShadow(color: Color(0xFFE53E3E).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                //       onPressed: () => logOut(context),
+                //     ),
+                //   ),
+                // ] else
+                ...[
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                  //   child: CustomButton(
+                  //     verticalPadding: 8,
+                  //     backgroundColor: Color(0xFF0A6EFA),
+                  //     title: 'Войти в профиль',
+                  //     textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                  //     borderColor: Color(0xFF0A6EFA),
+                  //     borderRadius: 46,
+                  //     boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  //     onPressed: () => showLogin(context),
+                  //   ),
+                  // ),
                 ],
                 // Ссылка на политику конфиденциальности внизу
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: TextButton(
-                    onPressed: () {
-                      context.router.push(const PrivacyPolicyRoute());
-                    },
-                    child: Text(
-                      'Политика конфиденциальности',
-                      style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+                //   child: TextButton(
+                //     onPressed: () {
+                //       context.router.push(const PrivacyPolicyRoute());
+                //     },
+                //     child: Text(
+                //       'Политика конфиденциальности',
+                //       style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

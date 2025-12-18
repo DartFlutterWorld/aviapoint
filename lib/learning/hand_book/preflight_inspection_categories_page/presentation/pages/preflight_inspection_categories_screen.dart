@@ -4,7 +4,7 @@ import 'package:aviapoint/core/presentation/widgets/clear_progress.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';

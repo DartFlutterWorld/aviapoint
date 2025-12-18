@@ -17,16 +17,9 @@ class ProfileRepositoryImpl extends ProfileRepository {
     try {
       final response = await _profileService.fetchProfilesList();
 
-      return right(
-        ProfileMapper.toEntities(response),
-      );
+      return right(ProfileMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -35,16 +28,31 @@ class ProfileRepositoryImpl extends ProfileRepository {
     try {
       final response = await _profileService.fetchProfile();
 
-      return right(
-        ProfileMapper.toEntity(response),
-      );
+      return right(ProfileMapper.toEntity(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProfileEntity>> updateProfile({String? email, String? firstName, String? lastName}) async {
+    try {
+      final body = <String, dynamic>{};
+      if (email != null) {
+        body['email'] = email;
+      }
+      if (firstName != null) {
+        body['first_name'] = firstName;
+      }
+      if (lastName != null) {
+        body['last_name'] = lastName;
+      }
+
+      final response = await _profileService.updateProfile(body);
+
+      return right(ProfileMapper.toEntity(response));
+    } on DioException catch (e) {
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 }

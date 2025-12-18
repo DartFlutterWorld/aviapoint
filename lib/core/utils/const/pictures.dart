@@ -76,4 +76,9 @@ class Pictures {
   static const String unlock = 'assets/png/unlock.png';
   static const String podpiskaActiveFon = 'assets/png/podpiska_active_fon.png';
   static const String podpiskaNoActiveFon = 'assets/png/podpiska_no_active_fon.png';
+  static const String user = 'assets/svg/user.svg';
+  static const String arrowRight = 'assets/svg/arrow-right.svg';
+  static const String securitySafe = 'assets/svg/security-safe.svg';
+  static const String smsEdit = 'assets/svg/sms-edit.svg';
+  static const String logout = 'assets/svg/logout.svg';
 }

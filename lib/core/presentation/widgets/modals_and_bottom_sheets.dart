@@ -17,11 +17,13 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/select_topics_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/profile_edit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> checkList({required BuildContext context, required List<NormalCheckListEntity> checkList}) async {
   return await showModalBottomSheet<void>(
@@ -374,4 +376,128 @@ Future<void> testingModeDialog({required BuildContext context}) async {
     _log('❌ Ошибка в testingModeDialog: $e');
     _log('StackTrace: $stackTrace');
   }
+}
+
+Future<void> openProfileEdit({required BuildContext context}) async {
+  await showModalBottomSheet<void>(
+    useRootNavigator: true,
+    isDismissible: true,
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    barrierColor: AppColors.bgOverlay,
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
+    builder: (bottomSheetContext) {
+      return ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: SizedBox(
+          height: MediaQuery.of(bottomSheetContext).size.height - 100,
+          // child: DetailQuestionScreen(questionId: questionId, categoryTitle: categoryTitle, question: question, withClose: true),
+          child: ProfileEdit(),
+        ),
+      );
+    },
+  );
+}
+
+Future<void> openContactUs({required BuildContext context}) async {
+  await showModalBottomSheet<void>(
+    useRootNavigator: true,
+    isDismissible: true,
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    barrierColor: AppColors.bgOverlay,
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
+    builder: (bottomSheetContext) {
+      return SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Заголовок с кнопкой закрытия
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Связаться с нами', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                  GestureDetector(onTap: () => Navigator.of(context).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
+                ],
+              ),
+              SizedBox(height: 24),
+              // Кнопки Telegram и WhatsApp
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () async {
+                        // Формат: https://wa.me/79990697289 (без +)
+                        final uri = Uri.parse('https://wa.me/79990697289');
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          Navigator.of(context).pop();
+                        } else {
+                          // Если не удалось открыть, показываем сообщение
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+                          }
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(10.w),
+                        decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10.r)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(Pictures.whatsapp),
+                            SizedBox(width: 6.w),
+                            Text('Whatsapp', style: AppStyles.bold16s.copyWith(color: Color(0xFF01B40E))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.w),
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () async {
+                        final uri = Uri.parse('https://t.me/dartflutterworld');
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          Navigator.of(context).pop();
+                        } else {
+                          // Если не удалось открыть, показываем сообщение
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+                          }
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(10.w),
+                        decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(Pictures.telegramm),
+                            SizedBox(width: 6.w),
+                            Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

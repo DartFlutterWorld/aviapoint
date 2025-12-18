@@ -55,12 +55,13 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetProfileEvent value)?  get,TResult Function( InitialProfileEvent value)?  initial,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetProfileEvent value)?  get,TResult Function( InitialProfileEvent value)?  initial,TResult Function( UpdateProfileEvent value)?  update,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get(_that);case InitialProfileEvent() when initial != null:
-return initial(_that);case _:
+return initial(_that);case UpdateProfileEvent() when update != null:
+return update(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetProfileEvent value)  get,required TResult Function( InitialProfileEvent value)  initial,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetProfileEvent value)  get,required TResult Function( InitialProfileEvent value)  initial,required TResult Function( UpdateProfileEvent value)  update,}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get(_that);case InitialProfileEvent():
-return initial(_that);case _:
+return initial(_that);case UpdateProfileEvent():
+return update(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -100,12 +102,13 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetProfileEvent value)?  get,TResult? Function( InitialProfileEvent value)?  initial,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetProfileEvent value)?  get,TResult? Function( InitialProfileEvent value)?  initial,TResult? Function( UpdateProfileEvent value)?  update,}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get(_that);case InitialProfileEvent() when initial != null:
-return initial(_that);case _:
+return initial(_that);case UpdateProfileEvent() when update != null:
+return update(_that);case _:
   return null;
 
 }
@@ -122,11 +125,12 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName)?  update,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
-return initial();case _:
+return initial();case UpdateProfileEvent() when update != null:
+return update(_that.email,_that.firstName,_that.lastName);case _:
   return orElse();
 
 }
@@ -144,11 +148,12 @@ return initial();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName)  update,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get();case InitialProfileEvent():
-return initial();case _:
+return initial();case UpdateProfileEvent():
+return update(_that.email,_that.firstName,_that.lastName);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +170,12 @@ return initial();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName)?  update,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
-return initial();case _:
+return initial();case UpdateProfileEvent() when update != null:
+return update(_that.email,_that.firstName,_that.lastName);case _:
   return null;
 
 }
@@ -240,6 +246,76 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class UpdateProfileEvent extends ProfileEvent {
+  const UpdateProfileEvent({this.email, this.firstName, this.lastName}): super._();
+  
+
+ final  String? email;
+ final  String? firstName;
+ final  String? lastName;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateProfileEventCopyWith<UpdateProfileEvent> get copyWith => _$UpdateProfileEventCopyWithImpl<UpdateProfileEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateProfileEvent&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,email,firstName,lastName);
+
+@override
+String toString() {
+  return 'ProfileEvent.update(email: $email, firstName: $firstName, lastName: $lastName)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateProfileEventCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
+  factory $UpdateProfileEventCopyWith(UpdateProfileEvent value, $Res Function(UpdateProfileEvent) _then) = _$UpdateProfileEventCopyWithImpl;
+@useResult
+$Res call({
+ String? email, String? firstName, String? lastName
+});
+
+
+
+
+}
+/// @nodoc
+class _$UpdateProfileEventCopyWithImpl<$Res>
+    implements $UpdateProfileEventCopyWith<$Res> {
+  _$UpdateProfileEventCopyWithImpl(this._self, this._then);
+
+  final UpdateProfileEvent _self;
+  final $Res Function(UpdateProfileEvent) _then;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,}) {
+  return _then(UpdateProfileEvent(
+email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,firstName: freezed == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
+as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 mixin _$ProfileState {

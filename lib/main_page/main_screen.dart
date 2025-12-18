@@ -11,7 +11,7 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/main_page/stories/presentation/widgets/list_stories_widget.dart';
 import 'package:aviapoint/main_page/widgets/banner_main_widget.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';

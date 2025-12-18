@@ -15,4 +15,7 @@ abstract class ProfileService {
   Future<ProfileDto> fetchProfile(
     // @Body() Map<String, dynamic> body,
   );
+
+  @PUT('/api/profile')
+  Future<ProfileDto> updateProfile(@Body() Map<String, dynamic> body);
 }

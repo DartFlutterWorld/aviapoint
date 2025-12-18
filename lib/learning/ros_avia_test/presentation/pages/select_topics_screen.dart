@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';

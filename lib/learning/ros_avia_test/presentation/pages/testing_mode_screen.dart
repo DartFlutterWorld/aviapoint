@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';

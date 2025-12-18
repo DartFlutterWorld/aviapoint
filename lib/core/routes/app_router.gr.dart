@@ -333,14 +333,7 @@ class DetailStoryRoute extends PageRouteInfo<DetailStoryRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final pathParams = data.inheritedPathParams;
-      final args = data.argsAs<DetailStoryRouteArgs>(
-        orElse: () => DetailStoryRouteArgs(
-          idStory: pathParams.getInt('id', 0),
-          stories: const [],
-          currentIndex: 0,
-        ),
-      );
+      final args = data.argsAs<DetailStoryRouteArgs>();
       return DetailStoryScreen(
         key: args.key,
         idStory: args.idStory,
@@ -460,11 +453,7 @@ class ElectricalPowerSubCategoryRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ElectricalPowerSubCategoryRouteArgs>(
-        orElse: () => ElectricalPowerSubCategoryRouteArgs(
-          nameCategory: 'Неисправности системы электроснабжения',
-        ),
-      );
+      final args = data.argsAs<ElectricalPowerSubCategoryRouteArgs>();
       return ElectricalPowerSubCategoryScreen(
         key: args.key,
         nameCategory: args.nameCategory,
@@ -521,9 +510,8 @@ class ElectricalPowerSupplySystemMalfunctionsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EmergencyCategoriesScreen]
-class EmergencyCategoriesRoute
-    extends PageRouteInfo<EmergencyCategoriesRouteArgs> {
-  EmergencyCategoriesRoute({Key? key, List<PageRouteInfo>? children})
+class EmergencyCategoriesRoute extends PageRouteInfo<void> {
+  const EmergencyCategoriesRoute({List<PageRouteInfo>? children})
     : super(EmergencyCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'EmergencyCategoriesRoute';
@@ -531,32 +519,9 @@ class EmergencyCategoriesRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return EmergencyCategoriesScreen();
+      return const EmergencyCategoriesScreen();
     },
   );
-}
-
-class EmergencyCategoriesRouteArgs {
-  const EmergencyCategoriesRouteArgs({this.key, required this.nameCategory});
-
-  final Key? key;
-
-  final String nameCategory;
-
-  @override
-  String toString() {
-    return 'EmergencyCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! EmergencyCategoriesRouteArgs) return false;
-    return key == other.key && nameCategory == other.nameCategory;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
@@ -699,9 +664,7 @@ class FiresSubCategoriesRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<FiresSubCategoriesRouteArgs>(
-        orElse: () => FiresSubCategoriesRouteArgs(nameCategory: 'Пожар'),
-      );
+      final args = data.argsAs<FiresSubCategoriesRouteArgs>();
       return FiresSubCategoriesScreen(
         key: args.key,
         nameCategory: args.nameCategory,
@@ -755,11 +718,7 @@ class ForcedLandingsSubCategoriesRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ForcedLandingsSubCategoriesRouteArgs>(
-        orElse: () => ForcedLandingsSubCategoriesRouteArgs(
-          nameCategory: 'Вынужденная посадка',
-        ),
-      );
+      final args = data.argsAs<ForcedLandingsSubCategoriesRouteArgs>();
       return ForcedLandingsSubCategoriesScreen(
         key: args.key,
         nameCategory: args.nameCategory,
@@ -1107,8 +1066,8 @@ class NewsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [NormalCategoriesScreen]
-class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
-  NormalCategoriesRoute({Key? key, List<PageRouteInfo>? children})
+class NormalCategoriesRoute extends PageRouteInfo<void> {
+  const NormalCategoriesRoute({List<PageRouteInfo>? children})
     : super(NormalCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'NormalCategoriesRoute';
@@ -1116,32 +1075,9 @@ class NormalCategoriesRoute extends PageRouteInfo<NormalCategoriesRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return NormalCategoriesScreen();
+      return const NormalCategoriesScreen();
     },
   );
-}
-
-class NormalCategoriesRouteArgs {
-  const NormalCategoriesRouteArgs({this.key, required this.nameCategory});
-
-  final Key? key;
-
-  final String nameCategory;
-
-  @override
-  String toString() {
-    return 'NormalCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! NormalCategoriesRouteArgs) return false;
-    return key == other.key && nameCategory == other.nameCategory;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for
@@ -1403,9 +1339,8 @@ class PaymentWebViewRouteArgs {
 
 /// generated route for
 /// [PreflightInspectionCategoriesScreen]
-class PreflightInspectionCategoriesRoute
-    extends PageRouteInfo<PreflightInspectionCategoriesRouteArgs> {
-  PreflightInspectionCategoriesRoute({Key? key, List<PageRouteInfo>? children})
+class PreflightInspectionCategoriesRoute extends PageRouteInfo<void> {
+  const PreflightInspectionCategoriesRoute({List<PageRouteInfo>? children})
     : super(PreflightInspectionCategoriesRoute.name, initialChildren: children);
 
   static const String name = 'PreflightInspectionCategoriesRoute';
@@ -1413,35 +1348,9 @@ class PreflightInspectionCategoriesRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return PreflightInspectionCategoriesScreen();
+      return const PreflightInspectionCategoriesScreen();
     },
   );
-}
-
-class PreflightInspectionCategoriesRouteArgs {
-  const PreflightInspectionCategoriesRouteArgs({
-    this.key,
-    required this.nameCategory,
-  });
-
-  final Key? key;
-
-  final String nameCategory;
-
-  @override
-  String toString() {
-    return 'PreflightInspectionCategoriesRouteArgs{key: $key, nameCategory: $nameCategory}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! PreflightInspectionCategoriesRouteArgs) return false;
-    return key == other.key && nameCategory == other.nameCategory;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ nameCategory.hashCode;
 }
 
 /// generated route for

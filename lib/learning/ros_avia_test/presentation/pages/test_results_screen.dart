@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
 

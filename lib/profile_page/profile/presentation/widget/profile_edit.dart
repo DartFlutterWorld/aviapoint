@@ -1,0 +1,178 @@
+import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
+import 'package:aviapoint/core/themes/app_colors.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+
+class ProfileEdit extends StatefulWidget {
+  const ProfileEdit({super.key});
+
+  @override
+  State<ProfileEdit> createState() => _ProfileEditState();
+}
+
+class _ProfileEditState extends State<ProfileEdit> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _firstNameController;
+  late final TextEditingController _lastNameController;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
+
+    // Загружаем данные профиля из текущего состояния блока
+    final currentState = context.read<ProfileBloc>().state;
+    currentState.maybeWhen(
+      success: (profile) {
+        _emailController.text = profile.email ?? '';
+        _firstNameController.text = profile.firstName ?? '';
+        _lastNameController.text = profile.lastName ?? '';
+      },
+      orElse: () {},
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    super.dispose();
+  }
+
+  void _handleSave() {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    context.read<ProfileBloc>().add(
+      ProfileEvent.update(
+        email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
+        firstName: _firstNameController.text.trim().isEmpty ? null : _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim().isEmpty ? null : _lastNameController.text.trim(),
+      ),
+    );
+  }
+
+  Widget _buildTextField({required TextEditingController controller, required String hintText, required String label}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: AppStyles.regular14s.copyWith(color: Color(0xFF6E7A89))),
+        SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(1.45),
+          width: double.infinity,
+          height: 50,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+          child: TextField(
+            controller: controller,
+            style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E)),
+            decoration: InputDecoration(
+              border: null,
+              disabledBorder: InputBorder.none,
+              filled: true,
+              fillColor: Color(0xFFE3F1FF),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.white),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              hintText: hintText,
+              hintStyle: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF)),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          success: (profile) {
+            if (_isLoading) {
+              setState(() {
+                _isLoading = false;
+              });
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
+            }
+          },
+          error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
+            if (_isLoading) {
+              setState(() {
+                _isLoading = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
+            }
+          },
+          orElse: () {},
+        );
+      },
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          return SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Заголовок с кнопкой закрытия
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Изменить данные', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                      GestureDetector(onTap: () => Navigator.of(context).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
+                    ],
+                  ),
+                  SizedBox(height: 24),
+                  // Поля для редактирования
+                  if (state is LoadingProfileState && _emailController.text.isEmpty)
+                    Center(child: CircularProgressIndicator())
+                  else ...[
+                    _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
+                    SizedBox(height: 16),
+                    _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
+                    SizedBox(height: 16),
+                    _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
+                    SizedBox(height: 24),
+                    // Кнопка сохранения
+                    CustomButton(
+                      verticalPadding: 8,
+                      backgroundColor: Color(0xFF0A6EFA),
+                      title: 'Сохранить',
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                      borderColor: Color(0xFF0A6EFA),
+                      borderRadius: 46,
+                      boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                      onPressed: _isLoading ? null : _handleSave,
+                      disabled: _isLoading,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

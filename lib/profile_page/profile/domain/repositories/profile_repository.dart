@@ -7,4 +7,5 @@ abstract class ProfileRepository {
   /// Получение профилей пользователей.
   Future<Either<Failure, List<ProfileEntity>>> fetchProfiles();
   Future<Either<Failure, ProfileEntity>> getProfile();
+  Future<Either<Failure, ProfileEntity>> updateProfile({String? email, String? firstName, String? lastName});
 }

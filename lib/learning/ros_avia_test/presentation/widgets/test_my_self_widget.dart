@@ -1,5 +1,5 @@
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottomSheets.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
