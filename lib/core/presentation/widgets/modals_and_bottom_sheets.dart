@@ -424,7 +424,7 @@ Future<void> openContactUs({required BuildContext context}) async {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Связаться с нами', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                  GestureDetector(onTap: () => Navigator.of(context).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
+                  GestureDetector(onTap: () => Navigator.of(bottomSheetContext).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
                 ],
               ),
               SizedBox(height: 24),
@@ -439,11 +439,11 @@ Future<void> openContactUs({required BuildContext context}) async {
                         final uri = Uri.parse('https://wa.me/79990697289');
                         if (await canLaunchUrl(uri)) {
                           await launchUrl(uri, mode: LaunchMode.externalApplication);
-                          Navigator.of(context).pop();
+                          Navigator.of(bottomSheetContext).pop();
                         } else {
                           // Если не удалось открыть, показываем сообщение
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+                          if (bottomSheetContext.mounted) {
+                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
                           }
                         }
                       },
@@ -469,11 +469,11 @@ Future<void> openContactUs({required BuildContext context}) async {
                         final uri = Uri.parse('https://t.me/dartflutterworld');
                         if (await canLaunchUrl(uri)) {
                           await launchUrl(uri, mode: LaunchMode.externalApplication);
-                          Navigator.of(context).pop();
+                          Navigator.of(bottomSheetContext).pop();
                         } else {
                           // Если не удалось открыть, показываем сообщение
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+                          if (bottomSheetContext.mounted) {
+                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
                           }
                         }
                       },

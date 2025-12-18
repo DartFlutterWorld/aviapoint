@@ -9,8 +9,10 @@ import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dar
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
@@ -226,7 +228,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(height: 16),
                                   Row(
                                     children: [
-                                      Image.asset(Pictures.pilot, height: 63, width: 63),
+                                      BlocBuilder<ProfileBloc, ProfileState>(
+                                        builder: (context, state) {
+                                          final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
+
+                                          final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+
+                                          return ClipOval(
+                                            child: imageUrl != null && imageUrl.isNotEmpty
+                                                ? CachedNetworkImage(
+                                                    imageUrl: imageUrl,
+                                                    width: 63,
+                                                    height: 63,
+                                                    fit: BoxFit.cover,
+                                                    placeholder: (context, url) => Image.asset(Pictures.pilot, width: 63, height: 63, fit: BoxFit.cover),
+                                                    errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 63, height: 63, fit: BoxFit.cover),
+                                                  )
+                                                : Image.asset(Pictures.pilot, height: 63, width: 63, fit: BoxFit.cover),
+                                          );
+                                        },
+                                      ),
 
                                       BlocBuilder<ProfileBloc, ProfileState>(
                                         builder: (context, state) => state.map(

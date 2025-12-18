@@ -1,7 +1,7 @@
 name: aviapoint
 description: service for pilot.
 publish_to: "none"
-version: 0.0.1+10
+version: 0.0.1+12
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -103,7 +103,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^10.0.0
-  build_runner: ^2.4.11
+  build_runner: ^2.4.13
   #dart_code_metrics: ^5.7.5
   flutter_lints: ^6.0.0
   freezed: ^3.2.3

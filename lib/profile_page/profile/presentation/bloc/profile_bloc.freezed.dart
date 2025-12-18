@@ -55,13 +55,14 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetProfileEvent value)?  get,TResult Function( InitialProfileEvent value)?  initial,TResult Function( UpdateProfileEvent value)?  update,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetProfileEvent value)?  get,TResult Function( InitialProfileEvent value)?  initial,TResult Function( UpdateProfileEvent value)?  update,TResult Function( UploadProfilePhotoEvent value)?  uploadPhoto,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get(_that);case InitialProfileEvent() when initial != null:
 return initial(_that);case UpdateProfileEvent() when update != null:
-return update(_that);case _:
+return update(_that);case UploadProfilePhotoEvent() when uploadPhoto != null:
+return uploadPhoto(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return update(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetProfileEvent value)  get,required TResult Function( InitialProfileEvent value)  initial,required TResult Function( UpdateProfileEvent value)  update,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetProfileEvent value)  get,required TResult Function( InitialProfileEvent value)  initial,required TResult Function( UpdateProfileEvent value)  update,required TResult Function( UploadProfilePhotoEvent value)  uploadPhoto,}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get(_that);case InitialProfileEvent():
 return initial(_that);case UpdateProfileEvent():
-return update(_that);case _:
+return update(_that);case UploadProfilePhotoEvent():
+return uploadPhoto(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return update(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetProfileEvent value)?  get,TResult? Function( InitialProfileEvent value)?  initial,TResult? Function( UpdateProfileEvent value)?  update,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetProfileEvent value)?  get,TResult? Function( InitialProfileEvent value)?  initial,TResult? Function( UpdateProfileEvent value)?  update,TResult? Function( UploadProfilePhotoEvent value)?  uploadPhoto,}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get(_that);case InitialProfileEvent() when initial != null:
 return initial(_that);case UpdateProfileEvent() when update != null:
-return update(_that);case _:
+return update(_that);case UploadProfilePhotoEvent() when uploadPhoto != null:
+return uploadPhoto(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return update(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName)?  update,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName)?  update,TResult Function( XFile photo)?  uploadPhoto,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
 return initial();case UpdateProfileEvent() when update != null:
-return update(_that.email,_that.firstName,_that.lastName);case _:
+return update(_that.email,_that.firstName,_that.lastName);case UploadProfilePhotoEvent() when uploadPhoto != null:
+return uploadPhoto(_that.photo);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return update(_that.email,_that.firstName,_that.lastName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName)  update,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName)  update,required TResult Function( XFile photo)  uploadPhoto,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get();case InitialProfileEvent():
 return initial();case UpdateProfileEvent():
-return update(_that.email,_that.firstName,_that.lastName);case _:
+return update(_that.email,_that.firstName,_that.lastName);case UploadProfilePhotoEvent():
+return uploadPhoto(_that.photo);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return update(_that.email,_that.firstName,_that.lastName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName)?  update,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName)?  update,TResult? Function( XFile photo)?  uploadPhoto,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
 return initial();case UpdateProfileEvent() when update != null:
-return update(_that.email,_that.firstName,_that.lastName);case _:
+return update(_that.email,_that.firstName,_that.lastName);case UploadProfilePhotoEvent() when uploadPhoto != null:
+return uploadPhoto(_that.photo);case _:
   return null;
 
 }
@@ -311,6 +317,72 @@ email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nu
 as String?,firstName: freezed == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
 as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: cast_nullable_to_non_nullable
 as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class UploadProfilePhotoEvent extends ProfileEvent {
+  const UploadProfilePhotoEvent(this.photo): super._();
+  
+
+ final  XFile photo;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UploadProfilePhotoEventCopyWith<UploadProfilePhotoEvent> get copyWith => _$UploadProfilePhotoEventCopyWithImpl<UploadProfilePhotoEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UploadProfilePhotoEvent&&(identical(other.photo, photo) || other.photo == photo));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,photo);
+
+@override
+String toString() {
+  return 'ProfileEvent.uploadPhoto(photo: $photo)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UploadProfilePhotoEventCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
+  factory $UploadProfilePhotoEventCopyWith(UploadProfilePhotoEvent value, $Res Function(UploadProfilePhotoEvent) _then) = _$UploadProfilePhotoEventCopyWithImpl;
+@useResult
+$Res call({
+ XFile photo
+});
+
+
+
+
+}
+/// @nodoc
+class _$UploadProfilePhotoEventCopyWithImpl<$Res>
+    implements $UploadProfilePhotoEventCopyWith<$Res> {
+  _$UploadProfilePhotoEventCopyWithImpl(this._self, this._then);
+
+  final UploadProfilePhotoEvent _self;
+  final $Res Function(UploadProfilePhotoEvent) _then;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? photo = null,}) {
+  return _then(UploadProfilePhotoEvent(
+null == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
+as XFile,
   ));
 }
 

@@ -2,10 +2,10 @@ import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/profile_page/profile/data/datasources/profile_service.dart';
 import 'package:aviapoint/profile_page/profile/data/mappers/profile_mapper.dart';
 import 'package:aviapoint/profile_page/profile/domain/entities/profile_entity.dart';
-
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileRepositoryImpl extends ProfileRepository {
   final ProfileService _profileService;
@@ -49,6 +49,23 @@ class ProfileRepositoryImpl extends ProfileRepository {
       }
 
       final response = await _profileService.updateProfile(body);
+
+      return right(ProfileMapper.toEntity(response));
+    } on DioException catch (e) {
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProfileEntity>> uploadProfilePhoto(XFile photo) async {
+    try {
+      // Читаем байты из файла
+      final bytes = await photo.readAsBytes();
+
+      // Создаем MultipartFile из байтов
+      final multipartFile = MultipartFile.fromBytes(bytes, filename: photo.name);
+
+      final response = await _profileService.uploadProfilePhoto(multipartFile);
 
       return right(ProfileMapper.toEntity(response));
     } on DioException catch (e) {

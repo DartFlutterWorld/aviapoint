@@ -2,8 +2,8 @@ import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:aviapoint/profile_page/profile/domain/entities/profile_entity.dart';
-
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'profile_bloc.freezed.dart';
 
@@ -14,6 +14,7 @@ abstract class ProfileEvent with _$ProfileEvent {
   const factory ProfileEvent.get() = GetProfileEvent;
   const factory ProfileEvent.initial() = InitialProfileEvent;
   const factory ProfileEvent.update({String? email, String? firstName, String? lastName}) = UpdateProfileEvent;
+  const factory ProfileEvent.uploadPhoto(XFile photo) = UploadProfilePhotoEvent;
 }
 
 @freezed
@@ -29,7 +30,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileRepository _profileRepository;
 
   ProfileBloc({required ProfileRepository profileRepository, required AppState initState}) : _profileRepository = profileRepository, super(const InitialProfileState()) {
-    on<ProfileEvent>((event, emitter) => event.map(get: (event) => _get(event, emitter), initial: (event) => _initial(event, emitter), update: (event) => _update(event, emitter)));
+    on<ProfileEvent>(
+      (event, emitter) => event.map(
+        get: (event) => _get(event, emitter),
+        initial: (event) => _initial(event, emitter),
+        update: (event) => _update(event, emitter),
+        uploadPhoto: (event) => _uploadPhoto(event, emitter),
+      ),
+    );
   }
 
   Future<void> _initial(_, Emitter<ProfileState> emit) async {
@@ -66,6 +74,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(
           ErrorProfileState(
             errorForUser: 'Не удалось обновить профиль!\nПопробуйте повторить запрос',
+            errorFromApi: l.message,
+            statusCode: 'Код ошибки сервера: ${l.statusCode}',
+            responseMessage: l.responseMessage,
+          ),
+        );
+      },
+      (r) {
+        emit(SuccessProfileState(profile: r));
+      },
+    );
+  }
+
+  Future<void> _uploadPhoto(UploadProfilePhotoEvent event, Emitter<ProfileState> emit) async {
+    emit(const LoadingProfileState());
+
+    final response = await _profileRepository.uploadProfilePhoto(event.photo);
+    response.fold(
+      (l) {
+        emit(
+          ErrorProfileState(
+            errorForUser: 'Не удалось загрузить фото!\nПопробуйте повторить запрос',
             errorFromApi: l.message,
             statusCode: 'Код ошибки сервера: ${l.statusCode}',
             responseMessage: l.responseMessage,

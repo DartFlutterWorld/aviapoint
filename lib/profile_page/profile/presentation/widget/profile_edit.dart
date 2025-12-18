@@ -1,12 +1,18 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -20,6 +26,9 @@ class _ProfileEditState extends State<ProfileEdit> {
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
   bool _isLoading = false;
+  XFile? _selectedPhoto;
+  String? _currentAvatarUrl;
+  Uint8List? _selectedPhotoBytes;
 
   @override
   void initState() {
@@ -35,6 +44,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         _emailController.text = profile.email ?? '';
         _firstNameController.text = profile.firstName ?? '';
         _lastNameController.text = profile.lastName ?? '';
+        _currentAvatarUrl = profile.avatarUrl;
       },
       orElse: () {},
     );
@@ -48,13 +58,45 @@ class _ProfileEditState extends State<ProfileEdit> {
     super.dispose();
   }
 
-  void _handleSave() {
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 800, maxHeight: 800);
+
+    if (image != null) {
+      setState(() {
+        _selectedPhoto = image;
+        _selectedPhotoBytes = null; // Сбрасываем байты
+      });
+
+      // Для веб-платформы читаем байты для preview
+      if (kIsWeb) {
+        try {
+          final bytes = await image.readAsBytes();
+          setState(() {
+            _selectedPhotoBytes = bytes;
+          });
+        } catch (e) {
+          // Ошибка чтения файла
+        }
+      }
+    }
+  }
+
+  void _handleSave() async {
     if (_isLoading) return;
 
     setState(() {
       _isLoading = true;
     });
 
+    // Сначала загружаем фото, если выбрано
+    if (_selectedPhoto != null) {
+      context.read<ProfileBloc>().add(ProfileEvent.uploadPhoto(_selectedPhoto!));
+      // Ждем успешной загрузки фото перед обновлением профиля
+      return;
+    }
+
+    // Если фото не выбрано, просто обновляем профиль
     context.read<ProfileBloc>().add(
       ProfileEvent.update(
         email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
@@ -108,11 +150,28 @@ class _ProfileEditState extends State<ProfileEdit> {
         state.maybeWhen(
           success: (profile) {
             if (_isLoading) {
-              setState(() {
-                _isLoading = false;
-              });
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
+              // Если была загрузка фото, теперь обновляем остальные данные
+              if (_selectedPhoto != null) {
+                setState(() {
+                  _selectedPhoto = null;
+                  _selectedPhotoBytes = null;
+                  _currentAvatarUrl = profile.avatarUrl;
+                });
+                // Обновляем остальные данные профиля
+                context.read<ProfileBloc>().add(
+                  ProfileEvent.update(
+                    email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
+                    firstName: _firstNameController.text.trim().isEmpty ? null : _firstNameController.text.trim(),
+                    lastName: _lastNameController.text.trim().isEmpty ? null : _lastNameController.text.trim(),
+                  ),
+                );
+              } else {
+                setState(() {
+                  _isLoading = false;
+                });
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
+              }
             }
           },
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
@@ -142,6 +201,60 @@ class _ProfileEditState extends State<ProfileEdit> {
                       Text('Изменить данные', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
                       GestureDetector(onTap: () => Navigator.of(context).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
                     ],
+                  ),
+                  SizedBox(height: 24),
+                  // Фото профиля
+                  Center(
+                    child: GestureDetector(
+                      onTap: _pickImage,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFE3F1FF),
+                                border: Border.all(color: Color(0xFF0A6EFA), width: 2),
+                              ),
+                              child: ClipOval(
+                                child: _selectedPhoto != null
+                                    ? (kIsWeb && _selectedPhotoBytes != null
+                                          ? Image.memory(_selectedPhotoBytes!, fit: BoxFit.cover, width: 100, height: 100)
+                                          : !kIsWeb
+                                          ? Image.file(File(_selectedPhoto!.path), fit: BoxFit.cover, width: 100, height: 100)
+                                          : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100))
+                                    : _currentAvatarUrl != null && _currentAvatarUrl!.isNotEmpty
+                                    ? CachedNetworkImage(
+                                        imageUrl: getImageUrl(_currentAvatarUrl!),
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                        placeholder: (context, url) => Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                                        errorWidget: (context, url, error) => Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                                      )
+                                    : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFF0A6EFA),
+                                border: Border.all(color: Colors.white, width: 2),
+                              ),
+                              child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(height: 24),
                   // Поля для редактирования

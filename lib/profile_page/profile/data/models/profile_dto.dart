@@ -11,6 +11,7 @@ abstract class ProfileDto with _$ProfileDto {
     String? email,
     @JsonKey(name: 'first_name') String? firstName,
     @JsonKey(name: 'last_name') String? lastName,
+    @JsonKey(name: 'avatar_url') String? avatarUrl,
   }) = _ProfileDto;
 
   // factory ProfileDto.fromEntity(ProfileEntity profile) => ProfileDto(

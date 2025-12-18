@@ -1,6 +1,7 @@
 import 'package:aviapoint/profile_page/profile/data/models/profile_dto.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'profile_service.g.dart';
 
@@ -18,4 +19,8 @@ abstract class ProfileService {
 
   @PUT('/api/profile')
   Future<ProfileDto> updateProfile(@Body() Map<String, dynamic> body);
+
+  @POST('/api/profile/photo')
+  @MultiPart()
+  Future<ProfileDto> uploadProfilePhoto(@Part(name: 'photo') MultipartFile photo);
 }
