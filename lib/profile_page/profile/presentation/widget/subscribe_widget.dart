@@ -47,15 +47,15 @@ class SubscribeWidget extends StatelessWidget {
     //  final isActive = subscription!.isActive && subscription.endDate.isAfter(DateTime.now());
     // final isExpired = subscription!.endDate.isBefore(DateTime.now());
     return ClipRRect(
-      borderRadius: BorderRadius.circular(9),
+      borderRadius: BorderRadius.circular(9.r),
+      clipBehavior: Clip.antiAlias,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         height: 225.h,
         width: 176.w,
-
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(fon)),
-          borderRadius: BorderRadius.circular(9),
+          image: DecorationImage(image: AssetImage(fon), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(9.r),
         ),
 
         child: Column(

@@ -50,16 +50,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
-      BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
-      _loadSubscription();
-      _loadSubscriptionTypes();
-    }
+    _loadDataIfAuthenticated();
 
     // Обрабатываем параметры из URL (для редиректа после оплаты)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handlePaymentRedirect();
     });
+  }
+
+  void _loadDataIfAuthenticated() {
+    if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
+      BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+      _loadSubscription();
+      _loadSubscriptionTypes();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Перезагружаем данные при изменении состояния авторизации
+    final isAuthenticated = Provider.of<AppState>(context, listen: true).isAuthenticated;
+    if (isAuthenticated && _subscriptions.isEmpty && !_isLoadingSubscription) {
+      // Если пользователь авторизован, но подписки не загружены, загружаем их
+      _loadDataIfAuthenticated();
+    }
   }
 
   Future<void> _handlePaymentRedirect() async {
@@ -111,30 +126,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadSubscription() async {
+    if (!mounted) return;
+
     if (!Provider.of<AppState>(context, listen: false).isAuthenticated) {
+      if (mounted) {
+        setState(() {
+          _subscriptions = [];
+          _isLoadingSubscription = false;
+        });
+      }
       return;
     }
 
-    setState(() {
-      _isLoadingSubscription = true;
-      _subscriptionError = null;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingSubscription = true;
+        _subscriptionError = null;
+      });
+    }
 
     try {
       final paymentRepository = getIt<PaymentRepository>();
       // Бэкенд теперь всегда возвращает успешный ответ с массивом (пустым или с данными)
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
-      setState(() {
-        _subscriptions = subscriptions;
-        _isLoadingSubscription = false;
-        _subscriptionError = null;
-      });
+      if (mounted) {
+        setState(() {
+          _subscriptions = subscriptions;
+          _isLoadingSubscription = false;
+          _subscriptionError = null;
+        });
+        print('✅ Подписки загружены: ${subscriptions.length}');
+      }
     } catch (e) {
       // Обрабатываем только реальные ошибки (сеть, парсинг и т.д.)
       // PaymentRepositoryImpl в большинстве случаев возвращает пустой список вместо исключения
-      print('Ошибка при загрузке подписок: $e');
+      print('❌ Ошибка при загрузке подписок: $e');
       final errorString = e.toString();
+      if (!mounted) return;
+
       if (errorString.contains('type \'String\' is not a subtype of type \'Map') || errorString.contains('<!DOCTYPE html>') || errorString.contains('DioException [unknown]')) {
         // Это ошибка SPA роутинга - просто не показываем подписку
         setState(() {
@@ -153,34 +183,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadSubscriptionTypes() async {
+    if (!mounted) return;
+
     if (!Provider.of<AppState>(context, listen: false).isAuthenticated) {
       print('⚠️ Пользователь не авторизован, пропускаем загрузку типов подписок');
+      if (mounted) {
+        setState(() {
+          _subscriptionTypes = [];
+          _isLoadingSubscriptionTypes = false;
+        });
+      }
       return;
     }
 
     print('🔵 Начинаем загрузку типов подписок...');
-    setState(() {
-      _isLoadingSubscriptionTypes = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingSubscriptionTypes = true;
+      });
+    }
 
     try {
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
       print('✅ Загружено типов подписок: ${subscriptionTypes.length}');
 
-      setState(() {
-        // Фильтруем только активные типы подписок
-        _subscriptionTypes = subscriptionTypes.where((type) => type.isActive).toList();
-        print('✅ Активных типов подписок: ${_subscriptionTypes.length}');
-        _isLoadingSubscriptionTypes = false;
-      });
+      if (mounted) {
+        setState(() {
+          // Фильтруем только активные типы подписок
+          _subscriptionTypes = subscriptionTypes.where((type) => type.isActive).toList();
+          print('✅ Активных типов подписок: ${_subscriptionTypes.length}');
+          _isLoadingSubscriptionTypes = false;
+        });
+      }
     } catch (e, stackTrace) {
       print('❌ Ошибка при загрузке типов подписок: $e');
       print('StackTrace: $stackTrace');
-      setState(() {
-        _subscriptionTypes = [];
-        _isLoadingSubscriptionTypes = false;
-      });
+      if (mounted) {
+        setState(() {
+          _subscriptionTypes = [];
+          _isLoadingSubscriptionTypes = false;
+        });
+      }
     }
   }
 
@@ -204,6 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (state is SuccessAuthState) {
             BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
             _loadSubscription();
+            _loadSubscriptionTypes();
           }
         },
         child: Scaffold(
