@@ -6,7 +6,9 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:aviapoint/injection_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -166,6 +168,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                   ),
                 );
               } else {
+                // Все данные успешно обновлены - закрываем bottom sheet
+                // Обновление странички произойдет автоматически через .then() в openProfileEdit
                 setState(() {
                   _isLoading = false;
                 });
@@ -192,7 +196,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: _isLoading ? MainAxisSize.max : MainAxisSize.min,
                 children: [
                   // Заголовок с кнопкой закрытия
                   Row(
@@ -231,6 +235,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                                         fit: BoxFit.cover,
                                         width: 100,
                                         height: 100,
+                                        cacheManager: getIt<DefaultCacheManager>(),
+                                        cacheKey: _currentAvatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
                                         placeholder: (context, url) => Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                                         errorWidget: (context, url, error) => Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                                       )
@@ -258,28 +264,47 @@ class _ProfileEditState extends State<ProfileEdit> {
                   ),
                   SizedBox(height: 24),
                   // Поля для редактирования
-                  if (state is LoadingProfileState && _emailController.text.isEmpty)
-                    Center(child: CircularProgressIndicator())
-                  else ...[
-                    _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
-                    SizedBox(height: 16),
-                    _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
-                    SizedBox(height: 16),
-                    _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
-                    SizedBox(height: 24),
-                    // Кнопка сохранения
-                    CustomButton(
-                      verticalPadding: 8,
-                      backgroundColor: Color(0xFF0A6EFA),
-                      title: 'Сохранить',
-                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                      borderColor: Color(0xFF0A6EFA),
-                      borderRadius: 46,
-                      boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                      onPressed: _isLoading ? null : _handleSave,
-                      disabled: _isLoading,
+                  if (_isLoading)
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Сохранение...', style: AppStyles.regular14s.copyWith(color: Color(0xFF6E7A89))),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
+                            SizedBox(height: 16),
+                            _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
+                            SizedBox(height: 16),
+                            _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
+                            SizedBox(height: 24),
+                            // Кнопка сохранения
+                            CustomButton(
+                              verticalPadding: 8,
+                              backgroundColor: Color(0xFF0A6EFA),
+                              title: 'Сохранить',
+                              textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                              borderColor: Color(0xFF0A6EFA),
+                              borderRadius: 46,
+                              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                              onPressed: _isLoading ? null : _handleSave,
+                              disabled: _isLoading,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
                 ],
               ),
             ),

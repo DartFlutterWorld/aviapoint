@@ -18,6 +18,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_quest
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/select_topics_screen.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/profile_edit.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -398,7 +399,13 @@ Future<void> openProfileEdit({required BuildContext context}) async {
         ),
       );
     },
-  );
+  ).then((_) {
+    // После закрытия bottom sheet обновляем профиль, чтобы получить актуальное фото
+    if (context.mounted) {
+      final profileBloc = context.read<ProfileBloc>();
+      profileBloc.add(ProfileEvent.get());
+    }
+  });
 }
 
 Future<void> openContactUs({required BuildContext context}) async {

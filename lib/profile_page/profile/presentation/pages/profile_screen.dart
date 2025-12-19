@@ -12,8 +12,9 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aviapoint/injection_container.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
@@ -251,231 +252,246 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _loadSubscriptionTypes();
           }
         },
-        child: Scaffold(
-          appBar: CustomAppBar(
-            title: 'Профиль',
-            withBack: false,
-            // backgroundColor: AppColors.background,
-          ),
-          backgroundColor: AppColors.background,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Provider.of<AppState>(context, listen: true).isAuthenticated
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 16),
-                                  Row(
+        child: BlocListener<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            // При обновлении профиля (включая загрузку фото) обновляем UI
+            state.maybeWhen(
+              success: (profile) {
+                // Профиль обновлен - BlocBuilder автоматически перестроит виджет
+                print('✅ Профиль обновлен, avatarUrl: ${profile.avatarUrl}');
+              },
+              orElse: () {},
+            );
+          },
+          child: Scaffold(
+            appBar: CustomAppBar(
+              title: 'Профиль',
+              withBack: false,
+              // backgroundColor: AppColors.background,
+            ),
+            backgroundColor: AppColors.background,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Provider.of<AppState>(context, listen: true).isAuthenticated
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        BlocBuilder<ProfileBloc, ProfileState>(
+                                          builder: (context, state) {
+                                            final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
+
+                                            // Для фото профиля используем avatarUrl (уже содержит timestamp в имени файла на бэкенде)
+                                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+
+                                            return ClipOval(
+                                              child: imageUrl != null && imageUrl.isNotEmpty
+                                                  ? CachedNetworkImage(
+                                                      imageUrl: imageUrl,
+                                                      width: 63,
+                                                      height: 63,
+                                                      fit: BoxFit.cover,
+                                                      cacheManager: getIt<DefaultCacheManager>(),
+                                                      cacheKey: avatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
+                                                      placeholder: (context, url) => Image.asset(Pictures.pilot, width: 63, height: 63, fit: BoxFit.cover),
+                                                      errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 63, height: 63, fit: BoxFit.cover),
+                                                    )
+                                                  : Image.asset(Pictures.pilot, height: 63, width: 63, fit: BoxFit.cover),
+                                            );
+                                          },
+                                        ),
+
+                                        BlocBuilder<ProfileBloc, ProfileState>(
+                                          builder: (context, state) => state.map(
+                                            success: (state) => Padding(
+                                              padding: const EdgeInsets.only(left: 12.0),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                                children: [
+                                                  Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                                                  Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                  Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                ],
+                                              ),
+                                            ),
+                                            error: (state) => Center(
+                                              child: ErrorCustom(
+                                                textError: state.errorForUser,
+                                                repeat: () {
+                                                  if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
+                                                    BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                            loading: (state) => LoadingCustom(),
+                                            initial: (state) => SizedBox(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 16),
+                                    // Информация о подписке
+                                    if (_isLoadingSubscription)
+                                      const Padding(padding: EdgeInsets.symmetric(vertical: 16.0), child: LoadingCustom())
+                                    else if (_subscriptions.isNotEmpty)
+                                      // Отображаем все подписки
+                                      Row(
+                                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: _subscriptions.map((subscription) {
+                                          // Находим соответствующий тип подписки по subscriptionTypeId
+
+                                          return SubscribeWidgetActive(subscription: subscription, fon: Pictures.podpiskaActiveFon);
+                                        }).toList(),
+                                      )
+                                    else ...[
+                                      // Подписки нет - показываем виджет без подписки
+                                      if (_isLoadingSubscriptionTypes)
+                                        // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
+                                        const SizedBox(height: 225)
+                                      else if (_subscriptionTypes.isNotEmpty)
+                                        // Используем первый доступный тип подписки (приоритет yearly)
+                                        SubscribeWidget(
+                                          subscriptionType: _subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => _subscriptionTypes.first),
+                                          fon: Pictures.podpiskaNoActiveFon,
+                                        )
+                                      else
+                                        // Если типов подписок нет, показываем заглушку
+                                        const SizedBox(height: 225),
+                                    ],
+                                    SizedBox(height: 16),
+                                    // Кнопка очистки БД
+                                    // ElevatedButton.icon(
+                                    //   onPressed: () {
+                                    //     showDialog<void>(
+                                    //       context: context,
+                                    //       builder: (ctx) => AlertDialog(
+                                    //         title: Text('Очистить прогресс?'),
+                                    //         content: Text('Это удалит все сохраненные сессии тестирования и прогресс. Это действие нельзя отменить.'),
+                                    //         actions: [
+                                    //           TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Отмена')),
+                                    //           ElevatedButton(
+                                    //             onPressed: () async {
+                                    //               Navigator.pop(ctx);
+                                    //               await getIt<AppDb>().clearAllData();
+                                    //               if (context.mounted) {
+                                    //                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Прогресс очищен')));
+                                    //               }
+                                    //             },
+                                    //             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                    //             child: Text('Очистить', style: TextStyle(color: Colors.white)),
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     );
+                                    //   },
+                                    //   icon: Icon(Icons.delete_outline),
+                                    //   label: Text('Очистить прогресс'),
+                                    //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
+                                    // ),
+                                    SizedBox(height: 16),
+                                    ProfileDataWidget(
+                                      title: 'Изменить данные',
+                                      icon: Pictures.user,
+                                      onTap: () => openProfileEdit(context: context),
+                                    ),
+                                    Divider(height: 18.h),
+                                    ProfileDataWidget(title: 'Политика конфиденциальности', icon: Pictures.securitySafe, onTap: () => context.router.push(const PrivacyPolicyRoute())),
+                                    Divider(height: 18.h),
+                                    ProfileDataWidget(
+                                      title: 'Связаться с нами',
+                                      icon: Pictures.smsEdit,
+                                      onTap: () => openContactUs(context: context),
+                                    ),
+                                    Divider(height: 18.h),
+                                    ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
+                                  ],
+                                )
+                              : Center(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      BlocBuilder<ProfileBloc, ProfileState>(
-                                        builder: (context, state) {
-                                          final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
+                                      Image.asset(Pictures.planeProfile, height: 374, width: 286),
+                                      SizedBox(height: 16),
 
-                                          final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
-
-                                          return ClipOval(
-                                            child: imageUrl != null && imageUrl.isNotEmpty
-                                                ? CachedNetworkImage(
-                                                    imageUrl: imageUrl,
-                                                    width: 63,
-                                                    height: 63,
-                                                    fit: BoxFit.cover,
-                                                    placeholder: (context, url) => Image.asset(Pictures.pilot, width: 63, height: 63, fit: BoxFit.cover),
-                                                    errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 63, height: 63, fit: BoxFit.cover),
-                                                  )
-                                                : Image.asset(Pictures.pilot, height: 63, width: 63, fit: BoxFit.cover),
-                                          );
-                                        },
-                                      ),
-
-                                      BlocBuilder<ProfileBloc, ProfileState>(
-                                        builder: (context, state) => state.map(
-                                          success: (state) => Padding(
-                                            padding: const EdgeInsets.only(left: 12.0),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-
-                                              children: [
-                                                Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                                                Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                                Text(state.profile.email ?? '', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
-                                              ],
-                                            ),
-                                          ),
-                                          error: (state) => Center(
-                                            child: ErrorCustom(
-                                              textError: state.errorForUser,
-                                              repeat: () {
-                                                if (Provider.of<AppState>(context, listen: false).isAuthenticated) {
-                                                  BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                          loading: (state) => LoadingCustom(),
-                                          initial: (state) => SizedBox(),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                                        child: CustomButton(
+                                          verticalPadding: 8,
+                                          backgroundColor: Color(0xFF0A6EFA),
+                                          title: 'Войти в профиль',
+                                          textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                          borderColor: Color(0xFF0A6EFA),
+                                          borderRadius: 46,
+                                          boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                          onPressed: () => showLogin(context),
                                         ),
                                       ),
                                     ],
                                   ),
-
-                                  SizedBox(height: 16),
-                                  // Информация о подписке
-                                  if (_isLoadingSubscription)
-                                    const Padding(padding: EdgeInsets.symmetric(vertical: 16.0), child: LoadingCustom())
-                                  else if (_subscriptions.isNotEmpty)
-                                    // Отображаем все подписки
-                                    Row(
-                                      // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: _subscriptions.map((subscription) {
-                                        // Находим соответствующий тип подписки по subscriptionTypeId
-
-                                        return SubscribeWidgetActive(subscription: subscription, fon: Pictures.podpiskaActiveFon);
-                                      }).toList(),
-                                    )
-                                  else ...[
-                                    // Подписки нет - показываем виджет без подписки
-                                    if (_isLoadingSubscriptionTypes)
-                                      // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
-                                      const SizedBox(height: 225)
-                                    else if (_subscriptionTypes.isNotEmpty)
-                                      // Используем первый доступный тип подписки (приоритет yearly)
-                                      SubscribeWidget(
-                                        subscriptionType: _subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => _subscriptionTypes.first),
-                                        fon: Pictures.podpiskaNoActiveFon,
-                                      )
-                                    else
-                                      // Если типов подписок нет, показываем заглушку
-                                      const SizedBox(height: 225),
-                                  ],
-                                  SizedBox(height: 16),
-                                  // Кнопка очистки БД
-                                  // ElevatedButton.icon(
-                                  //   onPressed: () {
-                                  //     showDialog<void>(
-                                  //       context: context,
-                                  //       builder: (ctx) => AlertDialog(
-                                  //         title: Text('Очистить прогресс?'),
-                                  //         content: Text('Это удалит все сохраненные сессии тестирования и прогресс. Это действие нельзя отменить.'),
-                                  //         actions: [
-                                  //           TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Отмена')),
-                                  //           ElevatedButton(
-                                  //             onPressed: () async {
-                                  //               Navigator.pop(ctx);
-                                  //               await getIt<AppDb>().clearAllData();
-                                  //               if (context.mounted) {
-                                  //                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Прогресс очищен')));
-                                  //               }
-                                  //             },
-                                  //             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                  //             child: Text('Очистить', style: TextStyle(color: Colors.white)),
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  //   icon: Icon(Icons.delete_outline),
-                                  //   label: Text('Очистить прогресс'),
-                                  //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
-                                  // ),
-                                  SizedBox(height: 16),
-                                  ProfileDataWidget(
-                                    title: 'Изменить данные',
-                                    icon: Pictures.user,
-                                    onTap: () => openProfileEdit(context: context),
-                                  ),
-                                  Divider(height: 18.h),
-                                  ProfileDataWidget(title: 'Политика конфиденциальности', icon: Pictures.securitySafe, onTap: () => context.router.push(const PrivacyPolicyRoute())),
-                                  Divider(height: 18.h),
-                                  ProfileDataWidget(
-                                    title: 'Связаться с нами',
-                                    icon: Pictures.smsEdit,
-                                    onTap: () => openContactUs(context: context),
-                                  ),
-                                  Divider(height: 18.h),
-                                  ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
-                                ],
-                              )
-                            : Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(Pictures.planeProfile, height: 374, width: 286),
-                                    SizedBox(height: 16),
-
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                                      child: CustomButton(
-                                        verticalPadding: 8,
-                                        backgroundColor: Color(0xFF0A6EFA),
-                                        title: 'Войти в профиль',
-                                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                                        borderColor: Color(0xFF0A6EFA),
-                                        borderRadius: 46,
-                                        boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                                        onPressed: () => showLogin(context),
-                                      ),
-                                    ),
-                                  ],
                                 ),
-                              ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                // Кнопки входа и выхода (прижаты к низу)
-                // if (Provider.of<AppState>(context, listen: true).isAuthenticated) ...[
-                //   Padding(
-                //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                //     child: CustomButton(
-                //       verticalPadding: 8,
-                //       backgroundColor: Color(0xFFFF6B6B),
-                //       title: 'Выйти',
-                //       textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                //       borderColor: Color(0xFFFF6B6B),
-                //       borderRadius: 46,
-                //       boxShadow: [BoxShadow(color: Color(0xFFE53E3E).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                //       onPressed: () => logOut(context),
-                //     ),
-                //   ),
-                // ] else
-                ...[
+                  // Кнопки входа и выхода (прижаты к низу)
+                  // if (Provider.of<AppState>(context, listen: true).isAuthenticated) ...[
+                  //   Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                  //     child: CustomButton(
+                  //       verticalPadding: 8,
+                  //       backgroundColor: Color(0xFFFF6B6B),
+                  //       title: 'Выйти',
+                  //       textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                  //       borderColor: Color(0xFFFF6B6B),
+                  //       borderRadius: 46,
+                  //       boxShadow: [BoxShadow(color: Color(0xFFE53E3E).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  //       onPressed: () => logOut(context),
+                  //     ),
+                  //   ),
+                  // ] else
+                  ...[
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                    //   child: CustomButton(
+                    //     verticalPadding: 8,
+                    //     backgroundColor: Color(0xFF0A6EFA),
+                    //     title: 'Войти в профиль',
+                    //     textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                    //     borderColor: Color(0xFF0A6EFA),
+                    //     borderRadius: 46,
+                    //     boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                    //     onPressed: () => showLogin(context),
+                    //   ),
+                    // ),
+                  ],
+                  // Ссылка на политику конфиденциальности внизу
                   // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                  //   child: CustomButton(
-                  //     verticalPadding: 8,
-                  //     backgroundColor: Color(0xFF0A6EFA),
-                  //     title: 'Войти в профиль',
-                  //     textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                  //     borderColor: Color(0xFF0A6EFA),
-                  //     borderRadius: 46,
-                  //     boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                  //     onPressed: () => showLogin(context),
+                  //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  //   child: TextButton(
+                  //     onPressed: () {
+                  //       context.router.push(const PrivacyPolicyRoute());
+                  //     },
+                  //     child: Text(
+                  //       'Политика конфиденциальности',
+                  //       style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                  //     ),
                   //   ),
                   // ),
                 ],
-                // Ссылка на политику конфиденциальности внизу
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                //   child: TextButton(
-                //     onPressed: () {
-                //       context.router.push(const PrivacyPolicyRoute());
-                //     },
-                //     child: Text(
-                //       'Политика конфиденциальности',
-                //       style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
-                //     ),
-                //   ),
-                // ),
-              ],
+              ),
             ),
           ),
         ),
