@@ -6,11 +6,8 @@ part 'type_sertificates_dto.g.dart';
 @freezed
 abstract class TypeSertificatesDto with _$TypeSertificatesDto {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory TypeSertificatesDto({
-    required int id,
-    required String title,
-    required String image,
-  }) = _TypeSertificatesDto;
+  const factory TypeSertificatesDto({required int id, required String title, required String image}) =
+      _TypeSertificatesDto;
 
   // factory TypeSertificatesDto.fromEntity(ProfileEntity profile) => TypeSertificatesDto(
   //       id: profile.id,

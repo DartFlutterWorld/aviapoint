@@ -19,7 +19,9 @@ class PreflightCheckedCubit extends Cubit<PreflightCheckedState> {
       // Если CheckProgress найден, создаем новый объект с обновленным checkedIds
       // Удаляем старый объект, без этой штуки не обновляется состояние, кубит не видит изменений
       checkProgress.remove(checkProgressByIdCategory);
-      checkProgress.add(checkProgressByIdCategory.copyWith(checkedIds: Set.from(checkProgressByIdCategory.checkedIds)..add(idCheck)));
+      checkProgress.add(
+        checkProgressByIdCategory.copyWith(checkedIds: Set.from(checkProgressByIdCategory.checkedIds)..add(idCheck)),
+      );
     } else {
       // Если CheckProgress не найден, добавляем новый объект с начальным idCheck
       checkProgress.add(CheckProgress(idCategory: idCategory, checkedIds: {idCheck}));

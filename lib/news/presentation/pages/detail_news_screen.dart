@@ -102,7 +102,11 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                         onTap: () => openSource(widget.news.source),
                         child: Text(
                           widget.news.source,
-                          style: AppStyles.medium14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline, decorationColor: Color(0xFF0A6EFA)),
+                          style: AppStyles.medium14s.copyWith(
+                            color: Color(0xFF0A6EFA),
+                            decoration: TextDecoration.underline,
+                            decorationColor: Color(0xFF0A6EFA),
+                          ),
                         ),
                       ),
                   ],

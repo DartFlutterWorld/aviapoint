@@ -16,16 +16,9 @@ class StoryRepositoryImpl extends StoryRepository {
     try {
       final response = await _storyService.getStories();
 
-      return right(
-        StoryMapper.toEntities(response),
-      );
+      return right(StoryMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -34,16 +27,9 @@ class StoryRepositoryImpl extends StoryRepository {
     try {
       final response = await _storyService.getStory(id);
 
-      return right(
-        StoryMapper.toEntity(response),
-      );
+      return right(StoryMapper.toEntity(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 }

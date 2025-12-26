@@ -20,7 +20,9 @@ abstract class HandBookService {
   Future<List<PreflightInspectionCategoriesDto>> fetchPreflightInspectionCategories();
 
   @GET('/api/learning/hand_book/preflight_inspection_categories/check_list/{preflihgtInspectionCategoryId}')
-  Future<List<PreflightInspectionCheckListDto>> fetchPreflightInspectionCheckListByCategory(@Path('preflihgtInspectionCategoryId') String preflihgtInspectionCategoryId);
+  Future<List<PreflightInspectionCheckListDto>> fetchPreflightInspectionCheckListByCategory(
+    @Path('preflihgtInspectionCategoryId') String preflihgtInspectionCategoryId,
+  );
 
   @GET('/api/learning/hand_book/preflight_inspection_categories/check_list')
   Future<List<PreflightInspectionCheckListDto>> fetchPreflightInspectionCheckList();
@@ -30,7 +32,9 @@ abstract class HandBookService {
   Future<List<NormalCategoriesDto>> fetchNormalCategories();
 
   @GET('/api/learning/hand_book/normal_categories/check_list/{normalCategoryId}')
-  Future<List<NormalCheckListDto>> fetchNormalCheckListByCategory(@Path('normalCategoryId') String preflihgtInspectionCategoryId);
+  Future<List<NormalCheckListDto>> fetchNormalCheckListByCategory(
+    @Path('normalCategoryId') String preflihgtInspectionCategoryId,
+  );
 
   @GET('/api/learning/hand_book/normal_categories/check_list')
   Future<List<NormalCheckListDto>> fetchNormalCheckList();

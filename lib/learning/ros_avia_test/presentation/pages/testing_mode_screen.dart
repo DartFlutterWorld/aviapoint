@@ -108,7 +108,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
-      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+      final hasActive = subscriptions.any(
+        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+      );
 
       if (mounted) {
         setState(() {
@@ -152,7 +154,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
       // Проверяем, есть ли хотя бы одна активная подписка
-      final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+      final hasActiveSubscription = subscriptions.any(
+        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+      );
 
       if (hasActiveSubscription) {
         // Обновляем состояние подписки в UI
@@ -220,7 +224,10 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       // Загружаем типы подписок и находим yearly
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
-      final yearlyType = subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => throw Exception('Годовая подписка не найдена'));
+      final yearlyType = subscriptionTypes.firstWhere(
+        (type) => type.code == 'rosaviatest_365' && type.isActive,
+        orElse: () => throw Exception('Годовая подписка не найдена'),
+      );
 
       if (!context.mounted) return;
 
@@ -236,7 +243,13 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       print('❌ Ошибка при создании платежа: $e');
       print('StackTrace: $stackTrace');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при загрузке типов подписок: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -266,7 +279,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   @override
   Widget build(BuildContext context) {
     // Формируем title в зависимости от наличия активной подписки
-    final trainingModeTitle = _hasActiveSubscription ? 'Тренировочный\nрежим' : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
+    final trainingModeTitle = _hasActiveSubscription
+        ? 'Тренировочный\nрежим'
+        : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
 
     return BlocProvider.value(
       value: getIt<RosAviaTestCubit>(),

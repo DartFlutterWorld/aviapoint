@@ -37,11 +37,7 @@ class HighCarbonMonoxideCoLevelAdvisoryScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'cabin_ht_control_knobs', 'off_push_full_in'),
@@ -59,15 +55,9 @@ class HighCarbonMonoxideCoLevelAdvisoryScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
-                children: [
-                  customTableRow(5, 'land', 'land_as_soon_as_practical'),
-                ],
+                children: [customTableRow(5, 'land', 'land_as_soon_as_practical')],
               ),
               SizedBox(height: 16),
             ],
@@ -78,22 +68,15 @@ class HighCarbonMonoxideCoLevelAdvisoryScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

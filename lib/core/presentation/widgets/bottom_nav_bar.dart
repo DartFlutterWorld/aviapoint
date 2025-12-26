@@ -3,10 +3,7 @@ import 'package:aviapoint/core/presentation/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({
-    super.key,
-    required this.tabsRouter,
-  });
+  const BottomNavBar({super.key, required this.tabsRouter});
 
   final TabsRouter tabsRouter;
 

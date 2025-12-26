@@ -38,14 +38,10 @@ class SmsBloc extends Bloc<SmsEvent, SmsState> {
   String email = '';
   String smsCode = '';
 
-  SmsBloc({required AuthRepository authRepository})
-      : _authRepository = authRepository,
-        super(const InitialSmsState()) {
+  SmsBloc({required AuthRepository authRepository}) : _authRepository = authRepository, super(const InitialSmsState()) {
     on<SmsEvent>(
-      (event, emitter) => event.map(
-        initial: (event) => _initial(event, emitter),
-        getSms: (event) => _getSms(event, emitter),
-      ),
+      (event, emitter) =>
+          event.map(initial: (event) => _initial(event, emitter), getSms: (event) => _getSms(event, emitter)),
     );
   }
 
@@ -58,9 +54,7 @@ class SmsBloc extends Bloc<SmsEvent, SmsState> {
   Future<void> _getSms(GetSmsEvent event, Emitter<SmsState> emit) async {
     emit(const LoadingSmsState());
 
-    final response = await _authRepository.getSms(
-      event.phone,
-    );
+    final response = await _authRepository.getSms(event.phone);
     response.fold(
       (l) {
         emit(
@@ -73,9 +67,7 @@ class SmsBloc extends Bloc<SmsEvent, SmsState> {
         );
       },
       (r) {
-        emit(
-          SuccessSmsState(r),
-        );
+        emit(SuccessSmsState(r));
       },
     );
   }

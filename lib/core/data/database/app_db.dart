@@ -163,12 +163,23 @@ class AppDb extends _$AppDb {
 
       if (existing != null) {
         // Обновляем существующую запись
-        await (update(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).write(AppSettingsCompanion(testMode: Value(testMode)));
+        await (update(appSettings)..where((t) => t.certificateTypeId.equals(certificateTypeId))).write(
+          AppSettingsCompanion(testMode: Value(testMode)),
+        );
       } else {
         // Создаем новую запись с дефолтными значениями
-        await into(
-          appSettings,
-        ).insert(AppSetting(certificateTypeId: certificateTypeId, testMode: testMode, mixAnswers: true, mixQuestions: true, buttonHint: true, selectedCategoryIds: const {}, title: '', image: ''));
+        await into(appSettings).insert(
+          AppSetting(
+            certificateTypeId: certificateTypeId,
+            testMode: testMode,
+            mixAnswers: true,
+            mixQuestions: true,
+            buttonHint: true,
+            selectedCategoryIds: const {},
+            title: '',
+            image: '',
+          ),
+        );
       }
       AppTalker.good('saveTestMode: saved successfully for certificateTypeId=$certificateTypeId, testMode=$testMode');
     } catch (e, stackTrace) {
@@ -188,7 +199,9 @@ class AppDb extends _$AppDb {
 
     for (final questionId in uniqueQuestionIds) {
       try {
-        await into(selectedQuestions).insert(SelectedQuestionsCompanion(certificateTypeId: Value(certificateTypeId), questionId: Value(questionId)));
+        await into(selectedQuestions).insert(
+          SelectedQuestionsCompanion(certificateTypeId: Value(certificateTypeId), questionId: Value(questionId)),
+        );
       } catch (e) {
         // Игнорируем ошибку дубликата если она все же возникнет
         continue;
@@ -197,20 +210,34 @@ class AppDb extends _$AppDb {
   }
 
   /// Получить все выбранные вопросы
-  Future<List<SelectedQuestion>> getSelectedQuestions(int certificateTypeId) => (select(selectedQuestions)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
+  Future<List<SelectedQuestion>> getSelectedQuestions(int certificateTypeId) =>
+      (select(selectedQuestions)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
 
   /// Удалить все выбранные вопросы
-  Future<int> deleteSelectedQuestions(int certificateTypeId) => (delete(selectedQuestions)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
+  Future<int> deleteSelectedQuestions(int certificateTypeId) =>
+      (delete(selectedQuestions)..where((t) => t.certificateTypeId.equals(certificateTypeId))).go();
 
   // ---------------- TEST ANSWERS ----------------
 
   /// Сохранить ответ на вопрос
-  Future<int> saveTestAnswer({required int certificateTypeId, required int questionId, required int selectedAnswerId, required int categoryId, required bool? isCorrect}) async {
+  Future<int> saveTestAnswer({
+    required int certificateTypeId,
+    required int questionId,
+    required int selectedAnswerId,
+    required int categoryId,
+    required bool? isCorrect,
+  }) async {
     final existingAnswer = await getAnswerForQuestion(certificateTypeId: certificateTypeId, questionId: questionId);
 
     if (existingAnswer != null) {
-      await (update(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).write(
-        TestAnswersCompanion(selectedAnswerId: Value(selectedAnswerId), categoryId: Value(categoryId), isCorrect: Value(isCorrect)),
+      await (update(
+        testAnswers,
+      )..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).write(
+        TestAnswersCompanion(
+          selectedAnswerId: Value(selectedAnswerId),
+          categoryId: Value(categoryId),
+          isCorrect: Value(isCorrect),
+        ),
       );
       return existingAnswer.id;
     } else {
@@ -227,7 +254,8 @@ class AppDb extends _$AppDb {
   }
 
   /// Получить все ответы по типу сертификата
-  Future<List<TestAnswer>> getAnswersByCertificateType(int certificateTypeId) => (select(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
+  Future<List<TestAnswer>> getAnswersByCertificateType(int certificateTypeId) =>
+      (select(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId))).get();
 
   /// Проверить есть ли хоть какие-то ответы (активный тест)
   Future<bool> hasActiveTest(int certificateTypeId) async {
@@ -252,8 +280,9 @@ class AppDb extends _$AppDb {
   }
 
   /// Получить ответ на конкретный вопрос
-  Future<TestAnswer?> getAnswerForQuestion({required int certificateTypeId, required int questionId}) =>
-      (select(testAnswers)..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).getSingleOrNull();
+  Future<TestAnswer?> getAnswerForQuestion({required int certificateTypeId, required int questionId}) => (select(
+    testAnswers,
+  )..where((t) => t.certificateTypeId.equals(certificateTypeId) & t.questionId.equals(questionId))).getSingleOrNull();
 
   /// Удалить все ответы для типа сертификата
   Future<int> deleteAnswersByCertificateType(int certificateTypeId) async {
@@ -273,6 +302,8 @@ class AppDb extends _$AppDb {
     final deletedQuestions = await delete(selectedQuestions).go();
     AppTalker.error('🔴 clearAllData: Deleted $deletedQuestions selected questions');
 
-    AppTalker.error('🔴 clearAllData: Database cleared! Total deletions - Answers: $deletedAnswers, Questions: $deletedQuestions');
+    AppTalker.error(
+      '🔴 clearAllData: Database cleared! Total deletions - Answers: $deletedAnswers, Questions: $deletedQuestions',
+    );
   }
 }

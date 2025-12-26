@@ -31,8 +31,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final NewsRepository _newsRepository;
 
   NewsBloc({required NewsRepository newsRepository})
-      : _newsRepository = newsRepository,
-        super(const LoadingNewsState()) {
+    : _newsRepository = newsRepository,
+      super(const LoadingNewsState()) {
     on<NewsEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),

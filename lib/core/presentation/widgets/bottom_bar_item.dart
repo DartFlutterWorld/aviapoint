@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:aviapoint/core/themes/app_styles.dart';
 
 class BottomBarItem extends StatelessWidget {
-  final String icon;
+  final String? icon;
+  final IconData? iconData;
   final String text;
   final Color activeColor;
   final Color textColor;
   final void Function() onPressed;
   final bool isActive;
 
-  const BottomBarItem({super.key, required this.icon, required this.text, required this.activeColor, required this.textColor, required this.onPressed, required this.isActive});
+  const BottomBarItem({
+    super.key,
+    this.icon,
+    this.iconData,
+    required this.text,
+    required this.activeColor,
+    required this.textColor,
+    required this.onPressed,
+    required this.isActive,
+  }) : assert(icon != null || iconData != null, 'Either icon or iconData must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,9 @@ class BottomBarItem extends StatelessWidget {
           children: [
             Column(
               children: [
-                SvgPicture.asset(icon, height: 24),
+                icon != null
+                    ? SvgPicture.asset(icon!, height: 24, colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn))
+                    : Icon(iconData!, size: 24, color: textColor),
                 const SizedBox(height: 6),
                 Text(
                   text,

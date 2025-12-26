@@ -12,6 +12,9 @@ abstract class ProfileDto with _$ProfileDto {
     @JsonKey(name: 'first_name') String? firstName,
     @JsonKey(name: 'last_name') String? lastName,
     @JsonKey(name: 'avatar_url') String? avatarUrl,
+    @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,
+    @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,
+    @JsonKey(name: 'owned_airports') dynamic ownedAirports, // JSONB массив ID аэропортов
   }) = _ProfileDto;
 
   // factory ProfileDto.fromEntity(ProfileEntity profile) => ProfileDto(
@@ -22,4 +25,22 @@ abstract class ProfileDto with _$ProfileDto {
   //     );
 
   factory ProfileDto.fromJson(Map<String, dynamic> json) => _$ProfileDtoFromJson(json);
+}
+
+/// Парсит nullable double
+double? _doubleFromJsonNullable(dynamic value) {
+  if (value == null) return null;
+  if (value is double) return value;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value);
+  return null;
+}
+
+/// Парсит nullable int
+int? _intFromJsonNullable(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  if (value is String) return int.tryParse(value);
+  return null;
 }

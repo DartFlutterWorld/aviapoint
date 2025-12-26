@@ -37,11 +37,7 @@ class EngineFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(25),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(25), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'throttle_controle', 'idle_pull_full_out'),
@@ -62,11 +58,7 @@ class EngineFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(25),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(25), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'airspeed_70_kias', 'flaps_up'),
@@ -90,11 +82,7 @@ class EngineFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(25),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(25), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'airspeed', '68_kias_best_glide_speed'),
@@ -117,22 +105,15 @@ class EngineFailureScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

@@ -6,12 +6,20 @@ import 'seo_helper_stub.dart' if (dart.library.html) 'seo_helper_web.dart' as ht
 /// Утилита для управления SEO метатегами
 class SeoHelper {
   /// Устанавливает метатеги для страницы
-  static void setMetaTags({required String title, required String description, String? imageUrl, String? url, String? type = 'website'}) {
+  static void setMetaTags({
+    required String title,
+    required String description,
+    String? imageUrl,
+    String? url,
+    String? type = 'website',
+  }) {
     if (!kIsWeb) return;
 
     final baseUrl = 'https://avia-point.com';
     final fullUrl = url != null ? '$baseUrl$url' : baseUrl;
-    final fullImageUrl = imageUrl != null ? (imageUrl.startsWith('http') ? imageUrl : '$baseUrl$imageUrl') : '$baseUrl/icons/Icon-512.png';
+    final fullImageUrl = imageUrl != null
+        ? (imageUrl.startsWith('http') ? imageUrl : '$baseUrl$imageUrl')
+        : '$baseUrl/icons/Icon-512.png';
 
     // Устанавливаем title
     html.SeoHelperWeb.setTitle(title);
@@ -41,10 +49,23 @@ class SeoHelper {
 
   /// Генерирует ключевые слова на основе заголовка и описания
   static String _generateKeywords(String title, String description) {
-    final keywords = <String>['авиация', 'пилот', 'обучение пилотов', 'РосАвиаТест', 'частный пилот', 'самолеты', 'запчасти для самолетов', 'авиационный маркет'];
+    final keywords = <String>[
+      'авиация',
+      'пилот',
+      'обучение пилотов',
+      'РосАвиаТест',
+      'частный пилот',
+      'самолеты',
+      'запчасти для самолетов',
+      'авиационный маркет',
+    ];
 
     // Добавляем слова из заголовка и описания
-    final words = '${title.toLowerCase()} ${description.toLowerCase()}'.split(RegExp(r'[^\wа-яё]+')).where((word) => word.length > 3).take(5).toList();
+    final words = '${title.toLowerCase()} ${description.toLowerCase()}'
+        .split(RegExp(r'[^\wа-яё]+'))
+        .where((word) => word.length > 3)
+        .take(5)
+        .toList();
 
     keywords.addAll(words);
 
@@ -52,11 +73,27 @@ class SeoHelper {
   }
 
   /// Устанавливает метатеги для страницы новости
-  static void setNewsMetaTags({required String title, required String description, String? imageUrl, required int newsId, DateTime? publishedAt}) {
-    setMetaTags(title: '$title - AviaPoint', description: description, imageUrl: imageUrl, url: '/news/$newsId', type: 'article');
+  static void setNewsMetaTags({
+    required String title,
+    required String description,
+    String? imageUrl,
+    required int newsId,
+    DateTime? publishedAt,
+  }) {
+    setMetaTags(
+      title: '$title - AviaPoint',
+      description: description,
+      imageUrl: imageUrl,
+      url: '/news/$newsId',
+      type: 'article',
+    );
 
     if (publishedAt != null && kIsWeb) {
-      html.SeoHelperWeb.setMetaTag('article:published_time', publishedAt.toIso8601String(), property: 'article:published_time');
+      html.SeoHelperWeb.setMetaTag(
+        'article:published_time',
+        publishedAt.toIso8601String(),
+        property: 'article:published_time',
+      );
     }
   }
 
@@ -66,13 +103,25 @@ class SeoHelper {
   }
 
   /// Устанавливает метатеги для страницы чек-листа
-  static void setChecklistMetaTags({required String title, required String description, required String categoryType, required int categoryId, String? imageUrl}) {
+  static void setChecklistMetaTags({
+    required String title,
+    required String description,
+    required String categoryType,
+    required int categoryId,
+    String? imageUrl,
+  }) {
     final url = '/learning/hand_book/$categoryType/check_list/$categoryId';
     setLearningMetaTags(title: title, description: description, url: url, imageUrl: imageUrl);
   }
 
   /// Устанавливает метатеги для страницы вопроса
-  static void setQuestionMetaTags({required String title, required String description, required String typeCertificate, required int questionId, String? imageUrl}) {
+  static void setQuestionMetaTags({
+    required String title,
+    required String description,
+    required String typeCertificate,
+    required int questionId,
+    String? imageUrl,
+  }) {
     final url = '/learning/type_sertificates/$typeCertificate/$questionId';
     setLearningMetaTags(title: title, description: description, url: url, imageUrl: imageUrl);
   }

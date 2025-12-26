@@ -52,7 +52,11 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(getImageUrl(url)));
     await Future.wait([_videoPlayerController!.initialize()]);
 
-    _chewieController = ChewieController(videoPlayerController: _videoPlayerController!, autoPlay: false, looping: true);
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController!,
+      autoPlay: false,
+      looping: true,
+    );
     setState(() {});
   }
 

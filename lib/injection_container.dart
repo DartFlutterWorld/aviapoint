@@ -32,6 +32,9 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/profile_page/profile/data/datasources/profile_service.dart';
 import 'package:aviapoint/profile_page/profile/data/repositories/profile_repository_impl.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
+import 'package:aviapoint/on_the_way/data/datasources/on_the_way_service.dart';
+import 'package:aviapoint/on_the_way/data/repositories/on_the_way_repository_impl.dart';
+import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get_it/get_it.dart';
 
@@ -47,7 +50,9 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<MyRouteObserver>(MyRouteObserver());
 
   // Сначала регистрируем AuthRepository
-  getIt.registerSingleton<AuthRepository>(AuthRepositoryImpl(authService: AuthService(dataSource.dio), apiDatasource: getIt.get<ApiDatasource>()));
+  getIt.registerSingleton<AuthRepository>(
+    AuthRepositoryImpl(authService: AuthService(dataSource.dio), apiDatasource: getIt.get<ApiDatasource>()),
+  );
 
   // Теперь создаём AppState, используя зарегистрированный AuthRepository
   final appState = AppState(authRepository: getIt<AuthRepository>());
@@ -56,7 +61,11 @@ Future<void> setupDependencies() async {
   // Регистрируем остальные зависимости
   getIt.registerSingleton<ProfileRepository>(ProfileRepositoryImpl(profileService: ProfileService(dataSource.dio)));
 
-  getIt.registerSingleton<VideoForStudentsRepository>(VideoForStudentsRepositoryImpl(videoForStudentsService: VideoForStudentsService(dataSource.dio)));
+  getIt.registerSingleton<OnTheWayRepository>(OnTheWayRepositoryImpl(onTheWayService: OnTheWayService(dataSource.dio)));
+
+  getIt.registerSingleton<VideoForStudentsRepository>(
+    VideoForStudentsRepositoryImpl(videoForStudentsService: VideoForStudentsService(dataSource.dio)),
+  );
 
   getIt.registerSingleton<HandBookRepository>(HandBookRepositoryImpl(handBookService: HandBookService(dataSource.dio)));
 
@@ -66,7 +75,9 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<StoryRepository>(StoryRepositoryImpl(storyService: StoryService(dataSource.dio)));
   getIt.registerSingleton<NewsRepository>(NewsRepositoryImpl(newsService: NewsService(dataSource.dio)));
 
-  getIt.registerSingleton<RosAviaTestRepository>(RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)));
+  getIt.registerSingleton<RosAviaTestRepository>(
+    RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)),
+  );
   getIt.registerSingleton<AppDb>(AppDb());
   getIt.registerSingleton<RosAviaTestCubit>(RosAviaTestCubit());
 

@@ -24,7 +24,8 @@ abstract class EmergencyCategoriesState with _$EmergencyCategoriesState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorEmergencyCategoriesState;
-  const factory EmergencyCategoriesState.success({required List<EmergencyCategoriesEntity> emergencyCategories}) = SuccessEmergencyCategoriesState;
+  const factory EmergencyCategoriesState.success({required List<EmergencyCategoriesEntity> emergencyCategories}) =
+      SuccessEmergencyCategoriesState;
   // const factory EmergencyCategoriesState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdEmergencyCategoriesState;
   // const factory EmergencyCategoriesState.done() = DoneEmergencyCategoriesState;
 }
@@ -33,8 +34,8 @@ class EmergencyCategoriesBloc extends Bloc<EmergencyCategoriesEvent, EmergencyCa
   final HandBookRepository _handBookRepository;
 
   EmergencyCategoriesBloc({required HandBookRepository handBookRepository})
-      : _handBookRepository = handBookRepository,
-        super(const LoadingEmergencyCategoriesState()) {
+    : _handBookRepository = handBookRepository,
+      super(const LoadingEmergencyCategoriesState()) {
     on<EmergencyCategoriesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -59,9 +60,7 @@ class EmergencyCategoriesBloc extends Bloc<EmergencyCategoriesEvent, EmergencyCa
         );
       },
       (r) {
-        emit(
-          SuccessEmergencyCategoriesState(emergencyCategories: r),
-        );
+        emit(SuccessEmergencyCategoriesState(emergencyCategories: r));
       },
     );
   }

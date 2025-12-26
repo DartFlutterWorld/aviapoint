@@ -29,7 +29,10 @@ abstract class NormalCheckListByCategoryState with _$NormalCheckListByCategorySt
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorNormalCheckListByCategoryState;
-  const factory NormalCheckListByCategoryState.success({required List<NormalCheckListEntity> normalCheckListByCategory, required int index}) = SuccessNormalCheckListByCategoryState;
+  const factory NormalCheckListByCategoryState.success({
+    required List<NormalCheckListEntity> normalCheckListByCategory,
+    required int index,
+  }) = SuccessNormalCheckListByCategoryState;
   // const factory NormalCheckListByCategoryState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdNormalCheckListByCategoryState;
   const factory NormalCheckListByCategoryState.initial() = InitialNormalCheckListByCategoryState;
 }
@@ -38,10 +41,12 @@ class NormalCheckListByCategoryBloc extends Bloc<NormalCheckListByCategoryEvent,
   final HandBookRepository _handBookRepository;
   final NormalCheckedCubit _normalCheckedCubit;
 
-  NormalCheckListByCategoryBloc({required HandBookRepository handBookRepository, required NormalCheckedCubit normalCheckedCubit})
-      : _handBookRepository = handBookRepository,
-        _normalCheckedCubit = normalCheckedCubit,
-        super(const InitialNormalCheckListByCategoryState()) {
+  NormalCheckListByCategoryBloc({
+    required HandBookRepository handBookRepository,
+    required NormalCheckedCubit normalCheckedCubit,
+  }) : _handBookRepository = handBookRepository,
+       _normalCheckedCubit = normalCheckedCubit,
+       super(const InitialNormalCheckListByCategoryState()) {
     on<NormalCheckListByCategoryEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -50,7 +55,10 @@ class NormalCheckListByCategoryBloc extends Bloc<NormalCheckListByCategoryEvent,
       ),
     );
   }
-  Future<void> _initial(InitialNormalCheckListByCategoryEvent event, Emitter<NormalCheckListByCategoryState> emit) async {
+  Future<void> _initial(
+    InitialNormalCheckListByCategoryEvent event,
+    Emitter<NormalCheckListByCategoryState> emit,
+  ) async {
     emit(const InitialNormalCheckListByCategoryState());
   }
 
@@ -78,7 +86,10 @@ class NormalCheckListByCategoryBloc extends Bloc<NormalCheckListByCategoryEvent,
         );
         ;
         emit(
-          SuccessNormalCheckListByCategoryState(normalCheckListByCategory: r, index: checkProgressByIdCategory?.checkedIds.last ?? 0),
+          SuccessNormalCheckListByCategoryState(
+            normalCheckListByCategory: r,
+            index: checkProgressByIdCategory?.checkedIds.last ?? 0,
+          ),
         );
       },
     );

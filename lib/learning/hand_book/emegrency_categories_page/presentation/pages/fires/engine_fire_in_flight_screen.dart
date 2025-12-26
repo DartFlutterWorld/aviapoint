@@ -39,7 +39,11 @@ class EngineFireInFlightScreen extends StatelessWidget {
                   customTableRow(4, 'master_switch_alt_and_bat', 'off'),
                   customTableRow(5, 'cabin_vents', 'open_as_needed'),
                   customTableRow(6, 'cabin_ht_and_cabin_air_control_knobs', 'off_push_full_in_to_avoid_drafts'),
-                  customTableRow(7, 'airspeed', '100_kias_if_fire_is_not_extinguished_increase_glid_speed_to_find_an_airspeed_within_airspeed_limitations_which_will_provide_an_incombustible_mixture'),
+                  customTableRow(
+                    7,
+                    'airspeed',
+                    '100_kias_if_fire_is_not_extinguished_increase_glid_speed_to_find_an_airspeed_within_airspeed_limitations_which_will_provide_an_incombustible_mixture',
+                  ),
                   customTableRow(8, 'forced_landing', 'execute_refer_to_emergency_landing_without_engine_power'),
                 ],
               ),

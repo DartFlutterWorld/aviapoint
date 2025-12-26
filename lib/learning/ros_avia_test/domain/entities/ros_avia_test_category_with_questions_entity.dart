@@ -18,7 +18,14 @@ class RosAviaTestCategoryWithQuestionsEntity extends Equatable {
     required this.questionsWithAnswers,
   });
   @override
-  List<Object?> get props => [categoryId, categoryTitle, categoryImage, categoryPosition, questionsCount, questionsCount];
+  List<Object?> get props => [
+    categoryId,
+    categoryTitle,
+    categoryImage,
+    categoryPosition,
+    questionsCount,
+    questionsCount,
+  ];
 }
 
 extension QuestionCountExtension on RosAviaTestCategoryWithQuestionsEntity {

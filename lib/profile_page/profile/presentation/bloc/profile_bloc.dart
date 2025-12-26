@@ -21,7 +21,13 @@ abstract class ProfileEvent with _$ProfileEvent {
 abstract class ProfileState with _$ProfileState {
   const ProfileState._();
   const factory ProfileState.loading() = LoadingProfileState;
-  const factory ProfileState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorProfileState;
+  const factory ProfileState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorProfileState;
   const factory ProfileState.success({required ProfileEntity profile}) = SuccessProfileState;
   const factory ProfileState.initial() = InitialProfileState;
 }
@@ -29,7 +35,9 @@ abstract class ProfileState with _$ProfileState {
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileRepository _profileRepository;
 
-  ProfileBloc({required ProfileRepository profileRepository, required AppState initState}) : _profileRepository = profileRepository, super(const InitialProfileState()) {
+  ProfileBloc({required ProfileRepository profileRepository, required AppState initState})
+    : _profileRepository = profileRepository,
+      super(const InitialProfileState()) {
     on<ProfileEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -68,7 +76,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> _update(UpdateProfileEvent event, Emitter<ProfileState> emit) async {
     emit(const LoadingProfileState());
 
-    final response = await _profileRepository.updateProfile(email: event.email, firstName: event.firstName, lastName: event.lastName);
+    final response = await _profileRepository.updateProfile(
+      email: event.email,
+      firstName: event.firstName,
+      lastName: event.lastName,
+    );
     response.fold(
       (l) {
         emit(

@@ -110,7 +110,9 @@ class PaymentRepositoryImpl implements PaymentRepository {
     } catch (e, stackTrace) {
       // Проверяем, не является ли ошибка попыткой распарсить HTML как JSON
       final errorString = e.toString();
-      if (errorString.contains('type \'String\' is not a subtype of type \'Map') || errorString.contains('<!DOCTYPE html>') || errorString.contains('DioException [unknown]')) {
+      if (errorString.contains('type \'String\' is not a subtype of type \'Map') ||
+          errorString.contains('<!DOCTYPE html>') ||
+          errorString.contains('DioException [unknown]')) {
         print('⚠️  Ошибка парсинга: сервер вернул HTML вместо JSON');
         print('   Ошибка: $e');
         return []; // Возвращаем пустой список вместо ошибки

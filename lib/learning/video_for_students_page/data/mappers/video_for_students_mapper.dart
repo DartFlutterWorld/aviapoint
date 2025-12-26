@@ -2,20 +2,11 @@ import 'package:aviapoint/learning/video_for_students_page/data/models/video_for
 import 'package:aviapoint/learning/video_for_students_page/domain/entities/video_for_students_entity.dart';
 
 class VideoForStudentsMapper {
-  static VideoForStudentsEntity toEntity(
-    VideoForStudentsDto model,
-  ) {
-    return VideoForStudentsEntity(
-      id: model.id,
-      title: model.title,
-      fileName: model.fileName,
-      url: model.url,
-    );
+  static VideoForStudentsEntity toEntity(VideoForStudentsDto model) {
+    return VideoForStudentsEntity(id: model.id, title: model.title, fileName: model.fileName, url: model.url);
   }
 
-  static List<VideoForStudentsEntity> toEntities(
-    List<VideoForStudentsDto> models,
-  ) {
+  static List<VideoForStudentsEntity> toEntities(List<VideoForStudentsDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

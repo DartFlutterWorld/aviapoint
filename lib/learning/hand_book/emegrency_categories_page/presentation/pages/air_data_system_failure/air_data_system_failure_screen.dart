@@ -37,14 +37,14 @@ class AirDataSystemFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
-                  customTableRow(1, 'adc_ahrs_circuit_breakers', 'check_in_ess_bus_and_avn_bus1_if_open_reset_close_circuit_breaker_if_circuit_breaker_opens_again_do_not_reset'),
+                  customTableRow(
+                    1,
+                    'adc_ahrs_circuit_breakers',
+                    'check_in_ess_bus_and_avn_bus1_if_open_reset_close_circuit_breaker_if_circuit_breaker_opens_again_do_not_reset',
+                  ),
                   customTableRow(2, 'standby_airspeed_indicator', 'use_for_airspeed_information'),
                 ],
               ),
@@ -57,15 +57,19 @@ class AirDataSystemFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
-                  customTableRow(1, 'adc_ahrs_circuit_breakers', 'check_in_ess_bus_and_avn_bus1_if_open_reset_close_circuit_breaker_if_circuit_breaker_opens_again_do_not_reset'),
-                  customTableRow(2, 'standby_altimetr', 'check_current_barometric_pressure_set_use_for_altitude_information'),
+                  customTableRow(
+                    1,
+                    'adc_ahrs_circuit_breakers',
+                    'check_in_ess_bus_and_avn_bus1_if_open_reset_close_circuit_breaker_if_circuit_breaker_opens_again_do_not_reset',
+                  ),
+                  customTableRow(
+                    2,
+                    'standby_altimetr',
+                    'check_current_barometric_pressure_set_use_for_altitude_information',
+                  ),
                 ],
               ),
               SizedBox(height: 16),
@@ -77,22 +81,15 @@ class AirDataSystemFailureScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

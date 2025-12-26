@@ -11,15 +11,18 @@ part 'preflight_inspection_check_list_by_category_bloc.freezed.dart';
 abstract class PreflightInspectionCheckListByCategoryEvent with _$PreflightInspectionCheckListByCategoryEvent {
   const PreflightInspectionCheckListByCategoryEvent._();
 
-  const factory PreflightInspectionCheckListByCategoryEvent.get(String preflihgtInspectionCategoryId) = GetPreflightInspectionCheckListByCategoryEvent;
-  const factory PreflightInspectionCheckListByCategoryEvent.initial() = InitialPreflightInspectionCheckListByCategoryEvent;
+  const factory PreflightInspectionCheckListByCategoryEvent.get(String preflihgtInspectionCategoryId) =
+      GetPreflightInspectionCheckListByCategoryEvent;
+  const factory PreflightInspectionCheckListByCategoryEvent.initial() =
+      InitialPreflightInspectionCheckListByCategoryEvent;
   // const factory PreflightInspectionCheckListByCategoryEvent.getById(int id) = GetByIdPreflightInspectionCheckListByCategoryEvent;
 }
 
 @freezed
 abstract class PreflightInspectionCheckListByCategoryState with _$PreflightInspectionCheckListByCategoryState {
   const PreflightInspectionCheckListByCategoryState._();
-  const factory PreflightInspectionCheckListByCategoryState.loading() = LoadingPreflightInspectionCheckListByCategoryState;
+  const factory PreflightInspectionCheckListByCategoryState.loading() =
+      LoadingPreflightInspectionCheckListByCategoryState;
   const factory PreflightInspectionCheckListByCategoryState.error({
     String? errorFromApi,
     required String errorForUser,
@@ -27,20 +30,26 @@ abstract class PreflightInspectionCheckListByCategoryState with _$PreflightInspe
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorPreflightInspectionCheckListByCategoryState;
-  const factory PreflightInspectionCheckListByCategoryState.success({required List<PreflightInspectionCheckListEntity> preflightInspectionCheckListByCategory, required int index}) =
-      SuccessPreflightInspectionCheckListByCategoryState;
+  const factory PreflightInspectionCheckListByCategoryState.success({
+    required List<PreflightInspectionCheckListEntity> preflightInspectionCheckListByCategory,
+    required int index,
+  }) = SuccessPreflightInspectionCheckListByCategoryState;
   // const factory PreflightInspectionCheckListByCategoryState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdPreflightInspectionCheckListByCategoryState;
-  const factory PreflightInspectionCheckListByCategoryState.initial() = InitialPreflightInspectionCheckListByCategoryState;
+  const factory PreflightInspectionCheckListByCategoryState.initial() =
+      InitialPreflightInspectionCheckListByCategoryState;
 }
 
-class PreflightInspectionCheckListByCategoryBloc extends Bloc<PreflightInspectionCheckListByCategoryEvent, PreflightInspectionCheckListByCategoryState> {
+class PreflightInspectionCheckListByCategoryBloc
+    extends Bloc<PreflightInspectionCheckListByCategoryEvent, PreflightInspectionCheckListByCategoryState> {
   final HandBookRepository _handBookRepository;
   final PreflightCheckedCubit _preflightCheckedCubit;
 
-  PreflightInspectionCheckListByCategoryBloc({required HandBookRepository handBookRepository, required PreflightCheckedCubit preflightCheckedCubit})
-      : _handBookRepository = handBookRepository,
-        _preflightCheckedCubit = preflightCheckedCubit,
-        super(const InitialPreflightInspectionCheckListByCategoryState()) {
+  PreflightInspectionCheckListByCategoryBloc({
+    required HandBookRepository handBookRepository,
+    required PreflightCheckedCubit preflightCheckedCubit,
+  }) : _handBookRepository = handBookRepository,
+       _preflightCheckedCubit = preflightCheckedCubit,
+       super(const InitialPreflightInspectionCheckListByCategoryState()) {
     on<PreflightInspectionCheckListByCategoryEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -49,14 +58,22 @@ class PreflightInspectionCheckListByCategoryBloc extends Bloc<PreflightInspectio
       ),
     );
   }
-  Future<void> _initial(InitialPreflightInspectionCheckListByCategoryEvent event, Emitter<PreflightInspectionCheckListByCategoryState> emit) async {
+  Future<void> _initial(
+    InitialPreflightInspectionCheckListByCategoryEvent event,
+    Emitter<PreflightInspectionCheckListByCategoryState> emit,
+  ) async {
     emit(const InitialPreflightInspectionCheckListByCategoryState());
   }
 
-  Future<void> _get(GetPreflightInspectionCheckListByCategoryEvent event, Emitter<PreflightInspectionCheckListByCategoryState> emit) async {
+  Future<void> _get(
+    GetPreflightInspectionCheckListByCategoryEvent event,
+    Emitter<PreflightInspectionCheckListByCategoryState> emit,
+  ) async {
     emit(const LoadingPreflightInspectionCheckListByCategoryState());
 
-    final response = await _handBookRepository.fetchPreflightInspectionCheckListByCategory(event.preflihgtInspectionCategoryId);
+    final response = await _handBookRepository.fetchPreflightInspectionCheckListByCategory(
+      event.preflihgtInspectionCategoryId,
+    );
     response.fold(
       (l) {
         emit(
@@ -77,7 +94,10 @@ class PreflightInspectionCheckListByCategoryBloc extends Bloc<PreflightInspectio
         );
         ;
         emit(
-          SuccessPreflightInspectionCheckListByCategoryState(preflightInspectionCheckListByCategory: r, index: checkProgressByIdCategory?.checkedIds.last ?? 0),
+          SuccessPreflightInspectionCheckListByCategoryState(
+            preflightInspectionCheckListByCategory: r,
+            index: checkProgressByIdCategory?.checkedIds.last ?? 0,
+          ),
         );
       },
     );

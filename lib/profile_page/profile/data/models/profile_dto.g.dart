@@ -13,6 +13,9 @@ _ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) => _ProfileDto(
   firstName: json['first_name'] as String?,
   lastName: json['last_name'] as String?,
   avatarUrl: json['avatar_url'] as String?,
+  averageRating: _doubleFromJsonNullable(json['average_rating']),
+  reviewsCount: _intFromJsonNullable(json['reviews_count']),
+  ownedAirports: json['owned_airports'],
 );
 
 Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) =>
@@ -23,4 +26,7 @@ Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) =>
       'first_name': instance.firstName,
       'last_name': instance.lastName,
       'avatar_url': instance.avatarUrl,
+      'average_rating': instance.averageRating,
+      'reviews_count': instance.reviewsCount,
+      'owned_airports': instance.ownedAirports,
     };

@@ -18,8 +18,15 @@ abstract class NormalCategoriesEvent with _$NormalCategoriesEvent {
 abstract class NormalCategoriesState with _$NormalCategoriesState {
   const NormalCategoriesState._();
   const factory NormalCategoriesState.loading() = LoadingNormalCategoriesState;
-  const factory NormalCategoriesState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorNormalCategoriesState;
-  const factory NormalCategoriesState.success({required List<NormalCategoriesEntity> normalCategories}) = SuccessNormalCategoriesState;
+  const factory NormalCategoriesState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorNormalCategoriesState;
+  const factory NormalCategoriesState.success({required List<NormalCategoriesEntity> normalCategories}) =
+      SuccessNormalCategoriesState;
   // const factory NormalCategoriesState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdNormalCategoriesState;
   // const factory NormalCategoriesState.done() = DoneNormalCategoriesState;
 }
@@ -27,7 +34,9 @@ abstract class NormalCategoriesState with _$NormalCategoriesState {
 class NormalCategoriesBloc extends Bloc<NormalCategoriesEvent, NormalCategoriesState> {
   final HandBookRepository _handBookRepository;
 
-  NormalCategoriesBloc({required HandBookRepository handBookRepository}) : _handBookRepository = handBookRepository, super(const LoadingNormalCategoriesState()) {
+  NormalCategoriesBloc({required HandBookRepository handBookRepository})
+    : _handBookRepository = handBookRepository,
+      super(const LoadingNormalCategoriesState()) {
     on<NormalCategoriesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),

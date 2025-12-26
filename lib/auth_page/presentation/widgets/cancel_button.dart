@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CancelButton extends StatelessWidget {
-  const CancelButton({
-    super.key,
-    this.onTap,
-  });
+  const CancelButton({super.key, this.onTap});
 
   final void Function()? onTap;
 
@@ -14,7 +11,8 @@ class CancelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () {
             Navigator.pop(context);
           },

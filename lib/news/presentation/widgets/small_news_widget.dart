@@ -65,7 +65,8 @@ class SmallNewsWidget extends StatelessWidget {
                 SizedBox(height: 5),
                 Text(news.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 5),
-                if (news.subTitle.isNotEmpty) Text(news.subTitle, style: AppStyles.light10s.copyWith(color: Color(0xFF374151))),
+                if (news.subTitle.isNotEmpty)
+                  Text(news.subTitle, style: AppStyles.light10s.copyWith(color: Color(0xFF374151))),
               ],
             ),
           ),

@@ -20,7 +20,8 @@ import 'package:talker_flutter/talker_flutter.dart';
 class SSlHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -52,7 +53,13 @@ Future<void> _run() async {
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   /// Задаем цвета статусбара.
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
 
   /// Задаем обработку SSL.
   HttpOverrides.global = SSlHttpOverrides();

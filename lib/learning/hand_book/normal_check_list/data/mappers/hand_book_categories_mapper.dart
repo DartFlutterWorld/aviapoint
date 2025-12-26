@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/hand_book/normal_check_list/data/models/norma
 import 'package:aviapoint/learning/hand_book/normal_check_list/domain/entities/normal_check_list_entity.dart';
 
 class NormalCheckListMapper {
-  static NormalCheckListEntity toEntity(
-    NormalCheckListDto model,
-  ) {
+  static NormalCheckListEntity toEntity(NormalCheckListDto model) {
     return NormalCheckListEntity(
       id: model.id,
       normalCategoryId: model.normalCategoryId,
@@ -19,9 +17,7 @@ class NormalCheckListMapper {
     );
   }
 
-  static List<NormalCheckListEntity> toEntities(
-    List<NormalCheckListDto> models,
-  ) {
+  static List<NormalCheckListEntity> toEntities(List<NormalCheckListDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

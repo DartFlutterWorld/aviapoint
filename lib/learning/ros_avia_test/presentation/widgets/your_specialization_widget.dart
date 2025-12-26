@@ -8,12 +8,7 @@ class YourSpecializationWidget extends StatelessWidget {
   final String specialization;
   final int topics;
   final VoidCallback onTap;
-  const YourSpecializationWidget({
-    super.key,
-    required this.specialization,
-    required this.topics,
-    required this.onTap,
-  });
+  const YourSpecializationWidget({super.key, required this.specialization, required this.topics, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,52 +17,25 @@ class YourSpecializationWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color(0xFFE3F1FF),
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFF000000).withOpacity(0.08),
-            blurRadius: 4.0,
-            offset: Offset(
-              0.0,
-              4.0,
-            ),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Color(0xFF000000).withOpacity(0.08), blurRadius: 4.0, offset: Offset(0.0, 4.0))],
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Ваша специализация',
-                style: AppStyles.medium14s.copyWith(
-                  color: Color(0xFF223B76),
-                ),
-              ),
+              Text('Ваша специализация', style: AppStyles.medium14s.copyWith(color: Color(0xFF223B76))),
               Container(
                 padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(27),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(27)),
                 child: Row(
                   children: [
-                    Text(
-                      'Всего:',
-                      style: AppStyles.medium10s.copyWith(
-                        color: Color(0xFF374151),
-                      ),
-                    ),
+                    Text('Всего:', style: AppStyles.medium10s.copyWith(color: Color(0xFF374151))),
                     SizedBox(width: 5),
-                    Text(
-                      '$topics тем',
-                      style: AppStyles.medium10s.copyWith(
-                        color: Color(0xFF0A6EFA),
-                      ),
-                    ),
+                    Text('$topics тем', style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA))),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           SizedBox(height: 8),
@@ -75,22 +43,14 @@ class YourSpecializationWidget extends StatelessWidget {
             onTap: onTap,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 9.5.h),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Text(
-                      specialization,
-                      style: AppStyles.regular14s.copyWith(
-                        color: Color(0xFF4B5767),
-                      ),
-                    ),
+                    child: Text(specialization, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
                   ),
-                  SvgPicture.asset(Pictures.arrowDown)
+                  SvgPicture.asset(Pictures.arrowDown),
                 ],
               ),
             ),

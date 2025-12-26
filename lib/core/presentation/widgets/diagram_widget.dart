@@ -53,7 +53,12 @@ class DiagramWidget extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               CustomPaint(
-                painter: _GaugePainter(progress: value, strokeWidth: strokeWidth, gradientColors: gradientColors, trackColor: trackColor),
+                painter: _GaugePainter(
+                  progress: value,
+                  strokeWidth: strokeWidth,
+                  gradientColors: gradientColors,
+                  trackColor: trackColor,
+                ),
               ),
               // Контент в центре
               Center(
@@ -68,7 +73,12 @@ class DiagramWidget extends StatelessWidget {
 }
 
 class _GaugePainter extends CustomPainter {
-  _GaugePainter({required this.progress, required this.strokeWidth, required this.gradientColors, required this.trackColor});
+  _GaugePainter({
+    required this.progress,
+    required this.strokeWidth,
+    required this.gradientColors,
+    required this.trackColor,
+  });
 
   final double progress; // 0.0…1.0
   final double strokeWidth;
@@ -99,7 +109,12 @@ class _GaugePainter extends CustomPainter {
         ..strokeWidth = strokeWidth
         ..strokeCap = StrokeCap.butt
         // SweepGradient вдоль дуги, от левого края (π) до текущего угла
-        ..shader = SweepGradient(startAngle: math.pi, endAngle: math.pi + sweep, colors: gradientColors, tileMode: TileMode.clamp).createShader(arcRect);
+        ..shader = SweepGradient(
+          startAngle: math.pi,
+          endAngle: math.pi + sweep,
+          colors: gradientColors,
+          tileMode: TileMode.clamp,
+        ).createShader(arcRect);
 
       canvas.drawArc(arcRect, math.pi, sweep, false, progressPaint);
     }
@@ -107,7 +122,10 @@ class _GaugePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _GaugePainter old) {
-    return old.progress != progress || old.strokeWidth != strokeWidth || old.trackColor != trackColor || old.gradientColors != gradientColors;
+    return old.progress != progress ||
+        old.strokeWidth != strokeWidth ||
+        old.trackColor != trackColor ||
+        old.gradientColors != gradientColors;
   }
 }
 
@@ -125,7 +143,12 @@ class _DefaultCenter extends StatelessWidget {
 
     return Text(
       '$value %',
-      style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, color: const Color(0xFF233163), letterSpacing: 0.5),
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: FontWeight.w800,
+        color: const Color(0xFF233163),
+        letterSpacing: 0.5,
+      ),
     );
   }
 }

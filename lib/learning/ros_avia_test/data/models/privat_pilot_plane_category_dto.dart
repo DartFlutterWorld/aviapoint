@@ -20,5 +20,6 @@ abstract class PrivatPilotPlaneCategoryDto with _$PrivatPilotPlaneCategoryDto {
   //       type: profile.type,
   //     );
 
-  factory PrivatPilotPlaneCategoryDto.fromJson(Map<String, dynamic> json) => _$PrivatPilotPlaneCategoryDtoFromJson(json);
+  factory PrivatPilotPlaneCategoryDto.fromJson(Map<String, dynamic> json) =>
+      _$PrivatPilotPlaneCategoryDtoFromJson(json);
 }

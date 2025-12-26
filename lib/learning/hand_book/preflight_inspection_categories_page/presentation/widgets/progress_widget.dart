@@ -24,7 +24,10 @@ class ProgressWidget extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10),
-          Text('$from из $to', style: AppStyles.medium10s.copyWith(color: from == to ? Color(0xFF15D585) : Color(0xFF0970FF))),
+          Text(
+            '$from из $to',
+            style: AppStyles.medium10s.copyWith(color: from == to ? Color(0xFF15D585) : Color(0xFF0970FF)),
+          ),
         ],
       ),
     );

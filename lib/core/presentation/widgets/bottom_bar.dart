@@ -7,10 +7,7 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 
 /// Нижнаяя панель навигации.
 class BottomBar extends StatefulWidget {
-  const BottomBar({
-    super.key,
-    this.tabsRouter,
-  });
+  const BottomBar({super.key, this.tabsRouter});
 
   final TabsRouter? tabsRouter;
 
@@ -35,9 +32,7 @@ class BottomBarState extends State<BottomBar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 5.0,
-            ),
+            padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
               icon: Pictures.bookNavbar,
               text: 'Обучение',
@@ -45,9 +40,7 @@ class BottomBarState extends State<BottomBar> {
               textColor: widget.tabsRouter!.activeIndex == 0 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 0) {
-                  AutoRouter.of(context).navigate(
-                    const LearningNavigationRoute(),
-                  );
+                  AutoRouter.of(context).navigate(const LearningNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(0);
                 }
@@ -64,9 +57,7 @@ class BottomBarState extends State<BottomBar> {
               textColor: widget.tabsRouter!.activeIndex == 1 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 1) {
-                  AutoRouter.of(context).navigate(
-                    const MarketNavigationRoute(),
-                  );
+                  AutoRouter.of(context).navigate(const MarketNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(1);
                 }
@@ -83,9 +74,7 @@ class BottomBarState extends State<BottomBar> {
               textColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 2) {
-                  AutoRouter.of(context).navigate(
-                    const MainNavigationRoute(),
-                  );
+                  AutoRouter.of(context).navigate(const MainNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(2);
                 }
@@ -102,9 +91,7 @@ class BottomBarState extends State<BottomBar> {
               textColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 3) {
-                  AutoRouter.of(context).navigate(
-                    const NewsNavigationRoute(),
-                  );
+                  AutoRouter.of(context).navigate(const NewsNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(3);
                 }
@@ -115,20 +102,31 @@ class BottomBarState extends State<BottomBar> {
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
-              icon: Pictures.profileNavbar,
-              text: 'Профиль',
+              iconData: Icons.flight,
+              text: 'По пути',
               activeColor: widget.tabsRouter!.activeIndex == 4 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 4 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
-                if (widget.tabsRouter!.activeIndex == 4) {
-                  AutoRouter.of(context).navigate(
-                    const ProfileNavigationRoute(),
-                  );
-                } else {
-                  widget.tabsRouter!.setActiveIndex(4);
-                }
+                widget.tabsRouter!.setActiveIndex(4);
               },
               isActive: widget.tabsRouter!.activeIndex == 4,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: BottomBarItem(
+              icon: Pictures.profileNavbar,
+              text: 'Профиль',
+              activeColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFFE3F1FF) : Colors.transparent,
+              textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
+              onPressed: () {
+                if (widget.tabsRouter!.activeIndex == 5) {
+                  AutoRouter.of(context).navigate(const ProfileNavigationRoute());
+                } else {
+                  widget.tabsRouter!.setActiveIndex(5);
+                }
+              },
+              isActive: widget.tabsRouter!.activeIndex == 5,
             ),
           ),
         ],

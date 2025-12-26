@@ -18,14 +18,22 @@ abstract class DetailNewsEvent with _$DetailNewsEvent {
 abstract class DetailNewsState with _$DetailNewsState {
   const DetailNewsState._();
   const factory DetailNewsState.loading() = LoadingDetailNewsState;
-  const factory DetailNewsState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorDetailNewsState;
+  const factory DetailNewsState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorDetailNewsState;
   const factory DetailNewsState.success({required NewsEntity news}) = SuccessDetailNewsState;
 }
 
 class DetailNewsBloc extends Bloc<DetailNewsEvent, DetailNewsState> {
   final NewsRepository _newsRepository;
 
-  DetailNewsBloc({required NewsRepository newsRepository}) : _newsRepository = newsRepository, super(const LoadingDetailNewsState()) {
+  DetailNewsBloc({required NewsRepository newsRepository})
+    : _newsRepository = newsRepository,
+      super(const LoadingDetailNewsState()) {
     on<DetailNewsEvent>((event, emitter) => event.map(get: (event) => _get(event, emitter)));
   }
 

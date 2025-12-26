@@ -38,16 +38,16 @@ class StaticSourceBlockageScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'alt_static_air_valve', 'on_pull_full_out'),
                   customTableRow(2, 'cabin_vents', 'closed'),
-                  customTableRow(3, 'cabin_ht_and_cabin_air_control_knobs', 'open_to_obtain_maximum_windshield_defroster_airflow'),
+                  customTableRow(
+                    3,
+                    'cabin_ht_and_cabin_air_control_knobs',
+                    'open_to_obtain_maximum_windshield_defroster_airflow',
+                  ),
                   customTableRow(4, 'airspeed', 'view_airspeed_calibration_altermate_static_source_correction_chart'),
                 ],
               ),
@@ -60,22 +60,15 @@ class StaticSourceBlockageScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

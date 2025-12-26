@@ -17,12 +17,7 @@ class GradientButton extends StatelessWidget {
     this.width,
     this.height = 44.0,
     this.boxShadow,
-    this.gradient = const LinearGradient(
-      colors: [
-        Color(0xFF695CF8),
-        Color(0xFF7A0FD9),
-      ],
-    ),
+    this.gradient = const LinearGradient(colors: [Color(0xFF695CF8), Color(0xFF7A0FD9)]),
   }) : super(key: key);
 
   @override
@@ -33,11 +28,7 @@ class GradientButton extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        decoration: BoxDecoration(
-          gradient: gradient,
-          borderRadius: borderRadius,
-          boxShadow: boxShadow,
-        ),
+        decoration: BoxDecoration(gradient: gradient, borderRadius: borderRadius, boxShadow: boxShadow),
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(

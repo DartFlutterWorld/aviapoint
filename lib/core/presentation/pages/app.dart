@@ -40,6 +40,16 @@ import 'package:aviapoint/core/presentation/widgets/max_width_container.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:aviapoint/on_the_way/presentation/bloc/bookings_bloc.dart';
+import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
+import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
+import 'package:aviapoint/core/utils/pending_actions.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/airport_ownership_request_bottom_sheet.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sheet.dart';
+import 'package:aviapoint/core/data/datasources/api_datasource.dart';
+import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
+import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -72,28 +82,51 @@ class _AppState extends State<App> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppState>(create: (context) => getIt<AppState>()),
-        BlocProvider<VideoForStudentsBloc>(create: (context) => VideoForStudentsBloc(videoForStudentsRepository: getIt<VideoForStudentsRepository>())),
-        BlocProvider<HandBookMainCategoriesBloc>(create: (context) => HandBookMainCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
-        BlocProvider<PreflightInspectionCategoriesBloc>(create: (context) => PreflightInspectionCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<VideoForStudentsBloc>(
+          create: (context) => VideoForStudentsBloc(videoForStudentsRepository: getIt<VideoForStudentsRepository>()),
+        ),
+        BlocProvider<HandBookMainCategoriesBloc>(
+          create: (context) => HandBookMainCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
+        BlocProvider<PreflightInspectionCategoriesBloc>(
+          create: (context) => PreflightInspectionCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<PreflightInspectionCheckListByCategoryBloc>(
-          create: (context) => PreflightInspectionCheckListByCategoryBloc(handBookRepository: getIt<HandBookRepository>(), preflightCheckedCubit: getIt<PreflightCheckedCubit>()),
+          create: (context) => PreflightInspectionCheckListByCategoryBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+            preflightCheckedCubit: getIt<PreflightCheckedCubit>(),
+          ),
           lazy: false,
         ),
-        BlocProvider<PreflightInspectionCheckListBloc>(create: (context) => PreflightInspectionCheckListBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<PreflightInspectionCheckListBloc>(
+          create: (context) => PreflightInspectionCheckListBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<PreflightCheckedCubit>(create: (context) => getIt<PreflightCheckedCubit>()),
-        BlocProvider<NormalCategoriesBloc>(create: (context) => NormalCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<NormalCategoriesBloc>(
+          create: (context) => NormalCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<NormalCheckListByCategoryBloc>(
-          create: (context) => NormalCheckListByCategoryBloc(handBookRepository: getIt<HandBookRepository>(), normalCheckedCubit: getIt<NormalCheckedCubit>()),
+          create: (context) => NormalCheckListByCategoryBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+            normalCheckedCubit: getIt<NormalCheckedCubit>(),
+          ),
           lazy: false,
         ),
-        BlocProvider<NormalCheckListBloc>(create: (context) => NormalCheckListBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<NormalCheckListBloc>(
+          create: (context) => NormalCheckListBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<NormalCheckedCubit>(create: (context) => getIt<NormalCheckedCubit>()),
-        BlocProvider<EmergencyCategoriesBloc>(create: (context) => EmergencyCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<EmergencyCategoriesBloc>(
+          create: (context) => EmergencyCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<SmsBloc>(create: (context) => SmsBloc(authRepository: getIt<AuthRepository>())),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository: getIt<AuthRepository>(), appState: getIt<AppState>()),
         ),
-        BlocProvider<CacheManagerBloc>(create: (context) => CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent())),
+        BlocProvider<CacheManagerBloc>(
+          create: (context) =>
+              CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent()),
+        ),
         BlocProvider<ProfileBloc>(
           create: (context) => ProfileBloc(profileRepository: getIt<ProfileRepository>(), initState: getIt<AppState>()),
         ),
@@ -103,16 +136,28 @@ class _AppState extends State<App> {
         BlocProvider<NewsBloc>(create: (context) => NewsBloc(newsRepository: getIt<NewsRepository>())),
         BlocProvider<CategoryNewsBloc>(create: (context) => CategoryNewsBloc(newsRepository: getIt<NewsRepository>())),
         BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
-        BlocProvider<TypeSertificatesBloc>(create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
-        BlocProvider<TypeCorrectAnswersBloc>(create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
-        BlocProvider<CategoriesWithListQuestionsBloc>(create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<TypeSertificatesBloc>(
+          create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<TypeCorrectAnswersBloc>(
+          create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<CategoriesWithListQuestionsBloc>(
+          create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
         BlocProvider<PaymentBloc>(create: (context) => PaymentBloc(paymentRepository: getIt<PaymentRepository>())),
-        BlocProvider<CategoriesBloc>(create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<CategoriesBloc>(
+          create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
         BlocProvider<AppSettingsBloc>(
-          create: (context) => AppSettingsBloc(db: getIt<AppDb>(), rosAviaTestCubit: getIt<RosAviaTestCubit>())..add(SetAppSettingsEvent()),
+          create: (context) =>
+              AppSettingsBloc(db: getIt<AppDb>(), rosAviaTestCubit: getIt<RosAviaTestCubit>())
+                ..add(SetAppSettingsEvent()),
           lazy: false,
         ),
         BlocProvider<RosAviaTestCubit>(create: (context) => getIt<RosAviaTestCubit>()),
+        BlocProvider<FlightsBloc>(create: (context) => FlightsBloc(onTheWayRepository: getIt<OnTheWayRepository>())),
+        BlocProvider<BookingsBloc>(create: (context) => BookingsBloc(onTheWayRepository: getIt<OnTheWayRepository>())),
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -120,6 +165,137 @@ class _AppState extends State<App> {
           if (state is SuccessAuthState) {
             _profileRequested = true;
             context.read<ProfileBloc>().add(const GetProfileEvent());
+            
+            // Проверяем, есть ли отложенная заявка на владение аэродромом
+            if (PendingActions.hasPendingOwnershipRequest()) {
+              final airportCode = PendingActions.getPendingAirportCode();
+              if (airportCode != null) {
+                // Открываем форму заявки или страницу редактирования после небольшой задержки, чтобы UI успел обновиться
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Future.delayed(Duration(milliseconds: 500), () async {
+                    // Используем navigatorKey для получения актуального контекста
+                    final navigatorContext = navigatorKey.currentContext;
+                    if (navigatorContext != null && navigatorContext.mounted) {
+                      try {
+                        // Получаем ProfileBloc из navigatorContext
+                        final profileBloc = navigatorContext.read<ProfileBloc>();
+                        
+                        // Всегда загружаем профиль заново, чтобы получить актуальные данные
+                        profileBloc.add(const GetProfileEvent());
+                        
+                        // Ждем загрузки профиля (максимум 10 секунд)
+                        ProfileState? finalProfileState;
+                        try {
+                          finalProfileState = await profileBloc.stream
+                              .where((state) => state is SuccessProfileState || state is ErrorProfileState)
+                              .timeout(const Duration(seconds: 10))
+                              .first;
+                        } catch (e) {
+                          // Если таймаут, берем текущее состояние
+                          finalProfileState = profileBloc.state;
+                        }
+
+                        // Получаем ID аэропорта по коду
+                        final dataSource = getIt<ApiDatasource>() as ApiDatasourceDio;
+                        final airportService = AirportService(dataSource.dio);
+                        final airport = await airportService.getAirportByCode(airportCode);
+                        
+                        if (airport != null && finalProfileState is SuccessProfileState) {
+                          final profile = finalProfileState.profile;
+                          final ownedAirports = profile.ownedAirports;
+                          
+                          // Проверяем, есть ли ID аэропорта в списке owned_airports
+                          final isOwner = ownedAirports != null && ownedAirports.contains(airport.id);
+                          
+                          print('🔍 Проверка владельца: airportId=${airport.id}, ownedAirports=$ownedAirports, isOwner=$isOwner');
+                          
+                          if (isOwner) {
+                            // Если владелец - открываем страницу редактирования
+                            AutoRouter.of(navigatorContext).push(EditAirportRoute(airportCode: airportCode));
+                          } else {
+                            // Если не владелец - открываем форму заявки
+                            showAirportOwnershipRequestBottomSheet(
+                              navigatorContext,
+                              airportCode: airportCode,
+                            );
+                          }
+                        } else {
+                          // Если аэропорт не найден или профиль не загружен, открываем форму заявки
+                          print('⚠️ Аэропорт не найден или профиль не загружен: airport=${airport != null}, profileState=${finalProfileState.runtimeType}');
+                          showAirportOwnershipRequestBottomSheet(
+                            navigatorContext,
+                            airportCode: airportCode,
+                          );
+                        }
+
+                        PendingActions.clearPendingOwnershipRequest();
+                      } catch (e) {
+                        print('Ошибка при проверке владельца: $e');
+                        // В случае ошибки открываем форму заявки
+                        try {
+                          showAirportOwnershipRequestBottomSheet(
+                            navigatorContext,
+                            airportCode: airportCode,
+                          );
+                        } catch (_) {
+                          // Игнорируем ошибки открытия формы
+                        }
+                        PendingActions.clearPendingOwnershipRequest();
+                      }
+                    } else {
+                      // Если контекст недоступен, очищаем отложенное действие
+                      PendingActions.clearPendingOwnershipRequest();
+                    }
+                  });
+                });
+              }
+            }
+            
+            // Проверяем, есть ли отложенная загрузка фотографий
+            if (PendingActions.hasPendingPhotoUpload()) {
+              final airportCode = PendingActions.getPendingPhotoUploadAirportCode();
+              if (airportCode != null) {
+                // Показываем UI индикацию и открываем загрузку фотографий после небольшой задержки
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Future.delayed(Duration(milliseconds: 500), () async {
+                    final navigatorContext = navigatorKey.currentContext;
+                    if (navigatorContext != null && navigatorContext.mounted) {
+                      try {
+                        // Показываем snackbar с информацией о том, что можно загружать фотографии
+                        ScaffoldMessenger.of(navigatorContext).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                Icon(Icons.check_circle, color: Colors.white),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Авторизация успешна! Теперь вы можете добавлять фотографии.',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                        
+                        // Открываем bottom sheet с информацией об аэропорте, где пользователь сможет загрузить фотографии
+                        await showAirportInfoBottomSheet(navigatorContext, airportCode);
+                        
+                        PendingActions.clearPendingPhotoUpload();
+                      } catch (e) {
+                        print('Ошибка при открытии загрузки фотографий: $e');
+                        PendingActions.clearPendingPhotoUpload();
+                      }
+                    } else {
+                      PendingActions.clearPendingPhotoUpload();
+                    }
+                  });
+                });
+              }
+            }
           }
         },
         child: Consumer<AppState>(

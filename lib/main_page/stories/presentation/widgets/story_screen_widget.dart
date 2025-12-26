@@ -77,7 +77,14 @@ class StoryScreenWidget extends StatelessWidget {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            boxShadow: [BoxShadow(color: Colors.grey[850]!, blurRadius: 150.0, blurStyle: BlurStyle.outer, offset: const Offset(0.0, 0.0))],
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey[850]!,
+                                blurRadius: 150.0,
+                                blurStyle: BlurStyle.outer,
+                                offset: const Offset(0.0, 0.0),
+                              ),
+                            ],
                           ),
                           child: StoryScreenElement(
                             stories: stories,
@@ -140,7 +147,11 @@ class StoryScreenWidget extends StatelessWidget {
           )
         : LayoutBuilder(
             builder: (context, constraints) => Padding(
-              padding: EdgeInsets.only(top: kIsWeb ? 16 : MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single).padding.top + 16),
+              padding: EdgeInsets.only(
+                top: kIsWeb
+                    ? 16
+                    : MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single).padding.top + 16,
+              ),
               child: Column(
                 // mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,7 +187,10 @@ class StoryScreenWidget extends StatelessWidget {
                           color: Colors.transparent,
                           width: double.infinity,
                           child: Center(
-                            child: Transform.rotate(angle: 90 * (pi / 180), child: SvgPicture.asset(Pictures.rightArrow)),
+                            child: Transform.rotate(
+                              angle: 90 * (pi / 180),
+                              child: SvgPicture.asset(Pictures.rightArrow),
+                            ),
                           ),
                         ),
                       ),

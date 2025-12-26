@@ -63,7 +63,11 @@ class SubscribeWidget extends StatelessWidget {
           children: [
             Text(
               subscriptionType.name,
-              style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76), fontStyle: FontStyle.italic, fontSize: 16.sp),
+              style: AppStyles.extraBold.copyWith(
+                color: Color(0xFF223B76),
+                fontStyle: FontStyle.italic,
+                fontSize: 16.sp,
+              ),
             ),
             SizedBox(height: 8),
             Text(subscriptionType.description, style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
@@ -92,7 +96,14 @@ class SubscribeWidget extends StatelessWidget {
               borderRadius: 46.r,
               textStyle: AppStyles.bold12s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.28), blurRadius: 17.8, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.28),
+                  blurRadius: 17.8,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7.0),
+                ),
+              ],
             ),
           ],
         ),

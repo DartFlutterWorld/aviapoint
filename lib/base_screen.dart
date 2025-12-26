@@ -23,6 +23,7 @@ class BaseScreen extends StatelessWidget {
 
         // PricesNavigationRoute(),
         NewsNavigationRoute(),
+        OnTheWayNavigationRoute(),
 
         ProfileNavigationRoute(),
         // SaleRequestNavigationRoute(),

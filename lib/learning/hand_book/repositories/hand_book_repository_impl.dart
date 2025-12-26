@@ -27,16 +27,9 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchHandBookMainCategoties();
 
-      return right(
-        HandBookMainCategoriesMapper.toEntities(response),
-      );
+      return right(HandBookMainCategoriesMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -45,35 +38,25 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchPreflightInspectionCategories();
 
-      return right(
-        PreflightInspectionCategoriesMapper.toEntities(response),
-      );
+      return right(PreflightInspectionCategoriesMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
-// Получение чек листа  Предполётной проверки по конкретной категории.
+  // Получение чек листа  Предполётной проверки по конкретной категории.
   @override
-  Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckListByCategory(String preflihgtInspectionCategoryId) async {
+  Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckListByCategory(
+    String preflihgtInspectionCategoryId,
+  ) async {
     try {
-      final response = await _handBookService.fetchPreflightInspectionCheckListByCategory(preflihgtInspectionCategoryId);
+      final response = await _handBookService.fetchPreflightInspectionCheckListByCategory(
+        preflihgtInspectionCategoryId,
+      );
 
-      return right(
-        PreflightInspectionCheckListMapper.toEntities(response),
-      );
+      return right(PreflightInspectionCheckListMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -83,16 +66,9 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchPreflightInspectionCheckList();
 
-      return right(
-        PreflightInspectionCheckListMapper.toEntities(response),
-      );
+      return right(PreflightInspectionCheckListMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -101,16 +77,9 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchNormalCategories();
 
-      return right(
-        NormalCategoriesMapper.toEntities(response),
-      );
+      return right(NormalCategoriesMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -120,16 +89,9 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchNormalCheckListByCategory(normalCategoryId);
 
-      return right(
-        NormalCheckListMapper.toEntities(response),
-      );
+      return right(NormalCheckListMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -139,16 +101,9 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchNormalCheckList();
 
-      return right(
-        NormalCheckListMapper.toEntities(response),
-      );
+      return right(NormalCheckListMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -157,16 +112,9 @@ class HandBookRepositoryImpl extends HandBookRepository {
     try {
       final response = await _handBookService.fetchEmergencyCategories();
 
-      return right(
-        EmergencyCategoriesMapper.toEntities(response),
-      );
+      return right(EmergencyCategoriesMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 

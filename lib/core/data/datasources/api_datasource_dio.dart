@@ -60,7 +60,12 @@ class ApiDatasourceDio extends ApiDatasource {
 
   // Метод для установки обоих токенов
   @override
-  void setAuthTokens({required String accessToken, required String refreshToken, Future<String?> Function()? onRefresh, void Function()? onLogout}) {
+  void setAuthTokens({
+    required String accessToken,
+    required String refreshToken,
+    Future<String?> Function()? onRefresh,
+    void Function()? onLogout,
+  }) {
     _dio.options.headers['Authorization'] = 'Bearer $accessToken';
     _refreshToken = refreshToken;
     _onRefresh = onRefresh;
@@ -86,9 +91,21 @@ class ApiDatasourceDio extends ApiDatasource {
   }
 
   @override
-  Future<T?> get<T>(String uri, {Map<String, dynamic>? queryParameters, Options? options, CancelToken? cancelToken, ProgressCallback? onReceiveProgress}) async {
+  Future<T?> get<T>(
+    String uri, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
-      final response = await _dio.get<T>(uri, queryParameters: queryParameters, options: options, cancelToken: cancelToken, onReceiveProgress: onReceiveProgress);
+      final response = await _dio.get<T>(
+        uri,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+      );
 
       return response.data;
     } on FormatException catch (_) {
@@ -186,9 +203,21 @@ class ApiDatasourceDio extends ApiDatasource {
   }
 
   @override
-  Future<T?> delete<T>(String uri, {dynamic data, Map<String, dynamic>? queryParameters, Options? options, CancelToken? cancelToken}) async {
+  Future<T?> delete<T>(
+    String uri, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
     try {
-      final response = await _dio.delete<T>(uri, data: data, queryParameters: queryParameters, options: options, cancelToken: cancelToken);
+      final response = await _dio.delete<T>(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
 
       return response.data;
     } on FormatException catch (_) {

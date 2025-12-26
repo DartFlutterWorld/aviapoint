@@ -20,13 +20,5 @@ class PreflightInspectionCheckListEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        id,
-        preflightInspectionCategoryId,
-        title,
-        doing,
-        picture,
-        titleEng,
-        doingEng,
-      ];
+  List<Object?> get props => [id, preflightInspectionCategoryId, title, doing, picture, titleEng, doingEng];
 }

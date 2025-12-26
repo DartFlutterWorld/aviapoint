@@ -20,7 +20,13 @@ abstract class AppSettingsEvent with _$AppSettingsEvent {
 abstract class AppSettingsState with _$AppSettingsState {
   const AppSettingsState._();
   const factory AppSettingsState.loading() = LoadingAppSettingsState;
-  const factory AppSettingsState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorAppSettingsState;
+  const factory AppSettingsState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorAppSettingsState;
   const factory AppSettingsState.success() = SuccessAppSettingsState;
   // const factory AppSettingsState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdAppSettingsState;
   // const factory AppSettingsState.done() = DoneAppSettingsState;
@@ -30,7 +36,10 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
   final AppDb _db;
   final RosAviaTestCubit _rosAviaTestCubit;
 
-  AppSettingsBloc({required RosAviaTestCubit rosAviaTestCubit, required AppDb db}) : _rosAviaTestCubit = rosAviaTestCubit, _db = db, super(const LoadingAppSettingsState()) {
+  AppSettingsBloc({required RosAviaTestCubit rosAviaTestCubit, required AppDb db})
+    : _rosAviaTestCubit = rosAviaTestCubit,
+      _db = db,
+      super(const LoadingAppSettingsState()) {
     on<AppSettingsEvent>((event, emitter) => event.map(set: (event) => _set(event, emitter)));
   }
 

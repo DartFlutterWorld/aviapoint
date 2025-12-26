@@ -84,7 +84,14 @@ class BannerMainWidget extends StatelessWidget {
                     textStyle: AppStyles.bold16s.copyWith(color: textColorButton),
                     borderColor: borderColorButton,
                     borderRadius: 46,
-                    boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xff0064D6).withOpacity(0.25),
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                        offset: Offset(0.0, 7.0),
+                      ),
+                    ],
                     // onPressed: () => context.router.push(NewsNavigationRoute()),
                     onPressed: onTap,
                   ),

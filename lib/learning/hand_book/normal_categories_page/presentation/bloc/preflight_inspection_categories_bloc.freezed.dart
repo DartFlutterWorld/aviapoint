@@ -12,56 +12,41 @@ part of 'preflight_inspection_categories_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$PreflightInspectionCategoriesEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) =>
+  TResult when<TResult extends Object?>({required TResult Function() get}) => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({TResult Function()? get, required TResult orElse()}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) =>
+  TResult map<TResult extends Object?>({required TResult Function(GetPreflightInspectionCategoriesEvent value) get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? get,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetPreflightInspectionCategoriesEvent value) get,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetPreflightInspectionCategoriesEvent value)? get,
-  }) =>
+  TResult? mapOrNull<TResult extends Object?>({TResult? Function(GetPreflightInspectionCategoriesEvent value)? get}) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetPreflightInspectionCategoriesEvent value)? get,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PreflightInspectionCategoriesEventCopyWith<$Res> {
   factory $PreflightInspectionCategoriesEventCopyWith(
-          PreflightInspectionCategoriesEvent value,
-          $Res Function(PreflightInspectionCategoriesEvent) then) =
-      _$PreflightInspectionCategoriesEventCopyWithImpl<$Res,
-          PreflightInspectionCategoriesEvent>;
+    PreflightInspectionCategoriesEvent value,
+    $Res Function(PreflightInspectionCategoriesEvent) then,
+  ) = _$PreflightInspectionCategoriesEventCopyWithImpl<$Res, PreflightInspectionCategoriesEvent>;
 }
 
 /// @nodoc
-class _$PreflightInspectionCategoriesEventCopyWithImpl<$Res,
-        $Val extends PreflightInspectionCategoriesEvent>
+class _$PreflightInspectionCategoriesEventCopyWithImpl<$Res, $Val extends PreflightInspectionCategoriesEvent>
     implements $PreflightInspectionCategoriesEventCopyWith<$Res> {
   _$PreflightInspectionCategoriesEventCopyWithImpl(this._value, this._then);
 
@@ -77,20 +62,19 @@ class _$PreflightInspectionCategoriesEventCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$GetPreflightInspectionCategoriesEventImplCopyWith<$Res> {
   factory _$$GetPreflightInspectionCategoriesEventImplCopyWith(
-          _$GetPreflightInspectionCategoriesEventImpl value,
-          $Res Function(_$GetPreflightInspectionCategoriesEventImpl) then) =
-      __$$GetPreflightInspectionCategoriesEventImplCopyWithImpl<$Res>;
+    _$GetPreflightInspectionCategoriesEventImpl value,
+    $Res Function(_$GetPreflightInspectionCategoriesEventImpl) then,
+  ) = __$$GetPreflightInspectionCategoriesEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$GetPreflightInspectionCategoriesEventImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCategoriesEventCopyWithImpl<$Res,
-        _$GetPreflightInspectionCategoriesEventImpl>
+    extends _$PreflightInspectionCategoriesEventCopyWithImpl<$Res, _$GetPreflightInspectionCategoriesEventImpl>
     implements _$$GetPreflightInspectionCategoriesEventImplCopyWith<$Res> {
   __$$GetPreflightInspectionCategoriesEventImplCopyWithImpl(
-      _$GetPreflightInspectionCategoriesEventImpl _value,
-      $Res Function(_$GetPreflightInspectionCategoriesEventImpl) _then)
-      : super(_value, _then);
+    _$GetPreflightInspectionCategoriesEventImpl _value,
+    $Res Function(_$GetPreflightInspectionCategoriesEventImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCategoriesEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -98,8 +82,7 @@ class __$$GetPreflightInspectionCategoriesEventImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetPreflightInspectionCategoriesEventImpl
-    extends GetPreflightInspectionCategoriesEvent {
+class _$GetPreflightInspectionCategoriesEventImpl extends GetPreflightInspectionCategoriesEvent {
   const _$GetPreflightInspectionCategoriesEventImpl() : super._();
 
   @override
@@ -110,8 +93,7 @@ class _$GetPreflightInspectionCategoriesEventImpl
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GetPreflightInspectionCategoriesEventImpl);
+        (other.runtimeType == runtimeType && other is _$GetPreflightInspectionCategoriesEventImpl);
   }
 
   @override
@@ -119,26 +101,19 @@ class _$GetPreflightInspectionCategoriesEventImpl
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() get,
-  }) {
+  TResult when<TResult extends Object?>({required TResult Function() get}) {
     return get();
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? get,
-  }) {
+  TResult? whenOrNull<TResult extends Object?>({TResult? Function()? get}) {
     return get?.call();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? get,
-    required TResult orElse(),
-  }) {
+  TResult maybeWhen<TResult extends Object?>({TResult Function()? get, required TResult orElse()}) {
     if (get != null) {
       return get();
     }
@@ -147,17 +122,13 @@ class _$GetPreflightInspectionCategoriesEventImpl
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetPreflightInspectionCategoriesEvent value) get,
-  }) {
+  TResult map<TResult extends Object?>({required TResult Function(GetPreflightInspectionCategoriesEvent value) get}) {
     return get(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetPreflightInspectionCategoriesEvent value)? get,
-  }) {
+  TResult? mapOrNull<TResult extends Object?>({TResult? Function(GetPreflightInspectionCategoriesEvent value)? get}) {
     return get?.call(this);
   }
 
@@ -174,10 +145,8 @@ class _$GetPreflightInspectionCategoriesEventImpl
   }
 }
 
-abstract class GetPreflightInspectionCategoriesEvent
-    extends PreflightInspectionCategoriesEvent {
-  const factory GetPreflightInspectionCategoriesEvent() =
-      _$GetPreflightInspectionCategoriesEventImpl;
+abstract class GetPreflightInspectionCategoriesEvent extends PreflightInspectionCategoriesEvent {
+  const factory GetPreflightInspectionCategoriesEvent() = _$GetPreflightInspectionCategoriesEventImpl;
   const GetPreflightInspectionCategoriesEvent._() : super._();
 }
 
@@ -186,87 +155,74 @@ mixin _$PreflightInspectionCategoriesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories) success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult? Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult? Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(LoadingPreflightInspectionCategoriesState value)
-        loading,
-    required TResult Function(ErrorPreflightInspectionCategoriesState value)
-        error,
-    required TResult Function(SuccessPreflightInspectionCategoriesState value)
-        success,
-  }) =>
-      throw _privateConstructorUsedError;
+    required TResult Function(LoadingPreflightInspectionCategoriesState value) loading,
+    required TResult Function(ErrorPreflightInspectionCategoriesState value) error,
+    required TResult Function(SuccessPreflightInspectionCategoriesState value) success,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPreflightInspectionCategoriesState value)? loading,
     TResult? Function(ErrorPreflightInspectionCategoriesState value)? error,
     TResult? Function(SuccessPreflightInspectionCategoriesState value)? success,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPreflightInspectionCategoriesState value)? loading,
     TResult Function(ErrorPreflightInspectionCategoriesState value)? error,
     TResult Function(SuccessPreflightInspectionCategoriesState value)? success,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $PreflightInspectionCategoriesStateCopyWith<$Res> {
   factory $PreflightInspectionCategoriesStateCopyWith(
-          PreflightInspectionCategoriesState value,
-          $Res Function(PreflightInspectionCategoriesState) then) =
-      _$PreflightInspectionCategoriesStateCopyWithImpl<$Res,
-          PreflightInspectionCategoriesState>;
+    PreflightInspectionCategoriesState value,
+    $Res Function(PreflightInspectionCategoriesState) then,
+  ) = _$PreflightInspectionCategoriesStateCopyWithImpl<$Res, PreflightInspectionCategoriesState>;
 }
 
 /// @nodoc
-class _$PreflightInspectionCategoriesStateCopyWithImpl<$Res,
-        $Val extends PreflightInspectionCategoriesState>
+class _$PreflightInspectionCategoriesStateCopyWithImpl<$Res, $Val extends PreflightInspectionCategoriesState>
     implements $PreflightInspectionCategoriesStateCopyWith<$Res> {
   _$PreflightInspectionCategoriesStateCopyWithImpl(this._value, this._then);
 
@@ -282,20 +238,19 @@ class _$PreflightInspectionCategoriesStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LoadingPreflightInspectionCategoriesStateImplCopyWith<$Res> {
   factory _$$LoadingPreflightInspectionCategoriesStateImplCopyWith(
-          _$LoadingPreflightInspectionCategoriesStateImpl value,
-          $Res Function(_$LoadingPreflightInspectionCategoriesStateImpl) then) =
-      __$$LoadingPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>;
+    _$LoadingPreflightInspectionCategoriesStateImpl value,
+    $Res Function(_$LoadingPreflightInspectionCategoriesStateImpl) then,
+  ) = __$$LoadingPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LoadingPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCategoriesStateCopyWithImpl<$Res,
-        _$LoadingPreflightInspectionCategoriesStateImpl>
+    extends _$PreflightInspectionCategoriesStateCopyWithImpl<$Res, _$LoadingPreflightInspectionCategoriesStateImpl>
     implements _$$LoadingPreflightInspectionCategoriesStateImplCopyWith<$Res> {
   __$$LoadingPreflightInspectionCategoriesStateImplCopyWithImpl(
-      _$LoadingPreflightInspectionCategoriesStateImpl _value,
-      $Res Function(_$LoadingPreflightInspectionCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$LoadingPreflightInspectionCategoriesStateImpl _value,
+    $Res Function(_$LoadingPreflightInspectionCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -303,8 +258,7 @@ class __$$LoadingPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadingPreflightInspectionCategoriesStateImpl
-    extends LoadingPreflightInspectionCategoriesState {
+class _$LoadingPreflightInspectionCategoriesStateImpl extends LoadingPreflightInspectionCategoriesState {
   const _$LoadingPreflightInspectionCategoriesStateImpl() : super._();
 
   @override
@@ -315,8 +269,7 @@ class _$LoadingPreflightInspectionCategoriesStateImpl
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoadingPreflightInspectionCategoriesStateImpl);
+        (other.runtimeType == runtimeType && other is _$LoadingPreflightInspectionCategoriesStateImpl);
   }
 
   @override
@@ -326,13 +279,15 @@ class _$LoadingPreflightInspectionCategoriesStateImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories) success,
   }) {
     return loading();
   }
@@ -342,16 +297,14 @@ class _$LoadingPreflightInspectionCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult? Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult? Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
   }) {
     return loading?.call();
   }
@@ -361,16 +314,14 @@ class _$LoadingPreflightInspectionCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -382,12 +333,9 @@ class _$LoadingPreflightInspectionCategoriesStateImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(LoadingPreflightInspectionCategoriesState value)
-        loading,
-    required TResult Function(ErrorPreflightInspectionCategoriesState value)
-        error,
-    required TResult Function(SuccessPreflightInspectionCategoriesState value)
-        success,
+    required TResult Function(LoadingPreflightInspectionCategoriesState value) loading,
+    required TResult Function(ErrorPreflightInspectionCategoriesState value) error,
+    required TResult Function(SuccessPreflightInspectionCategoriesState value) success,
   }) {
     return loading(this);
   }
@@ -417,37 +365,35 @@ class _$LoadingPreflightInspectionCategoriesStateImpl
   }
 }
 
-abstract class LoadingPreflightInspectionCategoriesState
-    extends PreflightInspectionCategoriesState {
-  const factory LoadingPreflightInspectionCategoriesState() =
-      _$LoadingPreflightInspectionCategoriesStateImpl;
+abstract class LoadingPreflightInspectionCategoriesState extends PreflightInspectionCategoriesState {
+  const factory LoadingPreflightInspectionCategoriesState() = _$LoadingPreflightInspectionCategoriesStateImpl;
   const LoadingPreflightInspectionCategoriesState._() : super._();
 }
 
 /// @nodoc
 abstract class _$$ErrorPreflightInspectionCategoriesStateImplCopyWith<$Res> {
   factory _$$ErrorPreflightInspectionCategoriesStateImplCopyWith(
-          _$ErrorPreflightInspectionCategoriesStateImpl value,
-          $Res Function(_$ErrorPreflightInspectionCategoriesStateImpl) then) =
-      __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>;
+    _$ErrorPreflightInspectionCategoriesStateImpl value,
+    $Res Function(_$ErrorPreflightInspectionCategoriesStateImpl) then,
+  ) = __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String? errorFromApi,
-      String errorForUser,
-      String? statusCode,
-      StackTrace? stackTrace,
-      String? responseMessage});
+  $Res call({
+    String? errorFromApi,
+    String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  });
 }
 
 /// @nodoc
 class __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCategoriesStateCopyWithImpl<$Res,
-        _$ErrorPreflightInspectionCategoriesStateImpl>
+    extends _$PreflightInspectionCategoriesStateCopyWithImpl<$Res, _$ErrorPreflightInspectionCategoriesStateImpl>
     implements _$$ErrorPreflightInspectionCategoriesStateImplCopyWith<$Res> {
   __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl(
-      _$ErrorPreflightInspectionCategoriesStateImpl _value,
-      $Res Function(_$ErrorPreflightInspectionCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$ErrorPreflightInspectionCategoriesStateImpl _value,
+    $Res Function(_$ErrorPreflightInspectionCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -460,42 +406,43 @@ class __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? responseMessage = freezed,
   }) {
-    return _then(_$ErrorPreflightInspectionCategoriesStateImpl(
-      errorFromApi: freezed == errorFromApi
-          ? _value.errorFromApi
-          : errorFromApi // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorForUser: null == errorForUser
-          ? _value.errorForUser
-          : errorForUser // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: freezed == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stackTrace: freezed == stackTrace
-          ? _value.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-      responseMessage: freezed == responseMessage
-          ? _value.responseMessage
-          : responseMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ErrorPreflightInspectionCategoriesStateImpl(
+        errorFromApi: freezed == errorFromApi
+            ? _value.errorFromApi
+            : errorFromApi // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorForUser: null == errorForUser
+            ? _value.errorForUser
+            : errorForUser // ignore: cast_nullable_to_non_nullable
+                  as String,
+        statusCode: freezed == statusCode
+            ? _value.statusCode
+            : statusCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stackTrace: freezed == stackTrace
+            ? _value.stackTrace
+            : stackTrace // ignore: cast_nullable_to_non_nullable
+                  as StackTrace?,
+        responseMessage: freezed == responseMessage
+            ? _value.responseMessage
+            : responseMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
-class _$ErrorPreflightInspectionCategoriesStateImpl
-    extends ErrorPreflightInspectionCategoriesState {
-  const _$ErrorPreflightInspectionCategoriesStateImpl(
-      {this.errorFromApi,
-      required this.errorForUser,
-      this.statusCode,
-      this.stackTrace,
-      this.responseMessage})
-      : super._();
+class _$ErrorPreflightInspectionCategoriesStateImpl extends ErrorPreflightInspectionCategoriesState {
+  const _$ErrorPreflightInspectionCategoriesStateImpl({
+    this.errorFromApi,
+    required this.errorForUser,
+    this.statusCode,
+    this.stackTrace,
+    this.responseMessage,
+  }) : super._();
 
   @override
   final String? errorFromApi;
@@ -518,47 +465,42 @@ class _$ErrorPreflightInspectionCategoriesStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ErrorPreflightInspectionCategoriesStateImpl &&
-            (identical(other.errorFromApi, errorFromApi) ||
-                other.errorFromApi == errorFromApi) &&
-            (identical(other.errorForUser, errorForUser) ||
-                other.errorForUser == errorForUser) &&
-            (identical(other.statusCode, statusCode) ||
-                other.statusCode == statusCode) &&
-            (identical(other.stackTrace, stackTrace) ||
-                other.stackTrace == stackTrace) &&
-            (identical(other.responseMessage, responseMessage) ||
-                other.responseMessage == responseMessage));
+            (identical(other.errorFromApi, errorFromApi) || other.errorFromApi == errorFromApi) &&
+            (identical(other.errorForUser, errorForUser) || other.errorForUser == errorForUser) &&
+            (identical(other.statusCode, statusCode) || other.statusCode == statusCode) &&
+            (identical(other.stackTrace, stackTrace) || other.stackTrace == stackTrace) &&
+            (identical(other.responseMessage, responseMessage) || other.responseMessage == responseMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser,
-      statusCode, stackTrace, responseMessage);
+  int get hashCode => Object.hash(runtimeType, errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
 
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ErrorPreflightInspectionCategoriesStateImplCopyWith<
-          _$ErrorPreflightInspectionCategoriesStateImpl>
-      get copyWith =>
-          __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl<
-              _$ErrorPreflightInspectionCategoriesStateImpl>(this, _$identity);
+  _$$ErrorPreflightInspectionCategoriesStateImplCopyWith<_$ErrorPreflightInspectionCategoriesStateImpl> get copyWith =>
+      __$$ErrorPreflightInspectionCategoriesStateImplCopyWithImpl<_$ErrorPreflightInspectionCategoriesStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories) success,
   }) {
-    return error(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+    return error(errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
   }
 
   @override
@@ -566,19 +508,16 @@ class _$ErrorPreflightInspectionCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult? Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult? Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
   }) {
-    return error?.call(
-        errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+    return error?.call(errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
   }
 
   @override
@@ -586,21 +525,18 @@ class _$ErrorPreflightInspectionCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(
-          errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
+      return error(errorFromApi, errorForUser, statusCode, stackTrace, responseMessage);
     }
     return orElse();
   }
@@ -608,12 +544,9 @@ class _$ErrorPreflightInspectionCategoriesStateImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(LoadingPreflightInspectionCategoriesState value)
-        loading,
-    required TResult Function(ErrorPreflightInspectionCategoriesState value)
-        error,
-    required TResult Function(SuccessPreflightInspectionCategoriesState value)
-        success,
+    required TResult Function(LoadingPreflightInspectionCategoriesState value) loading,
+    required TResult Function(ErrorPreflightInspectionCategoriesState value) error,
+    required TResult Function(SuccessPreflightInspectionCategoriesState value) success,
   }) {
     return error(this);
   }
@@ -643,15 +576,14 @@ class _$ErrorPreflightInspectionCategoriesStateImpl
   }
 }
 
-abstract class ErrorPreflightInspectionCategoriesState
-    extends PreflightInspectionCategoriesState {
-  const factory ErrorPreflightInspectionCategoriesState(
-          {final String? errorFromApi,
-          required final String errorForUser,
-          final String? statusCode,
-          final StackTrace? stackTrace,
-          final String? responseMessage}) =
-      _$ErrorPreflightInspectionCategoriesStateImpl;
+abstract class ErrorPreflightInspectionCategoriesState extends PreflightInspectionCategoriesState {
+  const factory ErrorPreflightInspectionCategoriesState({
+    final String? errorFromApi,
+    required final String errorForUser,
+    final String? statusCode,
+    final StackTrace? stackTrace,
+    final String? responseMessage,
+  }) = _$ErrorPreflightInspectionCategoriesStateImpl;
   const ErrorPreflightInspectionCategoriesState._() : super._();
 
   String? get errorFromApi;
@@ -663,65 +595,57 @@ abstract class ErrorPreflightInspectionCategoriesState
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ErrorPreflightInspectionCategoriesStateImplCopyWith<
-          _$ErrorPreflightInspectionCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$ErrorPreflightInspectionCategoriesStateImplCopyWith<_$ErrorPreflightInspectionCategoriesStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SuccessPreflightInspectionCategoriesStateImplCopyWith<$Res> {
   factory _$$SuccessPreflightInspectionCategoriesStateImplCopyWith(
-          _$SuccessPreflightInspectionCategoriesStateImpl value,
-          $Res Function(_$SuccessPreflightInspectionCategoriesStateImpl) then) =
-      __$$SuccessPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>;
+    _$SuccessPreflightInspectionCategoriesStateImpl value,
+    $Res Function(_$SuccessPreflightInspectionCategoriesStateImpl) then,
+  ) = __$$SuccessPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {List<PreflightInspectionCategoriesEntity>
-          preflightInspectionCategories});
+  $Res call({List<PreflightInspectionCategoriesEntity> preflightInspectionCategories});
 }
 
 /// @nodoc
 class __$$SuccessPreflightInspectionCategoriesStateImplCopyWithImpl<$Res>
-    extends _$PreflightInspectionCategoriesStateCopyWithImpl<$Res,
-        _$SuccessPreflightInspectionCategoriesStateImpl>
+    extends _$PreflightInspectionCategoriesStateCopyWithImpl<$Res, _$SuccessPreflightInspectionCategoriesStateImpl>
     implements _$$SuccessPreflightInspectionCategoriesStateImplCopyWith<$Res> {
   __$$SuccessPreflightInspectionCategoriesStateImplCopyWithImpl(
-      _$SuccessPreflightInspectionCategoriesStateImpl _value,
-      $Res Function(_$SuccessPreflightInspectionCategoriesStateImpl) _then)
-      : super(_value, _then);
+    _$SuccessPreflightInspectionCategoriesStateImpl _value,
+    $Res Function(_$SuccessPreflightInspectionCategoriesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? preflightInspectionCategories = null,
-  }) {
-    return _then(_$SuccessPreflightInspectionCategoriesStateImpl(
-      preflightInspectionCategories: null == preflightInspectionCategories
-          ? _value._preflightInspectionCategories
-          : preflightInspectionCategories // ignore: cast_nullable_to_non_nullable
-              as List<PreflightInspectionCategoriesEntity>,
-    ));
+  $Res call({Object? preflightInspectionCategories = null}) {
+    return _then(
+      _$SuccessPreflightInspectionCategoriesStateImpl(
+        preflightInspectionCategories: null == preflightInspectionCategories
+            ? _value._preflightInspectionCategories
+            : preflightInspectionCategories // ignore: cast_nullable_to_non_nullable
+                  as List<PreflightInspectionCategoriesEntity>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
-class _$SuccessPreflightInspectionCategoriesStateImpl
-    extends SuccessPreflightInspectionCategoriesState {
-  const _$SuccessPreflightInspectionCategoriesStateImpl(
-      {required final List<PreflightInspectionCategoriesEntity>
-          preflightInspectionCategories})
-      : _preflightInspectionCategories = preflightInspectionCategories,
-        super._();
+class _$SuccessPreflightInspectionCategoriesStateImpl extends SuccessPreflightInspectionCategoriesState {
+  const _$SuccessPreflightInspectionCategoriesStateImpl({
+    required final List<PreflightInspectionCategoriesEntity> preflightInspectionCategories,
+  }) : _preflightInspectionCategories = preflightInspectionCategories,
+       super._();
 
-  final List<PreflightInspectionCategoriesEntity>
-      _preflightInspectionCategories;
+  final List<PreflightInspectionCategoriesEntity> _preflightInspectionCategories;
   @override
   List<PreflightInspectionCategoriesEntity> get preflightInspectionCategories {
-    if (_preflightInspectionCategories is EqualUnmodifiableListView)
-      return _preflightInspectionCategories;
+    if (_preflightInspectionCategories is EqualUnmodifiableListView) return _preflightInspectionCategories;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_preflightInspectionCategories);
   }
@@ -737,37 +661,39 @@ class _$SuccessPreflightInspectionCategoriesStateImpl
         (other.runtimeType == runtimeType &&
             other is _$SuccessPreflightInspectionCategoriesStateImpl &&
             const DeepCollectionEquality().equals(
-                other._preflightInspectionCategories,
-                _preflightInspectionCategories));
+              other._preflightInspectionCategories,
+              _preflightInspectionCategories,
+            ));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_preflightInspectionCategories));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(_preflightInspectionCategories));
 
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$SuccessPreflightInspectionCategoriesStateImplCopyWith<
-          _$SuccessPreflightInspectionCategoriesStateImpl>
-      get copyWith =>
-          __$$SuccessPreflightInspectionCategoriesStateImplCopyWithImpl<
-                  _$SuccessPreflightInspectionCategoriesStateImpl>(
-              this, _$identity);
+  _$$SuccessPreflightInspectionCategoriesStateImplCopyWith<_$SuccessPreflightInspectionCategoriesStateImpl>
+  get copyWith =>
+      __$$SuccessPreflightInspectionCategoriesStateImplCopyWithImpl<_$SuccessPreflightInspectionCategoriesStateImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String? errorFromApi, String errorForUser,
-            String? statusCode, StackTrace? stackTrace, String? responseMessage)
-        error,
     required TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )
+    error,
+    required TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories) success,
   }) {
     return success(preflightInspectionCategories);
   }
@@ -777,16 +703,14 @@ class _$SuccessPreflightInspectionCategoriesStateImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult? Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult? Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
   }) {
     return success?.call(preflightInspectionCategories);
   }
@@ -796,16 +720,14 @@ class _$SuccessPreflightInspectionCategoriesStateImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(
-            String? errorFromApi,
-            String errorForUser,
-            String? statusCode,
-            StackTrace? stackTrace,
-            String? responseMessage)?
-        error,
-    TResult Function(
-            List<PreflightInspectionCategoriesEntity>
-                preflightInspectionCategories)?
-        success,
+      String? errorFromApi,
+      String errorForUser,
+      String? statusCode,
+      StackTrace? stackTrace,
+      String? responseMessage,
+    )?
+    error,
+    TResult Function(List<PreflightInspectionCategoriesEntity> preflightInspectionCategories)? success,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -817,12 +739,9 @@ class _$SuccessPreflightInspectionCategoriesStateImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(LoadingPreflightInspectionCategoriesState value)
-        loading,
-    required TResult Function(ErrorPreflightInspectionCategoriesState value)
-        error,
-    required TResult Function(SuccessPreflightInspectionCategoriesState value)
-        success,
+    required TResult Function(LoadingPreflightInspectionCategoriesState value) loading,
+    required TResult Function(ErrorPreflightInspectionCategoriesState value) error,
+    required TResult Function(SuccessPreflightInspectionCategoriesState value) success,
   }) {
     return success(this);
   }
@@ -852,12 +771,10 @@ class _$SuccessPreflightInspectionCategoriesStateImpl
   }
 }
 
-abstract class SuccessPreflightInspectionCategoriesState
-    extends PreflightInspectionCategoriesState {
-  const factory SuccessPreflightInspectionCategoriesState(
-          {required final List<PreflightInspectionCategoriesEntity>
-              preflightInspectionCategories}) =
-      _$SuccessPreflightInspectionCategoriesStateImpl;
+abstract class SuccessPreflightInspectionCategoriesState extends PreflightInspectionCategoriesState {
+  const factory SuccessPreflightInspectionCategoriesState({
+    required final List<PreflightInspectionCategoriesEntity> preflightInspectionCategories,
+  }) = _$SuccessPreflightInspectionCategoriesStateImpl;
   const SuccessPreflightInspectionCategoriesState._() : super._();
 
   List<PreflightInspectionCategoriesEntity> get preflightInspectionCategories;
@@ -865,7 +782,6 @@ abstract class SuccessPreflightInspectionCategoriesState
   /// Create a copy of PreflightInspectionCategoriesState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SuccessPreflightInspectionCategoriesStateImplCopyWith<
-          _$SuccessPreflightInspectionCategoriesStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$SuccessPreflightInspectionCategoriesStateImplCopyWith<_$SuccessPreflightInspectionCategoriesStateImpl>
+  get copyWith => throw _privateConstructorUsedError;
 }

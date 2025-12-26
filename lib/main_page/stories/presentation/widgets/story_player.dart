@@ -92,7 +92,10 @@ class AnimatedBar extends StatelessWidget {
           builder: (context, constraints) {
             return Stack(
               children: <Widget>[
-                _buildContainer(double.infinity, position < currentIndex ? Colors.white : Colors.white.withValues(alpha: 0.5)),
+                _buildContainer(
+                  double.infinity,
+                  position < currentIndex ? Colors.white : Colors.white.withValues(alpha: 0.5),
+                ),
                 position == currentIndex
                     ? AnimatedBuilder(
                         animation: animController,

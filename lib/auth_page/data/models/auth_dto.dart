@@ -8,7 +8,11 @@ part 'auth_dto.g.dart';
 abstract class AuthDto with _$AuthDto {
   /// token - авторизационный токен
   /// profile - профиль авторизованного пользователя
-  const factory AuthDto({required String token, @JsonKey(name: 'refresh_token') required String refreshToken, required ProfileDto profile}) = _AuthDto;
+  const factory AuthDto({
+    required String token,
+    @JsonKey(name: 'refresh_token') required String refreshToken,
+    required ProfileDto profile,
+  }) = _AuthDto;
 
   // factory AuthDto.fromEntity(AuthEntity auth) => AuthDto(
   //       token: auth.token,

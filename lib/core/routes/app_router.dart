@@ -55,6 +55,14 @@ import 'package:aviapoint/news/presentation/pages/news_navigation_screen.dart';
 import 'package:aviapoint/news/presentation/pages/news_screen.dart';
 import 'package:aviapoint/market/presentation/pages/market_navigation_screen.dart';
 import 'package:aviapoint/market/presentation/pages/market_screen.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/create_flight_screen.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/edit_flight_screen.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/edit_airport_screen.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/flight_detail_screen.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/flights_list_screen.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/on_the_way_navigation_screen.dart';
+import 'package:aviapoint/on_the_way/presentation/pages/on_the_way_screen.dart';
 import 'package:aviapoint/payment/domain/entities/subscription_type.dart';
 import 'package:aviapoint/sale/sale_request_navigation_screen.dart';
 import 'package:aviapoint/sale/sale_request_screen.dart';
@@ -126,9 +134,15 @@ class AppRouter extends RootStackRouter {
               path: 'stories/:id',
               page: DetailStoryRoute.page,
               // duration: const Duration(milliseconds: 500),
-              transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-                return FadeTransition(opacity: animation, alwaysIncludeSemantics: true, child: child);
-              },
+              transitionsBuilder:
+                  (
+                    BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secondaryAnimation,
+                    Widget child,
+                  ) {
+                    return FadeTransition(opacity: animation, alwaysIncludeSemantics: true, child: child);
+                  },
               meta: const {'hideBottomNav': true},
             ),
           ],
@@ -152,39 +166,103 @@ class AppRouter extends RootStackRouter {
             AutoRoute(path: 'video_for_students', page: VideoForStudentsRoute.page),
             AutoRoute(path: 'hand_book', page: HandBookMainCategoriesRoute.page),
             AutoRoute(path: 'hand_book/preflight_inspection_categories', page: PreflightInspectionCategoriesRoute.page),
-            AutoRoute(path: 'hand_book/preflight_inspection_categories/check_list/:preflihgtInspectionCategoryId', page: PreflightInspectionCheckListRoute.page),
+            AutoRoute(
+              path: 'hand_book/preflight_inspection_categories/check_list/:preflihgtInspectionCategoryId',
+              page: PreflightInspectionCheckListRoute.page,
+            ),
             AutoRoute(path: 'hand_book/normal_categories', page: NormalCategoriesRoute.page),
-            AutoRoute(path: 'hand_book/normal_categories/check_list/:normalCategoryId', page: NormalCheckListRoute.page),
+            AutoRoute(
+              path: 'hand_book/normal_categories/check_list/:normalCategoryId',
+              page: NormalCheckListRoute.page,
+            ),
             AutoRoute(path: 'hand_book/emergency_categories', page: EmergencyCategoriesRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/airspeeds_for_emergency_operations', page: AirspeedsForEmergencyOperationsRoute.page),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/airspeeds_for_emergency_operations',
+              page: AirspeedsForEmergencyOperationsRoute.page,
+            ),
             AutoRoute(path: 'hand_book/emergency_categories/engine_failure', page: EngineFailureRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/forced_landings_sub_categories', page: ForcedLandingsSubCategoriesRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/forced_landings_sub_categories/emergency_landing_with_engine_power', page: EmergencyLandingWithoutEnginePowerRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/forced_landings_sub_categories/emergency_landing_with_engine_power', page: EmergencyLandingWithEnginePowerRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/forced_landings_sub_categories/ditching', page: DitchingRoute.page),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/forced_landings_sub_categories',
+              page: ForcedLandingsSubCategoriesRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
+              page: EmergencyLandingWithoutEnginePowerRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/forced_landings_sub_categories/emergency_landing_with_engine_power',
+              page: EmergencyLandingWithEnginePowerRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/forced_landings_sub_categories/ditching',
+              page: DitchingRoute.page,
+            ),
             AutoRoute(path: 'hand_book/emergency_categories/fires_sub_categories', page: FiresSubCategoriesRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/fires_sub_categories/fires_during_start_on_ground', page: FiresDuringStartOnGroundRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/fires_sub_categories/engine_fire_in_flight', page: EngineFireInFlightRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/fires_sub_categories/electrical_fire_in_flight', page: ElectricalFireInFlightRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/fires_sub_categories/cabin_fire', page: CabinFireRoute.page),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/fires_sub_categories/fires_during_start_on_ground',
+              page: FiresDuringStartOnGroundRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/fires_sub_categories/engine_fire_in_flight',
+              page: EngineFireInFlightRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/fires_sub_categories/electrical_fire_in_flight',
+              page: ElectricalFireInFlightRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/fires_sub_categories/cabin_fire',
+              page: CabinFireRoute.page,
+            ),
             AutoRoute(path: 'hand_book/emergency_categories/fires_sub_categories/wing_fire', page: WingFireRoute.page),
             AutoRoute(path: 'hand_book/emergency_categories/icing', page: IcingRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/static_source_blockage', page: StaticSourceBlockageRoute.page),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/static_source_blockage',
+              page: StaticSourceBlockageRoute.page,
+            ),
             AutoRoute(path: 'hand_book/emergency_categories/excessive_fuel_vapor', page: ExcessiveFuelVaporRoute.page),
             AutoRoute(path: 'hand_book/emergency_categories/abnormal_landings', page: AbnormalLandingsRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/electrical_power', page: ElectricalPowerSubCategoryRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/electrical_power/electrical_power_supply_system_malfunctions', page: ElectricalPowerSupplySystemMalfunctionsRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/electrical_power/low_volts_annunciator_comes_on_bellow_1000_rpm', page: LowVoltsAnnunciatorComesOnBellow1000RpmRoute.page),
             AutoRoute(
-              path: 'hand_book/emergency_categories/electrical_power/low_volts_annunciator_comes_on_or_does_not_go_off_at_higher_rpm',
+              path: 'hand_book/emergency_categories/electrical_power',
+              page: ElectricalPowerSubCategoryRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/electrical_power/electrical_power_supply_system_malfunctions',
+              page: ElectricalPowerSupplySystemMalfunctionsRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/electrical_power/low_volts_annunciator_comes_on_bellow_1000_rpm',
+              page: LowVoltsAnnunciatorComesOnBellow1000RpmRoute.page,
+            ),
+            AutoRoute(
+              path:
+                  'hand_book/emergency_categories/electrical_power/low_volts_annunciator_comes_on_or_does_not_go_off_at_higher_rpm',
               page: LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmRoute.page,
             ),
-            AutoRoute(path: 'hand_book/emergency_categories/air_data_system_failure', page: AirDataSystemFailureRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/attitude_and_heading_reference_system_ahrs_failure', page: AttitudeAndHeadingReferenceSystemAhrsFailureRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/autopilot_or_electric_trim_failure', page: AutopilotOrElectricTrimFailureRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/display_cooling_advisory', page: DisplayCoolingAdvisoryRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/vacuum_system_failure', page: VacuumSystemFailureRoute.page),
-            AutoRoute(path: 'hand_book/emergency_categories/high_carbon_monoxide_co_level_advisory', page: HighCarbonMonoxideCoLevelAdvisoryRoute.page),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/air_data_system_failure',
+              page: AirDataSystemFailureRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/attitude_and_heading_reference_system_ahrs_failure',
+              page: AttitudeAndHeadingReferenceSystemAhrsFailureRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/autopilot_or_electric_trim_failure',
+              page: AutopilotOrElectricTrimFailureRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/display_cooling_advisory',
+              page: DisplayCoolingAdvisoryRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/vacuum_system_failure',
+              page: VacuumSystemFailureRoute.page,
+            ),
+            AutoRoute(
+              path: 'hand_book/emergency_categories/high_carbon_monoxide_co_level_advisory',
+              page: HighCarbonMonoxideCoLevelAdvisoryRoute.page,
+            ),
             AutoRoute(path: 'base_questions', page: BaseQuestionsRoute.page),
             AutoRoute(path: 'base_questions/:categoryId', page: ListQuestionByCategoryRoute.page),
             AutoRoute(path: 'type_sertificates/:typeCertificate/:questionId', page: DetailQuestionRoute.page),
@@ -218,6 +296,17 @@ class AppRouter extends RootStackRouter {
           path: 'market',
           page: MarketNavigationRoute.page,
           children: [AutoRoute(initial: true, page: MarketRoute.page)],
+        ),
+        AutoRoute(
+          path: 'on-the-way',
+          page: OnTheWayNavigationRoute.page,
+          children: [
+            AutoRoute(initial: true, page: FlightsListRoute.page, path: ''),
+            AutoRoute(path: 'create', page: CreateFlightRoute.page),
+            AutoRoute(path: ':id', page: FlightDetailRoute.page),
+            AutoRoute(path: ':id/edit', page: EditFlightRoute.page),
+            AutoRoute(path: 'airports/:airportCode/edit', page: EditAirportRoute.page),
+          ],
         ),
         AutoRoute(path: 'payment', page: PaymentRoute.page),
         AutoRoute(path: 'payment/webview', page: PaymentWebViewRoute.page),
@@ -266,6 +355,11 @@ class AuthGuard extends AutoRouteGuard {
   }
 
   Future<bool?> _showLoginBottomSheet(BuildContext context) async {
-    return await showCupertinoModalBottomSheet<bool>(barrierColor: Colors.black12, topRadius: const Radius.circular(20), context: context, builder: (context) => PhoneAuthScreen());
+    return await showCupertinoModalBottomSheet<bool>(
+      barrierColor: Colors.black12,
+      topRadius: const Radius.circular(20),
+      context: context,
+      builder: (context) => PhoneAuthScreen(),
+    );
   }
 }

@@ -19,8 +19,15 @@ abstract class TypeSertificatesEvent with _$TypeSertificatesEvent {
 abstract class TypeSertificatesState with _$TypeSertificatesState {
   const TypeSertificatesState._();
   const factory TypeSertificatesState.loading() = LoadingTypeSertificatesState;
-  const factory TypeSertificatesState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorTypeSertificatesState;
-  const factory TypeSertificatesState.success({required List<TypeSertificatesEntity> typeSertificates}) = SuccessTypeSertificatesState;
+  const factory TypeSertificatesState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorTypeSertificatesState;
+  const factory TypeSertificatesState.success({required List<TypeSertificatesEntity> typeSertificates}) =
+      SuccessTypeSertificatesState;
   // const factory TypeSertificatesState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdTypeSertificatesState;
   // const factory TypeSertificatesState.done() = DoneTypeSertificatesState;
 }
@@ -28,7 +35,9 @@ abstract class TypeSertificatesState with _$TypeSertificatesState {
 class TypeSertificatesBloc extends Bloc<TypeSertificatesEvent, TypeSertificatesState> {
   final RosAviaTestRepository _rosAviaTestRepository;
 
-  TypeSertificatesBloc({required RosAviaTestRepository rosAviaTestRepository}) : _rosAviaTestRepository = rosAviaTestRepository, super(const LoadingTypeSertificatesState()) {
+  TypeSertificatesBloc({required RosAviaTestRepository rosAviaTestRepository})
+    : _rosAviaTestRepository = rosAviaTestRepository,
+      super(const LoadingTypeSertificatesState()) {
     on<TypeSertificatesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),

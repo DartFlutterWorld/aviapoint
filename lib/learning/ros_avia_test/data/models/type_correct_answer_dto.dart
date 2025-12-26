@@ -6,10 +6,7 @@ part 'type_correct_answer_dto.g.dart';
 @freezed
 abstract class TypeCorrectAnswerDto with _$TypeCorrectAnswerDto {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory TypeCorrectAnswerDto({
-    required int id,
-    required String title,
-  }) = _TypeCorrectAnswerDto;
+  const factory TypeCorrectAnswerDto({required int id, required String title}) = _TypeCorrectAnswerDto;
 
   // factory TypeCorrectAnswerDto.fromEntity(ProfileEntity profile) => TypeCorrectAnswerDto(
   //       id: profile.id,

@@ -37,22 +37,19 @@ class VacuumSystemFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
-                  customTableRow(1, 'vacuum_indicator_vac', 'check_eis_engine_page_make_sure_vacuum_pointer_is_in_green_band_limits'),
+                  customTableRow(
+                    1,
+                    'vacuum_indicator_vac',
+                    'check_eis_engine_page_make_sure_vacuum_pointer_is_in_green_band_limits',
+                  ),
                 ],
               ),
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'warning',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('warning', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
               SizedBox(height: 8),
               Center(
@@ -69,22 +66,15 @@ class VacuumSystemFailureScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

@@ -15,7 +15,12 @@ class ListQuestionByCategoryScreen extends StatefulWidget {
   final List<QuestionWithAnswersEntity>? questionWithAnswersList;
   final String? categoryTitle;
 
-  const ListQuestionByCategoryScreen({super.key, @PathParam('categoryId') required this.categoryId, this.questionWithAnswersList, @QueryParam('categoryTitle') this.categoryTitle});
+  const ListQuestionByCategoryScreen({
+    super.key,
+    @PathParam('categoryId') required this.categoryId,
+    this.questionWithAnswersList,
+    @QueryParam('categoryTitle') this.categoryTitle,
+  });
 
   @override
   State<ListQuestionByCategoryScreen> createState() => _ListQuestionByCategoryScreenState();
@@ -68,7 +73,14 @@ class _ListQuestionByCategoryScreenState extends State<ListQuestionByCategoryScr
                               indexQuestion.value--;
                             }
                           },
-                          boxShadow: [BoxShadow(color: Color(0xff106BD2).withOpacity(0.11), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xff106BD2).withOpacity(0.11),
+                              blurRadius: 9,
+                              spreadRadius: 0,
+                              offset: Offset(0.0, 7.0),
+                            ),
+                          ],
                           textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0A6EFA)),
                           borderColor: Colors.transparent,
                           backgroundColor: Colors.white,
@@ -88,7 +100,14 @@ class _ListQuestionByCategoryScreenState extends State<ListQuestionByCategoryScr
                               context.router.maybePop();
                             }
                           },
-                          boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xff0064D6).withOpacity(0.27),
+                              blurRadius: 9,
+                              spreadRadius: 0,
+                              offset: Offset(0.0, 7.0),
+                            ),
+                          ],
                           textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
                           borderColor: Colors.transparent,
                           backgroundColor: Color(0xFF0A6EFA),

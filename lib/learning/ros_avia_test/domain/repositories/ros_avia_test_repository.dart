@@ -13,7 +13,9 @@ abstract class RosAviaTestRepository {
   Future<Either<Failure, List<TypeSertificatesEntity>>> fetchTypeCertificates();
   Future<Either<Failure, List<TypeCorrectAnswerEntity>>> fetchTypeCorrectAnswer();
   Future<Either<Failure, List<PrivatPilotPlaneCategoryEntity>>> fetchPrivatPilotPlaneCategory();
-  Future<Either<Failure, List<RosAviaTestCategoryWithQuestionsEntity>>> fetchRosAviaTestCategoryWithQuestions(int typeSsertificatesId);
+  Future<Either<Failure, List<RosAviaTestCategoryWithQuestionsEntity>>> fetchRosAviaTestCategoryWithQuestions(
+    int typeSsertificatesId,
+  );
   Future<Either<Failure, List<RosAviaTestCategoryEntity>>> fetchRosAviaTestCategory(int typeSsertificatesId);
   Future<Either<Failure, List<QuestionWithAnswersEntity>>> fetchQuestionsWithAnswersByCategoryAndTypeCertificate({
     required int typeSsertificatesId,
@@ -22,4 +24,5 @@ abstract class RosAviaTestRepository {
     required bool mixQuestions,
   });
 }
+
 // List<QuestionWithAnswersModel>

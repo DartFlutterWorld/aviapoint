@@ -16,7 +16,9 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthService _authService;
 
   /// ApiDatasource - источник данных.
-  AuthRepositoryImpl({required ApiDatasource apiDatasource, required AuthService authService}) : _authService = authService, _apiDatasource = apiDatasource;
+  AuthRepositoryImpl({required ApiDatasource apiDatasource, required AuthService authService})
+    : _authService = authService,
+      _apiDatasource = apiDatasource;
 
   @override
   Future<Either<Failure, SmsEntity>> getSms(String phone) async {
@@ -37,7 +39,12 @@ class AuthRepositoryImpl implements AuthRepository {
       await TokenStorage.saveTokens(accessToken: response.token, refreshToken: response.refreshToken);
 
       // Сохраняем оба токена
-      _apiDatasource.setAuthTokens(accessToken: response.token, refreshToken: response.refreshToken, onRefresh: () => refreshToken(response.refreshToken), onLogout: () => _logout());
+      _apiDatasource.setAuthTokens(
+        accessToken: response.token,
+        refreshToken: response.refreshToken,
+        onRefresh: () => refreshToken(response.refreshToken),
+        onLogout: () => _logout(),
+      );
 
       return right(AuthMapper.toEntity(response));
     } on DioException catch (e) {
@@ -70,7 +77,12 @@ class AuthRepositoryImpl implements AuthRepository {
       // );
 
       // Сохраняем оба токена
-      _apiDatasource.setAuthTokens(accessToken: response.token, refreshToken: response.refreshToken, onRefresh: () => refreshToken(response.refreshToken), onLogout: () => _logout());
+      _apiDatasource.setAuthTokens(
+        accessToken: response.token,
+        refreshToken: response.refreshToken,
+        onRefresh: () => refreshToken(response.refreshToken),
+        onLogout: () => _logout(),
+      );
 
       return response.token;
     } catch (e, stack) {

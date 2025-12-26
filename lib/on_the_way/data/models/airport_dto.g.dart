@@ -1,0 +1,106 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'airport_dto.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+AirportDto _$AirportDtoFromJson(Map<String, dynamic> json) => AirportDto(
+  id: _intFromJson(json['id']),
+  ident: _stringFromJson(json['ident']),
+  identRu: _stringFromJson(json['ident_ru']),
+  type: _stringFromJson(json['type']),
+  name: _stringFromJson(json['name']),
+  nameEng: json['name_eng'] as String?,
+  latitudeDeg: _doubleFromJsonNullable(json['latitude_deg']),
+  longitudeDeg: _doubleFromJsonNullable(json['longitude_deg']),
+  elevationFt: _intFromJsonNullable(json['elevation_ft']),
+  continent: json['continent'] as String?,
+  countryCode: _stringFromJson(json['country_code']),
+  country: json['country'] as String?,
+  countryEng: json['country_eng'] as String?,
+  isoRegion: json['iso_region'] as String?,
+  region: json['region'] as String?,
+  regionEng: json['region_eng'] as String?,
+  coordinatesText: json['coordinates_text'] as String?,
+  city: json['city'] as String?,
+  municipality: json['municipality'] as String?,
+  ownership: json['ownership'] as String?,
+  scheduledService: json['scheduled_service'] as String?,
+  isInternational: json['is_international'] == null
+      ? false
+      : _boolFromJsonWithDefault(json['is_international']),
+  email: json['email'] as String?,
+  website: json['website'] as String?,
+  notes: json['notes'] as String?,
+  runwayName: json['runway_name'] as String?,
+  runwayLength: _intFromJsonNullable(json['runway_length']),
+  runwayWidth: _intFromJsonNullable(json['runway_width']),
+  runwaySurface: json['runway_surface'] as String?,
+  runwayMagneticCourse: json['runway_magnetic_course'] as String?,
+  runwayLighting: json['runway_lighting'] as String?,
+  gpsCode: json['gps_code'] as String?,
+  iataCode: json['iata_code'] as String?,
+  localCode: json['local_code'] as String?,
+  services: json['services'] as Map<String, dynamic>?,
+  ownerId: _intFromJsonNullable(json['owner_id']),
+  isVerified: json['is_verified'] == null
+      ? false
+      : _boolFromJsonWithDefault(json['is_verified']),
+  photos: json['photos'],
+  visitorPhotos: json['visitor_photos'],
+  isActive: json['is_active'] == null
+      ? true
+      : _boolFromJsonWithDefault(json['is_active']),
+  source: json['source'] as String?,
+  createdAt: _dateTimeFromJsonNullable(json['created_at']),
+  updatedAt: _dateTimeFromJsonNullable(json['updated_at']),
+);
+
+Map<String, dynamic> _$AirportDtoToJson(AirportDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'ident': instance.ident,
+      'ident_ru': instance.identRu,
+      'type': instance.type,
+      'name': instance.name,
+      'name_eng': instance.nameEng,
+      'latitude_deg': instance.latitudeDeg,
+      'longitude_deg': instance.longitudeDeg,
+      'elevation_ft': instance.elevationFt,
+      'continent': instance.continent,
+      'country_code': instance.countryCode,
+      'country': instance.country,
+      'country_eng': instance.countryEng,
+      'iso_region': instance.isoRegion,
+      'region': instance.region,
+      'region_eng': instance.regionEng,
+      'coordinates_text': instance.coordinatesText,
+      'city': instance.city,
+      'municipality': instance.municipality,
+      'ownership': instance.ownership,
+      'scheduled_service': instance.scheduledService,
+      'is_international': instance.isInternational,
+      'email': instance.email,
+      'website': instance.website,
+      'notes': instance.notes,
+      'runway_name': instance.runwayName,
+      'runway_length': instance.runwayLength,
+      'runway_width': instance.runwayWidth,
+      'runway_surface': instance.runwaySurface,
+      'runway_magnetic_course': instance.runwayMagneticCourse,
+      'runway_lighting': instance.runwayLighting,
+      'gps_code': instance.gpsCode,
+      'iata_code': instance.iataCode,
+      'local_code': instance.localCode,
+      'services': instance.services,
+      'owner_id': instance.ownerId,
+      'is_verified': instance.isVerified,
+      'photos': instance.photos,
+      'visitor_photos': instance.visitorPhotos,
+      'is_active': instance.isActive,
+      'source': instance.source,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
+    };

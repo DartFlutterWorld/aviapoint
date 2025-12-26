@@ -63,8 +63,22 @@ class _LearningScreenState extends State<LearningScreen> {
               onTap2: () => startTestingFlowNew(context: context),
               alignPicture: Alignment.topRight,
               titleButton2: 'Тестирование',
-              boxShadowButton: [BoxShadow(color: Color(0xff106BD2).withOpacity(0.11), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-              boxShadowButton2: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+              boxShadowButton: [
+                BoxShadow(
+                  color: Color(0xff106BD2).withOpacity(0.11),
+                  blurRadius: 9,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7.0),
+                ),
+              ],
+              boxShadowButton2: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.27),
+                  blurRadius: 9,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7.0),
+                ),
+              ],
             ),
           ],
         ),

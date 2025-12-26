@@ -23,5 +23,6 @@ abstract class PreflightInspectionCheckListDto with _$PreflightInspectionCheckLi
   //       type: profile.type,
   //     );
 
-  factory PreflightInspectionCheckListDto.fromJson(Map<String, dynamic> json) => _$PreflightInspectionCheckListDtoFromJson(json);
+  factory PreflightInspectionCheckListDto.fromJson(Map<String, dynamic> json) =>
+      _$PreflightInspectionCheckListDtoFromJson(json);
 }

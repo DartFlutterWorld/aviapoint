@@ -151,6 +151,22 @@ class CabinFireRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CreateFlightScreen]
+class CreateFlightRoute extends PageRouteInfo<void> {
+  const CreateFlightRoute({List<PageRouteInfo>? children})
+    : super(CreateFlightRoute.name, initialChildren: children);
+
+  static const String name = 'CreateFlightRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreateFlightScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [DetailNewsScreen]
 class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
   DetailNewsRoute({
@@ -413,6 +429,100 @@ class DitchingRoute extends PageRouteInfo<void> {
       return const DitchingScreen();
     },
   );
+}
+
+/// generated route for
+/// [EditAirportScreen]
+class EditAirportRoute extends PageRouteInfo<EditAirportRouteArgs> {
+  EditAirportRoute({
+    Key? key,
+    required String airportCode,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditAirportRoute.name,
+         args: EditAirportRouteArgs(key: key, airportCode: airportCode),
+         initialChildren: children,
+       );
+
+  static const String name = 'EditAirportRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EditAirportRouteArgs>();
+      return EditAirportScreen(key: args.key, airportCode: args.airportCode);
+    },
+  );
+}
+
+class EditAirportRouteArgs {
+  const EditAirportRouteArgs({this.key, required this.airportCode});
+
+  final Key? key;
+
+  final String airportCode;
+
+  @override
+  String toString() {
+    return 'EditAirportRouteArgs{key: $key, airportCode: $airportCode}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditAirportRouteArgs) return false;
+    return key == other.key && airportCode == other.airportCode;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ airportCode.hashCode;
+}
+
+/// generated route for
+/// [EditFlightScreen]
+class EditFlightRoute extends PageRouteInfo<EditFlightRouteArgs> {
+  EditFlightRoute({
+    Key? key,
+    required FlightEntity flight,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditFlightRoute.name,
+         args: EditFlightRouteArgs(key: key, flight: flight),
+         initialChildren: children,
+       );
+
+  static const String name = 'EditFlightRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EditFlightRouteArgs>();
+      return EditFlightScreen(key: args.key, flight: args.flight);
+    },
+  );
+}
+
+class EditFlightRouteArgs {
+  const EditFlightRouteArgs({this.key, required this.flight});
+
+  final Key? key;
+
+  final FlightEntity flight;
+
+  @override
+  String toString() {
+    return 'EditFlightRouteArgs{key: $key, flight: $flight}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditFlightRouteArgs) return false;
+    return key == other.key && flight == other.flight;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ flight.hashCode;
 }
 
 /// generated route for
@@ -694,6 +804,109 @@ class FiresSubCategoriesRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ nameCategory.hashCode;
+}
+
+/// generated route for
+/// [FlightDetailScreen]
+class FlightDetailRoute extends PageRouteInfo<FlightDetailRouteArgs> {
+  FlightDetailRoute({
+    Key? key,
+    required int flightId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         FlightDetailRoute.name,
+         args: FlightDetailRouteArgs(key: key, flightId: flightId),
+         rawPathParams: {'id': flightId},
+         initialChildren: children,
+       );
+
+  static const String name = 'FlightDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<FlightDetailRouteArgs>(
+        orElse: () => FlightDetailRouteArgs(flightId: pathParams.getInt('id')),
+      );
+      return FlightDetailScreen(key: args.key, flightId: args.flightId);
+    },
+  );
+}
+
+class FlightDetailRouteArgs {
+  const FlightDetailRouteArgs({this.key, required this.flightId});
+
+  final Key? key;
+
+  final int flightId;
+
+  @override
+  String toString() {
+    return 'FlightDetailRouteArgs{key: $key, flightId: $flightId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FlightDetailRouteArgs) return false;
+    return key == other.key && flightId == other.flightId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ flightId.hashCode;
+}
+
+/// generated route for
+/// [FlightsListScreen]
+class FlightsListRoute extends PageRouteInfo<FlightsListRouteArgs> {
+  FlightsListRoute({
+    Key? key,
+    int? initialTabIndex,
+    List<PageRouteInfo>? children,
+  }) : super(
+         FlightsListRoute.name,
+         args: FlightsListRouteArgs(key: key, initialTabIndex: initialTabIndex),
+         initialChildren: children,
+       );
+
+  static const String name = 'FlightsListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<FlightsListRouteArgs>(
+        orElse: () => const FlightsListRouteArgs(),
+      );
+      return FlightsListScreen(
+        key: args.key,
+        initialTabIndex: args.initialTabIndex,
+      );
+    },
+  );
+}
+
+class FlightsListRouteArgs {
+  const FlightsListRouteArgs({this.key, this.initialTabIndex});
+
+  final Key? key;
+
+  final int? initialTabIndex;
+
+  @override
+  String toString() {
+    return 'FlightsListRouteArgs{key: $key, initialTabIndex: $initialTabIndex}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FlightsListRouteArgs) return false;
+    return key == other.key && initialTabIndex == other.initialTabIndex;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialTabIndex.hashCode;
 }
 
 /// generated route for
@@ -1137,6 +1350,38 @@ class NormalCheckListRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ normalCategoryId.hashCode;
+}
+
+/// generated route for
+/// [OnTheWayNavigationScreen]
+class OnTheWayNavigationRoute extends PageRouteInfo<void> {
+  const OnTheWayNavigationRoute({List<PageRouteInfo>? children})
+    : super(OnTheWayNavigationRoute.name, initialChildren: children);
+
+  static const String name = 'OnTheWayNavigationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const OnTheWayNavigationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [OnTheWayScreen]
+class OnTheWayRoute extends PageRouteInfo<void> {
+  const OnTheWayRoute({List<PageRouteInfo>? children})
+    : super(OnTheWayRoute.name, initialChildren: children);
+
+  static const String name = 'OnTheWayRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const OnTheWayScreen();
+    },
+  );
 }
 
 /// generated route for

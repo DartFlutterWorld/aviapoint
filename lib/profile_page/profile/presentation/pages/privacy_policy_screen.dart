@@ -21,7 +21,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
           children: [
             Text('Политика конфиденциальности', style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E))),
             SizedBox(height: 8.h),
-            Text('Дата последнего обновления: ${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}', style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767))),
+            Text(
+              'Дата последнего обновления: ${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
+              style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767)),
+            ),
             SizedBox(height: 24.h),
             _buildSection(
               '1. Общие положения',

@@ -24,7 +24,8 @@ abstract class TypeCorrectAnswersState with _$TypeCorrectAnswersState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorTypeCorrectAnswersState;
-  const factory TypeCorrectAnswersState.success({required List<TypeCorrectAnswerEntity> typeCorrectAnswer}) = SuccessTypeCorrectAnswersState;
+  const factory TypeCorrectAnswersState.success({required List<TypeCorrectAnswerEntity> typeCorrectAnswer}) =
+      SuccessTypeCorrectAnswersState;
   // const factory TypeCorrectAnswersState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdTypeCorrectAnswersState;
   // const factory TypeCorrectAnswersState.done() = DoneTypeCorrectAnswersState;
 }
@@ -33,8 +34,8 @@ class TypeCorrectAnswersBloc extends Bloc<TypeCorrectAnswersEvent, TypeCorrectAn
   final RosAviaTestRepository _rosAviaTestRepository;
 
   TypeCorrectAnswersBloc({required RosAviaTestRepository rosAviaTestRepository})
-      : _rosAviaTestRepository = rosAviaTestRepository,
-        super(const LoadingTypeCorrectAnswersState()) {
+    : _rosAviaTestRepository = rosAviaTestRepository,
+      super(const LoadingTypeCorrectAnswersState()) {
     on<TypeCorrectAnswersEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -59,9 +60,7 @@ class TypeCorrectAnswersBloc extends Bloc<TypeCorrectAnswersEvent, TypeCorrectAn
         );
       },
       (r) {
-        emit(
-          SuccessTypeCorrectAnswersState(typeCorrectAnswer: r),
-        );
+        emit(SuccessTypeCorrectAnswersState(typeCorrectAnswer: r));
       },
     );
   }

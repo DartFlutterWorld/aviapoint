@@ -34,9 +34,17 @@ class IcingScreen extends StatelessWidget {
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'pitot_heat_switch', 'on'),
-                  customTableRow(2, 'turnback', 'turn_back_or_change_altitude_to_obtain_an_outside_air_temperature_that_is_less_conducive_to_icing'),
+                  customTableRow(
+                    2,
+                    'turnback',
+                    'turn_back_or_change_altitude_to_obtain_an_outside_air_temperature_that_is_less_conducive_to_icing',
+                  ),
                   customTableRow(3, 'cabin_ht_control_knobs', 'on_pull_full_out'),
-                  customTableRow(4, 'cabin_ht_and_cabin_air_control_knobs', 'open_to_obtain_maximum_windshield_defroster_airflow'),
+                  customTableRow(
+                    4,
+                    'cabin_ht_and_cabin_air_control_knobs',
+                    'open_to_obtain_maximum_windshield_defroster_airflow',
+                  ),
                   customTableRow(5, 'cabin_air_control_knob', 'adjust_to_obtain_maximum_defroster_heat_and_airflow'),
                 ],
               ),
@@ -61,7 +69,10 @@ class IcingScreen extends StatelessWidget {
                       Padding(padding: const EdgeInsets.all(8.0), child: Text('7')),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('plan_a_landing_at_the_nearest_airport_wit_an_extermely_rapid_ice_buildup_select_a_suitable_off_airport_landing_site', textAlign: TextAlign.right).tr(),
+                        child: Text(
+                          'plan_a_landing_at_the_nearest_airport_wit_an_extermely_rapid_ice_buildup_select_a_suitable_off_airport_landing_site',
+                          textAlign: TextAlign.right,
+                        ).tr(),
                       ),
                     ],
                   ),
@@ -94,7 +105,10 @@ class IcingScreen extends StatelessWidget {
                       Padding(padding: const EdgeInsets.all(8.0), child: Text('10')),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('open_left_window_and_if_practical_scrape_ic_from_a_portion_of_he_windshield_for_visibiliy_in_the_landing_approach', textAlign: TextAlign.right).tr(),
+                        child: Text(
+                          'open_left_window_and_if_practical_scrape_ic_from_a_portion_of_he_windshield_for_visibiliy_in_the_landing_approach',
+                          textAlign: TextAlign.right,
+                        ).tr(),
                       ),
                     ],
                   ),
@@ -103,7 +117,10 @@ class IcingScreen extends StatelessWidget {
                       Padding(padding: const EdgeInsets.all(8.0), child: Text('11')),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('perform_a_landing_approach_using_a_forward_slip_if_necessary_for_improved_visibility', textAlign: TextAlign.right).tr(),
+                        child: Text(
+                          'perform_a_landing_approach_using_a_forward_slip_if_necessary_for_improved_visibility',
+                          textAlign: TextAlign.right,
+                        ).tr(),
                       ),
                     ],
                   ),
@@ -112,7 +129,10 @@ class IcingScreen extends StatelessWidget {
                       Padding(padding: const EdgeInsets.all(8.0), child: Text('12')),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('approach_at_65_to75_kias_depending_upon_te_amount_of_ice_accumulation', textAlign: TextAlign.right).tr(),
+                        child: Text(
+                          'approach_at_65_to75_kias_depending_upon_te_amount_of_ice_accumulation',
+                          textAlign: TextAlign.right,
+                        ).tr(),
                       ),
                     ],
                   ),
@@ -130,7 +150,10 @@ class IcingScreen extends StatelessWidget {
                       Padding(padding: const EdgeInsets.all(8.0), child: Text('14')),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('missed_approaches_should_be_avoided_whenever_possible_because_of_severely_reduced_climb_capability', textAlign: TextAlign.right).tr(),
+                        child: Text(
+                          'missed_approaches_should_be_avoided_whenever_possible_because_of_severely_reduced_climb_capability',
+                          textAlign: TextAlign.right,
+                        ).tr(),
                       ),
                     ],
                   ),

@@ -24,17 +24,20 @@ abstract class PreflightInspectionCategoriesState with _$PreflightInspectionCate
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorPreflightInspectionCategoriesState;
-  const factory PreflightInspectionCategoriesState.success({required List<PreflightInspectionCategoriesEntity> preflightInspectionCategories}) = SuccessPreflightInspectionCategoriesState;
+  const factory PreflightInspectionCategoriesState.success({
+    required List<PreflightInspectionCategoriesEntity> preflightInspectionCategories,
+  }) = SuccessPreflightInspectionCategoriesState;
   // const factory PreflightInspectionCategoriesState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdPreflightInspectionCategoriesState;
   // const factory PreflightInspectionCategoriesState.done() = DonePreflightInspectionCategoriesState;
 }
 
-class PreflightInspectionCategoriesBloc extends Bloc<PreflightInspectionCategoriesEvent, PreflightInspectionCategoriesState> {
+class PreflightInspectionCategoriesBloc
+    extends Bloc<PreflightInspectionCategoriesEvent, PreflightInspectionCategoriesState> {
   final HandBookRepository _handBookRepository;
 
   PreflightInspectionCategoriesBloc({required HandBookRepository handBookRepository})
-      : _handBookRepository = handBookRepository,
-        super(const LoadingPreflightInspectionCategoriesState()) {
+    : _handBookRepository = handBookRepository,
+      super(const LoadingPreflightInspectionCategoriesState()) {
     on<PreflightInspectionCategoriesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -43,7 +46,10 @@ class PreflightInspectionCategoriesBloc extends Bloc<PreflightInspectionCategori
     );
   }
 
-  Future<void> _get(GetPreflightInspectionCategoriesEvent event, Emitter<PreflightInspectionCategoriesState> emit) async {
+  Future<void> _get(
+    GetPreflightInspectionCategoriesEvent event,
+    Emitter<PreflightInspectionCategoriesState> emit,
+  ) async {
     emit(const LoadingPreflightInspectionCategoriesState());
 
     final response = await _handBookRepository.fetchPreflightInspectionCategories();
@@ -59,9 +65,7 @@ class PreflightInspectionCategoriesBloc extends Bloc<PreflightInspectionCategori
         );
       },
       (r) {
-        emit(
-          SuccessPreflightInspectionCategoriesState(preflightInspectionCategories: r),
-        );
+        emit(SuccessPreflightInspectionCategoriesState(preflightInspectionCategories: r));
       },
     );
   }

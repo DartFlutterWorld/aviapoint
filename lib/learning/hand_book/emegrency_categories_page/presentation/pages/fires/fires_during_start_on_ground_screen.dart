@@ -30,15 +30,9 @@ class FiresDuringStartOnGroundScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
-                children: [
-                  customTableRow(1, 'magnetos_switch', 'start_continue_cranking_to_start_to_engine'),
-                ],
+                children: [customTableRow(1, 'magnetos_switch', 'start_continue_cranking_to_start_to_engine')],
               ),
               SizedBox(height: 8),
               Center(
@@ -49,11 +43,7 @@ class FiresDuringStartOnGroundScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(2, 'power1', '1800_rpm_for_a_few_minutes'),
@@ -69,11 +59,7 @@ class FiresDuringStartOnGroundScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(2, 'throttle_controle', 'full_push_full_in'),
@@ -88,7 +74,11 @@ class FiresDuringStartOnGroundScreen extends StatelessWidget {
                   customTableRow(11, 'parking_brake', 'release'),
                   customTableRow(12, 'fire_extinguisher', 'obtain_have_ground_attendants_obtain_if_not_installed'),
                   customTableRow(13, 'airplane', 'evacuate'),
-                  customTableRow(14, 'fires', 'inspect_repair_or_replace_damaged_components_and_or_wiring_before_conducting_another_flight'),
+                  customTableRow(
+                    14,
+                    'fires',
+                    'inspect_repair_or_replace_damaged_components_and_or_wiring_before_conducting_another_flight',
+                  ),
                 ],
               ),
               SizedBox(height: 16),
@@ -100,22 +90,15 @@ class FiresDuringStartOnGroundScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

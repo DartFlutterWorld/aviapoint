@@ -25,7 +25,8 @@ abstract class NormalCheckListState with _$NormalCheckListState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorNormalCheckListState;
-  const factory NormalCheckListState.success({required List<NormalCheckListEntity> normalCheckList}) = SuccessNormalCheckListState;
+  const factory NormalCheckListState.success({required List<NormalCheckListEntity> normalCheckList}) =
+      SuccessNormalCheckListState;
   // const factory NormalCheckListState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdNormalCheckListState;
   // const factory NormalCheckListState.done() = DoneNormalCheckListState;
 }
@@ -34,8 +35,8 @@ class NormalCheckListBloc extends Bloc<NormalCheckListEvent, NormalCheckListStat
   final HandBookRepository _handBookRepository;
   List<NormalCheckListEntity> normalCheckList = [];
   NormalCheckListBloc({required HandBookRepository handBookRepository})
-      : _handBookRepository = handBookRepository,
-        super(const LoadingNormalCheckListState()) {
+    : _handBookRepository = handBookRepository,
+      super(const LoadingNormalCheckListState()) {
     on<NormalCheckListEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -61,9 +62,7 @@ class NormalCheckListBloc extends Bloc<NormalCheckListEvent, NormalCheckListStat
       },
       (r) {
         normalCheckList = r;
-        emit(
-          SuccessNormalCheckListState(normalCheckList: r),
-        );
+        emit(SuccessNormalCheckListState(normalCheckList: r));
       },
     );
   }

@@ -2,19 +2,11 @@ import 'package:aviapoint/learning/ros_avia_test/data/models/type_sertificates_d
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificates_entity.dart';
 
 class TypeSertificatesMapper {
-  static TypeSertificatesEntity toEntity(
-    TypeSertificatesDto model,
-  ) {
-    return TypeSertificatesEntity(
-      id: model.id,
-      title: model.title,
-      image: model.image,
-    );
+  static TypeSertificatesEntity toEntity(TypeSertificatesDto model) {
+    return TypeSertificatesEntity(id: model.id, title: model.title, image: model.image);
   }
 
-  static List<TypeSertificatesEntity> toEntities(
-    List<TypeSertificatesDto> models,
-  ) {
+  static List<TypeSertificatesEntity> toEntities(List<TypeSertificatesDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

@@ -43,17 +43,17 @@ class _UpAnimationState extends State<UpAnimation> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? AnimationController(duration: Duration(milliseconds: widget.milSecDuration), vsync: this);
+    _controller =
+        widget.controller ??
+        AnimationController(
+          duration: Duration(milliseconds: widget.milSecDuration),
+          vsync: this,
+        );
 
     offsetAnimation = Tween<Offset>(
       begin: widget.begin,
       end: widget.end,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: widget.curve,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
     if (widget.delay == 0) {
       _controller.forward();
       // _scaleController.forward();
@@ -79,14 +79,8 @@ class _UpAnimationState extends State<UpAnimation> with TickerProviderStateMixin
     return widget.withFadeTransition
         ? FadeTransition(
             opacity: _controller,
-            child: SlideTransition(
-              position: offsetAnimation,
-              child: widget.child,
-            ),
+            child: SlideTransition(position: offsetAnimation, child: widget.child),
           )
-        : SlideTransition(
-            position: offsetAnimation,
-            child: widget.child,
-          );
+        : SlideTransition(position: offsetAnimation, child: widget.child);
   }
 }

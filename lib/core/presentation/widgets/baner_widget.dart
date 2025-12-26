@@ -44,11 +44,22 @@ class BanerWidget extends StatelessWidget {
     this.backgroundColor2 = const Color(0xFF0A6EFA),
     this.borderColor = Colors.white,
     this.borderColor2 = const Color(0xFF0A6EFA),
-    this.boxShadowContainer = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
-    this.boxShadowButton = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
-    this.boxShadowButton2 = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+    this.boxShadowContainer = const [
+      BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0)),
+    ],
+    this.boxShadowButton = const [
+      BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0)),
+    ],
+    this.boxShadowButton2 = const [
+      BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0)),
+    ],
     this.titleStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
-    this.descStyle = const TextStyle(fontWeight: FontWeight.normal, fontSize: 13, height: 1.3, color: Color(0xFFF1F7FF)),
+    this.descStyle = const TextStyle(
+      fontWeight: FontWeight.normal,
+      fontSize: 13,
+      height: 1.3,
+      color: Color(0xFFF1F7FF),
+    ),
   });
 
   @override

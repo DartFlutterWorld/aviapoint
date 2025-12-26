@@ -13,20 +13,30 @@ part 'questions_by_type_certificate_and_categories_bloc.freezed.dart';
 abstract class QuestionsByTypeCertificateAndCategories with _$QuestionsByTypeCertificateAndCategories {
   const QuestionsByTypeCertificateAndCategories._();
 
-  const factory QuestionsByTypeCertificateAndCategories.get({required int typeSsertificatesId}) = GetQuestionsByTypeCertificateAndCategories;
+  const factory QuestionsByTypeCertificateAndCategories.get({required int typeSsertificatesId}) =
+      GetQuestionsByTypeCertificateAndCategories;
 }
 
 @freezed
 abstract class QuestionsByTypeCertificateAndCategoriesState with _$QuestionsByTypeCertificateAndCategoriesState {
   const QuestionsByTypeCertificateAndCategoriesState._();
-  const factory QuestionsByTypeCertificateAndCategoriesState.loading() = LoadingQuestionsByTypeCertificateAndCategoriesState;
-  const factory QuestionsByTypeCertificateAndCategoriesState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) =
-      ErrorQuestionsByTypeCertificateAndCategoriesState;
-  const factory QuestionsByTypeCertificateAndCategoriesState.success({required List<QuestionWithAnswersEntity> questionsWithAnswers, required bool buttonHint}) =
-      SuccessQuestionsByTypeCertificateAndCategoriesState;
+  const factory QuestionsByTypeCertificateAndCategoriesState.loading() =
+      LoadingQuestionsByTypeCertificateAndCategoriesState;
+  const factory QuestionsByTypeCertificateAndCategoriesState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorQuestionsByTypeCertificateAndCategoriesState;
+  const factory QuestionsByTypeCertificateAndCategoriesState.success({
+    required List<QuestionWithAnswersEntity> questionsWithAnswers,
+    required bool buttonHint,
+  }) = SuccessQuestionsByTypeCertificateAndCategoriesState;
 }
 
-class QuestionsByTypeCertificateAndCategoriesBloc extends Bloc<QuestionsByTypeCertificateAndCategories, QuestionsByTypeCertificateAndCategoriesState> {
+class QuestionsByTypeCertificateAndCategoriesBloc
+    extends Bloc<QuestionsByTypeCertificateAndCategories, QuestionsByTypeCertificateAndCategoriesState> {
   final RosAviaTestRepository _rosAviaTestRepository;
 
   QuestionsByTypeCertificateAndCategoriesBloc({required RosAviaTestRepository rosAviaTestRepository})
@@ -35,7 +45,10 @@ class QuestionsByTypeCertificateAndCategoriesBloc extends Bloc<QuestionsByTypeCe
     on<QuestionsByTypeCertificateAndCategories>((event, emitter) => event.map(get: (event) => _get(event, emitter)));
   }
 
-  Future<void> _get(GetQuestionsByTypeCertificateAndCategories event, Emitter<QuestionsByTypeCertificateAndCategoriesState> emit) async {
+  Future<void> _get(
+    GetQuestionsByTypeCertificateAndCategories event,
+    Emitter<QuestionsByTypeCertificateAndCategoriesState> emit,
+  ) async {
     emit(const LoadingQuestionsByTypeCertificateAndCategoriesState());
     final db = getIt<AppDb>();
 
@@ -60,7 +73,12 @@ class QuestionsByTypeCertificateAndCategoriesBloc extends Bloc<QuestionsByTypeCe
         );
       },
       (r) {
-        emit(SuccessQuestionsByTypeCertificateAndCategoriesState(questionsWithAnswers: r, buttonHint: s?.buttonHint ?? true));
+        emit(
+          SuccessQuestionsByTypeCertificateAndCategoriesState(
+            questionsWithAnswers: r,
+            buttonHint: s?.buttonHint ?? true,
+          ),
+        );
       },
     );
   }

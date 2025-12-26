@@ -11,6 +11,7 @@ class Pictures {
   static const String marketNavbar = 'assets/svg/market_navbar.svg';
   static const String mainNavbar = 'assets/svg/main_navbar.svg';
   static const String newsNavbar = 'assets/svg/news_navbar.svg';
+  static const String onTheWayNavbar = 'assets/svg/on_the_way_navbar.svg';
   static const String profileNavbar = 'assets/svg/profile_navbar.svg';
 
   static const String watchVideoBackground = 'assets/png/watch_video_background.png';

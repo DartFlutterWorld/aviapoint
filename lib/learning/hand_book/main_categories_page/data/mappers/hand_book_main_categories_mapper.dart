@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/hand_book/main_categories_page/data/models/ha
 import 'package:aviapoint/learning/hand_book/main_categories_page/domain/entities/hand_book_categories_entity.dart';
 
 class HandBookMainCategoriesMapper {
-  static HandBookMainCategoriesEntity toEntity(
-    HandBookMainCategoriesDto model,
-  ) {
+  static HandBookMainCategoriesEntity toEntity(HandBookMainCategoriesDto model) {
     return HandBookMainCategoriesEntity(
       mainCategoryId: model.mainCategoryId,
       title: model.title,
@@ -13,9 +11,7 @@ class HandBookMainCategoriesMapper {
     );
   }
 
-  static List<HandBookMainCategoriesEntity> toEntities(
-    List<HandBookMainCategoriesDto> models,
-  ) {
+  static List<HandBookMainCategoriesEntity> toEntities(List<HandBookMainCategoriesDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

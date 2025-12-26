@@ -60,6 +60,8 @@ abstract class ExceptionNetworkModel implements ExceptionNetwork {
       return ExceptionUnexpectedError(error: error.toString());
     }
 
-    return error.toString().contains("is not subtype of") ? ExceptionUnableToProcess() : ExceptionUnexpectedError(error: error.toString());
+    return error.toString().contains("is not subtype of")
+        ? ExceptionUnableToProcess()
+        : ExceptionUnexpectedError(error: error.toString());
   }
 }

@@ -26,14 +26,5 @@ class NormalCheckListEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        id,
-        normalCategoryId,
-        title,
-        doing,
-        picture,
-        titleEng,
-        doingEng,
-        checkList,
-      ];
+  List<Object?> get props => [id, normalCategoryId, title, doing, picture, titleEng, doingEng, checkList];
 }

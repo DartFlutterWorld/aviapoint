@@ -37,39 +37,23 @@ class CategoryWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(left: 15, right: 15, top: 11, bottom: 11),
             decoration: BoxDecoration(
-                border: Border.all(color: isSelect ? Color(0xFF0A6EFA) : const Color(0xFFE3F1FF), width: 1),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(16.r),
-                ),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF045EC5).withOpacity(0.08),
-                    blurRadius: 9.3,
-                    offset: Offset(
-                      0.0,
-                      4.0,
-                    ),
-                  ),
-                ]),
+              border: Border.all(color: isSelect ? Color(0xFF0A6EFA) : const Color(0xFFE3F1FF), width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(16.r)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0)),
+              ],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
                     if (image != null)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: SvgPicture.asset(image!),
-                      ),
+                      Padding(padding: const EdgeInsets.only(right: 10), child: SvgPicture.asset(image!)),
                     Expanded(
                       flex: 5,
-                      child: Text(
-                        title,
-                        style: AppStyles.bold15s.copyWith(
-                          color: Color(0xFF374151),
-                        ),
-                      ),
+                      child: Text(title, style: AppStyles.bold15s.copyWith(color: Color(0xFF374151))),
                     ),
                     SizedBox(width: 8),
                     if (withClear)

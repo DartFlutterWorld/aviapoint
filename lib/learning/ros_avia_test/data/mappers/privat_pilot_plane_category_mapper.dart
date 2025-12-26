@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/ros_avia_test/data/models/privat_pilot_plane_
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/privat_pilot_plane_category_entity.dart';
 
 class PrivatPilotPlaneCategoryMapper {
-  static PrivatPilotPlaneCategoryEntity toEntity(
-    PrivatPilotPlaneCategoryDto model,
-  ) {
+  static PrivatPilotPlaneCategoryEntity toEntity(PrivatPilotPlaneCategoryDto model) {
     return PrivatPilotPlaneCategoryEntity(
       id: model.id,
       title: model.title,
@@ -13,9 +11,7 @@ class PrivatPilotPlaneCategoryMapper {
     );
   }
 
-  static List<PrivatPilotPlaneCategoryEntity> toEntities(
-    List<PrivatPilotPlaneCategoryDto> models,
-  ) {
+  static List<PrivatPilotPlaneCategoryEntity> toEntities(List<PrivatPilotPlaneCategoryDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

@@ -39,7 +39,12 @@ class _NormalCategoriesScreenState extends State<NormalCategoriesScreen> {
       appBar: CustomAppBar(
         title: 'Нормальные процедуры',
         withBack: true,
-        actions: [IconButton(onPressed: () => context.read<NormalCheckedCubit>().clearAllCategory(), icon: SvgPicture.asset(Pictures.round_clear2))],
+        actions: [
+          IconButton(
+            onPressed: () => context.read<NormalCheckedCubit>().clearAllCategory(),
+            icon: SvgPicture.asset(Pictures.round_clear2),
+          ),
+        ],
       ),
       backgroundColor: AppColors.background,
       body: BlocBuilder<NormalCategoriesBloc, NormalCategoriesState>(
@@ -65,7 +70,9 @@ class _Success extends StatelessWidget {
 
   String getIcon({required BuildContext context, required int index}) {
     final state = BlocProvider.of<NormalCheckedCubit>(context).state;
-    final checksLenght = BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length;
+    final checksLenght = BlocProvider.of<NormalCheckListBloc>(
+      context,
+    ).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length;
 
     final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1);
     if (checkProgressByIdCategory != null) {
@@ -78,7 +85,9 @@ class _Success extends StatelessWidget {
 
   void canNavigation({required BuildContext context, required int index}) {
     final state = BlocProvider.of<NormalCheckedCubit>(context).state;
-    final checksLenght = BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length;
+    final checksLenght = BlocProvider.of<NormalCheckListBloc>(
+      context,
+    ).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length;
 
     // Если Выполнено всё то не даём провлиться в катгорию, иначе может провалиться в категорию и закончить проведение проверок
     final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1);
@@ -113,8 +122,15 @@ class _Success extends StatelessWidget {
                   child: BlocBuilder<NormalCheckListBloc, NormalCheckListState>(
                     builder: (context, state) => state.maybeMap(
                       success: (value) => ProgressWidget(
-                        from: normalCheckedState.checkProgress.firstWhereOrNull((e) => e.idCategory == index + 1)?.checkedIds.length ?? 0,
-                        to: BlocProvider.of<NormalCheckListBloc>(context).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length,
+                        from:
+                            normalCheckedState.checkProgress
+                                .firstWhereOrNull((e) => e.idCategory == index + 1)
+                                ?.checkedIds
+                                .length ??
+                            0,
+                        to: BlocProvider.of<NormalCheckListBloc>(
+                          context,
+                        ).normalCheckList.where((e) => e.normalCategoryId == index + 1 && e.checkList == false).length,
                       ),
                       orElse: () => SizedBox.shrink(),
                     ),

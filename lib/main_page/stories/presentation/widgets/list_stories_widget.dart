@@ -59,7 +59,9 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
               itemCount: state.story.length,
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
-                  AutoRouter.of(context).push(DetailStoryRoute(idStory: state.story[index].id, stories: state.story, currentIndex: index));
+                  AutoRouter.of(
+                    context,
+                  ).push(DetailStoryRoute(idStory: state.story[index].id, stories: state.story, currentIndex: index));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -68,7 +70,13 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                     width: 100.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      border: BlocProvider.of<StoryCubit>(context, listen: true).state.listStories.contains(state.story[index].id) ? null : Border.all(color: Color(0xFF0A6EFA), width: 1),
+                      border:
+                          BlocProvider.of<StoryCubit>(
+                            context,
+                            listen: true,
+                          ).state.listStories.contains(state.story[index].id)
+                          ? null
+                          : Border.all(color: Color(0xFF0A6EFA), width: 1),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
@@ -92,7 +100,10 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                             padding: const EdgeInsets.all(8.0),
                             child: Align(
                               alignment: Alignment.bottomCenter,
-                              child: Text(state.story[index].title, style: AppStyles.regular13s.copyWith(color: Color(0xFF374151))),
+                              child: Text(
+                                state.story[index].title,
+                                style: AppStyles.regular13s.copyWith(color: Color(0xFF374151)),
+                              ),
                             ),
                           ),
                         ],

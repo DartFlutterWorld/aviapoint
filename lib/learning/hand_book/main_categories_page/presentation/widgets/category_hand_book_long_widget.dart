@@ -34,19 +34,9 @@ class CategoryHandBookLongWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
-                BoxShadow(
-                  color: Color(0xFF045EC5).withOpacity(0.08),
-                  blurRadius: 9.3,
-                  offset: Offset(
-                    0.0,
-                    4.0,
-                  ),
-                ),
+                BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0)),
               ],
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(background),
-              ),
+              image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,17 +45,9 @@ class CategoryHandBookLongWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                      children: [
-                        Image.asset(
-                          picturePlane,
-                          height: imageHeight,
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ],
+                      children: [Image.asset(picturePlane, height: imageHeight, alignment: Alignment.centerLeft)],
                     ),
-                    SizedBox(
-                      width: 8,
-                    ),
+                    SizedBox(width: 8),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,14 +55,7 @@ class CategoryHandBookLongWidget extends StatelessWidget {
                           SizedBox(height: 18),
                           Padding(
                             padding: const EdgeInsets.only(right: 13),
-                            child: Text(
-                              title,
-                              style: AppStyles.bold15s.copyWith(
-                                  color: Color(
-                                    0xFF1F2937,
-                                  ),
-                                  height: 1),
-                            ),
+                            child: Text(title, style: AppStyles.bold15s.copyWith(color: Color(0xFF1F2937), height: 1)),
                           ),
                           SizedBox(height: 5),
                           Padding(
@@ -92,13 +67,13 @@ class CategoryHandBookLongWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
             ),
           ),
-          Positioned(bottom: 8, right: 11, child: SvgPicture.asset(Pictures.book))
+          Positioned(bottom: 8, right: 11, child: SvgPicture.asset(Pictures.book)),
         ],
       ),
     );

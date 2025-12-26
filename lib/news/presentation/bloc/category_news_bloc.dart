@@ -32,13 +32,9 @@ class CategoryNewsBloc extends Bloc<CategoryNewsEvent, CategoryNewsState> {
   List<CategoryNewsEntity> allCategory = [];
 
   CategoryNewsBloc({required NewsRepository newsRepository})
-      : _newsRepository = newsRepository,
-        super(const LoadingCategoryNewsState()) {
-    on<CategoryNewsEvent>(
-      (event, emitter) => event.map(
-        get: (event) => _get(event, emitter),
-      ),
-    );
+    : _newsRepository = newsRepository,
+      super(const LoadingCategoryNewsState()) {
+    on<CategoryNewsEvent>((event, emitter) => event.map(get: (event) => _get(event, emitter)));
   }
 
   Future<void> _get(GetCategoryNewsEvent event, Emitter<CategoryNewsState> emit) async {

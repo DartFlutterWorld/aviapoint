@@ -9,7 +9,17 @@ class PaymentEntity {
   final DateTime? createdAt;
   final bool? paid;
 
-  PaymentEntity({required this.id, required this.status, required this.amount, required this.currency, this.description, this.paymentUrl, this.confirmationToken, this.createdAt, this.paid});
+  PaymentEntity({
+    required this.id,
+    required this.status,
+    required this.amount,
+    required this.currency,
+    this.description,
+    this.paymentUrl,
+    this.confirmationToken,
+    this.createdAt,
+    this.paid,
+  });
 
   bool get isSucceeded => status == 'succeeded';
   bool get isPending => status == 'pending' || status == 'waiting_for_capture';

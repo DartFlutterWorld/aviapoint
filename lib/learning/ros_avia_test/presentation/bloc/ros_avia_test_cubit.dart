@@ -25,7 +25,8 @@ class RosAviaTestCubit extends Cubit<RosAviaTestState> {
 abstract class RosAviaTestState with _$RosAviaTestState {
   const factory RosAviaTestState({
     @Default('Частный пилот (самолет)') String typeCertificateName,
-    @Default(TypeSertificatesEntity(id: 1, title: 'Частный пилот (самолет)', image: '')) TypeSertificatesEntity typeSertificate,
+    @Default(TypeSertificatesEntity(id: 1, title: 'Частный пилот (самолет)', image: ''))
+    TypeSertificatesEntity typeSertificate,
     @Default(TestMode.training) TestMode testMode,
   }) = _RosAviaTestState;
 }

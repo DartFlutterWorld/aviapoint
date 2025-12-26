@@ -34,7 +34,9 @@ abstract class RosAviaTestService {
   // Future<List<NormalCategoriesDto>> fetchNormalCategories();
 
   @GET('/api/learning/ros_avia_test/{typeCertificateId}')
-  Future<List<RosAviaTestCategoryWithQuestionsDto>> fetchRosAviaTestCategoryWithQuestions(@Path('typeCertificateId') String typeCertificateId);
+  Future<List<RosAviaTestCategoryWithQuestionsDto>> fetchRosAviaTestCategoryWithQuestions(
+    @Path('typeCertificateId') String typeCertificateId,
+  );
 
   @GET('/api/learning/ros_avia_test/categories/{typeCertificateId}')
   Future<List<RosAviaTestCategoryDto>> fetchRosAviaTestCategory(@Path('typeCertificateId') String typeCertificateId);

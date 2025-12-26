@@ -38,11 +38,7 @@ class ElectricalPowerSupplySystemMalfunctionsScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow('1', 'master_switch_alt_only', 'off'),
@@ -59,55 +55,33 @@ class ElectricalPowerSupplySystemMalfunctionsScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'note',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('note', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
-              Center(
-                child: Text(
-                  'note1',
-                ).tr(),
-              ),
+              Center(child: Text('note1').tr()),
               SizedBox(height: 8),
-              Center(
-                child: Text(
-                  'note2',
-                ).tr(),
-              ),
+              Center(child: Text('note2').tr()),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow('и', 'com_1_nav_1', 'tune_to_active_frequency'),
-                  customTableRow('к', 'com_1_mic_and_nav_1', 'select_com_2_mic_and_nav2_will_be_inoperative_once_avionics_bus2_is_seleted_to_off'),
+                  customTableRow(
+                    'к',
+                    'com_1_mic_and_nav_1',
+                    'select_com_2_mic_and_nav2_will_be_inoperative_once_avionics_bus2_is_seleted_to_off',
+                  ),
                 ],
               ),
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'note',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('note', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
               SizedBox(height: 8),
-              Center(
-                child: Text(
-                  'note3',
-                ).tr(),
-              ),
+              Center(child: Text('note3').tr()),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow('л', 'avionics_switch_bus_2', 'off_keep_on_if_in_clouds'),
@@ -116,17 +90,10 @@ class ElectricalPowerSupplySystemMalfunctionsScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'note',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('note', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
               SizedBox(height: 8),
-              Center(
-                child: Text(
-                  'note4',
-                ).tr(),
-              ),
+              Center(child: Text('note4').tr()),
               SizedBox(height: 16),
             ],
           ),
@@ -136,22 +103,15 @@ class ElectricalPowerSupplySystemMalfunctionsScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(String number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == '0' ? '' : number),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == '0' ? '' : number)),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

@@ -19,7 +19,12 @@ class DetailStoryScreen extends StatefulWidget {
   final int currentIndex;
   final List<StoryEntity> stories;
 
-  const DetailStoryScreen({super.key, @PathParam('id') required this.idStory, required this.stories, required this.currentIndex});
+  const DetailStoryScreen({
+    super.key,
+    @PathParam('id') required this.idStory,
+    required this.stories,
+    required this.currentIndex,
+  });
 
   @override
   State<DetailStoryScreen> createState() => _DetailStoryScreenState();
@@ -128,7 +133,9 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
     }
 
     if (side == 'onLongPress') {
-      if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized && _videoPlayer!.controller.value.isPlaying) {
+      if (_videoPlayer != null &&
+          _videoPlayer!.controller.value.isInitialized &&
+          _videoPlayer!.controller.value.isPlaying) {
         _videoPlayer!.controller.pause();
         _animController?.stop();
       } else {
@@ -137,7 +144,9 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
       }
     }
     if (side == 'onLongPressEnd') {
-      if (_videoPlayer != null && _videoPlayer!.controller.value.isInitialized && !_videoPlayer!.controller.value.isPlaying) {
+      if (_videoPlayer != null &&
+          _videoPlayer!.controller.value.isInitialized &&
+          !_videoPlayer!.controller.value.isPlaying) {
         _videoPlayer!.controller.play();
         _animController?.forward();
       } else {
@@ -189,10 +198,14 @@ class _DetailStoryScreenState extends State<DetailStoryScreen> with SingleTicker
                   textColor: state.detailstory.textColor,
                   animController: _animController,
                   videoPlayer: _videoPlayer,
-                  onTapScreenRight: () => _onTapScreen('right', BlocProvider.of<CacheManagerBloc>(context).stories, context),
-                  onTapScreenLeft: () => _onTapScreen('left', BlocProvider.of<CacheManagerBloc>(context).stories, context),
-                  onLongPress: () => _onTapScreen('onLongPress', BlocProvider.of<CacheManagerBloc>(context).stories, context),
-                  onLongPressEnd: (details) => _onTapScreen('onLongPressEnd', BlocProvider.of<CacheManagerBloc>(context).stories, context),
+                  onTapScreenRight: () =>
+                      _onTapScreen('right', BlocProvider.of<CacheManagerBloc>(context).stories, context),
+                  onTapScreenLeft: () =>
+                      _onTapScreen('left', BlocProvider.of<CacheManagerBloc>(context).stories, context),
+                  onLongPress: () =>
+                      _onTapScreen('onLongPress', BlocProvider.of<CacheManagerBloc>(context).stories, context),
+                  onLongPressEnd: (details) =>
+                      _onTapScreen('onLongPressEnd', BlocProvider.of<CacheManagerBloc>(context).stories, context),
                   currentIndex: state2.currentIndex,
                 );
               },

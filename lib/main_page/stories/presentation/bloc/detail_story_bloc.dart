@@ -16,14 +16,22 @@ abstract class DetailStoryEvent with _$DetailStoryEvent {
 abstract class DetailStoryState with _$DetailStoryState {
   const DetailStoryState._();
   const factory DetailStoryState.loading() = LoadingDetailStoryState;
-  const factory DetailStoryState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorDetailStoryState;
+  const factory DetailStoryState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorDetailStoryState;
   const factory DetailStoryState.success({required StoryEntity detailstory}) = SuccessDetailStoryState;
 }
 
 class DetailStoryBloc extends Bloc<DetailStoryEvent, DetailStoryState> {
   final StoryRepository _storyRepository;
 
-  DetailStoryBloc({required StoryRepository storyRepository}) : _storyRepository = storyRepository, super(const LoadingDetailStoryState()) {
+  DetailStoryBloc({required StoryRepository storyRepository})
+    : _storyRepository = storyRepository,
+      super(const LoadingDetailStoryState()) {
     on<DetailStoryEvent>((event, emitter) => event.map(get: (event) => _get(event, emitter)));
   }
 

@@ -25,8 +25,10 @@ abstract class VideoForStudentsState with _$VideoForStudentsState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorVideoForStudentsState;
-  const factory VideoForStudentsState.success({required List<VideoForStudentsEntity> videoForStudents}) = SuccessVideoForStudentsState;
-  const factory VideoForStudentsState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdVideoForStudentsState;
+  const factory VideoForStudentsState.success({required List<VideoForStudentsEntity> videoForStudents}) =
+      SuccessVideoForStudentsState;
+  const factory VideoForStudentsState.successById({required VideoForStudentsEntity videoForStudents}) =
+      SuccessByIdVideoForStudentsState;
   const factory VideoForStudentsState.done() = DoneVideoForStudentsState;
 }
 
@@ -34,13 +36,10 @@ class VideoForStudentsBloc extends Bloc<VideoForStudentsEvent, VideoForStudentsS
   final VideoForStudentsRepository _videoForStudentsRepository;
 
   VideoForStudentsBloc({required VideoForStudentsRepository videoForStudentsRepository})
-      : _videoForStudentsRepository = videoForStudentsRepository,
-        super(const LoadingVideoForStudentsState()) {
+    : _videoForStudentsRepository = videoForStudentsRepository,
+      super(const LoadingVideoForStudentsState()) {
     on<VideoForStudentsEvent>(
-      (event, emitter) => event.map(
-        get: (event) => _get(event, emitter),
-        getById: (event) => _getById(event, emitter),
-      ),
+      (event, emitter) => event.map(get: (event) => _get(event, emitter), getById: (event) => _getById(event, emitter)),
     );
   }
 
@@ -60,9 +59,7 @@ class VideoForStudentsBloc extends Bloc<VideoForStudentsEvent, VideoForStudentsS
         );
       },
       (r) {
-        emit(
-          SuccessVideoForStudentsState(videoForStudents: r),
-        );
+        emit(SuccessVideoForStudentsState(videoForStudents: r));
       },
     );
   }
@@ -84,9 +81,7 @@ class VideoForStudentsBloc extends Bloc<VideoForStudentsEvent, VideoForStudentsS
         );
       },
       (r) {
-        emit(
-          SuccessByIdVideoForStudentsState(videoForStudents: r),
-        );
+        emit(SuccessByIdVideoForStudentsState(videoForStudents: r));
       },
     );
   }

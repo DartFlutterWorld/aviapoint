@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/hand_book/normal_categories_page/data/models/
 import 'package:aviapoint/learning/hand_book/normal_categories_page/domain/entities/normal_categories_entity.dart';
 
 class NormalCategoriesMapper {
-  static NormalCategoriesEntity toEntity(
-    NormalCategoriesDto model,
-  ) {
+  static NormalCategoriesEntity toEntity(NormalCategoriesDto model) {
     return NormalCategoriesEntity(
       id: model.id,
       title: model.title,
@@ -15,9 +13,7 @@ class NormalCategoriesMapper {
     );
   }
 
-  static List<NormalCategoriesEntity> toEntities(
-    List<NormalCategoriesDto> models,
-  ) {
+  static List<NormalCategoriesEntity> toEntities(List<NormalCategoriesDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

@@ -62,7 +62,12 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 800, maxHeight: 800);
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+      maxWidth: 800,
+      maxHeight: 800,
+    );
 
     if (image != null) {
       setState(() {
@@ -174,7 +179,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                   _isLoading = false;
                 });
                 Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
               }
             }
           },
@@ -183,7 +190,9 @@ class _ProfileEditState extends State<ProfileEdit> {
               setState(() {
                 _isLoading = false;
               });
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
             }
           },
           orElse: () {},
@@ -203,7 +212,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Изменить данные', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                      GestureDetector(onTap: () => Navigator.of(context).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: SvgPicture.asset(Pictures.closeAuth),
+                      ),
                     ],
                   ),
                   SizedBox(height: 24),
@@ -225,9 +237,19 @@ class _ProfileEditState extends State<ProfileEdit> {
                               child: ClipOval(
                                 child: _selectedPhoto != null
                                     ? (kIsWeb && _selectedPhotoBytes != null
-                                          ? Image.memory(_selectedPhotoBytes!, fit: BoxFit.cover, width: 100, height: 100)
+                                          ? Image.memory(
+                                              _selectedPhotoBytes!,
+                                              fit: BoxFit.cover,
+                                              width: 100,
+                                              height: 100,
+                                            )
                                           : !kIsWeb
-                                          ? Image.file(File(_selectedPhoto!.path), fit: BoxFit.cover, width: 100, height: 100)
+                                          ? Image.file(
+                                              File(_selectedPhoto!.path),
+                                              fit: BoxFit.cover,
+                                              width: 100,
+                                              height: 100,
+                                            )
                                           : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100))
                                     : _currentAvatarUrl != null && _currentAvatarUrl!.isNotEmpty
                                     ? CachedNetworkImage(
@@ -236,9 +258,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                                         width: 100,
                                         height: 100,
                                         cacheManager: getIt<DefaultCacheManager>(),
-                                        cacheKey: _currentAvatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
-                                        placeholder: (context, url) => Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
-                                        errorWidget: (context, url, error) => Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                                        cacheKey:
+                                            _currentAvatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
+                                        placeholder: (context, url) =>
+                                            Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                                       )
                                     : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                               ),
@@ -297,7 +322,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                               borderColor: Color(0xFF0A6EFA),
                               borderRadius: 46,
-                              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xff0064D6).withOpacity(0.25),
+                                  blurRadius: 4,
+                                  spreadRadius: 0,
+                                  offset: Offset(0.0, 7.0),
+                                ),
+                              ],
                               onPressed: _isLoading ? null : _handleSave,
                               disabled: _isLoading,
                             ),

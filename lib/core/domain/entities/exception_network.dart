@@ -21,9 +21,7 @@ class ExceptionNotFound implements ExceptionNetwork {
   @override
   String get errorMessage => error ?? 'Not Found';
 
-  const ExceptionNotFound({
-    this.error,
-  });
+  const ExceptionNotFound({this.error});
 }
 
 class ExceptionMethodNotAllowed implements ExceptionNetwork {
@@ -87,9 +85,7 @@ class ExceptionDefaultError implements ExceptionNetwork {
   @override
   String get errorMessage => error;
 
-  const ExceptionDefaultError({
-    required this.error,
-  });
+  const ExceptionDefaultError({required this.error});
 }
 
 class ExceptionUnexpectedError implements ExceptionNetwork {
@@ -98,9 +94,7 @@ class ExceptionUnexpectedError implements ExceptionNetwork {
   @override
   String get errorMessage => error;
 
-  const ExceptionUnexpectedError({
-    required this.error,
-  });
+  const ExceptionUnexpectedError({required this.error});
 }
 
 class ExceptionBadGatewayError implements ExceptionNetwork {
@@ -114,7 +108,5 @@ class ExceptionForbidden implements ExceptionNetwork {
   @override
   String get errorMessage => error ?? 'Forbidden';
 
-  const ExceptionForbidden({
-    this.error,
-  });
+  const ExceptionForbidden({this.error});
 }

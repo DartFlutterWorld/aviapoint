@@ -113,15 +113,28 @@ class _CategorySuccessState extends State<_CategorySuccess> {
               margin: EdgeInsets.only(right: 5.w),
               padding: EdgeInsets.all(8.h),
               decoration: BoxDecoration(
-                color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index ? Color(0xFF0A6EFA) : Color(0xFFD9E6F8),
+                color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index
+                    ? Color(0xFF0A6EFA)
+                    : Color(0xFFD9E6F8),
                 borderRadius: BorderRadius.circular(5),
                 boxShadow: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index
-                    ? [BoxShadow(color: Color(0xff0A6EFA).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))]
+                    ? [
+                        BoxShadow(
+                          color: Color(0xff0A6EFA).withOpacity(0.25),
+                          blurRadius: 4,
+                          spreadRadius: 0,
+                          offset: Offset(0.0, 4.0),
+                        ),
+                      ]
                     : [],
               ),
               child: Text(
                 widget.category[index].title,
-                style: AppStyles.mediumItalic13s.copyWith(color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index ? Color(0xFFFFFFFF) : Color(0xFF0A6EFA)),
+                style: AppStyles.mediumItalic13s.copyWith(
+                  color: BlocProvider.of<NewsCubit>(context, listen: true).state.categoryId == index
+                      ? Color(0xFFFFFFFF)
+                      : Color(0xFF0A6EFA),
+                ),
               ),
             ),
           ),

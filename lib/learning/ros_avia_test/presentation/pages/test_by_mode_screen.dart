@@ -32,11 +32,15 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   late QuestionsByTypeCertificateAndCategoriesBloc questionsByTypeCertificateAndCategoriesBloc;
 
   final ValueNotifier<int> indexQuestion = ValueNotifier<int>(0);
-  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(null); // Отслеживаем выбранный ответ для текущего вопроса
+  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(
+    null,
+  ); // Отслеживаем выбранный ответ для текущего вопроса
 
   @override
   void initState() {
-    questionsByTypeCertificateAndCategoriesBloc = QuestionsByTypeCertificateAndCategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>());
+    questionsByTypeCertificateAndCategoriesBloc = QuestionsByTypeCertificateAndCategoriesBloc(
+      rosAviaTestRepository: getIt<RosAviaTestRepository>(),
+    );
     super.initState();
   }
 
@@ -66,7 +70,8 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: questionsByTypeCertificateAndCategoriesBloc..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
+      value: questionsByTypeCertificateAndCategoriesBloc
+        ..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
       child: Scaffold(
         appBar: CustomAppBar(title: getNameOfTestMode(context.read<RosAviaTestCubit>().state.testMode), withBack: true),
         backgroundColor: AppColors.background,
@@ -76,7 +81,9 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
             error: (value) => ErrorCustom(
               textError: value.errorForUser,
               repeat: () {
-                questionsByTypeCertificateAndCategoriesBloc.add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId));
+                questionsByTypeCertificateAndCategoriesBloc.add(
+                  GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId),
+                );
               },
             ),
             success: (value) {
@@ -152,18 +159,28 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
 
                                           // Переходим к следующему вопросу
                                           if (indexQuestion.value + 1 < filteredQuestions.length) {
-                                            currentSelectedAnswerIndex.value = null; // Сбрасываем выбор для нового вопроса
+                                            currentSelectedAnswerIndex.value =
+                                                null; // Сбрасываем выбор для нового вопроса
                                             indexQuestion.value++;
                                           } else {
                                             // Все вопросы ответчены - переходим на результаты БЕЗ очистки
                                             // Очистка будет при нажатии "Завершить" на экране результатов
                                             if (mounted) {
-                                              context.router.push(TestResultsRoute(certificateTypeId: widget.typeCertificateId));
+                                              context.router.push(
+                                                TestResultsRoute(certificateTypeId: widget.typeCertificateId),
+                                              );
                                             }
                                           }
                                         }
                                       : null, // Кнопка неактивна если ответ не выбран
-                                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xff0064D6).withOpacity(0.27),
+                                      blurRadius: 9,
+                                      spreadRadius: 0,
+                                      offset: Offset(0.0, 7.0),
+                                    ),
+                                  ],
                                   textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
                                   borderColor: Colors.transparent,
                                   backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,

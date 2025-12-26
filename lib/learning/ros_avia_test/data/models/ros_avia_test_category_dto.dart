@@ -6,11 +6,8 @@ part 'ros_avia_test_category_dto.g.dart';
 @freezed
 abstract class RosAviaTestCategoryDto with _$RosAviaTestCategoryDto {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory RosAviaTestCategoryDto({
-    required int id,
-    required String title,
-    required String image,
-  }) = _RosAviaTestCategoryDto;
+  const factory RosAviaTestCategoryDto({required int id, required String title, required String image}) =
+      _RosAviaTestCategoryDto;
 
   // factory RosAviaTestCategoryDto.fromEntity(ProfileEntity profile) => RosAviaTestCategoryDto(
   //       id: profile.id,

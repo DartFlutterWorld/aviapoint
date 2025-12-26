@@ -3,9 +3,7 @@ import 'package:aviapoint/learning/ros_avia_test/data/models/ros_avia_test_categ
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
 
 class RosAviaTestCategoryWithQuestionsMapper {
-  static RosAviaTestCategoryWithQuestionsEntity toEntity(
-    RosAviaTestCategoryWithQuestionsDto model,
-  ) {
+  static RosAviaTestCategoryWithQuestionsEntity toEntity(RosAviaTestCategoryWithQuestionsDto model) {
     return RosAviaTestCategoryWithQuestionsEntity(
       categoryId: model.categoryId,
       categoryTitle: model.categoryTitle,
@@ -15,9 +13,7 @@ class RosAviaTestCategoryWithQuestionsMapper {
     );
   }
 
-  static List<RosAviaTestCategoryWithQuestionsEntity> toEntities(
-    List<RosAviaTestCategoryWithQuestionsDto> models,
-  ) {
+  static List<RosAviaTestCategoryWithQuestionsEntity> toEntities(List<RosAviaTestCategoryWithQuestionsDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 }

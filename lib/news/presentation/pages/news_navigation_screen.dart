@@ -7,9 +7,6 @@ class NewsNavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HeroControllerScope(
-      controller: HeroController(),
-      child: const AutoRouter(),
-    );
+    return HeroControllerScope(controller: HeroController(), child: const AutoRouter());
   }
 }

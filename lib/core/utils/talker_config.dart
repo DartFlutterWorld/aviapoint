@@ -3,7 +3,9 @@ import 'package:talker/talker.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class AppTalker {
-  static final Talker _talker = TalkerFlutter.init(settings: TalkerSettings(useConsoleLogs: kDebugMode, useHistory: true, maxHistoryItems: 100));
+  static final Talker _talker = TalkerFlutter.init(
+    settings: TalkerSettings(useConsoleLogs: kDebugMode, useHistory: true, maxHistoryItems: 100),
+  );
 
   static Talker get instance => _talker;
 

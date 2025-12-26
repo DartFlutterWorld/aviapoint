@@ -60,7 +60,12 @@ class PaymentHelper {
 
       if (userId == null) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка: не удалось получить данные пользователя'), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ошибка: не удалось получить данные пользователя'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
         return false;
       }
@@ -83,7 +88,15 @@ class PaymentHelper {
       print('🔵 Текущее состояние PaymentBloc: ${currentState.toString()}');
 
       paymentBloc.add(
-        CreatePaymentEvent(amount: amount, currency: currency, description: description, userId: userId!, subscriptionTypeId: subscriptionTypeId, customerPhone: customerPhone, returnUrl: returnUrl),
+        CreatePaymentEvent(
+          amount: amount,
+          currency: currency,
+          description: description,
+          userId: userId!,
+          subscriptionTypeId: subscriptionTypeId,
+          customerPhone: customerPhone,
+          returnUrl: returnUrl,
+        ),
       );
 
       // Ждем результат создания платежа
@@ -119,7 +132,13 @@ class PaymentHelper {
           Navigator.of(context).pop();
         }
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Превышено время ожидания. Попробуйте еще раз.'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Превышено время ожидания. Попробуйте еще раз.'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
         return false;
       } catch (e, stackTrace) {
@@ -130,7 +149,13 @@ class PaymentHelper {
           Navigator.of(context).pop();
         }
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при создании платежа: ${e.toString()}'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Ошибка при создании платежа: ${e.toString()}'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 3),
+            ),
+          );
         }
         return false;
       }
@@ -168,7 +193,11 @@ class PaymentHelper {
               MaterialPageRoute<bool>(
                 builder: (context) {
                   print('🔵 PaymentWebViewScreen создан с URL: $paymentUrl');
-                  return PaymentWebViewScreen(paymentUrl: paymentUrl, returnRouteSource: returnRouteSource, paymentId: paymentId);
+                  return PaymentWebViewScreen(
+                    paymentUrl: paymentUrl,
+                    returnRouteSource: returnRouteSource,
+                    paymentId: paymentId,
+                  );
                 },
               ),
             );
@@ -193,7 +222,9 @@ class PaymentHelper {
                 print('❌ rootContext не доступен для навигации при отмене');
               }
             } else {
-              print('⚠️ WebView закрыт, но result=$result, context.mounted=${context.mounted}, paymentId.isNotEmpty=${paymentId.isNotEmpty}');
+              print(
+                '⚠️ WebView закрыт, но result=$result, context.mounted=${context.mounted}, paymentId.isNotEmpty=${paymentId.isNotEmpty}',
+              );
               // Даже если result null или неопределен, пытаемся навигировать обратно
               if (rootContext != null && rootContext.mounted) {
                 navigateToSource(rootContext, returnRouteSource);
@@ -216,7 +247,9 @@ class PaymentHelper {
         },
         failure: (message) {
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: $message'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Ошибка: $message'), backgroundColor: Colors.red));
           }
           return false;
         },
@@ -228,7 +261,13 @@ class PaymentHelper {
       if (context.mounted) {
         // Закрываем индикатор загрузки, если он открыт
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при создании платежа: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при создании платежа: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
       }
       return false;
     }

@@ -22,5 +22,6 @@ abstract class PreflightInspectionCategoriesDto with _$PreflightInspectionCatego
   //       type: profile.type,
   //     );
 
-  factory PreflightInspectionCategoriesDto.fromJson(Map<String, dynamic> json) => _$PreflightInspectionCategoriesDtoFromJson(json);
+  factory PreflightInspectionCategoriesDto.fromJson(Map<String, dynamic> json) =>
+      _$PreflightInspectionCategoriesDtoFromJson(json);
 }

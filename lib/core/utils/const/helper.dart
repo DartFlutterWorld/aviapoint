@@ -19,7 +19,11 @@ String bigFirstSymbol(String input) {
   return input[0].toUpperCase() + input.substring(1).toLowerCase();
 }
 
-Future<void> showLogin(BuildContext context, {GlobalKey<ScaffoldState>? scaffoldKey, final void Function()? callback}) async {
+Future<void> showLogin(
+  BuildContext context, {
+  GlobalKey<ScaffoldState>? scaffoldKey,
+  final void Function()? callback,
+}) async {
   final bool? result = await showCupertinoModalBottomSheet<bool>(
     barrierColor: Colors.black12,
     topRadius: const Radius.circular(20),
@@ -60,7 +64,13 @@ void logOut(BuildContext context) async {
   }
 }
 
-final emptyQuestion = QuestionWithAnswersEntity(answers: List.empty(), questionId: 0, questionText: '', categoryTitle: '', categoryId: 0);
+final emptyQuestion = QuestionWithAnswersEntity(
+  answers: List.empty(),
+  questionId: 0,
+  questionText: '',
+  categoryTitle: '',
+  categoryId: 0,
+);
 
 enum TestMode { training, standart }
 

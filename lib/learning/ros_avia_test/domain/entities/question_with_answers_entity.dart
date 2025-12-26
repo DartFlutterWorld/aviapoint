@@ -2,7 +2,15 @@
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/answer_entity.dart';
 
 class QuestionWithAnswersEntity {
-  QuestionWithAnswersEntity({required this.questionId, required this.questionText, this.explanation, this.correctAnswer, required this.answers, required this.categoryTitle, required this.categoryId});
+  QuestionWithAnswersEntity({
+    required this.questionId,
+    required this.questionText,
+    this.explanation,
+    this.correctAnswer,
+    required this.answers,
+    required this.categoryTitle,
+    required this.categoryId,
+  });
 
   final int questionId;
   final String questionText;

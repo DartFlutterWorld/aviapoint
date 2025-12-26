@@ -13,7 +13,9 @@ abstract class HandBookRepository {
   Future<Either<Failure, List<HandBookMainCategoriesEntity>>> fetchHandBookMainCategoties();
   Future<Either<Failure, List<PreflightInspectionCategoriesEntity>>> fetchPreflightInspectionCategories();
   Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckList();
-  Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckListByCategory(String preflihgtInspectionCategoryId);
+  Future<Either<Failure, List<PreflightInspectionCheckListEntity>>> fetchPreflightInspectionCheckListByCategory(
+    String preflihgtInspectionCategoryId,
+  );
   // Future<Either<Failure, VideoForStudentsEntity>> fetchVideoById(String id);
 
   Future<Either<Failure, List<NormalCategoriesEntity>>> fetchNormalCategories();

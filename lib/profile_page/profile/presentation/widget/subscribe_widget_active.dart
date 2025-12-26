@@ -32,13 +32,20 @@ class SubscribeWidgetActive extends StatelessWidget {
           children: [
             Text(
               'Подписка на обучение\nактивна',
-              style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76), fontStyle: FontStyle.italic, fontSize: 16.sp),
+              style: AppStyles.extraBold.copyWith(
+                color: Color(0xFF223B76),
+                fontStyle: FontStyle.italic,
+                fontSize: 16.sp,
+              ),
             ),
             SizedBox(height: 8),
             Text('Вам доступен - Тренировочный режим', style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
             SizedBox(height: 8),
             ...[
-              Text('${_formatDate(subscription.startDate)} - ${_formatDate(subscription.endDate)}', style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
+              Text(
+                '${_formatDate(subscription.startDate)} - ${_formatDate(subscription.endDate)}',
+                style: AppStyles.light12s.copyWith(color: Color(0xFF374151)),
+              ),
               SizedBox(height: 4),
               RichText(
                 text: TextSpan(

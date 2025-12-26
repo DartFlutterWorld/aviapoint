@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_pag
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/domain/entities/preflight_inspection_categories_entity.dart';
 
 class PreflightInspectionCategoriesMapper {
-  static PreflightInspectionCategoriesEntity toEntity(
-    PreflightInspectionCategoriesDto model,
-  ) {
+  static PreflightInspectionCategoriesEntity toEntity(PreflightInspectionCategoriesDto model) {
     return PreflightInspectionCategoriesEntity(
       id: model.id,
       title: model.title,
@@ -15,9 +13,7 @@ class PreflightInspectionCategoriesMapper {
     );
   }
 
-  static List<PreflightInspectionCategoriesEntity> toEntities(
-    List<PreflightInspectionCategoriesDto> models,
-  ) {
+  static List<PreflightInspectionCategoriesEntity> toEntities(List<PreflightInspectionCategoriesDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

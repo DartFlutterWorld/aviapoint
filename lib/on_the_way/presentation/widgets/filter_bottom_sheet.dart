@@ -1,0 +1,172 @@
+import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+
+class FilterBottomSheet extends StatefulWidget {
+  final DateTime? initialDateFrom;
+  final DateTime? initialDateTo;
+  final void Function(DateTime?, DateTime?) onApply;
+
+  const FilterBottomSheet({super.key, this.initialDateFrom, this.initialDateTo, required this.onApply});
+
+  @override
+  State<FilterBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<FilterBottomSheet> {
+  DateTime? _dateFrom;
+  DateTime? _dateTo;
+  final DateFormat _dateFormat = DateFormat('dd.MM.yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    _dateFrom = widget.initialDateFrom;
+    _dateTo = widget.initialDateTo;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Заголовок
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Фильтры', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+              IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          // Информация о выбранном диапазоне
+          if (_dateFrom != null || _dateTo != null)
+            Container(
+              padding: EdgeInsets.all(12.w),
+              decoration: BoxDecoration(color: Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(8.r)),
+              child: Row(
+                children: [
+                  Icon(Icons.calendar_today, size: 16, color: Color(0xFF0A6EFA)),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Text(
+                      _dateFrom != null && _dateTo != null
+                          ? '${_dateFormat.format(_dateFrom!)} - ${_dateFormat.format(_dateTo!)}'
+                          : _dateFrom != null
+                          ? 'От: ${_dateFormat.format(_dateFrom!)}'
+                          : 'До: ${_dateFormat.format(_dateTo!)}',
+                      style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                    ),
+                  ),
+                  if (_dateFrom != null || _dateTo != null)
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _dateFrom = null;
+                          _dateTo = null;
+                        });
+                      },
+                      child: Icon(Icons.close, size: 18, color: Color(0xFF9CA5AF)),
+                    ),
+                ],
+              ),
+            ),
+          if (_dateFrom != null || _dateTo != null) SizedBox(height: 16.h),
+          // Календарь
+          CalendarDatePicker2(
+            config: CalendarDatePicker2Config(
+              calendarType: CalendarDatePicker2Type.range,
+              selectedDayHighlightColor: Color(0xFF0A6EFA),
+              todayTextStyle: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
+              selectedDayTextStyle: AppStyles.bold14s.copyWith(color: Colors.white),
+              firstDayOfWeek: 1, // Понедельник
+              weekdayLabelTextStyle: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+              controlsHeight: 50,
+              dayTextStyle: AppStyles.regular14s,
+            ),
+            value: [if (_dateFrom != null) _dateFrom!, if (_dateTo != null && _dateTo != _dateFrom) _dateTo!],
+            onValueChanged: (dates) {
+              setState(() {
+                if (dates.isNotEmpty) {
+                  // Устанавливаем время на начало дня для dateFrom
+                  final firstDate = dates.first;
+                  _dateFrom = DateTime(firstDate.year, firstDate.month, firstDate.day, 0, 0, 0);
+                  if (dates.length > 1) {
+                    // Устанавливаем время на конец дня для dateTo
+                    final lastDate = dates.last;
+                    _dateTo = DateTime(lastDate.year, lastDate.month, lastDate.day, 23, 59, 59);
+                  } else {
+                    // Если выбрана только одна дата, очищаем dateTo (пользователь может выбрать вторую дату)
+                    _dateTo = null;
+                  }
+                } else {
+                  _dateFrom = null;
+                  _dateTo = null;
+                }
+              });
+            },
+          ),
+          SizedBox(height: 16.h),
+          // Кнопки
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      _dateFrom = null;
+                      _dateTo = null;
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                    side: BorderSide(color: Color(0xFFD9E6F8)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  ),
+                  child: Text('Сбросить', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Если выбрана только одна дата, применяем её как диапазон от начала до конца дня
+                    DateTime? dateFrom = _dateFrom;
+                    DateTime? dateTo = _dateTo;
+
+                    if (dateFrom != null && dateTo == null) {
+                      // Если выбрана только начальная дата, устанавливаем её как диапазон на один день
+                      dateTo = DateTime(dateFrom.year, dateFrom.month, dateFrom.day, 23, 59, 59);
+                    } else if (dateFrom != null && dateTo != null) {
+                      // Убеждаемся, что dateTo - это конец дня
+                      dateTo = DateTime(dateTo.year, dateTo.month, dateTo.day, 23, 59, 59);
+                    }
+
+                    widget.onApply(dateFrom, dateTo);
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0A6EFA),
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  ),
+                  child: Text('Применить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+        ],
+      ),
+    );
+  }
+}

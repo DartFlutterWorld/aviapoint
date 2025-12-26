@@ -40,7 +40,9 @@ class CategoryHandBookSmallWidget extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0)),
+              ],
               image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background)),
             ),
             child: Column(

@@ -90,7 +90,12 @@ class StoryScreenElement extends StatelessWidget {
                   child: GestureDetector(
                     onLongPress: onLongPress,
                     onLongPressEnd: onLongPressEnd,
-                    child: CachedNetworkImage(imageUrl: getImageUrl(story.image), fit: BoxFit.cover, cacheManager: getIt<DefaultCacheManager>(), cacheKey: getImageUrl(story.image)),
+                    child: CachedNetworkImage(
+                      imageUrl: getImageUrl(story.image),
+                      fit: BoxFit.cover,
+                      cacheManager: getIt<DefaultCacheManager>(),
+                      cacheKey: getImageUrl(story.image),
+                    ),
                   ),
                 ),
               )
@@ -99,7 +104,11 @@ class StoryScreenElement extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: videoPlayer!.controller.value.aspectRatio,
-                  child: GestureDetector(onLongPress: onLongPress, onLongPressEnd: onLongPressEnd, child: VideoPlayer(videoPlayer!.controller)),
+                  child: GestureDetector(
+                    onLongPress: onLongPress,
+                    onLongPressEnd: onLongPressEnd,
+                    child: VideoPlayer(videoPlayer!.controller),
+                  ),
                 ),
               )
             : ClipRRect(
@@ -108,7 +117,12 @@ class StoryScreenElement extends StatelessWidget {
                   aspectRatio: 9 / 16,
                   child: Stack(
                     children: [
-                      CachedNetworkImage(fit: BoxFit.cover, imageUrl: getImageUrl(story.image), cacheManager: getIt<DefaultCacheManager>(), cacheKey: getImageUrl(story.image)),
+                      CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: getImageUrl(story.image),
+                        cacheManager: getIt<DefaultCacheManager>(),
+                        cacheKey: getImageUrl(story.image),
+                      ),
                       const Center(child: LoadingCustom()),
                     ],
                   ),
@@ -123,7 +137,12 @@ class StoryScreenElement extends StatelessWidget {
                 Row(
                   children: [
                     ...stories.asMap().map((index, e) {
-                      return MapEntry(index, animController != null ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex) : const SizedBox());
+                      return MapEntry(
+                        index,
+                        animController != null
+                            ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex)
+                            : const SizedBox(),
+                      );
                     }).values,
                     SizedBox(width: 13),
                     // Заглушка для кнопки закрытия (чтобы не было прыжков в layout)
@@ -238,7 +257,10 @@ class StoryScreenElement extends StatelessWidget {
                             // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);
                             startUrl(url: story.hyperlink, context: context);
                           },
-                          textStyle: AppStyles.button.copyWith(color: Color(int.parse('0xFF$textColor')), overflow: TextOverflow.ellipsis),
+                          textStyle: AppStyles.button.copyWith(
+                            color: Color(int.parse('0xFF$textColor')),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           borderColor: Color(int.parse('0xFF$buttonColor')),
                           boxShadow: const [],
                         ),

@@ -21,7 +21,8 @@ import 'package:dio/dio.dart';
 class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
   final RosAviaTestService _rosAviaTestService;
 
-  RosAviaTestRepositoryImpl({required RosAviaTestService rosAviaTestService}) : _rosAviaTestService = rosAviaTestService;
+  RosAviaTestRepositoryImpl({required RosAviaTestService rosAviaTestService})
+    : _rosAviaTestService = rosAviaTestService;
 
   @override
   Future<Either<Failure, List<TypeSertificatesEntity>>> fetchTypeCertificates() async {
@@ -114,7 +115,9 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
 
   // Получение чек листа  Нормальной проверки по конкретной категории.
   @override
-  Future<Either<Failure, List<RosAviaTestCategoryWithQuestionsEntity>>> fetchRosAviaTestCategoryWithQuestions(int typeSsertificatesId) async {
+  Future<Either<Failure, List<RosAviaTestCategoryWithQuestionsEntity>>> fetchRosAviaTestCategoryWithQuestions(
+    int typeSsertificatesId,
+  ) async {
     try {
       final response = await _rosAviaTestService.fetchRosAviaTestCategoryWithQuestions(typeSsertificatesId.toString());
 
@@ -145,9 +148,16 @@ class RosAviaTestRepositoryImpl extends RosAviaTestRepository {
     try {
       final categoryIdsList = categoryIds.toList();
       final categoryIdsString = categoryIdsList.join(',');
-      AppTalker.info('Fetching questions: typeSsertificatesId=$typeSsertificatesId, categoryIds=$categoryIdsString, mixAnswers=$mixAnswers, mixQuestions=$mixQuestions');
+      AppTalker.info(
+        'Fetching questions: typeSsertificatesId=$typeSsertificatesId, categoryIds=$categoryIdsString, mixAnswers=$mixAnswers, mixQuestions=$mixQuestions',
+      );
 
-      final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(typeSsertificatesId.toString(), categoryIdsString, mixAnswers, mixQuestions);
+      final response = await _rosAviaTestService.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
+        typeSsertificatesId.toString(),
+        categoryIdsString,
+        mixAnswers,
+        mixQuestions,
+      );
 
       AppTalker.good('Received ${response.length} questions');
 

@@ -2,18 +2,11 @@ import 'package:aviapoint/learning/ros_avia_test/data/models/type_correct_answer
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_correct_answer_entity.dart';
 
 class TypeCorrectAnswerMapper {
-  static TypeCorrectAnswerEntity toEntity(
-    TypeCorrectAnswerDto model,
-  ) {
-    return TypeCorrectAnswerEntity(
-      id: model.id,
-      title: model.title,
-    );
+  static TypeCorrectAnswerEntity toEntity(TypeCorrectAnswerDto model) {
+    return TypeCorrectAnswerEntity(id: model.id, title: model.title);
   }
 
-  static List<TypeCorrectAnswerEntity> toEntities(
-    List<TypeCorrectAnswerDto> models,
-  ) {
+  static List<TypeCorrectAnswerEntity> toEntities(List<TypeCorrectAnswerDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

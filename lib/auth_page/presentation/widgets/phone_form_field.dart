@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mask/mask/mask.dart';
 
 class PhoneFormField extends StatefulWidget {
-  const PhoneFormField({
-    Key? key,
-    required this.onChange,
-    this.phone,
-    this.onlyRead = false,
-  }) : super(key: key);
+  const PhoneFormField({Key? key, required this.onChange, this.phone, this.onlyRead = false}) : super(key: key);
 
   final void Function(String value) onChange;
   final String? phone;
@@ -49,9 +44,7 @@ class PhoneFormFieldState extends State<PhoneFormField> {
       padding: const EdgeInsets.all(1.45),
       width: double.infinity,
       height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       child: TextField(
         //autofocus: true,
         focusNode: _focusNode,
@@ -70,17 +63,11 @@ class PhoneFormFieldState extends State<PhoneFormField> {
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.transparent,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
-            ),
+            borderSide: BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           hintText: 'Номер телефона',
-          hintStyle: AppStyles.bold20s.copyWith(
-            color: Color(0xFF9CA5AF),
-          ),
+          hintStyle: AppStyles.bold20s.copyWith(color: Color(0xFF9CA5AF)),
           prefixIcon: Container(
             padding: const EdgeInsets.only(top: 2.5),
             width: 54,

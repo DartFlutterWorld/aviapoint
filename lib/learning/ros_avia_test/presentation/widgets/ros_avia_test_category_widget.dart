@@ -10,7 +10,13 @@ class RosAviaTestCategoryWidget extends StatelessWidget {
   final bool withArrow;
   final Widget? child;
 
-  const RosAviaTestCategoryWidget({super.key, required this.title, required this.subTitle, this.child, this.withArrow = true});
+  const RosAviaTestCategoryWidget({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    this.child,
+    this.withArrow = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,9 @@ class RosAviaTestCategoryWidget extends StatelessWidget {
               border: Border.all(color: const Color(0xFFE3F1FF), width: 1),
               borderRadius: BorderRadius.all(Radius.circular(16.r)),
               color: Colors.white,
-              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0)),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

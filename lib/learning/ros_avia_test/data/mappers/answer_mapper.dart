@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/ros_avia_test/data/models/ros_avia_test_categ
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/answer_entity.dart';
 
 class AnswerMapper {
-  static AnswerEntity toEntity(
-    AnswerDto model,
-  ) {
+  static AnswerEntity toEntity(AnswerDto model) {
     return AnswerEntity(
       answerId: model.answerId,
       answerText: model.answerText,
@@ -14,9 +12,7 @@ class AnswerMapper {
     );
   }
 
-  static List<AnswerEntity> toEntities(
-    List<AnswerDto> models,
-  ) {
+  static List<AnswerEntity> toEntities(List<AnswerDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 }

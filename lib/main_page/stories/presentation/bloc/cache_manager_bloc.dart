@@ -21,7 +21,13 @@ abstract class CacheManagerEvent with _$CacheManagerEvent {
 abstract class CacheManagerState with _$CacheManagerState {
   const CacheManagerState._();
   const factory CacheManagerState.loading() = LoadingCacheManagerState;
-  const factory CacheManagerState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorCacheManagerState;
+  const factory CacheManagerState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorCacheManagerState;
   const factory CacheManagerState.success({required List<StoryEntity> story}) = SuccessCacheManagerState;
 }
 
@@ -31,7 +37,9 @@ class CacheManagerBloc extends Bloc<CacheManagerEvent, CacheManagerState> {
   Set<int> allIdStories = {};
   final List<StoryEntity> stories = [];
 
-  CacheManagerBloc({required StoryRepository storyRepository}) : _storyRepository = storyRepository, super(const LoadingCacheManagerState()) {
+  CacheManagerBloc({required StoryRepository storyRepository})
+    : _storyRepository = storyRepository,
+      super(const LoadingCacheManagerState()) {
     on<CacheManagerEvent>((event, emitter) => event.map(getStories: (event) => _getStories(event, emitter)));
   }
 

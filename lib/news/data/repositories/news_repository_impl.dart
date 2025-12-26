@@ -19,16 +19,9 @@ class NewsRepositoryImpl extends NewsRepository {
     try {
       final response = await _newsService.getCategoryNews();
 
-      return right(
-        CategoryNewsMapper.toEntities(response),
-      );
+      return right(CategoryNewsMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -37,16 +30,9 @@ class NewsRepositoryImpl extends NewsRepository {
     try {
       final response = await _newsService.getNews();
 
-      return right(
-        NewsMapper.toEntities(response),
-      );
+      return right(NewsMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -55,16 +41,9 @@ class NewsRepositoryImpl extends NewsRepository {
     try {
       final response = await _newsService.getNewsById(id);
 
-      return right(
-        NewsMapper.toEntity(response),
-      );
+      return right(NewsMapper.toEntity(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -73,16 +52,9 @@ class NewsRepositoryImpl extends NewsRepository {
     try {
       final response = await _newsService.getNewsByCategory(categoryId);
 
-      return right(
-        NewsMapper.toEntities(response),
-      );
+      return right(NewsMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 }

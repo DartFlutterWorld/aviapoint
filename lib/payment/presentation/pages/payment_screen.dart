@@ -23,7 +23,15 @@ class PaymentScreen extends StatefulWidget {
   final String? returnUrl;
   final String? returnRouteSource; // Источник, откуда пришел пользователь (например, 'profile' или 'testing_mode')
 
-  const PaymentScreen({super.key, required this.amount, this.currency = 'RUB', required this.description, required this.subscriptionTypeId, this.returnUrl, this.returnRouteSource});
+  const PaymentScreen({
+    super.key,
+    required this.amount,
+    this.currency = 'RUB',
+    required this.description,
+    required this.subscriptionTypeId,
+    this.returnUrl,
+    this.returnRouteSource,
+  });
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -69,7 +77,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
       // Если userId не получен, показываем ошибку
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка: не удалось получить данные пользователя'), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ошибка: не удалось получить данные пользователя'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       });
     }
@@ -92,7 +105,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
               // Если платеж успешен (succeeded), возвращаемся на исходный экран
               if (payment.isSucceeded && _paymentId != null && payment.id == _paymentId) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж успешно выполнен'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Платеж успешно выполнен'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                   // Закрываем экран оплаты
                   Navigator.of(context).pop();
                   // Возвращаемся на исходный экран, если указан
@@ -111,7 +130,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
               // Если платеж отменен (canceled), показываем сообщение
               if (payment.isCanceled && _paymentId != null && payment.id == _paymentId) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж отменен'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Платеж отменен'),
+                      backgroundColor: Colors.orange,
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
                 }
                 return;
               }
@@ -137,7 +162,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     html.setWindowLocationHref(payment.paymentUrl!);
                   } catch (e) {
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: $e'), backgroundColor: Colors.red));
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text('Ошибка: $e'), backgroundColor: Colors.red));
                     }
                   }
                 } else {
@@ -170,20 +197,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     } catch (e) {
                       print('Ошибка при проверке статуса платежа: $e');
                       if (context.mounted) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(const SnackBar(content: Text('Не удалось проверить статус платежа'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Не удалось проверить статус платежа'),
+                            backgroundColor: Colors.orange,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
                       }
                     }
                   } else if (result == false && context.mounted) {
                     // Пользователь отменил оплату в WebView
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Платеж отменен'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Платеж отменен'),
+                        backgroundColor: Colors.orange,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
                   }
                 }
               }
             },
             failure: (message) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: $message'), backgroundColor: Colors.red));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Ошибка: $message'), backgroundColor: Colors.red));
             },
           );
         },
@@ -220,7 +259,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               );
                             },
                             orElse: () {
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка: не удалось получить данные пользователя'), backgroundColor: Colors.red));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Ошибка: не удалось получить данные пользователя'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
                             },
                           );
                         },

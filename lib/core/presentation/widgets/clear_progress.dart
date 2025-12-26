@@ -23,13 +23,8 @@ class ClearProgress extends StatelessWidget {
             style: AppStyles.bold16s.copyWith(color: Color(0xFF223B76)),
             textAlign: TextAlign.center,
           ),
-          Image.asset(
-            Pictures.planeProgress,
-            height: 76,
-          ),
-          SizedBox(
-            height: 9,
-          ),
+          Image.asset(Pictures.planeProgress, height: 76),
+          SizedBox(height: 9),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -46,18 +41,13 @@ class ClearProgress extends StatelessWidget {
                       color: Color(0xff0064D6).withOpacity(0.25),
                       blurRadius: 4,
                       spreadRadius: 0,
-                      offset: Offset(
-                        0.0,
-                        7.0,
-                      ),
+                      offset: Offset(0.0, 7.0),
                     ),
                   ],
                   onPressed: onTap1,
                 ),
               ),
-              SizedBox(
-                width: 40,
-              ),
+              SizedBox(width: 40),
               Flexible(
                 child: CustomButton(
                   verticalPadding: 4,
@@ -71,17 +61,14 @@ class ClearProgress extends StatelessWidget {
                       color: Color(0xff0064D6).withOpacity(0.25),
                       blurRadius: 4,
                       spreadRadius: 0,
-                      offset: Offset(
-                        0.0,
-                        7.0,
-                      ),
+                      offset: Offset(0.0, 7.0),
                     ),
                   ],
                   onPressed: onTap2,
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

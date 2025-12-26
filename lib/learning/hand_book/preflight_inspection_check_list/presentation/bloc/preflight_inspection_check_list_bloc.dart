@@ -24,17 +24,20 @@ abstract class PreflightInspectionCheckListState with _$PreflightInspectionCheck
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorPreflightInspectionCheckListState;
-  const factory PreflightInspectionCheckListState.success({required List<PreflightInspectionCheckListEntity> preflightInspectionCheckList}) = SuccessPreflightInspectionCheckListState;
+  const factory PreflightInspectionCheckListState.success({
+    required List<PreflightInspectionCheckListEntity> preflightInspectionCheckList,
+  }) = SuccessPreflightInspectionCheckListState;
   // const factory PreflightInspectionCheckListState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdPreflightInspectionCheckListState;
   // const factory PreflightInspectionCheckListState.done() = DonePreflightInspectionCheckListState;
 }
 
-class PreflightInspectionCheckListBloc extends Bloc<PreflightInspectionCheckListEvent, PreflightInspectionCheckListState> {
+class PreflightInspectionCheckListBloc
+    extends Bloc<PreflightInspectionCheckListEvent, PreflightInspectionCheckListState> {
   final HandBookRepository _handBookRepository;
   List<PreflightInspectionCheckListEntity> preflightInspectionCheckList = [];
   PreflightInspectionCheckListBloc({required HandBookRepository handBookRepository})
-      : _handBookRepository = handBookRepository,
-        super(const LoadingPreflightInspectionCheckListState()) {
+    : _handBookRepository = handBookRepository,
+      super(const LoadingPreflightInspectionCheckListState()) {
     on<PreflightInspectionCheckListEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -60,9 +63,7 @@ class PreflightInspectionCheckListBloc extends Bloc<PreflightInspectionCheckList
       },
       (r) {
         preflightInspectionCheckList = r;
-        emit(
-          SuccessPreflightInspectionCheckListState(preflightInspectionCheckList: r),
-        );
+        emit(SuccessPreflightInspectionCheckListState(preflightInspectionCheckList: r));
       },
     );
   }

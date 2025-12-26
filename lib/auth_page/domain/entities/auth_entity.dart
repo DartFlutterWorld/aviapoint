@@ -7,9 +7,5 @@ class AuthEntity {
 
   /// token - авторизационный токен
   /// profile - профиль авторизованного пользователя
-  const AuthEntity({
-    required this.token,
-    required this.refreshToken,
-    required this.profile,
-  });
+  const AuthEntity({required this.token, required this.refreshToken, required this.profile});
 }

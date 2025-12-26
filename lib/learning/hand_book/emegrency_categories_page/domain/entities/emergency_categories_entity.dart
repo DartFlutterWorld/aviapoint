@@ -20,13 +20,5 @@ class EmergencyCategoriesEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        id,
-        title,
-        subTitle,
-        mainCategoryId,
-        titleEng,
-        picture,
-        subTitleEng,
-      ];
+  List<Object?> get props => [id, title, subTitle, mainCategoryId, titleEng, picture, subTitleEng];
 }

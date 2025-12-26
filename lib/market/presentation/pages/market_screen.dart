@@ -61,7 +61,12 @@ class MarketScreen extends StatelessWidget {
                       } else {
                         // Если не удалось открыть, показываем сообщение
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Не удалось открыть WhatsApp'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                         }
                       }
                     },
@@ -90,7 +95,12 @@ class MarketScreen extends StatelessWidget {
                       } else {
                         // Если не удалось открыть, показываем сообщение
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Не удалось открыть Telegram'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                         }
                       }
                     },

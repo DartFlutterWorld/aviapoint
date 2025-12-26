@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/hand_book/emegrency_categories_page/data/mode
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/domain/entities/emergency_categories_entity.dart';
 
 class EmergencyCategoriesMapper {
-  static EmergencyCategoriesEntity toEntity(
-    EmergencyCategoriesDto model,
-  ) {
+  static EmergencyCategoriesEntity toEntity(EmergencyCategoriesDto model) {
     return EmergencyCategoriesEntity(
       id: model.id,
       title: model.title,
@@ -16,9 +14,7 @@ class EmergencyCategoriesMapper {
     );
   }
 
-  static List<EmergencyCategoriesEntity> toEntities(
-    List<EmergencyCategoriesDto> models,
-  ) {
+  static List<EmergencyCategoriesEntity> toEntities(List<EmergencyCategoriesDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

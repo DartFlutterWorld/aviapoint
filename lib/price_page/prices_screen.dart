@@ -15,13 +15,9 @@ class PricesScreen extends StatelessWidget {
       appBar: CustomAppBar(title: 'Price'),
       body: Column(
         children: [
-          Center(
-            child: Text('PricesScreen'),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextButton(onPressed: () => FirebaseCrashlytics.instance.crash(), child: Text('Error'))
+          Center(child: Text('PricesScreen')),
+          SizedBox(height: 20),
+          TextButton(onPressed: () => FirebaseCrashlytics.instance.crash(), child: Text('Error')),
         ],
       ),
     );

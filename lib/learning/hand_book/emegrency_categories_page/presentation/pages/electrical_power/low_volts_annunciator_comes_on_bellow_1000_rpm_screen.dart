@@ -37,11 +37,7 @@ class LowVoltsAnnunciatorComesOnBellow1000RpmScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow('1', 'throttle_controle', '1000_rpm'),
@@ -57,14 +53,14 @@ class LowVoltsAnnunciatorComesOnBellow1000RpmScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
-                  customTableRow('3', 'service', 'authorized_maintenance_personnel_must_do_electrical_system_inspection_prior_to_next_flight'),
+                  customTableRow(
+                    '3',
+                    'service',
+                    'authorized_maintenance_personnel_must_do_electrical_system_inspection_prior_to_next_flight',
+                  ),
                 ],
               ),
               SizedBox(height: 16),
@@ -76,22 +72,15 @@ class LowVoltsAnnunciatorComesOnBellow1000RpmScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(String number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == '0' ? '' : number),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == '0' ? '' : number)),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

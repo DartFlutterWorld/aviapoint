@@ -38,16 +38,16 @@ class AbnormalLandingsScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'approach', 'normal'),
                   customTableRow(2, 'wing_flaps', 'full'),
-                  customTableRow(3, 'touchdown', 'good_main_tire_first_hold_airplane_off_flat_tire_as_long_as_possible_with_aileron_control'),
+                  customTableRow(
+                    3,
+                    'touchdown',
+                    'good_main_tire_first_hold_airplane_off_flat_tire_as_long_as_possible_with_aileron_control',
+                  ),
                   customTableRow(4, 'directional_control', 'maintain_using_brake_on_good_wheel_as_required'),
                 ],
               ),
@@ -60,11 +60,7 @@ class AbnormalLandingsScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'approach', 'normal'),
@@ -75,25 +71,21 @@ class AbnormalLandingsScreen extends StatelessWidget {
                 ],
               ),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
-                  TableRow(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('4'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'when_nose_wheel_touches_down_maintain_full_up_elevator_as_airplane_slows_to_stop',
-                        textAlign: TextAlign.right,
-                      ).tr(),
-                    ),
-                  ])
+                  TableRow(
+                    children: [
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('4')),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'when_nose_wheel_touches_down_maintain_full_up_elevator_as_airplane_slows_to_stop',
+                          textAlign: TextAlign.right,
+                        ).tr(),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               SizedBox(height: 16),
@@ -105,22 +97,15 @@ class AbnormalLandingsScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

@@ -1,9 +1,36 @@
+import 'dart:convert';
 import 'package:aviapoint/profile_page/profile/data/models/profile_dto.dart';
 import 'package:aviapoint/profile_page/profile/domain/entities/profile_entity.dart';
 
 class ProfileMapper {
   static ProfileEntity toEntity(ProfileDto model) {
-    return ProfileEntity(id: model.id, phone: model.phone, firstName: model.firstName, lastName: model.lastName, email: model.email, avatarUrl: model.avatarUrl);
+    // Парсим owned_airports из JSONB
+    List<int>? ownedAirports;
+    if (model.ownedAirports != null) {
+      if (model.ownedAirports is List) {
+        ownedAirports = (model.ownedAirports as List).map((e) => e as int).toList();
+      } else if (model.ownedAirports is String) {
+        try {
+          final decoded = jsonDecode(model.ownedAirports as String) as List;
+          ownedAirports = decoded.map((e) => e as int).toList();
+        } catch (e) {
+          // Игнорируем ошибки парсинга
+          ownedAirports = null;
+        }
+      }
+    }
+
+    return ProfileEntity(
+      id: model.id,
+      phone: model.phone,
+      firstName: model.firstName,
+      lastName: model.lastName,
+      email: model.email,
+      avatarUrl: model.avatarUrl,
+      averageRating: model.averageRating,
+      reviewsCount: model.reviewsCount,
+      ownedAirports: ownedAirports,
+    );
   }
 
   static List<ProfileEntity> toEntities(List<ProfileDto> models) {

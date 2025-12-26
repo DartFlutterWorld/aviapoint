@@ -7,9 +7,22 @@ class ProfileEntity extends Equatable {
   final String? firstName;
   final String? lastName;
   final String? avatarUrl;
+  final double? averageRating;
+  final int? reviewsCount;
+  final List<int>? ownedAirports; // Список ID аэропортов, которыми владеет пользователь
 
-  const ProfileEntity({required this.id, required this.phone, this.email, this.firstName, this.lastName, this.avatarUrl});
+  const ProfileEntity({
+    required this.id,
+    required this.phone,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.avatarUrl,
+    this.averageRating,
+    this.reviewsCount,
+    this.ownedAirports,
+  });
 
   @override
-  List<Object?> get props => [id, phone, email, firstName, lastName, avatarUrl];
+  List<Object?> get props => [id, phone, email, firstName, lastName, avatarUrl, averageRating, reviewsCount, ownedAirports];
 }

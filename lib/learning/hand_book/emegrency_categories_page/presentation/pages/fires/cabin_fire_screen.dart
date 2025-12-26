@@ -30,11 +30,7 @@ class CabinFireScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'stby_batt_switch', 'off'),
@@ -46,10 +42,7 @@ class CabinFireScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'warning',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('warning', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
               SizedBox(height: 8),
               Center(
@@ -59,15 +52,15 @@ class CabinFireScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(6, 'cabin_vents', 'open_when_sure_that_fire_is_completely_extinguished'),
-                  customTableRow(7, 'cabin_ht_and_cabin_air_control_knobs', 'on_pull_full_out_when_sure_that_fire_is_completely_extinguished'),
+                  customTableRow(
+                    7,
+                    'cabin_ht_and_cabin_air_control_knobs',
+                    'on_pull_full_out_when_sure_that_fire_is_completely_extinguished',
+                  ),
                   customTableRow(8, 'touchdown1', 'land_the_airplane_as_soon_as_possible_to_inspect_for_damage'),
                 ],
               ),
@@ -80,22 +73,15 @@ class CabinFireScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

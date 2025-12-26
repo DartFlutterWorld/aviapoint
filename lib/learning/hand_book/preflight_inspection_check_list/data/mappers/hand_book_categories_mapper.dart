@@ -2,9 +2,7 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/dat
 import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/domain/entities/preflight_inspection_categories_entity.dart';
 
 class PreflightInspectionCheckListMapper {
-  static PreflightInspectionCheckListEntity toEntity(
-    PreflightInspectionCheckListDto model,
-  ) {
+  static PreflightInspectionCheckListEntity toEntity(PreflightInspectionCheckListDto model) {
     return PreflightInspectionCheckListEntity(
       id: model.id,
       preflightInspectionCategoryId: model.preflightInspectionCategoryId,
@@ -16,9 +14,7 @@ class PreflightInspectionCheckListMapper {
     );
   }
 
-  static List<PreflightInspectionCheckListEntity> toEntities(
-    List<PreflightInspectionCheckListDto> models,
-  ) {
+  static List<PreflightInspectionCheckListEntity> toEntities(List<PreflightInspectionCheckListDto> models) {
     return models.map((model) => toEntity(model)).toList();
   }
 

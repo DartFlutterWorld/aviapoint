@@ -20,11 +20,51 @@ class FiresSubCategoriesScreen extends StatefulWidget {
 
 class _FiresSubCategoriesScreenState extends State<FiresSubCategoriesScreen> {
   List<EmergencyCategoriesEntity> subCategory = [
-    EmergencyCategoriesEntity(id: 1, title: 'fires_during_start_on_ground'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
-    EmergencyCategoriesEntity(id: 2, title: 'engine_fire_in_flight'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
-    EmergencyCategoriesEntity(id: 3, title: 'electrical_fire_in_flight'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
-    EmergencyCategoriesEntity(id: 4, title: 'cabin_fire'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
-    EmergencyCategoriesEntity(id: 5, title: 'wing_fire'.tr(), subTitle: '', subTitleEng: '', mainCategoryId: 0, titleEng: '', picture: ''),
+    EmergencyCategoriesEntity(
+      id: 1,
+      title: 'fires_during_start_on_ground'.tr(),
+      subTitle: '',
+      subTitleEng: '',
+      mainCategoryId: 0,
+      titleEng: '',
+      picture: '',
+    ),
+    EmergencyCategoriesEntity(
+      id: 2,
+      title: 'engine_fire_in_flight'.tr(),
+      subTitle: '',
+      subTitleEng: '',
+      mainCategoryId: 0,
+      titleEng: '',
+      picture: '',
+    ),
+    EmergencyCategoriesEntity(
+      id: 3,
+      title: 'electrical_fire_in_flight'.tr(),
+      subTitle: '',
+      subTitleEng: '',
+      mainCategoryId: 0,
+      titleEng: '',
+      picture: '',
+    ),
+    EmergencyCategoriesEntity(
+      id: 4,
+      title: 'cabin_fire'.tr(),
+      subTitle: '',
+      subTitleEng: '',
+      mainCategoryId: 0,
+      titleEng: '',
+      picture: '',
+    ),
+    EmergencyCategoriesEntity(
+      id: 5,
+      title: 'wing_fire'.tr(),
+      subTitle: '',
+      subTitleEng: '',
+      mainCategoryId: 0,
+      titleEng: '',
+      picture: '',
+    ),
   ];
 
   @override

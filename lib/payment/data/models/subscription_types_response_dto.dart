@@ -6,7 +6,10 @@ part 'subscription_types_response_dto.g.dart';
 
 @freezed
 abstract class SubscriptionTypesResponseDto with _$SubscriptionTypesResponseDto {
-  const factory SubscriptionTypesResponseDto({@JsonKey(name: 'subscription_types') required List<SubscriptionTypeModel> subscriptionTypes}) = _SubscriptionTypesResponseDto;
+  const factory SubscriptionTypesResponseDto({
+    @JsonKey(name: 'subscription_types') required List<SubscriptionTypeModel> subscriptionTypes,
+  }) = _SubscriptionTypesResponseDto;
 
-  factory SubscriptionTypesResponseDto.fromJson(Map<String, dynamic> json) => _$SubscriptionTypesResponseDtoFromJson(json);
+  factory SubscriptionTypesResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionTypesResponseDtoFromJson(json);
 }

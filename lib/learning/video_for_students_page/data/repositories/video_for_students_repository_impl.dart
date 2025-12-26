@@ -10,23 +10,17 @@ import 'package:dio/dio.dart';
 class VideoForStudentsRepositoryImpl extends VideoForStudentsRepository {
   final VideoForStudentsService _videoForStudentsService;
 
-  VideoForStudentsRepositoryImpl({required VideoForStudentsService videoForStudentsService}) : _videoForStudentsService = videoForStudentsService;
+  VideoForStudentsRepositoryImpl({required VideoForStudentsService videoForStudentsService})
+    : _videoForStudentsService = videoForStudentsService;
 
   @override
   Future<Either<Failure, List<VideoForStudentsEntity>>> fetchVideosForStudents() async {
     try {
       final response = await _videoForStudentsService.fetchVideosForStudents();
 
-      return right(
-        VideoForStudentsMapper.toEntities(response),
-      );
+      return right(VideoForStudentsMapper.toEntities(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 
@@ -35,16 +29,9 @@ class VideoForStudentsRepositoryImpl extends VideoForStudentsRepository {
     try {
       final response = await _videoForStudentsService.fetchVideoById(id);
 
-      return right(
-        VideoForStudentsMapper.toEntity(response),
-      );
+      return right(VideoForStudentsMapper.toEntity(response));
     } on DioException catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: e.response?.statusCode.toString(),
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
 }

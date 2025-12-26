@@ -35,7 +35,10 @@ class TestMySelfWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(height: 12.h),
-            Text(Provider.of<RosAviaTestCubit>(context).state.typeSertificate.title, style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937))),
+            Text(
+              Provider.of<RosAviaTestCubit>(context).state.typeSertificate.title,
+              style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937)),
+            ),
             SizedBox(height: 4.h),
             Text('Подготовьтесь к экзамену', style: AppStyles.regular13s.copyWith(color: Color(0xFF6E7A89))),
             Spacer(),
@@ -48,7 +51,14 @@ class TestMySelfWidget extends StatelessWidget {
               borderRadius: 46.r,
               textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.28), blurRadius: 17.8, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.28),
+                  blurRadius: 17.8,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7.0),
+                ),
+              ],
             ),
             SizedBox(height: 12),
           ],

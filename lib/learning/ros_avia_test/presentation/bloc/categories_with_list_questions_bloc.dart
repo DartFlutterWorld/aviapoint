@@ -9,7 +9,8 @@ part 'categories_with_list_questions_bloc.freezed.dart';
 abstract class CategoriesWithListQuestionsEvent with _$CategoriesWithListQuestionsEvent {
   const CategoriesWithListQuestionsEvent._();
 
-  const factory CategoriesWithListQuestionsEvent.get({required int typeSsertificatesId}) = GetCategoriesWithListQuestionsEvent;
+  const factory CategoriesWithListQuestionsEvent.get({required int typeSsertificatesId}) =
+      GetCategoriesWithListQuestionsEvent;
   // const factory CategoriesWithListQuestionsEvent.getById(int id) = GetByIdCategoriesWithListQuestionsEvent;
 }
 
@@ -24,7 +25,9 @@ abstract class CategoriesWithListQuestionsState with _$CategoriesWithListQuestio
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorCategoriesWithListQuestionsState;
-  const factory CategoriesWithListQuestionsState.success({required List<RosAviaTestCategoryWithQuestionsEntity> categoryWithQuestions}) = SuccessCategoriesWithListQuestionsState;
+  const factory CategoriesWithListQuestionsState.success({
+    required List<RosAviaTestCategoryWithQuestionsEntity> categoryWithQuestions,
+  }) = SuccessCategoriesWithListQuestionsState;
   // const factory CategoriesWithListQuestionsState.successById({required VideoForStudentsEntity videoForStudents}) = SuccessByIdCategoriesWithListQuestionsState;
   // const factory CategoriesWithListQuestionsState.done() = DoneCategoriesWithListQuestionsState;
 }
@@ -33,8 +36,8 @@ class CategoriesWithListQuestionsBloc extends Bloc<CategoriesWithListQuestionsEv
   final RosAviaTestRepository _rosAviaTestRepository;
 
   CategoriesWithListQuestionsBloc({required RosAviaTestRepository rosAviaTestRepository})
-      : _rosAviaTestRepository = rosAviaTestRepository,
-        super(const LoadingCategoriesWithListQuestionsState()) {
+    : _rosAviaTestRepository = rosAviaTestRepository,
+      super(const LoadingCategoriesWithListQuestionsState()) {
     on<CategoriesWithListQuestionsEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -59,9 +62,7 @@ class CategoriesWithListQuestionsBloc extends Bloc<CategoriesWithListQuestionsEv
         );
       },
       (r) {
-        emit(
-          SuccessCategoriesWithListQuestionsState(categoryWithQuestions: r),
-        );
+        emit(SuccessCategoriesWithListQuestionsState(categoryWithQuestions: r));
       },
     );
   }

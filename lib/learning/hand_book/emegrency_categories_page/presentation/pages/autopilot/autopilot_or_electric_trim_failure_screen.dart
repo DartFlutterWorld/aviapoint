@@ -37,11 +37,7 @@ class AutopilotOrElectricTrimFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Table(
-                columnWidths: {
-                  0: FixedColumnWidth(32),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
+                columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},
                 border: TableBorder.all(color: Colors.grey),
                 children: [
                   customTableRow(1, 'control_wheel', 'crasp_firmly_regain_control_of_airplane'),
@@ -53,10 +49,7 @@ class AutopilotOrElectricTrimFailureScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'warning',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('warning', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
               Center(
                 child: Text(
@@ -72,22 +65,15 @@ class AutopilotOrElectricTrimFailureScreen extends StatelessWidget {
   }
 
   TableRow customTableRow(int number, String name, String doing) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(number == 0 ? '' : number.toString()),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(name).tr(),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          doing,
-          textAlign: TextAlign.right,
-        ).tr(),
-      ),
-    ]);
+    return TableRow(
+      children: [
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(number == 0 ? '' : number.toString())),
+        Padding(padding: const EdgeInsets.all(8.0), child: Text(name).tr()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(doing, textAlign: TextAlign.right).tr(),
+        ),
+      ],
+    );
   }
 }

@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   final PaymentRepository _paymentRepository;
 
-  PaymentBloc({required PaymentRepository paymentRepository}) : _paymentRepository = paymentRepository, super(const PaymentState.initial()) {
+  PaymentBloc({required PaymentRepository paymentRepository})
+    : _paymentRepository = paymentRepository,
+      super(const PaymentState.initial()) {
     on<CreatePaymentEvent>(_onCreatePayment);
     on<CheckPaymentStatusEvent>(_onCheckPaymentStatus);
     on<ResetPaymentEvent>(_onReset);

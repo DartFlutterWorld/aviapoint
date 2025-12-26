@@ -11,7 +11,15 @@ class PaymentWebViewScreen extends StatefulWidget {
   final VoidCallback? onCancel;
   final VoidCallback? onFailure;
 
-  const PaymentWebViewScreen({super.key, required this.paymentUrl, this.returnRouteSource, this.paymentId, this.onSuccess, this.onCancel, this.onFailure});
+  const PaymentWebViewScreen({
+    super.key,
+    required this.paymentUrl,
+    this.returnRouteSource,
+    this.paymentId,
+    this.onSuccess,
+    this.onCancel,
+    this.onFailure,
+  });
 
   @override
   State<PaymentWebViewScreen> createState() => _PaymentWebViewScreenState();

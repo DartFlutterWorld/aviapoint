@@ -207,7 +207,10 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                   children: [
                     ChipsWidget(questionWithAnswers: widget.question),
                     Flexible(
-                      child: Text(bigFirstSymbol(widget.categoryTitle), style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                      child: Text(
+                        bigFirstSymbol(widget.categoryTitle),
+                        style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF)),
+                      ),
                     ),
                   ],
                 ),
@@ -307,7 +310,10 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                                 children: [
                                   Text(
                                     'Обоснование',
-                                    style: AppStyles.bold14s.copyWith(color: Color(0xFF374151), fontWeight: FontWeight.w600),
+                                    style: AppStyles.bold14s.copyWith(
+                                      color: Color(0xFF374151),
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
 
                                   /// Анимированная стрелка (поворот на 180° при раскрытии)
@@ -326,8 +332,14 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                                 width: double.infinity,
                                 padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
                                 child: widget.question.explanation != null
-                                    ? HtmlWidget(widget.question.explanation!, textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4))
-                                    : Text('Скоро появится', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4)),
+                                    ? HtmlWidget(
+                                        widget.question.explanation!,
+                                        textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4),
+                                      )
+                                    : Text(
+                                        'Скоро появится',
+                                        style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4),
+                                      ),
                               ),
                           ],
                         ),
