@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 @RoutePage()
 class FlightsListScreen extends StatefulWidget {
@@ -371,13 +372,33 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
             // Кнопка фильтров по дате
             OutlinedButton.icon(
               onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
-                  builder: (context) =>
-                      FilterBottomSheet(initialDateFrom: _dateFrom, initialDateTo: _dateTo, onApply: _applyFilters),
-                );
+                if (kIsWeb) {
+                  // Для веба - модальное окно
+                  showDialog<void>(
+                    context: context,
+                    builder: (context) => Dialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: 500.w, maxHeight: 600.h),
+                        padding: EdgeInsets.all(24.w),
+                        child: FilterBottomSheet(
+                          initialDateFrom: _dateFrom,
+                          initialDateTo: _dateTo,
+                          onApply: _applyFilters,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  // Для мобильного - bottom sheet
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
+                    builder: (context) =>
+                        FilterBottomSheet(initialDateFrom: _dateFrom, initialDateTo: _dateTo, onApply: _applyFilters),
+                  );
+                }
               },
               icon: Icon(Icons.filter_list, color: Color(0xFF0A6EFA)),
               label: Text('Фильтры по дате', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
@@ -396,6 +417,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
                       _buildErrorState(errorForUser),
                   success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
+                  flightCreated: (flight) => _buildSuccessState([]), // Игнорируем состояние создания на экране списка
                 );
               },
             ),

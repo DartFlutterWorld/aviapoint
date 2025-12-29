@@ -33,7 +33,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

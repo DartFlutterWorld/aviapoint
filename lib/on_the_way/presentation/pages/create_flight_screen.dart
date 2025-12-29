@@ -820,47 +820,36 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             );
           },
           success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) {
+            // Игнорируем обычный success - он не относится к созданию полёта
+          },
+          flightCreated: (flight) {
             // Успешное создание - навигируем на детальную страницу созданного полета
-            if (flights.isNotEmpty) {
-              final createdFlight = flights.first;
-              // Закрываем экран создания
-              Navigator.of(context).pop();
-              // Навигируем на детальную страницу созданного полета
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (context.mounted) {
-                  try {
-                    AutoRouter.of(context).push(FlightDetailRoute(flightId: createdFlight.id));
-                  } catch (e) {
-                    print('Ошибка навигации к деталям полета: $e');
-                    // Если навигация не удалась, просто показываем сообщение
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Полет успешно создан'),
-                        backgroundColor: Colors.green,
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
+            Navigator.of(context).pop();
+            // Навигируем на детальную страницу созданного полета
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (context.mounted) {
+                try {
+                  AutoRouter.of(context).push(FlightDetailRoute(flightId: flight.id));
+                } catch (e) {
+                  print('Ошибка навигации к деталям полета: $e');
+                  // Если навигация не удалась, просто показываем сообщение
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Полет успешно создан'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 }
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Полет успешно создан'),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            } else {
-              // Если по какой-то причине полет не получен, просто возвращаемся назад
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Полет успешно создан'),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            }
+              }
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Полет успешно создан'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
           },
         );
       },

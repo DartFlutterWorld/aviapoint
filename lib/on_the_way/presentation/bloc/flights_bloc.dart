@@ -116,6 +116,7 @@ class FlightsState with _$FlightsState {
     DateTime? dateFrom,
     DateTime? dateTo,
   }) = SuccessFlightsState;
+  const factory FlightsState.flightCreated({required FlightEntity flight}) = FlightCreatedState;
 }
 
 class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
@@ -251,17 +252,9 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         );
       },
       (r) {
-        // После успешного создания возвращаем success состояние с созданным полетом в списке
-        // UI навигирует на детальную страницу созданного полета
+        // После успешного создания возвращаем отдельное состояние для создания
         emit(
-          SuccessFlightsState(
-            flights: [r], // Добавляем созданный полет в список
-            airport: null,
-            departureAirport: null,
-            arrivalAirport: null,
-            dateFrom: null,
-            dateTo: null,
-          ),
+          FlightsState.flightCreated(flight: r),
         );
       },
     );

@@ -87,6 +87,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
                       _buildErrorState(errorForUser),
                   success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
+                  flightCreated: (flight) => _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
                 );
               },
             ),

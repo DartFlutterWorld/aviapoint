@@ -55,13 +55,14 @@ extension FlightsStatePatterns on FlightsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadingFlightsState value)?  loading,TResult Function( ErrorFlightsState value)?  error,TResult Function( SuccessFlightsState value)?  success,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadingFlightsState value)?  loading,TResult Function( ErrorFlightsState value)?  error,TResult Function( SuccessFlightsState value)?  success,TResult Function( FlightCreatedState value)?  flightCreated,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case LoadingFlightsState() when loading != null:
 return loading(_that);case ErrorFlightsState() when error != null:
 return error(_that);case SuccessFlightsState() when success != null:
-return success(_that);case _:
+return success(_that);case FlightCreatedState() when flightCreated != null:
+return flightCreated(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadingFlightsState value)  loading,required TResult Function( ErrorFlightsState value)  error,required TResult Function( SuccessFlightsState value)  success,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadingFlightsState value)  loading,required TResult Function( ErrorFlightsState value)  error,required TResult Function( SuccessFlightsState value)  success,required TResult Function( FlightCreatedState value)  flightCreated,}){
 final _that = this;
 switch (_that) {
 case LoadingFlightsState():
 return loading(_that);case ErrorFlightsState():
 return error(_that);case SuccessFlightsState():
-return success(_that);case _:
+return success(_that);case FlightCreatedState():
+return flightCreated(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadingFlightsState value)?  loading,TResult? Function( ErrorFlightsState value)?  error,TResult? Function( SuccessFlightsState value)?  success,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadingFlightsState value)?  loading,TResult? Function( ErrorFlightsState value)?  error,TResult? Function( SuccessFlightsState value)?  success,TResult? Function( FlightCreatedState value)?  flightCreated,}){
 final _that = this;
 switch (_that) {
 case LoadingFlightsState() when loading != null:
 return loading(_that);case ErrorFlightsState() when error != null:
 return error(_that);case SuccessFlightsState() when success != null:
-return success(_that);case _:
+return success(_that);case FlightCreatedState() when flightCreated != null:
+return flightCreated(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,TResult Function( FlightEntity flight)?  flightCreated,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LoadingFlightsState() when loading != null:
 return loading();case ErrorFlightsState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessFlightsState() when success != null:
-return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
+return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case FlightCreatedState() when flightCreated != null:
+return flightCreated(_that.flight);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalA
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)  success,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)  success,required TResult Function( FlightEntity flight)  flightCreated,}) {final _that = this;
 switch (_that) {
 case LoadingFlightsState():
 return loading();case ErrorFlightsState():
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessFlightsState():
-return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
+return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case FlightCreatedState():
+return flightCreated(_that.flight);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalA
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,TResult? Function( FlightEntity flight)?  flightCreated,}) {final _that = this;
 switch (_that) {
 case LoadingFlightsState() when loading != null:
 return loading();case ErrorFlightsState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessFlightsState() when success != null:
-return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
+return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case FlightCreatedState() when flightCreated != null:
+return flightCreated(_that.flight);case _:
   return null;
 
 }
@@ -365,6 +371,72 @@ as String?,arrivalAirport: freezed == arrivalAirport ? _self.arrivalAirport : ar
 as String?,dateFrom: freezed == dateFrom ? _self.dateFrom : dateFrom // ignore: cast_nullable_to_non_nullable
 as DateTime?,dateTo: freezed == dateTo ? _self.dateTo : dateTo // ignore: cast_nullable_to_non_nullable
 as DateTime?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class FlightCreatedState extends FlightsState {
+  const FlightCreatedState({required this.flight}): super._();
+  
+
+ final  FlightEntity flight;
+
+/// Create a copy of FlightsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FlightCreatedStateCopyWith<FlightCreatedState> get copyWith => _$FlightCreatedStateCopyWithImpl<FlightCreatedState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FlightCreatedState&&(identical(other.flight, flight) || other.flight == flight));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,flight);
+
+@override
+String toString() {
+  return 'FlightsState.flightCreated(flight: $flight)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FlightCreatedStateCopyWith<$Res> implements $FlightsStateCopyWith<$Res> {
+  factory $FlightCreatedStateCopyWith(FlightCreatedState value, $Res Function(FlightCreatedState) _then) = _$FlightCreatedStateCopyWithImpl;
+@useResult
+$Res call({
+ FlightEntity flight
+});
+
+
+
+
+}
+/// @nodoc
+class _$FlightCreatedStateCopyWithImpl<$Res>
+    implements $FlightCreatedStateCopyWith<$Res> {
+  _$FlightCreatedStateCopyWithImpl(this._self, this._then);
+
+  final FlightCreatedState _self;
+  final $Res Function(FlightCreatedState) _then;
+
+/// Create a copy of FlightsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? flight = null,}) {
+  return _then(FlightCreatedState(
+flight: null == flight ? _self.flight : flight // ignore: cast_nullable_to_non_nullable
+as FlightEntity,
   ));
 }
 
