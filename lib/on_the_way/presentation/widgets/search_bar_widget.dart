@@ -26,10 +26,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialValue);
+    _controller = TextEditingController(text: widget.initialValue ?? '');
     _controller.addListener(() {
       // Обновляем UI при изменении текста для отображения кнопки очистки
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -40,6 +42,18 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         });
       }
     });
+  }
+  
+  @override
+  void didUpdateWidget(SearchBarWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Обновляем контроллер, если initialValue изменился
+    if (oldWidget.initialValue != widget.initialValue) {
+      final newValue = widget.initialValue?.isEmpty == false ? widget.initialValue! : '';
+      if (_controller.text != newValue) {
+        _controller.text = newValue;
+      }
+    }
   }
 
   @override
@@ -79,7 +93,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   void _selectAirport(AirportModel airport) {
     _controller.text = airport.code;
     widget.onSelected(airport.code);
-    setState(() => _showSuggestions = false);
+    if (mounted) {
+      setState(() => _showSuggestions = false);
+    }
     _focusNode.unfocus();
   }
 
@@ -111,7 +127,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       } else {
                         widget.onSelected('');
                       }
-                      setState(() => _showSuggestions = false);
+                      if (mounted) {
+                        setState(() => _showSuggestions = false);
+                      }
                     },
                   )
                 : null,

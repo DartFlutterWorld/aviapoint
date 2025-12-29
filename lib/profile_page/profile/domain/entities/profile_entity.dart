@@ -7,6 +7,8 @@ class ProfileEntity extends Equatable {
   final String? firstName;
   final String? lastName;
   final String? avatarUrl;
+  final String? telegram;
+  final String? max;
   final double? averageRating;
   final int? reviewsCount;
   final List<int>? ownedAirports; // Список ID аэропортов, которыми владеет пользователь
@@ -18,11 +20,13 @@ class ProfileEntity extends Equatable {
     this.firstName,
     this.lastName,
     this.avatarUrl,
+    this.telegram,
+    this.max,
     this.averageRating,
     this.reviewsCount,
     this.ownedAirports,
   });
 
   @override
-  List<Object?> get props => [id, phone, email, firstName, lastName, avatarUrl, averageRating, reviewsCount, ownedAirports];
+  List<Object?> get props => [id, phone, email, firstName, lastName, avatarUrl, telegram, max, averageRating, reviewsCount, ownedAirports];
 }

@@ -12,6 +12,8 @@ abstract class ProfileDto with _$ProfileDto {
     @JsonKey(name: 'first_name') String? firstName,
     @JsonKey(name: 'last_name') String? lastName,
     @JsonKey(name: 'avatar_url') String? avatarUrl,
+    String? telegram,
+    String? max,
     @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,
     @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,
     @JsonKey(name: 'owned_airports') dynamic ownedAirports, // JSONB массив ID аэропортов

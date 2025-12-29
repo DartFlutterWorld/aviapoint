@@ -13,7 +13,7 @@ abstract class ProfileEvent with _$ProfileEvent {
 
   const factory ProfileEvent.get() = GetProfileEvent;
   const factory ProfileEvent.initial() = InitialProfileEvent;
-  const factory ProfileEvent.update({String? email, String? firstName, String? lastName}) = UpdateProfileEvent;
+  const factory ProfileEvent.update({String? email, String? firstName, String? lastName, String? telegram, String? max}) = UpdateProfileEvent;
   const factory ProfileEvent.uploadPhoto(XFile photo) = UploadProfilePhotoEvent;
 }
 
@@ -80,6 +80,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       email: event.email,
       firstName: event.firstName,
       lastName: event.lastName,
+      telegram: event.telegram,
+      max: event.max,
     );
     response.fold(
       (l) {

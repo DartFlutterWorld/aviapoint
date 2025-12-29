@@ -2,6 +2,7 @@ import 'package:aviapoint/on_the_way/data/models/airport_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/booking_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/review_dto.dart';
+import 'package:aviapoint/on_the_way/data/models/flight_question_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -13,6 +14,7 @@ abstract class OnTheWayService {
 
   @GET('/api/flights')
   Future<List<FlightDto>> getFlights({
+    @Query('airport') String? airport,
     @Query('departure_airport') String? departureAirport,
     @Query('arrival_airport') String? arrivalAirport,
     @Query('date_from') DateTime? dateFrom,
@@ -71,14 +73,22 @@ abstract class OnTheWayService {
   @DELETE('/api/reviews/{id}')
   Future<void> deleteReview(@Path('id') int id);
 
+  // Вопросы пилоту
+  @GET('/api/flights/{flightId}/questions')
+  Future<List<FlightQuestionDto>> getQuestionsByFlightId(@Path('flightId') int flightId);
+
+  @POST('/api/flights/{flightId}/questions')
+  Future<FlightQuestionDto> createQuestion(@Path('flightId') int flightId, @Body() Map<String, dynamic> request);
+
+  @PUT('/api/flights/{flightId}/questions/{id}')
+  Future<FlightQuestionDto> updateQuestion(@Path('flightId') int flightId, @Path('id') int id, @Body() Map<String, dynamic> body);
+
+  @DELETE('/api/flights/{flightId}/questions/{id}')
+  Future<void> deleteQuestion(@Path('flightId') int flightId, @Path('id') int id);
+
   // Аэропорты
   @GET('/api/airports')
-  Future<List<AirportDto>> searchAirports({
-    @Query('q') String? query,
-    @Query('country') String? country,
-    @Query('type') String? type,
-    @Query('limit') int? limit,
-  });
+  Future<List<AirportDto>> searchAirports({@Query('q') String? query, @Query('country') String? country, @Query('type') String? type, @Query('limit') int? limit});
 
   @GET('/api/airports/{code}')
   Future<AirportDto> getAirportByCode(@Path('code') String code);

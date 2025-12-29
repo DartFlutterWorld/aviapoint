@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'flight_waypoint_dto.dart';
 
 part 'flight_dto.freezed.dart';
 part 'flight_dto.g.dart';
@@ -39,6 +40,8 @@ abstract class FlightDto with _$FlightDto {
     @JsonKey(name: 'pilot_average_rating', fromJson: _doubleFromJsonNullable) double? pilotAverageRating,
     // Фотографии полета
     @JsonKey(name: 'photos', fromJson: _photosFromJson) List<String>? photos,
+    // Точки маршрута
+    @JsonKey(name: 'waypoints', fromJson: _waypointsFromJson) List<FlightWaypointDto>? waypoints,
   }) = _FlightDto;
 
   factory FlightDto.fromJson(Map<String, dynamic> json) => _$FlightDtoFromJson(json);
@@ -129,6 +132,15 @@ List<String>? _photosFromJson(dynamic value) {
     } catch (e) {
       // Игнорируем ошибки парсинга
     }
+  }
+  return null;
+}
+
+/// Парсит список waypoints из JSON
+List<FlightWaypointDto>? _waypointsFromJson(dynamic value) {
+  if (value == null) return null;
+  if (value is List) {
+    return value.map((e) => FlightWaypointDto.fromJson(e as Map<String, dynamic>)).toList();
   }
   return null;
 }

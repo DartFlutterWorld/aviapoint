@@ -1,28 +1,35 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'create_flight_request_dto.freezed.dart';
-part 'create_flight_request_dto.g.dart';
+part 'flight_waypoint_dto.freezed.dart';
+part 'flight_waypoint_dto.g.dart';
 
 @freezed
-abstract class CreateFlightRequestDto with _$CreateFlightRequestDto {
-  const factory CreateFlightRequestDto({
-    @JsonKey(name: 'departure_airport') required String departureAirport,
-    @JsonKey(name: 'arrival_airport') required String arrivalAirport,
-    @JsonKey(name: 'departure_date', fromJson: _dateTimeFromJson) required DateTime departureDate,
-    @JsonKey(name: 'available_seats') required int availableSeats,
-    @JsonKey(name: 'price_per_seat') required double pricePerSeat,
-    @JsonKey(name: 'aircraft_type') String? aircraftType,
-    String? description,
-    @JsonKey(name: 'waypoints') List<Map<String, dynamic>>? waypoints,
-  }) = _CreateFlightRequestDto;
+abstract class FlightWaypointDto with _$FlightWaypointDto {
+  const factory FlightWaypointDto({
+    required int id,
+    @JsonKey(name: 'flight_id') required int flightId,
+    @JsonKey(name: 'airport_code') required String airportCode,
+    @JsonKey(name: 'sequence_order') required int sequenceOrder,
+    @JsonKey(name: 'arrival_time', fromJson: _dateTimeFromJsonNullable) DateTime? arrivalTime,
+    @JsonKey(name: 'departure_time', fromJson: _dateTimeFromJsonNullable) DateTime? departureTime,
+    String? comment,
+    @JsonKey(name: 'created_at', fromJson: _dateTimeFromJsonNullable) DateTime? createdAt,
+    // Дополнительная информация об аэропорте
+    @JsonKey(name: 'airport_name') String? airportName,
+    @JsonKey(name: 'airport_city') String? airportCity,
+    @JsonKey(name: 'airport_region') String? airportRegion,
+    @JsonKey(name: 'airport_type') String? airportType,
+    @JsonKey(name: 'airport_ident_ru') String? airportIdentRu,
+  }) = _FlightWaypointDto;
 
-  factory CreateFlightRequestDto.fromJson(Map<String, dynamic> json) => _$CreateFlightRequestDtoFromJson(json);
+  factory FlightWaypointDto.fromJson(Map<String, dynamic> json) => _$FlightWaypointDtoFromJson(json);
 }
 
-/// Парсит DateTime из строки, объекта DateTime или Map (если приходит как объект из JSON)
-DateTime _dateTimeFromJson(dynamic value) {
+/// Парсит nullable DateTime
+/// Аналогично реализации в flight_dto.dart - обрабатывает разные форматы
+DateTime? _dateTimeFromJsonNullable(dynamic value) {
   if (value == null) {
-    throw FormatException('DateTime cannot be null for required field');
+    return null;
   }
 
   if (value is String) {
@@ -68,5 +75,6 @@ DateTime _dateTimeFromJson(dynamic value) {
     }
   }
 
-  throw FormatException('Cannot parse DateTime from $value (type: ${value.runtimeType})');
+  return null;
 }
+

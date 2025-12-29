@@ -2,11 +2,13 @@ import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_question_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class OnTheWayRepository {
   Future<Either<Failure, List<FlightEntity>>> getFlights({
+    String? airport,
     String? departureAirport,
     String? arrivalAirport,
     DateTime? dateFrom,
@@ -23,6 +25,8 @@ abstract class OnTheWayRepository {
     required double pricePerSeat,
     String? aircraftType,
     String? description,
+    List<Map<String, dynamic>>? waypoints,
+    List<XFile>? photos,
   });
   Future<Either<Failure, FlightEntity>> updateFlight({
     required int id,
@@ -34,6 +38,7 @@ abstract class OnTheWayRepository {
     String? aircraftType,
     String? description,
     String? status,
+    List<Map<String, dynamic>>? waypoints,
   });
   Future<Either<Failure, FlightEntity>> deleteFlight(int id);
 
@@ -62,5 +67,22 @@ abstract class OnTheWayRepository {
   Future<Either<Failure, FlightEntity>> deleteFlightPhoto({
     required int flightId,
     required String photoUrl,
+  });
+
+  // Вопросы пилоту
+  Future<Either<Failure, List<FlightQuestionEntity>>> getQuestionsByFlightId(int flightId);
+  Future<Either<Failure, FlightQuestionEntity>> createQuestion({
+    required int flightId,
+    required String questionText,
+  });
+  Future<Either<Failure, FlightQuestionEntity>> updateQuestion({
+    required int flightId,
+    required int questionId,
+    String? questionText,
+    String? answerText,
+  });
+  Future<Either<Failure, void>> deleteQuestion({
+    required int flightId,
+    required int questionId,
   });
 }

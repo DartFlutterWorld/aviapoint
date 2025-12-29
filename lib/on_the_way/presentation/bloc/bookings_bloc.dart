@@ -37,6 +37,10 @@ class CancelBookingEvent extends BookingsEvent {
   CancelBookingEvent({required this.bookingId});
 }
 
+class ClearBookingsEvent extends BookingsEvent {
+  ClearBookingsEvent();
+}
+
 @freezed
 class BookingsState with _$BookingsState {
   const BookingsState._();
@@ -66,6 +70,12 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
     on<CreateBookingEvent>(_handleCreateBooking);
     on<ConfirmBookingEvent>(_handleConfirmBooking);
     on<CancelBookingEvent>(_handleCancelBooking);
+    on<ClearBookingsEvent>(_handleClearBookings);
+  }
+
+  Future<void> _handleClearBookings(ClearBookingsEvent event, Emitter<BookingsState> emit) async {
+    // Очищаем состояние - сбрасываем на начальное состояние с пустым списком
+    emit(const SuccessBookingsState(bookings: []));
   }
 
   Future<void> _handleGetBookings(GetBookingsEvent event, Emitter<BookingsState> emit) async {

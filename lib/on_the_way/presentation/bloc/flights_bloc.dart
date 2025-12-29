@@ -2,23 +2,26 @@ import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'flights_bloc.freezed.dart';
 
 // События без freezed, чтобы избежать проблем с одинаковыми полями
 abstract class FlightsEvent {
+  final String? airport;
   final String? departureAirport;
   final String? arrivalAirport;
   final DateTime? dateFrom;
   final DateTime? dateTo;
 
-  const FlightsEvent({this.departureAirport, this.arrivalAirport, this.dateFrom, this.dateTo});
+  const FlightsEvent({this.airport, this.departureAirport, this.arrivalAirport, this.dateFrom, this.dateTo});
 }
 
 class GetFlightsEvent extends FlightsEvent {
   final bool isRefresh;
 
   const GetFlightsEvent({
+    super.airport,
     super.departureAirport,
     super.arrivalAirport,
     super.dateFrom,
@@ -41,6 +44,8 @@ class CreateFlightEvent extends FlightsEvent {
   final double pricePerSeat;
   final String? aircraftType;
   final String? description;
+  final List<Map<String, dynamic>>? waypoints;
+  final List<XFile>? photos;
 
   const CreateFlightEvent({
     required this.departureAirport,
@@ -50,6 +55,8 @@ class CreateFlightEvent extends FlightsEvent {
     required this.pricePerSeat,
     this.aircraftType,
     this.description,
+    this.waypoints,
+    this.photos,
   });
 }
 
@@ -63,6 +70,7 @@ class UpdateFlightEvent extends FlightsEvent {
   final String? aircraftType;
   final String? description;
   final String? status;
+  final List<Map<String, dynamic>>? waypoints;
 
   const UpdateFlightEvent({
     required this.flightId,
@@ -74,6 +82,7 @@ class UpdateFlightEvent extends FlightsEvent {
     this.aircraftType,
     this.description,
     this.status,
+    this.waypoints,
   });
 }
 
@@ -81,6 +90,10 @@ class DeleteFlightEvent extends FlightsEvent {
   final int flightId;
 
   const DeleteFlightEvent({required this.flightId}) : super();
+}
+
+class ClearFlightsEvent extends FlightsEvent {
+  const ClearFlightsEvent() : super();
 }
 
 @freezed
@@ -97,6 +110,7 @@ class FlightsState with _$FlightsState {
   }) = ErrorFlightsState;
   const factory FlightsState.success({
     required List<FlightEntity> flights,
+    String? airport,
     String? departureAirport,
     String? arrivalAirport,
     DateTime? dateFrom,
@@ -109,12 +123,20 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
 
   FlightsBloc({required OnTheWayRepository onTheWayRepository})
     : _onTheWayRepository = onTheWayRepository,
-      super(const LoadingFlightsState()) {
+      super(const SuccessFlightsState(
+        flights: [],
+        airport: null,
+        departureAirport: null,
+        arrivalAirport: null,
+        dateFrom: null,
+        dateTo: null,
+      )) {
     on<GetFlightsEvent>(_handleGetFlights);
     on<GetMyFlightsEvent>(_handleGetMyFlights);
     on<CreateFlightEvent>(_handleCreateFlight);
     on<UpdateFlightEvent>(_handleUpdateFlight);
     on<DeleteFlightEvent>(_handleDeleteFlight);
+    on<ClearFlightsEvent>(_handleClearFlights);
   }
 
   Future<void> _handleGetFlights(GetFlightsEvent event, Emitter<FlightsState> emit) async {
@@ -167,6 +189,7 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         emit(
           SuccessFlightsState(
             flights: r,
+            airport: event.airport,
             departureAirport: event.departureAirport,
             arrivalAirport: event.arrivalAirport,
             dateFrom: event.dateFrom,
@@ -196,7 +219,7 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         );
       },
       (r) {
-        emit(SuccessFlightsState(flights: r));
+        emit(SuccessFlightsState(flights: r, airport: null, departureAirport: null, arrivalAirport: null, dateFrom: null, dateTo: null));
       },
     );
   }
@@ -212,6 +235,8 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       pricePerSeat: event.pricePerSeat,
       aircraftType: event.aircraftType,
       description: event.description,
+      waypoints: event.waypoints,
+      photos: event.photos,
     );
 
     response.fold(
@@ -226,8 +251,18 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         );
       },
       (r) {
-        // После успешного создания перезагружаем список полетов
-        add(const GetFlightsEvent(isRefresh: false));
+        // После успешного создания возвращаем success состояние с созданным полетом в списке
+        // UI навигирует на детальную страницу созданного полета
+        emit(
+          SuccessFlightsState(
+            flights: [r], // Добавляем созданный полет в список
+            airport: null,
+            departureAirport: null,
+            arrivalAirport: null,
+            dateFrom: null,
+            dateTo: null,
+          ),
+        );
       },
     );
   }
@@ -245,6 +280,7 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       aircraftType: event.aircraftType,
       description: event.description,
       status: event.status,
+      waypoints: event.waypoints,
     );
 
     response.fold(
@@ -264,6 +300,18 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         add(const GetMyFlightsEvent(isRefresh: false));
       },
     );
+  }
+
+  Future<void> _handleClearFlights(ClearFlightsEvent event, Emitter<FlightsState> emit) async {
+    // Очищаем состояние - сбрасываем на начальное состояние с пустым списком
+    emit(const SuccessFlightsState(
+      flights: [],
+      airport: null,
+      departureAirport: null,
+      arrivalAirport: null,
+      dateFrom: null,
+      dateTo: null,
+    ));
   }
 
   Future<void> _handleDeleteFlight(DeleteFlightEvent event, Emitter<FlightsState> emit) async {

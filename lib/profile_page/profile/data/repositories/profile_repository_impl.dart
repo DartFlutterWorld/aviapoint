@@ -35,7 +35,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, ProfileEntity>> updateProfile({String? email, String? firstName, String? lastName}) async {
+  Future<Either<Failure, ProfileEntity>> updateProfile({String? email, String? firstName, String? lastName, String? telegram, String? max}) async {
     try {
       final body = <String, dynamic>{};
       if (email != null) {
@@ -46,6 +46,12 @@ class ProfileRepositoryImpl extends ProfileRepository {
       }
       if (lastName != null) {
         body['last_name'] = lastName;
+      }
+      if (telegram != null) {
+        body['telegram'] = telegram;
+      }
+      if (max != null) {
+        body['max'] = max;
       }
 
       final response = await _profileService.updateProfile(body);

@@ -30,12 +30,18 @@ import 'package:aviapoint/on_the_way/presentation/bloc/reviews_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/review_card.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -51,6 +57,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoadingSubscription = false;
   bool _isLoadingSubscriptionTypes = false;
   String? _subscriptionError;
+  // Кэш для информации о полётах (flightId -> FlightEntity)
+  final Map<int, FlightEntity> _flightCache = {};
+  final Set<int> _loadingFlights = {}; // Чтобы не загружать один и тот же полёт дважды
+
+  /// Загружает информацию о полёте, если её ещё нет в кэше
+  Future<void> _loadFlightIfNeeded(int? flightId) async {
+    if (flightId == null || _flightCache.containsKey(flightId) || _loadingFlights.contains(flightId)) {
+      return;
+    }
+
+    _loadingFlights.add(flightId);
+    try {
+      final repository = getIt<OnTheWayRepository>();
+      final result = await repository.getFlight(flightId);
+      result.fold(
+        (failure) {
+          print('❌ [ProfileScreen] Ошибка загрузки полёта $flightId: ${failure.message}');
+        },
+        (flight) {
+          if (mounted) {
+            setState(() {
+              _flightCache[flightId] = flight;
+            });
+          }
+        },
+      );
+    } catch (e) {
+      print('❌ [ProfileScreen] Исключение при загрузке полёта $flightId: $e');
+    } finally {
+      _loadingFlights.remove(flightId);
+    }
+  }
 
   @override
   void initState() {
@@ -303,35 +341,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ? getImageUrl(avatarUrl)
                                                 : null;
 
-                                            return ClipOval(
-                                              child: imageUrl != null && imageUrl.isNotEmpty
-                                                  ? CachedNetworkImage(
-                                                      imageUrl: imageUrl,
-                                                      width: 63,
-                                                      height: 63,
-                                                      fit: BoxFit.cover,
-                                                      cacheManager: getIt<DefaultCacheManager>(),
-                                                      cacheKey:
-                                                          avatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
-                                                      placeholder: (context, url) => Image.asset(
+                                            return GestureDetector(
+                                              onTap: () {
+                                                if (imageUrl != null && imageUrl.isNotEmpty) {
+                                                  _showPhotoViewer(context, imageUrl);
+                                                }
+                                              },
+                                              child: ClipOval(
+                                                child: imageUrl != null && imageUrl.isNotEmpty
+                                                    ? CachedNetworkImage(
+                                                        imageUrl: imageUrl,
+                                                        width: 120,
+                                                        height: 120,
+                                                        fit: BoxFit.cover,
+                                                        cacheManager: getIt<DefaultCacheManager>(),
+                                                        cacheKey:
+                                                            avatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
+                                                        placeholder: (context, url) => Image.asset(
+                                                          Pictures.pilot,
+                                                          width: 120,
+                                                          height: 120,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        errorWidget: (context, url, error) => Image.asset(
+                                                          Pictures.pilot,
+                                                          width: 120,
+                                                          height: 120,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )
+                                                    : Image.asset(
                                                         Pictures.pilot,
-                                                        width: 63,
-                                                        height: 63,
+                                                        height: 120,
+                                                        width: 120,
                                                         fit: BoxFit.cover,
                                                       ),
-                                                      errorWidget: (context, url, error) => Image.asset(
-                                                        Pictures.pilot,
-                                                        width: 63,
-                                                        height: 63,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    )
-                                                  : Image.asset(
-                                                      Pictures.pilot,
-                                                      height: 63,
-                                                      width: 63,
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                              ),
                                             );
                                           },
                                         ),
@@ -348,14 +393,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     '${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}',
                                                     style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E)),
                                                   ),
-                                                  Text(
-                                                    state.profile.phone,
-                                                    style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                                  SizedBox(height: 4.h),
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Icon(Icons.phone, size: 16, color: Color(0xFF4B5767)),
+                                                      SizedBox(width: 6.w),
+                                                      Text(
+                                                        state.profile.phone,
+                                                        style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    state.profile.email ?? '',
-                                                    style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
-                                                  ),
+                                                  if (state.profile.telegram != null && state.profile.telegram!.isNotEmpty) ...[
+                                                    SizedBox(height: 4.h),
+                                                    Row(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Icon(Icons.telegram, size: 16, color: Color(0xFF4B5767)),
+                                                        SizedBox(width: 6.w),
+                                                        Text(
+                                                          state.profile.telegram!,
+                                                          style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                  if (state.profile.max != null && state.profile.max!.isNotEmpty) ...[
+                                                    SizedBox(height: 4.h),
+                                                    Row(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Icon(Icons.chat, size: 16, color: Color(0xFF4B5767)),
+                                                        SizedBox(width: 6.w),
+                                                        Text(
+                                                          state.profile.max!,
+                                                          style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                  if (state.profile.email != null && state.profile.email!.isNotEmpty) ...[
+                                                    SizedBox(height: 4.h),
+                                                    Row(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Icon(Icons.email, size: 16, color: Color(0xFF4B5767)),
+                                                        SizedBox(width: 6.w),
+                                                        Text(
+                                                          state.profile.email!,
+                                                          style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                   // Рейтинг пользователя
                                                   if (state.profile.averageRating != null &&
                                                       state.profile.averageRating! > 0) ...[
@@ -612,7 +703,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Отзывы', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+              Text('Отзывы о вас', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
               SizedBox(height: 12.h),
               reviewsState.when(
                 loading: () => Center(
@@ -649,9 +740,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   final mainReviews = reviews.where((r) => r.replyToReviewId == null).toList();
                   final replies = reviews.where((r) => r.replyToReviewId != null).toList();
 
+                  // Загружаем информацию о полётах для всех отзывов
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    for (final review in mainReviews.take(5)) {
+                      if (review.flightId != null) {
+                        _loadFlightIfNeeded(review.flightId);
+                      }
+                    }
+                  });
+
                   return Column(
                     children: mainReviews.take(5).map((review) {
                       final reviewReplies = replies.where((r) => r.replyToReviewId == review.id).toList();
+                      final flight = review.flightId != null ? _flightCache[review.flightId] : null;
 
                       return Column(
                         children: [
@@ -697,12 +798,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ReviewCard(
                                     review: review,
                                     canDelete: false, // В профиле показываются отзывы о пользователе, их нельзя удалять
+                                    // Передаем рейтинг конкретно за этот полёт
+                                    reviewedRating: review.rating != null ? review.rating!.toDouble() : null,
+                                    // Передаем информацию о полёте
+                                    departureAirport: flight?.departureAirport,
+                                    arrivalAirport: flight?.arrivalAirport,
+                                    departureDate: flight?.departureDate,
+                                    waypoints: flight?.waypoints,
                                   ),
                                   // Индикатор кликабельности
                                   if (review.flightId != null)
                                     Positioned(
                                       right: 8.w,
-                                      bottom: 8.h,
+                                      bottom: 18.h,
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                                         decoration: BoxDecoration(
@@ -763,6 +871,163 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return 'отзыва';
     } else {
       return 'отзывов';
+    }
+  }
+
+  /// Просмотр фотографии профиля в полноэкранном режиме
+  void _showPhotoViewer(BuildContext context, String imageUrl) {
+    bool showControls = true;
+
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogBuilderContext, setState) => GestureDetector(
+          onTap: () {
+            setState(() {
+              showControls = !showControls;
+            });
+          },
+          child: Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.zero,
+            child: Stack(
+              children: [
+                // Основной контент с фотографией
+                InteractiveViewer(
+                  minScale: 0.8,
+                  maxScale: 5.0,
+                  child: Center(
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.contain,
+                        width: double.infinity,
+                        height: double.infinity,
+                        cacheManager: getIt<DefaultCacheManager>(),
+                        placeholder: (context, url) => Container(
+                          color: Colors.black,
+                          child: Center(child: CircularProgressIndicator(color: Colors.white)),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.black,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.broken_image, color: Colors.white70, size: 64),
+                                SizedBox(height: 16.h),
+                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Верхняя панель с кнопками действий
+                if (showControls)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: SafeArea(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(width: 48.w), // Для центрирования
+                            // Кнопки действий
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Кнопка "Поделиться"
+                                IconButton(
+                                  icon: Icon(Icons.share, color: Colors.white, size: 24),
+                                  onPressed: () => _sharePhoto(dialogContext, imageUrl),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  tooltip: 'Поделиться',
+                                ),
+                                SizedBox(width: 8.w),
+                                // Кнопка "Скачать"
+                                IconButton(
+                                  icon: Icon(Icons.download, color: Colors.white, size: 24),
+                                  onPressed: () => _downloadPhoto(dialogContext, imageUrl),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  tooltip: 'Скачать',
+                                ),
+                                SizedBox(width: 8.w),
+                                // Кнопка закрытия
+                                IconButton(
+                                  icon: Icon(Icons.close, color: Colors.white, size: 28),
+                                  onPressed: () => Navigator.of(dialogContext).pop(),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Поделиться фотографией
+  Future<void> _sharePhoto(BuildContext context, String photoUrl) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    try {
+      await Share.shareUri(Uri.parse(photoUrl));
+    } catch (e) {
+      if (context.mounted) {
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+      }
+    }
+  }
+
+  /// Скачать фотографию
+  Future<void> _downloadPhoto(BuildContext context, String photoUrl) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    try {
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+      final fileName = photoUrl.split('/').last.split('?').first; // Убираем query параметры
+      final filePath = '${tempDir.path}/$fileName';
+
+      await dio.download(photoUrl, filePath);
+
+      // Запрашиваем разрешение на запись (для Android)
+      if (await Permission.storage.request().isGranted) {
+        final appDocDir = await getApplicationDocumentsDirectory();
+        final savedFile = await File(filePath).copy('${appDocDir.path}/$fileName');
+
+        if (context.mounted) {
+          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена: ${savedFile.path}'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+        }
+      } else {
+        if (context.mounted) {
+          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 2)));
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+      }
     }
   }
 }

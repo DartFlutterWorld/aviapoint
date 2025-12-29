@@ -128,12 +128,12 @@ return uploadPhoto(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName)?  update,TResult Function( XFile photo)?  uploadPhoto,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)?  update,TResult Function( XFile photo)?  uploadPhoto,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
 return initial();case UpdateProfileEvent() when update != null:
-return update(_that.email,_that.firstName,_that.lastName);case UploadProfilePhotoEvent() when uploadPhoto != null:
+return update(_that.email,_that.firstName,_that.lastName,_that.telegram,_that.max);case UploadProfilePhotoEvent() when uploadPhoto != null:
 return uploadPhoto(_that.photo);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return uploadPhoto(_that.photo);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName)  update,required TResult Function( XFile photo)  uploadPhoto,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)  update,required TResult Function( XFile photo)  uploadPhoto,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get();case InitialProfileEvent():
 return initial();case UpdateProfileEvent():
-return update(_that.email,_that.firstName,_that.lastName);case UploadProfilePhotoEvent():
+return update(_that.email,_that.firstName,_that.lastName,_that.telegram,_that.max);case UploadProfilePhotoEvent():
 return uploadPhoto(_that.photo);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return uploadPhoto(_that.photo);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName)?  update,TResult? Function( XFile photo)?  uploadPhoto,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)?  update,TResult? Function( XFile photo)?  uploadPhoto,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
 return initial();case UpdateProfileEvent() when update != null:
-return update(_that.email,_that.firstName,_that.lastName);case UploadProfilePhotoEvent() when uploadPhoto != null:
+return update(_that.email,_that.firstName,_that.lastName,_that.telegram,_that.max);case UploadProfilePhotoEvent() when uploadPhoto != null:
 return uploadPhoto(_that.photo);case _:
   return null;
 
@@ -257,12 +257,14 @@ String toString() {
 
 
 class UpdateProfileEvent extends ProfileEvent {
-  const UpdateProfileEvent({this.email, this.firstName, this.lastName}): super._();
+  const UpdateProfileEvent({this.email, this.firstName, this.lastName, this.telegram, this.max}): super._();
   
 
  final  String? email;
  final  String? firstName;
  final  String? lastName;
+ final  String? telegram;
+ final  String? max;
 
 /// Create a copy of ProfileEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -274,16 +276,16 @@ $UpdateProfileEventCopyWith<UpdateProfileEvent> get copyWith => _$UpdateProfileE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateProfileEvent&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateProfileEvent&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.telegram, telegram) || other.telegram == telegram)&&(identical(other.max, max) || other.max == max));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,firstName,lastName);
+int get hashCode => Object.hash(runtimeType,email,firstName,lastName,telegram,max);
 
 @override
 String toString() {
-  return 'ProfileEvent.update(email: $email, firstName: $firstName, lastName: $lastName)';
+  return 'ProfileEvent.update(email: $email, firstName: $firstName, lastName: $lastName, telegram: $telegram, max: $max)';
 }
 
 
@@ -294,7 +296,7 @@ abstract mixin class $UpdateProfileEventCopyWith<$Res> implements $ProfileEventC
   factory $UpdateProfileEventCopyWith(UpdateProfileEvent value, $Res Function(UpdateProfileEvent) _then) = _$UpdateProfileEventCopyWithImpl;
 @useResult
 $Res call({
- String? email, String? firstName, String? lastName
+ String? email, String? firstName, String? lastName, String? telegram, String? max
 });
 
 
@@ -311,11 +313,13 @@ class _$UpdateProfileEventCopyWithImpl<$Res>
 
 /// Create a copy of ProfileEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? telegram = freezed,Object? max = freezed,}) {
   return _then(UpdateProfileEvent(
 email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,firstName: freezed == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
 as String?,lastName: freezed == lastName ? _self.lastName : lastName // ignore: cast_nullable_to_non_nullable
+as String?,telegram: freezed == telegram ? _self.telegram : telegram // ignore: cast_nullable_to_non_nullable
+as String?,max: freezed == max ? _self.max : max // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

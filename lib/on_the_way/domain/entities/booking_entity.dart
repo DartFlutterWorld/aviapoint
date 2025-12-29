@@ -11,7 +11,16 @@ class BookingEntity extends Equatable {
   final String? passengerFirstName;
   final String? passengerLastName;
   final String? passengerAvatarUrl;
+  final String? passengerPhone;
+  final String? passengerEmail;
+  final String? passengerTelegram;
+  final String? passengerMax;
   final double? passengerAverageRating;
+  // Данные полёта (загружаются через JOIN в SQL)
+  final DateTime? flightDepartureDate;
+  final String? flightDepartureAirport;
+  final String? flightArrivalAirport;
+  final List<String>? flightWaypoints; // Все точки маршрута в порядке следования
 
   const BookingEntity({
     required this.id,
@@ -23,7 +32,15 @@ class BookingEntity extends Equatable {
     this.passengerFirstName,
     this.passengerLastName,
     this.passengerAvatarUrl,
+    this.passengerPhone,
+    this.passengerEmail,
+    this.passengerTelegram,
+    this.passengerMax,
     this.passengerAverageRating,
+    this.flightDepartureDate,
+    this.flightDepartureAirport,
+    this.flightArrivalAirport,
+    this.flightWaypoints,
   });
 
   /// Получить полное имя пассажира
@@ -49,6 +66,14 @@ class BookingEntity extends Equatable {
     passengerFirstName,
     passengerLastName,
     passengerAvatarUrl,
+    passengerPhone,
+    passengerEmail,
+    passengerTelegram,
+    passengerMax,
     passengerAverageRating,
+    flightDepartureDate,
+    flightDepartureAirport,
+    flightArrivalAirport,
+    flightWaypoints,
   ];
 }

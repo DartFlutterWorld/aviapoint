@@ -6,7 +6,9 @@ part of 'emergency_categories_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_EmergencyCategoriesDto _$EmergencyCategoriesDtoFromJson(Map<String, dynamic> json) => _EmergencyCategoriesDto(
+_EmergencyCategoriesDto _$EmergencyCategoriesDtoFromJson(
+  Map<String, dynamic> json,
+) => _EmergencyCategoriesDto(
   id: (json['id'] as num).toInt(),
   title: json['title'] as String,
   subTitle: json['sub_title'] as String,
@@ -16,7 +18,9 @@ _EmergencyCategoriesDto _$EmergencyCategoriesDtoFromJson(Map<String, dynamic> js
   picture: json['picture'] as String,
 );
 
-Map<String, dynamic> _$EmergencyCategoriesDtoToJson(_EmergencyCategoriesDto instance) => <String, dynamic>{
+Map<String, dynamic> _$EmergencyCategoriesDtoToJson(
+  _EmergencyCategoriesDto instance,
+) => <String, dynamic>{
   'id': instance.id,
   'title': instance.title,
   'sub_title': instance.subTitle,

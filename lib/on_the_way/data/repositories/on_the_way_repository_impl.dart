@@ -7,6 +7,7 @@ import 'package:aviapoint/on_the_way/data/models/create_review_request_dto.dart'
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_question_entity.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -21,14 +22,16 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
 
   @override
   Future<Either<Failure, List<FlightEntity>>> getFlights({
+    String? airport,
     String? departureAirport,
     String? arrivalAirport,
     DateTime? dateFrom,
     DateTime? dateTo,
   }) async {
     try {
-      print('🔵 [OnTheWayRepositoryImpl] getFlights: dateFrom = $dateFrom, dateTo = $dateTo');
+      print('🔵 [OnTheWayRepositoryImpl] getFlights: airport = $airport, dateFrom = $dateFrom, dateTo = $dateTo');
       final response = await _onTheWayService.getFlights(
+        airport: airport,
         departureAirport: departureAirport,
         arrivalAirport: arrivalAirport,
         dateFrom: dateFrom,
@@ -123,10 +126,24 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
     required double pricePerSeat,
     String? aircraftType,
     String? description,
+    List<Map<String, dynamic>>? waypoints,
+    List<XFile>? photos,
   }) async {
     try {
       // ВАЖНО: В БД поле price_per_seat имеет тип INTEGER, поэтому округляем до int перед созданием DTO
       final priceAsInt = pricePerSeat.round().toInt();
+
+      // Преобразуем waypoints в формат для отправки
+      List<Map<String, dynamic>>? waypointsDto;
+      if (waypoints != null && waypoints.isNotEmpty) {
+        waypointsDto = waypoints.map((wp) => {
+          'airport_code': wp['airport_code'],
+          'sequence_order': wp['sequence_order'],
+          'arrival_time': wp['arrival_time'],
+          'departure_time': wp['departure_time'],
+          'comment': wp['comment'],
+        }).toList();
+      }
 
       final request = CreateFlightRequestDto(
         departureAirport: departureAirport,
@@ -136,6 +153,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
         pricePerSeat: priceAsInt.toDouble(), // Передаем как double для DTO, но уже округленное значение
         aircraftType: aircraftType,
         description: description,
+        waypoints: waypointsDto,
       );
 
       // Явно сериализуем в JSON перед отправкой
@@ -147,9 +165,42 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
       print('🔵 Create Flight Request JSON:');
       print(jsonData);
 
+      // Сначала создаем полет обычным JSON запросом (как для аэропортов)
       final response = await _onTheWayService.createFlight(jsonData);
+      final flightEntity = OnTheWayMapper.toFlightEntity(response);
 
-      return right(OnTheWayMapper.toFlightEntity(response));
+      // Если есть фотографии, загружаем их отдельно (как для аэропортов)
+      if (photos != null && photos.isNotEmpty) {
+        // Конвертируем XFile в MultipartFile
+        final multipartFiles = await Future.wait(
+          photos.map((photo) async {
+            if (kIsWeb) {
+              // Для веб-платформы
+              final bytes = await photo.readAsBytes();
+              return MultipartFile.fromBytes(
+                bytes,
+                filename: photo.name,
+              );
+            } else {
+              // Для мобильных платформ
+              final file = File(photo.path);
+              return await MultipartFile.fromFile(
+                file.path,
+                filename: photo.name,
+              );
+            }
+          }),
+        );
+
+        // Загружаем фотографии отдельным запросом
+        final flightWithPhotos = await _onTheWayService.uploadFlightPhotos(
+          flightEntity.id,
+          multipartFiles,
+        );
+        return right(OnTheWayMapper.toFlightEntity(flightWithPhotos));
+      }
+
+      return right(flightEntity);
     } on DioException catch (e) {
       String? responseMessage;
       if (e.response?.data != null) {
@@ -180,6 +231,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
     String? aircraftType,
     String? description,
     String? status,
+    List<Map<String, dynamic>>? waypoints,
   }) async {
     try {
       final body = <String, dynamic>{};
@@ -216,6 +268,9 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
       }
       if (status != null) {
         body['status'] = status;
+      }
+      if (waypoints != null) {
+        body['waypoints'] = waypoints;
       }
 
       print('🔵 [UpdateFlight] Request body: $body');
@@ -645,6 +700,124 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
     try {
       final response = await _onTheWayService.deleteFlightPhoto(flightId, photoUrl);
       return right(OnTheWayMapper.toFlightEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  // ========== FLIGHT QUESTIONS ==========
+
+  @override
+  Future<Either<Failure, List<FlightQuestionEntity>>> getQuestionsByFlightId(int flightId) async {
+    try {
+      final response = await _onTheWayService.getQuestionsByFlightId(flightId);
+
+      return right(OnTheWayMapper.toFlightQuestionEntities(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, FlightQuestionEntity>> createQuestion({
+    required int flightId,
+    required String questionText,
+  }) async {
+    try {
+      final request = {'question_text': questionText};
+      final response = await _onTheWayService.createQuestion(flightId, request);
+
+      return right(OnTheWayMapper.toFlightQuestionEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, FlightQuestionEntity>> updateQuestion({
+    required int flightId,
+    required int questionId,
+    String? questionText,
+    String? answerText,
+  }) async {
+    try {
+      final body = <String, dynamic>{};
+      if (questionText != null) body['question_text'] = questionText;
+      if (answerText != null) body['answer_text'] = answerText;
+
+      final response = await _onTheWayService.updateQuestion(flightId, questionId, body);
+
+      return right(OnTheWayMapper.toFlightQuestionEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteQuestion({
+    required int flightId,
+    required int questionId,
+  }) async {
+    try {
+      await _onTheWayService.deleteQuestion(flightId, questionId);
+
+      return right(null);
     } on DioException catch (e) {
       String? responseMessage;
       if (e.response?.data != null) {

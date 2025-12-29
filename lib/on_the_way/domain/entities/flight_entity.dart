@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'flight_waypoint_entity.dart';
 
 class FlightEntity extends Equatable {
   final int id;
@@ -30,6 +31,7 @@ class FlightEntity extends Equatable {
   final String? pilotAvatarUrl;
   final double? pilotAverageRating;
   final List<String>? photos;
+  final List<FlightWaypointEntity>? waypoints;
 
   const FlightEntity({
     required this.id,
@@ -58,6 +60,7 @@ class FlightEntity extends Equatable {
     this.pilotAvatarUrl,
     this.pilotAverageRating,
     this.photos,
+    this.waypoints,
   });
 
   @override
@@ -88,6 +91,7 @@ class FlightEntity extends Equatable {
     pilotAvatarUrl,
     pilotAverageRating,
     photos,
+    waypoints,
   ];
 
   /// Получить полное имя пилота

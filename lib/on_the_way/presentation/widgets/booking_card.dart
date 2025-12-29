@@ -58,7 +58,9 @@ class BookingCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Бронирование #${booking.id}', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                Expanded(
+                  child: Text('Бронирование #${booking.id}', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(color: statusBgColor, borderRadius: BorderRadius.circular(8.r)),
@@ -66,52 +68,208 @@ class BookingCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 12.h),
-            // Количество мест
-            Row(
-              children: [
-                Icon(Icons.event_seat, size: 16, color: Color(0xFF9CA5AF)),
-                SizedBox(width: 6.w),
-                Text(
-                  '${booking.seatsCount} ${booking.seatsCount == 1
-                      ? 'место'
-                      : booking.seatsCount < 5
-                      ? 'места'
-                      : 'мест'}',
-                  style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+            SizedBox(height: 16.h),
+            // Маршрут и дата вылета
+            if (booking.flightWaypoints != null && booking.flightWaypoints!.isNotEmpty) ...[
+              Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF0F9FF),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Color(0xFF0A6EFA).withOpacity(0.2)),
                 ),
-              ],
-            ),
-            SizedBox(height: 8.h),
-            // Общая стоимость
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Маршрут со всеми точками
+                    Wrap(
+                      spacing: 8.w,
+                      runSpacing: 4.h,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        ...booking.flightWaypoints!.asMap().entries.expand((entry) {
+                          final index = entry.key;
+                          final airportCode = entry.value;
+                          final isFirst = index == 0;
+                          final isLast = index == booking.flightWaypoints!.length - 1;
+
+                          return [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                                  size: 18,
+                                  color: Color(0xFF0A6EFA),
+                                ),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  airportCode,
+                                  style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                                ),
+                              ],
+                            ),
+                            if (!isLast) ...[
+                              SizedBox(width: 4.w),
+                              Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)),
+                              SizedBox(width: 4.w),
+                            ],
+                          ];
+                        }).toList(),
+                      ],
+                    ),
+                    // Дата вылета
+                    if (booking.flightDepartureDate != null) ...[
+                      SizedBox(height: 12.h),
+                      Row(
+                        children: [
+                          Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
+                          SizedBox(width: 6.w),
+                          Text(
+                            DateFormat('dd.MM.yyyy', 'ru_RU').format(booking.flightDepartureDate!),
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.h),
+            ] else if (booking.flightDepartureAirport != null || booking.flightArrivalAirport != null) ...[
+              Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF0F9FF),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Color(0xFF0A6EFA).withOpacity(0.2)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Маршрут (fallback если waypoints нет)
+                    if (booking.flightDepartureAirport != null && booking.flightArrivalAirport != null) ...[
+                      Row(
+                        children: [
+                          Icon(Icons.flight_takeoff, size: 18, color: Color(0xFF0A6EFA)),
+                          SizedBox(width: 8.w),
+                          Text(
+                            booking.flightDepartureAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
+                          SizedBox(width: 12.w),
+                          Icon(Icons.arrow_forward, size: 18, color: Color(0xFF0A6EFA)),
+                          SizedBox(width: 12.w),
+                          Icon(Icons.flight_land, size: 18, color: Color(0xFF0A6EFA)),
+                          SizedBox(width: 8.w),
+                          Text(
+                            booking.flightArrivalAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
+                        ],
+                      ),
+                    ] else if (booking.flightDepartureAirport != null) ...[
+                      Row(
+                        children: [
+                          Icon(Icons.flight_takeoff, size: 18, color: Color(0xFF0A6EFA)),
+                          SizedBox(width: 8.w),
+                          Text(
+                            booking.flightDepartureAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
+                        ],
+                      ),
+                    ] else if (booking.flightArrivalAirport != null) ...[
+                      Row(
+                        children: [
+                          Icon(Icons.flight_land, size: 18, color: Color(0xFF0A6EFA)),
+                          SizedBox(width: 8.w),
+                          Text(
+                            booking.flightArrivalAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
+                        ],
+                      ),
+                    ],
+                    // Дата вылета
+                    if (booking.flightDepartureDate != null) ...[
+                      SizedBox(height: 8.h),
+                      Row(
+                        children: [
+                          Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
+                          SizedBox(width: 6.w),
+                          Text(
+                            DateFormat('dd.MM.yyyy', 'ru_RU').format(booking.flightDepartureDate!),
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.h),
+            ],
+            // Информация о бронировании
             Row(
               children: [
-                Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
-                SizedBox(width: 6.w),
-                Text(
-                  '${priceFormat.format(booking.totalPrice)}',
-                  style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981)),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Icon(Icons.event_seat, size: 16, color: Color(0xFF9CA5AF)),
+                      SizedBox(width: 6.w),
+                      Flexible(
+                        child: Text(
+                          '${booking.seatsCount} ${booking.seatsCount == 1
+                              ? 'место'
+                              : booking.seatsCount < 5
+                              ? 'места'
+                              : 'мест'}',
+                          style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
+                    SizedBox(width: 6.w),
+                    Text(
+                      '${priceFormat.format(booking.totalPrice)}',
+                      style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981)),
+                    ),
+                  ],
                 ),
               ],
             ),
             // Кнопка отмены (если статус pending или confirmed)
             if ((booking.status == 'pending' || booking.status == 'confirmed') && onCancel != null) ...[
-              SizedBox(height: 12.h),
-              OutlinedButton(
-                onPressed: onCancel,
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Color(0xFFEF4444)),
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
+              SizedBox(height: 16.h),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: onCancel,
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Color(0xFFEF4444)),
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                  ),
+                  child: Text('Отменить бронирование', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
                 ),
-                child: Text('Отменить бронирование', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
               ),
             ],
             // Кнопка перехода к деталям полета
             if (onTap != null) ...[
               SizedBox(height: 8.h),
-              TextButton(
-                onPressed: onTap,
-                child: Text('Подробнее о полете', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: onTap,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                  ),
+                  child: Text('Подробнее о полете', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                ),
               ),
             ],
           ],

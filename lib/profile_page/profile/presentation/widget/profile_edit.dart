@@ -27,6 +27,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   late final TextEditingController _emailController;
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
+  late final TextEditingController _telegramController;
+  late final TextEditingController _maxController;
   bool _isLoading = false;
   XFile? _selectedPhoto;
   String? _currentAvatarUrl;
@@ -38,6 +40,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     _emailController = TextEditingController();
     _firstNameController = TextEditingController();
     _lastNameController = TextEditingController();
+    _telegramController = TextEditingController();
+    _maxController = TextEditingController();
 
     // Загружаем данные профиля из текущего состояния блока
     final currentState = context.read<ProfileBloc>().state;
@@ -46,6 +50,8 @@ class _ProfileEditState extends State<ProfileEdit> {
         _emailController.text = profile.email ?? '';
         _firstNameController.text = profile.firstName ?? '';
         _lastNameController.text = profile.lastName ?? '';
+        _telegramController.text = profile.telegram ?? '';
+        _maxController.text = profile.max ?? '';
         _currentAvatarUrl = profile.avatarUrl;
       },
       orElse: () {},
@@ -57,6 +63,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     _emailController.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
+    _telegramController.dispose();
+    _maxController.dispose();
     super.dispose();
   }
 
@@ -109,6 +117,8 @@ class _ProfileEditState extends State<ProfileEdit> {
         email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
         firstName: _firstNameController.text.trim().isEmpty ? null : _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim().isEmpty ? null : _lastNameController.text.trim(),
+        telegram: _telegramController.text.trim().isEmpty ? null : _telegramController.text.trim(),
+        max: _maxController.text.trim().isEmpty ? null : _maxController.text.trim(),
       ),
     );
   }
@@ -170,6 +180,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                     email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
                     firstName: _firstNameController.text.trim().isEmpty ? null : _firstNameController.text.trim(),
                     lastName: _lastNameController.text.trim().isEmpty ? null : _lastNameController.text.trim(),
+                    telegram: _telegramController.text.trim().isEmpty ? null : _telegramController.text.trim(),
+                    max: _maxController.text.trim().isEmpty ? null : _maxController.text.trim(),
                   ),
                 );
               } else {
@@ -313,6 +325,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                             _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
                             SizedBox(height: 16),
                             _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
+                            SizedBox(height: 16),
+                            _buildTextField(controller: _telegramController, hintText: 'Telegram', label: 'Telegram'),
+                            SizedBox(height: 16),
+                            _buildTextField(controller: _maxController, hintText: 'Max', label: 'Max'),
                             SizedBox(height: 24),
                             // Кнопка сохранения
                             CustomButton(

@@ -87,8 +87,9 @@ Future<void> _run() async {
         enableScaleText: () => kIsWeb ? false : true,
         designSize: const Size(375, 812),
         child: EasyLocalization(
-          supportedLocales: [Locale('en', 'US'), Locale('ru', 'RU')],
+          supportedLocales: [Locale('en', 'EN'), Locale('ru', 'RU')],
           path: 'assets/translations',
+          useOnlyLangCode: false,
           // startLocale: Locale('en', 'EN'),
           startLocale: Locale('ru', 'RU'),
           child: AppWrapper(child: const App()),

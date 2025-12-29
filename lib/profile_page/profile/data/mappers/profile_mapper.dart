@@ -27,6 +27,8 @@ class ProfileMapper {
       lastName: model.lastName,
       email: model.email,
       avatarUrl: model.avatarUrl,
+      telegram: model.telegram,
+      max: model.max,
       averageRating: model.averageRating,
       reviewsCount: model.reviewsCount,
       ownedAirports: ownedAirports,

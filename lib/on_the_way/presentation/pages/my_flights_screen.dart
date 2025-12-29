@@ -21,6 +21,8 @@ class MyFlightsScreen extends StatefulWidget {
 }
 
 class _MyFlightsScreenState extends State<MyFlightsScreen> {
+  bool _wasAuthenticated = false;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
+        _wasAuthenticated = isAuthenticated;
         if (isAuthenticated) {
           context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
         }
@@ -39,6 +42,31 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (context, appState, child) {
+        // Отслеживаем изменения статуса авторизации
+        final isNowAuthenticated = appState.isAuthenticated;
+        
+        // Если пользователь вышел (был авторизован, стал неавторизован)
+        if (_wasAuthenticated && !isNowAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              // Очищаем данные при выходе
+              context.read<FlightsBloc>().add(const ClearFlightsEvent());
+            }
+          });
+        }
+        
+        // Если пользователь вошел (был неавторизован, стал авторизован)
+        if (!_wasAuthenticated && isNowAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              // Загружаем данные при входе
+              context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
+            }
+          });
+        }
+        
+        _wasAuthenticated = isNowAuthenticated;
+        
         // Если не авторизован, показываем экран авторизации
         if (!appState.isAuthenticated) {
           return _buildUnauthenticatedState(context);
@@ -58,7 +86,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
                   loading: () => _buildLoadingState(),
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
                       _buildErrorState(errorForUser),
-                  success: (flights, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
+                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
                 );
               },
             ),

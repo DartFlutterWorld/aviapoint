@@ -125,12 +125,12 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<FlightEntity> flights,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LoadingFlightsState() when loading != null:
 return loading();case ErrorFlightsState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessFlightsState() when success != null:
-return success(_that.flights,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
+return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
   return orElse();
 
 }
@@ -148,12 +148,12 @@ return success(_that.flights,_that.departureAirport,_that.arrivalAirport,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<FlightEntity> flights,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)  success,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)  success,}) {final _that = this;
 switch (_that) {
 case LoadingFlightsState():
 return loading();case ErrorFlightsState():
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessFlightsState():
-return success(_that.flights,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
+return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +170,12 @@ return success(_that.flights,_that.departureAirport,_that.arrivalAirport,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<FlightEntity> flights,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<FlightEntity> flights,  String? airport,  String? departureAirport,  String? arrivalAirport,  DateTime? dateFrom,  DateTime? dateTo)?  success,}) {final _that = this;
 switch (_that) {
 case LoadingFlightsState() when loading != null:
 return loading();case ErrorFlightsState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessFlightsState() when success != null:
-return success(_that.flights,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
+return success(_that.flights,_that.airport,_that.departureAirport,_that.arrivalAirport,_that.dateFrom,_that.dateTo);case _:
   return null;
 
 }
@@ -293,7 +293,7 @@ as String?,
 
 
 class SuccessFlightsState extends FlightsState {
-  const SuccessFlightsState({required final  List<FlightEntity> flights, this.departureAirport, this.arrivalAirport, this.dateFrom, this.dateTo}): _flights = flights,super._();
+  const SuccessFlightsState({required final  List<FlightEntity> flights, this.airport, this.departureAirport, this.arrivalAirport, this.dateFrom, this.dateTo}): _flights = flights,super._();
   
 
  final  List<FlightEntity> _flights;
@@ -303,6 +303,7 @@ class SuccessFlightsState extends FlightsState {
   return EqualUnmodifiableListView(_flights);
 }
 
+ final  String? airport;
  final  String? departureAirport;
  final  String? arrivalAirport;
  final  DateTime? dateFrom;
@@ -318,16 +319,16 @@ $SuccessFlightsStateCopyWith<SuccessFlightsState> get copyWith => _$SuccessFligh
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessFlightsState&&const DeepCollectionEquality().equals(other._flights, _flights)&&(identical(other.departureAirport, departureAirport) || other.departureAirport == departureAirport)&&(identical(other.arrivalAirport, arrivalAirport) || other.arrivalAirport == arrivalAirport)&&(identical(other.dateFrom, dateFrom) || other.dateFrom == dateFrom)&&(identical(other.dateTo, dateTo) || other.dateTo == dateTo));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessFlightsState&&const DeepCollectionEquality().equals(other._flights, _flights)&&(identical(other.airport, airport) || other.airport == airport)&&(identical(other.departureAirport, departureAirport) || other.departureAirport == departureAirport)&&(identical(other.arrivalAirport, arrivalAirport) || other.arrivalAirport == arrivalAirport)&&(identical(other.dateFrom, dateFrom) || other.dateFrom == dateFrom)&&(identical(other.dateTo, dateTo) || other.dateTo == dateTo));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_flights),departureAirport,arrivalAirport,dateFrom,dateTo);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_flights),airport,departureAirport,arrivalAirport,dateFrom,dateTo);
 
 @override
 String toString() {
-  return 'FlightsState.success(flights: $flights, departureAirport: $departureAirport, arrivalAirport: $arrivalAirport, dateFrom: $dateFrom, dateTo: $dateTo)';
+  return 'FlightsState.success(flights: $flights, airport: $airport, departureAirport: $departureAirport, arrivalAirport: $arrivalAirport, dateFrom: $dateFrom, dateTo: $dateTo)';
 }
 
 
@@ -338,7 +339,7 @@ abstract mixin class $SuccessFlightsStateCopyWith<$Res> implements $FlightsState
   factory $SuccessFlightsStateCopyWith(SuccessFlightsState value, $Res Function(SuccessFlightsState) _then) = _$SuccessFlightsStateCopyWithImpl;
 @useResult
 $Res call({
- List<FlightEntity> flights, String? departureAirport, String? arrivalAirport, DateTime? dateFrom, DateTime? dateTo
+ List<FlightEntity> flights, String? airport, String? departureAirport, String? arrivalAirport, DateTime? dateFrom, DateTime? dateTo
 });
 
 
@@ -355,10 +356,11 @@ class _$SuccessFlightsStateCopyWithImpl<$Res>
 
 /// Create a copy of FlightsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? flights = null,Object? departureAirport = freezed,Object? arrivalAirport = freezed,Object? dateFrom = freezed,Object? dateTo = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? flights = null,Object? airport = freezed,Object? departureAirport = freezed,Object? arrivalAirport = freezed,Object? dateFrom = freezed,Object? dateTo = freezed,}) {
   return _then(SuccessFlightsState(
 flights: null == flights ? _self._flights : flights // ignore: cast_nullable_to_non_nullable
-as List<FlightEntity>,departureAirport: freezed == departureAirport ? _self.departureAirport : departureAirport // ignore: cast_nullable_to_non_nullable
+as List<FlightEntity>,airport: freezed == airport ? _self.airport : airport // ignore: cast_nullable_to_non_nullable
+as String?,departureAirport: freezed == departureAirport ? _self.departureAirport : departureAirport // ignore: cast_nullable_to_non_nullable
 as String?,arrivalAirport: freezed == arrivalAirport ? _self.arrivalAirport : arrivalAirport // ignore: cast_nullable_to_non_nullable
 as String?,dateFrom: freezed == dateFrom ? _self.dateFrom : dateFrom // ignore: cast_nullable_to_non_nullable
 as DateTime?,dateTo: freezed == dateTo ? _self.dateTo : dateTo // ignore: cast_nullable_to_non_nullable

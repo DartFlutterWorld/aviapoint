@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'package:aviapoint/on_the_way/data/models/booking_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_dto.dart';
+import 'package:aviapoint/on_the_way/data/models/flight_waypoint_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/review_dto.dart';
+import 'package:aviapoint/on_the_way/data/models/flight_question_dto.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_waypoint_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_question_entity.dart';
 
 class OnTheWayMapper {
   static FlightEntity toFlightEntity(FlightDto dto) {
@@ -34,6 +39,25 @@ class OnTheWayMapper {
       pilotAvatarUrl: dto.pilotAvatarUrl,
       pilotAverageRating: dto.pilotAverageRating,
       photos: dto.photos,
+      waypoints: dto.waypoints?.map((wp) => toFlightWaypointEntity(wp)).toList(),
+    );
+  }
+
+  static FlightWaypointEntity toFlightWaypointEntity(FlightWaypointDto dto) {
+    return FlightWaypointEntity(
+      id: dto.id,
+      flightId: dto.flightId,
+      airportCode: dto.airportCode,
+      sequenceOrder: dto.sequenceOrder,
+      arrivalTime: dto.arrivalTime,
+      departureTime: dto.departureTime,
+      comment: dto.comment,
+      createdAt: dto.createdAt,
+      airportName: dto.airportName,
+      airportCity: dto.airportCity,
+      airportRegion: dto.airportRegion,
+      airportType: dto.airportType,
+      airportIdentRu: dto.airportIdentRu,
     );
   }
 
@@ -48,6 +72,22 @@ class OnTheWayMapper {
     print('   - passengerAvatarUrl: ${dto.passengerAvatarUrl}');
     print('   - passengerAverageRating: ${dto.passengerAverageRating}');
     
+    // Парсим waypoints из JSON
+    List<String>? flightWaypoints;
+    if (dto.flightWaypoints != null) {
+      if (dto.flightWaypoints is List) {
+        flightWaypoints = (dto.flightWaypoints as List).map((e) => e.toString()).toList();
+      } else if (dto.flightWaypoints is String) {
+        try {
+          final decoded = jsonDecode(dto.flightWaypoints as String) as List;
+          flightWaypoints = decoded.map((e) => e.toString()).toList();
+        } catch (e) {
+          // Игнорируем ошибки парсинга
+          flightWaypoints = null;
+        }
+      }
+    }
+    
     final entity = BookingEntity(
       id: dto.id,
       flightId: dto.flightId,
@@ -58,7 +98,15 @@ class OnTheWayMapper {
       passengerFirstName: dto.passengerFirstName,
       passengerLastName: dto.passengerLastName,
       passengerAvatarUrl: dto.passengerAvatarUrl,
+      passengerPhone: dto.passengerPhone,
+      passengerEmail: dto.passengerEmail,
+      passengerTelegram: dto.passengerTelegram,
+      passengerMax: dto.passengerMax,
       passengerAverageRating: dto.passengerAverageRating,
+      flightDepartureDate: dto.flightDepartureDate,
+      flightDepartureAirport: dto.flightDepartureAirport,
+      flightArrivalAirport: dto.flightArrivalAirport,
+      flightWaypoints: flightWaypoints,
     );
     
     print('✅ [OnTheWayMapper] BookingEntity создан:');
@@ -91,5 +139,29 @@ class OnTheWayMapper {
 
   static List<ReviewEntity> toReviewEntities(List<ReviewDto> dtos) {
     return dtos.map((dto) => toReviewEntity(dto)).toList();
+  }
+
+  static FlightQuestionEntity toFlightQuestionEntity(FlightQuestionDto dto) {
+    return FlightQuestionEntity(
+      id: dto.id,
+      flightId: dto.flightId,
+      authorId: dto.authorId,
+      questionText: dto.questionText,
+      answerText: dto.answerText,
+      answeredById: dto.answeredById,
+      answeredAt: dto.answeredAt,
+      createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
+      authorFirstName: dto.authorFirstName,
+      authorLastName: dto.authorLastName,
+      authorAvatarUrl: dto.authorAvatarUrl,
+      answeredByFirstName: dto.answeredByFirstName,
+      answeredByLastName: dto.answeredByLastName,
+      answeredByAvatarUrl: dto.answeredByAvatarUrl,
+    );
+  }
+
+  static List<FlightQuestionEntity> toFlightQuestionEntities(List<FlightQuestionDto> dtos) {
+    return dtos.map((dto) => toFlightQuestionEntity(dto)).toList();
   }
 }

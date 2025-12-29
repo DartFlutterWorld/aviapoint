@@ -15,7 +15,7 @@ import 'package:aviapoint/on_the_way/presentation/pages/my_bookings_screen.dart'
 import 'package:aviapoint/on_the_way/presentation/pages/my_flights_screen.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
-import 'package:aviapoint/on_the_way/presentation/widgets/search_bar_widget.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/flight_search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,27 +36,42 @@ class FlightsListScreen extends StatefulWidget {
 
 class _FlightsListScreenState extends State<FlightsListScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  String? _departureAirport;
-  String? _arrivalAirport;
+  String? _airport;
   DateTime? _dateFrom;
   DateTime? _dateTo;
   late AirportService _airportService;
+  bool _wasAuthenticated = false;
 
   @override
   void initState() {
     super.initState();
+    // Инициализируем состояние авторизации
+    _wasAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
-      setState(() {}); // Обновляем UI при смене вкладки для обновления FAB
-      // Загружаем данные при переключении вкладок (только если авторизован)
-      final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
-      if (isAuthenticated) {
-        if (_tabController.index == 1) {
-          // Вкладка "Мои полеты"
-          context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
-        } else if (_tabController.index == 2) {
-          // Вкладка "Мои бронирования"
-          context.read<BookingsBloc>().add(GetBookingsEvent());
+      if (!_tabController.indexIsChanging) {
+        // Срабатывает только когда вкладка уже переключена (не во время анимации)
+        setState(() {}); // Обновляем UI при смене вкладки для обновления FAB
+        // Загружаем данные при переключении вкладок
+        final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
+        if (_tabController.index == 0) {
+          // Вкладка "Поиск" - загружаем все полеты с текущими фильтрами
+          context.read<FlightsBloc>().add(
+            GetFlightsEvent(
+              airport: _airport,
+              dateFrom: _dateFrom,
+              dateTo: _dateTo,
+              isRefresh: false,
+            ),
+          );
+        } else if (isAuthenticated) {
+          if (_tabController.index == 1) {
+            // Вкладка "Мои полеты"
+            context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
+          } else if (_tabController.index == 2) {
+            // Вкладка "Мои бронирования"
+            context.read<BookingsBloc>().add(GetBookingsEvent());
+          }
         }
       }
     });
@@ -119,8 +134,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
     });
     context.read<FlightsBloc>().add(
       GetFlightsEvent(
-        departureAirport: _departureAirport,
-        arrivalAirport: _arrivalAirport,
+        airport: _airport,
         dateFrom: dateFrom,
         dateTo: dateTo,
         isRefresh: false,
@@ -128,15 +142,13 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
     );
   }
 
-  void _onSearch(String? departure, String? arrival) {
+  void _onSearch(String? airport) {
     setState(() {
-      _departureAirport = departure;
-      _arrivalAirport = arrival;
+      _airport = airport;
     });
     context.read<FlightsBloc>().add(
       GetFlightsEvent(
-        departureAirport: departure,
-        arrivalAirport: arrival,
+        airport: airport,
         dateFrom: _dateFrom,
         dateTo: _dateTo,
         isRefresh: false,
@@ -146,8 +158,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
 
   void _clearAllFilters() {
     setState(() {
-      _departureAirport = null;
-      _arrivalAirport = null;
+      _airport = null;
       _dateFrom = null;
       _dateTo = null;
     });
@@ -155,10 +166,71 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
   }
 
   bool get _hasActiveFilters =>
-      _departureAirport != null || _arrivalAirport != null || _dateFrom != null || _dateTo != null;
+      _airport != null || _dateFrom != null || _dateTo != null;
 
   @override
   Widget build(BuildContext context) {
+    // Слушаем изменения авторизации
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        final isNowAuthenticated = appState.isAuthenticated;
+        
+        // Если пользователь вышел (был авторизован, стал неавторизован)
+        if (_wasAuthenticated && !isNowAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              // Очищаем данные при выходе
+              context.read<FlightsBloc>().add(const ClearFlightsEvent());
+              context.read<BookingsBloc>().add(ClearBookingsEvent());
+              // Если на вкладке "Поиск", загружаем все полеты
+              if (_tabController.index == 0) {
+                context.read<FlightsBloc>().add(
+                  GetFlightsEvent(
+                    airport: _airport,
+                    dateFrom: _dateFrom,
+                    dateTo: _dateTo,
+                    isRefresh: false,
+                  ),
+                );
+              }
+            }
+          });
+        }
+        
+        // Если пользователь вошел (был неавторизован, стал авторизован)
+        if (!_wasAuthenticated && isNowAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              // Загружаем данные в зависимости от текущей вкладки
+              if (_tabController.index == 0) {
+                // Вкладка "Поиск" - загружаем все полеты с текущими фильтрами
+                context.read<FlightsBloc>().add(
+                  GetFlightsEvent(
+                    airport: _airport,
+                    dateFrom: _dateFrom,
+                    dateTo: _dateTo,
+                    isRefresh: false,
+                  ),
+                );
+              } else if (_tabController.index == 1) {
+                // Вкладка "Мои полеты"
+                context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
+              } else if (_tabController.index == 2) {
+                // Вкладка "Мои бронирования"
+                context.read<BookingsBloc>().add(GetBookingsEvent());
+              }
+            }
+          });
+        }
+        
+        _wasAuthenticated = isNowAuthenticated;
+        
+        return _buildScaffold(context);
+      },
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -229,8 +301,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
       onRefresh: () async {
         context.read<FlightsBloc>().add(
           GetFlightsEvent(
-            departureAirport: _departureAirport,
-            arrivalAirport: _arrivalAirport,
+            airport: _airport,
             dateFrom: _dateFrom,
             dateTo: _dateTo,
             isRefresh: true,
@@ -243,22 +314,13 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Поисковая строка - Откуда
-            SearchBarWidget(
-              hintText: 'Откуда (код аэропорта)',
-              initialValue: _departureAirport,
+            // Поисковая строка - Поиск по аэропорту (включая промежуточные точки)
+            FlightSearchBarWidget(
+              hintText: 'Поиск по аэропорту (включая промежуточные точки)',
+              initialValue: _airport,
               airportService: _airportService,
-              onSelected: (code) => _onSearch(code, _arrivalAirport),
-              onClear: () => _onSearch(null, _arrivalAirport),
-            ),
-            SizedBox(height: 12.h),
-            // Поисковая строка - Куда
-            SearchBarWidget(
-              hintText: 'Куда (код аэропорта)',
-              initialValue: _arrivalAirport,
-              airportService: _airportService,
-              onSelected: (code) => _onSearch(_departureAirport, code),
-              onClear: () => _onSearch(_departureAirport, null),
+              onSelected: (code) => _onSearch(code),
+              onClear: () => _onSearch(null),
             ),
             SizedBox(height: 12.h),
             // Активные фильтры (чипсы)
@@ -267,19 +329,11 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
                 spacing: 8.w,
                 runSpacing: 8.h,
                 children: [
-                  if (_departureAirport != null)
+                  if (_airport != null)
                     Chip(
-                      label: Text('Откуда: $_departureAirport', style: AppStyles.regular12s),
+                      label: Text('Аэропорт: $_airport', style: AppStyles.regular12s),
                       deleteIcon: Icon(Icons.close, size: 16),
-                      onDeleted: () => _onSearch(null, _arrivalAirport),
-                      backgroundColor: Color(0xFFD9E6F8),
-                      labelStyle: AppStyles.regular12s.copyWith(color: Color(0xFF374151)),
-                    ),
-                  if (_arrivalAirport != null)
-                    Chip(
-                      label: Text('Куда: $_arrivalAirport', style: AppStyles.regular12s),
-                      deleteIcon: Icon(Icons.close, size: 16),
-                      onDeleted: () => _onSearch(_departureAirport, null),
+                      onDeleted: () => _onSearch(null),
                       backgroundColor: Color(0xFFD9E6F8),
                       labelStyle: AppStyles.regular12s.copyWith(color: Color(0xFF374151)),
                     ),
@@ -341,7 +395,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
                   loading: () => _buildLoadingState(),
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
                       _buildErrorState(errorForUser),
-                  success: (flights, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
+                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
                 );
               },
             ),
@@ -399,8 +453,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
             onPressed: () {
               context.read<FlightsBloc>().add(
                 GetFlightsEvent(
-                  departureAirport: _departureAirport,
-                  arrivalAirport: _arrivalAirport,
+                  airport: _airport,
                   dateFrom: _dateFrom,
                   dateTo: _dateTo,
                   isRefresh: false,

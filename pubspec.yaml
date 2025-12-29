@@ -29,6 +29,8 @@ dependencies:
   json_annotation: ^4.9.0
   mask_text_input_formatter: ^2.9.0
   geolocator: ^14.0.1
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
   percent_indicator: ^4.2.4
   provider: ^6.0.2
   share_plus: ^12.0.1
