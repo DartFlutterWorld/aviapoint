@@ -148,6 +148,7 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         emit(
           SuccessFlightsState(
             flights: currentState.flights,
+            airport: event.airport ?? currentState.airport,
             departureAirport: event.departureAirport ?? currentState.departureAirport,
             arrivalAirport: event.arrivalAirport ?? currentState.arrivalAirport,
             dateFrom: event.dateFrom ?? currentState.dateFrom,
@@ -159,8 +160,9 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       emit(const LoadingFlightsState());
     }
 
-    print('🔵 [FlightsBloc] _handleGetFlights: dateFrom = ${event.dateFrom}, dateTo = ${event.dateTo}');
+    print('🔵 [FlightsBloc] _handleGetFlights: airport = ${event.airport}, dateFrom = ${event.dateFrom}, dateTo = ${event.dateTo}');
     final response = await _onTheWayRepository.getFlights(
+      airport: event.airport,
       departureAirport: event.departureAirport,
       arrivalAirport: event.arrivalAirport,
       dateFrom: event.dateFrom,

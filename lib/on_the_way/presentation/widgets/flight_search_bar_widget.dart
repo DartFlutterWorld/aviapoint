@@ -37,6 +37,8 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
   final FocusNode _focusNode = FocusNode();
   String? _searchQuery;
   bool _isSearchingFlights = false;
+  // Сохраняем информацию о найденных аэропортах для подсветки
+  Map<String, String> _foundAirportNames = {}; // код -> название
 
   @override
   void initState() {
@@ -54,6 +56,10 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
             setState(() => _showSuggestions = false);
           }
         });
+      } else if (_controller.text.isNotEmpty && _flightSuggestions.isNotEmpty) {
+        if (mounted) {
+          setState(() => _showSuggestions = true);
+        }
       }
     });
   }
@@ -92,17 +98,80 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
     });
 
     try {
-      // Ищем полеты через этот аэропорт
+      // Сначала ищем аэропорты по коду и названию
+      final airports = await widget.airportService.searchAirports(query);
+      
+      // Получаем коды найденных аэропортов и сохраняем их названия
+      final airportCodes = airports.map((a) => a.code).toSet().toList();
+      _foundAirportNames = {
+        for (var airport in airports)
+          airport.code: airport.name.isNotEmpty ? airport.name : '',
+      };
+      
+      // Если аэропорты не найдены, но запрос похож на код (короткий, заглавные буквы), пробуем искать напрямую
+      if (airportCodes.isEmpty && query.length <= 5 && query.toUpperCase() == query) {
+        airportCodes.add(query.toUpperCase());
+        _foundAirportNames[query.toUpperCase()] = '';
+      }
+      
+      if (airportCodes.isEmpty) {
+        // Если ничего не найдено, скрываем подсказки
+        if (mounted && _searchQuery == query) {
+          setState(() {
+            _flightSuggestions = [];
+            _showSuggestions = false;
+            _isSearchingFlights = false;
+          });
+        }
+        return;
+      }
+
+      // Ищем полёты для каждого найденного кода аэропорта
       final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
       final onTheWayService = OnTheWayService(apiDatasource.dio);
-      final flights = await onTheWayService.getFlights(airport: query);
+      
+      final allFlightsMap = <int, FlightEntity>{};
+      
+      // Ищем полёты для каждого кода аэропорта
+      for (final code in airportCodes) {
+        try {
+          final flights = await onTheWayService.getFlights(airport: code);
+          final flightEntities = flights.map((dto) => OnTheWayMapper.toFlightEntity(dto)).toList();
+          
+          // Добавляем в общий список (используем Map для дедупликации по ID)
+          for (final flight in flightEntities) {
+            allFlightsMap[flight.id] = flight;
+          }
+        } catch (e) {
+          print('⚠️ [FlightSearchBarWidget] Ошибка поиска полётов для аэропорта $code: $e');
+          // Продолжаем поиск для других аэропортов
+        }
+      }
 
       if (mounted && _searchQuery == query) {
+        final allFlights = allFlightsMap.values.toList();
+        
+        // Дополнительная фильтрация на фронтенде: проверяем, что полёт действительно содержит один из найденных аэропортов
+        final airportCodesUpper = airportCodes.map((c) => c.toUpperCase()).toSet();
+        
+        final filteredFlights = allFlights.where((flight) {
+          // Проверяем, есть ли один из найденных аэропортов в маршруте
+          if (flight.waypoints != null && flight.waypoints!.isNotEmpty) {
+            return flight.waypoints!.any((wp) => airportCodesUpper.contains(wp.airportCode.toUpperCase()));
+          }
+          // Если waypoints нет, проверяем departure и arrival
+          return airportCodesUpper.contains(flight.departureAirport.toUpperCase()) || 
+                 airportCodesUpper.contains(flight.arrivalAirport.toUpperCase());
+        }).toList();
+        
+        final suggestions = filteredFlights.take(10).toList();
         setState(() {
-          _flightSuggestions = flights.take(10).map((dto) => OnTheWayMapper.toFlightEntity(dto)).toList(); // Ограничиваем до 10 полетов
-          _showSuggestions = _flightSuggestions.isNotEmpty;
+          _flightSuggestions = suggestions;
+          // Показываем подсказки если есть результаты (фокус проверяется в UI)
+          _showSuggestions = suggestions.isNotEmpty;
           _isSearchingFlights = false;
         });
+        print('🔵 [FlightSearchBarWidget] Запрос: $query, найдено аэропортов: ${airportCodes.length}, получено полётов: ${allFlights.length}, отфильтровано: ${filteredFlights.length}, показываем: ${suggestions.length}, фокус: ${_focusNode.hasFocus}');
       }
     } catch (e, stackTrace) {
       print('❌ [FlightSearchBarWidget] Ошибка поиска: $e');
@@ -142,6 +211,7 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Коды аэропортов в строку
         Wrap(
           spacing: 4.w,
           runSpacing: 4.h,
@@ -152,7 +222,11 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
               final waypoint = entry.value;
               final isFirst = index == 0;
               final isLast = index == waypoints.length - 1;
-              final isHighlighted = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
+              // Подсвечиваем если совпадает код или название
+              final codeMatches = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
+              final nameMatches = waypoint.airportName != null && 
+                                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
+              final isHighlighted = codeMatches || nameMatches;
 
               return [
                 Row(
@@ -190,48 +264,115 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
             }).toList(),
           ],
         ),
-        // Дополнительная информация о точках
+        // Дополнительная информация о точках - в колонку
         if (waypoints.any((wp) => wp.airportName != null || wp.airportCity != null)) ...[
           SizedBox(height: 8.h),
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 4.h,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: waypoints.where((wp) => wp.airportName != null || wp.airportCity != null).map((waypoint) {
-              final isHighlighted = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    waypoint.airportCode,
-                    style: AppStyles.regular12s.copyWith(
-                      color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
-                      fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
-                    ),
-                  ),
-                  if (waypoint.airportName != null || waypoint.airportCity != null) ...[
+              // Подсвечиваем если совпадает код или название
+              final codeMatches = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
+              final nameMatches = waypoint.airportName != null && 
+                                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
+              final isHighlighted = codeMatches || nameMatches;
+              
+              return Padding(
+                padding: EdgeInsets.only(bottom: 4.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      ' • ',
-                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-                    ),
-                    Text(
-                      [
-                        if (waypoint.airportName != null) waypoint.airportName,
-                        if (waypoint.airportCity != null) waypoint.airportCity,
-                        if (waypoint.airportRegion != null) waypoint.airportRegion,
-                      ].where((e) => e != null).join(', '),
+                      waypoint.airportCode,
                       style: AppStyles.regular12s.copyWith(
                         color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+                        fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
+                    if (waypoint.airportName != null || waypoint.airportCity != null) ...[
+                      SizedBox(width: 4.w),
+                      Expanded(
+                        child: _buildHighlightedText(
+                          [
+                            if (waypoint.airportName != null) waypoint.airportName!,
+                            if (waypoint.airportCity != null) waypoint.airportCity!,
+                            if (waypoint.airportRegion != null) waypoint.airportRegion!,
+                          ].join(', '),
+                          searchQuery,
+                          isHighlighted,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               );
             }).toList(),
           ),
         ],
       ],
+    );
+  }
+
+  /// Строит текст с подсветкой совпадающей части
+  Widget _buildHighlightedText(String text, String query, bool isCodeHighlighted) {
+    if (query.isEmpty || text.isEmpty) {
+      return Text(
+        text,
+        style: AppStyles.regular12s.copyWith(
+          color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    final queryUpper = query.toUpperCase();
+    final textUpper = text.toUpperCase();
+    final index = textUpper.indexOf(queryUpper);
+
+    if (index == -1) {
+      // Совпадения нет, возвращаем обычный текст
+      return Text(
+        text,
+        style: AppStyles.regular12s.copyWith(
+          color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    // Есть совпадение, подсвечиваем его
+    return RichText(
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      text: TextSpan(
+        children: [
+          // Текст до совпадения
+          if (index > 0)
+            TextSpan(
+              text: text.substring(0, index),
+              style: AppStyles.regular12s.copyWith(
+                color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+              ),
+            ),
+          // Подсвеченное совпадение
+          TextSpan(
+            text: text.substring(index, index + query.length),
+            style: AppStyles.regular12s.copyWith(
+              color: Color(0xFF0A6EFA),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Текст после совпадения
+          if (index + query.length < text.length)
+            TextSpan(
+              text: text.substring(index + query.length),
+              style: AppStyles.regular12s.copyWith(
+                color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -245,8 +386,9 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
           focusNode: _focusNode,
           onChanged: _search,
           onTap: () {
-            if (_controller.text.isEmpty) {
-              _search('');
+            // При тапе показываем подсказки, если они есть
+            if (_controller.text.isNotEmpty && _flightSuggestions.isNotEmpty) {
+              setState(() => _showSuggestions = true);
             }
           },
           decoration: InputDecoration(
@@ -287,7 +429,7 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
           ),
           style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
         ),
-        if (_showSuggestions && _flightSuggestions.isNotEmpty)
+        if (_showSuggestions && _flightSuggestions.isNotEmpty && _focusNode.hasFocus)
           Container(
             margin: EdgeInsets.only(top: 4.h),
             decoration: BoxDecoration(
@@ -300,14 +442,6 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
             child: ListView(
               shrinkWrap: true,
               children: [
-                // Полеты
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                  child: Text(
-                    'Полеты',
-                    style: AppStyles.bold12s.copyWith(color: Color(0xFF9CA5AF)),
-                  ),
-                ),
                 ..._flightSuggestions.map((flight) {
                   return InkWell(
                     onTap: () => _selectFlight(flight),
