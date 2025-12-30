@@ -44,8 +44,8 @@ class BookingCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
-        padding: EdgeInsets.all(12.w),
+        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+        padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: Color(0xFFD9E6F8)),

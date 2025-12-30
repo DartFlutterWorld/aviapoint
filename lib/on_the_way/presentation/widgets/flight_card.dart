@@ -29,14 +29,15 @@ class FlightCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
-        padding: EdgeInsets.all(12.w),
+        margin: EdgeInsets.only(bottom: 16.h),
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: Color(0xFFD9E6F8)),
           color: Colors.white,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ID полета
@@ -51,9 +52,11 @@ class FlightCard extends StatelessWidget {
             // Маршрут
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
+                Flexible(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Отображаем маршрут из waypoints, если они есть
@@ -66,6 +69,7 @@ class FlightCard extends StatelessWidget {
                           final isLast = index == flight.waypoints!.length - 1;
 
                           return Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               if (index > 0) ...[
                                 SizedBox(height: 8.h),
@@ -126,7 +130,9 @@ class FlightCard extends StatelessWidget {
               children: [
                 Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
                 SizedBox(width: 6.w),
-                Text(dateFormat.format(flight.departureDate), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                Flexible(
+                  child: Text(dateFormat.format(flight.departureDate), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                ),
               ],
             ),
             SizedBox(height: 8.h),
@@ -134,13 +140,18 @@ class FlightCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
-                    SizedBox(width: 6.w),
-                    Text('${priceFormat.format(flight.pricePerSeat)} / место', style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981))),
-                  ],
+                Flexible(
+                  child: Row(
+                    children: [
+                      Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
+                      SizedBox(width: 6.w),
+                      Flexible(
+                        child: Text('${priceFormat.format(flight.pricePerSeat)} / место', style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981))),
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(width: 8.w),
                 Row(
                   children: [
                     Icon(Icons.event_seat, size: 16, color: Color(0xFF9CA5AF)),
@@ -157,7 +168,9 @@ class FlightCard extends StatelessWidget {
                 children: [
                   Icon(Icons.flight, size: 16, color: Color(0xFF9CA5AF)),
                   SizedBox(width: 6.w),
-                  Text(flight.aircraftType!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                  Flexible(
+                    child: Text(flight.aircraftType!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                  ),
                 ],
               ),
             ],
@@ -252,8 +265,9 @@ class FlightCard extends StatelessWidget {
                     ),
                     SizedBox(width: 8.w),
                     // Имя и рейтинг
-                    Expanded(
+                    Flexible(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(flight.pilotFullName ?? 'Пилот', style: AppStyles.bold12s.copyWith(color: Color(0xFF374151))),
@@ -342,6 +356,7 @@ class FlightCard extends StatelessWidget {
         showAirportInfoBottomSheet(context, code);
       },
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(8.w),
@@ -349,15 +364,23 @@ class FlightCard extends StatelessWidget {
             child: Icon(iconData, color: iconColor, size: 16.r),
           ),
           SizedBox(width: 8.w),
-          Expanded(
+          Flexible(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Код и русский код
                 Row(
                   children: [
-                    Text(code, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                    if (identRu != null && identRu != code) ...[SizedBox(width: 4.w), Text('($identRu)', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
+                    Flexible(
+                      child: Text(code, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                    ),
+                    if (identRu != null && identRu != code) ...[
+                      SizedBox(width: 4.w),
+                      Flexible(
+                        child: Text('($identRu)', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                      ),
+                    ],
                     if (isInternational) ...[
                       SizedBox(width: 6.w),
                       Container(
@@ -374,32 +397,51 @@ class FlightCard extends StatelessWidget {
                 // Название аэропорта
                 if (name != null) ...[
                   SizedBox(height: 2.h),
-                  Text(
-                    name,
-                    style: AppStyles.regular12s.copyWith(color: Color(0xFF374151)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Flexible(
+                    child: Text(name, style: AppStyles.regular12s.copyWith(color: Color(0xFF374151))),
                   ),
                 ],
                 // Город, регион, тип
                 if (city != null || region != null || typeDisplay.isNotEmpty) ...[
                   SizedBox(height: 2.h),
-                  Row(
-                    children: [
-                      if (city != null) ...[
-                        Icon(Icons.location_city, size: 10.r, color: Color(0xFF9CA5AF)),
-                        SizedBox(width: 2.w),
-                        Text(city, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                  Flexible(
+                    child: Wrap(
+                      spacing: 6.w,
+                      runSpacing: 4.h,
+                      children: [
+                        if (city != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.location_city, size: 10.r, color: Color(0xFF9CA5AF)),
+                              SizedBox(width: 2.w),
+                              Flexible(
+                                child: Text(city, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                              ),
+                            ],
+                          ),
+                        if (region != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (city != null) ...[Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 6.w)],
+                              Flexible(
+                                child: Text(region, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                              ),
+                            ],
+                          ),
+                        if (typeDisplay.isNotEmpty)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (city != null || region != null) ...[Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 6.w)],
+                              Flexible(
+                                child: Text(typeDisplay, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                              ),
+                            ],
+                          ),
                       ],
-                      if (region != null) ...[
-                        if (city != null) ...[SizedBox(width: 6.w), Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 6.w)],
-                        Text(region, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                      ],
-                      if (typeDisplay.isNotEmpty) ...[
-                        if (city != null || region != null) ...[SizedBox(width: 6.w), Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 6.w)],
-                        Text(typeDisplay, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                      ],
-                    ],
+                    ),
                   ),
                 ],
               ],

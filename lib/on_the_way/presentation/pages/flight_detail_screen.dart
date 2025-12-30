@@ -418,7 +418,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
 
   Widget _buildLoadingState() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
       child: Column(
         children: [
           Shimmer(
@@ -510,13 +510,14 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
     }
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Информация о полете
           Container(
-            padding: EdgeInsets.all(16.w),
+            margin: EdgeInsets.symmetric(horizontal: 8.w),
+            padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
               border: Border.all(color: Color(0xFFD9E6F8)),
@@ -721,7 +722,8 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
           // Информация о пилоте (улучшенный UI)
           if (flight.pilotFullName != null || flight.pilotAverageRating != null) ...[
             Container(
-              padding: EdgeInsets.all(16.w),
+              margin: EdgeInsets.symmetric(horizontal: 8.w),
+              padding: EdgeInsets.all(8.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: Color(0xFFD9E6F8)),
@@ -832,7 +834,10 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Бронирования', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Text('Бронирования', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                        ),
                         SizedBox(height: 12.h),
                         ...flightBookings.map((booking) {
                           return PilotBookingCard(
@@ -869,10 +874,14 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
           ],
           // Кнопки действий
           if (isAuthenticated) ...[
-            if (isOwner) ...[
-              // Кнопки для владельца (только для активных полетов)
-              if (flight.status == 'active')
-                Column(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Column(
+                children: [
+                  if (isOwner) ...[
+                    // Кнопки для владельца (только для активных полетов)
+                    if (flight.status == 'active')
+                      Column(
                   children: [
                     Row(
                       children: [
@@ -929,10 +938,10 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     ),
                   ],
                 ),
-            ] else ...[
-              // Кнопки для пассажира (только для активных полетов)
-              if (flight.status == 'active') ...[
-                Row(
+                  ] else ...[
+                    // Кнопки для пассажира (только для активных полетов)
+                    if (flight.status == 'active') ...[
+                      Row(
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
@@ -990,11 +999,16 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     ),
                   ],
                 ),
-              ],
-            ],
+                    ],
+                  ],
+                ],
+              ),
+            ),
           ] else ...[
-            Container(
-              padding: EdgeInsets.all(16.w),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Container(
+              padding: EdgeInsets.all(8.w),
               decoration: BoxDecoration(
                 color: Color(0xFFFFF4E6),
                 borderRadius: BorderRadius.circular(12.r),
@@ -1029,6 +1043,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                   ),
                 ],
               ),
+            ),
             ),
           ],
           SizedBox(height: 24.h),
@@ -1071,20 +1086,22 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
           orElse: () {},
         );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (isAuthenticated && !hasPilotReview)
-                  TextButton.icon(
-                    onPressed: () => _showCreateReviewDialog(context, flight, isOwner),
-                    icon: Icon(Icons.add, size: 18, color: Color(0xFF0A6EFA)),
-                    label: Text('Оставить отзыв', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
-                  ),
-              ],
-            ),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (isAuthenticated && !hasPilotReview)
+                    TextButton.icon(
+                      onPressed: () => _showCreateReviewDialog(context, flight, isOwner),
+                      icon: Icon(Icons.add, size: 18, color: Color(0xFF0A6EFA)),
+                      label: Text('Оставить отзыв', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                    ),
+                ],
+              ),
             SizedBox(height: 16.h),
             reviewsState.when(
               loading: () => Center(
@@ -1449,6 +1466,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
               },
             ),
           ],
+          ),
         );
       },
     );
@@ -1741,13 +1759,15 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
       return SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Фото самолёта/вертолёта', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Фото самолёта/вертолёта', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
             // Кнопка загрузки фотографий (только для участников полета)
             if (isParticipant)
               TextButton.icon(
@@ -1876,6 +1896,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
           ),
         SizedBox(height: 24.h),
       ],
+      ),
     );
   }
 
@@ -2349,48 +2370,47 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
     String? type,
     bool isInternational = false,
   }) {
-    // Определяем иконку и цвет в зависимости от типа
-    IconData iconData = Icons.local_airport; // Иконка аэропорта (самолётик) по умолчанию
-    Color iconColor = Color(0xFF0A6EFA);
+    // Используем переданную иконку и определяем цвет в зависимости от неё (как на карте)
+    IconData iconData = icon;
+    Color iconColor;
+    
+    if (icon == Icons.flight_takeoff) {
+      // Зелёный для отправления
+      iconColor = Colors.green;
+    } else if (icon == Icons.flight_land) {
+      // Красный для прибытия
+      iconColor = Colors.red;
+    } else if (icon == Icons.flight) {
+      // Синий для промежуточных точек
+      iconColor = Colors.blue;
+    } else {
+      // По умолчанию синий
+      iconColor = Color(0xFF0A6EFA);
+    }
 
-    // Получаем отображаемый тип и определяем иконку
+    // Получаем отображаемый тип
     String typeDisplay = '';
     if (type != null) {
       final typeLower = type.toLowerCase();
       switch (typeLower) {
         case 'heliport':
         case 'вертодром':
-          iconData = Icons.airplanemode_active; // Иконка вертолёта (альтернативная иконка самолёта для визуального отличия)
-          iconColor = Color(0xFF10B981);
           typeDisplay = 'Вертодром';
           break;
         case 'airport':
         case 'аэродром':
-          iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
-          iconColor = Color(0xFF0A6EFA);
           typeDisplay = 'Аэродром';
           break;
         case 'small_airport':
-          iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
-          iconColor = Color(0xFF0A6EFA);
           typeDisplay = 'Малый аэродром';
           break;
         case 'medium_airport':
-          iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
-          iconColor = Color(0xFF0A6EFA);
           typeDisplay = 'Средний аэродром';
           break;
         case 'large_airport':
-          iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
-          iconColor = Color(0xFF0A6EFA);
           typeDisplay = 'Крупный аэродром';
           break;
         default:
-          // Проверяем, содержит ли тип слово "heliport" или "вертодром"
-          if (typeLower.contains('heliport') || typeLower.contains('вертодром')) {
-            iconData = Icons.airplanemode_active; // Иконка вертолёта (альтернативная иконка самолёта для визуального отличия)
-            iconColor = Color(0xFF10B981);
-          }
           typeDisplay = type;
       }
     }
@@ -2443,19 +2463,31 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                 // Город, регион, тип
                 if (city != null || region != null || typeDisplay.isNotEmpty) ...[
                   SizedBox(height: 4.h),
-                  Row(
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 4.h,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       if (city != null) ...[
-                        Icon(Icons.location_city, size: 12.r, color: Color(0xFF9CA5AF)),
-                        SizedBox(width: 4.w),
-                        Text(city, style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.location_city, size: 12.r, color: Color(0xFF9CA5AF)),
+                            SizedBox(width: 4.w),
+                            Text(city, style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                          ],
+                        ),
                       ],
                       if (region != null) ...[
-                        if (city != null) ...[SizedBox(width: 8.w), Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 8.w)],
+                        if (city != null) ...[
+                          Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                        ],
                         Text(region, style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                       if (typeDisplay.isNotEmpty) ...[
-                        if (city != null || region != null) ...[SizedBox(width: 8.w), Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 8.w)],
+                        if (city != null || region != null) ...[
+                          Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                        ],
                         Text(typeDisplay, style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                     ],
@@ -2500,13 +2532,15 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
       },
       child: BlocBuilder<QuestionsBloc, QuestionsState>(
         builder: (context, questionsState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Вопросы пилоту', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Вопросы пилоту', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                   // Кнопка "Задать вопрос" внутри секции, чтобы иметь доступ к QuestionsBloc
                   // Скрываем кнопку, если полёт завершен
                   if (isAuthenticated && !isOwner && flight.status != 'completed')
@@ -2641,6 +2675,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                 },
               ),
             ],
+            ),
           );
         },
       ),

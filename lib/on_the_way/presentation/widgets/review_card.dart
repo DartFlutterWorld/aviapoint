@@ -73,7 +73,7 @@ class ReviewCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.all(8.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -247,8 +247,10 @@ class ReviewCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Показываем ФИО и рейтинг в одной строке (если нет reviewedName, значит это отзыв на странице профиля)
-                            if (!isReply && reviewedName == null && review.rating != null && review.rating! > 0)
+                            // Отступ сверху для отзывов на странице профиля (между датой и первой строкой)
+                            if (!isReply && reviewedName == null) SizedBox(height: 4.h),
+                            // Показываем ФИО и рейтинг (если нет reviewedName, значит это отзыв на странице профиля)
+                            if (!isReply && reviewedName == null && review.rating != null && review.rating! > 0) ...[
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,10 +260,11 @@ class ReviewCard extends StatelessWidget {
                                   Text('оценил вас в', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                                   SizedBox(width: 4.w),
                                   Text(review.rating!.toStringAsFixed(1), style: AppStyles.bold12s.copyWith(color: Color(0xFF0A6EFA))),
-                                  SizedBox(width: 6.w),
-                                  RatingWidget(rating: review.rating!, size: 12),
                                 ],
-                              )
+                              ),
+                              SizedBox(height: 4.h),
+                              RatingWidget(rating: review.rating!, size: 12),
+                            ]
                             else
                               Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                             // Показываем маршрут и дату вылета (если нет reviewedName, значит это отзыв на странице профиля)

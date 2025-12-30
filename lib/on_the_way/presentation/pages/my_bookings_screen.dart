@@ -79,7 +79,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16.h),
             child: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {
                 return state.when(
@@ -156,7 +156,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
       children: List.generate(
         3,
         (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+          margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
           padding: EdgeInsets.all(12.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.r),
