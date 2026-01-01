@@ -158,12 +158,20 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(color: Color(0xFFD9E6F8)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: Offset(0, 4),
+                  spreadRadius: 0,
+                ),
+              ],
             ),
             constraints: BoxConstraints(maxHeight: 300.h),
-            child: ListView.builder(
+            child: ListView.separated(
               shrinkWrap: true,
               itemCount: _suggestions.length,
+              separatorBuilder: (context, index) => Divider(height: 1, thickness: 1, color: Color(0xFFF3F4F6)),
               itemBuilder: (context, index) {
                 final airport = _suggestions[index];
                 // Определяем иконку в зависимости от типа
@@ -175,24 +183,27 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   iconColor = Color(0xFF10B981);
                 }
 
-                return InkWell(
-                  onTap: () => _selectAirport(airport),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB), width: 0.5)),
-                    ),
-                    child: Stack(
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => _selectAirport(airport),
+                    borderRadius: BorderRadius.circular(0),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      child: Stack(
                       children: [
                         Row(
                           children: [
                             // Иконка типа аэропорта
                             Container(
-                              padding: EdgeInsets.all(8.w),
-                              decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8.r)),
+                              padding: EdgeInsets.all(10.w),
+                              decoration: BoxDecoration(
+                                color: iconColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
                               child: Icon(iconData, color: iconColor, size: 20.r),
                             ),
-                            SizedBox(width: 12.w),
+                            SizedBox(width: 16.w),
                             // Основная информация
                             Expanded(
                               child: Column(
@@ -201,55 +212,79 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                   // Код и название
                                   Row(
                                     children: [
-                                      Text(airport.code, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                                      Text(
+                                        airport.code,
+                                        style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                                      ),
                                       if (airport.identRu != null && airport.identRu != airport.code) ...[
-                                        SizedBox(width: 4.w),
-                                        Text('(${airport.identRu})', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                        SizedBox(width: 6.w),
+                                        Text(
+                                          '(${airport.identRu})',
+                                          style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                        ),
                                       ],
                                       if (airport.isInternational == true) ...[
-                                        SizedBox(width: 6.w),
+                                        SizedBox(width: 8.w),
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                          decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(4.r)),
+                                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF0A6EFA).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(4.r),
+                                          ),
                                           child: Text(
                                             'INT',
-                                            style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.w600),
+                                            style: AppStyles.medium10s.copyWith(
+                                              color: Color(0xFF0A6EFA),
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ],
                                   ),
-                                  SizedBox(height: 4.h),
+                                  SizedBox(height: 6.h),
                                   // Название аэропорта
                                   Text(
                                     airport.name,
                                     style: AppStyles.regular13s.copyWith(color: Color(0xFF374151)),
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 4.h),
-                                  // Дополнительная информация
-                                  Row(
-                                    children: [
-                                      if (airport.city != null) ...[
-                                        Icon(Icons.location_city, size: 12.r, color: Color(0xFF9CA5AF)),
-                                        SizedBox(width: 4.w),
-                                        Text(airport.city!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                      ],
-                                      if (airport.region != null) ...[
-                                        if (airport.city != null) ...[SizedBox(width: 8.w), Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 8.w)],
-                                        Text(airport.region!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                      ],
-                                      if (airport.typeDisplay.isNotEmpty) ...[
-                                        if (airport.city != null || airport.region != null) ...[
-                                          SizedBox(width: 8.w),
-                                          Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                          SizedBox(width: 8.w),
+                                  // Тип аэропорта под названием
+                                  if (airport.typeDisplay.isNotEmpty) ...[
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      airport.typeDisplay,
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                    ),
+                                  ],
+                                  // Адрес (город и регион) - без ограничений по overflow
+                                  if (airport.city != null || airport.region != null) ...[
+                                    SizedBox(height: 4.h),
+                                    Wrap(
+                                      spacing: 8.w,
+                                      runSpacing: 4.h,
+                                      crossAxisAlignment: WrapCrossAlignment.center,
+                                      children: [
+                                        if (airport.city != null) ...[
+                                          Icon(Icons.location_city, size: 12.r, color: Color(0xFF9CA5AF)),
+                                          SizedBox(width: 4.w),
+                                          Text(
+                                            airport.city!,
+                                            style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                          ),
                                         ],
-                                        Text(airport.typeDisplay, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                        if (airport.region != null) ...[
+                                          if (airport.city != null)
+                                            Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                          Text(
+                                            airport.region!,
+                                            style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                          ),
+                                        ],
                                       ],
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -260,18 +295,25 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                           top: 0,
                           right: 0,
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                            decoration: BoxDecoration(color: airport.isActive ? Color(0xFF10B981).withOpacity(0.1) : Color(0xFFEF4444).withOpacity(0.1), borderRadius: BorderRadius.circular(4.r)),
+                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: airport.isActive ? Color(0xFF10B981).withOpacity(0.1) : Color(0xFFEF4444).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
                             child: Text(
                               airport.isActive ? 'Действующий' : 'Недействующий',
-                              style: AppStyles.medium10s.copyWith(color: airport.isActive ? Color(0xFF10B981) : Color(0xFFEF4444), fontWeight: FontWeight.w600),
+                              style: AppStyles.medium10s.copyWith(
+                                color: airport.isActive ? Color(0xFF10B981) : Color(0xFFEF4444),
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
+                ),
+              );
               },
             ),
           ),

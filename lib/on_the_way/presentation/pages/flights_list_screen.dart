@@ -42,6 +42,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
   DateTime? _dateTo;
   late AirportService _airportService;
   bool _wasAuthenticated = false;
+  bool _hasLoadedInitialData = false;
 
   @override
   void initState() {
@@ -110,6 +111,36 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
         }
       }
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Перезагружаем данные при возврате на экран (например, при переключении вкладок через AutoTabsScaffold)
+    // Используем флаг, чтобы не загружать данные повторно при первом вызове (это уже делается в initState)
+    if (!_hasLoadedInitialData) {
+      _hasLoadedInitialData = true;
+      return;
+    }
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
+        // Загружаем данные в зависимости от текущей вкладки
+        if (_tabController.index == 0) {
+          // Вкладка "Поиск" - загружаем все полеты с текущими фильтрами
+          context.read<FlightsBloc>().add(GetFlightsEvent(airport: _airport, dateFrom: _dateFrom, dateTo: _dateTo, isRefresh: false));
+        } else if (isAuthenticated) {
+          if (_tabController.index == 1) {
+            // Вкладка "Мои полеты"
+            context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
+          } else if (_tabController.index == 2) {
+            // Вкладка "Мои бронирования"
+            context.read<BookingsBloc>().add(GetBookingsEvent());
+          }
+        }
+      }
+    });
   }
 
   @override

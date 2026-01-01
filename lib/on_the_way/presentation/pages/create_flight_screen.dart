@@ -11,6 +11,7 @@ import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/search_bar_widget.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -86,14 +87,50 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     return _commentControllers[index]!;
   }
 
+  // Проверка валидности формы (все обязательные поля заполнены)
+  bool _isFormValid() {
+    // Проверяем количество точек маршрута
+    if (_waypoints.length < 2) return false;
+
+    // Проверяем, что все точки имеют код аэропорта
+    for (var wp in _waypoints) {
+      if (wp.airportCode.isEmpty) return false;
+    }
+
+    // Проверяем дату отправления (обязательна)
+    if (_waypoints.first.departureTime == null) return false;
+
+    // Проверяем количество мест
+    if (_selectedSeats == null || _selectedSeats! <= 0) return false;
+
+    // Проверяем цену
+    final priceText = _priceController.text.trim();
+    if (priceText.isEmpty) return false;
+    final price = double.tryParse(priceText.replaceAll(' ', '').replaceAll(',', '.'));
+    if (price == null || price <= 0) return false;
+
+    // Проверяем тип самолета (обязателен)
+    if (_aircraftTypeController.text.trim().isEmpty) return false;
+
+    return true;
+  }
+
   void _submitForm() {
     if (!_formKey.currentState!.validate()) {
+      // Если форма не прошла валидацию, показываем ошибки для незаполненных полей
+      _showValidationErrors();
       return;
     }
 
     // Валидация: минимум 2 точки в маршруте
     if (_waypoints.length < 2) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
       return;
     }
 
@@ -101,9 +138,27 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     for (var i = 0; i < _waypoints.length; i++) {
       final wp = _waypoints[i];
       if (wp.airportCode.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Укажите код аэропорта для точки ${i + 1}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Укажите код аэропорта для точки ${i + 1}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 5),
+          ),
+        );
         return;
       }
+    }
+
+    // Валидация: дата отправления обязательна
+    if (_waypoints.first.departureTime == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Укажите дату и время вылета'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
+      return;
     }
 
     // Формируем waypoints из списка точек маршрута
@@ -127,9 +182,8 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
       });
     }
 
-    // Для departureDate используем дату вылета из первой точки, если она указана, иначе текущую дату
-    final firstWaypoint = _waypoints.first;
-    final departureDate = firstWaypoint.departureTime ?? DateTime.now();
+    // Получаем departureDate из первой точки (обязательное поле, уже проверено выше)
+    final departureDate = _waypoints.first.departureTime!;
 
     // Создаем полет
     context.read<FlightsBloc>().add(
@@ -139,12 +193,59 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
         departureDate: departureDate,
         availableSeats: _selectedSeats ?? 1,
         pricePerSeat: double.parse(_priceController.text.replaceAll(' ', '').replaceAll(',', '.')),
-        aircraftType: _aircraftTypeController.text.isNotEmpty ? _aircraftTypeController.text : null,
+        aircraftType: _aircraftTypeController.text.trim(),
         description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
         waypoints: waypoints,
         photos: _photos.isNotEmpty ? _photos : null,
       ),
     );
+  }
+
+  // Показываем ошибки валидации для незаполненных обязательных полей
+  void _showValidationErrors() {
+    final errors = <String>[];
+
+    if (_waypoints.length < 2) {
+      errors.add('Маршрут должен содержать минимум 2 точки');
+    } else {
+      for (var i = 0; i < _waypoints.length; i++) {
+        if (_waypoints[i].airportCode.isEmpty) {
+          errors.add('Укажите код аэропорта для точки ${i + 1}');
+        }
+      }
+    }
+
+    if (_waypoints.isNotEmpty && _waypoints.first.departureTime == null) {
+      errors.add('Укажите дату и время вылета');
+    }
+
+    if (_selectedSeats == null || _selectedSeats! <= 0) {
+      errors.add('Выберите количество мест');
+    }
+
+    final priceText = _priceController.text.trim();
+    if (priceText.isEmpty) {
+      errors.add('Введите размер компенсации');
+    } else {
+      final price = double.tryParse(priceText.replaceAll(' ', '').replaceAll(',', '.'));
+      if (price == null || price <= 0) {
+        errors.add('Введите корректный размер компенсации');
+      }
+    }
+
+    if (_aircraftTypeController.text.trim().isEmpty) {
+      errors.add('Введите тип самолета');
+    }
+
+    if (errors.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errors.join('\n')),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
+    }
   }
 
   Widget _buildPhotosSection() {
@@ -724,57 +825,114 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                     _buildRouteSection(),
                     SizedBox(height: 16.h),
                     // Количество мест
-                    SizedBox(
-                      width: 150.w,
-                      child: DropdownButtonFormField<int>(
-                        value: _selectedSeats,
-                        decoration: InputDecoration(
-                          labelText: 'Доступных мест *',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                    Row(
+                      children: [
+                        Icon(Icons.event_seat, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Свободных мест', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return DropdownButtonFormField2<int>(
+                          value: _selectedSeats,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            hintText: 'Выберите количество мест',
+                            hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                            isDense: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                              borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                          iconStyleData: IconStyleData(
+                            icon: SizedBox.shrink(),
+                            iconEnabledColor: Colors.transparent,
+                            iconDisabledColor: Colors.transparent,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                          dropdownStyleData: DropdownStyleData(
+                            maxHeight: 240.h,
+                            width: constraints.maxWidth,
+                            offset: Offset(0, 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(color: Color(0xFFD9E6F8)),
+                            ),
+                            elevation: 8,
                           ),
-                        ),
-                        items: List.generate(5, (index) => index + 1).map((seats) {
-                          return DropdownMenuItem<int>(
-                            value: seats,
-                            child: Text('$seats', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedSeats = value;
-                            _seatsController.text = value?.toString() ?? '';
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Выберите количество мест';
-                          }
-                          return null;
-                        },
-                      ),
+                          menuItemStyleData: MenuItemStyleData(
+                            height: 48.h,
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          ),
+                          style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                          selectedItemBuilder: (BuildContext context) {
+                            return List.generate(5, (index) => index + 1).map((seats) {
+                              return Center(
+                                child: Text(
+                                  '$seats',
+                                  style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                                ),
+                              );
+                            }).toList();
+                          },
+                          items: List.generate(5, (index) => index + 1).map((seats) {
+                            return DropdownMenuItem<int>(
+                              value: seats,
+                              child: Text(
+                                '$seats',
+                                style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedSeats = value;
+                              _seatsController.text = value?.toString() ?? '';
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Выберите количество мест';
+                            }
+                            return null;
+                          },
+                        );
+                      },
                     ),
                     SizedBox(height: 16.h),
-                    // Цена за место
+                    // Компенсация за место
+                    Row(
+                      children: [
+                        Icon(Icons.currency_ruble, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Компенсация за место', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
                     TextFormField(
                       controller: _priceController,
                       keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
                       decoration: InputDecoration(
-                        labelText: 'Цена за место (₽) *',
-                        hintText: 'Например: 5000',
+                        hintText: 'Введите размер компенсации (₽)',
+                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                         filled: true,
                         fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
@@ -790,24 +948,34 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Введите цену за место';
+                          return 'Введите размер компенсации';
                         }
                         final price = double.tryParse(value.replaceAll(' ', '').replaceAll(',', '.'));
                         if (price == null || price <= 0) {
-                          return 'Цена должна быть больше 0';
+                          return 'Компенсация должна быть больше 0';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 16.h),
-                    // Тип самолета (опционально)
+                    // Тип самолета (обязательное поле)
+                    Row(
+                      children: [
+                        Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Тип самолета', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
                     TextFormField(
                       controller: _aircraftTypeController,
+                      onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
                       decoration: InputDecoration(
-                        labelText: 'Тип самолета',
-                        hintText: 'Например: Cessna 172',
+                        hintText: 'Например, Cessna 172',
+                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                         filled: true,
                         fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
@@ -821,22 +989,35 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Введите тип самолета';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 16.h),
                     // Секция фотографий самолета
                     _buildPhotosSection(),
                     SizedBox(height: 16.h),
                     // Описание (опционально)
-                    Text('Дополнительная информация о полёте', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                    Row(
+                      children: [
+                        Icon(Icons.description, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Дополнительная информация о полёте', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
                     SizedBox(height: 8.h),
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 4,
                       decoration: InputDecoration(
-                        labelText: 'Описание',
-                        hintText: 'Дополнительная информация о полете',
+                        hintText: 'Введите дополнительную информацию о полете',
+                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                         filled: true,
                         fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
@@ -854,7 +1035,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                     SizedBox(height: 16.h),
                     // Кнопка создания
                     ElevatedButton(
-                      onPressed: isLoading ? null : _submitForm,
+                      onPressed: (isLoading || !_isFormValid()) ? null : _submitForm,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0A6EFA),
                         padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -1007,8 +1188,6 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           // Для первой точки - дата и время вылета и комментарий
           if (isFirst) ...[
             SizedBox(height: 16.h),
-            Divider(),
-            SizedBox(height: 12.h),
             Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
@@ -1041,6 +1220,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
               decoration: InputDecoration(
                 labelText: 'Комментарий',
                 hintText: 'Дополнительная информация о точке',
+                hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                 filled: true,
                 fillColor: Color(0xFFF9FAFB),
                 border: OutlineInputBorder(
@@ -1077,8 +1257,6 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           // Для последней точки - дата и время прибытия и комментарий
           if (isLast) ...[
             SizedBox(height: 16.h),
-            Divider(),
-            SizedBox(height: 12.h),
             Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
@@ -1111,6 +1289,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
               decoration: InputDecoration(
                 labelText: 'Комментарий',
                 hintText: 'Дополнительная информация о точке',
+                hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                 filled: true,
                 fillColor: Color(0xFFF9FAFB),
                 border: OutlineInputBorder(
@@ -1147,8 +1326,6 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           // Для промежуточных точек - дата и время прибытия, отправления и комментарий
           if (!isFirst && !isLast) ...[
             SizedBox(height: 16.h),
-            Divider(),
-            SizedBox(height: 12.h),
             // Дата и время прибытия
             Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
@@ -1207,6 +1384,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
               decoration: InputDecoration(
                 labelText: 'Комментарий',
                 hintText: 'Дополнительная информация о точке',
+                hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                 filled: true,
                 fillColor: Color(0xFFF9FAFB),
                 border: OutlineInputBorder(

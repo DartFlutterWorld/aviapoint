@@ -314,14 +314,12 @@ class FlightCard extends StatelessWidget {
     String typeDisplay = '';
     if (type != null && type.isNotEmpty) {
       final typeLower = type.toLowerCase().trim();
-      print('🔍 [FlightCard] Тип аэропорта: "$type" -> "$typeLower"');
 
       // Проверяем сначала на вертодромы
       if (typeLower == 'heliport' || typeLower == 'вертодром' || typeLower.contains('heliport') || typeLower.contains('вертодром')) {
         iconData = Icons.airplanemode_active; // Иконка вертолёта (альтернативная иконка самолёта для визуального отличия)
         iconColor = Color(0xFF10B981);
         typeDisplay = 'Вертодром';
-        print('✅ [FlightCard] Установлена иконка вертолёта для типа: $type');
       } else {
         // Для всех остальных типов - аэродром (самолётик)
         iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
@@ -345,10 +343,7 @@ class FlightCard extends StatelessWidget {
           default:
             typeDisplay = type;
         }
-        print('✅ [FlightCard] Установлена иконка самолёта для типа: $type');
       }
-    } else {
-      print('⚠️ [FlightCard] Тип аэропорта не указан или пустой');
     }
 
     return GestureDetector(

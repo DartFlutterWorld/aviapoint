@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:aviapoint/on_the_way/data/models/airport_review_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/booking_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_waypoint_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/review_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_question_dto.dart';
+import 'package:aviapoint/on_the_way/domain/entities/airport_review_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_waypoint_entity.dart';
@@ -163,5 +165,26 @@ class OnTheWayMapper {
 
   static List<FlightQuestionEntity> toFlightQuestionEntities(List<FlightQuestionDto> dtos) {
     return dtos.map((dto) => toFlightQuestionEntity(dto)).toList();
+  }
+
+  static AirportReviewEntity toAirportReviewEntity(AirportReviewDto dto) {
+    return AirportReviewEntity(
+      id: dto.id,
+      airportCode: dto.airportCode,
+      reviewerId: dto.reviewerId,
+      rating: dto.rating,
+      comment: dto.comment,
+      photoUrls: dto.photoUrls,
+      replyToReviewId: dto.replyToReviewId,
+      createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
+      reviewerFirstName: dto.reviewerFirstName,
+      reviewerLastName: dto.reviewerLastName,
+      reviewerAvatarUrl: dto.reviewerAvatarUrl,
+    );
+  }
+
+  static List<AirportReviewEntity> toAirportReviewEntities(List<AirportReviewDto> dtos) {
+    return dtos.map((dto) => toAirportReviewEntity(dto)).toList();
   }
 }

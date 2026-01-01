@@ -140,14 +140,53 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
     return _commentControllers[index]!;
   }
 
+  // Проверка валидности формы (все обязательные поля заполнены)
+  bool _isFormValid() {
+    // Проверяем количество точек маршрута
+    if (_waypoints.length < 2) return false;
+
+    // Проверяем, что все точки имеют код аэропорта
+    for (var wp in _waypoints) {
+      if (wp.airportCode.isEmpty) return false;
+    }
+
+    // Проверяем дату отправления (обязательна)
+    if (_waypoints.first.departureTime == null) return false;
+
+    // Проверяем количество мест
+    final seatsText = _seatsController.text.trim();
+    if (seatsText.isEmpty) return false;
+    final seats = int.tryParse(seatsText);
+    if (seats == null || seats <= 0) return false;
+
+    // Проверяем цену
+    final priceText = _priceController.text.trim();
+    if (priceText.isEmpty) return false;
+    final price = double.tryParse(priceText.replaceAll(' ', '').replaceAll(',', '.'));
+    if (price == null || price <= 0) return false;
+
+    // Проверяем тип самолета (обязателен)
+    if (_aircraftTypeController.text.trim().isEmpty) return false;
+
+    return true;
+  }
+
   void _submitForm() {
     if (!_formKey.currentState!.validate()) {
+      // Если форма не прошла валидацию, показываем ошибки для незаполненных полей
+      _showValidationErrors();
       return;
     }
 
     // Валидация: минимум 2 точки в маршруте
     if (_waypoints.length < 2) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
       return;
     }
 
@@ -155,9 +194,27 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
     for (var i = 0; i < _waypoints.length; i++) {
       final wp = _waypoints[i];
       if (wp.airportCode.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Укажите код аэропорта для точки ${i + 1}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Укажите код аэропорта для точки ${i + 1}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 5),
+          ),
+        );
         return;
       }
+    }
+
+    // Валидация: дата отправления обязательна
+    if (_waypoints.first.departureTime == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Укажите дату и время вылета'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
+      return;
     }
 
     // Формируем список waypoints для отправки
@@ -178,8 +235,8 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
     // Преобразуем цену в double (будет округлено до int в repository)
     final priceValue = double.parse(_priceController.text.replaceAll(' ', '').replaceAll(',', '.'));
 
-    // Получаем departureDate из первой точки (для обратной совместимости)
-    final departureDate = _waypoints.first.departureTime ?? DateTime.now();
+    // Получаем departureDate из первой точки (обязательное поле, уже проверено выше)
+    final departureDate = _waypoints.first.departureTime!;
 
     // Сохраняем изменения полета
     context.read<FlightsBloc>().add(
@@ -224,6 +281,59 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при сохранении фотографий: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
+    }
+  }
+
+  // Показываем ошибки валидации для незаполненных обязательных полей
+  void _showValidationErrors() {
+    final errors = <String>[];
+
+    if (_waypoints.length < 2) {
+      errors.add('Маршрут должен содержать минимум 2 точки');
+    } else {
+      for (var i = 0; i < _waypoints.length; i++) {
+        if (_waypoints[i].airportCode.isEmpty) {
+          errors.add('Укажите код аэропорта для точки ${i + 1}');
+        }
+      }
+    }
+
+    if (_waypoints.isNotEmpty && _waypoints.first.departureTime == null) {
+      errors.add('Укажите дату и время вылета');
+    }
+
+    final seatsText = _seatsController.text.trim();
+    if (seatsText.isEmpty) {
+      errors.add('Введите количество мест');
+    } else {
+      final seats = int.tryParse(seatsText);
+      if (seats == null || seats <= 0) {
+        errors.add('Количество мест должно быть больше 0');
+      }
+    }
+
+    final priceText = _priceController.text.trim();
+    if (priceText.isEmpty) {
+      errors.add('Введите цену за место');
+    } else {
+      final price = double.tryParse(priceText.replaceAll(' ', '').replaceAll(',', '.'));
+      if (price == null || price <= 0) {
+        errors.add('Введите корректную цену за место');
+      }
+    }
+
+    if (_aircraftTypeController.text.trim().isEmpty) {
+      errors.add('Введите тип самолета');
+    }
+
+    if (errors.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errors.join('\n')),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
     }
   }
 
@@ -340,14 +450,21 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                     // Секция маршрута с несколькими точками
                     _buildRouteSection(),
                     SizedBox(height: 16.h),
-                    // Количество мест
-                    Text('Количество мест', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                    // Свободных мест
+                    Row(
+                      children: [
+                        Icon(Icons.event_seat, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Свободных мест', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
                     SizedBox(height: 8.h),
                     TextFormField(
                       controller: _seatsController,
                       keyboardType: TextInputType.number,
+                      onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
                       decoration: InputDecoration(
-                        hintText: 'Введите количество мест',
+                        hintText: 'Введите количество свободных мест',
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -366,24 +483,31 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Введите количество мест';
+                          return 'Введите количество свободных мест';
                         }
                         final seats = int.tryParse(value);
                         if (seats == null || seats <= 0) {
-                          return 'Количество мест должно быть больше 0';
+                          return 'Количество свободных мест должно быть больше 0';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 16.h),
                     // Цена за место
-                    Text('Цена за место (₽)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                    Row(
+                      children: [
+                        Icon(Icons.attach_money, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Цена за место', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
                     SizedBox(height: 8.h),
                     TextFormField(
                       controller: _priceController,
                       keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
                       decoration: InputDecoration(
-                        hintText: 'Введите цену за место',
+                        hintText: 'Введите цену за место (₽)',
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -412,11 +536,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                       },
                     ),
                     SizedBox(height: 16.h),
-                    // Тип самолета (опционально)
-                    Text('Тип самолета (опционально)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                    // Тип самолета
+                    Row(
+                      children: [
+                        Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: 12.w),
+                        Text('Тип самолета', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
+                    ),
                     SizedBox(height: 8.h),
                     TextFormField(
                       controller: _aircraftTypeController,
+                      onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
                       decoration: InputDecoration(
                         hintText: 'Например, Cessna 172',
                         filled: true,
@@ -435,16 +566,22 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Введите тип самолета';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 16.h),
-                    // Описание (опционально)
-                    Text('Описание (опционально)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                    // Дополнительная информация о полёте
+                    Text('Дополнительная информация о полёте', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                     SizedBox(height: 8.h),
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 4,
                       decoration: InputDecoration(
-                        hintText: 'Дополнительная информация о полете',
+                        hintText: 'Введите дополнительную информацию о полете',
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -468,7 +605,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                     SizedBox(height: 24.h),
                     // Кнопка сохранения
                     ElevatedButton(
-                      onPressed: isLoading ? null : _submitForm,
+                      onPressed: (isLoading || !_isFormValid()) ? null : _submitForm,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0A6EFA),
                         padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -585,11 +722,15 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           Row(
             children: [
               Container(
-                width: 32.w,
-                height: 32.w,
-                decoration: BoxDecoration(color: isFirst || isLast ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF), shape: BoxShape.circle),
-                child: Center(
-                  child: Text('${index + 1}', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                padding: EdgeInsets.all(10.w),
+                decoration: BoxDecoration(
+                  color: (isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue)).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Icon(
+                  isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                  color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue),
+                  size: 20.r,
                 ),
               ),
               SizedBox(width: 12.w),
@@ -626,8 +767,6 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           // Для первой точки - дата и время вылета и комментарий
           if (isFirst) ...[
             SizedBox(height: 16.h),
-            Divider(),
-            SizedBox(height: 12.h),
             Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
@@ -693,8 +832,6 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           // Для последней точки - дата и время прибытия и комментарий
           if (isLast) ...[
             SizedBox(height: 16.h),
-            Divider(),
-            SizedBox(height: 12.h),
             Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
@@ -760,8 +897,6 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           // Для промежуточных точек - дата и время прибытия, отправления и комментарий
           if (!isFirst && !isLast) ...[
             SizedBox(height: 16.h),
-            Divider(),
-            SizedBox(height: 12.h),
             Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(

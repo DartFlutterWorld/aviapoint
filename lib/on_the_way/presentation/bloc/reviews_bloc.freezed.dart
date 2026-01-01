@@ -134,12 +134,12 @@ return reviewDeleted(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<ReviewEntity> reviews)?  success,TResult Function( ReviewEntity review)?  reviewCreated,TResult Function( ReviewEntity review)?  reviewUpdated,TResult Function()?  reviewDeleted,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( List<ReviewEntity> reviews,  Map<int, FlightEntity> flights)?  success,TResult Function( ReviewEntity review)?  reviewCreated,TResult Function( ReviewEntity review)?  reviewUpdated,TResult Function()?  reviewDeleted,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LoadingReviewsState() when loading != null:
 return loading();case ErrorReviewsState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessReviewsState() when success != null:
-return success(_that.reviews);case ReviewCreatedState() when reviewCreated != null:
+return success(_that.reviews,_that.flights);case ReviewCreatedState() when reviewCreated != null:
 return reviewCreated(_that.review);case ReviewUpdatedState() when reviewUpdated != null:
 return reviewUpdated(_that.review);case ReviewDeletedState() when reviewDeleted != null:
 return reviewDeleted();case _:
@@ -160,12 +160,12 @@ return reviewDeleted();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<ReviewEntity> reviews)  success,required TResult Function( ReviewEntity review)  reviewCreated,required TResult Function( ReviewEntity review)  reviewUpdated,required TResult Function()  reviewDeleted,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( List<ReviewEntity> reviews,  Map<int, FlightEntity> flights)  success,required TResult Function( ReviewEntity review)  reviewCreated,required TResult Function( ReviewEntity review)  reviewUpdated,required TResult Function()  reviewDeleted,}) {final _that = this;
 switch (_that) {
 case LoadingReviewsState():
 return loading();case ErrorReviewsState():
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessReviewsState():
-return success(_that.reviews);case ReviewCreatedState():
+return success(_that.reviews,_that.flights);case ReviewCreatedState():
 return reviewCreated(_that.review);case ReviewUpdatedState():
 return reviewUpdated(_that.review);case ReviewDeletedState():
 return reviewDeleted();case _:
@@ -185,12 +185,12 @@ return reviewDeleted();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<ReviewEntity> reviews)?  success,TResult? Function( ReviewEntity review)?  reviewCreated,TResult? Function( ReviewEntity review)?  reviewUpdated,TResult? Function()?  reviewDeleted,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( List<ReviewEntity> reviews,  Map<int, FlightEntity> flights)?  success,TResult? Function( ReviewEntity review)?  reviewCreated,TResult? Function( ReviewEntity review)?  reviewUpdated,TResult? Function()?  reviewDeleted,}) {final _that = this;
 switch (_that) {
 case LoadingReviewsState() when loading != null:
 return loading();case ErrorReviewsState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessReviewsState() when success != null:
-return success(_that.reviews);case ReviewCreatedState() when reviewCreated != null:
+return success(_that.reviews,_that.flights);case ReviewCreatedState() when reviewCreated != null:
 return reviewCreated(_that.review);case ReviewUpdatedState() when reviewUpdated != null:
 return reviewUpdated(_that.review);case ReviewDeletedState() when reviewDeleted != null:
 return reviewDeleted();case _:
@@ -311,7 +311,7 @@ as String?,
 
 
 class SuccessReviewsState extends ReviewsState {
-  const SuccessReviewsState({required final  List<ReviewEntity> reviews}): _reviews = reviews,super._();
+  const SuccessReviewsState({required final  List<ReviewEntity> reviews, required final  Map<int, FlightEntity> flights}): _reviews = reviews,_flights = flights,super._();
   
 
  final  List<ReviewEntity> _reviews;
@@ -319,6 +319,13 @@ class SuccessReviewsState extends ReviewsState {
   if (_reviews is EqualUnmodifiableListView) return _reviews;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_reviews);
+}
+
+ final  Map<int, FlightEntity> _flights;
+ Map<int, FlightEntity> get flights {
+  if (_flights is EqualUnmodifiableMapView) return _flights;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_flights);
 }
 
 
@@ -332,16 +339,16 @@ $SuccessReviewsStateCopyWith<SuccessReviewsState> get copyWith => _$SuccessRevie
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessReviewsState&&const DeepCollectionEquality().equals(other._reviews, _reviews));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessReviewsState&&const DeepCollectionEquality().equals(other._reviews, _reviews)&&const DeepCollectionEquality().equals(other._flights, _flights));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_reviews));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_reviews),const DeepCollectionEquality().hash(_flights));
 
 @override
 String toString() {
-  return 'ReviewsState.success(reviews: $reviews)';
+  return 'ReviewsState.success(reviews: $reviews, flights: $flights)';
 }
 
 
@@ -352,7 +359,7 @@ abstract mixin class $SuccessReviewsStateCopyWith<$Res> implements $ReviewsState
   factory $SuccessReviewsStateCopyWith(SuccessReviewsState value, $Res Function(SuccessReviewsState) _then) = _$SuccessReviewsStateCopyWithImpl;
 @useResult
 $Res call({
- List<ReviewEntity> reviews
+ List<ReviewEntity> reviews, Map<int, FlightEntity> flights
 });
 
 
@@ -369,10 +376,11 @@ class _$SuccessReviewsStateCopyWithImpl<$Res>
 
 /// Create a copy of ReviewsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? reviews = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? reviews = null,Object? flights = null,}) {
   return _then(SuccessReviewsState(
 reviews: null == reviews ? _self._reviews : reviews // ignore: cast_nullable_to_non_nullable
-as List<ReviewEntity>,
+as List<ReviewEntity>,flights: null == flights ? _self._flights : flights // ignore: cast_nullable_to_non_nullable
+as Map<int, FlightEntity>,
   ));
 }
 

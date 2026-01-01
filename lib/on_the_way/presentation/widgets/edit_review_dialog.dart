@@ -65,7 +65,7 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
               ),
             );
           },
-          success: (reviews) {},
+          success: (reviews, flights) {},
           reviewCreated: (review) {},
           reviewUpdated: (review) {
             Navigator.of(context).pop(true);

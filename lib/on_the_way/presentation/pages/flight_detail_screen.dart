@@ -47,6 +47,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
@@ -788,6 +789,16 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                                   Text(flight.pilotAverageRating!.toStringAsFixed(1), style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                                   SizedBox(width: 8.w),
                                   Text('Рейтинг', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                                  SizedBox(width: 8.w),
+                                  GestureDetector(
+                                    child: Text(
+                                      'Отзывы',
+                                      style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                                    ),
+                                    onTap: () {
+                                      openPilotReviews(context: context, pilotId: flight.pilotId);
+                                    },
+                                  ),
                                 ],
                               ),
                             ] else ...[
@@ -882,123 +893,123 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     // Кнопки для владельца (только для активных полетов)
                     if (flight.status == 'active')
                       Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              final result = await AutoRouter.of(context).push(EditFlightRoute(flight: flight));
-                              // Обновляем детали полета после редактирования
-                              if (result == true && context.mounted) {
-                                context.read<FlightDetailBloc>().add(flight.id);
-                              }
-                            },
-                            icon: Icon(Icons.edit, color: Color(0xFF0A6EFA)),
-                            label: Text('Редактировать', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 14.h),
-                              side: BorderSide(color: Color(0xFFD9E6F8)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: () async {
+                                    final result = await AutoRouter.of(context).push(EditFlightRoute(flight: flight));
+                                    // Обновляем детали полета после редактирования
+                                    if (result == true && context.mounted) {
+                                      context.read<FlightDetailBloc>().add(flight.id);
+                                    }
+                                  },
+                                  icon: Icon(Icons.edit, color: Color(0xFF0A6EFA)),
+                                  label: Text('Редактировать', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                                    side: BorderSide(color: Color(0xFFD9E6F8)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: () {
+                                    _showCancelFlightDialog(context, flight.id);
+                                  },
+                                  icon: Icon(Icons.cancel, color: Color(0xFFEF4444)),
+                                  label: Text('Отменить полёт', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                                    side: BorderSide(color: Color(0xFFEF4444)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12.h),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                _showCompleteFlightDialog(context, flight.id);
+                              },
+                              icon: Icon(Icons.check_circle, color: Colors.white),
+                              label: Text('Завершить полёт', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFFFA726),
+                                padding: EdgeInsets.symmetric(vertical: 14.h),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () {
-                              _showCancelFlightDialog(context, flight.id);
-                            },
-                            icon: Icon(Icons.cancel, color: Color(0xFFEF4444)),
-                            label: Text('Отменить полёт', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 14.h),
-                              side: BorderSide(color: Color(0xFFEF4444)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12.h),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _showCompleteFlightDialog(context, flight.id);
-                        },
-                        icon: Icon(Icons.check_circle, color: Colors.white),
-                        label: Text('Завершить полёт', style: AppStyles.bold14s.copyWith(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFFA726),
-                          padding: EdgeInsets.symmetric(vertical: 14.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
                   ] else ...[
                     // Кнопки для пассажира (только для активных полетов)
                     if (flight.status == 'active') ...[
                       Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: flight.availableSeats > 0
-                            ? () {
-                                final flightDetailBloc = context.read<FlightDetailBloc>();
-                                showDialog<Map<String, dynamic>>(
-                                  context: context,
-                                  builder: (dialogContext) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(value: context.read<BookingsBloc>()),
-                                      BlocProvider.value(value: flightDetailBloc),
-                                    ],
-                                    child: BookingDialog(flight: flight),
-                                  ),
-                                ).then((result) {
-                                  if (result != null && result['success'] == true) {
-                                    // Обновляем детали полета после успешного бронирования
-                                    if (context.mounted) {
-                                      flightDetailBloc.add(flight.id);
-                                      // Сбрасываем состояние бронирования для следующего использования
-                                      context.read<BookingsBloc>().add(GetBookingsEvent());
-
-                                      // Если нужно переключиться на вкладку "Мои бронирования"
-                                      if (result['switchToMyBookings'] == true) {
-                                        // Возвращаемся на главный экран и переключаемся на вкладку "Мои бронирования"
-                                        // Закрываем текущий экран деталей полета
-                                        Navigator.of(context).pop();
-
-                                        // Переключаемся на вкладку "Мои бронирования" через navigate
-                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: flight.availableSeats > 0
+                                  ? () {
+                                      final flightDetailBloc = context.read<FlightDetailBloc>();
+                                      showDialog<Map<String, dynamic>>(
+                                        context: context,
+                                        builder: (dialogContext) => MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider.value(value: context.read<BookingsBloc>()),
+                                            BlocProvider.value(value: flightDetailBloc),
+                                          ],
+                                          child: BookingDialog(flight: flight),
+                                        ),
+                                      ).then((result) {
+                                        if (result != null && result['success'] == true) {
+                                          // Обновляем детали полета после успешного бронирования
                                           if (context.mounted) {
-                                            // Используем navigate для перехода на OnTheWayNavigationRoute с нужной вкладкой
-                                            // Это заменит текущий маршрут на новый
-                                            context.router.navigate(OnTheWayNavigationRoute(children: [FlightsListRoute(initialTabIndex: 2)]));
+                                            flightDetailBloc.add(flight.id);
+                                            // Сбрасываем состояние бронирования для следующего использования
+                                            context.read<BookingsBloc>().add(GetBookingsEvent());
+
+                                            // Если нужно переключиться на вкладку "Мои бронирования"
+                                            if (result['switchToMyBookings'] == true) {
+                                              // Возвращаемся на главный экран и переключаемся на вкладку "Мои бронирования"
+                                              // Закрываем текущий экран деталей полета
+                                              Navigator.of(context).pop();
+
+                                              // Переключаемся на вкладку "Мои бронирования" через navigate
+                                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                if (context.mounted) {
+                                                  // Используем navigate для перехода на OnTheWayNavigationRoute с нужной вкладкой
+                                                  // Это заменит текущий маршрут на новый
+                                                  context.router.navigate(OnTheWayNavigationRoute(children: [FlightsListRoute(initialTabIndex: 2)]));
+                                                }
+                                              });
+                                            }
                                           }
-                                        });
-                                      }
+                                        }
+                                      });
                                     }
-                                  }
-                                });
-                              }
-                            : null, // Неактивна, если нет свободных мест
-                        icon: Icon(Icons.bookmark),
-                        label: Text('Забронировать место', style: AppStyles.bold16s),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF0A6EFA),
-                          disabledBackgroundColor: Color(0xFF9CA5AF),
-                          disabledForegroundColor: Colors.white,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                        ),
+                                  : null, // Неактивна, если нет свободных мест
+                              icon: Icon(Icons.bookmark),
+                              label: Text('Забронировать место', style: AppStyles.bold16s),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF0A6EFA),
+                                disabledBackgroundColor: Color(0xFF9CA5AF),
+                                disabledForegroundColor: Colors.white,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
                     ],
                   ],
                 ],
@@ -1008,42 +1019,42 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Container(
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: Color(0xFFFFF4E6),
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: Color(0xFFFFA726)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Color(0xFFFFA726)),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: Text('Для бронирования места или задать вопрос необходимо войти в систему', style: AppStyles.regular14s.copyWith(color: Color(0xFFE65100))),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12.h),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () => _showAuthScreen(context),
-                      icon: Icon(Icons.login, size: 18),
-                      label: Text('Войти', style: AppStyles.bold14s),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0A6EFA),
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFF4E6),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Color(0xFFFFA726)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Color(0xFFFFA726)),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: Text('Для бронирования места или задать вопрос необходимо войти в систему', style: AppStyles.regular14s.copyWith(color: Color(0xFFE65100))),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () => _showAuthScreen(context),
+                        icon: Icon(Icons.login, size: 18),
+                        label: Text('Войти', style: AppStyles.bold14s),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF0A6EFA),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
             ),
           ],
           SizedBox(height: 24.h),
@@ -1078,7 +1089,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         // Проверяем, есть ли уже отзыв о пилоте от текущего пользователя
         bool hasPilotReview = false;
         reviewsState.maybeWhen(
-          success: (reviews) {
+          success: (reviews, flights) {
             if (currentUserId != null) {
               hasPilotReview = reviews.any((review) => review.reviewerId == currentUserId && review.reviewedId == flight.pilotId && review.replyToReviewId == null);
             }
@@ -1102,370 +1113,374 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     ),
                 ],
               ),
-            SizedBox(height: 16.h),
-            reviewsState.when(
-              loading: () => Center(
-                child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-              ),
-              error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.w),
-                  child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
+              SizedBox(height: 16.h),
+              reviewsState.when(
+                loading: () => Center(
+                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
                 ),
-              ),
-              success: (reviews) {
-                if (reviews.isEmpty) {
-                  return Container(
-                    padding: EdgeInsets.all(24.w),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF9FAFB),
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(color: Color(0xFFE5E7EB)),
-                    ),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Icon(Icons.reviews_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                          SizedBox(height: 12.h),
-                          Text('Пока нет отзывов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-                        ],
+                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
+                  ),
+                ),
+                success: (reviews, flights) {
+                  if (reviews.isEmpty) {
+                    return Container(
+                      padding: EdgeInsets.all(24.w),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF9FAFB),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: Color(0xFFE5E7EB)),
                       ),
-                    ),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Icon(Icons.reviews_outlined, size: 48, color: Color(0xFF9CA5AF)),
+                            SizedBox(height: 12.h),
+                            Text('Пока нет отзывов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  // Разделяем отзывы: о пилоте и о пассажирах
+                  final mainReviews = reviews.where((r) => r.replyToReviewId == null).toList();
+                  final replies = reviews.where((r) => r.replyToReviewId != null).toList();
+
+                  // Отзывы о пилоте (где reviewedId == pilotId)
+                  final pilotReviews = mainReviews.where((r) => r.reviewedId == flight.pilotId).toList();
+                  // Отзывы о пассажирах (где reviewedId != pilotId)
+                  final passengerReviews = mainReviews.where((r) => r.reviewedId != flight.pilotId).toList();
+
+                  // Вычисляем средний рейтинг пилота из таблицы reviews (один раз для всех отзывов)
+                  final pilotRatingReviews = reviews
+                      .where(
+                        (r) => r.reviewedId == flight.pilotId && r.rating != null && r.replyToReviewId == null, // Только основные отзывы, не ответы
+                      )
+                      .toList();
+
+                  double? pilotAverageRating;
+                  if (pilotRatingReviews.isNotEmpty) {
+                    final ratingsSum = pilotRatingReviews.fold<int>(0, (sum, r) => sum + (r.rating ?? 0));
+                    pilotAverageRating = ratingsSum / pilotRatingReviews.length;
+                    print('🔵 [FlightDetail] Вычислен средний рейтинг пилота для всех отзывов:');
+                    print('   - Всего отзывов о пилоте: ${pilotRatingReviews.length}');
+                    print('   - Сумма рейтингов: $ratingsSum');
+                    print('   - Средний рейтинг: $pilotAverageRating');
+                  } else {
+                    pilotAverageRating = null;
+                    print('⚠️ [FlightDetail] Нет отзывов о пилоте для вычисления рейтинга');
+                  }
+
+                  final profileState = context.read<ProfileBloc>().state;
+                  final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
+
+                  // Получаем данные о бронированиях для поиска информации о пассажирах
+                  final bookingsState = context.read<BookingsBloc>().state;
+                  final bookings = bookingsState.maybeWhen(
+                    success: (bookings) {
+                      final flightBookings = bookings.where((b) => b.flightId == flight.id).toList();
+                      print('🔵 [FlightDetail] Состояние бронирований: success');
+                      print('   - Всего бронирований в состоянии: ${bookings.length}');
+                      print('   - Бронирований для этого полета: ${flightBookings.length}');
+                      if (flightBookings.isNotEmpty) {
+                        print('   - ID бронирований для этого полета: ${flightBookings.map((b) => b.id).toList()}');
+                      }
+                      return flightBookings;
+                    },
+                    loading: () {
+                      print('⚠️ [FlightDetail] Состояние бронирований: loading');
+                      return <BookingEntity>[];
+                    },
+                    error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
+                      print('❌ [FlightDetail] Состояние бронирований: error');
+                      print('   - errorForUser: $errorForUser');
+                      print('   - errorFromApi: $errorFromApi');
+                      return <BookingEntity>[];
+                    },
+                    orElse: () {
+                      print('⚠️ [FlightDetail] Состояние бронирований: unknown');
+                      return <BookingEntity>[];
+                    },
                   );
-                }
 
-                // Разделяем отзывы: о пилоте и о пассажирах
-                final mainReviews = reviews.where((r) => r.replyToReviewId == null).toList();
-                final replies = reviews.where((r) => r.replyToReviewId != null).toList();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Секция: Отзывы о пилоте
+                      if (pilotReviews.isNotEmpty) ...[
+                        Text('Отзывы о пилоте', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                        SizedBox(height: 12.h),
+                        ...pilotReviews.map((review) {
+                          final reviewReplies = replies.where((r) => r.replyToReviewId == review.id).toList();
+                          final canDelete = currentUserId != null && review.reviewerId == currentUserId;
+                          final canEdit = currentUserId != null && review.reviewerId == currentUserId;
 
-                // Отзывы о пилоте (где reviewedId == pilotId)
-                final pilotReviews = mainReviews.where((r) => r.reviewedId == flight.pilotId).toList();
-                // Отзывы о пассажирах (где reviewedId != pilotId)
-                final passengerReviews = mainReviews.where((r) => r.reviewedId != flight.pilotId).toList();
+                          // Проверяем, может ли текущий пользователь ответить на отзыв о пилоте
+                          // Пассажир может ответить только один раз
+                          bool canReply = false;
+                          if (currentUserId != null && review.reviewerId != currentUserId) {
+                            // Проверяем, что пользователь имеет право отвечать (он пассажир этого полета)
+                            final hasBooking = bookings.any((b) => b.passengerId == currentUserId && b.flightId == flight.id);
 
-                // Вычисляем средний рейтинг пилота из таблицы reviews (один раз для всех отзывов)
-                final pilotRatingReviews = reviews
-                    .where(
-                      (r) => r.reviewedId == flight.pilotId && r.rating != null && r.replyToReviewId == null, // Только основные отзывы, не ответы
-                    )
-                    .toList();
+                            if (hasBooking) {
+                              // Проверяем, что еще нет ответа от текущего пользователя на этот отзыв
+                              // Используем reviewReplies, который уже отфильтрован для этого отзыва
+                              final existingReplies = reviewReplies.where((r) => r.reviewerId == currentUserId).toList();
 
-                double? pilotAverageRating;
-                if (pilotRatingReviews.isNotEmpty) {
-                  final ratingsSum = pilotRatingReviews.fold<int>(0, (sum, r) => sum + (r.rating ?? 0));
-                  pilotAverageRating = ratingsSum / pilotRatingReviews.length;
-                  print('🔵 [FlightDetail] Вычислен средний рейтинг пилота для всех отзывов:');
-                  print('   - Всего отзывов о пилоте: ${pilotRatingReviews.length}');
-                  print('   - Сумма рейтингов: $ratingsSum');
-                  print('   - Средний рейтинг: $pilotAverageRating');
-                } else {
-                  pilotAverageRating = null;
-                  print('⚠️ [FlightDetail] Нет отзывов о пилоте для вычисления рейтинга');
-                }
+                              // Если нет ответов от текущего пользователя, можно ответить
+                              canReply = existingReplies.isEmpty;
 
-                final profileState = context.read<ProfileBloc>().state;
-                final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
+                              // Отладочная информация
+                              print('🔵 [FlightDetail] Проверка ответа на отзыв ${review.id}:');
+                              print('   - currentUserId: $currentUserId');
+                              print('   - review.reviewerId: ${review.reviewerId}');
+                              print('   - hasBooking: $hasBooking');
+                              print('   - Всего отзывов в списке: ${reviews.length}');
+                              print('   - Всего ответов на этот отзыв: ${reviewReplies.length}');
+                              print('   - Ответов от currentUserId: ${existingReplies.length}');
+                              if (existingReplies.isNotEmpty) {
+                                print('   - existingReplies IDs: ${existingReplies.map((r) => r.id).toList()}');
+                                print('   - existingReplies reviewerIds: ${existingReplies.map((r) => r.reviewerId).toList()}');
+                              }
+                              print('   - canReply: $canReply');
+                            }
+                          }
 
-                // Получаем данные о бронированиях для поиска информации о пассажирах
-                final bookingsState = context.read<BookingsBloc>().state;
-                final bookings = bookingsState.maybeWhen(
-                  success: (bookings) {
-                    final flightBookings = bookings.where((b) => b.flightId == flight.id).toList();
-                    print('🔵 [FlightDetail] Состояние бронирований: success');
-                    print('   - Всего бронирований в состоянии: ${bookings.length}');
-                    print('   - Бронирований для этого полета: ${flightBookings.length}');
-                    if (flightBookings.isNotEmpty) {
-                      print('   - ID бронирований для этого полета: ${flightBookings.map((b) => b.id).toList()}');
-                    }
-                    return flightBookings;
-                  },
-                  loading: () {
-                    print('⚠️ [FlightDetail] Состояние бронирований: loading');
-                    return <BookingEntity>[];
-                  },
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-                    print('❌ [FlightDetail] Состояние бронирований: error');
-                    print('   - errorForUser: $errorForUser');
-                    print('   - errorFromApi: $errorFromApi');
-                    return <BookingEntity>[];
-                  },
-                  orElse: () {
-                    print('⚠️ [FlightDetail] Состояние бронирований: unknown');
-                    return <BookingEntity>[];
-                  },
-                );
+                          // Отладочная информация для отзывов о пилоте
+                          print('🔵 [FlightDetail] Отзыв о пилоте ${review.id}:');
+                          print('   - pilotFullName: ${flight.pilotFullName}');
+                          print('   - pilotAvatarUrl: ${flight.pilotAvatarUrl}');
+                          print('   - pilotAverageRating (вычисленный): $pilotAverageRating');
+                          print('   - review.rating: ${review.rating}');
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Секция: Отзывы о пилоте
-                    if (pilotReviews.isNotEmpty) ...[
-                      Text('Отзывы о пилоте', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                      SizedBox(height: 12.h),
-                      ...pilotReviews.map((review) {
-                        final reviewReplies = replies.where((r) => r.replyToReviewId == review.id).toList();
-                        final canDelete = currentUserId != null && review.reviewerId == currentUserId;
-                        final canEdit = currentUserId != null && review.reviewerId == currentUserId;
-
-                        // Проверяем, может ли текущий пользователь ответить на отзыв о пилоте
-                        // Пассажир может ответить только один раз
-                        bool canReply = false;
-                        if (currentUserId != null && review.reviewerId != currentUserId) {
-                          // Проверяем, что пользователь имеет право отвечать (он пассажир этого полета)
-                          final hasBooking = bookings.any((b) => b.passengerId == currentUserId && b.flightId == flight.id);
-
-                          if (hasBooking) {
-                            // Проверяем, что еще нет ответа от текущего пользователя на этот отзыв
+                          return Column(
+                            key: ValueKey('pilot_review_${review.id}_${reviewReplies.length}_$canReply'),
+                            children: [
+                              ReviewCard(
+                                key: ValueKey('review_card_${review.id}_$canReply'),
+                                review: review,
+                                canDelete: canDelete,
+                                canEdit: canEdit,
+                                onDelete: canDelete ? () => _showDeleteReviewDialog(context, review.id) : null,
+                                onEdit: canEdit ? () => _showEditReviewDialog(context, review) : null,
+                                onReply: canReply ? () => _showReplyToReviewDialog(context, flight, review, isOwner) : null,
+                                onTap: () {}, // Отзывы на странице детальной информации о полёте не требуют навигации
+                                reviewedName: flight.pilotFullName,
+                                reviewedAvatarUrl: flight.pilotAvatarUrl,
+                                reviewedRating: pilotAverageRating, // Используем вычисленный рейтинг
+                              ),
+                              // Отображаем ответы на отзыв (если они есть)
+                              ...reviewReplies.map((reply) {
+                                final canDeleteReply = currentUserId != null && reply.reviewerId == currentUserId;
+                                final canEditReply = currentUserId != null && reply.reviewerId == currentUserId;
+                                return Padding(
+                                  padding: EdgeInsets.only(left: 40.w, top: 12.h),
+                                  child: ReviewCard(
+                                    review: reply,
+                                    isReply: true,
+                                    canDelete: canDeleteReply,
+                                    canEdit: canEditReply,
+                                    onDelete: canDeleteReply ? () => _showDeleteReviewDialog(context, reply.id) : null,
+                                    onEdit: canEditReply ? () => _showEditReviewDialog(context, reply) : null,
+                                    onTap: () {}, // Ответы не требуют навигации
+                                  ),
+                                );
+                              }),
+                            ],
+                          );
+                        }).toList(),
+                        SizedBox(height: 24.h),
+                      ],
+                      // Секция: Отзывы о пассажирах
+                      if (passengerReviews.isNotEmpty) ...[
+                        Text('Отзывы о пассажирах', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                        SizedBox(height: 12.h),
+                        ...passengerReviews.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final review = entry.value;
+                          final reviewReplies = replies.where((r) => r.replyToReviewId == review.id).toList();
+                          final canDelete = currentUserId != null && review.reviewerId == currentUserId;
+                          final canEdit = currentUserId != null && review.reviewerId == currentUserId;
+                          // Можно ответить только на отзыв, который оставлен на текущего пользователя
+                          // Проверяем, что еще нет ответа от текущего пользователя на этот отзыв
+                          bool canReply = false;
+                          if (currentUserId != null && review.reviewedId == currentUserId) {
                             // Используем reviewReplies, который уже отфильтрован для этого отзыва
                             final existingReplies = reviewReplies.where((r) => r.reviewerId == currentUserId).toList();
-
                             // Если нет ответов от текущего пользователя, можно ответить
                             canReply = existingReplies.isEmpty;
 
-                            // Отладочная информация
-                            print('🔵 [FlightDetail] Проверка ответа на отзыв ${review.id}:');
+                            print('🔵 [FlightDetail] Проверка ответа на отзыв о пассажире ${review.id}:');
                             print('   - currentUserId: $currentUserId');
-                            print('   - review.reviewerId: ${review.reviewerId}');
-                            print('   - hasBooking: $hasBooking');
-                            print('   - Всего отзывов в списке: ${reviews.length}');
+                            print('   - review.reviewedId: ${review.reviewedId}');
                             print('   - Всего ответов на этот отзыв: ${reviewReplies.length}');
                             print('   - Ответов от currentUserId: ${existingReplies.length}');
-                            if (existingReplies.isNotEmpty) {
-                              print('   - existingReplies IDs: ${existingReplies.map((r) => r.id).toList()}');
-                              print('   - existingReplies reviewerIds: ${existingReplies.map((r) => r.reviewerId).toList()}');
-                            }
                             print('   - canReply: $canReply');
                           }
-                        }
 
-                        // Отладочная информация для отзывов о пилоте
-                        print('🔵 [FlightDetail] Отзыв о пилоте ${review.id}:');
-                        print('   - pilotFullName: ${flight.pilotFullName}');
-                        print('   - pilotAvatarUrl: ${flight.pilotAvatarUrl}');
-                        print('   - pilotAverageRating (вычисленный): $pilotAverageRating');
-                        print('   - review.rating: ${review.rating}');
+                          // Получаем информацию о пассажире из таблицы профилей
+                          // reviewedId - это ID пассажира (пользователя), о котором отзыв
+                          final passengerProfile = _getPassengerProfile(review.reviewedId);
 
-                        return Column(
-                          key: ValueKey('pilot_review_${review.id}_${reviewReplies.length}_$canReply'),
-                          children: [
-                            ReviewCard(
-                              key: ValueKey('review_card_${review.id}_$canReply'),
-                              review: review,
-                              canDelete: canDelete,
-                              canEdit: canEdit,
-                              onDelete: canDelete ? () => _showDeleteReviewDialog(context, review.id) : null,
-                              onEdit: canEdit ? () => _showEditReviewDialog(context, review) : null,
-                              onReply: canReply ? () => _showReplyToReviewDialog(context, flight, review, isOwner) : null,
-                              reviewedName: flight.pilotFullName,
-                              reviewedAvatarUrl: flight.pilotAvatarUrl,
-                              reviewedRating: pilotAverageRating, // Используем вычисленный рейтинг
-                            ),
-                            // Отображаем ответы на отзыв (если они есть)
-                            ...reviewReplies.map((reply) {
-                              final canDeleteReply = currentUserId != null && reply.reviewerId == currentUserId;
-                              final canEditReply = currentUserId != null && reply.reviewerId == currentUserId;
-                              return Padding(
-                                padding: EdgeInsets.only(left: 40.w, top: 12.h),
-                                child: ReviewCard(
-                                  review: reply,
-                                  isReply: true,
-                                  canDelete: canDeleteReply,
-                                  canEdit: canEditReply,
-                                  onDelete: canDeleteReply ? () => _showDeleteReviewDialog(context, reply.id) : null,
-                                  onEdit: canEditReply ? () => _showEditReviewDialog(context, reply) : null,
-                                ),
-                              );
-                            }),
-                          ],
-                        );
-                      }).toList(),
-                      SizedBox(height: 24.h),
-                    ],
-                    // Секция: Отзывы о пассажирах
-                    if (passengerReviews.isNotEmpty) ...[
-                      Text('Отзывы о пассажирах', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                      SizedBox(height: 12.h),
-                      ...passengerReviews.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final review = entry.value;
-                        final reviewReplies = replies.where((r) => r.replyToReviewId == review.id).toList();
-                        final canDelete = currentUserId != null && review.reviewerId == currentUserId;
-                        final canEdit = currentUserId != null && review.reviewerId == currentUserId;
-                        // Можно ответить только на отзыв, который оставлен на текущего пользователя
-                        // Проверяем, что еще нет ответа от текущего пользователя на этот отзыв
-                        bool canReply = false;
-                        if (currentUserId != null && review.reviewedId == currentUserId) {
-                          // Используем reviewReplies, который уже отфильтрован для этого отзыва
-                          final existingReplies = reviewReplies.where((r) => r.reviewerId == currentUserId).toList();
-                          // Если нет ответов от текущего пользователя, можно ответить
-                          canReply = existingReplies.isEmpty;
-
-                          print('🔵 [FlightDetail] Проверка ответа на отзыв о пассажире ${review.id}:');
-                          print('   - currentUserId: $currentUserId');
-                          print('   - review.reviewedId: ${review.reviewedId}');
-                          print('   - Всего ответов на этот отзыв: ${reviewReplies.length}');
-                          print('   - Ответов от currentUserId: ${existingReplies.length}');
-                          print('   - canReply: $canReply');
-                        }
-
-                        // Получаем информацию о пассажире из таблицы профилей
-                        // reviewedId - это ID пассажира (пользователя), о котором отзыв
-                        final passengerProfile = _getPassengerProfile(review.reviewedId);
-
-                        // Если профиль не найден и профили еще не загружаются, пытаемся загрузить (без await, так как это синхронный контекст)
-                        if (passengerProfile == null && !_isLoadingProfiles && _profilesCache.isEmpty) {
-                          print('⚠️ [FlightDetail] Профиль не найден, пытаемся загрузить профили...');
-                          // Используем WidgetsBinding для безопасного вызова после build
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (mounted) {
-                              _loadProfiles(); // Загружаем асинхронно, но не ждем
-                            }
-                          });
-                        }
-
-                        print('🔵 [FlightDetail] Получение данных пассажира для отзыва ${review.id}:');
-                        print('   - review.reviewedId (ID пассажира): ${review.reviewedId}');
-                        print('   - passengerProfile: ${passengerProfile != null ? "найден" : "не найден"}');
-                        if (passengerProfile != null) {
-                          print('   - passengerProfile.firstName: ${passengerProfile.firstName}');
-                          print('   - passengerProfile.lastName: ${passengerProfile.lastName}');
-                          print('   - passengerProfile.avatarUrl: ${passengerProfile.avatarUrl}');
-                          print('   - passengerProfile.averageRating: ${passengerProfile.averageRating}');
-                        } else {
-                          print('   ⚠️ [FlightDetail] Профиль пассажира не найден в кеше!');
-                          print('   - Размер кеша профилей: ${_profilesCache.length}');
-                          print('   - ID в кеше: ${_profilesCache.keys.toList()}');
-                          print('   - _isLoadingProfiles: $_isLoadingProfiles');
-                        }
-
-                        // Получаем информацию о пассажире из профиля
-                        String? passengerName;
-                        String? passengerAvatarUrl;
-                        double? passengerRating;
-
-                        if (passengerProfile != null) {
-                          // Формируем полное имя из firstName и lastName
-                          if (passengerProfile.firstName != null && passengerProfile.lastName != null) {
-                            passengerName = '${passengerProfile.firstName} ${passengerProfile.lastName}'.trim();
-                          } else if (passengerProfile.firstName != null) {
-                            passengerName = passengerProfile.firstName;
-                          } else if (passengerProfile.lastName != null) {
-                            passengerName = passengerProfile.lastName;
+                          // Если профиль не найден и профили еще не загружаются, пытаемся загрузить (без await, так как это синхронный контекст)
+                          if (passengerProfile == null && !_isLoadingProfiles && _profilesCache.isEmpty) {
+                            print('⚠️ [FlightDetail] Профиль не найден, пытаемся загрузить профили...');
+                            // Используем WidgetsBinding для безопасного вызова после build
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (mounted) {
+                                _loadProfiles(); // Загружаем асинхронно, но не ждем
+                              }
+                            });
                           }
-                          passengerAvatarUrl = passengerProfile.avatarUrl;
-                        }
 
-                        // Вычисляем средний рейтинг пассажира из таблицы reviews
-                        // Ищем все отзывы, где reviewedId == review.reviewedId (ID пассажира)
-                        final passengerReviews = reviews
-                            .where(
-                              (r) => r.reviewedId == review.reviewedId && r.rating != null && r.replyToReviewId == null, // Только основные отзывы, не ответы
-                            )
-                            .toList();
+                          print('🔵 [FlightDetail] Получение данных пассажира для отзыва ${review.id}:');
+                          print('   - review.reviewedId (ID пассажира): ${review.reviewedId}');
+                          print('   - passengerProfile: ${passengerProfile != null ? "найден" : "не найден"}');
+                          if (passengerProfile != null) {
+                            print('   - passengerProfile.firstName: ${passengerProfile.firstName}');
+                            print('   - passengerProfile.lastName: ${passengerProfile.lastName}');
+                            print('   - passengerProfile.avatarUrl: ${passengerProfile.avatarUrl}');
+                            print('   - passengerProfile.averageRating: ${passengerProfile.averageRating}');
+                          } else {
+                            print('   ⚠️ [FlightDetail] Профиль пассажира не найден в кеше!');
+                            print('   - Размер кеша профилей: ${_profilesCache.length}');
+                            print('   - ID в кеше: ${_profilesCache.keys.toList()}');
+                            print('   - _isLoadingProfiles: $_isLoadingProfiles');
+                          }
 
-                        if (passengerReviews.isNotEmpty) {
-                          final ratingsSum = passengerReviews.fold<int>(0, (sum, r) => sum + (r.rating ?? 0));
-                          passengerRating = ratingsSum / passengerReviews.length;
-                          print('🔵 [FlightDetail] Вычислен средний рейтинг пассажира:');
-                          print('   - Всего отзывов о пассажире: ${passengerReviews.length}');
-                          print('   - Сумма рейтингов: $ratingsSum');
-                          print('   - Средний рейтинг: $passengerRating');
-                        } else {
-                          passengerRating = null;
-                          print('⚠️ [FlightDetail] Нет отзывов о пассажире для вычисления рейтинга');
-                        }
+                          // Получаем информацию о пассажире из профиля
+                          String? passengerName;
+                          String? passengerAvatarUrl;
+                          double? passengerRating;
 
-                        // Если информация о пассажире не найдена в профиле, используем fallback
-                        // Важно: всегда должно быть имя, чтобы блок "Отзыв о:" отображался
-                        if (passengerName == null || passengerName.isEmpty) {
-                          passengerName = 'Пассажир #${review.reviewedId}';
-                        }
+                          if (passengerProfile != null) {
+                            // Формируем полное имя из firstName и lastName
+                            if (passengerProfile.firstName != null && passengerProfile.lastName != null) {
+                              passengerName = '${passengerProfile.firstName} ${passengerProfile.lastName}'.trim();
+                            } else if (passengerProfile.firstName != null) {
+                              passengerName = passengerProfile.firstName;
+                            } else if (passengerProfile.lastName != null) {
+                              passengerName = passengerProfile.lastName;
+                            }
+                            passengerAvatarUrl = passengerProfile.avatarUrl;
+                          }
 
-                        // Убеждаемся, что имя не пустое (для отображения блока "Отзыв о:")
-                        if (passengerName.isEmpty) {
-                          passengerName = 'Пассажир #${review.reviewedId}';
-                        }
+                          // Вычисляем средний рейтинг пассажира из таблицы reviews
+                          // Ищем все отзывы, где reviewedId == review.reviewedId (ID пассажира)
+                          final passengerReviews = reviews
+                              .where(
+                                (r) => r.reviewedId == review.reviewedId && r.rating != null && r.replyToReviewId == null, // Только основные отзывы, не ответы
+                              )
+                              .toList();
 
-                        // Отладочная информация
-                        print('🔵 [FlightDetail] Отзыв о пассажире ${review.id}:');
-                        print('   - reviewedId: ${review.reviewedId}');
-                        print('   - passengerName: $passengerName');
-                        print('   - passengerAvatarUrl: $passengerAvatarUrl');
-                        print('   - passengerRating: $passengerRating');
-                        print('   - review.rating (рейтинг отзыва): ${review.rating}');
-                        print('   - passengerProfile: ${passengerProfile != null ? "найден (ID: ${passengerProfile.id})" : "не найден"}');
-                        print('   - Передаем в ReviewCard:');
-                        print('     reviewedName: $passengerName');
-                        print('     reviewedRating: $passengerRating');
+                          if (passengerReviews.isNotEmpty) {
+                            final ratingsSum = passengerReviews.fold<int>(0, (sum, r) => sum + (r.rating ?? 0));
+                            passengerRating = ratingsSum / passengerReviews.length;
+                            print('🔵 [FlightDetail] Вычислен средний рейтинг пассажира:');
+                            print('   - Всего отзывов о пассажире: ${passengerReviews.length}');
+                            print('   - Сумма рейтингов: $ratingsSum');
+                            print('   - Средний рейтинг: $passengerRating');
+                          } else {
+                            passengerRating = null;
+                            print('⚠️ [FlightDetail] Нет отзывов о пассажире для вычисления рейтинга');
+                          }
 
-                        return Column(
-                          key: ValueKey('passenger_review_${review.id}_${reviewReplies.length}_$canReply'),
-                          children: [
-                            // Разделитель между отзывами (кроме первого)
-                            if (index > 0) ...[SizedBox(height: 26.h), Divider(height: 1, thickness: 1, color: Color(0xFFE5E7EB), indent: 0, endIndent: 0), SizedBox(height: 26.h)],
-                            ReviewCard(
-                              key: ValueKey('review_card_${review.id}_$canReply'),
-                              review: review,
-                              canDelete: canDelete,
-                              canEdit: canEdit,
-                              onDelete: canDelete ? () => _showDeleteReviewDialog(context, review.id) : null,
-                              onEdit: canEdit ? () => _showEditReviewDialog(context, review) : null,
-                              onReply: canReply ? () => _showReplyToReviewDialog(context, flight, review, isOwner) : null,
-                              // Информация о пилоте, который оставил отзыв (для блока со стрелкой)
-                              reviewerName: flight.pilotFullName, // Имя пилота для блока "Кто оставил → О ком"
-                              reviewerAvatarUrl: flight.pilotAvatarUrl,
-                              reviewerRating: pilotAverageRating, // Средний рейтинг пилота (вычисленный из отзывов)
-                              // Информация о пассажире, о котором отзыв
-                              reviewedName: passengerName,
-                              reviewedAvatarUrl: passengerAvatarUrl,
-                              reviewedRating: passengerRating,
-                            ),
-                            // Отображаем ответы на отзыв (если они есть)
-                            ...reviewReplies.map((reply) {
-                              final canDeleteReply = currentUserId != null && reply.reviewerId == currentUserId;
-                              final canEditReply = currentUserId != null && reply.reviewerId == currentUserId;
-                              return Padding(
-                                padding: EdgeInsets.only(left: 40.w, top: 12.h),
-                                child: ReviewCard(
-                                  review: reply,
-                                  isReply: true,
-                                  canDelete: canDeleteReply,
-                                  canEdit: canEditReply,
-                                  onDelete: canDeleteReply ? () => _showDeleteReviewDialog(context, reply.id) : null,
-                                  onEdit: canEditReply ? () => _showEditReviewDialog(context, reply) : null,
-                                ),
-                              );
-                            }),
-                          ],
-                        );
-                      }).toList(),
+                          // Если информация о пассажире не найдена в профиле, используем fallback
+                          // Важно: всегда должно быть имя, чтобы блок "Отзыв о:" отображался
+                          if (passengerName == null || passengerName.isEmpty) {
+                            passengerName = 'Пассажир #${review.reviewedId}';
+                          }
+
+                          // Убеждаемся, что имя не пустое (для отображения блока "Отзыв о:")
+                          if (passengerName.isEmpty) {
+                            passengerName = 'Пассажир #${review.reviewedId}';
+                          }
+
+                          // Отладочная информация
+                          print('🔵 [FlightDetail] Отзыв о пассажире ${review.id}:');
+                          print('   - reviewedId: ${review.reviewedId}');
+                          print('   - passengerName: $passengerName');
+                          print('   - passengerAvatarUrl: $passengerAvatarUrl');
+                          print('   - passengerRating: $passengerRating');
+                          print('   - review.rating (рейтинг отзыва): ${review.rating}');
+                          print('   - passengerProfile: ${passengerProfile != null ? "найден (ID: ${passengerProfile.id})" : "не найден"}');
+                          print('   - Передаем в ReviewCard:');
+                          print('     reviewedName: $passengerName');
+                          print('     reviewedRating: $passengerRating');
+
+                          return Column(
+                            key: ValueKey('passenger_review_${review.id}_${reviewReplies.length}_$canReply'),
+                            children: [
+                              // Разделитель между отзывами (кроме первого)
+                              if (index > 0) ...[SizedBox(height: 26.h), Divider(height: 1, thickness: 1, color: Color(0xFFE5E7EB), indent: 0, endIndent: 0), SizedBox(height: 26.h)],
+                              ReviewCard(
+                                key: ValueKey('review_card_${review.id}_$canReply'),
+                                review: review,
+                                canDelete: canDelete,
+                                canEdit: canEdit,
+                                onDelete: canDelete ? () => _showDeleteReviewDialog(context, review.id) : null,
+                                onEdit: canEdit ? () => _showEditReviewDialog(context, review) : null,
+                                onReply: canReply ? () => _showReplyToReviewDialog(context, flight, review, isOwner) : null,
+                                onTap: () {}, // Отзывы на странице детальной информации о полёте не требуют навигации
+                                // Информация о пилоте, который оставил отзыв (для блока со стрелкой)
+                                reviewerName: flight.pilotFullName, // Имя пилота для блока "Кто оставил → О ком"
+                                reviewerAvatarUrl: flight.pilotAvatarUrl,
+                                reviewerRating: pilotAverageRating, // Средний рейтинг пилота (вычисленный из отзывов)
+                                // Информация о пассажире, о котором отзыв
+                                reviewedName: passengerName,
+                                reviewedAvatarUrl: passengerAvatarUrl,
+                                reviewedRating: passengerRating,
+                              ),
+                              // Отображаем ответы на отзыв (если они есть)
+                              ...reviewReplies.map((reply) {
+                                final canDeleteReply = currentUserId != null && reply.reviewerId == currentUserId;
+                                final canEditReply = currentUserId != null && reply.reviewerId == currentUserId;
+                                return Padding(
+                                  padding: EdgeInsets.only(left: 40.w, top: 12.h),
+                                  child: ReviewCard(
+                                    review: reply,
+                                    isReply: true,
+                                    canDelete: canDeleteReply,
+                                    canEdit: canEditReply,
+                                    onDelete: canDeleteReply ? () => _showDeleteReviewDialog(context, reply.id) : null,
+                                    onEdit: canEditReply ? () => _showEditReviewDialog(context, reply) : null,
+                                    onTap: () {}, // Ответы не требуют навигации
+                                  ),
+                                );
+                              }),
+                            ],
+                          );
+                        }).toList(),
+                      ],
                     ],
-                  ],
-                );
-              },
-              reviewCreated: (review) {
-                // После создания отзыва (включая ответ) обновляем список
-                // Важно: обновляем сразу, чтобы BlocBuilder перестроился с новыми данными
-                // Добавляем небольшую задержку, чтобы гарантировать, что состояние обновилось
-                Future.microtask(() {
-                  if (context.mounted) {
-                    context.read<ReviewsBloc>().add(GetReviewsByFlightIdEvent(flightId: flight.id));
-                  }
-                });
-                return SizedBox.shrink();
-              },
-              reviewUpdated: (review) {
-                // После обновления отзыва обновляем список
-                context.read<ReviewsBloc>().add(GetReviewsByFlightIdEvent(flightId: flight.id));
-                return SizedBox.shrink();
-              },
-              reviewDeleted: () {
-                // После удаления отзыва обновляем список
-                context.read<ReviewsBloc>().add(GetReviewsByFlightIdEvent(flightId: flight.id));
-                return SizedBox.shrink();
-              },
-            ),
-          ],
+                  );
+                },
+                reviewCreated: (review) {
+                  // После создания отзыва (включая ответ) обновляем список
+                  // Важно: обновляем сразу, чтобы BlocBuilder перестроился с новыми данными
+                  // Добавляем небольшую задержку, чтобы гарантировать, что состояние обновилось
+                  Future.microtask(() {
+                    if (context.mounted) {
+                      context.read<ReviewsBloc>().add(GetReviewsByFlightIdEvent(flightId: flight.id));
+                    }
+                  });
+                  return SizedBox.shrink();
+                },
+                reviewUpdated: (review) {
+                  // После обновления отзыва обновляем список
+                  context.read<ReviewsBloc>().add(GetReviewsByFlightIdEvent(flightId: flight.id));
+                  return SizedBox.shrink();
+                },
+                reviewDeleted: () {
+                  // После удаления отзыва обновляем список
+                  context.read<ReviewsBloc>().add(GetReviewsByFlightIdEvent(flightId: flight.id));
+                  return SizedBox.shrink();
+                },
+              ),
+            ],
           ),
         );
       },
@@ -1768,134 +1783,134 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Фото самолёта/вертолёта', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-            // Кнопка загрузки фотографий (только для участников полета)
-            if (isParticipant)
-              TextButton.icon(
-                onPressed: () => _showUploadPhotosDialog(context, flight),
-                icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
-                label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+              // Кнопка загрузки фотографий (только для участников полета)
+              if (isParticipant)
+                TextButton.icon(
+                  onPressed: () => _showUploadPhotosDialog(context, flight),
+                  icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
+                  label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  ),
                 ),
-              ),
-          ],
-        ),
-        SizedBox(height: 12.h),
-        if (hasPhotos)
-          GridView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: 1.0),
-            itemCount: flight.photos!.length,
-            itemBuilder: (context, index) {
-              final photoUrl = flight.photos![index];
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  // Фотография
-                  GestureDetector(
-                    onTap: () => _showPhotoViewer(context, flight, flight.photos!, index, isOwner),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: CachedNetworkImage(
-                        imageUrl: getImageUrl(photoUrl),
-                        fit: BoxFit.cover,
-                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                        cacheKey: photoUrl,
-                        placeholder: (context, url) => Container(
-                          color: Color(0xFFF3F4F6),
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Color(0xFFF3F4F6),
-                          child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
+            ],
+          ),
+          SizedBox(height: 12.h),
+          if (hasPhotos)
+            GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: 1.0),
+              itemCount: flight.photos!.length,
+              itemBuilder: (context, index) {
+                final photoUrl = flight.photos![index];
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    // Фотография
+                    GestureDetector(
+                      onTap: () => _showPhotoViewer(context, flight, flight.photos!, index, isOwner),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: CachedNetworkImage(
+                          imageUrl: getImageUrl(photoUrl),
+                          fit: BoxFit.cover,
+                          cacheManager: GetIt.instance<DefaultCacheManager>(),
+                          cacheKey: photoUrl,
+                          placeholder: (context, url) => Container(
+                            color: Color(0xFFF3F4F6),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: Color(0xFFF3F4F6),
+                            child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  // Кнопка меню в правом верхнем углу
-                  Positioned(
-                    top: 8.h,
-                    right: 8.w,
-                    child: PopupMenuButton<String>(
-                      icon: Container(
-                        padding: EdgeInsets.all(6.w),
-                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
-                        child: Icon(Icons.more_vert, color: Colors.white, size: 18),
-                      ),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                      onSelected: (value) {
-                        switch (value) {
-                          case 'share':
-                            _sharePhoto(context, photoUrl);
-                            break;
-                          case 'download':
-                            _downloadPhoto(context, photoUrl);
-                            break;
-                          case 'delete':
-                            if (isOwner) {
-                              _deletePhotoFromList(context, flight, photoUrl);
-                            }
-                            break;
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: 'share',
-                          child: Row(
-                            children: [
-                              Icon(Icons.share, size: 20, color: Color(0xFF374151)),
-                              SizedBox(width: 12.w),
-                              Text('Поделиться', style: AppStyles.regular14s),
-                            ],
-                          ),
+                    // Кнопка меню в правом верхнем углу
+                    Positioned(
+                      top: 8.h,
+                      right: 8.w,
+                      child: PopupMenuButton<String>(
+                        icon: Container(
+                          padding: EdgeInsets.all(6.w),
+                          decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                          child: Icon(Icons.more_vert, color: Colors.white, size: 18),
                         ),
-                        PopupMenuItem(
-                          value: 'download',
-                          child: Row(
-                            children: [
-                              Icon(Icons.download, size: 20, color: Color(0xFF374151)),
-                              SizedBox(width: 12.w),
-                              Text('Скачать', style: AppStyles.regular14s),
-                            ],
-                          ),
-                        ),
-                        if (isOwner)
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'share':
+                              _sharePhoto(context, photoUrl);
+                              break;
+                            case 'download':
+                              _downloadPhoto(context, photoUrl);
+                              break;
+                            case 'delete':
+                              if (isOwner) {
+                                _deletePhotoFromList(context, flight, photoUrl);
+                              }
+                              break;
+                          }
+                        },
+                        itemBuilder: (context) => [
                           PopupMenuItem(
-                            value: 'delete',
+                            value: 'share',
                             child: Row(
                               children: [
-                                Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                                Icon(Icons.share, size: 20, color: Color(0xFF374151)),
                                 SizedBox(width: 12.w),
-                                Text('Удалить', style: AppStyles.regular14s.copyWith(color: Colors.red)),
+                                Text('Поделиться', style: AppStyles.regular14s),
                               ],
                             ),
                           ),
-                      ],
+                          PopupMenuItem(
+                            value: 'download',
+                            child: Row(
+                              children: [
+                                Icon(Icons.download, size: 20, color: Color(0xFF374151)),
+                                SizedBox(width: 12.w),
+                                Text('Скачать', style: AppStyles.regular14s),
+                              ],
+                            ),
+                          ),
+                          if (isOwner)
+                            PopupMenuItem(
+                              value: 'delete',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                                  SizedBox(width: 12.w),
+                                  Text('Удалить', style: AppStyles.regular14s.copyWith(color: Colors.red)),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
+                );
+              },
+            )
+          else
+            Container(
+              padding: EdgeInsets.all(24.w),
+              decoration: BoxDecoration(
+                color: Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(color: Color(0xFFE5E7EB)),
+              ),
+              child: Column(
+                children: [
+                  Icon(Icons.photo_library_outlined, size: 48, color: Color(0xFF9CA5AF)),
+                  SizedBox(height: 12.h),
+                  Text('Пока нет фотографий', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                 ],
-              );
-            },
-          )
-        else
-          Container(
-            padding: EdgeInsets.all(24.w),
-            decoration: BoxDecoration(
-              color: Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Color(0xFFE5E7EB)),
+              ),
             ),
-            child: Column(
-              children: [
-                Icon(Icons.photo_library_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                SizedBox(height: 12.h),
-                Text('Пока нет фотографий', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-              ],
-            ),
-          ),
-        SizedBox(height: 24.h),
-      ],
+          SizedBox(height: 24.h),
+        ],
       ),
     );
   }
@@ -2373,7 +2388,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
     // Используем переданную иконку и определяем цвет в зависимости от неё (как на карте)
     IconData iconData = icon;
     Color iconColor;
-    
+
     if (icon == Icons.flight_takeoff) {
       // Зелёный для отправления
       iconColor = Colors.green;
@@ -2479,15 +2494,11 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                         ),
                       ],
                       if (region != null) ...[
-                        if (city != null) ...[
-                          Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
-                        ],
+                        if (city != null) ...[Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF)))],
                         Text(region, style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                       if (typeDisplay.isNotEmpty) ...[
-                        if (city != null || region != null) ...[
-                          Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
-                        ],
+                        if (city != null || region != null) ...[Text('•', style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF)))],
                         Text(typeDisplay, style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                     ],
@@ -2541,140 +2552,140 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Вопросы пилоту', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                  // Кнопка "Задать вопрос" внутри секции, чтобы иметь доступ к QuestionsBloc
-                  // Скрываем кнопку, если полёт завершен
-                  if (isAuthenticated && !isOwner && flight.status != 'completed')
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        final questionsBloc = context.read<QuestionsBloc>();
-                        _showQuestionDialog(
-                          context,
-                          flight.id,
-                          isAuthenticated,
-                          questionsBloc,
-                          // Callback для обновления списка после создания вопроса
-                          onQuestionCreated: () {
-                            questionsBloc.add(GetQuestionsByFlightIdEvent(flightId: flight.id));
-                          },
-                        );
-                      },
-                      icon: Icon(Icons.help_outline, size: 16),
-                      label: Text('Задать вопрос', style: AppStyles.bold14s),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF10B981),
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                      ),
-                    ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              Builder(
-                builder: (context) {
-                  // Игнорируем InitialQuestionsState - это начальное состояние
-                  if (questionsState is LoadingQuestionsState) {
-                    return Center(
-                      child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                    );
-                  }
-
-                  if (questionsState is ErrorQuestionsState) {
-                    return Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.w),
-                        child: Text(questionsState.errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
-                      ),
-                    );
-                  }
-
-                  if (questionsState is SuccessQuestionsState) {
-                    final questions = questionsState.questions;
-
-                    if (questions.isEmpty) {
-                      return Container(
-                        padding: EdgeInsets.all(24.w),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF9FAFB),
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: Color(0xFFE5E7EB)),
+                    // Кнопка "Задать вопрос" внутри секции, чтобы иметь доступ к QuestionsBloc
+                    // Скрываем кнопку, если полёт завершен
+                    if (isAuthenticated && !isOwner && flight.status != 'completed')
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          final questionsBloc = context.read<QuestionsBloc>();
+                          _showQuestionDialog(
+                            context,
+                            flight.id,
+                            isAuthenticated,
+                            questionsBloc,
+                            // Callback для обновления списка после создания вопроса
+                            onQuestionCreated: () {
+                              questionsBloc.add(GetQuestionsByFlightIdEvent(flightId: flight.id));
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.help_outline, size: 16),
+                        label: Text('Задать вопрос', style: AppStyles.bold14s),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF10B981),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                         ),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Icon(Icons.help_outline, size: 48, color: Color(0xFF9CA5AF)),
-                              SizedBox(height: 12.h),
-                              Text('Пока нет вопросов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-                            ],
-                          ),
+                      ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                Builder(
+                  builder: (context) {
+                    // Игнорируем InitialQuestionsState - это начальное состояние
+                    if (questionsState is LoadingQuestionsState) {
+                      return Center(
+                        child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    if (questionsState is ErrorQuestionsState) {
+                      return Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Text(questionsState.errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                         ),
                       );
                     }
 
-                    return Column(
-                      children: questions.map((question) {
-                        // Проверяем права на редактирование/удаление
-                        final profileState = context.read<ProfileBloc>().state;
-                        final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
+                    if (questionsState is SuccessQuestionsState) {
+                      final questions = questionsState.questions;
 
-                        final canEdit =
-                            isAuthenticated &&
-                            ((currentUserId != null && question.authorId == currentUserId) || // Автор вопроса
-                                (isOwner && question.answerText != null && question.answeredById == currentUserId) // Пилот для ответа
-                                );
-                        final canDelete =
-                            isAuthenticated &&
-                            ((currentUserId != null && question.authorId == currentUserId) || // Автор вопроса
-                                isOwner // Пилот может удалить любой вопрос
-                                );
-                        final canAnswer = isOwner && question.answerText == null; // Пилот может ответить, если ответа нет
-
-                        return QuestionCard(
-                          question: question,
-                          canDelete: canDelete,
-                          canEdit: canEdit,
-                          canAnswer: canAnswer,
-                          onDelete: canDelete ? () => _showDeleteQuestionDialog(context, flight.id, question.id) : null,
-                          onEdit: canEdit
-                              ? () {
-                                  final questionsBloc = context.read<QuestionsBloc>();
-                                  _showEditQuestionDialog(
-                                    context,
-                                    flight.id,
-                                    question,
-                                    isOwner,
-                                    questionsBloc,
-                                    onQuestionUpdated: () {
-                                      questionsBloc.add(GetQuestionsByFlightIdEvent(flightId: flight.id));
-                                    },
-                                  );
-                                }
-                              : null,
-                          onAnswer: canAnswer
-                              ? () {
-                                  final questionsBloc = context.read<QuestionsBloc>();
-                                  _showAnswerQuestionDialog(
-                                    context,
-                                    flight.id,
-                                    question,
-                                    questionsBloc,
-                                    onQuestionUpdated: () {
-                                      questionsBloc.add(GetQuestionsByFlightIdEvent(flightId: flight.id));
-                                    },
-                                  );
-                                }
-                              : null,
-                          pilotRating: flight.pilotAverageRating,
+                      if (questions.isEmpty) {
+                        return Container(
+                          padding: EdgeInsets.all(24.w),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFF9FAFB),
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(color: Color(0xFFE5E7EB)),
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Icon(Icons.help_outline, size: 48, color: Color(0xFF9CA5AF)),
+                                SizedBox(height: 12.h),
+                                Text('Пока нет вопросов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                              ],
+                            ),
+                          ),
                         );
-                      }).toList(),
-                    );
-                  }
+                      }
 
-                  // Для других состояний (questionCreated, questionUpdated, questionDeleted)
-                  return SizedBox.shrink();
-                },
-              ),
-            ],
+                      return Column(
+                        children: questions.map((question) {
+                          // Проверяем права на редактирование/удаление
+                          final profileState = context.read<ProfileBloc>().state;
+                          final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
+
+                          final canEdit =
+                              isAuthenticated &&
+                              ((currentUserId != null && question.authorId == currentUserId) || // Автор вопроса
+                                  (isOwner && question.answerText != null && question.answeredById == currentUserId) // Пилот для ответа
+                                  );
+                          final canDelete =
+                              isAuthenticated &&
+                              ((currentUserId != null && question.authorId == currentUserId) || // Автор вопроса
+                                  isOwner // Пилот может удалить любой вопрос
+                                  );
+                          final canAnswer = isOwner && question.answerText == null; // Пилот может ответить, если ответа нет
+
+                          return QuestionCard(
+                            question: question,
+                            canDelete: canDelete,
+                            canEdit: canEdit,
+                            canAnswer: canAnswer,
+                            onDelete: canDelete ? () => _showDeleteQuestionDialog(context, flight.id, question.id) : null,
+                            onEdit: canEdit
+                                ? () {
+                                    final questionsBloc = context.read<QuestionsBloc>();
+                                    _showEditQuestionDialog(
+                                      context,
+                                      flight.id,
+                                      question,
+                                      isOwner,
+                                      questionsBloc,
+                                      onQuestionUpdated: () {
+                                        questionsBloc.add(GetQuestionsByFlightIdEvent(flightId: flight.id));
+                                      },
+                                    );
+                                  }
+                                : null,
+                            onAnswer: canAnswer
+                                ? () {
+                                    final questionsBloc = context.read<QuestionsBloc>();
+                                    _showAnswerQuestionDialog(
+                                      context,
+                                      flight.id,
+                                      question,
+                                      questionsBloc,
+                                      onQuestionUpdated: () {
+                                        questionsBloc.add(GetQuestionsByFlightIdEvent(flightId: flight.id));
+                                      },
+                                    );
+                                  }
+                                : null,
+                            pilotRating: flight.pilotAverageRating,
+                          );
+                        }).toList(),
+                      );
+                    }
+
+                    // Для других состояний (questionCreated, questionUpdated, questionDeleted)
+                    return SizedBox.shrink();
+                  },
+                ),
+              ],
             ),
           );
         },

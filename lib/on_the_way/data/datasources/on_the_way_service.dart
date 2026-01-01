@@ -1,4 +1,5 @@
 import 'package:aviapoint/on_the_way/data/models/airport_dto.dart';
+import 'package:aviapoint/on_the_way/data/models/airport_review_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/booking_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/review_dto.dart';
@@ -106,4 +107,25 @@ abstract class OnTheWayService {
 
   @DELETE('/api/airports/{code}/visitor-photos')
   Future<AirportDto> deleteVisitorPhoto(@Path('code') String code, @Body() Map<String, dynamic> body);
+
+  // Отзывы об аэропортах
+  @GET('/api/airports/{code}/reviews')
+  Future<List<AirportReviewDto>> getAirportReviews(@Path('code') String code);
+
+  @POST('/api/airports/reviews')
+  @MultiPart()
+  Future<AirportReviewDto> createAirportReview(@Body() FormData formData);
+
+  @PUT('/api/airports/reviews/{id}')
+  Future<AirportReviewDto> updateAirportReview(@Path('id') int id, @Body() Map<String, dynamic> body);
+
+  @POST('/api/airports/reviews/{id}/photos')
+  @MultiPart()
+  Future<AirportReviewDto> addAirportReviewPhotos(@Path('id') int id, @Part(name: 'photos') List<MultipartFile> photos);
+
+  @DELETE('/api/airports/reviews/{id}/photos')
+  Future<AirportReviewDto> deleteAirportReviewPhoto(@Path('id') int id, @Query('photo_url') String photoUrl);
+
+  @DELETE('/api/airports/reviews/{id}')
+  Future<void> deleteAirportReview(@Path('id') int id);
 }

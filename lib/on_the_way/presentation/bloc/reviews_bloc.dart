@@ -1,4 +1,5 @@
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -62,7 +63,10 @@ class ReviewsState with _$ReviewsState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorReviewsState;
-  const factory ReviewsState.success({required List<ReviewEntity> reviews}) = SuccessReviewsState;
+  const factory ReviewsState.success({
+    required List<ReviewEntity> reviews,
+    required Map<int, FlightEntity> flights,
+  }) = SuccessReviewsState;
   const factory ReviewsState.reviewCreated({required ReviewEntity review}) = ReviewCreatedState;
   const factory ReviewsState.reviewUpdated({required ReviewEntity review}) = ReviewUpdatedState;
   const factory ReviewsState.reviewDeleted() = ReviewDeletedState;
@@ -86,8 +90,8 @@ class ReviewsBloc extends Bloc<ReviewsEvent, ReviewsState> {
 
     final response = await _onTheWayRepository.getReviews(event.userId);
 
-    response.fold(
-      (l) {
+    await response.fold(
+      (l) async {
         emit(
           ErrorReviewsState(
             errorForUser: 'Не удалось загрузить отзывы',
@@ -97,8 +101,24 @@ class ReviewsBloc extends Bloc<ReviewsEvent, ReviewsState> {
           ),
         );
       },
-      (r) {
-        emit(SuccessReviewsState(reviews: r));
+      (r) async {
+        // Загружаем информацию о полётах для всех отзывов с flightId
+        final Map<int, FlightEntity> flights = {};
+        final flightIds = r.where((review) => review.flightId != null).map((review) => review.flightId!).toSet();
+        
+        for (final flightId in flightIds) {
+          final flightResponse = await _onTheWayRepository.getFlight(flightId);
+          flightResponse.fold(
+            (l) {
+              // Игнорируем ошибки загрузки отдельных полётов, просто не добавляем их в мапу
+            },
+            (flight) {
+              flights[flightId] = flight;
+            },
+          );
+        }
+
+        emit(SuccessReviewsState(reviews: r, flights: flights));
       },
     );
   }
@@ -108,8 +128,8 @@ class ReviewsBloc extends Bloc<ReviewsEvent, ReviewsState> {
 
     final response = await _onTheWayRepository.getReviewsByFlightId(event.flightId);
 
-    response.fold(
-      (l) {
+    await response.fold(
+      (l) async {
         emit(
           ErrorReviewsState(
             errorForUser: 'Не удалось загрузить отзывы',
@@ -119,8 +139,24 @@ class ReviewsBloc extends Bloc<ReviewsEvent, ReviewsState> {
           ),
         );
       },
-      (r) {
-        emit(SuccessReviewsState(reviews: r));
+      (r) async {
+        // Загружаем информацию о полётах для всех отзывов с flightId
+        final Map<int, FlightEntity> flights = {};
+        final flightIds = r.where((review) => review.flightId != null).map((review) => review.flightId!).toSet();
+        
+        for (final flightId in flightIds) {
+          final flightResponse = await _onTheWayRepository.getFlight(flightId);
+          flightResponse.fold(
+            (l) {
+              // Игнорируем ошибки загрузки отдельных полётов, просто не добавляем их в мапу
+            },
+            (flight) {
+              flights[flightId] = flight;
+            },
+          );
+        }
+
+        emit(SuccessReviewsState(reviews: r, flights: flights));
       },
     );
   }

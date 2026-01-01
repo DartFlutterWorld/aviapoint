@@ -4,6 +4,7 @@ import 'package:aviapoint/on_the_way/data/mappers/on_the_way_mapper.dart';
 import 'package:aviapoint/on_the_way/data/models/create_booking_request_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/create_flight_request_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/create_review_request_dto.dart';
+import 'package:aviapoint/on_the_way/domain/entities/airport_review_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
@@ -817,6 +818,227 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
     try {
       await _onTheWayService.deleteQuestion(flightId, questionId);
 
+      return right(null);
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  // ========== AIRPORT REVIEWS ==========
+
+  @override
+  Future<Either<Failure, List<AirportReviewEntity>>> getAirportReviews(String airportCode) async {
+    try {
+      final response = await _onTheWayService.getAirportReviews(airportCode);
+      return right(OnTheWayMapper.toAirportReviewEntities(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AirportReviewEntity>> createAirportReview({
+    required String airportCode,
+    required int reviewerId,
+    required int rating,
+    String? comment,
+    int? replyToReviewId,
+    List<XFile>? photos,
+  }) async {
+    try {
+      // Создаём FormData для multipart запроса
+      final formData = FormData();
+      formData.fields.addAll([
+        MapEntry('airport_code', airportCode),
+        MapEntry('reviewer_id', reviewerId.toString()),
+        MapEntry('rating', rating.toString()),
+      ]);
+      if (comment != null && comment.isNotEmpty) {
+        formData.fields.add(MapEntry('comment', comment));
+      }
+      if (replyToReviewId != null) {
+        formData.fields.add(MapEntry('reply_to_review_id', replyToReviewId.toString()));
+      }
+
+      // Добавляем фотографии, если они есть
+      if (photos != null && photos.isNotEmpty) {
+        final multipartFiles = await Future.wait(
+          photos.map((photo) async {
+            if (kIsWeb) {
+              final bytes = await photo.readAsBytes();
+              return MultipartFile.fromBytes(
+                bytes,
+                filename: photo.name,
+              );
+            } else {
+              final file = File(photo.path);
+              return await MultipartFile.fromFile(
+                file.path,
+                filename: photo.name,
+              );
+            }
+          }),
+        );
+        formData.files.addAll(
+          multipartFiles.map((file) => MapEntry('photos', file)),
+        );
+      }
+
+      final response = await _onTheWayService.createAirportReview(formData);
+
+      return right(OnTheWayMapper.toAirportReviewEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AirportReviewEntity>> updateAirportReview({
+    required int reviewId,
+    required int rating,
+    String? comment,
+  }) async {
+    try {
+      final body = {'rating': rating, 'comment': comment};
+      final response = await _onTheWayService.updateAirportReview(reviewId, body);
+      return right(OnTheWayMapper.toAirportReviewEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AirportReviewEntity>> addAirportReviewPhotos({
+    required int reviewId,
+    required List<XFile> photos,
+  }) async {
+    try {
+      final multipartFiles = await Future.wait(
+        photos.map((photo) async {
+          if (kIsWeb) {
+            final bytes = await photo.readAsBytes();
+            return MultipartFile.fromBytes(
+              bytes,
+              filename: photo.name,
+            );
+          } else {
+            final file = File(photo.path);
+            return await MultipartFile.fromFile(
+              file.path,
+              filename: photo.name,
+            );
+          }
+        }),
+      );
+
+      final response = await _onTheWayService.addAirportReviewPhotos(reviewId, multipartFiles);
+      return right(OnTheWayMapper.toAirportReviewEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AirportReviewEntity>> deleteAirportReviewPhoto({
+    required int reviewId,
+    required String photoUrl,
+  }) async {
+    try {
+      final response = await _onTheWayService.deleteAirportReviewPhoto(reviewId, photoUrl);
+      return right(OnTheWayMapper.toAirportReviewEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAirportReview(int reviewId) async {
+    try {
+      await _onTheWayService.deleteAirportReview(reviewId);
       return right(null);
     } on DioException catch (e) {
       String? responseMessage;

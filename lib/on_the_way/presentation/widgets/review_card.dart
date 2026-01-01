@@ -25,6 +25,7 @@ class ReviewCard extends StatelessWidget {
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
   final VoidCallback? onReply;
+  final VoidCallback onTap; // Обработчик нажатия на чип "К полёту"
   final bool isReply;
   final String? reviewedName;
   final String? reviewedAvatarUrl;
@@ -47,6 +48,7 @@ class ReviewCard extends StatelessWidget {
     this.onDelete,
     this.onEdit,
     this.onReply,
+    required this.onTap,
     this.isReply = false,
     this.reviewedName,
     this.reviewedAvatarUrl,
@@ -76,10 +78,20 @@ class ReviewCard extends StatelessWidget {
             padding: EdgeInsets.all(8.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              children: [if (!isReply && reviewedName != null) _buildReviewerBlock(context) else _buildProfileHeader(context), _buildComment(), _buildReplyButton()],
+            ),
+          ),
+          _buildCreatedAtDate(),
+        ],
+      ),
+    );
+  }
+
+  /// Блок "Кто оставил → О ком отзыв"
+  Widget _buildReviewerBlock(BuildContext context) {
+    return Column(
               children: [
-                // Блок "Кто оставил → О ком отзыв" (только для основных отзывов, не для ответов)
-                if (!isReply && reviewedName != null) ...[
-                  SizedBox(height: 16.h), // Отступ сверху для даты
+        SizedBox(height: 16.h),
                   Container(
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
@@ -91,166 +103,52 @@ class ReviewCard extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Кто оставил отзыв (reviewer) - показываем только если есть reviewerName
                         if (reviewerName != null) ...[
-                          // Аватар reviewer
-                          GestureDetector(
-                            onTap: reviewerAvatarUrl != null && reviewerAvatarUrl!.isNotEmpty ? () => _showPhotoViewer(context, getImageUrl(reviewerAvatarUrl!)) : null,
-                            child: ClipOval(
-                              child: reviewerAvatarUrl != null && reviewerAvatarUrl!.isNotEmpty
-                                  ? CachedNetworkImage(
-                                      imageUrl: getImageUrl(reviewerAvatarUrl!),
-                                      width: 40.r,
-                                      height: 40.r,
-                                      fit: BoxFit.cover,
-                                      cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                      cacheKey: reviewerAvatarUrl,
-                                      placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                      errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                    )
-                                  : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                            ),
-                          ),
+                _buildAvatar(context, reviewerAvatarUrl, 40.r),
                           SizedBox(width: 8.w),
-                          // Имя reviewer
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  reviewerName!,
-                                  style: AppStyles.bold14s.copyWith(color: Color(0xFF1E293B)),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                if (reviewerRating != null && reviewerRating! > 0) ...[SizedBox(height: 4.h), RatingWidget(rating: reviewerRating!.round(), size: 12)],
-                              ],
-                            ),
-                          ),
+                Expanded(child: _buildReviewerInfo(reviewerName!, reviewerRating)),
                           SizedBox(width: 12.w),
-                          // Стрелка вправо
                           Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFF0A6EFA)),
                           SizedBox(width: 12.w),
                         ],
-                        // О ком отзыв (reviewed)
-                        // Аватар reviewed
-                        GestureDetector(
-                          onTap: reviewedAvatarUrl != null && reviewedAvatarUrl!.isNotEmpty ? () => _showPhotoViewer(context, getImageUrl(reviewedAvatarUrl!)) : null,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4, offset: Offset(0, 2))],
-                            ),
-                            child: ClipOval(
-                              child: reviewedAvatarUrl != null && reviewedAvatarUrl!.isNotEmpty
-                                  ? CachedNetworkImage(
-                                      imageUrl: getImageUrl(reviewedAvatarUrl!),
-                                      width: 40.r,
-                                      height: 40.r,
-                                      fit: BoxFit.cover,
-                                      cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                      cacheKey: reviewedAvatarUrl,
-                                      placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                      errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                    )
-                                  : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                            ),
-                          ),
-                        ),
+              _buildAvatar(context, reviewedAvatarUrl, 40.r, withBorder: true),
                         SizedBox(width: 8.w),
-                        // Имя и рейтинг reviewed
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                reviewedName!,
-                                style: AppStyles.bold14s.copyWith(color: Color(0xFF1E293B)),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              if (reviewedRating != null) ...[
-                                SizedBox(height: 4.h),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Builder(
-                                      builder: (context) {
-                                        final rating = reviewedRating!.round().clamp(1, 5);
-                                        return RatingWidget(rating: rating, size: 12);
-                                      },
-                                    ),
-                                    SizedBox(width: 6.w),
-                                    Text(reviewedRating!.toStringAsFixed(1), style: AppStyles.bold12s.copyWith(color: Color(0xFF0A6EFA))),
-                                  ],
-                                ),
-                              ],
+              Expanded(child: _buildReviewedInfo(reviewedName!, reviewedRating)),
                             ],
                           ),
                         ),
+        _buildActionButtons(),
                       ],
-                    ),
-                  ),
-                  // Кнопки управления
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+    );
+  }
+
+  /// Заголовок для отзывов в профиле
+  Widget _buildProfileHeader(BuildContext context) {
+    return Row(
                     children: [
-                      if (canEdit && onEdit != null)
-                        IconButton(
-                          icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
-                          onPressed: onEdit,
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                        ),
-                      if (canDelete && onDelete != null)
-                        IconButton(
-                          icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
-                          onPressed: onDelete,
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                        ),
-                    ],
-                  ),
-                ] else ...[
-                  // Для ответов показываем стандартный заголовок
-                  Row(
-                    children: [
-                      // Аватар рецензента
-                      Builder(
-                        builder: (context) {
-                          final avatarUrl = review.reviewerAvatarUrl;
-                          final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
-                          return GestureDetector(
-                            onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, imageUrl) : null,
-                            child: ClipOval(
-                              child: imageUrl != null && imageUrl.isNotEmpty
-                                  ? CachedNetworkImage(
-                                      imageUrl: imageUrl,
-                                      width: 40.r,
-                                      height: 40.r,
-                                      fit: BoxFit.cover,
-                                      cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                      cacheKey: avatarUrl,
-                                      placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                      errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                    )
-                                  : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                            ),
-                          );
-                        },
-                      ),
+        _buildAvatar(context, review.reviewerAvatarUrl, 40.r),
                       SizedBox(width: 12.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Отступ сверху для отзывов на странице профиля (между датой и первой строкой)
-                            if (!isReply && reviewedName == null) SizedBox(height: 4.h),
-                            // Показываем ФИО и рейтинг (если нет reviewedName, значит это отзыв на странице профиля)
-                            if (!isReply && reviewedName == null && review.rating != null && review.rating! > 0) ...[
+              if (!isReply && reviewedName == null) SizedBox(height: 12.h),
+              _buildProfileReviewerName(),
+              if (!isReply && reviewedName == null) _buildFlightInfo(),
+            ],
+          ),
+        ),
+        _buildActionButtons(),
+      ],
+    );
+  }
+
+  /// Имя рецензента с рейтингом для профиля
+  Widget _buildProfileReviewerName() {
+    if (!isReply && reviewedName == null && review.rating != null && review.rating! > 0) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -264,17 +162,29 @@ class ReviewCard extends StatelessWidget {
                               ),
                               SizedBox(height: 4.h),
                               RatingWidget(rating: review.rating!, size: 12),
-                            ]
-                            else
-                              Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                            // Показываем маршрут и дату вылета (если нет reviewedName, значит это отзыв на странице профиля)
-                            if (!isReply && reviewedName == null && (departureAirport != null || arrivalAirport != null || waypoints != null || departureDate != null)) ...[
+        ],
+      );
+    }
+    return Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)));
+  }
+
+  /// Информация о полёте (маршрут и дата)
+  Widget _buildFlightInfo() {
+    final hasFlightInfo = departureAirport != null || arrivalAirport != null || (waypoints != null && waypoints!.isNotEmpty);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
                               SizedBox(height: 8.h),
-                              // Маршрут: если есть waypoints, показываем все точки, иначе departureAirport → arrivalAirport
-                              if (waypoints != null && waypoints!.isNotEmpty)
-                                Builder(
-                                  builder: (context) {
-                                    // Сортируем waypoints по sequenceOrder
+        if (hasFlightInfo) _buildRoute(),
+        _buildDepartureDate(),
+      ],
+    );
+  }
+
+  /// Маршрут полёта
+  Widget _buildRoute() {
+    if (waypoints != null && waypoints!.isNotEmpty) {
                                     final sortedWaypoints = List<FlightWaypointEntity>.from(waypoints!)..sort((a, b) => a.sequenceOrder.compareTo(b.sequenceOrder));
 
                                     return Wrap(
@@ -302,10 +212,10 @@ class ReviewCard extends StatelessWidget {
                                         }).toList(),
                                       ],
                                     );
-                                  },
-                                )
-                              else if (departureAirport != null || arrivalAirport != null)
-                                Row(
+    }
+
+    if (departureAirport != null || arrivalAirport != null) {
+      return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(Icons.flight_takeoff, size: 14, color: Color(0xFF9CA5AF)),
@@ -316,10 +226,19 @@ class ReviewCard extends StatelessWidget {
                                     SizedBox(width: 8.w),
                                     Text(arrivalAirport ?? '—', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                                   ],
-                                ),
-                              // Дата вылета (только дата, без времени)
-                              if (departureDate != null) ...[
-                                SizedBox(height: 4.h),
+      );
+    }
+
+    return SizedBox.shrink();
+  }
+
+  /// Дата вылета с чипом "К полёту"
+  Widget _buildDepartureDate() {
+    return Padding(
+      padding: EdgeInsets.only(top: 4.h),
+      child: Row(
+        children: [
+          if (departureDate != null)
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -328,11 +247,115 @@ class ReviewCard extends StatelessWidget {
                                     Text(DateFormat('dd.MM.yyyy').format(departureDate!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                                   ],
                                 ),
-                              ],
+          if (departureDate != null) Spacer(),
+          _buildFlightChip(),
                             ],
+      ),
+    );
+  }
+
+  /// Чип "К полёту"
+  Widget _buildFlightChip() {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+        decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(8.r)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.flight_takeoff, size: 14, color: Color(0xFF0A6EFA)),
+            SizedBox(width: 4.w),
+            Text('К полёту', style: AppStyles.regular12s.copyWith(color: Color(0xFF0A6EFA))),
                           ],
                         ),
                       ),
+    );
+  }
+
+  /// Аватар пользователя
+  Widget _buildAvatar(BuildContext context, String? avatarUrl, double size, {bool withBorder = false}) {
+    final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+    final avatar = ClipOval(
+      child: imageUrl != null && imageUrl.isNotEmpty
+          ? CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+              cacheManager: GetIt.instance<DefaultCacheManager>(),
+              cacheKey: avatarUrl,
+              placeholder: (context, url) => Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
+              errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
+            )
+          : Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
+    );
+
+    final child = withBorder
+        ? Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4, offset: Offset(0, 2))],
+            ),
+            child: avatar,
+          )
+        : avatar;
+
+    return GestureDetector(onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, imageUrl) : null, child: child);
+  }
+
+  /// Информация о рецензенте
+  Widget _buildReviewerInfo(String name, double? rating) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: AppStyles.bold14s.copyWith(color: Color(0xFF1E293B)),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (rating != null && rating > 0) ...[SizedBox(height: 4.h), RatingWidget(rating: rating.round(), size: 12)],
+      ],
+    );
+  }
+
+  /// Информация о том, о ком отзыв
+  Widget _buildReviewedInfo(String name, double? rating) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: AppStyles.bold14s.copyWith(color: Color(0xFF1E293B)),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (rating != null) ...[
+          SizedBox(height: 4.h),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RatingWidget(rating: rating.round().clamp(1, 5), size: 12),
+              SizedBox(width: 6.w),
+              Text(rating.toStringAsFixed(1), style: AppStyles.bold12s.copyWith(color: Color(0xFF0A6EFA))),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  /// Кнопки управления (редактирование и удаление)
+  Widget _buildActionButtons() {
+    if (!canEdit && !canDelete) return SizedBox.shrink();
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
                       if (canEdit && onEdit != null)
                         IconButton(
                           icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
@@ -348,13 +371,26 @@ class ReviewCard extends StatelessWidget {
                           constraints: BoxConstraints(),
                         ),
                     ],
-                  ),
-                ],
-                // Текст отзыва
-                if (review.comment != null && review.comment!.isNotEmpty) ...[SizedBox(height: 12.h), Text(review.comment!, style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)))],
-                if (!isReply && onReply != null) ...[
-                  SizedBox(height: 12.h),
-                  TextButton.icon(
+    );
+  }
+
+  /// Текст комментария
+  Widget _buildComment() {
+    if (review.comment == null || review.comment!.isEmpty) return SizedBox.shrink();
+
+    return Padding(
+      padding: EdgeInsets.only(top: 12.h),
+      child: Text(review.comment!, style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+    );
+  }
+
+  /// Кнопка "Ответить"
+  Widget _buildReplyButton() {
+    if (isReply || onReply == null) return SizedBox.shrink();
+
+    return Padding(
+      padding: EdgeInsets.only(top: 12.h),
+      child: TextButton.icon(
                     onPressed: onReply,
                     icon: Icon(Icons.reply, size: 16, color: Color(0xFF0A6EFA)),
                     label: Text('Ответить', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
@@ -364,21 +400,19 @@ class ReviewCard extends StatelessWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ),
-                ],
-              ],
-            ),
-          ),
-          // Дата и время в правом верхнем углу
-          if (review.createdAt != null)
-            Positioned(
+    );
+  }
+
+  /// Дата создания отзыва в правом верхнем углу
+  Widget _buildCreatedAtDate() {
+    if (review.createdAt == null) return SizedBox.shrink();
+
+    return Positioned(
               top: 8.h,
               right: 12.w,
               child: Text(
                 DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
                 style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
-              ),
-            ),
-        ],
       ),
     );
   }

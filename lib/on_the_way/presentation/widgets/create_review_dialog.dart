@@ -70,7 +70,7 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
               ),
             );
           },
-          success: (reviews) {},
+          success: (reviews, flights) {},
           reviewCreated: (review) {
             Navigator.of(context).pop(true);
             ScaffoldMessenger.of(context).showSnackBar(

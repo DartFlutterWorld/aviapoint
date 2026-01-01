@@ -4,6 +4,7 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_stars_widget.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -167,6 +168,19 @@ class PilotBookingCard extends StatelessWidget {
                                 if (booking.passengerAverageRating != null && booking.passengerAverageRating! > 0) ...[
                                   SizedBox(height: 2.h),
                                   RatingStarsWidget(rating: booking.passengerAverageRating!, fontSize: 10.sp),
+                                  SizedBox(height: 4.h),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _showPassengerReviews(context, booking.passengerId);
+                                    },
+                                    child: Text(
+                                      'Отзывы',
+                                      style: AppStyles.regular12s.copyWith(
+                                        color: Color(0xFF0A6EFA),
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ],
                             ),
@@ -303,6 +317,27 @@ class PilotBookingCard extends StatelessWidget {
   }
 
   /// Просмотр фотографии в полноэкранном режиме
+  void _showPassengerReviews(BuildContext context, int passengerId) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) {
+        return Container(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(bottomSheetContext).size.height * 0.85),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+          ),
+          child: UserReviewsBottomSheet(
+            userId: passengerId,
+            title: 'Отзывы о пассажире',
+          ),
+        );
+      },
+    );
+  }
+
   void _showPhotoViewer(BuildContext context, String imageUrl) {
     bool showControls = true;
 

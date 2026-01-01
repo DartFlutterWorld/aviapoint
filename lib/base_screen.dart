@@ -15,17 +15,12 @@ class BaseScreen extends StatelessWidget {
       transitionBuilder: (_, child, __) => child,
       animationDuration: Duration.zero,
       routes: const [
-        LearningNavigationRoute(),
-        MarketNavigationRoute(),
-
-        // MainRoute(),
-        MainNavigationRoute(),
-
-        // PricesNavigationRoute(),
-        NewsNavigationRoute(),
-        OnTheWayNavigationRoute(),
-
-        ProfileNavigationRoute(),
+        MainNavigationRoute(), // Главная (индекс 0)
+        LearningNavigationRoute(), // Обучение (индекс 1)
+        OnTheWayNavigationRoute(), // По пути (индекс 2)
+        NewsNavigationRoute(), // Новости (индекс 3)
+        MarketNavigationRoute(), // Маркет (индекс 4)
+        ProfileNavigationRoute(), // Профиль (индекс 5)
         // SaleRequestNavigationRoute(),
       ],
       bottomNavigationBuilder: MediaQuery.of(context).size.width < 768

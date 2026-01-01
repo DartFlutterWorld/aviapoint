@@ -31,16 +31,17 @@ class BottomBarState extends State<BottomBar> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Главная (индекс 0)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
-              icon: Pictures.bookNavbar,
-              text: 'Обучение',
+              icon: Pictures.mainNavbar,
+              text: 'Главная',
               activeColor: widget.tabsRouter!.activeIndex == 0 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 0 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 0) {
-                  AutoRouter.of(context).navigate(const LearningNavigationRoute());
+                  AutoRouter.of(context).navigate(const MainNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(0);
                 }
@@ -48,16 +49,17 @@ class BottomBarState extends State<BottomBar> {
               isActive: widget.tabsRouter!.activeIndex == 0,
             ),
           ),
+          // Обучение (индекс 1)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
-              icon: Pictures.marketNavbar,
-              text: 'Маркет',
+              icon: Pictures.bookNavbar,
+              text: 'Обучение',
               activeColor: widget.tabsRouter!.activeIndex == 1 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 1 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 1) {
-                  AutoRouter.of(context).navigate(const MarketNavigationRoute());
+                  AutoRouter.of(context).navigate(const LearningNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(1);
                 }
@@ -65,23 +67,21 @@ class BottomBarState extends State<BottomBar> {
               isActive: widget.tabsRouter!.activeIndex == 1,
             ),
           ),
+          // По пути (индекс 2)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
-              icon: Pictures.mainNavbar,
-              text: 'Главная',
+              iconData: Icons.flight,
+              text: 'По пути',
               activeColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
-                if (widget.tabsRouter!.activeIndex == 2) {
-                  AutoRouter.of(context).navigate(const MainNavigationRoute());
-                } else {
-                  widget.tabsRouter!.setActiveIndex(2);
-                }
+                widget.tabsRouter!.setActiveIndex(2);
               },
               isActive: widget.tabsRouter!.activeIndex == 2,
             ),
           ),
+          // Новости (индекс 3)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
@@ -99,19 +99,25 @@ class BottomBarState extends State<BottomBar> {
               isActive: widget.tabsRouter!.activeIndex == 3,
             ),
           ),
+          // Маркет (индекс 4)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
-              iconData: Icons.flight,
-              text: 'По пути',
+              icon: Pictures.marketNavbar,
+              text: 'Маркет',
               activeColor: widget.tabsRouter!.activeIndex == 4 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 4 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
-                widget.tabsRouter!.setActiveIndex(4);
+                if (widget.tabsRouter!.activeIndex == 4) {
+                  AutoRouter.of(context).navigate(const MarketNavigationRoute());
+                } else {
+                  widget.tabsRouter!.setActiveIndex(4);
+                }
               },
               isActive: widget.tabsRouter!.activeIndex == 4,
             ),
           ),
+          // Профиль (индекс 5)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(

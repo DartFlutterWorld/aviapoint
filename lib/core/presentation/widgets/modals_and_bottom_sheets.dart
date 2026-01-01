@@ -19,6 +19,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/pages/select_topic
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertificates_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/profile_edit.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart' show UserReviewsBottomSheet;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,11 +45,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
             spacing: 24,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Карта контрольных проверок',
-                textAlign: TextAlign.center,
-                style: AppStyles.bigButtonCulture.copyWith(fontSize: 22),
-              ),
+              Text('Карта контрольных проверок', textAlign: TextAlign.center, style: AppStyles.bigButtonCulture.copyWith(fontSize: 22)),
               Table(
                 border: TableBorder.all(width: 0.5),
                 children: [
@@ -70,14 +67,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
                 textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                 borderColor: Color(0xFF0A6EFA),
                 borderRadius: 46,
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xff0064D6).withOpacity(0.25),
-                    blurRadius: 4,
-                    spreadRadius: 0,
-                    offset: Offset(0.0, 7.0),
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                 onPressed: () => context.router.maybePop(),
               ),
             ],
@@ -109,9 +99,7 @@ Future<void> selectTypeCertificate({required BuildContext context, required Enum
     if (screen == Screens.learning) {
       BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
 
-      BlocProvider.of<CategoriesWithListQuestionsBloc>(
-        context,
-      ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
+      BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
     }
     if (screen == Screens.selectTopicsScreen) {
       BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
@@ -130,10 +118,7 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
         child: Center(
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: ClearProgress(
-              onTap1: () => Navigator.pop(context, true),
-              onTap2: () => Navigator.pop(context, false),
-            ),
+            child: ClearProgress(onTap1: () => Navigator.pop(context, true), onTap2: () => Navigator.pop(context, false)),
           ),
         ),
       );
@@ -144,12 +129,7 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
   // if (result != null) {}
 }
 
-Future<void> openQuestion({
-  required BuildContext context,
-  required QuestionWithAnswersEntity? question,
-  required int questionId,
-  required String? categoryTitle,
-}) async {
+Future<void> openQuestion({required BuildContext context, required QuestionWithAnswersEntity? question, required int questionId, required String? categoryTitle}) async {
   await showModalBottomSheet<void>(
     useRootNavigator: true,
     isDismissible: true,
@@ -164,12 +144,7 @@ Future<void> openQuestion({
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         child: SizedBox(
           height: MediaQuery.of(bottomSheetContext).size.height - 100,
-          child: DetailQuestionScreen(
-            questionId: questionId,
-            categoryTitle: categoryTitle,
-            question: question,
-            withClose: true,
-          ),
+          child: DetailQuestionScreen(questionId: questionId, categoryTitle: categoryTitle, question: question, withClose: true),
         ),
       );
     },
@@ -193,33 +168,22 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode}) a
 
     _log('🔵 selectTopics: открываю showModalBottomSheet');
 
-    final result =
-        await showModalBottomSheet<
-          (
-            int certificateTypeId,
-            bool mixAnswers,
-            bool buttonHint,
-            Set<int> selectedCategoryIds,
-            String title,
-            String image,
-            bool mixQuestions,
-          )
-        >(
-          useRootNavigator: true,
-          isDismissible: true,
-          context: context,
-          isScrollControlled: true,
-          enableDrag: true,
-          barrierColor: AppColors.bgOverlay,
-          backgroundColor: Color(0xFFF1F7FF),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-          builder: (context) {
-            return ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              child: SizedBox(height: MediaQuery.of(context).size.height - 100, child: SelectTopicsScreen()),
-            );
-          },
+    final result = await showModalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
+      useRootNavigator: true,
+      isDismissible: true,
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      barrierColor: AppColors.bgOverlay,
+      backgroundColor: Color(0xFFF1F7FF),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
+      builder: (context) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          child: SizedBox(height: MediaQuery.of(context).size.height - 100, child: SelectTopicsScreen()),
         );
+      },
+    );
 
     if (result != null) {
       // Очистить старые ответы и выбранные вопросы перед новым тестом
@@ -333,14 +297,7 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   textStyle: AppStyles.bold15s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff0064D6).withOpacity(0.25),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      offset: Offset(0.0, 7.0),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                   onPressed: () {
                     Navigator.pop(dialogContext);
                     // Продолжить тест
@@ -355,14 +312,7 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   textStyle: AppStyles.bold15s.copyWith(color: Color(0xFF0A6EFA)),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff0064D6).withOpacity(0.25),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      offset: Offset(0.0, 7.0),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                   onPressed: () async {
                     Navigator.pop(dialogContext);
                     // Очистить ответы и начать заново
@@ -482,10 +432,7 @@ Future<void> openContactUs({required BuildContext context}) async {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Связаться с нами', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                  GestureDetector(
-                    onTap: () => Navigator.of(bottomSheetContext).pop(),
-                    child: SvgPicture.asset(Pictures.closeAuth),
-                  ),
+                  GestureDetector(onTap: () => Navigator.of(bottomSheetContext).pop(), child: SvgPicture.asset(Pictures.closeAuth)),
                 ],
               ),
               SizedBox(height: 24),
@@ -504,12 +451,7 @@ Future<void> openContactUs({required BuildContext context}) async {
                         } else {
                           // Если не удалось открыть, показываем сообщение
                           if (bottomSheetContext.mounted) {
-                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                              const SnackBar(
-                                content: Text('Не удалось открыть WhatsApp'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
+                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
                           }
                         }
                       },
@@ -539,12 +481,7 @@ Future<void> openContactUs({required BuildContext context}) async {
                         } else {
                           // Если не удалось открыть, показываем сообщение
                           if (bottomSheetContext.mounted) {
-                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                              const SnackBar(
-                                content: Text('Не удалось открыть Telegram'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
+                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
                           }
                         }
                       },
@@ -567,6 +504,28 @@ Future<void> openContactUs({required BuildContext context}) async {
               ),
             ],
           ),
+        ),
+      );
+    },
+  );
+}
+
+Future<void> openPilotReviews({required BuildContext context, required int pilotId}) async {
+  await showModalBottomSheet<void>(
+    useRootNavigator: true,
+    isDismissible: true,
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    barrierColor: AppColors.bgOverlay,
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
+    builder: (bottomSheetContext) {
+      return ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: SizedBox(
+          height: MediaQuery.of(bottomSheetContext).size.height - 100,
+          child: UserReviewsBottomSheet(userId: pilotId, title: 'Отзывы о пилоте'),
         ),
       );
     },

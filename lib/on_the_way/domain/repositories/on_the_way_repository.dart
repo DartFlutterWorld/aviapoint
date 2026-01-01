@@ -1,4 +1,5 @@
 import 'package:aviapoint/core/failure/failure.dart';
+import 'package:aviapoint/on_the_way/domain/entities/airport_review_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
@@ -85,4 +86,29 @@ abstract class OnTheWayRepository {
     required int flightId,
     required int questionId,
   });
+
+  // Отзывы об аэропортах
+  Future<Either<Failure, List<AirportReviewEntity>>> getAirportReviews(String airportCode);
+  Future<Either<Failure, AirportReviewEntity>> createAirportReview({
+    required String airportCode,
+    required int reviewerId,
+    required int rating,
+    String? comment,
+    int? replyToReviewId,
+    List<XFile>? photos,
+  });
+  Future<Either<Failure, AirportReviewEntity>> updateAirportReview({
+    required int reviewId,
+    required int rating,
+    String? comment,
+  });
+  Future<Either<Failure, AirportReviewEntity>> addAirportReviewPhotos({
+    required int reviewId,
+    required List<XFile> photos,
+  });
+  Future<Either<Failure, AirportReviewEntity>> deleteAirportReviewPhoto({
+    required int reviewId,
+    required String photoUrl,
+  });
+  Future<Either<Failure, void>> deleteAirportReview(int reviewId);
 }
