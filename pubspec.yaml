@@ -1,7 +1,7 @@
 name: aviapoint
 description: service for pilot.
 publish_to: "none"
-version: 0.0.1+19
+version: 0.0.1+20
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -41,11 +41,11 @@ dependencies:
   file_saver: ^0.3.1
   url_launcher: ^6.3.0
   webview_flutter: ^4.4.2
-  device_info_plus: ^12.2.0
+  device_info_plus: ^12.3.0
   package_info_plus: ^9.0.0
   auto_size_text: ^3.0.0
   socket_io_client: ^3.0.2
-  modal_bottom_sheet: ^2.1.2
+  modal_bottom_sheet: ^3.0.0
   mask: ^1.0.5
   pinput: ^5.0.1
   dropdown_button2: ^2.1.4
@@ -87,7 +87,7 @@ dependencies:
   flutter_sticky_header: ^0.8.0
   cached_video_player_plus: ^4.0.4
   flutter_carousel_slider: ^1.1.0
-  video_player: ^2.9.3
+  video_player: ^2.10.1
   flutter_cache_manager: ^3.4.1
   gradient_borders: ^1.0.1
   visibility_detector: ^0.4.0+2
@@ -124,11 +124,12 @@ onesignal_flutter:
     url: https://github.com/OneSignal/OneSignal-Flutter-SDK.git
     ref: "df09f09c754e93438bbe3975f12f2f4649f81cd3"
 # Временное решение, потом надо обновить пакет modal_bottom_sheet когда пофиксят чтоб прила собаралсь и удалить dependency_overrides:
-dependency_overrides:
-  modal_bottom_sheet:
-    git:
-      url: https://github.com/danReynolds/modal_bottom_sheet.git
-      path: modal_bottom_sheet
+# dependency_overrides:
+#   modal_bottom_sheet:
+#     git:
+#       url: https://github.com/danReynolds/modal_bottom_sheet.git
+#       path: modal_bottom_sheet
+#   video_player_android: ^2.9.2
 
 flutter_launcher_icons:
   android: "launcher_icon"

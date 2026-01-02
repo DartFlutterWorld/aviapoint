@@ -41,7 +41,7 @@ class _PaymentService implements PaymentService {
     try {
       _value = PaymentDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -68,7 +68,7 @@ class _PaymentService implements PaymentService {
     try {
       _value = PaymentDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -95,7 +95,7 @@ class _PaymentService implements PaymentService {
     try {
       _value = SubscriptionsResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -122,7 +122,7 @@ class _PaymentService implements PaymentService {
     try {
       _value = SubscriptionTypesResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;

@@ -45,7 +45,7 @@ class _VideoForStudentsService implements VideoForStudentsService {
           )
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -72,7 +72,7 @@ class _VideoForStudentsService implements VideoForStudentsService {
     try {
       _value = VideoForStudentsDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;

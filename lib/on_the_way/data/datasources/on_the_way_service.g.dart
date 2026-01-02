@@ -55,7 +55,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => FlightDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -82,7 +82,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -111,7 +111,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => FlightDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -139,7 +139,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -167,7 +167,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -194,7 +194,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -223,7 +223,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => BookingDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -252,7 +252,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => BookingDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -280,7 +280,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = BookingDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -307,7 +307,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = BookingDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -334,7 +334,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = BookingDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -363,7 +363,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => ReviewDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -392,7 +392,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => ReviewDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -420,7 +420,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = ReviewDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -448,7 +448,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = ReviewDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -484,7 +484,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -511,7 +511,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -562,7 +562,7 @@ class _OnTheWayService implements OnTheWayService {
           )
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -593,7 +593,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightQuestionDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -625,7 +625,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = FlightQuestionDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -684,7 +684,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => AirportDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -711,7 +711,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -744,7 +744,7 @@ class _OnTheWayService implements OnTheWayService {
           .map((dynamic i) => AirportDto.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -780,7 +780,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -816,7 +816,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -847,7 +847,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -878,7 +878,7 @@ class _OnTheWayService implements OnTheWayService {
           )
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -910,7 +910,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportReviewDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -941,7 +941,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportReviewDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -977,7 +977,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportReviewDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
@@ -1007,7 +1007,7 @@ class _OnTheWayService implements OnTheWayService {
     try {
       _value = AirportReviewDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
