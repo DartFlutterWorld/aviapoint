@@ -829,7 +829,18 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       children: [
                         Icon(Icons.event_seat, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text('Свободных мест', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Свободных мест',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: AppStyles.regular14s.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -919,7 +930,18 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       children: [
                         Icon(Icons.currency_ruble, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text('Компенсация за место', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Компенсация за место',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: AppStyles.regular14s.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -963,7 +985,18 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       children: [
                         Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text('Тип самолета', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Тип самолета',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: AppStyles.regular14s.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -1161,13 +1194,21 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
               Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 24, color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue)),
               SizedBox(width: 12.w),
               Expanded(
-                child: Text(
-                  isFirst
-                      ? 'Отправление'
-                      : isLast
-                      ? 'Прибытие'
-                      : 'Промежуточная точка',
-                  style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                child: RichText(
+                  text: TextSpan(
+                    text: isFirst
+                        ? 'Отправление'
+                        : isLast
+                        ? 'Прибытие'
+                        : 'Промежуточная точка',
+                    style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                    children: [
+                      TextSpan(
+                        text: ' *',
+                        style: AppStyles.bold14s.copyWith(color: Colors.red),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               if (!isFirst && !isLast && onRemoved != null)
@@ -1188,11 +1229,22 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           // Для первой точки - дата и время вылета и комментарий
           if (isFirst) ...[
             SizedBox(height: 16.h),
-            Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+            RichText(
+              text: TextSpan(
+                text: 'Укажите дату и время вылета из этого аэропорта',
+                style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                children: [
+                  TextSpan(
+                    text: ' *',
+                    style: AppStyles.regular12s.copyWith(color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('departure_first_${currentWaypoint.id}_$index'),
-              label: 'Дата и время вылета',
+              label: 'Дата и время вылета *',
               initialDateTime: currentWaypoint.departureTime,
               onDateTimeSelected: (dateTime) {
                 if (onUpdated != null) {

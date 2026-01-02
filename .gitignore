@@ -39,6 +39,13 @@
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+# Android build files
+android/app/build/
+android/build/
+android/.gradle/
+*.apk
+*.ap_
+*.aab
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -66,6 +73,12 @@
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+# iOS build files
+ios/build/
+ios/Podfile.lock
+*.ipa
+*.dSYM.zip
+*.dSYM
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

@@ -455,7 +455,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                       children: [
                         Icon(Icons.event_seat, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text('Свободных мест', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Свободных мест',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: AppStyles.regular14s.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -498,7 +509,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                       children: [
                         Icon(Icons.attach_money, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text('Цена за место', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Цена за место',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: AppStyles.regular14s.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -541,7 +563,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                       children: [
                         Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text('Тип самолета', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Тип самолета',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: AppStyles.regular14s.copyWith(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -719,59 +752,72 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.all(10.w),
-                decoration: BoxDecoration(
-                  color: (isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue)).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Icon(
-                  isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
-                  color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue),
-                  size: 20.r,
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      isFirst
+              Row(
+                children: [
+                  Icon(
+                    isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                    color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue),
+                    size: 20.r,
+                  ),
+                  SizedBox(width: 8.w),
+                  RichText(
+                    text: TextSpan(
+                      text: isFirst
                           ? 'Отправление'
                           : isLast
                           ? 'Прибытие'
                           : 'Промежуточная точка',
                       style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: AppStyles.bold14s.copyWith(color: Colors.red),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 8.h),
-                    SearchBarWidget(
-                      key: ValueKey('airport_search_${currentWaypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
-                      initialValue: currentCode.isEmpty || currentCode == '' ? null : currentCode, // Явно проверяем на пустую строку
-                      hintText: 'Введите код аэродрома или название',
-                      airportService: _airportService,
-                      onSelected: onAirportSelected,
+                  ),
+                  Spacer(),
+                  if (!isFirst && !isLast && onRemoved != null)
+                    IconButton(
+                      icon: Icon(Icons.delete_outline, color: Colors.red),
+                      onPressed: onRemoved,
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
                     ),
-                  ],
-                ),
+                ],
               ),
-              if (!isFirst && !isLast && onRemoved != null)
-                IconButton(
-                  icon: Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: onRemoved,
-                ),
+              SizedBox(height: 12.h),
+              SearchBarWidget(
+                key: ValueKey('airport_search_${currentWaypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
+                initialValue: currentCode.isEmpty || currentCode == '' ? null : currentCode, // Явно проверяем на пустую строку
+                hintText: 'Введите код аэродрома или название',
+                airportService: _airportService,
+                onSelected: onAirportSelected,
+              ),
             ],
           ),
           // Для первой точки - дата и время вылета и комментарий
           if (isFirst) ...[
             SizedBox(height: 16.h),
-            Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+            RichText(
+              text: TextSpan(
+                text: 'Укажите дату и время вылета из этого аэропорта',
+                style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                children: [
+                  TextSpan(
+                    text: ' *',
+                    style: AppStyles.regular12s.copyWith(color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('departure_first_${currentWaypoint.id}_$index'),
-              label: 'Дата и время вылета',
+              label: 'Дата и время вылета *',
               initialDateTime: currentWaypoint.departureTime,
               onDateTimeSelected: (dateTime) {
                 if (onUpdated != null) {
@@ -1074,7 +1120,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Фото самолёта/вертолёта', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+            Text('Фото самолёта/вертолёта', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
             TextButton.icon(
               onPressed: () => _showUploadPhotosDialog(context),
               icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),

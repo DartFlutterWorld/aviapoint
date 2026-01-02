@@ -28,18 +28,21 @@ class SelectPassengerDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       child: Container(
         constraints: BoxConstraints(maxWidth: 400.w, maxHeight: 500.h),
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 20.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Выберите пассажира', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                Expanded(
+                  child: Text('Выберите пассажира', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                ),
                 IconButton(
                   icon: Icon(Icons.close, color: Color(0xFF9CA5AF)),
                   onPressed: () => Navigator.of(context).pop(),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
                 ),
               ],
             ),
@@ -48,10 +51,7 @@ class SelectPassengerDialog extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(20.w),
                 child: Center(
-                  child: Text(
-                    'Нет подтверждённых бронирований',
-                    style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                  ),
+                  child: Text('Нет подтверждённых бронирований', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                 ),
               )
             else
@@ -77,9 +77,7 @@ class SelectPassengerDialog extends StatelessWidget {
                           children: [
                             // Аватар пассажира
                             GestureDetector(
-                              onTap: booking.passengerAvatarUrl != null && booking.passengerAvatarUrl!.isNotEmpty
-                                  ? () => _showPhotoViewer(context, getImageUrl(booking.passengerAvatarUrl!))
-                                  : null,
+                              onTap: booking.passengerAvatarUrl != null && booking.passengerAvatarUrl!.isNotEmpty ? () => _showPhotoViewer(context, getImageUrl(booking.passengerAvatarUrl!)) : null,
                               child: ClipOval(
                                 child: booking.passengerAvatarUrl != null && booking.passengerAvatarUrl!.isNotEmpty
                                     ? CachedNetworkImage(
@@ -104,19 +102,13 @@ class SelectPassengerDialog extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    booking.passengerFullName ?? 'Пассажир #${booking.passengerId}',
-                                    style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
-                                  ),
+                                  Text(booking.passengerFullName ?? 'Пассажир #${booking.passengerId}', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                                   if (booking.passengerAverageRating != null && booking.passengerAverageRating! > 0) ...[
                                     SizedBox(height: 4.h),
                                     RatingStarsWidget(rating: booking.passengerAverageRating!),
                                   ],
                                   SizedBox(height: 4.h),
-                                  Text(
-                                    'Мест: ${booking.seatsCount}',
-                                    style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-                                  ),
+                                  Text('Мест: ${booking.seatsCount}', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                                 ],
                               ),
                             ),
@@ -199,11 +191,7 @@ class SelectPassengerDialog extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
-                          ),
+                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,10 +205,7 @@ class SelectPassengerDialog extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8.w),
@@ -228,10 +213,7 @@ class SelectPassengerDialog extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8.w),
@@ -239,10 +221,7 @@ class SelectPassengerDialog extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                 ),
                               ],
                             ),
@@ -267,13 +246,7 @@ class SelectPassengerDialog extends StatelessWidget {
       await Share.shareUri(Uri.parse(photoUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось поделиться фотографией'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
       }
     }
   }
@@ -285,26 +258,14 @@ class SelectPassengerDialog extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Правый клик по изображению → "Сохранить как"'),
-            backgroundColor: Colors.blue,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Необходимо разрешение на сохранение файлов'),
-            backgroundColor: Colors.orange,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         return;
       }
 
@@ -329,37 +290,21 @@ class SelectPassengerDialog extends StatelessWidget {
       await dio.download(photoUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid
-          ? await getExternalStorageDirectory()
-          : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid
-            ? '${directory.path}/Download/$fileName'
-            : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Фотография сохранена'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
       }
     } catch (e) {
       scaffoldMessenger.hideCurrentSnackBar();
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось скачать фотографию: $e'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
     }
   }

@@ -81,7 +81,6 @@ class ReviewCard extends StatelessWidget {
               children: [if (!isReply && reviewedName != null) _buildReviewerBlock(context) else _buildProfileHeader(context), _buildComment(), _buildReplyButton()],
             ),
           ),
-          _buildCreatedAtDate(),
         ],
       ),
     );
@@ -90,55 +89,92 @@ class ReviewCard extends StatelessWidget {
   /// Блок "Кто оставил → О ком отзыв"
   Widget _buildReviewerBlock(BuildContext context) {
     return Column(
-              children: [
-        SizedBox(height: 16.h),
-                  Container(
-                    padding: EdgeInsets.all(16.w),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF9FAFB),
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(color: Color(0xFFE5E7EB), width: 1.5),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: Offset(0, 2))],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (reviewerName != null) ...[
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Дата и кнопки без контейнера
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (review.createdAt != null)
+              Text(
+                DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
+                style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
+              ),
+            if (review.createdAt == null && (canEdit || canDelete)) Spacer(),
+            _buildActionButtons(),
+          ],
+        ),
+
+        // Контейнер с блоком "Кто оставил → О ком отзыв"
+        Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Color(0xFFF9FAFB),
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: Color(0xFFE5E7EB), width: 1.5),
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: Offset(0, 2))],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (reviewerName != null) ...[
                 _buildAvatar(context, reviewerAvatarUrl, 40.r),
-                          SizedBox(width: 8.w),
+                SizedBox(width: 8.w),
                 Expanded(child: _buildReviewerInfo(reviewerName!, reviewerRating)),
-                          SizedBox(width: 12.w),
-                          Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFF0A6EFA)),
-                          SizedBox(width: 12.w),
-                        ],
+                SizedBox(width: 12.w),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFF0A6EFA)),
+                SizedBox(width: 12.w),
+              ],
               _buildAvatar(context, reviewedAvatarUrl, 40.r, withBorder: true),
-                        SizedBox(width: 8.w),
+              SizedBox(width: 8.w),
               Expanded(child: _buildReviewedInfo(reviewedName!, reviewedRating)),
-                            ],
-                          ),
-                        ),
-        _buildActionButtons(),
-                      ],
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   /// Заголовок для отзывов в профиле
   Widget _buildProfileHeader(BuildContext context) {
-    return Row(
-                    children: [
-        _buildAvatar(context, review.reviewerAvatarUrl, 40.r),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-              if (!isReply && reviewedName == null) SizedBox(height: 12.h),
-              _buildProfileReviewerName(),
-              if (!isReply && reviewedName == null) _buildFlightInfo(),
-            ],
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _buildAvatar(context, review.reviewerAvatarUrl, 40.r),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isReply && reviewedName == null) SizedBox(height: 12.h),
+                  _buildProfileReviewerName(),
+                  if (!isReply && reviewedName == null) _buildFlightInfo(),
+                ],
+              ),
+            ),
+          ],
         ),
-        _buildActionButtons(),
+        // Дата и кнопки управления
+        if (review.createdAt != null || canEdit || canDelete)
+          Padding(
+            padding: EdgeInsets.only(top: 12.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (review.createdAt != null)
+                  Text(
+                    DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
+                    style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
+                  ),
+                if (review.createdAt == null && (canEdit || canDelete)) Spacer(),
+                _buildActionButtons(),
+              ],
+            ),
+          ),
       ],
     );
   }
@@ -149,19 +185,19 @@ class ReviewCard extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                                  SizedBox(width: 4.w),
-                                  Text('оценил вас в', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                  SizedBox(width: 4.w),
-                                  Text(review.rating!.toStringAsFixed(1), style: AppStyles.bold12s.copyWith(color: Color(0xFF0A6EFA))),
-                                ],
-                              ),
-                              SizedBox(height: 4.h),
-                              RatingWidget(rating: review.rating!, size: 12),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+              SizedBox(width: 4.w),
+              Text('оценил вас в', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+              SizedBox(width: 4.w),
+              Text(review.rating!.toStringAsFixed(1), style: AppStyles.bold12s.copyWith(color: Color(0xFF0A6EFA))),
+            ],
+          ),
+          SizedBox(height: 4.h),
+          RatingWidget(rating: review.rating!, size: 12),
         ],
       );
     }
@@ -175,7 +211,7 @@ class ReviewCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-                              SizedBox(height: 8.h),
+        SizedBox(height: 8.h),
         if (hasFlightInfo) _buildRoute(),
         _buildDepartureDate(),
       ],
@@ -185,47 +221,47 @@ class ReviewCard extends StatelessWidget {
   /// Маршрут полёта
   Widget _buildRoute() {
     if (waypoints != null && waypoints!.isNotEmpty) {
-                                    final sortedWaypoints = List<FlightWaypointEntity>.from(waypoints!)..sort((a, b) => a.sequenceOrder.compareTo(b.sequenceOrder));
+      final sortedWaypoints = List<FlightWaypointEntity>.from(waypoints!)..sort((a, b) => a.sequenceOrder.compareTo(b.sequenceOrder));
 
-                                    return Wrap(
-                                      spacing: 4.w,
-                                      runSpacing: 4.h,
-                                      crossAxisAlignment: WrapCrossAlignment.center,
-                                      children: [
-                                        ...sortedWaypoints.asMap().entries.expand((entry) {
-                                          final index = entry.key;
-                                          final waypoint = entry.value;
-                                          final isFirst = index == 0;
-                                          final isLast = index == sortedWaypoints.length - 1;
+      return Wrap(
+        spacing: 4.w,
+        runSpacing: 4.h,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          ...sortedWaypoints.asMap().entries.expand((entry) {
+            final index = entry.key;
+            final waypoint = entry.value;
+            final isFirst = index == 0;
+            final isLast = index == sortedWaypoints.length - 1;
 
-                                          return [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 14, color: Color(0xFF9CA5AF)),
-                                                SizedBox(width: 4.w),
-                                                Text(waypoint.airportCode, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                              ],
-                                            ),
-                                            if (!isLast) ...[SizedBox(width: 4.w), Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0A6EFA)), SizedBox(width: 4.w)],
-                                          ];
-                                        }).toList(),
-                                      ],
-                                    );
+            return [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 14, color: Color(0xFF9CA5AF)),
+                  SizedBox(width: 4.w),
+                  Text(waypoint.airportCode, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                ],
+              ),
+              if (!isLast) ...[SizedBox(width: 4.w), Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0A6EFA)), SizedBox(width: 4.w)],
+            ];
+          }).toList(),
+        ],
+      );
     }
 
     if (departureAirport != null || arrivalAirport != null) {
       return Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.flight_takeoff, size: 14, color: Color(0xFF9CA5AF)),
-                                    SizedBox(width: 4.w),
-                                    Text(departureAirport ?? '—', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                    SizedBox(width: 8.w),
-                                    Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0A6EFA)),
-                                    SizedBox(width: 8.w),
-                                    Text(arrivalAirport ?? '—', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                  ],
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.flight_takeoff, size: 14, color: Color(0xFF9CA5AF)),
+          SizedBox(width: 4.w),
+          Text(departureAirport ?? '—', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+          SizedBox(width: 8.w),
+          Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0A6EFA)),
+          SizedBox(width: 8.w),
+          Text(arrivalAirport ?? '—', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+        ],
       );
     }
 
@@ -239,17 +275,17 @@ class ReviewCard extends StatelessWidget {
       child: Row(
         children: [
           if (departureDate != null)
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.calendar_today, size: 14, color: Color(0xFF9CA5AF)),
-                                    SizedBox(width: 4.w),
-                                    Text(DateFormat('dd.MM.yyyy').format(departureDate!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                  ],
-                                ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.calendar_today, size: 14, color: Color(0xFF9CA5AF)),
+                SizedBox(width: 4.w),
+                Text(DateFormat('dd.MM.yyyy').format(departureDate!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+              ],
+            ),
           if (departureDate != null) Spacer(),
           _buildFlightChip(),
-                            ],
+        ],
       ),
     );
   }
@@ -267,9 +303,9 @@ class ReviewCard extends StatelessWidget {
             Icon(Icons.flight_takeoff, size: 14, color: Color(0xFF0A6EFA)),
             SizedBox(width: 4.w),
             Text('К полёту', style: AppStyles.regular12s.copyWith(color: Color(0xFF0A6EFA))),
-                          ],
-                        ),
-                      ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -356,21 +392,21 @@ class ReviewCard extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-                      if (canEdit && onEdit != null)
-                        IconButton(
-                          icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
-                          onPressed: onEdit,
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                        ),
-                      if (canDelete && onDelete != null)
-                        IconButton(
-                          icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
-                          onPressed: onDelete,
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                        ),
-                    ],
+        if (canEdit && onEdit != null)
+          IconButton(
+            icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
+            onPressed: onEdit,
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+          ),
+        if (canDelete && onDelete != null)
+          IconButton(
+            icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
+            onPressed: onDelete,
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+          ),
+      ],
     );
   }
 
@@ -391,28 +427,14 @@ class ReviewCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 12.h),
       child: TextButton.icon(
-                    onPressed: onReply,
-                    icon: Icon(Icons.reply, size: 16, color: Color(0xFF0A6EFA)),
-                    label: Text('Ответить', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      minimumSize: Size(0, 0),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  ),
-    );
-  }
-
-  /// Дата создания отзыва в правом верхнем углу
-  Widget _buildCreatedAtDate() {
-    if (review.createdAt == null) return SizedBox.shrink();
-
-    return Positioned(
-              top: 8.h,
-              right: 12.w,
-              child: Text(
-                DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
-                style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
+        onPressed: onReply,
+        icon: Icon(Icons.reply, size: 16, color: Color(0xFF0A6EFA)),
+        label: Text('Ответить', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          minimumSize: Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
       ),
     );
   }

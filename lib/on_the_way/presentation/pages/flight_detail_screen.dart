@@ -847,7 +847,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.w),
-                          child: Text('Бронирования', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                          child: Text('Бронирования', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                         ),
                         SizedBox(height: 12.h),
                         ...flightBookings.map((booking) {
@@ -1057,10 +1057,10 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
               ),
             ),
           ],
-          SizedBox(height: 24.h),
+          // SizedBox(height: 24.h),
           // Секция вопросов пилоту (доступна всем)
           _buildQuestionsSection(context, flight, isAuthenticated, isOwner),
-          SizedBox(height: 24.h),
+          // SizedBox(height: 24.h),
           // Секция отзывов (только для завершенных полетов)
           if (flight.status == 'completed') _buildReviewsSection(context, flight, isAuthenticated, isOwner),
         ],
@@ -1088,10 +1088,30 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
 
         // Проверяем, есть ли уже отзыв о пилоте от текущего пользователя
         bool hasPilotReview = false;
+        // Проверяем, есть ли еще пассажиры без отзывов (для пилота)
+        bool hasPassengersWithoutReviews = false;
         reviewsState.maybeWhen(
           success: (reviews, flights) {
             if (currentUserId != null) {
               hasPilotReview = reviews.any((review) => review.reviewerId == currentUserId && review.reviewedId == flight.pilotId && review.replyToReviewId == null);
+
+              // Для пилота: проверяем, есть ли еще пассажиры без отзывов
+              if (isOwner) {
+                final bookingsState = context.read<BookingsBloc>().state;
+                final confirmedBookings = bookingsState.maybeWhen(
+                  success: (bookings) => bookings.where((b) => b.flightId == flight.id && b.status == 'confirmed').toList(),
+                  orElse: () => <BookingEntity>[],
+                );
+
+                // Получаем список ID пассажиров, о которых уже есть отзывы от текущего пилота
+                final reviewedPassengerIds = reviews
+                    .where((review) => review.reviewerId == currentUserId && review.replyToReviewId == null && review.reviewedId != flight.pilotId)
+                    .map((review) => review.reviewedId)
+                    .toSet();
+
+                // Проверяем, есть ли пассажиры, о которых еще нет отзывов
+                hasPassengersWithoutReviews = confirmedBookings.any((booking) => !reviewedPassengerIds.contains(booking.passengerId));
+              }
             }
           },
           orElse: () {},
@@ -1105,7 +1125,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (isAuthenticated && !hasPilotReview)
+                  if (isAuthenticated && ((!isOwner && !hasPilotReview) || (isOwner && hasPassengersWithoutReviews)))
                     TextButton.icon(
                       onPressed: () => _showCreateReviewDialog(context, flight, isOwner),
                       icon: Icon(Icons.add, size: 18, color: Color(0xFF0A6EFA)),
@@ -1211,7 +1231,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     children: [
                       // Секция: Отзывы о пилоте
                       if (pilotReviews.isNotEmpty) ...[
-                        Text('Отзывы о пилоте', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                        Text('Отзывы о пилоте', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                         SizedBox(height: 12.h),
                         ...pilotReviews.map((review) {
                           final reviewReplies = replies.where((r) => r.replyToReviewId == review.id).toList();
@@ -1296,7 +1316,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                       ],
                       // Секция: Отзывы о пассажирах
                       if (passengerReviews.isNotEmpty) ...[
-                        Text('Отзывы о пассажирах', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                        Text('Отзывы о пассажирах', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                         SizedBox(height: 12.h),
                         ...passengerReviews.asMap().entries.map((entry) {
                           final index = entry.key;
@@ -1505,15 +1525,33 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         return;
       }
 
-      // Если только одно бронирование, используем его сразу
-      if (confirmedBookings.length == 1) {
-        userBooking = confirmedBookings.first;
+      // Получаем список отзывов, чтобы исключить пассажиров, о которых уже есть отзывы
+      final reviewsState = context.read<ReviewsBloc>().state;
+      final existingReviews = reviewsState.maybeWhen(
+        success: (reviews, flights) => reviews.where((review) => review.reviewerId == currentUserId && review.replyToReviewId == null && review.reviewedId != flight.pilotId).toList(),
+        orElse: () => <ReviewEntity>[],
+      );
+
+      // Получаем ID пассажиров, о которых уже есть отзывы
+      final reviewedPassengerIds = existingReviews.map((review) => review.reviewedId).toSet();
+
+      // Фильтруем список пассажиров, исключая тех, о которых уже есть отзывы
+      final availableBookings = confirmedBookings.where((booking) => !reviewedPassengerIds.contains(booking.passengerId)).toList();
+
+      if (availableBookings.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Вы уже оставили отзывы о всех пассажирах'), backgroundColor: Colors.orange));
+        return;
+      }
+
+      // Если только одно доступное бронирование, используем его сразу
+      if (availableBookings.length == 1) {
+        userBooking = availableBookings.first;
         reviewedId = userBooking.passengerId;
       } else {
-        // Если несколько бронирований, показываем диалог выбора
+        // Если несколько доступных бронирований, показываем диалог выбора
         final selectedBooking = await showDialog<BookingEntity>(
           context: context,
-          builder: (dialogContext) => SelectPassengerDialog(bookings: confirmedBookings, onSelect: (booking) => Navigator.of(dialogContext).pop(booking)),
+          builder: (dialogContext) => SelectPassengerDialog(bookings: availableBookings, onSelect: (booking) => Navigator.of(dialogContext).pop(booking)),
         );
 
         if (selectedBooking == null) return;

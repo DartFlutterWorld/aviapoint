@@ -42,6 +42,9 @@ fvm flutter build appbundle --release --dart-define=isDevelopment=false
 # 3. Сборка production версии appbundle
 fvm flutter build apk --release --dart-define=isDevelopment=false
 
+# 2. Соберите iOS приложение с production окружением
+flutter build ios --release --dart-define=isDevelopment=false
+
 # 4. Копирование на VPS
 scp -r build/web/* root@83.166.246.205:/home/aviapoint/
 uOTC0OWjMVIoaRxI
