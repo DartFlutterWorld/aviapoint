@@ -88,5 +88,9 @@
 	<string>Приложению необходим доступ к фотографиям для сохранения изображений</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Приложению необходим доступ к камере для съёмки фотографий самолёта/вертолёта</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Приложению необходим доступ к геолокации для отображения карт и определения местоположения аэропортов</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Приложению необходим доступ к геолокации для отображения карт и определения местоположения аэропортов</string>
 </dict>
 </plist>

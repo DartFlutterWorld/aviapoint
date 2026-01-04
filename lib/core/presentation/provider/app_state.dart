@@ -5,7 +5,9 @@ import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/config/environment.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
+import 'package:aviapoint/core/services/app_firebase.dart';
 import 'package:aviapoint/injection_container.dart';
+import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -62,6 +64,9 @@ class AppState with ChangeNotifier {
           onRefresh: () => _authRepository.refreshToken(tokens['refreshToken']!),
           onLogout: _logout,
         );
+
+        // Отправляем FCM токен на сервер при проверке статуса авторизации
+        _sendFcmTokenToServer();
       } else {
         await _logout();
       }
@@ -79,5 +84,19 @@ class AppState with ChangeNotifier {
     await TokenStorage.clearTokens();
     getIt<ApiDatasource>().delAuthHeader();
     notifyListeners();
+  }
+
+  /// Отправка FCM токена на сервер
+  Future<void> _sendFcmTokenToServer() async {
+    try {
+      final fcmToken = AppFirebase().fcmToken;
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        final profileRepository = getIt<ProfileRepository>();
+        await profileRepository.saveFcmToken(fcmToken);
+      }
+    } catch (e) {
+      // Не блокируем работу приложения, если не удалось отправить FCM токен
+      debugPrint('Ошибка отправки FCM токена: $e');
+    }
   }
 }

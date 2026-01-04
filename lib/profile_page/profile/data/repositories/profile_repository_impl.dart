@@ -78,4 +78,14 @@ class ProfileRepositoryImpl extends ProfileRepository {
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> saveFcmToken(String? fcmToken) async {
+    try {
+      await _profileService.saveFcmToken({'fcm_token': fcmToken});
+      return right(null);
+    } on DioException catch (e) {
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
+    }
+  }
 }

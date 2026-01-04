@@ -42,30 +42,44 @@ class QuestionCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Дата и кнопка удаления в строке справа
+                // Дата, кнопки редактирования и удаления в одной строке
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Дата и время справа
+                    // Дата и время слева
                     if (question.createdAt != null)
                       Text(
                         DateFormat('dd.MM.yyyy HH:mm').format(question.createdAt!),
                         style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
                       ),
-                    // Кнопка удаления справа
-                    if (canDelete && onDelete != null) ...[
-                      if (question.createdAt != null) SizedBox(width: 8.w),
-                      IconButton(
-                        icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
-                        onPressed: onDelete,
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                      ),
-                    ],
+                    // Кнопки редактирования и удаления справа
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Кнопка редактирования
+                        if (canEdit && onEdit != null)
+                          IconButton(
+                            icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
+                            onPressed: onEdit,
+                            padding: EdgeInsets.zero,
+                            constraints: BoxConstraints(),
+                          ),
+                        // Кнопка удаления
+                        if (canDelete && onDelete != null) ...[
+                          if (canEdit && onEdit != null) SizedBox(width: 4.w),
+                          IconButton(
+                            icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
+                            onPressed: onDelete,
+                            padding: EdgeInsets.zero,
+                            constraints: BoxConstraints(),
+                          ),
+                        ],
+                      ],
+                    ),
                   ],
                 ),
                 SizedBox(height: 12.h),
@@ -97,14 +111,6 @@ class QuestionCard extends StatelessWidget {
                         children: [Text(question.authorName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)))],
                       ),
                     ),
-                    // Кнопка редактирования (только для автора вопроса)
-                    if (canEdit && onEdit != null)
-                      IconButton(
-                        icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
-                        onPressed: onEdit,
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                      ),
                   ],
                 ),
                 SizedBox(height: 12.h),

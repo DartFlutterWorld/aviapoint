@@ -9,4 +9,5 @@ abstract class ProfileRepository {
   Future<Either<Failure, ProfileEntity>> getProfile();
   Future<Either<Failure, ProfileEntity>> updateProfile({String? email, String? firstName, String? lastName, String? telegram, String? max});
   Future<Either<Failure, ProfileEntity>> uploadProfilePhoto(XFile photo);
+  Future<Either<Failure, void>> saveFcmToken(String? fcmToken);
 }

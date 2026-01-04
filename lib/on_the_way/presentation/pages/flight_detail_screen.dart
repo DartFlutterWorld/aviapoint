@@ -2582,7 +2582,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
       child: BlocBuilder<QuestionsBloc, QuestionsState>(
         builder: (context, questionsState) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

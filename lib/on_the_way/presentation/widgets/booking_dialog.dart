@@ -1,7 +1,9 @@
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/bookings_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flight_detail_bloc.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,7 @@ class BookingDialog extends StatefulWidget {
 
 class _BookingDialogState extends State<BookingDialog> {
   int _seatsCount = 1;
+  bool _shouldCheckProfileAfterBooking = false;
 
   @override
   void initState() {
@@ -65,9 +68,44 @@ class _BookingDialogState extends State<BookingDialog> {
           });
         }
 
-        return BlocListener<BookingsBloc, BookingsState>(
-          listener: (context, state) {
-            state.when(
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<ProfileBloc, ProfileState>(
+              listener: (context, profileState) {
+                // Проверяем ФИО только если был запрос на проверку после бронирования
+                if (_shouldCheckProfileAfterBooking) {
+                  profileState.maybeWhen(
+                    success: (profile) {
+                      final firstName = profile.firstName?.trim() ?? '';
+                      final lastName = profile.lastName?.trim() ?? '';
+                      
+                      if (firstName.isEmpty || lastName.isEmpty) {
+                        // Если ФИО не заполнены, открываем редактирование профиля
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (context.mounted) {
+                            _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг
+                            openProfileEdit(context: context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Пожалуйста, заполните имя и фамилию для завершения бронирования'),
+                                backgroundColor: Colors.orange,
+                                duration: Duration(seconds: 4),
+                              ),
+                            );
+                          }
+                        });
+                      } else {
+                        _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг, если ФИО заполнены
+                      }
+                    },
+                    orElse: () {},
+                  );
+                }
+              },
+            ),
+            BlocListener<BookingsBloc, BookingsState>(
+              listener: (context, state) {
+                state.when(
               loading: () {
                 // Не показываем ничего при loading
               },
@@ -95,7 +133,7 @@ class _BookingDialogState extends State<BookingDialog> {
               success: (bookings) {
                 // Не обрабатываем success в диалоге
               },
-              bookingCreated: (booking) {
+              bookingCreated: (booking) async {
                 // Обновляем информацию о полете перед закрытием диалога
                 try {
                   final flightDetailBloc = context.read<FlightDetailBloc>();
@@ -106,15 +144,71 @@ class _BookingDialogState extends State<BookingDialog> {
                 } catch (e) {
                   print('❌ [BookingDialog] Не удалось обновить информацию о полете: $e');
                 }
+                
                 // Закрываем диалог с результатом, указывающим на необходимость переключения вкладки
                 Navigator.of(context).pop({'success': true, 'switchToMyBookings': true});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Бронирование успешно создано'),
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                
+                // Проверяем, заполнены ли ФИО у пользователя
+                try {
+                  final profileBloc = context.read<ProfileBloc>();
+                  final profileState = profileBloc.state;
+                  
+                  profileState.maybeWhen(
+                    success: (profile) {
+                      // Проверяем, заполнены ли имя и фамилия
+                      final firstName = profile.firstName?.trim() ?? '';
+                      final lastName = profile.lastName?.trim() ?? '';
+                      
+                      if (firstName.isEmpty || lastName.isEmpty) {
+                        // Если ФИО не заполнены, открываем редактирование профиля
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (context.mounted) {
+                            openProfileEdit(context: context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Пожалуйста, заполните имя и фамилию для завершения бронирования'),
+                                backgroundColor: Colors.orange,
+                                duration: Duration(seconds: 4),
+                              ),
+                            );
+                          }
+                        });
+                      } else {
+                        // Если ФИО заполнены, показываем обычное сообщение об успехе
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Бронирование успешно создано'),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    },
+                    orElse: () {
+                      // Если профиль не загружен, загружаем его и помечаем, что нужно проверить после загрузки
+                      _shouldCheckProfileAfterBooking = true;
+                      profileBloc.add(ProfileEvent.get());
+                      // Показываем сообщение об успехе
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Бронирование успешно создано'),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                  );
+                } catch (e) {
+                  print('❌ [BookingDialog] Ошибка при проверке профиля: $e');
+                  // В случае ошибки просто показываем сообщение об успехе
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Бронирование успешно создано'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
               },
               bookingConfirmed: (booking) {
                 // Не обрабатываем в диалоге
@@ -122,8 +216,10 @@ class _BookingDialogState extends State<BookingDialog> {
               bookingCancelled: (booking) {
                 // Не обрабатываем в диалоге
               },
-            );
-          },
+                );
+              },
+            ),
+          ],
           child: Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
             child: BlocBuilder<BookingsBloc, BookingsState>(
