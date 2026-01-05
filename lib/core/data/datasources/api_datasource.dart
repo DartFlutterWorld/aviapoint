@@ -27,7 +27,7 @@ abstract class ApiDatasource {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options options,
-    Function(int, int)? onSendProgress,
+    void Function(int, int)? onSendProgress,
   });
 
   /// PUT request to API

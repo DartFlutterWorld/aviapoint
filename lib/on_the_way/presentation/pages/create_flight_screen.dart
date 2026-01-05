@@ -10,12 +10,12 @@ import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/search_bar_widget.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
+import 'package:aviapoint/core/presentation/widgets/date_time_field_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -124,13 +124,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
 
     // Валидация: минимум 2 точки в маршруте
     if (_waypoints.length < 2) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 5),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
       return;
     }
 
@@ -138,26 +134,14 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     for (var i = 0; i < _waypoints.length; i++) {
       final wp = _waypoints[i];
       if (wp.airportCode.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Укажите код аэропорта для точки ${i + 1}'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 5),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Укажите код аэропорта для точки ${i + 1}'), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
         return;
       }
     }
 
     // Валидация: дата отправления обязательна
     if (_waypoints.first.departureTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Укажите дату и время вылета'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 5),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Укажите дату и время вылета'), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
       return;
     }
 
@@ -238,13 +222,20 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     }
 
     if (errors.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errors.join('\n')),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 5),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errors.join('\n')), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
+    }
+  }
+
+  Future<void> _showAircraftTypeSelector(BuildContext context) async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => AircraftTypeSelectorDialog(initialValue: _aircraftTypeController.text),
+    );
+
+    if (result != null && result.isNotEmpty) {
+      setState(() {
+        _aircraftTypeController.text = result;
+      });
     }
   }
 
@@ -869,11 +860,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                               borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                             ),
                           ),
-                          iconStyleData: IconStyleData(
-                            icon: SizedBox.shrink(),
-                            iconEnabledColor: Colors.transparent,
-                            iconDisabledColor: Colors.transparent,
-                          ),
+                          iconStyleData: IconStyleData(icon: SizedBox.shrink(), iconEnabledColor: Colors.transparent, iconDisabledColor: Colors.transparent),
                           dropdownStyleData: DropdownStyleData(
                             maxHeight: 240.h,
                             width: constraints.maxWidth,
@@ -893,20 +880,14 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                           selectedItemBuilder: (BuildContext context) {
                             return List.generate(5, (index) => index + 1).map((seats) {
                               return Center(
-                                child: Text(
-                                  '$seats',
-                                  style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
-                                ),
+                                child: Text('$seats', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
                               );
                             }).toList();
                           },
                           items: List.generate(5, (index) => index + 1).map((seats) {
                             return DropdownMenuItem<int>(
                               value: seats,
-                              child: Text(
-                                '$seats',
-                                style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
-                              ),
+                              child: Text('$seats', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -1000,34 +981,43 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       ],
                     ),
                     SizedBox(height: 8.h),
-                    TextFormField(
-                      controller: _aircraftTypeController,
-                      onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
-                      decoration: InputDecoration(
-                        hintText: 'Например, Cessna 172',
-                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                    InkWell(
+                      onTap: () => _showAircraftTypeSelector(context),
+                      child: TextFormField(
+                        controller: _aircraftTypeController,
+                        enabled: false,
+                        onChanged: (_) => setState(() {}), // Обновляем состояние для перерисовки кнопки
+                        decoration: InputDecoration(
+                          hintText: 'Нажмите для выбора типа самолёта',
+                          hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                          ),
+                          suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
-                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Введите тип самолета';
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Введите тип самолета';
-                        }
-                        return null;
-                      },
                     ),
                     SizedBox(height: 16.h),
                     // Секция фотографий самолета
@@ -1476,66 +1466,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
   }
 
   Widget _buildDateTimeField({Key? key, required String label, DateTime? initialDateTime, required void Function(DateTime?) onDateTimeSelected}) {
-    return InkWell(
-      key: key,
-      onTap: () async {
-        // Сначала выбираем дату
-        final dateResult = await showCalendarDatePicker2Dialog(
-          context: context,
-          config: CalendarDatePicker2WithActionButtonsConfig(
-            calendarType: CalendarDatePicker2Type.single,
-            selectedDayHighlightColor: Color(0xFF0A6EFA),
-            todayTextStyle: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
-            selectedDayTextStyle: AppStyles.bold14s.copyWith(color: Colors.white),
-          ),
-          dialogSize: Size(MediaQuery.of(context).size.width * 0.9, 400),
-          value: initialDateTime != null ? [initialDateTime] : [],
-        );
-
-        if (dateResult == null || dateResult.isEmpty) return;
-
-        final selectedDate = dateResult.first;
-        if (selectedDate == null) return;
-
-        // Затем выбираем время
-        final timeResult = await showTimePicker(
-          context: context,
-          initialTime: initialDateTime != null ? TimeOfDay.fromDateTime(initialDateTime) : TimeOfDay.now(),
-          builder: (context, child) {
-            return Theme(
-              data: Theme.of(context).copyWith(colorScheme: ColorScheme.light(primary: Color(0xFF0A6EFA))),
-              child: child!,
-            );
-          },
-        );
-
-        if (timeResult != null) {
-          final dateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, timeResult.hour, timeResult.minute);
-          onDateTimeSelected(dateTime);
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          color: Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: Color(0xFFE5E7EB)),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.calendar_today, size: 18, color: Color(0xFF9CA5AF)),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Text(
-                initialDateTime != null ? DateFormat('dd.MM.yyyy HH:mm').format(initialDateTime) : 'Выберите дату и время',
-                style: AppStyles.regular14s.copyWith(color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF)),
-              ),
-            ),
-            Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFF9CA5AF)),
-          ],
-        ),
-      ),
-    );
+    return DateTimeFieldWidget(fieldKey: key, label: label, initialDateTime: initialDateTime, onDateTimeSelected: onDateTimeSelected);
   }
 }
 

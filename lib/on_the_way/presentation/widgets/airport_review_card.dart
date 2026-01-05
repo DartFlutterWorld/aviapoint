@@ -25,8 +25,8 @@ class AirportReviewCard extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onReply;
   final bool isReply;
-  final Function(BuildContext, List<String>, int)? onPhotoTap;
-  final Function(int, String)? onDeletePhoto; // Callback для удаления фотографии (reviewId, photoUrl)
+  final void Function(BuildContext, List<String>, int)? onPhotoTap;
+  final void Function(int, String)? onDeletePhoto; // Callback для удаления фотографии (reviewId, photoUrl)
 
   const AirportReviewCard({
     super.key,

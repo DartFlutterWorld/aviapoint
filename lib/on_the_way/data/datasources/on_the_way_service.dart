@@ -4,6 +4,8 @@ import 'package:aviapoint/on_the_way/data/models/booking_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/review_dto.dart';
 import 'package:aviapoint/on_the_way/data/models/flight_question_dto.dart';
+import 'package:aviapoint/on_the_way/data/models/aircraft_manufacturer_dto.dart';
+import 'package:aviapoint/on_the_way/data/models/aircraft_model_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -128,4 +130,22 @@ abstract class OnTheWayService {
 
   @DELETE('/api/airports/reviews/{id}')
   Future<void> deleteAirportReview(@Path('id') int id);
+
+  // Каталог самолётов
+  @GET('/api/aircraft/manufacturers')
+  Future<List<AircraftManufacturerDto>> getAircraftManufacturers({
+    @Query('active_only') bool? activeOnly,
+  });
+
+  @GET('/api/aircraft/models')
+  Future<List<AircraftModelDto>> getAircraftModels({
+    @Query('manufacturer_id') int? manufacturerId,
+    @Query('category') String? category,
+    @Query('engine_type') String? engineType,
+    @Query('active_only') bool? activeOnly,
+    @Query('q') String? searchQuery,
+  });
+
+  @GET('/api/aircraft/models/{id}')
+  Future<AircraftModelDto> getAircraftModelById(@Path('id') int id);
 }
