@@ -14,7 +14,7 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io' show Platform;
@@ -243,6 +243,19 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     }
   }
 
+  bool _shouldShowTrainingMode() {
+    // На веб всегда показываем
+    if (kIsWeb) return true;
+
+    // На iOS показываем только если showPaidContent = true
+    if (Platform.isIOS) {
+      return AppSettingsServiceHelper().getSettingValue('showPaidContent');
+    }
+
+    // На Android и других платформах всегда показываем
+    return true;
+  }
+
   Future<void> _handleModeSelection(BuildContext context, TestMode testMode) async {
     final rosAviaTestCubit = context.read<RosAviaTestCubit>();
     rosAviaTestCubit.setTestMode(testMode);
@@ -296,8 +309,8 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 16.h),
-                  // На iOS показываем только если showPaidContent = true, на остальных платформах всегда показываем
-                  if (!Platform.isIOS || AppSettingsServiceHelper().getSettingValue('showPaidContent')) ...[
+                  // На iOS показываем только если showPaidContent = true, на остальных платформах (веб, Android) всегда показываем
+                  if (_shouldShowTrainingMode()) ...[
                     TestingModeElement(
                       title: trainingModeTitle,
                       subTitle: 'Правильные ответы появляются сразу',
