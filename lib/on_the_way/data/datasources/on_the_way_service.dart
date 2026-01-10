@@ -84,14 +84,23 @@ abstract class OnTheWayService {
   Future<FlightQuestionDto> createQuestion(@Path('flightId') int flightId, @Body() Map<String, dynamic> request);
 
   @PUT('/api/flights/{flightId}/questions/{id}')
-  Future<FlightQuestionDto> updateQuestion(@Path('flightId') int flightId, @Path('id') int id, @Body() Map<String, dynamic> body);
+  Future<FlightQuestionDto> updateQuestion(
+    @Path('flightId') int flightId,
+    @Path('id') int id,
+    @Body() Map<String, dynamic> body,
+  );
 
   @DELETE('/api/flights/{flightId}/questions/{id}')
   Future<void> deleteQuestion(@Path('flightId') int flightId, @Path('id') int id);
 
   // Аэропорты
   @GET('/api/airports')
-  Future<List<AirportDto>> searchAirports({@Query('q') String? query, @Query('country') String? country, @Query('type') String? type, @Query('limit') int? limit});
+  Future<List<AirportDto>> searchAirports({
+    @Query('q') String? query,
+    @Query('country') String? country,
+    @Query('type') String? type,
+    @Query('limit') int? limit,
+  });
 
   @GET('/api/airports/{code}')
   Future<AirportDto> getAirportByCode(@Path('code') String code);
@@ -133,16 +142,11 @@ abstract class OnTheWayService {
 
   // Каталог самолётов
   @GET('/api/aircraft/manufacturers')
-  Future<List<AircraftManufacturerDto>> getAircraftManufacturers({
-    @Query('active_only') bool? activeOnly,
-  });
+  Future<List<AircraftManufacturerDto>> getAircraftManufacturers();
 
   @GET('/api/aircraft/models')
   Future<List<AircraftModelDto>> getAircraftModels({
     @Query('manufacturer_id') int? manufacturerId,
-    @Query('category') String? category,
-    @Query('engine_type') String? engineType,
-    @Query('active_only') bool? activeOnly,
     @Query('q') String? searchQuery,
   });
 

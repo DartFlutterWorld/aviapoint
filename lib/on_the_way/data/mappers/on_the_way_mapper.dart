@@ -73,7 +73,7 @@ class OnTheWayMapper {
     print('   - passengerLastName: ${dto.passengerLastName}');
     print('   - passengerAvatarUrl: ${dto.passengerAvatarUrl}');
     print('   - passengerAverageRating: ${dto.passengerAverageRating}');
-    
+
     // Парсим waypoints из JSON
     List<String>? flightWaypoints;
     if (dto.flightWaypoints != null) {
@@ -89,7 +89,7 @@ class OnTheWayMapper {
         }
       }
     }
-    
+
     final entity = BookingEntity(
       id: dto.id,
       flightId: dto.flightId,
@@ -110,11 +110,11 @@ class OnTheWayMapper {
       flightArrivalAirport: dto.flightArrivalAirport,
       flightWaypoints: flightWaypoints,
     );
-    
+
     print('✅ [OnTheWayMapper] BookingEntity создан:');
     print('   - passengerFullName: ${entity.passengerFullName}');
     print('   - passengerAverageRating: ${entity.passengerAverageRating}');
-    
+
     return entity;
   }
 

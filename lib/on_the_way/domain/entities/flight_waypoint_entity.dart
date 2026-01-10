@@ -49,4 +49,3 @@ class FlightWaypointEntity extends Equatable {
     airportIdentRu,
   ];
 }
-

@@ -13,8 +13,15 @@ abstract class ProfileEvent with _$ProfileEvent {
 
   const factory ProfileEvent.get() = GetProfileEvent;
   const factory ProfileEvent.initial() = InitialProfileEvent;
-  const factory ProfileEvent.update({String? email, String? firstName, String? lastName, String? telegram, String? max}) = UpdateProfileEvent;
+  const factory ProfileEvent.update({
+    String? email,
+    String? firstName,
+    String? lastName,
+    String? telegram,
+    String? max,
+  }) = UpdateProfileEvent;
   const factory ProfileEvent.uploadPhoto(XFile photo) = UploadProfilePhotoEvent;
+  const factory ProfileEvent.deleteAccount() = DeleteAccountEvent;
 }
 
 @freezed
@@ -30,6 +37,8 @@ abstract class ProfileState with _$ProfileState {
   }) = ErrorProfileState;
   const factory ProfileState.success({required ProfileEntity profile}) = SuccessProfileState;
   const factory ProfileState.initial() = InitialProfileState;
+  const factory ProfileState.deleting() = DeletingAccountState;
+  const factory ProfileState.deleted() = DeletedAccountState;
 }
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
@@ -44,6 +53,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         initial: (event) => _initial(event, emitter),
         update: (event) => _update(event, emitter),
         uploadPhoto: (event) => _uploadPhoto(event, emitter),
+        deleteAccount: (event) => _deleteAccount(event, emitter),
       ),
     );
   }
@@ -117,6 +127,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       },
       (r) {
         emit(SuccessProfileState(profile: r));
+      },
+    );
+  }
+
+  Future<void> _deleteAccount(DeleteAccountEvent event, Emitter<ProfileState> emit) async {
+    emit(const DeletingAccountState());
+
+    final response = await _profileRepository.deleteAccount();
+    response.fold(
+      (l) {
+        emit(
+          ErrorProfileState(
+            errorForUser: 'Не удалось удалить аккаунт!\nПопробуйте повторить запрос',
+            errorFromApi: l.message,
+            statusCode: 'Код ошибки сервера: ${l.statusCode}',
+            responseMessage: l.responseMessage,
+          ),
+        );
+      },
+      (r) {
+        emit(const DeletedAccountState());
       },
     );
   }

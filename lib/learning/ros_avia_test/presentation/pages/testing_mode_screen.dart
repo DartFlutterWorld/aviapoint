@@ -13,9 +13,11 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mo
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
+import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:io' show Platform;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -108,9 +110,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
-      final hasActive = subscriptions.any(
-        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
-      );
+      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
 
       if (mounted) {
         setState(() {
@@ -154,9 +154,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
       // Проверяем, есть ли хотя бы одна активная подписка
-      final hasActiveSubscription = subscriptions.any(
-        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
-      );
+      final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
 
       if (hasActiveSubscription) {
         // Обновляем состояние подписки в UI
@@ -224,10 +222,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       // Загружаем типы подписок и находим yearly
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
-      final yearlyType = subscriptionTypes.firstWhere(
-        (type) => type.code == 'rosaviatest_365' && type.isActive,
-        orElse: () => throw Exception('Годовая подписка не найдена'),
-      );
+      final yearlyType = subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => throw Exception('Годовая подписка не найдена'));
 
       if (!context.mounted) return;
 
@@ -243,13 +238,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       print('❌ Ошибка при создании платежа: $e');
       print('StackTrace: $stackTrace');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ошибка при загрузке типов подписок: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
       }
     }
   }
@@ -279,9 +268,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   @override
   Widget build(BuildContext context) {
     // Формируем title в зависимости от наличия активной подписки
-    final trainingModeTitle = _hasActiveSubscription
-        ? 'Тренировочный\nрежим'
-        : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
+    final trainingModeTitle = _hasActiveSubscription ? 'Тренировочный\nрежим' : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
 
     return BlocProvider.value(
       value: getIt<RosAviaTestCubit>(),
@@ -303,26 +290,29 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
           appBar: CustomAppBar(title: 'Выберите режим тестирования', withBack: true),
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 16.h),
-                  TestingModeElement(
-                    title: trainingModeTitle,
-                    subTitle: 'Правильные ответы появляются сразу',
-                    onTap: () => _handleTrainingModePayment(context),
-                    image: Pictures.zamok,
-                    bg: Pictures.traningTestBgPng,
-                    isLock: !_hasActiveSubscription, // Показываем анимацию, если нет активной подписки
-                  ),
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',
-                    style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
-                  ),
-                  SizedBox(height: 16.h),
+                  // На iOS показываем только если showPaidContent = true, на остальных платформах всегда показываем
+                  if (!Platform.isIOS || AppSettingsServiceHelper().getSettingValue('showPaidContent')) ...[
+                    TestingModeElement(
+                      title: trainingModeTitle,
+                      subTitle: 'Правильные ответы появляются сразу',
+                      onTap: () => _handleTrainingModePayment(context),
+                      image: Pictures.zamok,
+                      bg: Pictures.traningTestBgPng,
+                      isLock: !_hasActiveSubscription, // Показываем анимацию, если нет активной подписки
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',
+                      style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
                   TestingModeElement(
                     title: 'Стандартный\nтест',
                     subTitle: 'Результаты появятся вконце теста',

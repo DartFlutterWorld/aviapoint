@@ -26,6 +26,12 @@ import 'package:aviapoint/main_page/stories/domain/repositories/story_repository
 import 'package:aviapoint/news/data/datasources/news_service.dart';
 import 'package:aviapoint/news/data/repositories/news_repository_impl.dart';
 import 'package:aviapoint/news/domain/repositories/news_repository.dart';
+import 'package:aviapoint/blog/data/datasources/blog_service.dart';
+import 'package:aviapoint/blog/data/repositories/blog_repository_impl.dart';
+import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
+import 'package:aviapoint/app_settings/data/datasources/app_settings_service.dart';
+import 'package:aviapoint/app_settings/data/repositories/app_settings_repository_impl.dart';
+import 'package:aviapoint/app_settings/domain/repositories/app_settings_repository.dart';
 import 'package:aviapoint/payment/data/datasources/payment_service.dart';
 import 'package:aviapoint/payment/data/repositories/payment_repository_impl.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
@@ -74,6 +80,11 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<NormalCheckedCubit>(NormalCheckedCubit());
   getIt.registerSingleton<StoryRepository>(StoryRepositoryImpl(storyService: StoryService(dataSource.dio)));
   getIt.registerSingleton<NewsRepository>(NewsRepositoryImpl(newsService: NewsService(dataSource.dio)));
+  getIt.registerSingleton<BlogRepository>(BlogRepositoryImpl(blogService: BlogService(dataSource.dio)));
+
+  getIt.registerSingleton<AppSettingsRepository>(
+    AppSettingsRepositoryImpl(appSettingsService: AppSettingsService(dataSource.dio)),
+  );
 
   getIt.registerSingleton<RosAviaTestRepository>(
     RosAviaTestRepositoryImpl(rosAviaTestService: RosAviaTestService(dataSource.dio)),

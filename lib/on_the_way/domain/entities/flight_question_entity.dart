@@ -78,4 +78,3 @@ class FlightQuestionEntity extends Equatable {
     answeredByAvatarUrl,
   ];
 }
-

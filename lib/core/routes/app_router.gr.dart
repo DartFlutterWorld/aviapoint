@@ -135,6 +135,90 @@ class BaseRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [BlogArticleDetailScreen]
+class BlogArticleDetailRoute extends PageRouteInfo<BlogArticleDetailRouteArgs> {
+  BlogArticleDetailRoute({
+    Key? key,
+    required int articleId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BlogArticleDetailRoute.name,
+         args: BlogArticleDetailRouteArgs(key: key, articleId: articleId),
+         rawPathParams: {'id': articleId},
+         initialChildren: children,
+       );
+
+  static const String name = 'BlogArticleDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<BlogArticleDetailRouteArgs>(
+        orElse: () =>
+            BlogArticleDetailRouteArgs(articleId: pathParams.getInt('id')),
+      );
+      return BlogArticleDetailScreen(key: args.key, articleId: args.articleId);
+    },
+  );
+}
+
+class BlogArticleDetailRouteArgs {
+  const BlogArticleDetailRouteArgs({this.key, required this.articleId});
+
+  final Key? key;
+
+  final int articleId;
+
+  @override
+  String toString() {
+    return 'BlogArticleDetailRouteArgs{key: $key, articleId: $articleId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BlogArticleDetailRouteArgs) return false;
+    return key == other.key && articleId == other.articleId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ articleId.hashCode;
+}
+
+/// generated route for
+/// [BlogNavigationScreen]
+class BlogNavigationRoute extends PageRouteInfo<void> {
+  const BlogNavigationRoute({List<PageRouteInfo>? children})
+    : super(BlogNavigationRoute.name, initialChildren: children);
+
+  static const String name = 'BlogNavigationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BlogNavigationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [BlogScreen]
+class BlogRoute extends PageRouteInfo<void> {
+  const BlogRoute({List<PageRouteInfo>? children})
+    : super(BlogRoute.name, initialChildren: children);
+
+  static const String name = 'BlogRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BlogScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [CabinFireScreen]
 class CabinFireRoute extends PageRouteInfo<void> {
   const CabinFireRoute({List<PageRouteInfo>? children})
@@ -146,6 +230,22 @@ class CabinFireRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const CabinFireScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [CreateBlogArticleScreen]
+class CreateBlogArticleRoute extends PageRouteInfo<void> {
+  const CreateBlogArticleRoute({List<PageRouteInfo>? children})
+    : super(CreateBlogArticleRoute.name, initialChildren: children);
+
+  static const String name = 'CreateBlogArticleRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreateBlogArticleScreen();
     },
   );
 }
@@ -476,6 +576,58 @@ class EditAirportRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ airportCode.hashCode;
+}
+
+/// generated route for
+/// [EditBlogArticleScreen]
+class EditBlogArticleRoute extends PageRouteInfo<EditBlogArticleRouteArgs> {
+  EditBlogArticleRoute({
+    Key? key,
+    required int articleId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditBlogArticleRoute.name,
+         args: EditBlogArticleRouteArgs(key: key, articleId: articleId),
+         rawPathParams: {'id': articleId},
+         initialChildren: children,
+       );
+
+  static const String name = 'EditBlogArticleRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditBlogArticleRouteArgs>(
+        orElse: () =>
+            EditBlogArticleRouteArgs(articleId: pathParams.getInt('id')),
+      );
+      return EditBlogArticleScreen(key: args.key, articleId: args.articleId);
+    },
+  );
+}
+
+class EditBlogArticleRouteArgs {
+  const EditBlogArticleRouteArgs({this.key, required this.articleId});
+
+  final Key? key;
+
+  final int articleId;
+
+  @override
+  String toString() {
+    return 'EditBlogArticleRouteArgs{key: $key, articleId: $articleId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditBlogArticleRouteArgs) return false;
+    return key == other.key && articleId == other.articleId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ articleId.hashCode;
 }
 
 /// generated route for

@@ -12,12 +12,7 @@ class FlightRouteMap extends StatefulWidget {
   final AirportService airportService;
   final double height;
 
-  const FlightRouteMap({
-    super.key,
-    required this.flight,
-    required this.airportService,
-    this.height = 300,
-  });
+  const FlightRouteMap({super.key, required this.flight, required this.airportService, this.height = 300});
 
   @override
   State<FlightRouteMap> createState() => _FlightRouteMapState();
@@ -54,7 +49,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
         final waypoint = waypoints[i];
         try {
           final airport = await widget.airportService.getAirportByCode(waypoint.airportCode);
-          
+
           if (airport != null && airport.latitudeDeg != null && airport.longitudeDeg != null) {
             final position = LatLng(airport.latitudeDeg!, airport.longitudeDeg!);
             routePoints.add(position);
@@ -62,7 +57,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
             // Создаем маркер для точки
             final isFirst = i == 0;
             final isLast = i == waypoints.length - 1;
-            
+
             Color markerColor;
             IconData markerIcon;
             if (isFirst) {
@@ -75,7 +70,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
               markerColor = Colors.blue;
               markerIcon = Icons.flight;
             }
-            
+
             markers.add(
               Marker(
                 point: position,
@@ -91,18 +86,10 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
                       boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
+                        BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2)),
                       ],
                     ),
-                    child: Icon(
-                      markerIcon,
-                      color: Colors.white,
-                      size: 24,
-                    ),
+                    child: Icon(markerIcon, color: Colors.white, size: 24),
                   ),
                 ),
               ),
@@ -118,13 +105,13 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
         for (int i = 0; i < routePoints.length - 1; i++) {
           final from = routePoints[i];
           final to = routePoints[i + 1];
-          
+
           // Вычисляем расстояние в метрах
           final distanceInMeters = _distance.as(LengthUnit.Meter, from, to);
-          
+
           // Конвертируем в километры
           final distanceInKm = distanceInMeters / 1000;
-          
+
           // Форматируем расстояние всегда в километрах
           String distanceText;
           if (distanceInKm < 1) {
@@ -137,13 +124,10 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
             // Больше 100 км - без дробной части
             distanceText = '${distanceInKm.toStringAsFixed(0)} км';
           }
-          
+
           // Вычисляем среднюю точку между двумя аэропортами
-          final midPoint = LatLng(
-            (from.latitude + to.latitude) / 2,
-            (from.longitude + to.longitude) / 2,
-          );
-          
+          final midPoint = LatLng((from.latitude + to.latitude) / 2, (from.longitude + to.longitude) / 2);
+
           // Создаем маркер с расстоянием
           markers.add(
             Marker(
@@ -157,11 +141,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
                   borderRadius: BorderRadius.circular(6.r),
                   border: Border.all(color: Color(0xFF0A6EFA), width: 1),
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
+                    BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 2)),
                   ],
                 ),
                 child: Center(
@@ -179,7 +159,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
             ),
           );
         }
-        
+
         // Вычисляем границы для отображения всего маршрута
         double minLat = routePoints.first.latitude;
         double maxLat = routePoints.first.latitude;
@@ -193,10 +173,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
           maxLng = maxLng > point.longitude ? maxLng : point.longitude;
         }
 
-        _bounds = LatLngBounds(
-          LatLng(minLat, minLng),
-          LatLng(maxLat, maxLng),
-        );
+        _bounds = LatLngBounds(LatLng(minLat, minLng), LatLng(maxLat, maxLng));
 
         setState(() {
           _routePoints = routePoints;
@@ -223,15 +200,9 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
     if (widget.flight.waypoints == null || widget.flight.waypoints!.isEmpty) {
       return Container(
         height: widget.height.h,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12.r),
-        ),
+        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12.r)),
         child: Center(
-          child: Text(
-            'Маршрут не указан',
-            style: AppStyles.regular14s.copyWith(color: Colors.grey[600]),
-          ),
+          child: Text('Маршрут не указан', style: AppStyles.regular14s.copyWith(color: Colors.grey[600])),
         ),
       );
     }
@@ -239,13 +210,8 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
     if (_isLoading) {
       return Container(
         height: widget.height.h,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
+        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12.r)),
+        child: Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -253,10 +219,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
     LatLng initialPosition = const LatLng(55.7558, 37.6173); // Москва по умолчанию
     if (_routePoints.isNotEmpty) {
       if (_bounds != null) {
-        initialPosition = LatLng(
-          (_bounds!.north + _bounds!.south) / 2,
-          (_bounds!.east + _bounds!.west) / 2,
-        );
+        initialPosition = LatLng((_bounds!.north + _bounds!.south) / 2, (_bounds!.east + _bounds!.west) / 2);
       } else {
         initialPosition = _routePoints.first;
       }
@@ -266,13 +229,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
       height: widget.height.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4))],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.r),
@@ -303,17 +260,9 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
             ),
             if (_routePoints.length > 1)
               PolylineLayer(
-                polylines: [
-                  Polyline(
-                    points: _routePoints,
-                    strokeWidth: 3.0,
-                    color: const Color(0xFF0A6EFA),
-                  ),
-                ],
+                polylines: [Polyline(points: _routePoints, strokeWidth: 3.0, color: const Color(0xFF0A6EFA))],
               ),
-            MarkerLayer(
-              markers: _markers,
-            ),
+            MarkerLayer(markers: _markers),
           ],
         ),
       ),
@@ -323,24 +272,14 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
   void _fitCameraToBounds() {
     if (_bounds != null && _isMapReady) {
       try {
-        _mapController.fitCamera(
-          CameraFit.bounds(
-            bounds: _bounds!,
-            padding: const EdgeInsets.all(50),
-          ),
-        );
+        _mapController.fitCamera(CameraFit.bounds(bounds: _bounds!, padding: const EdgeInsets.all(50)));
       } catch (e) {
         print('⚠️ [FlightRouteMap] Ошибка установки камеры: $e');
         // Повторяем попытку через небольшую задержку
         Future.delayed(const Duration(milliseconds: 300), () {
           if (mounted && _isMapReady) {
             try {
-              _mapController.fitCamera(
-                CameraFit.bounds(
-                  bounds: _bounds!,
-                  padding: const EdgeInsets.all(50),
-                ),
-              );
+              _mapController.fitCamera(CameraFit.bounds(bounds: _bounds!, padding: const EdgeInsets.all(50)));
             } catch (e2) {
               print('⚠️ [FlightRouteMap] Повторная ошибка установки камеры: $e2');
             }

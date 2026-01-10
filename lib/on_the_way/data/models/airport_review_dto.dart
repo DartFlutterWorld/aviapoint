@@ -91,4 +91,3 @@ DateTime? _dateTimeFromJsonNullable(dynamic value) {
   }
   return _dateTimeFromJson(value);
 }
-

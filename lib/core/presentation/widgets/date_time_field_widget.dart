@@ -37,8 +37,12 @@ class DateTimeFieldWidget extends StatelessWidget {
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
-                initialDateTime != null ? DateFormat('dd.MM.yyyy HH:mm').format(initialDateTime!) : 'Выберите дату и время',
-                style: AppStyles.regular14s.copyWith(color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF)),
+                initialDateTime != null
+                    ? DateFormat('dd.MM.yyyy HH:mm').format(initialDateTime!)
+                    : 'Выберите дату и время',
+                style: AppStyles.regular14s.copyWith(
+                  color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF),
+                ),
               ),
             ),
             Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFF9CA5AF)),
@@ -80,9 +84,14 @@ class DateTimeFieldWidget extends StatelessWidget {
     );
 
     if (timeResult != null) {
-      final dateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, timeResult.hour, timeResult.minute);
+      final dateTime = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        timeResult.hour,
+        timeResult.minute,
+      );
       onDateTimeSelected(dateTime);
     }
   }
 }
-

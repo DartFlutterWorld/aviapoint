@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileDto {
 
- int get id; String get phone; String? get email;@JsonKey(name: 'first_name') String? get firstName;@JsonKey(name: 'last_name') String? get lastName;@JsonKey(name: 'avatar_url') String? get avatarUrl; String? get telegram; String? get max;@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? get averageRating;@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? get reviewsCount;@JsonKey(name: 'owned_airports') dynamic get ownedAirports;
+ int get id;@JsonKey(fromJson: _stringFromJsonNullable) String get phone; String? get email;@JsonKey(name: 'first_name') String? get firstName;@JsonKey(name: 'last_name') String? get lastName;@JsonKey(name: 'avatar_url') String? get avatarUrl; String? get telegram; String? get max;@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? get averageRating;@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? get reviewsCount;@JsonKey(name: 'owned_airports') dynamic get ownedAirports;
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ProfileDtoCopyWith<$Res>  {
   factory $ProfileDtoCopyWith(ProfileDto value, $Res Function(ProfileDto) _then) = _$ProfileDtoCopyWithImpl;
 @useResult
 $Res call({
- int id, String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports
+ int id,@JsonKey(fromJson: _stringFromJsonNullable) String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports
 });
 
 
@@ -163,7 +163,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileDto() when $default != null:
 return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports);case _:
@@ -184,7 +184,7 @@ return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileDto():
 return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports);case _:
@@ -204,7 +204,7 @@ return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileDto() when $default != null:
 return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports);case _:
@@ -219,11 +219,11 @@ return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,
 @JsonSerializable()
 
 class _ProfileDto implements ProfileDto {
-  const _ProfileDto({required this.id, required this.phone, this.email, @JsonKey(name: 'first_name') this.firstName, @JsonKey(name: 'last_name') this.lastName, @JsonKey(name: 'avatar_url') this.avatarUrl, this.telegram, this.max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) this.averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) this.reviewsCount, @JsonKey(name: 'owned_airports') this.ownedAirports});
+  const _ProfileDto({required this.id, @JsonKey(fromJson: _stringFromJsonNullable) required this.phone, this.email, @JsonKey(name: 'first_name') this.firstName, @JsonKey(name: 'last_name') this.lastName, @JsonKey(name: 'avatar_url') this.avatarUrl, this.telegram, this.max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) this.averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) this.reviewsCount, @JsonKey(name: 'owned_airports') this.ownedAirports});
   factory _ProfileDto.fromJson(Map<String, dynamic> json) => _$ProfileDtoFromJson(json);
 
 @override final  int id;
-@override final  String phone;
+@override@JsonKey(fromJson: _stringFromJsonNullable) final  String phone;
 @override final  String? email;
 @override@JsonKey(name: 'first_name') final  String? firstName;
 @override@JsonKey(name: 'last_name') final  String? lastName;
@@ -267,7 +267,7 @@ abstract mixin class _$ProfileDtoCopyWith<$Res> implements $ProfileDtoCopyWith<$
   factory _$ProfileDtoCopyWith(_ProfileDto value, $Res Function(_ProfileDto) _then) = __$ProfileDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports
+ int id,@JsonKey(fromJson: _stringFromJsonNullable) String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports
 });
 
 

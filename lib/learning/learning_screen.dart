@@ -23,6 +23,7 @@ class _LearningScreenState extends State<LearningScreen> {
       appBar: const CustomAppBar(
         title: 'Обучение',
         withBack: false,
+        withProfile: true,
         // backgroundColor: AppColors.background,
       ),
       backgroundColor: AppColors.background,

@@ -49,5 +49,3 @@ class PendingActions {
     _hasPendingPhotoUpload = false;
   }
 }
-
-

@@ -12,6 +12,8 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/generated/l10n.dart';
+import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -55,7 +57,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<SubscriptionTypeModel> _subscriptionTypes = [];
   bool _isLoadingSubscription = false;
   bool _isLoadingSubscriptionTypes = false;
-  String? _subscriptionError;
 
   @override
   void initState() {
@@ -151,7 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (mounted) {
       setState(() {
         _isLoadingSubscription = true;
-        _subscriptionError = null;
       });
     }
 
@@ -164,7 +164,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _subscriptions = subscriptions;
           _isLoadingSubscription = false;
-          _subscriptionError = null;
         });
         print('✅ Подписки загружены: ${subscriptions.length}');
       }
@@ -175,17 +174,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final errorString = e.toString();
       if (!mounted) return;
 
-      if (errorString.contains('type \'String\' is not a subtype of type \'Map') || errorString.contains('<!DOCTYPE html>') || errorString.contains('DioException [unknown]')) {
+      if (errorString.contains('type \'String\' is not a subtype of type \'Map') ||
+          errorString.contains('<!DOCTYPE html>') ||
+          errorString.contains('DioException [unknown]')) {
         // Это ошибка SPA роутинга - просто не показываем подписку
         setState(() {
           _subscriptions = [];
-          _subscriptionError = null;
           _isLoadingSubscription = false;
         });
       } else {
-        // Для других ошибок показываем сообщение
+        // Для других ошибок просто не показываем подписку
         setState(() {
-          _subscriptionError = 'Не удалось загрузить информацию о подписке';
+          _subscriptions = [];
           _isLoadingSubscription = false;
         });
       }
@@ -269,13 +269,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // Профиль обновлен - BlocBuilder автоматически перестроит виджет
                 print('✅ Профиль обновлен, avatarUrl: ${profile.avatarUrl}');
               },
+              deleted: () async {
+                // Закрываем диалог загрузки
+                if (context.mounted) {
+                  // Используем rootNavigator для гарантированного закрытия диалога
+                  final navigator = Navigator.of(context, rootNavigator: true);
+                  if (navigator.canPop()) {
+                    navigator.pop();
+                  }
+                  
+                  // Небольшая задержка, чтобы диалог успел закрыться
+                  await Future<void>.delayed(const Duration(milliseconds: 100));
+                  
+                  if (context.mounted) {
+                    // Показываем сообщение об успешном удалении
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Аккаунт успешно удален'),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    
+                    // Выходим из аккаунта (это обновит AppState и покажет неавторизованное состояние профиля)
+                    logOut(context);
+                  }
+                }
+              },
+              deleting: () {
+                // Показываем индикатор загрузки (уже показан в _deleteAccount)
+              },
+              error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
+                // Закрываем диалог загрузки при ошибке
+                if (context.mounted) {
+                  Navigator.of(context).pop(); // Закрываем диалог загрузки
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(errorForUser),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
+              },
               orElse: () {},
             );
           },
           child: Scaffold(
             appBar: CustomAppBar(
               title: 'Профиль',
-              withBack: false,
+              withBack: true,
+              actions: Provider.of<AppState>(context, listen: true).isAuthenticated
+                  ? [
+                      IconButton(
+                        icon: Icon(Icons.delete_outline, color: Colors.red),
+                        onPressed: () => _showDeleteAccountConfirmation(context),
+                        tooltip: 'Удалить аккаунт',
+                      ),
+                    ]
+                  : [],
               // backgroundColor: AppColors.background,
             ),
             backgroundColor: AppColors.background,
@@ -296,10 +348,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         BlocBuilder<ProfileBloc, ProfileState>(
                                           builder: (context, state) {
-                                            final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
+                                            final avatarUrl = state.maybeWhen(
+                                              success: (profile) => profile.avatarUrl,
+                                              orElse: () => null,
+                                            );
 
                                             // Для фото профиля используем avatarUrl (уже содержит timestamp в имени файла на бэкенде)
-                                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+                                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty
+                                                ? getImageUrl(avatarUrl)
+                                                : null;
 
                                             return GestureDetector(
                                               onTap: () {
@@ -315,11 +372,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         height: 120,
                                                         fit: BoxFit.cover,
                                                         cacheManager: getIt<DefaultCacheManager>(),
-                                                        cacheKey: avatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
-                                                        placeholder: (context, url) => Image.asset(Pictures.pilot, width: 120, height: 120, fit: BoxFit.cover),
-                                                        errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 120, height: 120, fit: BoxFit.cover),
+                                                        cacheKey:
+                                                            avatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
+                                                        placeholder: (context, url) => Image.asset(
+                                                          Pictures.pilot,
+                                                          width: 120,
+                                                          height: 120,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        errorWidget: (context, url, error) => Image.asset(
+                                                          Pictures.pilot,
+                                                          width: 120,
+                                                          height: 120,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       )
-                                                    : Image.asset(Pictures.pilot, height: 120, width: 120, fit: BoxFit.cover),
+                                                    : Image.asset(
+                                                        Pictures.pilot,
+                                                        height: 120,
+                                                        width: 120,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                               ),
                                             );
                                           },
@@ -333,24 +406,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
 
                                                 children: [
-                                                  Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                                                  Text(
+                                                    '${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}',
+                                                    style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E)),
+                                                  ),
                                                   SizedBox(height: 4.h),
                                                   Row(
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
                                                       Icon(Icons.phone, size: 16, color: Color(0xFF4B5767)),
                                                       SizedBox(width: 6.w),
-                                                      Text(state.profile.phone, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                      Text(
+                                                        state.profile.phone,
+                                                        style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                                                      ),
                                                     ],
                                                   ),
-                                                  if (state.profile.telegram != null && state.profile.telegram!.isNotEmpty) ...[
+                                                  if (state.profile.telegram != null &&
+                                                      state.profile.telegram!.isNotEmpty) ...[
                                                     SizedBox(height: 4.h),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         Icon(Icons.telegram, size: 16, color: Color(0xFF4B5767)),
                                                         SizedBox(width: 6.w),
-                                                        Text(state.profile.telegram!, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                        Text(
+                                                          state.profile.telegram!,
+                                                          style: AppStyles.regular14s.copyWith(
+                                                            color: Color(0xFF4B5767),
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
@@ -361,35 +446,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       children: [
                                                         Icon(Icons.chat, size: 16, color: Color(0xFF4B5767)),
                                                         SizedBox(width: 6.w),
-                                                        Text(state.profile.max!, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                        Text(
+                                                          state.profile.max!,
+                                                          style: AppStyles.regular14s.copyWith(
+                                                            color: Color(0xFF4B5767),
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
-                                                  if (state.profile.email != null && state.profile.email!.isNotEmpty) ...[
+                                                  if (state.profile.email != null &&
+                                                      state.profile.email!.isNotEmpty) ...[
                                                     SizedBox(height: 4.h),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         Icon(Icons.email, size: 16, color: Color(0xFF4B5767)),
                                                         SizedBox(width: 6.w),
-                                                        Text(state.profile.email!, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                                                        Text(
+                                                          state.profile.email!,
+                                                          style: AppStyles.regular14s.copyWith(
+                                                            color: Color(0xFF4B5767),
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
                                                   // Рейтинг пользователя
-                                                  if (state.profile.averageRating != null && state.profile.averageRating! > 0) ...[
+                                                  if (state.profile.averageRating != null &&
+                                                      state.profile.averageRating! > 0) ...[
                                                     SizedBox(height: 8.h),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        RatingWidget(rating: state.profile.averageRating!.round(), size: 16),
+                                                        RatingWidget(
+                                                          rating: state.profile.averageRating!.round(),
+                                                          size: 16,
+                                                        ),
                                                         SizedBox(width: 8.w),
-                                                        Text('${state.profile.averageRating!.toStringAsFixed(1)}', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                                                        if (state.profile.reviewsCount != null && state.profile.reviewsCount! > 0) ...[
+                                                        Text(
+                                                          '${state.profile.averageRating!.toStringAsFixed(1)}',
+                                                          style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                                                        ),
+                                                        if (state.profile.reviewsCount != null &&
+                                                            state.profile.reviewsCount! > 0) ...[
                                                           SizedBox(width: 4.w),
                                                           Text(
                                                             '(${state.profile.reviewsCount} ${_getReviewsCountText(state.profile.reviewsCount!)})',
-                                                            style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                                            style: AppStyles.regular12s.copyWith(
+                                                              color: Color(0xFF9CA5AF),
+                                                            ),
                                                           ),
                                                         ],
                                                       ],
@@ -410,41 +516,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             loading: (state) => LoadingCustom(),
                                             initial: (state) => SizedBox(),
+                                            deleting: (state) => LoadingCustom(),
+                                            deleted: (state) => SizedBox(),
                                           ),
                                         ),
                                       ],
                                     ),
 
                                     SizedBox(height: 16),
-                                    // Информация о подписке
-                                    if (_isLoadingSubscription)
-                                      const Padding(padding: EdgeInsets.symmetric(vertical: 16.0), child: LoadingCustom())
-                                    else if (_subscriptions.isNotEmpty)
-                                      // Отображаем все подписки
-                                      Row(
-                                        // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: _subscriptions.map((subscription) {
-                                          // Находим соответствующий тип подписки по subscriptionTypeId
-
-                                          return SubscribeWidgetActive(subscription: subscription, fon: Pictures.podpiskaActiveFon);
-                                        }).toList(),
-                                      )
-                                    else ...[
-                                      // Подписки нет - показываем виджет без подписки
-                                      if (_isLoadingSubscriptionTypes)
-                                        // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
-                                        const SizedBox(height: 225)
-                                      else if (_subscriptionTypes.isNotEmpty)
-                                        // Используем первый доступный тип подписки (приоритет yearly)
-                                        SubscribeWidget(
-                                          subscriptionType: _subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => _subscriptionTypes.first),
-                                          fon: Pictures.podpiskaNoActiveFon,
+                                    // На iOS показываем только если showPaidContent = true, на остальных платформах всегда показываем
+                                    if (!Platform.isIOS || AppSettingsServiceHelper().getSettingValue('showPaidContent')) ...[
+                                      if (_isLoadingSubscription)
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                                          child: LoadingCustom(),
                                         )
-                                      else
-                                        // Если типов подписок нет, показываем заглушку
-                                        const SizedBox(height: 225),
+                                      else if (_subscriptions.isNotEmpty)
+                                        // Отображаем все подписки
+                                        Row(
+                                          // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: _subscriptions.map((subscription) {
+                                            // Находим соответствующий тип подписки по subscriptionTypeId
+
+                                            return SubscribeWidgetActive(
+                                              subscription: subscription,
+                                              fon: Pictures.podpiskaActiveFon,
+                                            );
+                                          }).toList(),
+                                        )
+                                      else ...[
+                                        // Подписки нет - показываем виджет без подписки
+                                        if (_isLoadingSubscriptionTypes)
+                                          // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
+                                          const SizedBox(height: 225)
+                                        else if (_subscriptionTypes.isNotEmpty)
+                                          // Используем первый доступный тип подписки (приоритет yearly)
+                                          SubscribeWidget(
+                                            subscriptionType: _subscriptionTypes.firstWhere(
+                                              (type) => type.code == 'rosaviatest_365' && type.isActive,
+                                              orElse: () => _subscriptionTypes.first,
+                                            ),
+                                            fon: Pictures.podpiskaNoActiveFon,
+                                          )
+                                        else
+                                          // Если типов подписок нет, показываем заглушку
+                                          const SizedBox(height: 225),
+                                      ],
+                                      SizedBox(height: 16),
                                     ],
-                                    SizedBox(height: 16),
                                     // Кнопка очистки БД
                                     // ElevatedButton.icon(
                                     //   onPressed: () {
@@ -478,7 +597,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     // Секция отзывов
                                     BlocBuilder<ProfileBloc, ProfileState>(
                                       builder: (context, profileState) {
-                                        return profileState.maybeWhen(success: (profile) => _buildReviewsSection(context, profile.id), orElse: () => SizedBox.shrink());
+                                        return profileState.maybeWhen(
+                                          success: (profile) => _buildReviewsSection(context, profile.id),
+                                          orElse: () => SizedBox.shrink(),
+                                        );
                                       },
                                     ),
                                     SizedBox(height: 16),
@@ -488,7 +610,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       onTap: () => openProfileEdit(context: context),
                                     ),
                                     Divider(height: 18.h),
-                                    ProfileDataWidget(title: 'Политика конфиденциальности', icon: Pictures.securitySafe, onTap: () => context.router.push(const PrivacyPolicyRoute())),
+                                    ProfileDataWidget(
+                                      title: 'Политика конфиденциальности',
+                                      icon: Pictures.securitySafe,
+                                      onTap: () => context.router.push(const PrivacyPolicyRoute()),
+                                    ),
                                     Divider(height: 18.h),
                                     ProfileDataWidget(
                                       title: 'Связаться с нами',
@@ -496,7 +622,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       onTap: () => openContactUs(context: context),
                                     ),
                                     Divider(height: 18.h),
-                                    ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
+                                    ProfileDataWidget(
+                                      title: 'Выйти',
+                                      icon: Pictures.logout,
+                                      onTap: () => logOut(context),
+                                    ),
                                     SizedBox(height: 24.h),
                                   ],
                                 )
@@ -518,7 +648,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                                           borderColor: Color(0xFF0A6EFA),
                                           borderRadius: 46,
-                                          boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0xff0064D6).withOpacity(0.25),
+                                              blurRadius: 4,
+                                              spreadRadius: 0,
+                                              offset: Offset(0.0, 7.0),
+                                            ),
+                                          ],
                                           onPressed: () => showLogin(context),
                                         ),
                                       ),
@@ -641,26 +778,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       final flight = review.flightId != null ? flights[review.flightId] : null;
 
                       return Column(
-                                children: [
-                                  ReviewCard(
-                                    review: review,
-                                    canDelete: false, // В профиле показываются отзывы о пользователе, их нельзя удалять
-                                    // Передаем рейтинг конкретно за этот полёт
-                                    reviewedRating: review.rating != null ? review.rating!.toDouble() : null,
-                                    // Передаем информацию о полёте
-                                    departureAirport: flight?.departureAirport,
-                                    arrivalAirport: flight?.arrivalAirport,
-                                    departureDate: flight?.departureDate,
-                                    waypoints: flight?.waypoints,
+                        children: [
+                          ReviewCard(
+                            review: review,
+                            canDelete: false, // В профиле показываются отзывы о пользователе, их нельзя удалять
+                            // Передаем рейтинг конкретно за этот полёт
+                            reviewedRating: review.rating != null ? review.rating!.toDouble() : null,
+                            // Передаем информацию о полёте
+                            departureAirport: flight?.departureAirport,
+                            arrivalAirport: flight?.arrivalAirport,
+                            departureDate: flight?.departureDate,
+                            waypoints: flight?.waypoints,
                             onTap: () {
                               if (review.flightId != null) {
-                                              if (context.mounted) {
+                                if (context.mounted) {
                                   context.router.push(
                                     BaseRoute(
                                       children: [
-                                        OnTheWayNavigationRoute(children: [FlightDetailRoute(flightId: review.flightId!)]),
-                                            ],
-                                          ),
+                                        OnTheWayNavigationRoute(
+                                          children: [FlightDetailRoute(flightId: review.flightId!)],
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 }
                               }
@@ -752,7 +891,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                 SizedBox(height: 16.h),
-                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                Text(
+                                  'Не удалось загрузить изображение',
+                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                ),
                               ],
                             ),
                           ),
@@ -772,7 +914,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -786,7 +932,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8.w),
@@ -794,7 +943,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8.w),
@@ -802,7 +954,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -827,7 +982,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await Share.shareUri(Uri.parse(photoUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -850,17 +1011,130 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final savedFile = await File(filePath).copy('${appDocDir.path}/$fileName');
 
         if (context.mounted) {
-          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена: ${savedFile.path}'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('Фотография сохранена: ${savedFile.path}'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       } else {
         if (context.mounted) {
-          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 2)));
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('Необходимо разрешение на сохранение файлов'),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       }
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
+  }
+
+  /// Показывает модальное окно подтверждения удаления аккаунта
+  void _showDeleteAccountConfirmation(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                S.of(context).atantion_delete_acc,
+                style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).description_delete_acc,
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+            ),
+            SizedBox(height: 16.h),
+            Container(
+              padding: EdgeInsets.all(12.w),
+              decoration: BoxDecoration(
+                color: Color(0xFFFFF3CD),
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(color: Color(0xFFFFC107)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Text(
+                      'Это действие нельзя отменить. Все ваши данные будут безвозвратно удалены.',
+                      style: AppStyles.regular12s.copyWith(color: Color(0xFF856404)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              S.of(context).no_delete_acc,
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280)),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              _deleteAccount(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+            ),
+            child: Text(
+              S.of(context).yes_delete_acc,
+              style: AppStyles.bold14s.copyWith(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Удаляет аккаунт пользователя
+  void _deleteAccount(BuildContext context) {
+    // Показываем индикатор загрузки
+    // Используем rootNavigator для гарантированного отображения поверх всех виджетов
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black54,
+      builder: (dialogContext) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // Инициируем удаление аккаунта
+    context.read<ProfileBloc>().add(const DeleteAccountEvent());
   }
 }

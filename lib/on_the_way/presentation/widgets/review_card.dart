@@ -78,7 +78,11 @@ class ReviewCard extends StatelessWidget {
             padding: EdgeInsets.all(8.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [if (!isReply && reviewedName != null) _buildReviewerBlock(context) else _buildProfileHeader(context), _buildComment(), _buildReplyButton()],
+              children: [
+                if (!isReply && reviewedName != null) _buildReviewerBlock(context) else _buildProfileHeader(context),
+                _buildComment(),
+                _buildReplyButton(),
+              ],
             ),
           ),
         ],
@@ -206,7 +210,8 @@ class ReviewCard extends StatelessWidget {
 
   /// Информация о полёте (маршрут и дата)
   Widget _buildFlightInfo() {
-    final hasFlightInfo = departureAirport != null || arrivalAirport != null || (waypoints != null && waypoints!.isNotEmpty);
+    final hasFlightInfo =
+        departureAirport != null || arrivalAirport != null || (waypoints != null && waypoints!.isNotEmpty);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +226,8 @@ class ReviewCard extends StatelessWidget {
   /// Маршрут полёта
   Widget _buildRoute() {
     if (waypoints != null && waypoints!.isNotEmpty) {
-      final sortedWaypoints = List<FlightWaypointEntity>.from(waypoints!)..sort((a, b) => a.sequenceOrder.compareTo(b.sequenceOrder));
+      final sortedWaypoints = List<FlightWaypointEntity>.from(waypoints!)
+        ..sort((a, b) => a.sequenceOrder.compareTo(b.sequenceOrder));
 
       return Wrap(
         spacing: 4.w,
@@ -238,12 +244,20 @@ class ReviewCard extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 14, color: Color(0xFF9CA5AF)),
+                  Icon(
+                    isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                    size: 14,
+                    color: Color(0xFF9CA5AF),
+                  ),
                   SizedBox(width: 4.w),
                   Text(waypoint.airportCode, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                 ],
               ),
-              if (!isLast) ...[SizedBox(width: 4.w), Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0A6EFA)), SizedBox(width: 4.w)],
+              if (!isLast) ...[
+                SizedBox(width: 4.w),
+                Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0A6EFA)),
+                SizedBox(width: 4.w),
+              ],
             ];
           }).toList(),
         ],
@@ -280,7 +294,10 @@ class ReviewCard extends StatelessWidget {
               children: [
                 Icon(Icons.calendar_today, size: 14, color: Color(0xFF9CA5AF)),
                 SizedBox(width: 4.w),
-                Text(DateFormat('dd.MM.yyyy').format(departureDate!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                Text(
+                  DateFormat('dd.MM.yyyy').format(departureDate!),
+                  style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                ),
               ],
             ),
           if (departureDate != null) Spacer(),
@@ -322,7 +339,8 @@ class ReviewCard extends StatelessWidget {
               cacheManager: GetIt.instance<DefaultCacheManager>(),
               cacheKey: avatarUrl,
               placeholder: (context, url) => Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
-              errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
+              errorWidget: (context, url, error) =>
+                  Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
             )
           : Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
     );
@@ -338,7 +356,10 @@ class ReviewCard extends StatelessWidget {
           )
         : avatar;
 
-    return GestureDetector(onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, imageUrl) : null, child: child);
+    return GestureDetector(
+      onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, imageUrl) : null,
+      child: child,
+    );
   }
 
   /// Информация о рецензенте
@@ -484,7 +505,10 @@ class ReviewCard extends StatelessWidget {
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                 SizedBox(height: 16.h),
-                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                Text(
+                                  'Не удалось загрузить изображение',
+                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                ),
                               ],
                             ),
                           ),
@@ -504,7 +528,11 @@ class ReviewCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -518,7 +546,10 @@ class ReviewCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8.w),
@@ -526,7 +557,10 @@ class ReviewCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8.w),
@@ -534,7 +568,10 @@ class ReviewCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -559,7 +596,13 @@ class ReviewCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(photoUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -571,14 +614,26 @@ class ReviewCard extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Правый клик по изображению → "Сохранить как"'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Необходимо разрешение на сохранение файлов'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
@@ -603,21 +658,37 @@ class ReviewCard extends StatelessWidget {
       await dio.download(photoUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid
+          ? await getExternalStorageDirectory()
+          : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid
+            ? '${directory.path}/Download/$fileName'
+            : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Фотография сохранена'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     } catch (e) {
       scaffoldMessenger.hideCurrentSnackBar();
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }

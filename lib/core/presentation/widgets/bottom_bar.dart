@@ -117,17 +117,17 @@ class BottomBarState extends State<BottomBar> {
               isActive: widget.tabsRouter!.activeIndex == 4,
             ),
           ),
-          // Профиль (индекс 5)
+          // Блог (индекс 5)
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: BottomBarItem(
-              icon: Pictures.profileNavbar,
-              text: 'Профиль',
+              iconData: Icons.article,
+              text: 'Блог',
               activeColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 5) {
-                  AutoRouter.of(context).navigate(const ProfileNavigationRoute());
+                  AutoRouter.of(context).navigate(const BlogNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(5);
                 }

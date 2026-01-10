@@ -53,22 +53,14 @@ class _QuestionDialogState extends State<QuestionDialog> {
     final text = _textController.text.trim();
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(widget.isAnswer ? 'Введите ответ' : 'Введите вопрос'),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text(widget.isAnswer ? 'Введите ответ' : 'Введите вопрос'), backgroundColor: Colors.red),
       );
       return;
     }
 
     if (widget.question == null) {
       // Создание нового вопроса
-      context.read<QuestionsBloc>().add(
-        CreateQuestionEvent(
-          flightId: widget.flightId,
-          questionText: text,
-        ),
-      );
+      context.read<QuestionsBloc>().add(CreateQuestionEvent(flightId: widget.flightId, questionText: text));
     } else {
       // Редактирование вопроса или ответа
       context.read<QuestionsBloc>().add(
@@ -161,10 +153,10 @@ class _QuestionDialogState extends State<QuestionDialog> {
                       widget.question == null
                           ? 'Задать вопрос пилоту'
                           : (widget.isAnswer
-                              ? (widget.question!.answerText == null || widget.question!.answerText!.isEmpty
-                                  ? 'Ответить на вопрос'
-                                  : 'Редактировать ответ')
-                              : 'Редактировать вопрос'),
+                                ? (widget.question!.answerText == null || widget.question!.answerText!.isEmpty
+                                      ? 'Ответить на вопрос'
+                                      : 'Редактировать ответ')
+                                : 'Редактировать вопрос'),
                       style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
                     ),
                     IconButton(
@@ -176,10 +168,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
                 SizedBox(height: 16.h),
                 // Текст вопроса (если редактируем ответ)
                 if (widget.question != null && widget.isAnswer) ...[
-                  Text(
-                    'Вопрос:',
-                    style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
-                  ),
+                  Text('Вопрос:', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                   SizedBox(height: 8.h),
                   Container(
                     padding: EdgeInsets.all(12.w),
@@ -237,7 +226,10 @@ class _QuestionDialogState extends State<QuestionDialog> {
                       ? SizedBox(
                           height: 20.h,
                           width: 20.w,
-                          child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
                         )
                       : Text(
                           widget.question == null ? 'Отправить вопрос' : 'Сохранить',
@@ -264,7 +256,7 @@ Future<bool?> showQuestionDialog({
 }) async {
   // Если передан существующий bloc, используем его, иначе создаем новый
   final bloc = questionsBloc ?? QuestionsBloc(onTheWayRepository: getIt<OnTheWayRepository>());
-  
+
   if (kIsWeb) {
     return await showDialog<bool>(
       context: context,
@@ -314,4 +306,3 @@ Future<bool?> showQuestionDialog({
     );
   }
 }
-

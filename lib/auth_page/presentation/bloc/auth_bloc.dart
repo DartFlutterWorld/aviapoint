@@ -26,7 +26,13 @@ abstract class AuthState with _$AuthState {
 
   const factory AuthState.loading() = LoadingAuthState;
 
-  const factory AuthState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorAuthState;
+  const factory AuthState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorAuthState;
 
   const factory AuthState.success(AuthEntity auth) = SuccessAuthState;
 }
@@ -35,8 +41,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
   final AppState _appState;
 
-  AuthBloc({required AuthRepository authRepository, required AppState appState}) : _authRepository = authRepository, _appState = appState, super(const InitialAuthState()) {
-    on<AuthEvent>((event, emitter) => event.map(initial: (event) => _initial(event, emitter), get: (event) => _get(event, emitter)));
+  AuthBloc({required AuthRepository authRepository, required AppState appState})
+    : _authRepository = authRepository,
+      _appState = appState,
+      super(const InitialAuthState()) {
+    on<AuthEvent>(
+      (event, emitter) => event.map(initial: (event) => _initial(event, emitter), get: (event) => _get(event, emitter)),
+    );
   }
 
   Future<void> _initial(_, Emitter<AuthState> emit) async {

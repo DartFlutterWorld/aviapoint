@@ -97,3 +97,6 @@ ssh root@83.166.246.205 'docker exec aviapoint-nginx du -sh /app/public/'
 # Или проверить на хосте (если папка смонтирована)
 ssh root@83.166.246.205 'ls -la /home/aviapoint_server/public/'
 ```
+
+
+ifconfig | grep "inet " | grep -v 127.0.0.1

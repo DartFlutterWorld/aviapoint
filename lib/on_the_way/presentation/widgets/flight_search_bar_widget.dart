@@ -100,20 +100,17 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
     try {
       // Сначала ищем аэропорты по коду и названию
       final airports = await widget.airportService.searchAirports(query);
-      
+
       // Получаем коды найденных аэропортов и сохраняем их названия
       final airportCodes = airports.map((a) => a.code).toSet().toList();
-      _foundAirportNames = {
-        for (var airport in airports)
-          airport.code: airport.name.isNotEmpty ? airport.name : '',
-      };
-      
+      _foundAirportNames = {for (var airport in airports) airport.code: airport.name.isNotEmpty ? airport.name : ''};
+
       // Если аэропорты не найдены, но запрос похож на код (короткий, заглавные буквы), пробуем искать напрямую
       if (airportCodes.isEmpty && query.length <= 5 && query.toUpperCase() == query) {
         airportCodes.add(query.toUpperCase());
         _foundAirportNames[query.toUpperCase()] = '';
       }
-      
+
       if (airportCodes.isEmpty) {
         // Если ничего не найдено, скрываем подсказки
         if (mounted && _searchQuery == query) {
@@ -129,15 +126,15 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
       // Ищем полёты для каждого найденного кода аэропорта
       final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
       final onTheWayService = OnTheWayService(apiDatasource.dio);
-      
+
       final allFlightsMap = <int, FlightEntity>{};
-      
+
       // Ищем полёты для каждого кода аэропорта
       for (final code in airportCodes) {
         try {
           final flights = await onTheWayService.getFlights(airport: code);
           final flightEntities = flights.map((dto) => OnTheWayMapper.toFlightEntity(dto)).toList();
-          
+
           // Добавляем в общий список (используем Map для дедупликации по ID)
           for (final flight in flightEntities) {
             allFlightsMap[flight.id] = flight;
@@ -150,20 +147,20 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
 
       if (mounted && _searchQuery == query) {
         final allFlights = allFlightsMap.values.toList();
-        
+
         // Дополнительная фильтрация на фронтенде: проверяем, что полёт действительно содержит один из найденных аэропортов
         final airportCodesUpper = airportCodes.map((c) => c.toUpperCase()).toSet();
-        
+
         final filteredFlights = allFlights.where((flight) {
           // Проверяем, есть ли один из найденных аэропортов в маршруте
           if (flight.waypoints != null && flight.waypoints!.isNotEmpty) {
             return flight.waypoints!.any((wp) => airportCodesUpper.contains(wp.airportCode.toUpperCase()));
           }
           // Если waypoints нет, проверяем departure и arrival
-          return airportCodesUpper.contains(flight.departureAirport.toUpperCase()) || 
-                 airportCodesUpper.contains(flight.arrivalAirport.toUpperCase());
+          return airportCodesUpper.contains(flight.departureAirport.toUpperCase()) ||
+              airportCodesUpper.contains(flight.arrivalAirport.toUpperCase());
         }).toList();
-        
+
         final suggestions = filteredFlights.take(10).toList();
         setState(() {
           _flightSuggestions = suggestions;
@@ -171,7 +168,9 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
           _showSuggestions = suggestions.isNotEmpty;
           _isSearchingFlights = false;
         });
-        print('🔵 [FlightSearchBarWidget] Запрос: $query, найдено аэропортов: ${airportCodes.length}, получено полётов: ${allFlights.length}, отфильтровано: ${filteredFlights.length}, показываем: ${suggestions.length}, фокус: ${_focusNode.hasFocus}');
+        print(
+          '🔵 [FlightSearchBarWidget] Запрос: $query, найдено аэропортов: ${airportCodes.length}, получено полётов: ${allFlights.length}, отфильтровано: ${filteredFlights.length}, показываем: ${suggestions.length}, фокус: ${_focusNode.hasFocus}',
+        );
       }
     } catch (e, stackTrace) {
       print('❌ [FlightSearchBarWidget] Ошибка поиска: $e');
@@ -224,8 +223,9 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
               final isLast = index == waypoints.length - 1;
               // Подсвечиваем если совпадает код или название
               final codeMatches = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
-              final nameMatches = waypoint.airportName != null && 
-                                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
+              final nameMatches =
+                  waypoint.airportName != null &&
+                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
               final isHighlighted = codeMatches || nameMatches;
 
               return [
@@ -272,10 +272,11 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
             children: waypoints.where((wp) => wp.airportName != null || wp.airportCity != null).map((waypoint) {
               // Подсвечиваем если совпадает код или название
               final codeMatches = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
-              final nameMatches = waypoint.airportName != null && 
-                                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
+              final nameMatches =
+                  waypoint.airportName != null &&
+                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
               final isHighlighted = codeMatches || nameMatches;
-              
+
               return Padding(
                 padding: EdgeInsets.only(bottom: 4.h),
                 child: Row(
@@ -317,9 +318,7 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
     if (query.isEmpty || text.isEmpty) {
       return Text(
         text,
-        style: AppStyles.regular12s.copyWith(
-          color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
-        ),
+        style: AppStyles.regular12s.copyWith(color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       );
@@ -333,9 +332,7 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
       // Совпадения нет, возвращаем обычный текст
       return Text(
         text,
-        style: AppStyles.regular12s.copyWith(
-          color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
-        ),
+        style: AppStyles.regular12s.copyWith(color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       );
@@ -351,25 +348,18 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
           if (index > 0)
             TextSpan(
               text: text.substring(0, index),
-              style: AppStyles.regular12s.copyWith(
-                color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
-              ),
+              style: AppStyles.regular12s.copyWith(color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
             ),
           // Подсвеченное совпадение
           TextSpan(
             text: text.substring(index, index + query.length),
-            style: AppStyles.regular12s.copyWith(
-              color: Color(0xFF0A6EFA),
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppStyles.regular12s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.bold),
           ),
           // Текст после совпадения
           if (index + query.length < text.length)
             TextSpan(
               text: text.substring(index + query.length),
-              style: AppStyles.regular12s.copyWith(
-                color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
-              ),
+              style: AppStyles.regular12s.copyWith(color: isCodeHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
             ),
         ],
       ),
@@ -506,4 +496,3 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
     );
   }
 }
-

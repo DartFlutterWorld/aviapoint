@@ -74,7 +74,10 @@ class _UserReviewsBottomSheetState extends State<UserReviewsBottomSheet> {
                                 children: [
                                   Icon(Icons.reviews_outlined, size: 48, color: Color(0xFF9CA5AF)),
                                   SizedBox(height: 12.h),
-                                  Text('Пока нет отзывов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                                  Text(
+                                    'Пока нет отзывов',
+                                    style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                  ),
                                 ],
                               ),
                             ),
@@ -102,7 +105,9 @@ class _UserReviewsBottomSheetState extends State<UserReviewsBottomSheet> {
                                         context.router.push(
                                           BaseRoute(
                                             children: [
-                                              OnTheWayNavigationRoute(children: [FlightDetailRoute(flightId: review.flightId!)]),
+                                              OnTheWayNavigationRoute(
+                                                children: [FlightDetailRoute(flightId: review.flightId!)],
+                                              ),
                                             ],
                                           ),
                                         );

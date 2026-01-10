@@ -55,14 +55,15 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetProfileEvent value)?  get,TResult Function( InitialProfileEvent value)?  initial,TResult Function( UpdateProfileEvent value)?  update,TResult Function( UploadProfilePhotoEvent value)?  uploadPhoto,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetProfileEvent value)?  get,TResult Function( InitialProfileEvent value)?  initial,TResult Function( UpdateProfileEvent value)?  update,TResult Function( UploadProfilePhotoEvent value)?  uploadPhoto,TResult Function( DeleteAccountEvent value)?  deleteAccount,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get(_that);case InitialProfileEvent() when initial != null:
 return initial(_that);case UpdateProfileEvent() when update != null:
 return update(_that);case UploadProfilePhotoEvent() when uploadPhoto != null:
-return uploadPhoto(_that);case _:
+return uploadPhoto(_that);case DeleteAccountEvent() when deleteAccount != null:
+return deleteAccount(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return uploadPhoto(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetProfileEvent value)  get,required TResult Function( InitialProfileEvent value)  initial,required TResult Function( UpdateProfileEvent value)  update,required TResult Function( UploadProfilePhotoEvent value)  uploadPhoto,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetProfileEvent value)  get,required TResult Function( InitialProfileEvent value)  initial,required TResult Function( UpdateProfileEvent value)  update,required TResult Function( UploadProfilePhotoEvent value)  uploadPhoto,required TResult Function( DeleteAccountEvent value)  deleteAccount,}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get(_that);case InitialProfileEvent():
 return initial(_that);case UpdateProfileEvent():
 return update(_that);case UploadProfilePhotoEvent():
-return uploadPhoto(_that);case _:
+return uploadPhoto(_that);case DeleteAccountEvent():
+return deleteAccount(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return uploadPhoto(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetProfileEvent value)?  get,TResult? Function( InitialProfileEvent value)?  initial,TResult? Function( UpdateProfileEvent value)?  update,TResult? Function( UploadProfilePhotoEvent value)?  uploadPhoto,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetProfileEvent value)?  get,TResult? Function( InitialProfileEvent value)?  initial,TResult? Function( UpdateProfileEvent value)?  update,TResult? Function( UploadProfilePhotoEvent value)?  uploadPhoto,TResult? Function( DeleteAccountEvent value)?  deleteAccount,}){
 final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get(_that);case InitialProfileEvent() when initial != null:
 return initial(_that);case UpdateProfileEvent() when update != null:
 return update(_that);case UploadProfilePhotoEvent() when uploadPhoto != null:
-return uploadPhoto(_that);case _:
+return uploadPhoto(_that);case DeleteAccountEvent() when deleteAccount != null:
+return deleteAccount(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return uploadPhoto(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)?  update,TResult Function( XFile photo)?  uploadPhoto,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  get,TResult Function()?  initial,TResult Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)?  update,TResult Function( XFile photo)?  uploadPhoto,TResult Function()?  deleteAccount,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
 return initial();case UpdateProfileEvent() when update != null:
 return update(_that.email,_that.firstName,_that.lastName,_that.telegram,_that.max);case UploadProfilePhotoEvent() when uploadPhoto != null:
-return uploadPhoto(_that.photo);case _:
+return uploadPhoto(_that.photo);case DeleteAccountEvent() when deleteAccount != null:
+return deleteAccount();case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return uploadPhoto(_that.photo);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)  update,required TResult Function( XFile photo)  uploadPhoto,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  get,required TResult Function()  initial,required TResult Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)  update,required TResult Function( XFile photo)  uploadPhoto,required TResult Function()  deleteAccount,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent():
 return get();case InitialProfileEvent():
 return initial();case UpdateProfileEvent():
 return update(_that.email,_that.firstName,_that.lastName,_that.telegram,_that.max);case UploadProfilePhotoEvent():
-return uploadPhoto(_that.photo);case _:
+return uploadPhoto(_that.photo);case DeleteAccountEvent():
+return deleteAccount();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return uploadPhoto(_that.photo);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)?  update,TResult? Function( XFile photo)?  uploadPhoto,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  get,TResult? Function()?  initial,TResult? Function( String? email,  String? firstName,  String? lastName,  String? telegram,  String? max)?  update,TResult? Function( XFile photo)?  uploadPhoto,TResult? Function()?  deleteAccount,}) {final _that = this;
 switch (_that) {
 case GetProfileEvent() when get != null:
 return get();case InitialProfileEvent() when initial != null:
 return initial();case UpdateProfileEvent() when update != null:
 return update(_that.email,_that.firstName,_that.lastName,_that.telegram,_that.max);case UploadProfilePhotoEvent() when uploadPhoto != null:
-return uploadPhoto(_that.photo);case _:
+return uploadPhoto(_that.photo);case DeleteAccountEvent() when deleteAccount != null:
+return deleteAccount();case _:
   return null;
 
 }
@@ -394,6 +400,38 @@ as XFile,
 }
 
 /// @nodoc
+
+
+class DeleteAccountEvent extends ProfileEvent {
+  const DeleteAccountEvent(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteAccountEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProfileEvent.deleteAccount()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ProfileState {
 
 
@@ -437,14 +475,16 @@ extension ProfileStatePatterns on ProfileState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadingProfileState value)?  loading,TResult Function( ErrorProfileState value)?  error,TResult Function( SuccessProfileState value)?  success,TResult Function( InitialProfileState value)?  initial,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadingProfileState value)?  loading,TResult Function( ErrorProfileState value)?  error,TResult Function( SuccessProfileState value)?  success,TResult Function( InitialProfileState value)?  initial,TResult Function( DeletingAccountState value)?  deleting,TResult Function( DeletedAccountState value)?  deleted,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case LoadingProfileState() when loading != null:
 return loading(_that);case ErrorProfileState() when error != null:
 return error(_that);case SuccessProfileState() when success != null:
 return success(_that);case InitialProfileState() when initial != null:
-return initial(_that);case _:
+return initial(_that);case DeletingAccountState() when deleting != null:
+return deleting(_that);case DeletedAccountState() when deleted != null:
+return deleted(_that);case _:
   return orElse();
 
 }
@@ -462,14 +502,16 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadingProfileState value)  loading,required TResult Function( ErrorProfileState value)  error,required TResult Function( SuccessProfileState value)  success,required TResult Function( InitialProfileState value)  initial,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadingProfileState value)  loading,required TResult Function( ErrorProfileState value)  error,required TResult Function( SuccessProfileState value)  success,required TResult Function( InitialProfileState value)  initial,required TResult Function( DeletingAccountState value)  deleting,required TResult Function( DeletedAccountState value)  deleted,}){
 final _that = this;
 switch (_that) {
 case LoadingProfileState():
 return loading(_that);case ErrorProfileState():
 return error(_that);case SuccessProfileState():
 return success(_that);case InitialProfileState():
-return initial(_that);case _:
+return initial(_that);case DeletingAccountState():
+return deleting(_that);case DeletedAccountState():
+return deleted(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -486,14 +528,16 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadingProfileState value)?  loading,TResult? Function( ErrorProfileState value)?  error,TResult? Function( SuccessProfileState value)?  success,TResult? Function( InitialProfileState value)?  initial,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadingProfileState value)?  loading,TResult? Function( ErrorProfileState value)?  error,TResult? Function( SuccessProfileState value)?  success,TResult? Function( InitialProfileState value)?  initial,TResult? Function( DeletingAccountState value)?  deleting,TResult? Function( DeletedAccountState value)?  deleted,}){
 final _that = this;
 switch (_that) {
 case LoadingProfileState() when loading != null:
 return loading(_that);case ErrorProfileState() when error != null:
 return error(_that);case SuccessProfileState() when success != null:
 return success(_that);case InitialProfileState() when initial != null:
-return initial(_that);case _:
+return initial(_that);case DeletingAccountState() when deleting != null:
+return deleting(_that);case DeletedAccountState() when deleted != null:
+return deleted(_that);case _:
   return null;
 
 }
@@ -510,13 +554,15 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( ProfileEntity profile)?  success,TResult Function()?  initial,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult Function( ProfileEntity profile)?  success,TResult Function()?  initial,TResult Function()?  deleting,TResult Function()?  deleted,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LoadingProfileState() when loading != null:
 return loading();case ErrorProfileState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessProfileState() when success != null:
 return success(_that.profile);case InitialProfileState() when initial != null:
-return initial();case _:
+return initial();case DeletingAccountState() when deleting != null:
+return deleting();case DeletedAccountState() when deleted != null:
+return deleted();case _:
   return orElse();
 
 }
@@ -534,13 +580,15 @@ return initial();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( ProfileEntity profile)  success,required TResult Function()  initial,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)  error,required TResult Function( ProfileEntity profile)  success,required TResult Function()  initial,required TResult Function()  deleting,required TResult Function()  deleted,}) {final _that = this;
 switch (_that) {
 case LoadingProfileState():
 return loading();case ErrorProfileState():
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessProfileState():
 return success(_that.profile);case InitialProfileState():
-return initial();case _:
+return initial();case DeletingAccountState():
+return deleting();case DeletedAccountState():
+return deleted();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -557,13 +605,15 @@ return initial();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( ProfileEntity profile)?  success,TResult? Function()?  initial,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( String? errorFromApi,  String errorForUser,  String? statusCode,  StackTrace? stackTrace,  String? responseMessage)?  error,TResult? Function( ProfileEntity profile)?  success,TResult? Function()?  initial,TResult? Function()?  deleting,TResult? Function()?  deleted,}) {final _that = this;
 switch (_that) {
 case LoadingProfileState() when loading != null:
 return loading();case ErrorProfileState() when error != null:
 return error(_that.errorFromApi,_that.errorForUser,_that.statusCode,_that.stackTrace,_that.responseMessage);case SuccessProfileState() when success != null:
 return success(_that.profile);case InitialProfileState() when initial != null:
-return initial();case _:
+return initial();case DeletingAccountState() when deleting != null:
+return deleting();case DeletedAccountState() when deleted != null:
+return deleted();case _:
   return null;
 
 }
@@ -767,6 +817,70 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'ProfileState.initial()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class DeletingAccountState extends ProfileState {
+  const DeletingAccountState(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeletingAccountState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProfileState.deleting()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class DeletedAccountState extends ProfileState {
+  const DeletedAccountState(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeletedAccountState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProfileState.deleted()';
 }
 
 

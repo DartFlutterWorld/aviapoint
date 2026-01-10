@@ -142,7 +142,10 @@ class PilotInfoWidget extends StatelessWidget {
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                 SizedBox(height: 16.h),
-                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                Text(
+                                  'Не удалось загрузить изображение',
+                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                ),
                               ],
                             ),
                           ),

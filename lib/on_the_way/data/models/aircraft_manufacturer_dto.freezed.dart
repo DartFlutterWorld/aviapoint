@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AircraftManufacturerDto {
 
- int get id; String get name; String? get country; String? get website; String? get description;@JsonKey(name: 'is_active') bool get isActive;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
+ int get id; String get name;
 /// Create a copy of AircraftManufacturerDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AircraftManufacturerDtoCopyWith<AircraftManufacturerDto> get copyWith => _$Airc
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AircraftManufacturerDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.website, website) || other.website == website)&&(identical(other.description, description) || other.description == description)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AircraftManufacturerDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,country,website,description,isActive,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name);
 
 @override
 String toString() {
-  return 'AircraftManufacturerDto(id: $id, name: $name, country: $country, website: $website, description: $description, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'AircraftManufacturerDto(id: $id, name: $name)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AircraftManufacturerDtoCopyWith<$Res>  {
   factory $AircraftManufacturerDtoCopyWith(AircraftManufacturerDto value, $Res Function(AircraftManufacturerDto) _then) = _$AircraftManufacturerDtoCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String? country, String? website, String? description,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ int id, String name
 });
 
 
@@ -65,17 +65,11 @@ class _$AircraftManufacturerDtoCopyWithImpl<$Res>
 
 /// Create a copy of AircraftManufacturerDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? country = freezed,Object? website = freezed,Object? description = freezed,Object? isActive = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
-as String?,website: freezed == website ? _self.website : website // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as String,
   ));
 }
 
@@ -160,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String? country,  String? website,  String? description, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AircraftManufacturerDto() when $default != null:
-return $default(_that.id,_that.name,_that.country,_that.website,_that.description,_that.isActive,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name);case _:
   return orElse();
 
 }
@@ -181,10 +175,10 @@ return $default(_that.id,_that.name,_that.country,_that.website,_that.descriptio
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String? country,  String? website,  String? description, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name)  $default,) {final _that = this;
 switch (_that) {
 case _AircraftManufacturerDto():
-return $default(_that.id,_that.name,_that.country,_that.website,_that.description,_that.isActive,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +195,10 @@ return $default(_that.id,_that.name,_that.country,_that.website,_that.descriptio
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String? country,  String? website,  String? description, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name)?  $default,) {final _that = this;
 switch (_that) {
 case _AircraftManufacturerDto() when $default != null:
-return $default(_that.id,_that.name,_that.country,_that.website,_that.description,_that.isActive,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name);case _:
   return null;
 
 }
@@ -216,17 +210,11 @@ return $default(_that.id,_that.name,_that.country,_that.website,_that.descriptio
 @JsonSerializable()
 
 class _AircraftManufacturerDto implements AircraftManufacturerDto {
-  const _AircraftManufacturerDto({required this.id, required this.name, this.country, this.website, this.description, @JsonKey(name: 'is_active') this.isActive = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt});
+  const _AircraftManufacturerDto({required this.id, required this.name});
   factory _AircraftManufacturerDto.fromJson(Map<String, dynamic> json) => _$AircraftManufacturerDtoFromJson(json);
 
 @override final  int id;
 @override final  String name;
-@override final  String? country;
-@override final  String? website;
-@override final  String? description;
-@override@JsonKey(name: 'is_active') final  bool isActive;
-@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
-@override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
 
 /// Create a copy of AircraftManufacturerDto
 /// with the given fields replaced by the non-null parameter values.
@@ -241,16 +229,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AircraftManufacturerDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.country, country) || other.country == country)&&(identical(other.website, website) || other.website == website)&&(identical(other.description, description) || other.description == description)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AircraftManufacturerDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,country,website,description,isActive,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name);
 
 @override
 String toString() {
-  return 'AircraftManufacturerDto(id: $id, name: $name, country: $country, website: $website, description: $description, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'AircraftManufacturerDto(id: $id, name: $name)';
 }
 
 
@@ -261,7 +249,7 @@ abstract mixin class _$AircraftManufacturerDtoCopyWith<$Res> implements $Aircraf
   factory _$AircraftManufacturerDtoCopyWith(_AircraftManufacturerDto value, $Res Function(_AircraftManufacturerDto) _then) = __$AircraftManufacturerDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String? country, String? website, String? description,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ int id, String name
 });
 
 
@@ -278,17 +266,11 @@ class __$AircraftManufacturerDtoCopyWithImpl<$Res>
 
 /// Create a copy of AircraftManufacturerDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? country = freezed,Object? website = freezed,Object? description = freezed,Object? isActive = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,}) {
   return _then(_AircraftManufacturerDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,country: freezed == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
-as String?,website: freezed == website ? _self.website : website // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as String,
   ));
 }
 

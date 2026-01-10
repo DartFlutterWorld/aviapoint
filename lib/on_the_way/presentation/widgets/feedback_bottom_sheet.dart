@@ -10,12 +10,7 @@ class FeedbackBottomSheet extends StatefulWidget {
   final String? airportCode; // Код аэропорта (если есть)
   final int? flightId; // ID полета (если есть)
 
-  const FeedbackBottomSheet({
-    super.key,
-    required this.sourcePage,
-    this.airportCode,
-    this.flightId,
-  });
+  const FeedbackBottomSheet({super.key, required this.sourcePage, this.airportCode, this.flightId});
 
   @override
   State<FeedbackBottomSheet> createState() => _FeedbackBottomSheetState();
@@ -57,17 +52,11 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
       });
 
       // Отправляем запрос
-      await dio.post<Map<String, dynamic>>(
-        '/api/feedback',
-        data: formData,
-      );
+      await dio.post<Map<String, dynamic>>('/api/feedback', data: formData);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Обратная связь успешно отправлена'),
-            backgroundColor: Color(0xFF10B981),
-          ),
+          SnackBar(content: Text('Обратная связь успешно отправлена'), backgroundColor: Color(0xFF10B981)),
         );
 
         // Закрываем bottom sheet
@@ -75,12 +64,9 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ошибка отправки: ${e.toString()}'),
-            backgroundColor: Color(0xFFEF4444),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) {
@@ -115,10 +101,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
                     style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
+                IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
               ],
             ),
             SizedBox(height: 16.h),
@@ -129,9 +112,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
               decoration: InputDecoration(
                 labelText: 'Email',
                 hintText: 'Введите ваш email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -153,9 +134,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
               decoration: InputDecoration(
                 labelText: 'Комментарий',
                 hintText: 'Опишите неточность или проблему',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -175,9 +154,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0A6EFA),
                   padding: EdgeInsets.symmetric(vertical: 14.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                 ),
                 child: _isSubmitting
                     ? SizedBox(
@@ -188,10 +165,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
                           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
-                    : Text(
-                        'Отправить',
-                        style: AppStyles.bold14s.copyWith(color: Colors.white),
-                      ),
+                    : Text('Отправить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
@@ -213,11 +187,6 @@ Future<void> showFeedbackBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (context) => FeedbackBottomSheet(
-      sourcePage: sourcePage,
-      airportCode: airportCode,
-      flightId: flightId,
-    ),
+    builder: (context) => FeedbackBottomSheet(sourcePage: sourcePage, airportCode: airportCode, flightId: flightId),
   );
 }
-

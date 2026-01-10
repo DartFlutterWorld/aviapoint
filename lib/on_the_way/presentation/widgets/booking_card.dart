@@ -59,7 +59,10 @@ class BookingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text('Бронирование #${booking.id}', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                  child: Text(
+                    'Бронирование #${booking.id}',
+                    style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -103,10 +106,7 @@ class BookingCard extends StatelessWidget {
                                   color: Color(0xFF0A6EFA),
                                 ),
                                 SizedBox(width: 6.w),
-                                Text(
-                                  airportCode,
-                                  style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
-                                ),
+                                Text(airportCode, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                               ],
                             ),
                             if (!isLast) ...[
@@ -265,9 +265,7 @@ class BookingCard extends StatelessWidget {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: onTap,
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-                  ),
+                  style: TextButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 12.h)),
                   child: Text('Подробнее о полете', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
                 ),
               ),

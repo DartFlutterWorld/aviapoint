@@ -36,7 +36,7 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Новости авиации', withBack: false),
+      appBar: CustomAppBar(title: 'Новости авиации', withBack: false, withProfile: true),
       backgroundColor: AppColors.background,
       body: ListView(
         children: [

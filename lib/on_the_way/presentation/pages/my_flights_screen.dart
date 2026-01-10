@@ -44,7 +44,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
       builder: (context, appState, child) {
         // Отслеживаем изменения статуса авторизации
         final isNowAuthenticated = appState.isAuthenticated;
-        
+
         // Если пользователь вышел (был авторизован, стал неавторизован)
         if (_wasAuthenticated && !isNowAuthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,7 +54,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
             }
           });
         }
-        
+
         // Если пользователь вошел (был неавторизован, стал авторизован)
         if (!_wasAuthenticated && isNowAuthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,9 +64,9 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
             }
           });
         }
-        
+
         _wasAuthenticated = isNowAuthenticated;
-        
+
         // Если не авторизован, показываем экран авторизации
         if (!appState.isAuthenticated) {
           return _buildUnauthenticatedState(context);
@@ -86,8 +86,10 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
                   loading: () => _buildLoadingState(),
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
                       _buildErrorState(errorForUser),
-                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
-                  flightCreated: (flight) => _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
+                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) =>
+                      _buildSuccessState(flights),
+                  flightCreated: (flight) =>
+                      _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
                 );
               },
             ),

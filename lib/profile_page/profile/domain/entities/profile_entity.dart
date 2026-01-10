@@ -28,5 +28,17 @@ class ProfileEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, phone, email, firstName, lastName, avatarUrl, telegram, max, averageRating, reviewsCount, ownedAirports];
+  List<Object?> get props => [
+    id,
+    phone,
+    email,
+    firstName,
+    lastName,
+    avatarUrl,
+    telegram,
+    max,
+    averageRating,
+    reviewsCount,
+    ownedAirports,
+  ];
 }

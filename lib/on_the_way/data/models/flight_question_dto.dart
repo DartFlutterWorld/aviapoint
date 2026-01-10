@@ -86,4 +86,3 @@ int? _intFromJsonNullable(dynamic value) {
   if (value is String) return int.tryParse(value);
   return null;
 }
-

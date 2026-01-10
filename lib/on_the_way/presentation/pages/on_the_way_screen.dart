@@ -267,7 +267,7 @@ class _OnTheWayScreenState extends State<OnTheWayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'По пути', withBack: false),
+      appBar: CustomAppBar(title: 'По пути', withBack: false, withProfile: true),
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),

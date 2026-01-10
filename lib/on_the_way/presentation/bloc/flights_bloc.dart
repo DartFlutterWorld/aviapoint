@@ -124,14 +124,16 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
 
   FlightsBloc({required OnTheWayRepository onTheWayRepository})
     : _onTheWayRepository = onTheWayRepository,
-      super(const SuccessFlightsState(
-        flights: [],
-        airport: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        dateFrom: null,
-        dateTo: null,
-      )) {
+      super(
+        const SuccessFlightsState(
+          flights: [],
+          airport: null,
+          departureAirport: null,
+          arrivalAirport: null,
+          dateFrom: null,
+          dateTo: null,
+        ),
+      ) {
     on<GetFlightsEvent>(_handleGetFlights);
     on<GetMyFlightsEvent>(_handleGetMyFlights);
     on<CreateFlightEvent>(_handleCreateFlight);
@@ -160,7 +162,9 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       emit(const LoadingFlightsState());
     }
 
-    print('🔵 [FlightsBloc] _handleGetFlights: airport = ${event.airport}, dateFrom = ${event.dateFrom}, dateTo = ${event.dateTo}');
+    print(
+      '🔵 [FlightsBloc] _handleGetFlights: airport = ${event.airport}, dateFrom = ${event.dateFrom}, dateTo = ${event.dateTo}',
+    );
     final response = await _onTheWayRepository.getFlights(
       airport: event.airport,
       departureAirport: event.departureAirport,
@@ -222,7 +226,16 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
         );
       },
       (r) {
-        emit(SuccessFlightsState(flights: r, airport: null, departureAirport: null, arrivalAirport: null, dateFrom: null, dateTo: null));
+        emit(
+          SuccessFlightsState(
+            flights: r,
+            airport: null,
+            departureAirport: null,
+            arrivalAirport: null,
+            dateFrom: null,
+            dateTo: null,
+          ),
+        );
       },
     );
   }
@@ -255,9 +268,7 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       },
       (r) {
         // После успешного создания возвращаем отдельное состояние для создания
-        emit(
-          FlightsState.flightCreated(flight: r),
-        );
+        emit(FlightsState.flightCreated(flight: r));
       },
     );
   }
@@ -299,14 +310,16 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
 
   Future<void> _handleClearFlights(ClearFlightsEvent event, Emitter<FlightsState> emit) async {
     // Очищаем состояние - сбрасываем на начальное состояние с пустым списком
-    emit(const SuccessFlightsState(
-      flights: [],
-      airport: null,
-      departureAirport: null,
-      arrivalAirport: null,
-      dateFrom: null,
-      dateTo: null,
-    ));
+    emit(
+      const SuccessFlightsState(
+        flights: [],
+        airport: null,
+        departureAirport: null,
+        arrivalAirport: null,
+        dateFrom: null,
+        dateTo: null,
+      ),
+    );
   }
 
   Future<void> _handleDeleteFlight(DeleteFlightEvent event, Emitter<FlightsState> emit) async {

@@ -10,8 +10,9 @@ import 'package:aviapoint/on_the_way/data/models/aircraft_model_dto.dart';
 
 class AircraftTypeSelectorDialog extends StatefulWidget {
   final String? initialValue;
+  final bool returnModelId; // Если true, возвращает ID модели вместо названия
 
-  const AircraftTypeSelectorDialog({super.key, this.initialValue});
+  const AircraftTypeSelectorDialog({super.key, this.initialValue, this.returnModelId = false});
 
   @override
   State<AircraftTypeSelectorDialog> createState() => _AircraftTypeSelectorDialogState();
@@ -72,7 +73,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
       final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
       final service = OnTheWayService(apiDatasource.dio);
       debugPrint('✈️ [AircraftTypeSelectorDialog] Loading manufacturers...');
-      final manufacturers = await service.getAircraftManufacturers(activeOnly: true);
+      final manufacturers = await service.getAircraftManufacturers();
       debugPrint('✈️ [AircraftTypeSelectorDialog] Loaded ${manufacturers.length} manufacturers');
 
       setState(() {
@@ -134,7 +135,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
       final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
       final service = OnTheWayService(apiDatasource.dio);
       debugPrint('✈️ [AircraftTypeSelectorDialog] Loading models for manufacturer id: $manufacturerId');
-      final models = await service.getAircraftModels(manufacturerId: manufacturerId, activeOnly: true);
+      final models = await service.getAircraftModels(manufacturerId: manufacturerId);
       debugPrint('✈️ [AircraftTypeSelectorDialog] Loaded ${models.length} models');
 
       setState(() {
@@ -164,9 +165,18 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
 
   void _confirmSelection() {
     if (_selectedModel != null) {
-      Navigator.of(context).pop(_selectedModel!.fullName);
+      final fullName = _selectedModel!.getFullName();
+      if (widget.returnModelId) {
+        Navigator.of(context).pop({'id': _selectedModel!.id, 'fullName': fullName});
+      } else {
+        Navigator.of(context).pop(fullName);
+      }
     } else if (_isManualMode && _manualInputController.text.trim().isNotEmpty) {
-      Navigator.of(context).pop(_manualInputController.text.trim());
+      if (widget.returnModelId) {
+        Navigator.of(context).pop({'id': null, 'fullName': _manualInputController.text.trim()});
+      } else {
+        Navigator.of(context).pop(_manualInputController.text.trim());
+      }
     }
   }
 
@@ -391,7 +401,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: Text(model.fullName, style: AppStyles.bold14s.copyWith(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFF374151))),
+                                                  child: Text(model.getFullName(), style: AppStyles.bold14s.copyWith(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFF374151))),
                                                 ),
                                                 if (isSelected) Icon(Icons.check_circle, color: Color(0xFF0A6EFA), size: 20),
                                               ],

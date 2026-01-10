@@ -77,4 +77,3 @@ DateTime? _dateTimeFromJsonNullable(dynamic value) {
 
   return null;
 }
-

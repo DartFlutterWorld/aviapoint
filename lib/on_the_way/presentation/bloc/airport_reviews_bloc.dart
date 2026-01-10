@@ -73,9 +73,7 @@ class AirportReviewsState with _$AirportReviewsState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorAirportReviewsState;
-  const factory AirportReviewsState.success({
-    required List<AirportReviewEntity> reviews,
-  }) = SuccessAirportReviewsState;
+  const factory AirportReviewsState.success({required List<AirportReviewEntity> reviews}) = SuccessAirportReviewsState;
   const factory AirportReviewsState.reviewCreated({required AirportReviewEntity review}) = AirportReviewCreatedState;
   const factory AirportReviewsState.reviewUpdated({required AirportReviewEntity review}) = AirportReviewUpdatedState;
   const factory AirportReviewsState.reviewDeleted() = AirportReviewDeletedState;
@@ -85,8 +83,8 @@ class AirportReviewsBloc extends Bloc<AirportReviewsEvent, AirportReviewsState> 
   final OnTheWayRepository _onTheWayRepository;
 
   AirportReviewsBloc({required OnTheWayRepository onTheWayRepository})
-      : _onTheWayRepository = onTheWayRepository,
-        super(const LoadingAirportReviewsState()) {
+    : _onTheWayRepository = onTheWayRepository,
+      super(const LoadingAirportReviewsState()) {
     on<GetAirportReviewsEvent>(_handleGetAirportReviews);
     on<CreateAirportReviewEvent>(_handleCreateAirportReview);
     on<UpdateAirportReviewEvent>(_handleUpdateAirportReview);
@@ -196,13 +194,13 @@ class AirportReviewsBloc extends Bloc<AirportReviewsEvent, AirportReviewsState> 
     );
   }
 
-  Future<void> _handleAddAirportReviewPhotos(AddAirportReviewPhotosEvent event, Emitter<AirportReviewsState> emit) async {
+  Future<void> _handleAddAirportReviewPhotos(
+    AddAirportReviewPhotosEvent event,
+    Emitter<AirportReviewsState> emit,
+  ) async {
     emit(const LoadingAirportReviewsState());
 
-    final response = await _onTheWayRepository.addAirportReviewPhotos(
-      reviewId: event.reviewId,
-      photos: event.photos,
-    );
+    final response = await _onTheWayRepository.addAirportReviewPhotos(reviewId: event.reviewId, photos: event.photos);
 
     response.fold(
       (l) {
@@ -221,7 +219,10 @@ class AirportReviewsBloc extends Bloc<AirportReviewsEvent, AirportReviewsState> 
     );
   }
 
-  Future<void> _handleDeleteAirportReviewPhoto(DeleteAirportReviewPhotoEvent event, Emitter<AirportReviewsState> emit) async {
+  Future<void> _handleDeleteAirportReviewPhoto(
+    DeleteAirportReviewPhotoEvent event,
+    Emitter<AirportReviewsState> emit,
+  ) async {
     emit(const LoadingAirportReviewsState());
 
     final response = await _onTheWayRepository.deleteAirportReviewPhoto(
@@ -246,4 +247,3 @@ class AirportReviewsBloc extends Bloc<AirportReviewsEvent, AirportReviewsState> 
     );
   }
 }
-

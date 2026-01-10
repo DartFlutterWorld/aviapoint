@@ -87,7 +87,7 @@ class PilotBookingCard extends StatelessWidget {
               print('   - passengerFullName: ${booking.passengerFullName}');
               print('   - passengerAvatarUrl: ${booking.passengerAvatarUrl}');
               print('   - passengerAverageRating: ${booking.passengerAverageRating}');
-              
+
               return Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Color(0xFFF9FAFB)),
@@ -128,10 +128,11 @@ class PilotBookingCard extends StatelessWidget {
                                         '   - avatarUrl из БД: ${booking.passengerAvatarUrl}\n'
                                         '   - Сформированный imageUrl: $imageUrl',
                                       );
-                                      
+
                                       // Очищаем кэш при ошибке декодирования (EncodingError)
                                       // Это может помочь, если файл был поврежден в кэше
-                                      if (errorType.contains('EncodingError') || errorMessage.contains('cannot be decoded')) {
+                                      if (errorType.contains('EncodingError') ||
+                                          errorMessage.contains('cannot be decoded')) {
                                         try {
                                           GetIt.instance<DefaultCacheManager>().removeFile(url).catchError((Object e) {
                                             print('⚠️ [PilotBookingCard] Не удалось очистить кэш: $e');
@@ -141,7 +142,7 @@ class PilotBookingCard extends StatelessWidget {
                                           print('⚠️ [PilotBookingCard] Ошибка при очистке кэша: $e');
                                         }
                                       }
-                                      
+
                                       return Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover);
                                     },
                                   )
@@ -329,10 +330,7 @@ class PilotBookingCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
           ),
-          child: UserReviewsBottomSheet(
-            userId: passengerId,
-            title: 'Отзывы о пассажире',
-          ),
+          child: UserReviewsBottomSheet(userId: passengerId, title: 'Отзывы о пассажире'),
         );
       },
     );
@@ -382,7 +380,10 @@ class PilotBookingCard extends StatelessWidget {
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                 SizedBox(height: 16.h),
-                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                Text(
+                                  'Не удалось загрузить изображение',
+                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                ),
                               ],
                             ),
                           ),

@@ -63,10 +63,8 @@ class ReviewsState with _$ReviewsState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorReviewsState;
-  const factory ReviewsState.success({
-    required List<ReviewEntity> reviews,
-    required Map<int, FlightEntity> flights,
-  }) = SuccessReviewsState;
+  const factory ReviewsState.success({required List<ReviewEntity> reviews, required Map<int, FlightEntity> flights}) =
+      SuccessReviewsState;
   const factory ReviewsState.reviewCreated({required ReviewEntity review}) = ReviewCreatedState;
   const factory ReviewsState.reviewUpdated({required ReviewEntity review}) = ReviewUpdatedState;
   const factory ReviewsState.reviewDeleted() = ReviewDeletedState;
@@ -105,7 +103,7 @@ class ReviewsBloc extends Bloc<ReviewsEvent, ReviewsState> {
         // Загружаем информацию о полётах для всех отзывов с flightId
         final Map<int, FlightEntity> flights = {};
         final flightIds = r.where((review) => review.flightId != null).map((review) => review.flightId!).toSet();
-        
+
         for (final flightId in flightIds) {
           final flightResponse = await _onTheWayRepository.getFlight(flightId);
           flightResponse.fold(
@@ -143,7 +141,7 @@ class ReviewsBloc extends Bloc<ReviewsEvent, ReviewsState> {
         // Загружаем информацию о полётах для всех отзывов с flightId
         final Map<int, FlightEntity> flights = {};
         final flightIds = r.where((review) => review.flightId != null).map((review) => review.flightId!).toSet();
-        
+
         for (final flightId in flightIds) {
           final flightResponse = await _onTheWayRepository.getFlight(flightId);
           flightResponse.fold(

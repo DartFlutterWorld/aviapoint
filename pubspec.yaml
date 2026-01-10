@@ -99,6 +99,9 @@ dependencies:
   drift_flutter: ^0.2.7
   talker: ^5.0.2
   talker_flutter: ^5.0.2
+  flutter_quill: ^11.5.0
+  flutter_quill_extensions: ^11.0.0
+  dart_quill_delta: ^10.8.3
 
 #dart run build_runner build --delete-conflicting-outputs
 dev_dependencies:

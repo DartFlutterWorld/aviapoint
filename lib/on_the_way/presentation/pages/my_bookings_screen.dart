@@ -44,7 +44,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
       builder: (context, appState, child) {
         // Отслеживаем изменения статуса авторизации
         final isNowAuthenticated = appState.isAuthenticated;
-        
+
         // Если пользователь вышел (был авторизован, стал неавторизован)
         if (_wasAuthenticated && !isNowAuthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,7 +54,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             }
           });
         }
-        
+
         // Если пользователь вошел (был неавторизован, стал авторизован)
         if (!_wasAuthenticated && isNowAuthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,9 +64,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             }
           });
         }
-        
+
         _wasAuthenticated = isNowAuthenticated;
-        
+
         // Если не авторизован, показываем экран авторизации
         if (!appState.isAuthenticated) {
           return _buildUnauthenticatedState(context);

@@ -61,31 +61,19 @@ abstract class OnTheWayRepository {
   Future<Either<Failure, ReviewEntity>> updateReview({required int reviewId, required int rating, String? comment});
   Future<Either<Failure, void>> deleteReview(int reviewId);
 
-  Future<Either<Failure, FlightEntity>> uploadFlightPhotos({
-    required int flightId,
-    required List<XFile> photos,
-  });
-  Future<Either<Failure, FlightEntity>> deleteFlightPhoto({
-    required int flightId,
-    required String photoUrl,
-  });
+  Future<Either<Failure, FlightEntity>> uploadFlightPhotos({required int flightId, required List<XFile> photos});
+  Future<Either<Failure, FlightEntity>> deleteFlightPhoto({required int flightId, required String photoUrl});
 
   // Вопросы пилоту
   Future<Either<Failure, List<FlightQuestionEntity>>> getQuestionsByFlightId(int flightId);
-  Future<Either<Failure, FlightQuestionEntity>> createQuestion({
-    required int flightId,
-    required String questionText,
-  });
+  Future<Either<Failure, FlightQuestionEntity>> createQuestion({required int flightId, required String questionText});
   Future<Either<Failure, FlightQuestionEntity>> updateQuestion({
     required int flightId,
     required int questionId,
     String? questionText,
     String? answerText,
   });
-  Future<Either<Failure, void>> deleteQuestion({
-    required int flightId,
-    required int questionId,
-  });
+  Future<Either<Failure, void>> deleteQuestion({required int flightId, required int questionId});
 
   // Отзывы об аэропортах
   Future<Either<Failure, List<AirportReviewEntity>>> getAirportReviews(String airportCode);

@@ -13,6 +13,6 @@ abstract class CreateAirportReviewRequestDto with _$CreateAirportReviewRequestDt
     @JsonKey(name: 'reply_to_review_id') int? replyToReviewId,
   }) = _CreateAirportReviewRequestDto;
 
-  factory CreateAirportReviewRequestDto.fromJson(Map<String, dynamic> json) => _$CreateAirportReviewRequestDtoFromJson(json);
+  factory CreateAirportReviewRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$CreateAirportReviewRequestDtoFromJson(json);
 }
-

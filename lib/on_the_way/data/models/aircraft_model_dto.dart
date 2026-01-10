@@ -10,15 +10,18 @@ abstract class AircraftModelDto with _$AircraftModelDto {
     required int id,
     @JsonKey(name: 'manufacturer_id') required int manufacturerId,
     @JsonKey(name: 'model_code') required String modelCode,
-    @JsonKey(name: 'full_name') required String fullName,
-    String? category,
-    @JsonKey(name: 'engine_type') String? engineType,
-    @JsonKey(name: 'engine_count') @Default(1) int engineCount,
-    @JsonKey(name: 'is_active') @Default(true) bool isActive,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
     AircraftManufacturerDto? manufacturer,
   }) = _AircraftModelDto;
 
   factory AircraftModelDto.fromJson(Map<String, dynamic> json) => _$AircraftModelDtoFromJson(json);
+}
+
+/// Extension для получения полного названия модели
+extension AircraftModelDtoExtension on AircraftModelDto {
+  /// Получить полное название модели (производитель + код модели)
+  String getFullName() {
+    final manufacturerName = manufacturer?.name ?? '';
+    final name = '$manufacturerName $modelCode'.trim();
+    return name.isEmpty ? modelCode : name;
+  }
 }

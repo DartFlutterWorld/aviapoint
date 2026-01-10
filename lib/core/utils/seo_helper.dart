@@ -125,4 +125,34 @@ class SeoHelper {
     final url = '/learning/type_sertificates/$typeCertificate/$questionId';
     setLearningMetaTags(title: title, description: description, url: url, imageUrl: imageUrl);
   }
+
+  /// Устанавливает метатеги для страницы статьи блога
+  static void setBlogArticleMetaTags({
+    required String title,
+    required String description,
+    String? imageUrl,
+    required int articleId,
+    String? publishedAt,
+  }) {
+    setMetaTags(
+      title: '$title - AviaPoint',
+      description: description,
+      imageUrl: imageUrl,
+      url: '/blog/$articleId',
+      type: 'article',
+    );
+
+    if (publishedAt != null && kIsWeb) {
+      try {
+        final published = DateTime.parse(publishedAt);
+        html.SeoHelperWeb.setMetaTag(
+          'article:published_time',
+          published.toIso8601String(),
+          property: 'article:published_time',
+        );
+      } catch (e) {
+        // Игнорируем ошибки парсинга даты
+      }
+    }
+  }
 }

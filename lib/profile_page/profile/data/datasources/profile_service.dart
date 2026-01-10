@@ -25,4 +25,7 @@ abstract class ProfileService {
 
   @POST('/api/profile/fcm-token')
   Future<void> saveFcmToken(@Body() Map<String, dynamic> body);
+
+  @DELETE('/api/profile')
+  Future<void> deleteAccount();
 }

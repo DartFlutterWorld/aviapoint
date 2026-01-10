@@ -86,9 +86,9 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
   void _submitReview() {
     // Для основных отзывов (не replies) рейтинг обязателен
     if (widget.review.replyToReviewId == null && _rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
@@ -129,18 +129,16 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
             // Закрываем диалог после обновления отзыва
             // Передаем информацию о фотографиях для последующей обработки
             if (!mounted || _isClosing) return;
-            
+
             _isClosing = true;
-            
+
             // Закрываем диалог с информацией о фотографиях
             if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop({
-                'updated': true,
-                'photosToDelete': _photosToDelete,
-                'photosToAdd': _photosToAdd,
-              });
+              Navigator.of(
+                context,
+              ).pop({'updated': true, 'photosToDelete': _photosToDelete, 'photosToAdd': _photosToAdd});
             }
-            
+
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -246,7 +244,10 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 8.w,
                       children: [
-                        Text('Добавить фотографии (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                        Text(
+                          'Добавить фотографии (необязательно)',
+                          style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                        ),
                         TextButton.icon(
                           onPressed: isLoading ? null : _pickPhotos,
                           icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
@@ -268,7 +269,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                             .where((url) => !_photosToDelete.contains(url))
                             .toList();
                         final totalPhotosCount = existingPhotos.length + _photosToAdd.length;
-                        
+
                         if (totalPhotosCount == 0) {
                           return Container(
                             padding: EdgeInsets.all(16.w),
@@ -281,12 +282,15 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                               children: [
                                 Icon(Icons.photo_library_outlined, size: 24, color: Color(0xFF9CA5AF)),
                                 SizedBox(width: 12.w),
-                                Text('Фотографии не добавлены', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                                Text(
+                                  'Фотографии не добавлены',
+                                  style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                ),
                               ],
                             ),
                           );
                         }
-                        
+
                         return GridView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -328,10 +332,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                       onTap: () => _deleteExistingPhoto(photoUrl),
                                       child: Container(
                                         padding: EdgeInsets.all(4.w),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
+                                        decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                                         child: Icon(Icons.close, size: 16.r, color: Colors.white),
                                       ),
                                     ),
@@ -339,7 +340,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                 ],
                               );
                             }
-                            
+
                             // Новые фотографии
                             final newPhotoIndex = index - existingPhotos.length;
                             final photo = _photosToAdd[newPhotoIndex];
@@ -353,10 +354,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                           future: photo.readAsBytes(),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
-                                              return Image.memory(
-                                                snapshot.data!,
-                                                fit: BoxFit.cover,
-                                              );
+                                              return Image.memory(snapshot.data!, fit: BoxFit.cover);
                                             }
                                             return Container(
                                               color: Color(0xFFF3F4F6),
@@ -364,10 +362,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                             );
                                           },
                                         )
-                                      : Image.file(
-                                          File(photo.path),
-                                          fit: BoxFit.cover,
-                                        ),
+                                      : Image.file(File(photo.path), fit: BoxFit.cover),
                                 ),
                                 Positioned(
                                   top: 4.h,
@@ -376,10 +371,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                     onTap: () => _deleteNewPhoto(newPhotoIndex),
                                     child: Container(
                                       padding: EdgeInsets.all(4.w),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
+                                      decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                                       child: Icon(Icons.close, size: 16.r, color: Colors.white),
                                     ),
                                   ),
@@ -430,4 +422,3 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
     return '${getBackUrl(useLocal: true)}/$photoUrl';
   }
 }
-

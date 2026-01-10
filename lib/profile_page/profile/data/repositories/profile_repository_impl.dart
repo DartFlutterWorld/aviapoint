@@ -35,7 +35,13 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, ProfileEntity>> updateProfile({String? email, String? firstName, String? lastName, String? telegram, String? max}) async {
+  Future<Either<Failure, ProfileEntity>> updateProfile({
+    String? email,
+    String? firstName,
+    String? lastName,
+    String? telegram,
+    String? max,
+  }) async {
     try {
       final body = <String, dynamic>{};
       if (email != null) {
@@ -86,6 +92,20 @@ class ProfileRepositoryImpl extends ProfileRepository {
       return right(null);
     } on DioException catch (e) {
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAccount() async {
+    try {
+      await _profileService.deleteAccount();
+      return right(null);
+    } on DioException catch (e) {
+      return left(ServerFailure(
+        statusCode: e.response?.statusCode.toString(),
+        message: e.message,
+        responseMessage: e.response?.data?.toString(),
+      ));
     }
   }
 }

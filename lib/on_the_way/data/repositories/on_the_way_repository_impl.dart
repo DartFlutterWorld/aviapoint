@@ -137,13 +137,17 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
       // Преобразуем waypoints в формат для отправки
       List<Map<String, dynamic>>? waypointsDto;
       if (waypoints != null && waypoints.isNotEmpty) {
-        waypointsDto = waypoints.map((wp) => {
-          'airport_code': wp['airport_code'],
-          'sequence_order': wp['sequence_order'],
-          'arrival_time': wp['arrival_time'],
-          'departure_time': wp['departure_time'],
-          'comment': wp['comment'],
-        }).toList();
+        waypointsDto = waypoints
+            .map(
+              (wp) => {
+                'airport_code': wp['airport_code'],
+                'sequence_order': wp['sequence_order'],
+                'arrival_time': wp['arrival_time'],
+                'departure_time': wp['departure_time'],
+                'comment': wp['comment'],
+              },
+            )
+            .toList();
       }
 
       final request = CreateFlightRequestDto(
@@ -178,26 +182,17 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
             if (kIsWeb) {
               // Для веб-платформы
               final bytes = await photo.readAsBytes();
-              return MultipartFile.fromBytes(
-                bytes,
-                filename: photo.name,
-              );
+              return MultipartFile.fromBytes(bytes, filename: photo.name);
             } else {
               // Для мобильных платформ
               final file = File(photo.path);
-              return await MultipartFile.fromFile(
-                file.path,
-                filename: photo.name,
-              );
+              return await MultipartFile.fromFile(file.path, filename: photo.name);
             }
           }),
         );
 
         // Загружаем фотографии отдельным запросом
-        final flightWithPhotos = await _onTheWayService.uploadFlightPhotos(
-          flightEntity.id,
-          multipartFiles,
-        );
+        final flightWithPhotos = await _onTheWayService.uploadFlightPhotos(flightEntity.id, multipartFiles);
         return right(OnTheWayMapper.toFlightEntity(flightWithPhotos));
       }
 
@@ -326,7 +321,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
   Future<Either<Failure, List<BookingEntity>>> getBookings() async {
     try {
       final response = await _onTheWayService.getBookings();
-      
+
       print('🔵 [OnTheWayRepository] Получены бронирования с бэкенда: ${response.length} шт.');
       for (var booking in response) {
         print('   - Booking #${booking.id}:');
@@ -360,7 +355,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
   Future<Either<Failure, List<BookingEntity>>> getBookingsByFlightId(int flightId) async {
     try {
       final response = await _onTheWayService.getBookingsByFlightId(flightId);
-      
+
       print('🔵 [OnTheWayRepository] Получены бронирования для полёта #$flightId: ${response.length} шт.');
       for (var booking in response) {
         print('   - Booking #${booking.id}:');
@@ -646,10 +641,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
   }
 
   @override
-  Future<Either<Failure, FlightEntity>> uploadFlightPhotos({
-    required int flightId,
-    required List<XFile> photos,
-  }) async {
+  Future<Either<Failure, FlightEntity>> uploadFlightPhotos({required int flightId, required List<XFile> photos}) async {
     try {
       // Конвертируем XFile в MultipartFile
       final multipartFiles = await Future.wait(
@@ -657,17 +649,11 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
           if (kIsWeb) {
             // Для веб-платформы
             final bytes = await photo.readAsBytes();
-            return MultipartFile.fromBytes(
-              bytes,
-              filename: photo.name,
-            );
+            return MultipartFile.fromBytes(bytes, filename: photo.name);
           } else {
             // Для мобильных платформ
             final file = File(photo.path);
-            return await MultipartFile.fromFile(
-              file.path,
-              filename: photo.name,
-            );
+            return await MultipartFile.fromFile(file.path, filename: photo.name);
           }
         }),
       );
@@ -694,10 +680,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
   }
 
   @override
-  Future<Either<Failure, FlightEntity>> deleteFlightPhoto({
-    required int flightId,
-    required String photoUrl,
-  }) async {
+  Future<Either<Failure, FlightEntity>> deleteFlightPhoto({required int flightId, required String photoUrl}) async {
     try {
       final response = await _onTheWayService.deleteFlightPhoto(flightId, photoUrl);
       return right(OnTheWayMapper.toFlightEntity(response));
@@ -811,10 +794,7 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteQuestion({
-    required int flightId,
-    required int questionId,
-  }) async {
+  Future<Either<Failure, void>> deleteQuestion({required int flightId, required int questionId}) async {
     try {
       await _onTheWayService.deleteQuestion(flightId, questionId);
 
@@ -894,22 +874,14 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
           photos.map((photo) async {
             if (kIsWeb) {
               final bytes = await photo.readAsBytes();
-              return MultipartFile.fromBytes(
-                bytes,
-                filename: photo.name,
-              );
+              return MultipartFile.fromBytes(bytes, filename: photo.name);
             } else {
               final file = File(photo.path);
-              return await MultipartFile.fromFile(
-                file.path,
-                filename: photo.name,
-              );
+              return await MultipartFile.fromFile(file.path, filename: photo.name);
             }
           }),
         );
-        formData.files.addAll(
-          multipartFiles.map((file) => MapEntry('photos', file)),
-        );
+        formData.files.addAll(multipartFiles.map((file) => MapEntry('photos', file)));
       }
 
       final response = await _onTheWayService.createAirportReview(formData);
@@ -973,16 +945,10 @@ class OnTheWayRepositoryImpl extends OnTheWayRepository {
         photos.map((photo) async {
           if (kIsWeb) {
             final bytes = await photo.readAsBytes();
-            return MultipartFile.fromBytes(
-              bytes,
-              filename: photo.name,
-            );
+            return MultipartFile.fromBytes(bytes, filename: photo.name);
           } else {
             final file = File(photo.path);
-            return await MultipartFile.fromFile(
-              file.path,
-              filename: photo.name,
-            );
+            return await MultipartFile.fromFile(file.path, filename: photo.name);
           }
         }),
       );

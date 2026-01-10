@@ -20,7 +20,7 @@ class BaseScreen extends StatelessWidget {
         OnTheWayNavigationRoute(), // По пути (индекс 2)
         NewsNavigationRoute(), // Новости (индекс 3)
         MarketNavigationRoute(), // Маркет (индекс 4)
-        ProfileNavigationRoute(), // Профиль (индекс 5)
+        BlogNavigationRoute(), // Блог (индекс 5)
         // SaleRequestNavigationRoute(),
       ],
       bottomNavigationBuilder: MediaQuery.of(context).size.width < 768

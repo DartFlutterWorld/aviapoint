@@ -35,6 +35,11 @@ import 'package:aviapoint/news/presentation/bloc/category_news_bloc.dart';
 import 'package:aviapoint/news/presentation/bloc/detail_news_bloc.dart';
 import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
 import 'package:aviapoint/news/presentation/cubit/news_cubit.dart';
+import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
+import 'package:aviapoint/blog/presentation/bloc/blog_categories_bloc.dart';
+import 'package:aviapoint/blog/presentation/bloc/blog_tags_bloc.dart';
+import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
+import 'package:aviapoint/blog/presentation/bloc/blog_article_detail_bloc.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/core/presentation/widgets/max_width_container.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
@@ -55,6 +60,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:aviapoint/generated/l10n.dart';
 
 /// Корень приложения.
 @immutable
@@ -136,6 +143,16 @@ class _AppState extends State<App> {
         BlocProvider<NewsBloc>(create: (context) => NewsBloc(newsRepository: getIt<NewsRepository>())),
         BlocProvider<CategoryNewsBloc>(create: (context) => CategoryNewsBloc(newsRepository: getIt<NewsRepository>())),
         BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
+        BlocProvider<BlogCategoriesBloc>(
+          create: (context) => BlogCategoriesBloc(blogRepository: getIt<BlogRepository>()),
+        ),
+        BlocProvider<BlogTagsBloc>(
+          create: (context) => BlogTagsBloc(blogRepository: getIt<BlogRepository>()),
+        ),
+        BlocProvider<BlogArticlesBloc>(create: (context) => BlogArticlesBloc(blogRepository: getIt<BlogRepository>())),
+        BlocProvider<BlogArticleDetailBloc>(
+          create: (context) => BlogArticleDetailBloc(blogRepository: getIt<BlogRepository>()),
+        ),
         BlocProvider<TypeSertificatesBloc>(
           create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
         ),
@@ -165,7 +182,7 @@ class _AppState extends State<App> {
           if (state is SuccessAuthState) {
             _profileRequested = true;
             context.read<ProfileBloc>().add(const GetProfileEvent());
-            
+
             // Проверяем, есть ли отложенная заявка на владение аэродромом
             if (PendingActions.hasPendingOwnershipRequest()) {
               final airportCode = PendingActions.getPendingAirportCode();
@@ -179,10 +196,10 @@ class _AppState extends State<App> {
                       try {
                         // Получаем ProfileBloc из navigatorContext
                         final profileBloc = navigatorContext.read<ProfileBloc>();
-                        
+
                         // Всегда загружаем профиль заново, чтобы получить актуальные данные
                         profileBloc.add(const GetProfileEvent());
-                        
+
                         // Ждем загрузки профиля (максимум 10 секунд)
                         ProfileState? finalProfileState;
                         try {
@@ -199,33 +216,31 @@ class _AppState extends State<App> {
                         final dataSource = getIt<ApiDatasource>() as ApiDatasourceDio;
                         final airportService = AirportService(dataSource.dio);
                         final airport = await airportService.getAirportByCode(airportCode);
-                        
+
                         if (airport != null && finalProfileState is SuccessProfileState) {
                           final profile = finalProfileState.profile;
                           final ownedAirports = profile.ownedAirports;
-                          
+
                           // Проверяем, есть ли ID аэропорта в списке owned_airports
                           final isOwner = ownedAirports != null && ownedAirports.contains(airport.id);
-                          
-                          print('🔍 Проверка владельца: airportId=${airport.id}, ownedAirports=$ownedAirports, isOwner=$isOwner');
-                          
+
+                          print(
+                            '🔍 Проверка владельца: airportId=${airport.id}, ownedAirports=$ownedAirports, isOwner=$isOwner',
+                          );
+
                           if (isOwner) {
                             // Если владелец - открываем страницу редактирования
                             AutoRouter.of(navigatorContext).push(EditAirportRoute(airportCode: airportCode));
                           } else {
                             // Если не владелец - открываем форму заявки
-                            showAirportOwnershipRequestBottomSheet(
-                              navigatorContext,
-                              airportCode: airportCode,
-                            );
+                            showAirportOwnershipRequestBottomSheet(navigatorContext, airportCode: airportCode);
                           }
                         } else {
                           // Если аэропорт не найден или профиль не загружен, открываем форму заявки
-                          print('⚠️ Аэропорт не найден или профиль не загружен: airport=${airport != null}, profileState=${finalProfileState.runtimeType}');
-                          showAirportOwnershipRequestBottomSheet(
-                            navigatorContext,
-                            airportCode: airportCode,
+                          print(
+                            '⚠️ Аэропорт не найден или профиль не загружен: airport=${airport != null}, profileState=${finalProfileState.runtimeType}',
                           );
+                          showAirportOwnershipRequestBottomSheet(navigatorContext, airportCode: airportCode);
                         }
 
                         PendingActions.clearPendingOwnershipRequest();
@@ -233,10 +248,7 @@ class _AppState extends State<App> {
                         print('Ошибка при проверке владельца: $e');
                         // В случае ошибки открываем форму заявки
                         try {
-                          showAirportOwnershipRequestBottomSheet(
-                            navigatorContext,
-                            airportCode: airportCode,
-                          );
+                          showAirportOwnershipRequestBottomSheet(navigatorContext, airportCode: airportCode);
                         } catch (_) {
                           // Игнорируем ошибки открытия формы
                         }
@@ -250,7 +262,7 @@ class _AppState extends State<App> {
                 });
               }
             }
-            
+
             // Проверяем, есть ли отложенная загрузка фотографий
             if (PendingActions.hasPendingPhotoUpload()) {
               final airportCode = PendingActions.getPendingPhotoUploadAirportCode();
@@ -280,10 +292,10 @@ class _AppState extends State<App> {
                             duration: Duration(seconds: 3),
                           ),
                         );
-                        
+
                         // Открываем bottom sheet с информацией об аэропорте, где пользователь сможет загрузить фотографии
                         await showAirportInfoBottomSheet(navigatorContext, airportCode);
-                        
+
                         PendingActions.clearPendingPhotoUpload();
                       } catch (e) {
                         print('Ошибка при открытии загрузки фотографий: $e');
@@ -323,7 +335,11 @@ class _AppState extends State<App> {
             maxWidth: 834.0, // iPhone 13 Pro Max ширина
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
-              localizationsDelegates: context.localizationDelegates,
+              localizationsDelegates: [
+                ...context.localizationDelegates,
+                S.delegate,
+                FlutterQuillLocalizations.delegate,
+              ],
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               title: 'AviaPoint',

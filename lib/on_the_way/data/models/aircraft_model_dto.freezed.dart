@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AircraftModelDto {
 
- int get id;@JsonKey(name: 'manufacturer_id') int get manufacturerId;@JsonKey(name: 'model_code') String get modelCode;@JsonKey(name: 'full_name') String get fullName; String? get category;@JsonKey(name: 'engine_type') String? get engineType;@JsonKey(name: 'engine_count') int get engineCount;@JsonKey(name: 'is_active') bool get isActive;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt; AircraftManufacturerDto? get manufacturer;
+ int get id;@JsonKey(name: 'manufacturer_id') int get manufacturerId;@JsonKey(name: 'model_code') String get modelCode; AircraftManufacturerDto? get manufacturer;
 /// Create a copy of AircraftModelDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AircraftModelDtoCopyWith<AircraftModelDto> get copyWith => _$AircraftModelDtoCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AircraftModelDto&&(identical(other.id, id) || other.id == id)&&(identical(other.manufacturerId, manufacturerId) || other.manufacturerId == manufacturerId)&&(identical(other.modelCode, modelCode) || other.modelCode == modelCode)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.category, category) || other.category == category)&&(identical(other.engineType, engineType) || other.engineType == engineType)&&(identical(other.engineCount, engineCount) || other.engineCount == engineCount)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.manufacturer, manufacturer) || other.manufacturer == manufacturer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AircraftModelDto&&(identical(other.id, id) || other.id == id)&&(identical(other.manufacturerId, manufacturerId) || other.manufacturerId == manufacturerId)&&(identical(other.modelCode, modelCode) || other.modelCode == modelCode)&&(identical(other.manufacturer, manufacturer) || other.manufacturer == manufacturer));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,manufacturerId,modelCode,fullName,category,engineType,engineCount,isActive,createdAt,updatedAt,manufacturer);
+int get hashCode => Object.hash(runtimeType,id,manufacturerId,modelCode,manufacturer);
 
 @override
 String toString() {
-  return 'AircraftModelDto(id: $id, manufacturerId: $manufacturerId, modelCode: $modelCode, fullName: $fullName, category: $category, engineType: $engineType, engineCount: $engineCount, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, manufacturer: $manufacturer)';
+  return 'AircraftModelDto(id: $id, manufacturerId: $manufacturerId, modelCode: $modelCode, manufacturer: $manufacturer)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AircraftModelDtoCopyWith<$Res>  {
   factory $AircraftModelDtoCopyWith(AircraftModelDto value, $Res Function(AircraftModelDto) _then) = _$AircraftModelDtoCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'manufacturer_id') int manufacturerId,@JsonKey(name: 'model_code') String modelCode,@JsonKey(name: 'full_name') String fullName, String? category,@JsonKey(name: 'engine_type') String? engineType,@JsonKey(name: 'engine_count') int engineCount,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt, AircraftManufacturerDto? manufacturer
+ int id,@JsonKey(name: 'manufacturer_id') int manufacturerId,@JsonKey(name: 'model_code') String modelCode, AircraftManufacturerDto? manufacturer
 });
 
 
@@ -65,19 +65,12 @@ class _$AircraftModelDtoCopyWithImpl<$Res>
 
 /// Create a copy of AircraftModelDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? manufacturerId = null,Object? modelCode = null,Object? fullName = null,Object? category = freezed,Object? engineType = freezed,Object? engineCount = null,Object? isActive = null,Object? createdAt = freezed,Object? updatedAt = freezed,Object? manufacturer = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? manufacturerId = null,Object? modelCode = null,Object? manufacturer = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,manufacturerId: null == manufacturerId ? _self.manufacturerId : manufacturerId // ignore: cast_nullable_to_non_nullable
 as int,modelCode: null == modelCode ? _self.modelCode : modelCode // ignore: cast_nullable_to_non_nullable
-as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
-as String,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as String?,engineType: freezed == engineType ? _self.engineType : engineType // ignore: cast_nullable_to_non_nullable
-as String?,engineCount: null == engineCount ? _self.engineCount : engineCount // ignore: cast_nullable_to_non_nullable
-as int,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,manufacturer: freezed == manufacturer ? _self.manufacturer : manufacturer // ignore: cast_nullable_to_non_nullable
+as String,manufacturer: freezed == manufacturer ? _self.manufacturer : manufacturer // ignore: cast_nullable_to_non_nullable
 as AircraftManufacturerDto?,
   ));
 }
@@ -175,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'manufacturer_id')  int manufacturerId, @JsonKey(name: 'model_code')  String modelCode, @JsonKey(name: 'full_name')  String fullName,  String? category, @JsonKey(name: 'engine_type')  String? engineType, @JsonKey(name: 'engine_count')  int engineCount, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt,  AircraftManufacturerDto? manufacturer)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'manufacturer_id')  int manufacturerId, @JsonKey(name: 'model_code')  String modelCode,  AircraftManufacturerDto? manufacturer)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AircraftModelDto() when $default != null:
-return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.fullName,_that.category,_that.engineType,_that.engineCount,_that.isActive,_that.createdAt,_that.updatedAt,_that.manufacturer);case _:
+return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.manufacturer);case _:
   return orElse();
 
 }
@@ -196,10 +189,10 @@ return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.fullName,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'manufacturer_id')  int manufacturerId, @JsonKey(name: 'model_code')  String modelCode, @JsonKey(name: 'full_name')  String fullName,  String? category, @JsonKey(name: 'engine_type')  String? engineType, @JsonKey(name: 'engine_count')  int engineCount, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt,  AircraftManufacturerDto? manufacturer)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'manufacturer_id')  int manufacturerId, @JsonKey(name: 'model_code')  String modelCode,  AircraftManufacturerDto? manufacturer)  $default,) {final _that = this;
 switch (_that) {
 case _AircraftModelDto():
-return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.fullName,_that.category,_that.engineType,_that.engineCount,_that.isActive,_that.createdAt,_that.updatedAt,_that.manufacturer);case _:
+return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.manufacturer);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -216,10 +209,10 @@ return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.fullName,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'manufacturer_id')  int manufacturerId, @JsonKey(name: 'model_code')  String modelCode, @JsonKey(name: 'full_name')  String fullName,  String? category, @JsonKey(name: 'engine_type')  String? engineType, @JsonKey(name: 'engine_count')  int engineCount, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt,  AircraftManufacturerDto? manufacturer)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'manufacturer_id')  int manufacturerId, @JsonKey(name: 'model_code')  String modelCode,  AircraftManufacturerDto? manufacturer)?  $default,) {final _that = this;
 switch (_that) {
 case _AircraftModelDto() when $default != null:
-return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.fullName,_that.category,_that.engineType,_that.engineCount,_that.isActive,_that.createdAt,_that.updatedAt,_that.manufacturer);case _:
+return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.manufacturer);case _:
   return null;
 
 }
@@ -231,19 +224,12 @@ return $default(_that.id,_that.manufacturerId,_that.modelCode,_that.fullName,_th
 @JsonSerializable()
 
 class _AircraftModelDto implements AircraftModelDto {
-  const _AircraftModelDto({required this.id, @JsonKey(name: 'manufacturer_id') required this.manufacturerId, @JsonKey(name: 'model_code') required this.modelCode, @JsonKey(name: 'full_name') required this.fullName, this.category, @JsonKey(name: 'engine_type') this.engineType, @JsonKey(name: 'engine_count') this.engineCount = 1, @JsonKey(name: 'is_active') this.isActive = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt, this.manufacturer});
+  const _AircraftModelDto({required this.id, @JsonKey(name: 'manufacturer_id') required this.manufacturerId, @JsonKey(name: 'model_code') required this.modelCode, this.manufacturer});
   factory _AircraftModelDto.fromJson(Map<String, dynamic> json) => _$AircraftModelDtoFromJson(json);
 
 @override final  int id;
 @override@JsonKey(name: 'manufacturer_id') final  int manufacturerId;
 @override@JsonKey(name: 'model_code') final  String modelCode;
-@override@JsonKey(name: 'full_name') final  String fullName;
-@override final  String? category;
-@override@JsonKey(name: 'engine_type') final  String? engineType;
-@override@JsonKey(name: 'engine_count') final  int engineCount;
-@override@JsonKey(name: 'is_active') final  bool isActive;
-@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
-@override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
 @override final  AircraftManufacturerDto? manufacturer;
 
 /// Create a copy of AircraftModelDto
@@ -259,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AircraftModelDto&&(identical(other.id, id) || other.id == id)&&(identical(other.manufacturerId, manufacturerId) || other.manufacturerId == manufacturerId)&&(identical(other.modelCode, modelCode) || other.modelCode == modelCode)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.category, category) || other.category == category)&&(identical(other.engineType, engineType) || other.engineType == engineType)&&(identical(other.engineCount, engineCount) || other.engineCount == engineCount)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.manufacturer, manufacturer) || other.manufacturer == manufacturer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AircraftModelDto&&(identical(other.id, id) || other.id == id)&&(identical(other.manufacturerId, manufacturerId) || other.manufacturerId == manufacturerId)&&(identical(other.modelCode, modelCode) || other.modelCode == modelCode)&&(identical(other.manufacturer, manufacturer) || other.manufacturer == manufacturer));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,manufacturerId,modelCode,fullName,category,engineType,engineCount,isActive,createdAt,updatedAt,manufacturer);
+int get hashCode => Object.hash(runtimeType,id,manufacturerId,modelCode,manufacturer);
 
 @override
 String toString() {
-  return 'AircraftModelDto(id: $id, manufacturerId: $manufacturerId, modelCode: $modelCode, fullName: $fullName, category: $category, engineType: $engineType, engineCount: $engineCount, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, manufacturer: $manufacturer)';
+  return 'AircraftModelDto(id: $id, manufacturerId: $manufacturerId, modelCode: $modelCode, manufacturer: $manufacturer)';
 }
 
 
@@ -279,7 +265,7 @@ abstract mixin class _$AircraftModelDtoCopyWith<$Res> implements $AircraftModelD
   factory _$AircraftModelDtoCopyWith(_AircraftModelDto value, $Res Function(_AircraftModelDto) _then) = __$AircraftModelDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'manufacturer_id') int manufacturerId,@JsonKey(name: 'model_code') String modelCode,@JsonKey(name: 'full_name') String fullName, String? category,@JsonKey(name: 'engine_type') String? engineType,@JsonKey(name: 'engine_count') int engineCount,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt, AircraftManufacturerDto? manufacturer
+ int id,@JsonKey(name: 'manufacturer_id') int manufacturerId,@JsonKey(name: 'model_code') String modelCode, AircraftManufacturerDto? manufacturer
 });
 
 
@@ -296,19 +282,12 @@ class __$AircraftModelDtoCopyWithImpl<$Res>
 
 /// Create a copy of AircraftModelDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? manufacturerId = null,Object? modelCode = null,Object? fullName = null,Object? category = freezed,Object? engineType = freezed,Object? engineCount = null,Object? isActive = null,Object? createdAt = freezed,Object? updatedAt = freezed,Object? manufacturer = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? manufacturerId = null,Object? modelCode = null,Object? manufacturer = freezed,}) {
   return _then(_AircraftModelDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,manufacturerId: null == manufacturerId ? _self.manufacturerId : manufacturerId // ignore: cast_nullable_to_non_nullable
 as int,modelCode: null == modelCode ? _self.modelCode : modelCode // ignore: cast_nullable_to_non_nullable
-as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
-as String,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as String?,engineType: freezed == engineType ? _self.engineType : engineType // ignore: cast_nullable_to_non_nullable
-as String?,engineCount: null == engineCount ? _self.engineCount : engineCount // ignore: cast_nullable_to_non_nullable
-as int,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,manufacturer: freezed == manufacturer ? _self.manufacturer : manufacturer // ignore: cast_nullable_to_non_nullable
+as String,manufacturer: freezed == manufacturer ? _self.manufacturer : manufacturer // ignore: cast_nullable_to_non_nullable
 as AircraftManufacturerDto?,
   ));
 }

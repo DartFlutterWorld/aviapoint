@@ -18,10 +18,7 @@ class CreateQuestionEvent extends QuestionsEvent {
   final int flightId;
   final String questionText;
 
-  CreateQuestionEvent({
-    required this.flightId,
-    required this.questionText,
-  });
+  CreateQuestionEvent({required this.flightId, required this.questionText});
 }
 
 class UpdateQuestionEvent extends QuestionsEvent {
@@ -30,22 +27,14 @@ class UpdateQuestionEvent extends QuestionsEvent {
   final String? questionText;
   final String? answerText;
 
-  UpdateQuestionEvent({
-    required this.flightId,
-    required this.questionId,
-    this.questionText,
-    this.answerText,
-  });
+  UpdateQuestionEvent({required this.flightId, required this.questionId, this.questionText, this.answerText});
 }
 
 class DeleteQuestionEvent extends QuestionsEvent {
   final int flightId;
   final int questionId;
 
-  DeleteQuestionEvent({
-    required this.flightId,
-    required this.questionId,
-  });
+  DeleteQuestionEvent({required this.flightId, required this.questionId});
 }
 
 @freezed
@@ -160,10 +149,7 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
   Future<void> _handleDeleteQuestion(DeleteQuestionEvent event, Emitter<QuestionsState> emit) async {
     emit(QuestionsState.loading());
 
-    final response = await _onTheWayRepository.deleteQuestion(
-      flightId: event.flightId,
-      questionId: event.questionId,
-    );
+    final response = await _onTheWayRepository.deleteQuestion(flightId: event.flightId, questionId: event.questionId);
 
     response.fold(
       (l) {
@@ -184,4 +170,3 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
     );
   }
 }
-

@@ -7,7 +7,7 @@ part 'profile_dto.g.dart';
 abstract class ProfileDto with _$ProfileDto {
   const factory ProfileDto({
     required int id,
-    required String phone,
+    @JsonKey(fromJson: _stringFromJsonNullable) required String phone,
     String? email,
     @JsonKey(name: 'first_name') String? firstName,
     @JsonKey(name: 'last_name') String? lastName,
@@ -45,4 +45,11 @@ int? _intFromJsonNullable(dynamic value) {
   if (value is num) return value.toInt();
   if (value is String) return int.tryParse(value);
   return null;
+}
+
+/// Парсит nullable string, возвращает пустую строку если null
+String _stringFromJsonNullable(dynamic value) {
+  if (value == null) return '';
+  if (value is String) return value;
+  return value.toString();
 }

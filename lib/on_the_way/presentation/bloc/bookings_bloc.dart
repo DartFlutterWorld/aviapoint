@@ -146,7 +146,7 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
 
   Future<void> _handleConfirmBooking(ConfirmBookingEvent event, Emitter<BookingsState> emit) async {
     final previousState = state;
-    
+
     if (previousState is SuccessBookingsState) {
       emit(SuccessBookingsState(bookings: previousState.bookings));
     } else {

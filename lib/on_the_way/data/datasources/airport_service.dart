@@ -44,7 +44,7 @@ class AirportService {
       }
 
       print('✅ [AirportService] Успешно обработано ${results.length} аэропортов');
-      
+
       // Сортируем: сначала действующие, потом недействующие, внутри каждой группы по названию
       results.sort((a, b) {
         // Сначала сравниваем по статусу (действующие первыми)
@@ -56,7 +56,7 @@ class AirportService {
         // Если статус одинаковый, сортируем по названию
         return a.name.compareTo(b.name);
       });
-      
+
       return results;
     } catch (e, stackTrace) {
       print('❌ [AirportService] Ошибка поиска аэропортов: $e');
@@ -186,26 +186,17 @@ class AirportService {
   }
 
   /// Загрузить официальные фотографии аэропорта (только для владельцев)
-  Future<AirportModel> uploadAirportPhotos({
-    required String airportCode,
-    required List<XFile> photos,
-  }) async {
+  Future<AirportModel> uploadAirportPhotos({required String airportCode, required List<XFile> photos}) async {
     try {
       // Конвертируем XFile в MultipartFile
       final multipartFiles = await Future.wait(
         photos.map((photo) async {
           if (kIsWeb) {
             final bytes = await photo.readAsBytes();
-            return MultipartFile.fromBytes(
-              bytes,
-              filename: photo.name,
-            );
+            return MultipartFile.fromBytes(bytes, filename: photo.name);
           } else {
             final file = File(photo.path);
-            return await MultipartFile.fromFile(
-              file.path,
-              filename: photo.name,
-            );
+            return await MultipartFile.fromFile(file.path, filename: photo.name);
           }
         }),
       );
@@ -220,26 +211,17 @@ class AirportService {
   }
 
   /// Загрузить фотографии посетителей
-  Future<AirportModel> uploadVisitorPhotos({
-    required String airportCode,
-    required List<XFile> photos,
-  }) async {
+  Future<AirportModel> uploadVisitorPhotos({required String airportCode, required List<XFile> photos}) async {
     try {
       // Конвертируем XFile в MultipartFile
       final multipartFiles = await Future.wait(
         photos.map((photo) async {
           if (kIsWeb) {
             final bytes = await photo.readAsBytes();
-            return MultipartFile.fromBytes(
-              bytes,
-              filename: photo.name,
-            );
+            return MultipartFile.fromBytes(bytes, filename: photo.name);
           } else {
             final file = File(photo.path);
-            return await MultipartFile.fromFile(
-              file.path,
-              filename: photo.name,
-            );
+            return await MultipartFile.fromFile(file.path, filename: photo.name);
           }
         }),
       );
@@ -254,15 +236,9 @@ class AirportService {
   }
 
   /// Удалить фотографию посетителя
-  Future<AirportModel> deleteVisitorPhoto({
-    required String airportCode,
-    required String photoUrl,
-  }) async {
+  Future<AirportModel> deleteVisitorPhoto({required String airportCode, required String photoUrl}) async {
     try {
-      final dto = await _onTheWayService.deleteVisitorPhoto(
-        airportCode,
-        {'photo_url': photoUrl},
-      );
+      final dto = await _onTheWayService.deleteVisitorPhoto(airportCode, {'photo_url': photoUrl});
       return _dtoToModel(dto);
     } catch (e, stackTrace) {
       print('❌ [AirportService] Ошибка удаления фото посетителя: $e');
@@ -270,5 +246,4 @@ class AirportService {
       rethrow;
     }
   }
-
 }

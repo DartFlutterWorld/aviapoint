@@ -18,6 +18,7 @@ class MarketScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: 'Маркет',
         withBack: false,
+        withProfile: true,
         actions: [
           // Provider.of<AppState>(context, listen: true).isAuthenticated
           //     ? IconButton(onPressed: () => logOut(context), icon: Icon(Icons.logout))

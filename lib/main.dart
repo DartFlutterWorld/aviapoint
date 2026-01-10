@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:aviapoint/core/domain/app_bloc_observer.dart';
 import 'package:aviapoint/core/utils/talker_config.dart';
+import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -36,6 +37,16 @@ class StringStackTrace implements StackTrace {
 // ignore: long-method
 Future<void> main() async {
   FlutterError.onError = (FlutterErrorDetails details) async {
+    // Игнорируем некритичную ошибку QuillNativeBridgeApi.isIosSimulator
+    if (details.exception is PlatformException) {
+      final e = details.exception as PlatformException;
+      if (e.code == 'channel-error' && 
+          (e.message?.contains('isIosSimulator') == true || 
+           e.message?.contains('QuillNativeBridgeApi') == true)) {
+        // Это некритичная ошибка, просто игнорируем её
+        return;
+      }
+    }
     AppTalker.error('Flutter Error', details.exception, details.stack);
     Zone.current.handleUncaughtError(details.exception, details.stack ?? StringStackTrace(details.stack.toString()));
   };
@@ -73,6 +84,17 @@ Future<void> _run() async {
 
   /// Инициализация ServiceLocator.
   await setupDependencies();
+
+  /// Инициализация настроек приложения (feature flags)
+  /// Загружаем настройки сразу после инициализации зависимостей,
+  /// чтобы они были доступны при первом рендере UI
+  try {
+    await AppSettingsServiceHelper().initialize();
+  } catch (e) {
+    // При ошибке используем значения по умолчанию
+    // Сервис сам обработает ошибку и установит дефолтные значения
+    debugPrint('Ошибка инициализации настроек приложения: $e');
+  }
 
   Bloc.observer = AppBlocObserver.instance();
   Bloc.transformer = bloc_concurrency.sequential<Object?>();

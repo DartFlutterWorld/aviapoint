@@ -44,18 +44,17 @@ class AirportReviewEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        airportCode,
-        reviewerId,
-        rating,
-        comment,
-        photoUrls,
-        replyToReviewId,
-        createdAt,
-        updatedAt,
-        reviewerFirstName,
-        reviewerLastName,
-        reviewerAvatarUrl,
-      ];
+    id,
+    airportCode,
+    reviewerId,
+    rating,
+    comment,
+    photoUrls,
+    replyToReviewId,
+    createdAt,
+    updatedAt,
+    reviewerFirstName,
+    reviewerLastName,
+    reviewerAvatarUrl,
+  ];
 }
-

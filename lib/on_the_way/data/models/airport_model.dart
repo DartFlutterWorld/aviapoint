@@ -14,19 +14,19 @@ class AirportModel {
   final String? regionEng; // Английское название региона
   final String? coordinatesText; // КТА
   final String? continent; // Континент
-  
+
   // Координаты
   final double? latitudeDeg;
   final double? longitudeDeg;
   final int? elevationFt; // Высота над уровнем моря в футах
-  
+
   // Дополнительная информация
   final String? ownership; // Принадлежность
   final bool isInternational; // Международный ли аэропорт
   final String? email;
   final String? website;
   final String? notes;
-  
+
   // Данные о ВПП
   final String? runwayName;
   final int? runwayLength;
@@ -34,12 +34,12 @@ class AirportModel {
   final String? runwaySurface;
   final String? runwayMagneticCourse;
   final String? runwayLighting;
-  
+
   // Коды
   final String? gpsCode;
   final String? iataCode;
   final String? localCode;
-  
+
   // Дополнительные поля
   final Map<String, dynamic>? services; // Услуги
   final int? ownerId;
@@ -95,7 +95,7 @@ class AirportModel {
   });
 
   String get displayName => '$code - $name${city != null ? ' ($city)' : ''}';
-  
+
   /// Полное отображение с дополнительной информацией
   String get fullDisplayName {
     final parts = <String>[];
@@ -112,7 +112,7 @@ class AirportModel {
     }
     return parts.join(' ');
   }
-  
+
   /// Тип аэропорта на русском
   String get typeDisplay {
     switch (type.toLowerCase()) {

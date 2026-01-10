@@ -27,7 +27,17 @@ class QuestionCard extends StatelessWidget {
   final VoidCallback? onAnswer;
   final double? pilotRating; // Рейтинг пилота для отображения
 
-  const QuestionCard({super.key, required this.question, this.canDelete = false, this.canEdit = false, this.canAnswer = false, this.onDelete, this.onEdit, this.onAnswer, this.pilotRating});
+  const QuestionCard({
+    super.key,
+    required this.question,
+    this.canDelete = false,
+    this.canEdit = false,
+    this.canAnswer = false,
+    this.onDelete,
+    this.onEdit,
+    this.onAnswer,
+    this.pilotRating,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +98,9 @@ class QuestionCard extends StatelessWidget {
                   children: [
                     // Аватар автора вопроса
                     GestureDetector(
-                      onTap: question.authorAvatarUrl != null && question.authorAvatarUrl!.isNotEmpty ? () => _showPhotoViewer(context, getImageUrl(question.authorAvatarUrl!)) : null,
+                      onTap: question.authorAvatarUrl != null && question.authorAvatarUrl!.isNotEmpty
+                          ? () => _showPhotoViewer(context, getImageUrl(question.authorAvatarUrl!))
+                          : null,
                       child: ClipOval(
                         child: question.authorAvatarUrl != null && question.authorAvatarUrl!.isNotEmpty
                             ? CachedNetworkImage(
@@ -98,8 +110,10 @@ class QuestionCard extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 cacheManager: GetIt.instance<DefaultCacheManager>(),
                                 cacheKey: question.authorAvatarUrl,
-                                placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                placeholder: (context, url) =>
+                                    Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                               )
                             : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                       ),
@@ -108,7 +122,9 @@ class QuestionCard extends StatelessWidget {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text(question.authorName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)))],
+                        children: [
+                          Text(question.authorName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                        ],
                       ),
                     ),
                   ],
@@ -145,8 +161,10 @@ class QuestionCard extends StatelessWidget {
                                         fit: BoxFit.cover,
                                         cacheManager: GetIt.instance<DefaultCacheManager>(),
                                         cacheKey: question.answeredByAvatarUrl,
-                                        placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                        errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                        placeholder: (context, url) =>
+                                            Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                                       )
                                     : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                               ),
@@ -158,12 +176,18 @@ class QuestionCard extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      Text(question.answeredByName ?? 'Пилот', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                                      Text(
+                                        question.answeredByName ?? 'Пилот',
+                                        style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA)),
+                                      ),
                                       SizedBox(width: 8.w),
                                       Text('(Пилот)', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                                     ],
                                   ),
-                                  if (pilotRating != null && pilotRating! > 0) ...[SizedBox(height: 4.h), RatingWidget(rating: pilotRating!.round(), size: 12)],
+                                  if (pilotRating != null && pilotRating! > 0) ...[
+                                    SizedBox(height: 4.h),
+                                    RatingWidget(rating: pilotRating!.round(), size: 12),
+                                  ],
                                 ],
                               ),
                             ),
@@ -257,7 +281,10 @@ class QuestionCard extends StatelessWidget {
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                 SizedBox(height: 16.h),
-                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                Text(
+                                  'Не удалось загрузить изображение',
+                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                ),
                               ],
                             ),
                           ),
@@ -277,7 +304,11 @@ class QuestionCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,7 +322,10 @@ class QuestionCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8.w),
@@ -299,7 +333,10 @@ class QuestionCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8.w),
@@ -307,7 +344,10 @@ class QuestionCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -332,7 +372,13 @@ class QuestionCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(photoUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -344,14 +390,26 @@ class QuestionCard extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Правый клик по изображению → "Сохранить как"'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Необходимо разрешение на сохранение файлов'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
@@ -376,21 +434,37 @@ class QuestionCard extends StatelessWidget {
       await dio.download(photoUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid
+          ? await getExternalStorageDirectory()
+          : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid
+            ? '${directory.path}/Download/$fileName'
+            : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Фотография сохранена'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     } catch (e) {
       scaffoldMessenger.hideCurrentSnackBar();
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }

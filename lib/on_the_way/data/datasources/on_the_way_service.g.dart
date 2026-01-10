@@ -1033,12 +1033,9 @@ class _OnTheWayService implements OnTheWayService {
   }
 
   @override
-  Future<List<AircraftManufacturerDto>> getAircraftManufacturers({
-    bool? activeOnly,
-  }) async {
+  Future<List<AircraftManufacturerDto>> getAircraftManufacturers() async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'active_only': activeOnly};
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<AircraftManufacturerDto>>(
@@ -1070,17 +1067,11 @@ class _OnTheWayService implements OnTheWayService {
   @override
   Future<List<AircraftModelDto>> getAircraftModels({
     int? manufacturerId,
-    String? category,
-    String? engineType,
-    bool? activeOnly,
     String? searchQuery,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'manufacturer_id': manufacturerId,
-      r'category': category,
-      r'engine_type': engineType,
-      r'active_only': activeOnly,
       r'q': searchQuery,
     };
     queryParameters.removeWhere((k, v) => v == null);

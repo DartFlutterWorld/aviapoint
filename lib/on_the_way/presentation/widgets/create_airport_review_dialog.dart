@@ -40,9 +40,9 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
   void _submitReview() {
     // Для ответов рейтинг не требуется, для основных отзывов - обязателен
     if (widget.replyToReviewId == null && _rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
@@ -51,15 +51,15 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
     final ratingValue = widget.replyToReviewId == null ? _rating : 5;
 
     context.read<AirportReviewsBloc>().add(
-          CreateAirportReviewEvent(
-            airportCode: widget.airportCode,
-            reviewerId: widget.reviewerId,
-            rating: ratingValue,
-            comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
-            replyToReviewId: widget.replyToReviewId,
-            photos: _photos.isNotEmpty ? _photos : null,
-          ),
-        );
+      CreateAirportReviewEvent(
+        airportCode: widget.airportCode,
+        reviewerId: widget.reviewerId,
+        rating: ratingValue,
+        comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+        replyToReviewId: widget.replyToReviewId,
+        photos: _photos.isNotEmpty ? _photos : null,
+      ),
+    );
   }
 
   Future<void> _pickPhotos() async {
@@ -246,10 +246,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                                         future: photo.readAsBytes(),
                                         builder: (context, snapshot) {
                                           if (snapshot.hasData) {
-                                            return Image.memory(
-                                              snapshot.data!,
-                                              fit: BoxFit.cover,
-                                            );
+                                            return Image.memory(snapshot.data!, fit: BoxFit.cover);
                                           }
                                           return Container(
                                             color: Color(0xFFF3F4F6),
@@ -257,10 +254,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                                           );
                                         },
                                       )
-                                    : Image.file(
-                                        File(photo.path),
-                                        fit: BoxFit.cover,
-                                      ),
+                                    : Image.file(File(photo.path), fit: BoxFit.cover),
                               ),
                               Positioned(
                                 top: 4.h,
@@ -269,10 +263,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                                   onTap: () => _deletePhoto(index),
                                   child: Container(
                                     padding: EdgeInsets.all(4.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
+                                    decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                                     child: Icon(Icons.close, size: 16.r, color: Colors.white),
                                   ),
                                 ),
@@ -293,7 +284,10 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                           children: [
                             Icon(Icons.photo_library_outlined, size: 24, color: Color(0xFF9CA5AF)),
                             SizedBox(width: 12.w),
-                            Text('Фотографии не добавлены', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                            Text(
+                              'Фотографии не добавлены',
+                              style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            ),
                           ],
                         ),
                       ),
@@ -345,4 +339,3 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
     );
   }
 }
-
