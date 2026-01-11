@@ -23,6 +23,13 @@ import 'dart:convert';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
+import 'package:aviapoint/blog/presentation/bloc/blog_comments_bloc.dart';
+import 'package:aviapoint/blog/presentation/widgets/comment_card.dart';
+import 'package:aviapoint/blog/presentation/widgets/comment_dialog.dart';
+import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
+import 'package:aviapoint/blog/domain/entities/blog_comment_entity.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/injection_container.dart';
 
 @RoutePage()
 class BlogArticleDetailScreen extends StatefulWidget {
@@ -255,6 +262,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                           SizedBox(height: 24.h),
                           _buildArticleContent(article.content),
                           SizedBox(height: 24.h),
+                          _buildCommentsSection(article.id),
                         ],
                       ),
                     ),
@@ -353,6 +361,209 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
       }
       return op;
     }).toList();
+  }
+
+  /// Секция комментариев
+  Widget _buildCommentsSection(int articleId) {
+    final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
+
+    return BlocProvider(
+      create: (context) {
+        final bloc = BlogCommentsBloc(blogRepository: getIt<BlogRepository>());
+        bloc.add(GetCommentsByArticleIdEvent(articleId: articleId));
+        return bloc;
+      },
+      child: BlocBuilder<BlogCommentsBloc, BlogCommentsState>(
+        builder: (context, commentsState) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Комментарии', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                SizedBox(height: 12.h),
+                // Кнопка "Оставить комментарий"
+                ElevatedButton.icon(
+                  onPressed: () => _showCommentDialog(context, articleId, isAuthenticated),
+                  icon: Icon(Icons.comment_outlined, size: 16),
+                  label: Text('Оставить комментарий', style: AppStyles.bold14s),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0A6EFA),
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                commentsState.maybeWhen(
+                  loading: () => Center(
+                    child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
+                  ),
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.w),
+                      child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
+                    ),
+                  ),
+                  success: (comments) {
+                    if (comments.isEmpty) {
+                      return Container(
+                        padding: EdgeInsets.all(24.w),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF9FAFB),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: Color(0xFFE5E7EB)),
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Icon(Icons.comment_outlined, size: 48, color: Color(0xFF9CA5AF)),
+                              SizedBox(height: 12.h),
+                              Text('Пока нет комментариев', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    // Разделяем комментарии: основные и ответы
+                    final mainComments = comments.where((c) => c.parentCommentId == null).toList();
+                    final replies = comments.where((c) => c.parentCommentId != null).toList();
+
+                    // Получаем текущего пользователя для проверки прав
+                    final profileState = context.read<ProfileBloc>().state;
+                    final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
+
+                    return Column(
+                      children: mainComments.map((BlogCommentEntity comment) {
+                        final commentReplies = replies.where((BlogCommentEntity r) => r.parentCommentId == comment.id).toList();
+                        final canDelete = currentUserId != null && comment.authorId == currentUserId;
+                        final canEdit = currentUserId != null && comment.authorId == currentUserId;
+                        final canReply = isAuthenticated && currentUserId != null && currentUserId != comment.authorId;
+
+                        return Column(
+                          children: [
+                            CommentCard(
+                              comment: comment,
+                              isReply: false,
+                              canDelete: canDelete,
+                              canEdit: canEdit,
+                              onDelete: canDelete ? () => _showDeleteCommentDialog(context, articleId, comment.id) : null,
+                              onEdit: canEdit ? () => _showEditCommentDialog(context, articleId, comment, isAuthenticated) : null,
+                              onReply: canReply ? () => _showCommentDialog(context, articleId, isAuthenticated, parentCommentId: comment.id.toString()) : null,
+                            ),
+                            // Отображаем ответы на комментарий (если они есть)
+                            if (commentReplies.isNotEmpty)
+                              Padding(
+                                padding: EdgeInsets.only(left: 40.w),
+                                child: Column(
+                                  children: commentReplies.map((BlogCommentEntity reply) {
+                                    final canDeleteReply = currentUserId != null && reply.authorId == currentUserId;
+                                    final canEditReply = currentUserId != null && reply.authorId == currentUserId;
+                                    return CommentCard(
+                                      comment: reply,
+                                      isReply: true,
+                                      canDelete: canDeleteReply,
+                                      canEdit: canEditReply,
+                                      onDelete: canDeleteReply ? () => _showDeleteCommentDialog(context, articleId, reply.id) : null,
+                                      onEdit: canEditReply ? () => _showEditCommentDialog(context, articleId, reply, isAuthenticated) : null,
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                          ],
+                        );
+                      }).toList(),
+                    );
+                  },
+                  orElse: () => const SizedBox(),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// Показывает диалог для создания/редактирования комментария
+  Future<void> _showCommentDialog(BuildContext context, int articleId, bool isAuthenticated, {String? parentCommentId}) async {
+    if (!isAuthenticated) {
+      // Если не авторизован, показываем авторизацию
+      await showLogin(
+        context,
+        callback: () {
+          // После успешной авторизации проверяем снова и показываем диалог
+          final appState = Provider.of<AppState>(context, listen: false);
+          if (appState.isAuthenticated) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                _showCommentDialog(context, articleId, true, parentCommentId: parentCommentId);
+              }
+            });
+          }
+        },
+      );
+      return;
+    }
+
+    // Показываем диалог создания комментария
+    final commentsBloc = context.read<BlogCommentsBloc>();
+    await showCommentDialog(
+      context: context,
+      articleId: articleId,
+      parentCommentId: parentCommentId,
+      commentsBloc: commentsBloc,
+      onCommentCreated: () {
+        commentsBloc.add(GetCommentsByArticleIdEvent(articleId: articleId));
+      },
+    );
+  }
+
+  /// Показывает диалог для редактирования комментария
+  Future<void> _showEditCommentDialog(BuildContext context, int articleId, BlogCommentEntity comment, bool isAuthenticated) async {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    final commentsBloc = context.read<BlogCommentsBloc>();
+    await showCommentDialog(
+      context: context,
+      articleId: articleId,
+      comment: comment,
+      commentsBloc: commentsBloc,
+      onCommentCreated: () {
+        commentsBloc.add(GetCommentsByArticleIdEvent(articleId: articleId));
+      },
+    );
+  }
+
+  /// Показывает диалог подтверждения удаления комментария
+  Future<void> _showDeleteCommentDialog(BuildContext context, int articleId, int commentId) async {
+    if (!mounted) return;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Удалить комментарий?'),
+        content: Text('Вы уверены, что хотите удалить этот комментарий?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('Отмена', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Удалить', style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true && mounted) {
+      final commentsBloc = context.read<BlogCommentsBloc>();
+      commentsBloc.add(DeleteCommentEvent(articleId: articleId, commentId: commentId));
+    }
   }
 }
 

@@ -6,9 +6,11 @@ import 'package:aviapoint/blog/data/models/create_blog_article_dto.dart';
 import 'package:aviapoint/blog/data/repositories/mappers/blog_article_mapper.dart';
 import 'package:aviapoint/blog/data/repositories/mappers/blog_category_mapper.dart';
 import 'package:aviapoint/blog/data/repositories/mappers/blog_tag_mapper.dart';
+import 'package:aviapoint/blog/data/repositories/mappers/blog_comment_mapper.dart';
 import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/blog/domain/entities/blog_category_entity.dart';
 import 'package:aviapoint/blog/domain/entities/blog_tag_entity.dart';
+import 'package:aviapoint/blog/domain/entities/blog_comment_entity.dart';
 import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
@@ -481,6 +483,110 @@ class BlogRepositoryImpl extends BlogRepository {
       return left(ServerFailure(
         statusCode: null,
         message: 'Ошибка при загрузке изображения: ${e.toString()}',
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BlogCommentEntity>>> getCommentsByArticleId(int articleId) async {
+    try {
+      final response = await _blogService.getCommentsByArticleId(articleId);
+      return right(BlogCommentMapper.toEntities(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(ServerFailure(
+        statusCode: e.response?.statusCode.toString(),
+        message: e.message,
+        responseMessage: responseMessage,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BlogCommentEntity>> createComment({
+    required int articleId,
+    String? parentCommentId,
+    required String content,
+  }) async {
+    try {
+      final body = {
+        'content': content,
+        if (parentCommentId != null) 'parent_comment_id': int.tryParse(parentCommentId) ?? parentCommentId,
+      };
+      final response = await _blogService.createComment(articleId, body);
+      return right(BlogCommentMapper.toEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(ServerFailure(
+        statusCode: e.response?.statusCode.toString(),
+        message: e.message,
+        responseMessage: responseMessage,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BlogCommentEntity>> updateComment({
+    required int commentId,
+    required int articleId,
+    required String content,
+  }) async {
+    try {
+      final body = {'content': content};
+      final response = await _blogService.updateComment(articleId, commentId, body);
+      return right(BlogCommentMapper.toEntity(response));
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(ServerFailure(
+        statusCode: e.response?.statusCode.toString(),
+        message: e.message,
+        responseMessage: responseMessage,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteComment({
+    required int commentId,
+    required int articleId,
+  }) async {
+    try {
+      await _blogService.deleteComment(articleId, commentId);
+      return right(null);
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return left(ServerFailure(
+        statusCode: e.response?.statusCode.toString(),
+        message: e.message,
+        responseMessage: responseMessage,
       ));
     }
   }

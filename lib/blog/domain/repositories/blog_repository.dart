@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/blog/domain/entities/blog_category_entity.dart';
 import 'package:aviapoint/blog/domain/entities/blog_tag_entity.dart';
+import 'package:aviapoint/blog/domain/entities/blog_comment_entity.dart';
 import 'package:aviapoint/core/failure/failure.dart';
 import 'package:dartz/dartz.dart';
 
@@ -69,4 +70,21 @@ abstract class BlogRepository {
   
   // Загрузка изображений для контента статьи из bytes (для веб-версии)
   Future<Either<Failure, String>> uploadContentImageBytes(List<int> bytes, {required String fileName, int? articleId});
+
+  // Комментарии к статьям
+  Future<Either<Failure, List<BlogCommentEntity>>> getCommentsByArticleId(int articleId);
+  Future<Either<Failure, BlogCommentEntity>> createComment({
+    required int articleId,
+    String? parentCommentId,
+    required String content,
+  });
+  Future<Either<Failure, BlogCommentEntity>> updateComment({
+    required int commentId,
+    required int articleId,
+    required String content,
+  });
+  Future<Either<Failure, void>> deleteComment({
+    required int commentId,
+    required int articleId,
+  });
 }

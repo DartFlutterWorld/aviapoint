@@ -530,13 +530,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
                                     // ),
                                     SizedBox(height: 16),
-                                    // Секция отзывов
-                                    BlocBuilder<ProfileBloc, ProfileState>(
-                                      builder: (context, profileState) {
-                                        return profileState.maybeWhen(success: (profile) => _buildReviewsSection(context, profile.id), orElse: () => SizedBox.shrink());
-                                      },
-                                    ),
-                                    SizedBox(height: 16),
                                     ProfileDataWidget(
                                       title: 'Изменить данные',
                                       icon: Pictures.user,
@@ -552,6 +545,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     Divider(height: 18.h),
                                     ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
+                                    SizedBox(height: 16),
+                                    // Секция отзывов
+                                    BlocBuilder<ProfileBloc, ProfileState>(
+                                      builder: (context, profileState) {
+                                        return profileState.maybeWhen(success: (profile) => _buildReviewsSection(context, profile.id), orElse: () => SizedBox.shrink());
+                                      },
+                                    ),
                                     SizedBox(height: 24.h),
                                   ],
                                 )

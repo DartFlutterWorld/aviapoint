@@ -1,6 +1,7 @@
 import 'package:aviapoint/blog/data/models/blog_article_dto.dart';
 import 'package:aviapoint/blog/data/models/blog_category_dto.dart';
 import 'package:aviapoint/blog/data/models/blog_tag_dto.dart';
+import 'package:aviapoint/blog/data/models/blog_comment_dto.dart';
 import 'package:aviapoint/blog/data/models/upload_image_response_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -61,4 +62,17 @@ abstract class BlogService {
   @POST('/api/blog/articles/content-images/upload')
   @MultiPart()
   Future<UploadImageResponseDto> uploadContentImageTemporary(@Part(name: 'image') MultipartFile image);
+
+  // Комментарии к статьям
+  @GET('/api/blog/articles/{id}/comments')
+  Future<List<BlogCommentDto>> getCommentsByArticleId(@Path('id') int articleId);
+
+  @POST('/api/blog/articles/{id}/comments')
+  Future<BlogCommentDto> createComment(@Path('id') int articleId, @Body() Map<String, dynamic> body);
+
+  @PUT('/api/blog/articles/{id}/comments/{commentId}')
+  Future<BlogCommentDto> updateComment(@Path('id') int articleId, @Path('commentId') int commentId, @Body() Map<String, dynamic> body);
+
+  @DELETE('/api/blog/articles/{id}/comments/{commentId}')
+  Future<void> deleteComment(@Path('id') int articleId, @Path('commentId') int commentId);
 }
