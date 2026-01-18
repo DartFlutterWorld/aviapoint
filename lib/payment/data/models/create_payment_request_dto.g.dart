@@ -6,7 +6,9 @@ part of 'create_payment_request_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_CreatePaymentRequestDto _$CreatePaymentRequestDtoFromJson(Map<String, dynamic> json) => _CreatePaymentRequestDto(
+_CreatePaymentRequestDto _$CreatePaymentRequestDtoFromJson(
+  Map<String, dynamic> json,
+) => _CreatePaymentRequestDto(
   amount: (json['amount'] as num).toDouble(),
   currency: json['currency'] as String,
   description: json['description'] as String,
@@ -16,7 +18,9 @@ _CreatePaymentRequestDto _$CreatePaymentRequestDtoFromJson(Map<String, dynamic> 
   returnUrl: json['return_url'] as String?,
 );
 
-Map<String, dynamic> _$CreatePaymentRequestDtoToJson(_CreatePaymentRequestDto instance) => <String, dynamic>{
+Map<String, dynamic> _$CreatePaymentRequestDtoToJson(
+  _CreatePaymentRequestDto instance,
+) => <String, dynamic>{
   'amount': instance.amount,
   'currency': instance.currency,
   'description': instance.description,

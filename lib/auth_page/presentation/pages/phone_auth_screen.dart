@@ -56,12 +56,18 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   Widget build(BuildContext context) {
     var app = BlocListener<AuthBloc, AuthState>(
       listener: _authBlocListener,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
           Container(
             decoration: const BoxDecoration(color: Color(0xFFF9FDFF)),
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 30),
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 30,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -268,7 +274,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
               ],
             ),
           ),
-        ],
+          ],
+        ),
       ),
     );
 

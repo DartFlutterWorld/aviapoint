@@ -60,17 +60,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoadingSubscription = false;
   bool _isLoadingSubscriptionTypes = false;
   String _appVersion = '';
+  bool _showPaidContent = true; // Значение из БД, по умолчанию true
 
   @override
   void initState() {
     super.initState();
     _loadDataIfAuthenticated();
     _loadAppVersion();
+    _loadShowPaidContentSetting();
 
     // Обрабатываем параметры из URL (для редиректа после оплаты)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handlePaymentRedirect();
     });
+  }
+
+  Future<void> _loadShowPaidContentSetting() async {
+    if (!kIsWeb && Platform.isIOS) {
+      try {
+        final value = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
+        if (mounted) {
+          setState(() {
+            _showPaidContent = value;
+          });
+        }
+      } catch (e) {
+        // При ошибке оставляем true (значение по умолчанию)
+      }
+    }
   }
 
   Future<void> _loadAppVersion() async {
@@ -259,7 +276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     // На iOS показываем только если showPaidContent = true
     if (Platform.isIOS) {
-      return AppSettingsServiceHelper().getSettingValue('showPaidContent');
+      return _showPaidContent;
     }
 
     // На Android и других платформах всегда показываем

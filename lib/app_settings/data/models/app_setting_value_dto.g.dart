@@ -7,9 +7,10 @@ part of 'app_setting_value_dto.dart';
 // **************************************************************************
 
 _AppSettingValueDto _$AppSettingValueDtoFromJson(Map<String, dynamic> json) =>
-    _AppSettingValueDto(key: json['key'] as String, value: json['value'] as bool);
+    _AppSettingValueDto(
+      key: json['key'] as String,
+      value: json['value'] as bool,
+    );
 
-Map<String, dynamic> _$AppSettingValueDtoToJson(_AppSettingValueDto instance) => <String, dynamic>{
-  'key': instance.key,
-  'value': instance.value,
-};
+Map<String, dynamic> _$AppSettingValueDtoToJson(_AppSettingValueDto instance) =>
+    <String, dynamic>{'key': instance.key, 'value': instance.value};

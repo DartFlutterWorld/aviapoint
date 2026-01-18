@@ -21,17 +21,18 @@ _ReviewDto _$ReviewDtoFromJson(Map<String, dynamic> json) => _ReviewDto(
   flightId: _intFromJsonNullable(json['flight_id']),
 );
 
-Map<String, dynamic> _$ReviewDtoToJson(_ReviewDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'booking_id': instance.bookingId,
-  'reviewer_id': instance.reviewerId,
-  'reviewed_id': instance.reviewedId,
-  'rating': instance.rating,
-  'comment': instance.comment,
-  'reply_to_review_id': instance.replyToReviewId,
-  'created_at': instance.createdAt?.toIso8601String(),
-  'reviewer_first_name': instance.reviewerFirstName,
-  'reviewer_last_name': instance.reviewerLastName,
-  'reviewer_avatar_url': instance.reviewerAvatarUrl,
-  'flight_id': instance.flightId,
-};
+Map<String, dynamic> _$ReviewDtoToJson(_ReviewDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'booking_id': instance.bookingId,
+      'reviewer_id': instance.reviewerId,
+      'reviewed_id': instance.reviewedId,
+      'rating': instance.rating,
+      'comment': instance.comment,
+      'reply_to_review_id': instance.replyToReviewId,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'reviewer_first_name': instance.reviewerFirstName,
+      'reviewer_last_name': instance.reviewerLastName,
+      'reviewer_avatar_url': instance.reviewerAvatarUrl,
+      'flight_id': instance.flightId,
+    };

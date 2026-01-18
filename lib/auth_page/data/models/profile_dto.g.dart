@@ -13,9 +13,10 @@ _ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) => _ProfileDto(
   lastName: json['lastName'] as String?,
 );
 
-Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) => <String, dynamic>{
-  'phone': instance.phone,
-  'email': instance.email,
-  'firstName': instance.firstName,
-  'lastName': instance.lastName,
-};
+Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) =>
+    <String, dynamic>{
+      'phone': instance.phone,
+      'email': instance.email,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+    };

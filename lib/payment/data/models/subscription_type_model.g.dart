@@ -6,7 +6,9 @@ part of 'subscription_type_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_SubscriptionTypeModel _$SubscriptionTypeModelFromJson(Map<String, dynamic> json) => _SubscriptionTypeModel(
+_SubscriptionTypeModel _$SubscriptionTypeModelFromJson(
+  Map<String, dynamic> json,
+) => _SubscriptionTypeModel(
   id: (json['id'] as num).toInt(),
   code: json['code'] as String,
   name: json['name'] as String,
@@ -17,7 +19,9 @@ _SubscriptionTypeModel _$SubscriptionTypeModelFromJson(Map<String, dynamic> json
   description: json['description'] as String,
 );
 
-Map<String, dynamic> _$SubscriptionTypeModelToJson(_SubscriptionTypeModel instance) => <String, dynamic>{
+Map<String, dynamic> _$SubscriptionTypeModelToJson(
+  _SubscriptionTypeModel instance,
+) => <String, dynamic>{
   'id': instance.id,
   'code': instance.code,
   'name': instance.name,

@@ -84,16 +84,6 @@ Future<void> _run() async {
   /// Инициализация ServiceLocator.
   await setupDependencies();
 
-  /// Инициализация настроек приложения (feature flags)
-  /// Загружаем настройки сразу после инициализации зависимостей,
-  /// чтобы они были доступны при первом рендере UI
-  try {
-    await AppSettingsServiceHelper().initialize();
-  } catch (e) {
-    // При ошибке используем значения по умолчанию
-    // Сервис сам обработает ошибку и установит дефолтные значения
-    debugPrint('Ошибка инициализации настроек приложения: $e');
-  }
 
   Bloc.observer = AppBlocObserver.instance();
   Bloc.transformer = bloc_concurrency.sequential<Object?>();

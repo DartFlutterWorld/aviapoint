@@ -18,14 +18,15 @@ _PaymentDto _$PaymentDtoFromJson(Map<String, dynamic> json) => _PaymentDto(
   paid: json['paid'] as bool?,
 );
 
-Map<String, dynamic> _$PaymentDtoToJson(_PaymentDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'status': instance.status,
-  'amount': instance.amount,
-  'currency': instance.currency,
-  'description': instance.description,
-  'payment_url': instance.paymentUrl,
-  'confirmation_token': instance.confirmationToken,
-  'created_at': instance.createdAt,
-  'paid': instance.paid,
-};
+Map<String, dynamic> _$PaymentDtoToJson(_PaymentDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'status': instance.status,
+      'amount': instance.amount,
+      'currency': instance.currency,
+      'description': instance.description,
+      'payment_url': instance.paymentUrl,
+      'confirmation_token': instance.confirmationToken,
+      'created_at': instance.createdAt,
+      'paid': instance.paid,
+    };

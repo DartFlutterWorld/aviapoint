@@ -32,6 +32,7 @@ class TestingModeScreen extends StatefulWidget {
 class _TestingModeScreenState extends State<TestingModeScreen> {
   bool _hasActiveSubscription = false;
   bool? _previousAuthStatus;
+  bool _showPaidContent = true; // Значение из БД, по умолчанию true
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     final appState = Provider.of<AppState>(context, listen: false);
     _previousAuthStatus = appState.isAuthenticated;
     _checkSubscription();
+    _loadShowPaidContentSetting();
 
     // Обрабатываем параметры из URL (для редиректа после оплаты)
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -110,9 +112,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
-      final hasActive = subscriptions.any(
-        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
-      );
+      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
 
       if (mounted) {
         setState(() {
@@ -156,9 +156,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
       // Проверяем, есть ли хотя бы одна активная подписка
-      final hasActiveSubscription = subscriptions.any(
-        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
-      );
+      final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
 
       if (hasActiveSubscription) {
         // Обновляем состояние подписки в UI
@@ -226,10 +224,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       // Загружаем типы подписок и находим yearly
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
-      final yearlyType = subscriptionTypes.firstWhere(
-        (type) => type.code == 'rosaviatest_365' && type.isActive,
-        orElse: () => throw Exception('Годовая подписка не найдена'),
-      );
+      final yearlyType = subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => throw Exception('Годовая подписка не найдена'));
 
       if (!context.mounted) return;
 
@@ -245,13 +240,22 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       print('❌ Ошибка при создании платежа: $e');
       print('StackTrace: $stackTrace');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ошибка при загрузке типов подписок: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+      }
+    }
+  }
+
+  Future<void> _loadShowPaidContentSetting() async {
+    if (!kIsWeb && Platform.isIOS) {
+      try {
+        final value = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
+        if (mounted) {
+          setState(() {
+            _showPaidContent = value;
+          });
+        }
+      } catch (e) {
+        // При ошибке оставляем true (значение по умолчанию)
       }
     }
   }
@@ -262,7 +266,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
     // На iOS показываем только если showPaidContent = true
     if (Platform.isIOS) {
-      return AppSettingsServiceHelper().getSettingValue('showPaidContent');
+      return _showPaidContent;
     }
 
     // На Android и других платформах всегда показываем
@@ -294,9 +298,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   @override
   Widget build(BuildContext context) {
     // Формируем title в зависимости от наличия активной подписки
-    final trainingModeTitle = _hasActiveSubscription
-        ? 'Тренировочный\nрежим'
-        : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
+    final trainingModeTitle = _hasActiveSubscription ? 'Тренировочный\nрежим' : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
 
     return BlocProvider.value(
       value: getIt<RosAviaTestCubit>(),
@@ -337,7 +339,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                     SizedBox(height: 16.h),
                     Text(
                       'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',
-                      style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
+                      style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.5),
                     ),
                     SizedBox(height: 16.h),
                   ],
@@ -351,7 +353,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                   SizedBox(height: 16.h),
                   Text(
                     'Стандартный режим позволит вам бесплатно готовиться к экзамену. Статистика по правильно отвечнным вопросам появится вконце всех вопросов',
-                    style: AppStyles.regular12s.copyWith(color: Color(0xFF1F2937), height: 1),
+                    style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.5),
                   ),
                 ],
               ),
