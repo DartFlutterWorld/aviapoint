@@ -360,6 +360,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                 LocationPickerWidget(
                   initialLocation: _selectedLocation,
                   onLocationSelected: (locationData) {
+                    print('🔵 [CreateAircraftMarketScreen] Выбор местоположения: $locationData');
                     setState(() {
                       _selectedLocation = locationData['address'] as String?;
                     });

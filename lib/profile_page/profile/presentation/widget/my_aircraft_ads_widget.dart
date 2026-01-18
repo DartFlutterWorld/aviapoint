@@ -7,6 +7,7 @@ import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -232,10 +233,10 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.all(8.w),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: kIsWeb ? 3 : 2,
         crossAxisSpacing: 8.w,
         mainAxisSpacing: 8.h,
-        childAspectRatio: 0.75,
+        childAspectRatio: kIsWeb ? 0.95 : 0.67,
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {
@@ -243,7 +244,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
         return AircraftMarketCard(
           product: product,
           showEditButtons: true,
-          showYearAndLocation: false,
+          showYearAndLocation: true,
           showInactiveBadge: true,
           onTap: () {
             context.router.push(

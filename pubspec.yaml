@@ -1,7 +1,7 @@
 name: aviapoint
 description: service for pilot.
 publish_to: "none"
-version: 0.0.1+26
+version: 0.0.1+27
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -29,7 +29,7 @@ dependencies:
   json_annotation: ^4.9.0
   mask_text_input_formatter: ^2.9.0
   geolocator: ^14.0.1
-  flutter_map: ^7.0.2
+  flutter_map: ^8.2.2
   latlong2: ^0.9.1
   percent_indicator: ^4.2.4
   provider: ^6.0.2

@@ -43,6 +43,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'dart:io';
 
 @RoutePage()
@@ -58,16 +59,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<SubscriptionTypeModel> _subscriptionTypes = [];
   bool _isLoadingSubscription = false;
   bool _isLoadingSubscriptionTypes = false;
+  String _appVersion = '';
 
   @override
   void initState() {
     super.initState();
     _loadDataIfAuthenticated();
+    _loadAppVersion();
 
     // Обрабатываем параметры из URL (для редиректа после оплаты)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handlePaymentRedirect();
     });
+  }
+
+  Future<void> _loadAppVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      setState(() {
+        _appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+      });
+    } catch (e) {
+      // Игнорируем ошибки при получении версии
+    }
   }
 
   void _loadDataIfAuthenticated() {
@@ -679,6 +693,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       },
                                     ),
                                     SizedBox(height: 24.h),
+                                    // Версия приложения (незаметно внизу)
+                                    if (_appVersion.isNotEmpty)
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: 16.h),
+                                        child: Center(
+                                          child: Text(
+                                            'Версия $_appVersion',
+                                            style: AppStyles.regular12s.copyWith(
+                                              color: Color(0xFF9CA5AF),
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                   ],
                                 )
                               : Center(
@@ -710,6 +738,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           onPressed: () => showLogin(context),
                                         ),
                                       ),
+                                      // Версия приложения (незаметно внизу)
+                                      if (_appVersion.isNotEmpty)
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 24.h, bottom: 16.h),
+                                          child: Text(
+                                            'Версия $_appVersion',
+                                            style: AppStyles.regular12s.copyWith(
+                                              color: Color(0xFF9CA5AF),
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
                                     ],
                                   ),
                                 ),
