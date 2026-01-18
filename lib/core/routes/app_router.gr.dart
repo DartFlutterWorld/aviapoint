@@ -43,6 +43,59 @@ class AirDataSystemFailureRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AircraftMarketDetailScreen]
+class AircraftMarketDetailRoute
+    extends PageRouteInfo<AircraftMarketDetailRouteArgs> {
+  AircraftMarketDetailRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AircraftMarketDetailRoute.name,
+         args: AircraftMarketDetailRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'AircraftMarketDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<AircraftMarketDetailRouteArgs>(
+        orElse: () =>
+            AircraftMarketDetailRouteArgs(id: pathParams.getInt('id')),
+      );
+      return AircraftMarketDetailScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class AircraftMarketDetailRouteArgs {
+  const AircraftMarketDetailRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'AircraftMarketDetailRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AircraftMarketDetailRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
 /// [AirspeedsForEmergencyOperationsScreen]
 class AirspeedsForEmergencyOperationsRoute extends PageRouteInfo<void> {
   const AirspeedsForEmergencyOperationsRoute({List<PageRouteInfo>? children})
@@ -230,6 +283,22 @@ class CabinFireRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const CabinFireScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [CreateAircraftMarketScreen]
+class CreateAircraftMarketRoute extends PageRouteInfo<void> {
+  const CreateAircraftMarketRoute({List<PageRouteInfo>? children})
+    : super(CreateAircraftMarketRoute.name, initialChildren: children);
+
+  static const String name = 'CreateAircraftMarketRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreateAircraftMarketScreen();
     },
   );
 }
@@ -529,6 +598,54 @@ class DitchingRoute extends PageRouteInfo<void> {
       return const DitchingScreen();
     },
   );
+}
+
+/// generated route for
+/// [EditAircraftMarketScreen]
+class EditAircraftMarketRoute
+    extends PageRouteInfo<EditAircraftMarketRouteArgs> {
+  EditAircraftMarketRoute({
+    Key? key,
+    required AircraftMarketEntity product,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditAircraftMarketRoute.name,
+         args: EditAircraftMarketRouteArgs(key: key, product: product),
+         initialChildren: children,
+       );
+
+  static const String name = 'EditAircraftMarketRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EditAircraftMarketRouteArgs>();
+      return EditAircraftMarketScreen(key: args.key, product: args.product);
+    },
+  );
+}
+
+class EditAircraftMarketRouteArgs {
+  const EditAircraftMarketRouteArgs({this.key, required this.product});
+
+  final Key? key;
+
+  final AircraftMarketEntity product;
+
+  @override
+  String toString() {
+    return 'EditAircraftMarketRouteArgs{key: $key, product: $product}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditAircraftMarketRouteArgs) return false;
+    return key == other.key && product == other.product;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ product.hashCode;
 }
 
 /// generated route for
@@ -1516,22 +1633,6 @@ class OnTheWayNavigationRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const OnTheWayNavigationScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [OnTheWayScreen]
-class OnTheWayRoute extends PageRouteInfo<void> {
-  const OnTheWayRoute({List<PageRouteInfo>? children})
-    : super(OnTheWayRoute.name, initialChildren: children);
-
-  static const String name = 'OnTheWayRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const OnTheWayScreen();
     },
   );
 }

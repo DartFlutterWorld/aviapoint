@@ -1,8 +1,8 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final DateTime? initialDateFrom;
@@ -18,7 +18,6 @@ class FilterBottomSheet extends StatefulWidget {
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
   DateTime? _dateFrom;
   DateTime? _dateTo;
-  final DateFormat _dateFormat = DateFormat('dd.MM.yyyy');
 
   @override
   void initState() {
@@ -57,10 +56,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   Expanded(
                     child: Text(
                       _dateFrom != null && _dateTo != null
-                          ? '${_dateFormat.format(_dateFrom!)} - ${_dateFormat.format(_dateTo!)}'
+                          ? '${formatDate(_dateFrom!)} - ${formatDate(_dateTo!)}'
                           : _dateFrom != null
-                          ? 'От: ${_dateFormat.format(_dateFrom!)}'
-                          : 'До: ${_dateFormat.format(_dateTo!)}',
+                          ? 'От: ${formatDate(_dateFrom!)}'
+                          : 'До: ${formatDate(_dateTo!)}',
                       style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                     ),
                   ),

@@ -27,6 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? elevation;
   final Color? shadowColor;
   final bool withProfile;
+  final PreferredSizeWidget? bottom;
 
   const CustomAppBar({
     super.key,
@@ -41,10 +42,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.elevation = 1,
     this.shadowColor,
     this.withProfile = false,
+    this.bottom,
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(height);
+  Size get preferredSize => Size.fromHeight(height + (bottom?.preferredSize.height ?? 0));
 
   // void _pop(BuildContext context) {
   //   AutoRouter.of(context).maybePop();
@@ -100,11 +102,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               maxLines: 2,
               textAlign: titleTextAlign,
             ),
-      actions: [
-        ...actions,
-        if (withProfile)
-          _ProfileButton(),
-      ],
+      actions: [...actions, if (withProfile) _ProfileButton()],
+      bottom: bottom,
     );
   }
 }
@@ -128,10 +127,7 @@ class _ProfileButton extends StatelessWidget {
 
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        final avatarUrl = state.maybeWhen(
-          success: (profile) => profile.avatarUrl,
-          orElse: () => null,
-        );
+        final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
 
         final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
 

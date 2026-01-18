@@ -7,7 +7,4 @@ part of 'category_news_dto.dart';
 // **************************************************************************
 
 CategoryNewsDto _$CategoryNewsDtoFromJson(Map<String, dynamic> json) =>
-    CategoryNewsDto(
-      id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-    );
+    CategoryNewsDto(id: (json['id'] as num).toInt(), title: json['title'] as String);

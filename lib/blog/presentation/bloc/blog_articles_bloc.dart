@@ -86,7 +86,7 @@ class BlogArticlesBloc extends Bloc<BlogArticlesEvent, BlogArticlesState> {
   static const int _defaultLimit = 20;
   int _currentOffset = 0;
   bool _hasMore = true;
-  
+
   // Сохраняем последние фильтры для loadMore
   int? _lastCategoryId;
   int? _lastTagId;
@@ -114,7 +114,7 @@ class BlogArticlesBloc extends Bloc<BlogArticlesEvent, BlogArticlesState> {
     emit(const LoadingBlogArticlesState());
     _currentOffset = 0;
     _hasMore = true;
-    
+
     // Сохраняем фильтры для loadMore
     _lastCategoryId = event.categoryId;
     _lastTagId = event.tagId;

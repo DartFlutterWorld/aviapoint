@@ -1,6 +1,7 @@
 import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,15 +15,6 @@ class BlogArticleCard extends StatelessWidget {
 
   const BlogArticleCard({super.key, required this.article, this.onTap, this.showStatus = false});
 
-  String _formatDate(String? date) {
-    if (date == null || date.isEmpty) return '';
-    try {
-      final parsed = DateTime.parse(date);
-      return '${parsed.day.toString().padLeft(2, '0')}.${parsed.month.toString().padLeft(2, '0')}.${parsed.year}';
-    } catch (e) {
-      return date;
-    }
-  }
 
   String _getAuthorName() {
     if (article.author == null) return 'Автор';
@@ -74,121 +66,121 @@ class BlogArticleCard extends StatelessWidget {
         child: Stack(
           children: [
             Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                  imageUrl: getImageUrl(article.coverImageUrl!),
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer(
-                    duration: const Duration(milliseconds: 1000),
-                    color: const Color(0xFF8D66FE),
-                    colorOpacity: 0.2,
-                    child: Container(decoration: const BoxDecoration()),
-                  ),
-                  height: 75.h,
-                  width: 75.w,
-                ),
-              ),
-            if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty) SizedBox(width: 8.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (article.category != null)
-                        Text(
-                          article.category!.name.toUpperCase(),
-                          style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
-                        ),
-                      Text(
-                        _formatDate(article.publishedAt),
-                        style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: CachedNetworkImage(
+                      imageUrl: getImageUrl(article.coverImageUrl!),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer(
+                        duration: const Duration(milliseconds: 1000),
+                        color: const Color(0xFF8D66FE),
+                        colorOpacity: 0.2,
+                        child: Container(decoration: const BoxDecoration()),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  Text(
-                    article.title,
-                    style: AppStyles.medium14s.copyWith(color: const Color(0xFF374151)),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (article.excerpt != null && article.excerpt!.isNotEmpty) ...[
-                    SizedBox(height: 5.h),
-                    Text(
-                      article.excerpt!,
-                      style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767)),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      height: 75.h,
+                      width: 75.w,
                     ),
-                  ],
-                  SizedBox(height: 8.h),
-                  Wrap(
-                    spacing: 12.w,
-                    runSpacing: 4.h,
+                  ),
+                if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty) SizedBox(width: 8.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                  Row(
-                        mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.person_outline, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                      SizedBox(width: 4.w),
-                      Text(_getAuthorName(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (article.category != null)
+                            Text(
+                              article.category!.name.toUpperCase(),
+                              style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                            ),
+                          Text(
+                            article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
+                            style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                          ),
                         ],
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
+                      SizedBox(height: 5.h),
+                      Text(
+                        article.title,
+                        style: AppStyles.medium14s.copyWith(color: const Color(0xFF374151)),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (article.excerpt != null && article.excerpt!.isNotEmpty) ...[
+                        SizedBox(height: 5.h),
+                        Text(
+                          article.excerpt!,
+                          style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767)),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                      SizedBox(height: 8.h),
+                      Wrap(
+                        spacing: 12.w,
+                        runSpacing: 4.h,
                         children: [
-                      Icon(Icons.visibility_outlined, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                      SizedBox(width: 4.w),
-                      Text('${article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
-                    ],
-                  ),
-                      if (article.aircraftModel != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.flight, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                            SizedBox(width: 4.w),
-                            Flexible(
-                              child: Text(
-                                article.aircraftModel!.getFullName(),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.person_outline, size: 12.sp, color: const Color(0xFF9CA5AF)),
+                              SizedBox(width: 4.w),
+                              Text(
+                                _getAuthorName(),
                                 style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.visibility_outlined, size: 12.sp, color: const Color(0xFF9CA5AF)),
+                              SizedBox(width: 4.w),
+                              Text(
+                                '${article.viewCount}',
+                                style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                              ),
+                            ],
+                          ),
+                          if (article.aircraftModel != null)
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.flight, size: 12.sp, color: const Color(0xFF9CA5AF)),
+                                SizedBox(width: 4.w),
+                                Flexible(
+                                  child: Text(
+                                    article.aircraftModel!.getFullName(),
+                                    style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                    ],
-                  ),
-                  if (showStatus) ...[
-                    SizedBox(height: 6.h),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          _getStatusText(),
-                          style: AppStyles.light10s.copyWith(
-                            color: Colors.white,
-                            fontSize: 9.sp,
+                        ],
+                      ),
+                      if (showStatus) ...[
+                        SizedBox(height: 6.h),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                            decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8)),
+                            child: Text(
+                              _getStatusText(),
+                              style: AppStyles.light10s.copyWith(color: Colors.white, fontSize: 9.sp),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+                      ],
+                    ],
+                  ),
+                ),
               ],
             ),
           ],

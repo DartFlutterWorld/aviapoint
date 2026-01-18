@@ -22,6 +22,7 @@ import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.da
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart' show UserReviewsBottomSheet;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -428,6 +429,118 @@ Future<void> testingModeDialog({required BuildContext context}) async {
     // Обработка ошибок
     _log('❌ Ошибка в testingModeDialog: $e');
     _log('StackTrace: $stackTrace');
+  }
+}
+
+/// Проверяет, заполнены ли все поля профиля пользователя
+/// 
+/// Проверяются следующие поля:
+/// - firstName (имя)
+/// - lastName (фамилия)
+/// - email
+/// - telegram
+/// - max
+/// 
+/// [context] - контекст для доступа к Bloc
+/// 
+/// Возвращает:
+/// - `true` если все поля заполнены
+/// - `false` если хотя бы одно поле пустое
+/// - `null` если профиль еще не загружен
+bool? checkProfileDataComplete(BuildContext context) {
+  try {
+    final profileBloc = context.read<ProfileBloc>();
+    final profileState = profileBloc.state;
+
+    return profileState.maybeWhen(
+      success: (profile) {
+        // Проверяем все поля профиля
+        final firstName = profile.firstName?.trim() ?? '';
+        final lastName = profile.lastName?.trim() ?? '';
+        final email = profile.email?.trim() ?? '';
+        final telegram = profile.telegram?.trim() ?? '';
+        final max = profile.max?.trim() ?? '';
+
+        // Возвращаем false, если хотя бы одно поле пустое
+        if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || telegram.isEmpty || max.isEmpty) {
+          return false;
+        }
+        return true;
+      },
+      orElse: () {
+        // Если профиль не загружен, загружаем его
+        // Возвращаем null, чтобы вызывающий код знал, что нужно проверить через BlocListener
+        profileBloc.add(const ProfileEvent.get());
+        return null;
+      },
+    );
+  } catch (e) {
+    // Игнорируем ошибки при проверке профиля
+    print('Ошибка при проверке профиля: $e');
+    return true; // В случае ошибки считаем, что проверка прошла успешно
+  }
+}
+
+/// Универсальная функция для проверки полей профиля и открытия модалки редактирования
+/// 
+/// Проверяет, заполнены ли все поля профиля пользователя.
+/// Если хотя бы одно поле пустое, открывает форму редактирования профиля с указанным сообщением.
+/// 
+/// [context] - контекст для доступа к Bloc и навигации
+/// [message] - сообщение, которое будет показано, если поля не заполнены (опционально)
+/// 
+/// Возвращает:
+/// - `true` если все поля заполнены
+/// - `false` если хотя бы одно поле пустое (в этом случае открывается форма редактирования)
+/// - `null` если профиль еще не загружен (нужно проверить через BlocListener)
+bool? checkDataProfileAndOpenEditIfNeeded({
+  required BuildContext context,
+  String? message,
+}) {
+  try {
+    final profileBloc = context.read<ProfileBloc>();
+    final profileState = profileBloc.state;
+
+    return profileState.maybeWhen(
+      success: (profile) {
+        // Проверяем все поля профиля
+        final firstName = profile.firstName?.trim() ?? '';
+        final lastName = profile.lastName?.trim() ?? '';
+        final email = profile.email?.trim() ?? '';
+        final telegram = profile.telegram?.trim() ?? '';
+        final max = profile.max?.trim() ?? '';
+
+        // Если хотя бы одно поле пустое, открываем форму редактирования
+        if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || telegram.isEmpty || max.isEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              // Получаем контекст корневого навигатора для показа snackbar поверх всех окон
+              final rootContext = Navigator.of(context, rootNavigator: true).context;
+              openProfileEdit(context: context);
+              ScaffoldMessenger.of(rootContext).showSnackBar(
+                SnackBar(
+                  content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'),
+                  backgroundColor: Colors.orange,
+                  duration: Duration(seconds: 5),
+                ),
+              );
+            }
+          });
+          return false;
+        }
+        return true;
+      },
+      orElse: () {
+        // Если профиль не загружен, загружаем его
+        // Возвращаем null, чтобы вызывающий код знал, что нужно проверить через BlocListener
+        profileBloc.add(const ProfileEvent.get());
+        return null;
+      },
+    );
+  } catch (e) {
+    // Игнорируем ошибки при проверке профиля
+    print('Ошибка при проверке профиля: $e');
+    return true; // В случае ошибки считаем, что проверка прошла успешно
   }
 }
 

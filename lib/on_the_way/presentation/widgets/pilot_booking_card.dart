@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_stars_widget.dart';
@@ -197,7 +198,7 @@ class PilotBookingCard extends StatelessWidget {
                                     Icon(Icons.phone, size: 14, color: Color(0xFF9CA5AF)),
                                     SizedBox(width: 4.w),
                                     Text(
-                                      booking.passengerPhone!,
+                                      formatPhone(booking.passengerPhone!),
                                       style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                                     ),
                                   ],

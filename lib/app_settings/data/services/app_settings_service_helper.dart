@@ -9,7 +9,7 @@ class AppSettingsServiceHelper {
   AppSettingsServiceHelper._internal();
 
   final AppSettingsRepository _repository = getIt<AppSettingsRepository>();
-  
+
   // Кеш для значений настроек
   final Map<String, bool> _cache = {};
   bool _isInitialized = false;
@@ -17,7 +17,7 @@ class AppSettingsServiceHelper {
   /// Инициализация - загрузка всех настроек в кеш
   Future<void> initialize() async {
     if (_isInitialized) return;
-    
+
     try {
       final result = await _repository.getAllSettings();
       result.fold(

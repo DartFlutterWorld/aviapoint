@@ -29,6 +29,9 @@ import 'package:aviapoint/news/domain/repositories/news_repository.dart';
 import 'package:aviapoint/blog/data/datasources/blog_service.dart';
 import 'package:aviapoint/blog/data/repositories/blog_repository_impl.dart';
 import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
+import 'package:aviapoint/market/data/datasources/market_service.dart';
+import 'package:aviapoint/market/data/repositories/market_repository_impl.dart';
+import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/app_settings/data/datasources/app_settings_service.dart';
 import 'package:aviapoint/app_settings/data/repositories/app_settings_repository_impl.dart';
 import 'package:aviapoint/app_settings/domain/repositories/app_settings_repository.dart';
@@ -81,6 +84,8 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<StoryRepository>(StoryRepositoryImpl(storyService: StoryService(dataSource.dio)));
   getIt.registerSingleton<NewsRepository>(NewsRepositoryImpl(newsService: NewsService(dataSource.dio)));
   getIt.registerSingleton<BlogRepository>(BlogRepositoryImpl(blogService: BlogService(dataSource.dio)));
+
+  getIt.registerSingleton<MarketRepository>(MarketRepositoryImpl(marketService: MarketService(dataSource.dio)));
 
   getIt.registerSingleton<AppSettingsRepository>(
     AppSettingsRepositoryImpl(appSettingsService: AppSettingsService(dataSource.dio)),

@@ -62,12 +62,17 @@
   <link rel="manifest" href="manifest.json">
 
   <script>
-    // Отключаем проблемные Service Workers при HTTPS ошибках
+    // Регистрация Firebase Messaging Service Worker для push-уведомлений
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        for (const registration of registrations) {
-          registration.unregister();
-        }
+      // Регистрируем Firebase Messaging Service Worker
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then((registration) => {
+            console.log('✅ Firebase Messaging Service Worker зарегистрирован:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('⚠️ Ошибка регистрации Firebase Messaging Service Worker:', error);
+          });
       });
     }
   </script>

@@ -207,9 +207,16 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                     ),
                   ),
                 ),
+
                 Padding(
-                  padding: EdgeInsets.fromLTRB(8.w, 44.h, 8.w, 10.h),
-                  child: Text('Выберите тип самолёта', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Center(
+                    child: Text(
+                      'Выберите авиатехнику',
+                      style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -386,6 +393,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                       itemCount: _models.length,
                                       itemBuilder: (context, index) {
                                         final model = _models[index];
+                                        print(model);
                                         final isSelected = _selectedModel?.id == model.id;
                                         return InkWell(
                                           onTap: () => _selectModel(model),
@@ -401,7 +409,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: Text(model.getFullName(), style: AppStyles.bold14s.copyWith(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFF374151))),
+                                                  child: Text(model.modelCode, style: AppStyles.bold14s.copyWith(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFF374151))),
                                                 ),
                                                 if (isSelected) Icon(Icons.check_circle, color: Color(0xFF0A6EFA), size: 20),
                                               ],

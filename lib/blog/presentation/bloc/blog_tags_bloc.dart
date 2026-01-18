@@ -31,8 +31,8 @@ class BlogTagsBloc extends Bloc<BlogTagsEvent, BlogTagsState> {
   final BlogRepository _blogRepository;
 
   BlogTagsBloc({required BlogRepository blogRepository})
-      : _blogRepository = blogRepository,
-        super(const LoadingBlogTagsState()) {
+    : _blogRepository = blogRepository,
+      super(const LoadingBlogTagsState()) {
     on<BlogTagsEvent>((event, emitter) => event.map(get: (event) => _get(event, emitter)));
   }
 

@@ -60,8 +60,8 @@ class BlogCommentsBloc extends Bloc<BlogCommentsEvent, BlogCommentsState> {
   final BlogRepository _blogRepository;
 
   BlogCommentsBloc({required BlogRepository blogRepository})
-      : _blogRepository = blogRepository,
-        super(const BlogCommentsState.initial()) {
+    : _blogRepository = blogRepository,
+      super(const BlogCommentsState.initial()) {
     on<GetCommentsByArticleIdEvent>(_handleGetCommentsByArticleId);
     on<CreateCommentEvent>(_handleCreateComment);
     on<UpdateCommentEvent>(_handleUpdateComment);
@@ -149,10 +149,7 @@ class BlogCommentsBloc extends Bloc<BlogCommentsEvent, BlogCommentsState> {
   Future<void> _handleDeleteComment(DeleteCommentEvent event, Emitter<BlogCommentsState> emit) async {
     emit(BlogCommentsState.loading());
 
-    final response = await _blogRepository.deleteComment(
-      commentId: event.commentId,
-      articleId: event.articleId,
-    );
+    final response = await _blogRepository.deleteComment(commentId: event.commentId, articleId: event.articleId);
 
     response.fold(
       (l) {

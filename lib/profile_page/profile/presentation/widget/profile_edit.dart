@@ -112,13 +112,14 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
 
     // Если фото не выбрано, просто обновляем профиль
+    // Отправляем пустую строку вместо null для очистки полей
     context.read<ProfileBloc>().add(
       ProfileEvent.update(
-        email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
-        firstName: _firstNameController.text.trim().isEmpty ? null : _firstNameController.text.trim(),
-        lastName: _lastNameController.text.trim().isEmpty ? null : _lastNameController.text.trim(),
-        telegram: _telegramController.text.trim().isEmpty ? null : _telegramController.text.trim(),
-        max: _maxController.text.trim().isEmpty ? null : _maxController.text.trim(),
+        email: _emailController.text.trim(),
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        telegram: _telegramController.text.trim(),
+        max: _maxController.text.trim(),
       ),
     );
   }
@@ -175,13 +176,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                   _currentAvatarUrl = profile.avatarUrl;
                 });
                 // Обновляем остальные данные профиля
+                // Отправляем пустую строку вместо null для очистки полей
                 context.read<ProfileBloc>().add(
                   ProfileEvent.update(
-                    email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
-                    firstName: _firstNameController.text.trim().isEmpty ? null : _firstNameController.text.trim(),
-                    lastName: _lastNameController.text.trim().isEmpty ? null : _lastNameController.text.trim(),
-                    telegram: _telegramController.text.trim().isEmpty ? null : _telegramController.text.trim(),
-                    max: _maxController.text.trim().isEmpty ? null : _maxController.text.trim(),
+                    email: _emailController.text.trim(),
+                    firstName: _firstNameController.text.trim(),
+                    lastName: _lastNameController.text.trim(),
+                    telegram: _telegramController.text.trim(),
+                    max: _maxController.text.trim(),
                   ),
                 );
               } else {
@@ -191,9 +193,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                   _isLoading = false;
                 });
                 Navigator.of(context).pop();
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
+                // Используем корневой контекст для показа snackbar поверх всех окон
+                final rootContext = Navigator.of(context, rootNavigator: true).context;
+                ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
               }
             }
           },
@@ -202,9 +204,9 @@ class _ProfileEditState extends State<ProfileEdit> {
               setState(() {
                 _isLoading = false;
               });
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
+              // Используем корневой контекст для показа snackbar поверх всех окон
+              final rootContext = Navigator.of(context, rootNavigator: true).context;
+              ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
             }
           },
           orElse: () {},

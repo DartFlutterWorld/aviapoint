@@ -9,7 +9,8 @@ import 'package:dio/dio.dart';
 class AppSettingsRepositoryImpl extends AppSettingsRepository {
   final AppSettingsService _appSettingsService;
 
-  AppSettingsRepositoryImpl({required AppSettingsService appSettingsService}) : _appSettingsService = appSettingsService;
+  AppSettingsRepositoryImpl({required AppSettingsService appSettingsService})
+    : _appSettingsService = appSettingsService;
 
   @override
   Future<Either<Failure, List<AppSettingsEntity>>> getAllSettings() async {

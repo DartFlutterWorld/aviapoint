@@ -1,8 +1,8 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 /// Переиспользуемый виджет для выбора даты и времени
 class DateTimeFieldWidget extends StatelessWidget {
@@ -38,7 +38,7 @@ class DateTimeFieldWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 initialDateTime != null
-                    ? DateFormat('dd.MM.yyyy HH:mm').format(initialDateTime!)
+                    ? formatDateWithTime(initialDateTime!)
                     : 'Выберите дату и время',
                 style: AppStyles.regular14s.copyWith(
                   color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF),

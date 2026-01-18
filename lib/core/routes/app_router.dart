@@ -46,6 +46,10 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/pages/test_results
 import 'package:aviapoint/learning/video_for_students_page/presentation/pages/video_for_students_screen.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/presentation/pages/detail_story_screen.dart';
+import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
+import 'package:aviapoint/market/presentation/pages/aircraft_market_detail_screen.dart';
+import 'package:aviapoint/market/presentation/pages/edit_aircraft_market_screen.dart';
+import 'package:aviapoint/market/presentation/pages/create_aircraft_market_screen.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/pages/detail_news_screen.dart';
 import 'package:aviapoint/news/presentation/pages/news_navigation_screen.dart';
@@ -64,7 +68,6 @@ import 'package:aviapoint/on_the_way/presentation/pages/edit_airport_screen.dart
 import 'package:aviapoint/on_the_way/presentation/pages/flight_detail_screen.dart';
 import 'package:aviapoint/on_the_way/presentation/pages/flights_list_screen.dart';
 import 'package:aviapoint/on_the_way/presentation/pages/on_the_way_navigation_screen.dart';
-import 'package:aviapoint/on_the_way/presentation/pages/on_the_way_screen.dart';
 import 'package:aviapoint/sale/sale_request_navigation_screen.dart';
 import 'package:aviapoint/sale/sale_request_screen.dart';
 import 'package:collection/collection.dart';
@@ -214,7 +217,12 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: 'market',
           page: MarketNavigationRoute.page,
-          children: [AutoRoute(initial: true, page: MarketRoute.page)],
+          children: [
+            AutoRoute(initial: true, page: MarketRoute.page),
+            AutoRoute(path: 'create-aircraft', page: CreateAircraftMarketRoute.page),
+            AutoRoute(path: ':id', page: AircraftMarketDetailRoute.page),
+            AutoRoute(path: ':id/edit', page: EditAircraftMarketRoute.page),
+          ],
         ),
         AutoRoute(
           path: 'on-the-way',

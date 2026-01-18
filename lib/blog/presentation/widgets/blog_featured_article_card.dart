@@ -2,6 +2,7 @@ import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,15 +15,6 @@ class BlogFeaturedArticleCard extends StatelessWidget {
 
   const BlogFeaturedArticleCard({super.key, required this.article, this.onTap});
 
-  String _formatDate(String? date) {
-    if (date == null || date.isEmpty) return '';
-    try {
-      final parsed = DateTime.parse(date);
-      return '${parsed.day}.${parsed.month}.${parsed.year}';
-    } catch (e) {
-      return date;
-    }
-  }
 
   String _getAuthorName() {
     if (article.author == null) return 'Автор';
@@ -104,7 +96,7 @@ class BlogFeaturedArticleCard extends StatelessWidget {
                           style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
                         ),
                       Text(
-                        _formatDate(article.publishedAt),
+                        article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
                         style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
                       ),
                     ],
@@ -143,7 +135,10 @@ class BlogFeaturedArticleCard extends StatelessWidget {
                         children: [
                           Icon(Icons.visibility_outlined, size: 12.sp, color: const Color(0xFF9CA5AF)),
                           SizedBox(width: 4.w),
-                          Text('${article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                          Text(
+                            '${article.viewCount}',
+                            style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                          ),
                         ],
                       ),
                       if (article.aircraftModel != null)

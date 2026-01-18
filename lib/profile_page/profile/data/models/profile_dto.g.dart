@@ -18,6 +18,7 @@ _ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) => _ProfileDto(
   averageRating: _doubleFromJsonNullable(json['average_rating']),
   reviewsCount: _intFromJsonNullable(json['reviews_count']),
   ownedAirports: json['owned_airports'],
+  isAdmin: json['is_admin'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) =>
@@ -33,4 +34,5 @@ Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) =>
       'average_rating': instance.averageRating,
       'reviews_count': instance.reviewsCount,
       'owned_airports': instance.ownedAirports,
+      'is_admin': instance.isAdmin,
     };

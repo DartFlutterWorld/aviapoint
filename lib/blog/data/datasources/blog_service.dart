@@ -56,7 +56,10 @@ abstract class BlogService {
   // Загрузка изображений для контента статьи
   @POST('/api/blog/articles/{id}/content-images')
   @MultiPart()
-  Future<UploadImageResponseDto> uploadContentImage(@Path('id') int articleId, @Part(name: 'image') MultipartFile image);
+  Future<UploadImageResponseDto> uploadContentImage(
+    @Path('id') int articleId,
+    @Part(name: 'image') MultipartFile image,
+  );
 
   // Загрузка изображений для контента новой статьи (без article_id)
   @POST('/api/blog/articles/content-images/upload')
@@ -71,7 +74,11 @@ abstract class BlogService {
   Future<BlogCommentDto> createComment(@Path('id') int articleId, @Body() Map<String, dynamic> body);
 
   @PUT('/api/blog/articles/{id}/comments/{commentId}')
-  Future<BlogCommentDto> updateComment(@Path('id') int articleId, @Path('commentId') int commentId, @Body() Map<String, dynamic> body);
+  Future<BlogCommentDto> updateComment(
+    @Path('id') int articleId,
+    @Path('commentId') int commentId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @DELETE('/api/blog/articles/{id}/comments/{commentId}')
   Future<void> deleteComment(@Path('id') int articleId, @Path('commentId') int commentId);

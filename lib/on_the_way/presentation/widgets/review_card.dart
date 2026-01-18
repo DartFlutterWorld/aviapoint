@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_waypoint_entity.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -102,7 +102,7 @@ class ReviewCard extends StatelessWidget {
           children: [
             if (review.createdAt != null)
               Text(
-                DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
+                formatDateWithTime(review.createdAt!),
                 style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
               ),
             if (review.createdAt == null && (canEdit || canDelete)) Spacer(),
@@ -171,7 +171,7 @@ class ReviewCard extends StatelessWidget {
               children: [
                 if (review.createdAt != null)
                   Text(
-                    DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
+                    formatDateWithTime(review.createdAt!),
                     style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
                   ),
                 if (review.createdAt == null && (canEdit || canDelete)) Spacer(),
@@ -295,7 +295,7 @@ class ReviewCard extends StatelessWidget {
                 Icon(Icons.calendar_today, size: 14, color: Color(0xFF9CA5AF)),
                 SizedBox(width: 4.w),
                 Text(
-                  DateFormat('dd.MM.yyyy').format(departureDate!),
+                  formatDate(departureDate!),
                   style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                 ),
               ],

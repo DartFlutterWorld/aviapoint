@@ -12,6 +12,8 @@ import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/search_bar_widget.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
 import 'package:aviapoint/core/presentation/widgets/date_time_field_widget.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,6 +56,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
 
   // Список фотографий самолета
   final List<XFile> _photos = [];
+
+  // Флаг для проверки ФИО после создания полёта
+  bool _shouldCheckProfileAfterCreation = false;
 
   @override
   void initState() {
@@ -124,13 +129,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
 
     // Валидация: минимум 2 точки в маршруте
     if (_waypoints.length < 2) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 5),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Маршрут должен содержать минимум 2 точки (отправление и прибытие)'), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
       return;
     }
 
@@ -138,26 +139,14 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     for (var i = 0; i < _waypoints.length; i++) {
       final wp = _waypoints[i];
       if (wp.airportCode.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Укажите код аэропорта для точки ${i + 1}'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 5),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Укажите код аэропорта для точки ${i + 1}'), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
         return;
       }
     }
 
     // Валидация: дата отправления обязательна
     if (_waypoints.first.departureTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Укажите дату и время вылета'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 5),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Укажите дату и время вылета'), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
       return;
     }
 
@@ -171,17 +160,13 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
       final isLast = index == _waypoints.length - 1;
 
       // Получаем комментарий из контроллера, если он существует, иначе из waypoint
-      final commentText = _commentControllers.containsKey(index)
-          ? (_commentControllers[index]!.text.isEmpty ? null : _commentControllers[index]!.text)
-          : wp.comment;
+      final commentText = _commentControllers.containsKey(index) ? (_commentControllers[index]!.text.isEmpty ? null : _commentControllers[index]!.text) : wp.comment;
 
       waypoints.add({
         'airport_code': wp.airportCode,
         'sequence_order': index + 1,
         'arrival_time': isFirst ? null : wp.arrivalTime?.toIso8601String(), // Для первой точки arrival_time не нужен
-        'departure_time': isLast
-            ? null
-            : wp.departureTime?.toIso8601String(), // Для последней точки departure_time не нужен
+        'departure_time': isLast ? null : wp.departureTime?.toIso8601String(), // Для последней точки departure_time не нужен
         'comment': commentText,
       });
     }
@@ -242,9 +227,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     }
 
     if (errors.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errors.join('\n')), backgroundColor: Colors.red, duration: Duration(seconds: 5)),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errors.join('\n')), backgroundColor: Colors.red, duration: Duration(seconds: 5)));
     }
   }
 
@@ -286,12 +269,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12.w,
-              mainAxisSpacing: 12.h,
-              childAspectRatio: 1.0,
-            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: 1.0),
             itemCount: _photos.length,
             itemBuilder: (context, index) {
               final photo = _photos[index];
@@ -429,13 +407,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Не удалось выбрать фотографии: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
     }
   }
@@ -490,12 +462,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                   future: photo.readAsBytes(),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
-                                      return Image.memory(
-                                        snapshot.data!,
-                                        fit: BoxFit.contain,
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                      );
+                                      return Image.memory(snapshot.data!, fit: BoxFit.contain, width: double.infinity, height: double.infinity);
                                     }
                                     return Container(
                                       color: Colors.black,
@@ -503,12 +470,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                     );
                                   },
                                 )
-                              : Image.file(
-                                  File(photo.path),
-                                  fit: BoxFit.contain,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
+                              : Image.file(File(photo.path), fit: BoxFit.contain, width: double.infinity, height: double.infinity),
                         ),
                       ),
                     );
@@ -525,11 +487,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
-                          ),
+                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -537,10 +495,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                             // Индикатор текущей фотографии
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(20.r),
-                              ),
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20.r)),
                               child: Text(
                                 '${currentIndex + 1} / ${_photos.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -554,10 +509,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(mainContext, _photos[currentIndex]),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8.w),
@@ -565,10 +517,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(mainContext, _photos[currentIndex]),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8.w),
@@ -579,10 +528,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                     Navigator.of(dialogContext).pop();
                                     _deletePhoto(currentIndex);
                                   },
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Удалить',
                                 ),
                                 SizedBox(width: 8.w),
@@ -590,10 +536,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                 ),
                               ],
                             ),
@@ -613,11 +556,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
-                          ),
+                          gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -627,15 +566,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                               IconButton(
                                 icon: Icon(Icons.chevron_left, color: Colors.white, size: 32),
                                 onPressed: () {
-                                  pageController.previousPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
+                                  pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
                                 },
-                                style: IconButton.styleFrom(
-                                  backgroundColor: Colors.black.withOpacity(0.5),
-                                  shape: CircleBorder(),
-                                ),
+                                style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
                               SizedBox(width: 48.w),
@@ -650,10 +583,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                                     width: 8.w,
                                     height: 8.w,
                                     margin: EdgeInsets.symmetric(horizontal: 4.w),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: currentIndex == index ? Colors.white : Colors.white.withOpacity(0.3),
-                                    ),
+                                    decoration: BoxDecoration(shape: BoxShape.circle, color: currentIndex == index ? Colors.white : Colors.white.withOpacity(0.3)),
                                   ),
                                 ),
                               ),
@@ -664,15 +594,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                               IconButton(
                                 icon: Icon(Icons.chevron_right, color: Colors.white, size: 32),
                                 onPressed: () {
-                                  pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
+                                  pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
                                 },
-                                style: IconButton.styleFrom(
-                                  backgroundColor: Colors.black.withOpacity(0.5),
-                                  shape: CircleBorder(),
-                                ),
+                                style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
                               SizedBox(width: 48.w),
@@ -693,25 +617,13 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Используйте правую кнопку мыши для сохранения изображения'),
-            backgroundColor: Colors.blue,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Используйте правую кнопку мыши для сохранения изображения'), backgroundColor: Colors.blue, duration: Duration(seconds: 2)));
       } else {
         // Для мобильных платформ
         await Share.shareXFiles([photo], text: 'Фотография самолета');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Не удалось поделиться фотографией: $e'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
     }
   }
 
@@ -719,37 +631,19 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Используйте правую кнопку мыши для сохранения изображения'),
-            backgroundColor: Colors.blue,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Используйте правую кнопку мыши для сохранения изображения'), backgroundColor: Colors.blue, duration: Duration(seconds: 2)));
       } else {
         // Для мобильных платформ - запрашиваем разрешение на запись
         final status = await Permission.storage.request();
         if (!status.isGranted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Необходимо разрешение на сохранение файлов'),
-              backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
           return;
         }
 
         // Получаем директорию для загрузок
         final directory = await getExternalStorageDirectory();
         if (directory == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Не удалось получить доступ к директории загрузок'),
-              backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось получить доступ к директории загрузок'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
           return;
         }
 
@@ -758,22 +652,10 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
         final file = File(photo.path);
         await file.copy(downloadPath);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Фотография сохранена в загрузки'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Фотография сохранена в загрузки'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Не удалось скачать фотографию: $e'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
     }
   }
 
@@ -821,27 +703,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
   void _initRoute() {
     if (_waypoints.isEmpty) {
       setState(() {
-        _waypoints.add(
-          _RouteWaypoint(
-            id: 'init_${_waypointIdCounter++}',
-            airportCode: '',
-            airportName: null,
-            arrivalTime: null,
-            departureTime: null,
-            comment: null,
-          ),
-        );
+        _waypoints.add(_RouteWaypoint(id: 'init_${_waypointIdCounter++}', airportCode: '', airportName: null, arrivalTime: null, departureTime: null, comment: null));
         // Добавляем вторую точку (прибытие)
-        _waypoints.add(
-          _RouteWaypoint(
-            id: 'init_${_waypointIdCounter++}',
-            airportCode: '',
-            airportName: null,
-            arrivalTime: null,
-            departureTime: null,
-            comment: null,
-          ),
-        );
+        _waypoints.add(_RouteWaypoint(id: 'init_${_waypointIdCounter++}', airportCode: '', airportName: null, arrivalTime: null, departureTime: null, comment: null));
         // Создаем контроллеры для обеих точек
         _commentControllers[0] = TextEditingController(text: '');
         _commentControllers[1] = TextEditingController(text: '');
@@ -910,51 +774,69 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
       );
     }
 
-    return BlocListener<FlightsBloc, FlightsState>(
-      listener: (context, state) {
-        state.when(
-          loading: () {},
-          error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 3)),
-            );
-          },
-          success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) {
-            // Игнорируем обычный success - он не относится к созданию полёта
-          },
-          flightCreated: (flight) {
-            // Успешное создание - навигируем на детальную страницу созданного полета
-            Navigator.of(context).pop();
-            // Навигируем на детальную страницу созданного полета
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (context.mounted) {
-                try {
-                  AutoRouter.of(context).push(FlightDetailRoute(flightId: flight.id));
-                } catch (e) {
-                  print('Ошибка навигации к деталям полета: $e');
-                  // Если навигация не удалась, просто показываем сообщение
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Полет успешно создан'),
-                      backgroundColor: Colors.green,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<FlightsBloc, FlightsState>(
+          listener: (context, state) {
+            state.when(
+              loading: () {},
+              error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+              },
+              success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) {
+                // Игнорируем обычный success - он не относится к созданию полёта
+              },
+              flightCreated: (flight) {
+                // Показываем сообщение об успехе
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Полет успешно создан'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+
+                // Проверяем, заполнены ли ФИО у пользователя (универсальная функция)
+                final profileCheckResult = checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Заполните профиль чтоб с вами могли связаться');
+
+                // Если профиль еще не загружен (null), устанавливаем флаг для проверки после загрузки
+                if (profileCheckResult == null) {
+                  _shouldCheckProfileAfterCreation = true;
                 }
-              }
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Полет успешно создан'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
+
+                // Успешное создание - навигируем на детальную страницу созданного полета
+                Navigator.of(context).pop();
+                // Навигируем на детальную страницу созданного полета
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (context.mounted) {
+                    try {
+                      AutoRouter.of(context).push(FlightDetailRoute(flightId: flight.id));
+                    } catch (e) {
+                      print('Ошибка навигации к деталям полета: $e');
+                      // Если навигация не удалась, просто показываем сообщение
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Полет успешно создан'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                    }
+                  }
+                });
+              },
             );
           },
-        );
-      },
+        ),
+        BlocListener<ProfileBloc, ProfileState>(
+          listenWhen: (previous, current) {
+            // Проверяем ФИО только если был запрос на проверку после создания полёта
+            if (_shouldCheckProfileAfterCreation && current is SuccessProfileState) {
+              return true;
+            }
+            return false;
+          },
+          listener: (context, profileState) {
+            if (!mounted) return;
+            // Проверяем ФИО только если был запрос на проверку после создания полёта
+            if (_shouldCheckProfileAfterCreation) {
+              _shouldCheckProfileAfterCreation = false; // Сбрасываем флаг
+              // Используем универсальную функцию для проверки ФИО
+              checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Пожалуйста, заполните имя и фамилию в профиле');
+            }
+          },
+        ),
+      ],
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Создать полет', withBack: true),
+        appBar: CustomAppBar(title: 'Создать полёт', withBack: true),
         backgroundColor: AppColors.background,
         body: BlocBuilder<FlightsBloc, FlightsState>(
           builder: (context, state) {
@@ -1015,11 +897,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                               borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                             ),
                           ),
-                          iconStyleData: IconStyleData(
-                            icon: SizedBox.shrink(),
-                            iconEnabledColor: Colors.transparent,
-                            iconDisabledColor: Colors.transparent,
-                          ),
+                          iconStyleData: IconStyleData(icon: SizedBox.shrink(), iconEnabledColor: Colors.transparent, iconDisabledColor: Colors.transparent),
                           dropdownStyleData: DropdownStyleData(
                             maxHeight: 240.h,
                             width: constraints.maxWidth,
@@ -1120,14 +998,14 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       },
                     ),
                     SizedBox(height: 16.h),
-                    // Тип самолета (обязательное поле)
+                    // Модель самолёта (обязательное поле)
                     Row(
                       children: [
                         Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
                         RichText(
                           text: TextSpan(
-                            text: 'Тип самолета',
+                            text: 'Модель самолёта',
                             style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                             children: [
                               TextSpan(
@@ -1172,7 +1050,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Введите тип самолета';
+                            return 'Введите модель самолёта';
                           }
                           return null;
                         },
@@ -1187,10 +1065,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       children: [
                         Icon(Icons.description, size: 20, color: Color(0xFF9CA5AF)),
                         SizedBox(width: 12.w),
-                        Text(
-                          'Дополнительная информация о полёте',
-                          style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                        ),
+                        Text('Дополнительная информация о полёте', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -1198,7 +1073,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                       controller: _descriptionController,
                       maxLines: 4,
                       decoration: InputDecoration(
-                        hintText: 'Введите дополнительную информацию о полете',
+                        hintText: 'Введите дополнительную информацию о полёте',
                         hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                         filled: true,
                         fillColor: Colors.white,
@@ -1343,11 +1218,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           Row(
             children: [
               // Иконка в зависимости от типа точки
-              Icon(
-                isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
-                size: 24,
-                color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue),
-              ),
+              Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 24, color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue)),
               SizedBox(width: 12.w),
               Expanded(
                 child: RichText(
@@ -1376,12 +1247,8 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           ),
           SizedBox(height: 8.h),
           SearchBarWidget(
-            key: ValueKey(
-              'airport_search_${currentWaypoint.id}_$index',
-            ), // Используем ID и индекс для гарантии уникальности
-            initialValue: currentCode.isEmpty || currentCode == ''
-                ? null
-                : currentCode, // Явно проверяем на пустую строку
+            key: ValueKey('airport_search_${currentWaypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
+            initialValue: currentCode.isEmpty || currentCode == '' ? null : currentCode, // Явно проверяем на пустую строку
             hintText: 'Введите код аэродрома или название',
             airportService: _airportService,
             onSelected: onAirportSelected,
@@ -1469,10 +1336,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           // Для последней точки - дата и время прибытия и комментарий
           if (isLast) ...[
             SizedBox(height: 16.h),
-            Text(
-              'Укажите дату и время прибытия в этот аэропорт',
-              style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-            ),
+            Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('arrival_last_${currentWaypoint.id}_$index'),
@@ -1542,10 +1406,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           if (!isFirst && !isLast) ...[
             SizedBox(height: 16.h),
             // Дата и время прибытия
-            Text(
-              'Укажите дату и время прибытия в этот аэропорт',
-              style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-            ),
+            Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('arrival_inter_${currentWaypoint.id}_$index'),
@@ -1570,10 +1431,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             ),
             SizedBox(height: 12.h),
             // Дата и время отправления
-            Text(
-              'Укажите дату и время вылета из этого аэропорта',
-              style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-            ),
+            Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('departure_inter_${currentWaypoint.id}_$index'),
@@ -1644,18 +1502,8 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     );
   }
 
-  Widget _buildDateTimeField({
-    Key? key,
-    required String label,
-    DateTime? initialDateTime,
-    required void Function(DateTime?) onDateTimeSelected,
-  }) {
-    return DateTimeFieldWidget(
-      fieldKey: key,
-      label: label,
-      initialDateTime: initialDateTime,
-      onDateTimeSelected: onDateTimeSelected,
-    );
+  Widget _buildDateTimeField({Key? key, required String label, DateTime? initialDateTime, required void Function(DateTime?) onDateTimeSelected}) {
+    return DateTimeFieldWidget(fieldKey: key, label: label, initialDateTime: initialDateTime, onDateTimeSelected: onDateTimeSelected);
   }
 }
 
@@ -1668,12 +1516,5 @@ class _RouteWaypoint {
   final DateTime? departureTime;
   final String? comment;
 
-  _RouteWaypoint({
-    String? id,
-    required this.airportCode,
-    this.airportName,
-    this.arrivalTime,
-    this.departureTime,
-    this.comment,
-  }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
+  _RouteWaypoint({String? id, required this.airportCode, this.airportName, this.arrivalTime, this.departureTime, this.comment}) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 }

@@ -8,6 +8,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/core/utils/seo_helper.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -49,18 +50,9 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
   }
 
   void _shareArticle(String title) {
-    Share.share('$title\n\nЧитайте в Авиаблоге');
+    Share.share('$title\n\nЧитайте в АвиаБлоге');
   }
 
-  String _formatDate(String? date) {
-    if (date == null || date.isEmpty) return '';
-    try {
-      final parsed = DateTime.parse(date);
-      return '${parsed.day}.${parsed.month}.${parsed.year}';
-    } catch (e) {
-      return date;
-    }
-  }
 
   String _getAuthorName() {
     return context.read<BlogArticleDetailBloc>().state.maybeWhen(
@@ -94,7 +86,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
       },
       child: Scaffold(
         appBar: CustomAppBar(
-          title: 'Авиаблог',
+          title: 'АвиаБлог',
           withBack: true,
           onTap: () {
             // Обновляем список статей перед возвратом
@@ -112,7 +104,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
 
                 return state.maybeWhen(
                   success: (article) {
-                    final isAuthor = isAuthenticated && currentUserId != null && article.authorId == currentUserId;
+                    final isAuthor = isAuthenticated && PermissionHelper.isOwnerOrAdmin(article.authorId, context);
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -122,7 +114,11 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                             onPressed: () => AutoRouter.of(context).push(EditBlogArticleRoute(articleId: article.id)),
                             tooltip: 'Редактировать статью',
                           ),
-                        IconButton(icon: const Icon(Icons.share), onPressed: () => _shareArticle(article.title), tooltip: 'Поделиться'),
+                        IconButton(
+                          icon: const Icon(Icons.share),
+                          onPressed: () => _shareArticle(article.title),
+                          tooltip: 'Поделиться',
+                        ),
                       ],
                     );
                   },
@@ -170,7 +166,11 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                           colorOpacity: 0.2,
                           child: Container(decoration: const BoxDecoration()),
                         ),
-                        errorWidget: (context, url, error) => Container(height: 250.h, color: const Color(0xFFD9E6F8), child: const Icon(Icons.image, size: 48)),
+                        errorWidget: (context, url, error) => Container(
+                          height: 250.h,
+                          color: const Color(0xFFD9E6F8),
+                          child: const Icon(Icons.image, size: 48),
+                        ),
                       ),
                     Padding(
                       padding: EdgeInsets.all(16.w),
@@ -189,7 +189,10 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                   children: [
                                     Icon(Icons.person_outline, size: 14.sp, color: const Color(0xFF9CA5AF)),
                                     SizedBox(width: 4.w),
-                                    Text(_getAuthorName(), style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
+                                    Text(
+                                      _getAuthorName(),
+                                      style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
+                                    ),
                                   ],
                                 ),
                               Row(
@@ -197,7 +200,10 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                 children: [
                                   Icon(Icons.calendar_today, size: 14.sp, color: const Color(0xFF9CA5AF)),
                                   SizedBox(width: 4.w),
-                                  Text(_formatDate(article.publishedAt), style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
+                                  Text(
+                                    article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
+                                    style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -205,7 +211,10 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                 children: [
                                   Icon(Icons.visibility_outlined, size: 14.sp, color: const Color(0xFF9CA5AF)),
                                   SizedBox(width: 4.w),
-                                  Text('${article.viewCount}', style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
+                                  Text(
+                                    '${article.viewCount}',
+                                    style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
+                                  ),
                                 ],
                               ),
                               if (article.aircraftModel != null)
@@ -242,7 +251,10 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                     : AppColors.primary100p,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Text(article.category!.name, style: AppStyles.regular12s.copyWith(color: Colors.white)),
+                              child: Text(
+                                article.category!.name,
+                                style: AppStyles.regular12s.copyWith(color: Colors.white),
+                              ),
                             ),
                           ],
                           if (article.tags != null && article.tags!.isNotEmpty) ...[
@@ -253,8 +265,14 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                               children: article.tags!.map((tag) {
                                 return Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                                  decoration: BoxDecoration(color: const Color(0xFFD9E6F8), borderRadius: BorderRadius.circular(12)),
-                                  child: Text('#${tag.name}', style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767))),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFD9E6F8),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    '#${tag.name}',
+                                    style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767)),
+                                  ),
                                 );
                               }).toList(),
                             ),
@@ -351,7 +369,9 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
           }
 
           // Преобразуем относительный путь в полный URL для текущего окружения
-          final normalizedUrl = relativePath.startsWith('http://') || relativePath.startsWith('https://') ? relativePath : getImageUrl(relativePath);
+          final normalizedUrl = relativePath.startsWith('http://') || relativePath.startsWith('https://')
+              ? relativePath
+              : getImageUrl(relativePath);
 
           return {
             ...op,
@@ -419,7 +439,10 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                             children: [
                               Icon(Icons.comment_outlined, size: 48, color: Color(0xFF9CA5AF)),
                               SizedBox(height: 12.h),
-                              Text('Пока нет комментариев', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                              Text(
+                                'Пока нет комментариев',
+                                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                              ),
                             ],
                           ),
                         ),
@@ -436,9 +459,12 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
 
                     return Column(
                       children: mainComments.map((BlogCommentEntity comment) {
-                        final commentReplies = replies.where((BlogCommentEntity r) => r.parentCommentId == comment.id).toList();
-                        final canDelete = currentUserId != null && comment.authorId == currentUserId;
-                        final canEdit = currentUserId != null && comment.authorId == currentUserId;
+                        final commentReplies = replies
+                            .where((BlogCommentEntity r) => r.parentCommentId == comment.id)
+                            .toList();
+                        final isAdmin = PermissionHelper.isAdmin(context);
+                        final canDelete = (currentUserId != null && comment.authorId == currentUserId) || isAdmin;
+                        final canEdit = (currentUserId != null && comment.authorId == currentUserId) || isAdmin;
                         final canReply = isAuthenticated && currentUserId != null && currentUserId != comment.authorId;
 
                         return Column(
@@ -448,9 +474,20 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                               isReply: false,
                               canDelete: canDelete,
                               canEdit: canEdit,
-                              onDelete: canDelete ? () => _showDeleteCommentDialog(context, articleId, comment.id) : null,
-                              onEdit: canEdit ? () => _showEditCommentDialog(context, articleId, comment, isAuthenticated) : null,
-                              onReply: canReply ? () => _showCommentDialog(context, articleId, isAuthenticated, parentCommentId: comment.id.toString()) : null,
+                              onDelete: canDelete
+                                  ? () => _showDeleteCommentDialog(context, articleId, comment.id)
+                                  : null,
+                              onEdit: canEdit
+                                  ? () => _showEditCommentDialog(context, articleId, comment, isAuthenticated)
+                                  : null,
+                              onReply: canReply
+                                  ? () => _showCommentDialog(
+                                      context,
+                                      articleId,
+                                      isAuthenticated,
+                                      parentCommentId: comment.id.toString(),
+                                    )
+                                  : null,
                             ),
                             // Отображаем ответы на комментарий (если они есть)
                             if (commentReplies.isNotEmpty)
@@ -458,15 +495,20 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                 padding: EdgeInsets.only(left: 40.w),
                                 child: Column(
                                   children: commentReplies.map((BlogCommentEntity reply) {
-                                    final canDeleteReply = currentUserId != null && reply.authorId == currentUserId;
-                                    final canEditReply = currentUserId != null && reply.authorId == currentUserId;
+                                    final isAdmin = PermissionHelper.isAdmin(context);
+                                    final canDeleteReply = (currentUserId != null && reply.authorId == currentUserId) || isAdmin;
+                                    final canEditReply = (currentUserId != null && reply.authorId == currentUserId) || isAdmin;
                                     return CommentCard(
                                       comment: reply,
                                       isReply: true,
                                       canDelete: canDeleteReply,
                                       canEdit: canEditReply,
-                                      onDelete: canDeleteReply ? () => _showDeleteCommentDialog(context, articleId, reply.id) : null,
-                                      onEdit: canEditReply ? () => _showEditCommentDialog(context, articleId, reply, isAuthenticated) : null,
+                                      onDelete: canDeleteReply
+                                          ? () => _showDeleteCommentDialog(context, articleId, reply.id)
+                                          : null,
+                                      onEdit: canEditReply
+                                          ? () => _showEditCommentDialog(context, articleId, reply, isAuthenticated)
+                                          : null,
                                     );
                                   }).toList(),
                                 ),
@@ -487,7 +529,12 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
   }
 
   /// Показывает диалог для создания/редактирования комментария
-  Future<void> _showCommentDialog(BuildContext context, int articleId, bool isAuthenticated, {String? parentCommentId}) async {
+  Future<void> _showCommentDialog(
+    BuildContext context,
+    int articleId,
+    bool isAuthenticated, {
+    String? parentCommentId,
+  }) async {
     if (!isAuthenticated) {
       // Если не авторизован, показываем авторизацию
       await showLogin(
@@ -521,7 +568,12 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
   }
 
   /// Показывает диалог для редактирования комментария
-  Future<void> _showEditCommentDialog(BuildContext context, int articleId, BlogCommentEntity comment, bool isAuthenticated) async {
+  Future<void> _showEditCommentDialog(
+    BuildContext context,
+    int articleId,
+    BlogCommentEntity comment,
+    bool isAuthenticated,
+  ) async {
     if (!isAuthenticated) {
       return;
     }
@@ -603,7 +655,11 @@ class _QuillReadOnlyViewerState extends State<_QuillReadOnlyViewer> {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: QuillEditor.basic(
         controller: _controller,
-        config: QuillEditorConfig(placeholder: '', padding: EdgeInsets.zero, embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders()),
+        config: QuillEditorConfig(
+          placeholder: '',
+          padding: EdgeInsets.zero,
+          embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
+        ),
         focusNode: _focusNode,
       ),
     );

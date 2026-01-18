@@ -67,7 +67,7 @@ abstract class BlogRepository {
   // Если articleId указан, изображение сохраняется в папку статьи
   // Если articleId null, изображение сохраняется во временную папку (для новых статей)
   Future<Either<Failure, String>> uploadContentImage(File imageFile, {int? articleId});
-  
+
   // Загрузка изображений для контента статьи из bytes (для веб-версии)
   Future<Either<Failure, String>> uploadContentImageBytes(List<int> bytes, {required String fileName, int? articleId});
 
@@ -83,8 +83,5 @@ abstract class BlogRepository {
     required int articleId,
     required String content,
   });
-  Future<Either<Failure, void>> deleteComment({
-    required int commentId,
-    required int articleId,
-  });
+  Future<Either<Failure, void>> deleteComment({required int commentId, required int articleId});
 }

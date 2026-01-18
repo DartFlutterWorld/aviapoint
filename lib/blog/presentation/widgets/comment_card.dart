@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:aviapoint/blog/domain/entities/blog_comment_entity.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -61,7 +61,7 @@ class CommentCard extends StatelessWidget {
                     // Дата и время слева
                     if (comment.createdAt != null)
                       Text(
-                        DateFormat('dd.MM.yyyy HH:mm').format(comment.createdAt!),
+                        formatDateWithTime(comment.createdAt!),
                         style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
                       ),
                     // Кнопки редактирования и удаления справа

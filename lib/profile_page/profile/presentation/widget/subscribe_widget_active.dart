@@ -1,8 +1,8 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class SubscribeWidgetActive extends StatelessWidget {
   final SubscriptionDto subscription;
@@ -10,9 +10,6 @@ class SubscribeWidgetActive extends StatelessWidget {
 
   const SubscribeWidgetActive({super.key, required this.subscription, required this.fon});
 
-  String _formatDate(DateTime date) {
-    return DateFormat('dd.MM.yyyy', 'ru_RU').format(date);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,7 @@ class SubscribeWidgetActive extends StatelessWidget {
             SizedBox(height: 8),
             ...[
               Text(
-                '${_formatDate(subscription.startDate)} - ${_formatDate(subscription.endDate)}',
+                '${formatDate(subscription.startDate)} - ${formatDate(subscription.endDate)}',
                 style: AppStyles.light12s.copyWith(color: Color(0xFF374151)),
               ),
               SizedBox(height: 4),

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:aviapoint/core/failure/failure.dart';
 import 'package:aviapoint/profile_page/profile/data/datasources/profile_service.dart';
 import 'package:aviapoint/profile_page/profile/data/mappers/profile_mapper.dart';
@@ -5,6 +7,7 @@ import 'package:aviapoint/profile_page/profile/domain/entities/profile_entity.da
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 
 class ProfileRepositoryImpl extends ProfileRepository {
@@ -44,10 +47,13 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }) async {
     try {
       final body = <String, dynamic>{};
+      // Всегда отправляем поля, даже если они null (для очистки полей используем пустую строку)
+      // Если значение null, не отправляем (не обновляем), если пустая строка - отправляем (очищаем)
       if (email != null) {
         body['email'] = email;
       }
       if (firstName != null) {
+        // Если передана пустая строка, отправляем её для очистки поля
         body['first_name'] = firstName;
       }
       if (lastName != null) {
@@ -88,7 +94,30 @@ class ProfileRepositoryImpl extends ProfileRepository {
   @override
   Future<Either<Failure, void>> saveFcmToken(String? fcmToken) async {
     try {
-      await _profileService.saveFcmToken({'fcm_token': fcmToken});
+      // Определяем платформу
+      String? platform;
+      if (kIsWeb) {
+        platform = 'web';
+      } else {
+        // Для мобильных устройств можно определить более точно
+        try {
+          if (Platform.isIOS) {
+            platform = 'ios';
+          } else if (Platform.isAndroid) {
+            platform = 'android';
+          } else {
+            platform = 'mobile';
+          }
+        } catch (e) {
+          // Если Platform недоступен, используем 'mobile' по умолчанию
+          platform = 'mobile';
+        }
+      }
+
+      await _profileService.saveFcmToken({
+        'fcm_token': fcmToken,
+        'platform': platform,
+      });
       return right(null);
     } on DioException catch (e) {
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
@@ -101,11 +130,13 @@ class ProfileRepositoryImpl extends ProfileRepository {
       await _profileService.deleteAccount();
       return right(null);
     } on DioException catch (e) {
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: e.response?.data?.toString(),
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: e.response?.data?.toString(),
+        ),
+      );
     }
   }
 }

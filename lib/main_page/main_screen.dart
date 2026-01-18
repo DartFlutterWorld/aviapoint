@@ -109,13 +109,23 @@ class _MainScreenState extends State<MainScreen> {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(18.r),
-              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF045EC5).withOpacity(0.08),
+                  blurRadius: 10,
+                  spreadRadius: 0,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               children: [
                 Text('Новости авиации', style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937))),
                 SizedBox(height: 6.h),
-                Text('Мы публикуем только актуальные и полезные новости для пилотов и авиаперсонала', style: AppStyles.light14s.copyWith(color: Color(0xFF4B5767))),
+                Text(
+                  'Мы публикуем только актуальные и полезные новости для пилотов и авиаперсонала',
+                  style: AppStyles.light14s.copyWith(color: Color(0xFF4B5767)),
+                ),
                 SizedBox(height: 16.h),
 
                 BlocBuilder<NewsBloc, NewsState>(
@@ -138,7 +148,14 @@ class _MainScreenState extends State<MainScreen> {
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff0064D6).withOpacity(0.25),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: Offset(0.0, 7.0),
+                    ),
+                  ],
                   // onPressed: () => context.router.push(NewsNavigationRoute()),
                   onPressed: () => AutoRouter.of(context).push(const BaseRoute(children: [NewsNavigationRoute()])),
                 ),
@@ -151,20 +168,32 @@ class _MainScreenState extends State<MainScreen> {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(18.r),
-              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF045EC5).withOpacity(0.08),
+                  blurRadius: 10,
+                  spreadRadius: 0,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               children: [
-                Text('Авиаблог', style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937))),
+                Text('АвиаБлог', style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937))),
                 SizedBox(height: 6.h),
-                Text('Статьи, обзоры и советы для пилотов и авиаэнтузиастов', style: AppStyles.light14s.copyWith(color: Color(0xFF4B5767))),
+                Text(
+                  'Статьи, обзоры и советы для пилотов и авиаэнтузиастов',
+                  style: AppStyles.light14s.copyWith(color: Color(0xFF4B5767)),
+                ),
                 SizedBox(height: 16.h),
                 BlocBuilder<BlogArticlesBloc, BlogArticlesState>(
                   builder: (context, state) => state.maybeWhen(
                     error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                       textError: errorForUser,
                       repeat: () {
-                        BlocProvider.of<BlogArticlesBloc>(context).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
+                        BlocProvider.of<BlogArticlesBloc>(
+                          context,
+                        ).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
                       },
                     ),
                     loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
@@ -180,8 +209,15 @@ class _MainScreenState extends State<MainScreen> {
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF7A0FD9),
                   borderRadius: 46,
-                  boxShadow: [BoxShadow(color: Color(0xFF7A0FD9).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                  onPressed: () => AutoRouter.of(context).push(BlogNavigationRoute()),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xFF7A0FD9).withOpacity(0.25),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: Offset(0.0, 7.0),
+                    ),
+                  ],
+                  onPressed: () => AutoRouter.of(context).push(BaseRoute(children: [BlogNavigationRoute()])),
                 ),
               ],
             ),
@@ -203,7 +239,11 @@ class _SuccessNews extends StatelessWidget {
       // height: 420,
       child: GridView.builder(
         physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          crossAxisCount: 2,
+        ),
         itemCount: 4,
         shrinkWrap: true,
         itemBuilder: (context, index) => GestureDetector(
@@ -271,18 +311,24 @@ class _SuccessBlogArticles extends StatelessWidget {
     return SizedBox(
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          crossAxisCount: 2,
+        ),
         itemCount: articles.length > 4 ? 4 : articles.length,
         shrinkWrap: true,
         itemBuilder: (context, index) => GestureDetector(
-          onTap: () => AutoRouter.of(context).push(BlogArticleDetailRoute(articleId: articles[index].id)),
+          onTap: () => AutoRouter.of(context).push(BaseRoute(children: [BlogNavigationRoute(children: [BlogArticleDetailRoute(articleId: articles[index].id)])])),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Stack(
               fit: StackFit.expand,
               children: [
                 CachedNetworkImage(
-                  imageUrl: articles[index].coverImageUrl != null && articles[index].coverImageUrl!.isNotEmpty ? getImageUrl(articles[index].coverImageUrl!) : '',
+                  imageUrl: articles[index].coverImageUrl != null && articles[index].coverImageUrl!.isNotEmpty
+                      ? getImageUrl(articles[index].coverImageUrl!)
+                      : '',
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Shimmer(
                     duration: const Duration(milliseconds: 1000),

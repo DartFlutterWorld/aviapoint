@@ -16,7 +16,15 @@ class TestingModeElement extends StatefulWidget {
   final String bg;
   final bool isLock;
 
-  const TestingModeElement({super.key, required this.title, required this.subTitle, required this.onTap, required this.image, required this.bg, this.isLock = false});
+  const TestingModeElement({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.onTap,
+    required this.image,
+    required this.bg,
+    this.isLock = false,
+  });
 
   @override
   State<TestingModeElement> createState() => _TestingModeElementState();
@@ -71,7 +79,9 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
 
       if (!mounted) return;
 
-      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+      final hasActive = subscriptions.any(
+        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+      );
 
       if (mounted) {
         setState(() {
@@ -214,7 +224,14 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
             decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Color(0xff045EC5).withOpacity(0.08), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff045EC5).withOpacity(0.08),
+                  blurRadius: 9.3,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 4.0),
+                ),
+              ],
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(image: AssetImage(widget.bg), fit: BoxFit.cover),
             ),
@@ -234,7 +251,9 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
                 SizedBox(
                   height: 55.h,
                   width: 84,
-                  child: _currentStage == 0 ? Image.asset(widget.image, height: 55.h, width: 84) : SizedBox.shrink(), // Пустое место, чтобы высота не менялась
+                  child: _currentStage == 0
+                      ? Image.asset(widget.image, height: 55.h, width: 84)
+                      : SizedBox.shrink(), // Пустое место, чтобы высота не менялась
                 ),
               ],
             ),
@@ -264,7 +283,11 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
                         child: Center(
                           child: Opacity(
                             opacity: iconOpacity,
-                            child: Image.asset(_currentStage == 1 ? Pictures.lock : Pictures.unlock, height: 55.h, width: 84),
+                            child: Image.asset(
+                              _currentStage == 1 ? Pictures.lock : Pictures.unlock,
+                              height: 55.h,
+                              width: 84,
+                            ),
                           ),
                         ),
                       ),

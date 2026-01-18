@@ -6,9 +6,7 @@ part of 'create_review_request_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_CreateReviewRequestDto _$CreateReviewRequestDtoFromJson(
-  Map<String, dynamic> json,
-) => _CreateReviewRequestDto(
+_CreateReviewRequestDto _$CreateReviewRequestDtoFromJson(Map<String, dynamic> json) => _CreateReviewRequestDto(
   bookingId: (json['booking_id'] as num).toInt(),
   reviewedId: (json['reviewed_id'] as num).toInt(),
   rating: (json['rating'] as num?)?.toInt(),
@@ -16,9 +14,7 @@ _CreateReviewRequestDto _$CreateReviewRequestDtoFromJson(
   replyToReviewId: (json['reply_to_review_id'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$CreateReviewRequestDtoToJson(
-  _CreateReviewRequestDto instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$CreateReviewRequestDtoToJson(_CreateReviewRequestDto instance) => <String, dynamic>{
   'booking_id': instance.bookingId,
   'reviewed_id': instance.reviewedId,
   'rating': instance.rating,

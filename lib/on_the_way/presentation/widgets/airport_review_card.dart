@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/airport_review_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -98,7 +98,7 @@ class AirportReviewCard extends StatelessWidget {
               if (review.createdAt != null) ...[
                 SizedBox(height: 4.h),
                 Text(
-                  DateFormat('dd.MM.yyyy').format(review.createdAt!),
+                  formatDate(review.createdAt!),
                   style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                 ),
               ],
@@ -393,7 +393,7 @@ class AirportReviewCard extends StatelessWidget {
       top: 16.h,
       right: 16.w,
       child: Text(
-        DateFormat('dd.MM.yyyy HH:mm').format(review.createdAt!),
+        formatDateWithTime(review.createdAt!),
         style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
       ),
     );

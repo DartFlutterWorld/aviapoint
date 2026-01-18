@@ -32,6 +32,7 @@ class ProfileMapper {
       averageRating: model.averageRating,
       reviewsCount: model.reviewsCount,
       ownedAirports: ownedAirports,
+      isAdmin: model.isAdmin ?? false,
     );
   }
 

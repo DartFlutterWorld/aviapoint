@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 String bigFirstSymbol(String input) {
   if (input.isEmpty) return input;
@@ -90,4 +91,74 @@ class IntListJson extends TypeConverter<Set<int>, String> {
 
   @override
   String toSql(Set<int> value) => jsonEncode(value.toList());
+}
+
+/// Форматирует номер телефона в формат +7 (###) ###-##-##
+String formatPhone(String phone) {
+  if (phone.isEmpty) return phone;
+  
+  // Удаляем все нецифровые символы, кроме плюса в начале
+  String digits = phone.replaceAll(RegExp(r'[^\d+]'), '');
+  
+  // Если номер начинается с 8, заменяем на +7
+  if (digits.startsWith('8')) {
+    digits = '+7' + digits.substring(1);
+  } else if (!digits.startsWith('+7') && !digits.startsWith('7')) {
+    // Если нет кода страны, добавляем +7
+    digits = '+7' + digits;
+  } else if (digits.startsWith('7')) {
+    digits = '+7' + digits.substring(1);
+  }
+  
+  // Удаляем плюс для форматирования
+  String cleanDigits = digits.replaceAll('+', '');
+  
+  // Если номер не содержит код страны 7, добавляем
+  if (!cleanDigits.startsWith('7')) {
+    cleanDigits = '7' + cleanDigits;
+  }
+  
+  // Удаляем первую 7 для форматирования
+  if (cleanDigits.startsWith('7') && cleanDigits.length > 1) {
+    cleanDigits = cleanDigits.substring(1);
+  }
+  
+  // Форматируем в (###) ###-##-##
+  if (cleanDigits.length >= 10) {
+    final area = cleanDigits.substring(0, 3);
+    final first = cleanDigits.substring(3, 6);
+    final second = cleanDigits.substring(6, 8);
+    final third = cleanDigits.substring(8, cleanDigits.length > 10 ? 10 : cleanDigits.length);
+    return '+7 ($area) $first-$second-$third';
+  } else if (cleanDigits.length >= 6) {
+    final area = cleanDigits.substring(0, 3);
+    final first = cleanDigits.substring(3, 6);
+    final rest = cleanDigits.substring(6);
+    return '+7 ($area) $first-$rest';
+  } else if (cleanDigits.length >= 3) {
+    final area = cleanDigits.substring(0, 3);
+    final rest = cleanDigits.substring(3);
+    return '+7 ($area) $rest';
+  } else {
+    return '+7 $cleanDigits';
+  }
+}
+
+/// Форматирует цену с разделителями тысяч без копеек
+String formatPrice(int price) {
+  final format = NumberFormat('#,##0', 'ru_RU');
+  return format.format(price);
+}
+
+/// Форматирует дату в формат дд.мм.гггг
+String formatDate(DateTime? date) {
+  if (date == null) return '';
+  return '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+}
+
+/// Форматирует дату и время в формат дд.мм.гггг чч:мм
+String formatDateWithTime(DateTime? date) {
+  if (date == null) return '';
+  final dateStr = formatDate(date);
+  return '$dateStr ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
 }

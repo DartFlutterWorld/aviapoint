@@ -39,10 +39,8 @@ class AppFirebase {
       await AppCrashlytics().init();
     }
 
-    /// Инициализируем Firebase message.
-    if (!kIsWeb) {
-      await AppMessaging().init();
-      _fcmToken = AppMessaging().fcmToken;
-    }
+    /// Инициализируем Firebase message (включая веб)
+    await AppMessaging().init();
+    _fcmToken = AppMessaging().fcmToken;
   }
 }

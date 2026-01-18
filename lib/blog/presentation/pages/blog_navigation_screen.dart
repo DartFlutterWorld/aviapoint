@@ -10,4 +10,3 @@ class BlogNavigationScreen extends StatelessWidget {
     return HeroControllerScope(controller: HeroController(), child: const AutoRouter());
   }
 }
-

@@ -1,4 +1,5 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
 import 'package:aviapoint/on_the_way/data/datasources/on_the_way_service.dart';
 import 'package:aviapoint/on_the_way/data/mappers/on_the_way_mapper.dart';
@@ -8,7 +9,6 @@ import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class FlightSearchBarWidget extends StatefulWidget {
   final String? initialValue;
@@ -471,7 +471,7 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
                               Icon(Icons.calendar_today, size: 12, color: Color(0xFF9CA5AF)),
                               SizedBox(width: 4.w),
                               Text(
-                                DateFormat('dd.MM.yyyy').format(flight.departureDate),
+                                formatDate(flight.departureDate),
                                 style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                               ),
                             ],

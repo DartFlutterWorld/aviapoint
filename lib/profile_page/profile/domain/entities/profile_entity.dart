@@ -12,6 +12,7 @@ class ProfileEntity extends Equatable {
   final double? averageRating;
   final int? reviewsCount;
   final List<int>? ownedAirports; // Список ID аэропортов, которыми владеет пользователь
+  final bool isAdmin; // Является ли пользователь администратором
 
   const ProfileEntity({
     required this.id,
@@ -25,6 +26,7 @@ class ProfileEntity extends Equatable {
     this.averageRating,
     this.reviewsCount,
     this.ownedAirports,
+    this.isAdmin = false,
   });
 
   @override
@@ -40,5 +42,6 @@ class ProfileEntity extends Equatable {
     averageRating,
     reviewsCount,
     ownedAirports,
+    isAdmin,
   ];
 }

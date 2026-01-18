@@ -9,7 +9,7 @@ class BlogCommentEntity extends Equatable {
   final bool isApproved;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  
+
   // Данные автора комментария
   final String? authorFirstName;
   final String? authorLastName;
@@ -44,17 +44,17 @@ class BlogCommentEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        articleId,
-        authorId,
-        parentCommentId,
-        content,
-        isApproved,
-        createdAt,
-        updatedAt,
-        authorFirstName,
-        authorLastName,
-        authorAvatarUrl,
-        authorRating,
-      ];
+    id,
+    articleId,
+    authorId,
+    parentCommentId,
+    content,
+    isApproved,
+    createdAt,
+    updatedAt,
+    authorFirstName,
+    authorLastName,
+    authorAvatarUrl,
+    authorRating,
+  ];
 }

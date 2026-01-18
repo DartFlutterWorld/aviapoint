@@ -48,7 +48,10 @@ class BlogCategoryChip extends StatelessWidget {
             //   ),
             Text(
               category.name,
-              style: AppStyles.regular12s.copyWith(color: isSelected ? Colors.white : AppColors.textPrimary, fontSize: 11.sp),
+              style: AppStyles.regular12s.copyWith(
+                color: isSelected ? Colors.white : AppColors.textPrimary,
+                fontSize: 11.sp,
+              ),
             ),
           ],
         ),

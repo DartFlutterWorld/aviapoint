@@ -134,14 +134,20 @@ class _BlogScreenState extends State<BlogScreen> {
       if (userId == null) {
         // Показываем индикатор загрузки
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Загрузка данных профиля...'), duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Загрузка данных профиля...'), duration: Duration(seconds: 2)));
         }
 
         // Ждем загрузки профиля (максимум 5 секунд)
         try {
           await profileBloc.stream
               .firstWhere((state) {
-                return state.maybeWhen(success: (_) => true, error: (_, __, ___, ____, _____) => true, orElse: () => false);
+                return state.maybeWhen(
+                  success: (_) => true,
+                  error: (_, __, ___, ____, _____) => true,
+                  orElse: () => false,
+                );
               })
               .timeout(const Duration(seconds: 5));
 
@@ -166,7 +172,9 @@ class _BlogScreenState extends State<BlogScreen> {
         });
         _applyFilters();
       } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось загрузить данные профиля'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Не удалось загрузить данные профиля'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -222,210 +230,266 @@ class _BlogScreenState extends State<BlogScreen> {
         );
       },
       child: Scaffold(
-      appBar: CustomAppBar(
-        title: 'Авиаблог',
-        withBack: true,
-        withProfile: true,
-        actions: isAuthenticated ? [IconButton(icon: const Icon(Icons.add), onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()), tooltip: 'Создать статью')] : const [],
-      ),
-      backgroundColor: AppColors.background,
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(bottom: 16.h),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFF0A6EFA), Color(0xFF7A0FD9)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [BoxShadow(color: const Color(0xFF0A6EFA).withOpacity(0.4), blurRadius: 12, spreadRadius: 0, offset: const Offset(0, 4))],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () async {
-              final appState = Provider.of<AppState>(context, listen: false);
-              // Если не авторизован, показываем авторизацию
-              if (!appState.isAuthenticated) {
-                final result = await showCupertinoModalBottomSheet<bool>(barrierColor: Colors.black12, topRadius: const Radius.circular(20), context: context, builder: (context) => PhoneAuthScreen());
-
-                // После успешной авторизации обновляем статус и переходим на создание статьи
-                if (result == true && context.mounted) {
-                  await appState.checkAuthStatus();
-                  if (appState.isAuthenticated && context.mounted) {
-                    AutoRouter.of(context).push(const CreateBlogArticleRoute());
-                  }
-                }
-              } else {
-                // Если авторизован, сразу переходим на создание статьи
-                AutoRouter.of(context).push(const CreateBlogArticleRoute());
-              }
-            },
-            borderRadius: BorderRadius.circular(30),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(6.w),
-                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
-                    child: Icon(Icons.add, color: Colors.white, size: 20.sp),
+        appBar: CustomAppBar(
+          title: 'АвиаБлог',
+          withBack: true,
+          withProfile: true,
+          actions: isAuthenticated
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()),
+                    tooltip: 'Создать статью',
                   ),
-                  SizedBox(width: 12.w),
-                  Text('Создать статью', style: AppStyles.bold14s.copyWith(color: Colors.white, letterSpacing: 0.5)),
-                ],
+                ]
+              : const [],
+        ),
+        backgroundColor: AppColors.background,
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(bottom: 16.h),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF0A6EFA), Color(0xFF7A0FD9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF0A6EFA).withOpacity(0.4),
+                blurRadius: 12,
+                spreadRadius: 0,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () async {
+                final appState = Provider.of<AppState>(context, listen: false);
+                // Если не авторизован, показываем авторизацию
+                if (!appState.isAuthenticated) {
+                  final result = await showCupertinoModalBottomSheet<bool>(
+                    barrierColor: Colors.black12,
+                    topRadius: const Radius.circular(20),
+                    context: context,
+                    builder: (context) => PhoneAuthScreen(),
+                  );
+
+                  // После успешной авторизации обновляем статус и переходим на создание статьи
+                  if (result == true && context.mounted) {
+                    await appState.checkAuthStatus();
+                    if (appState.isAuthenticated && context.mounted) {
+                      AutoRouter.of(context).push(const CreateBlogArticleRoute());
+                    }
+                  }
+                } else {
+                  // Если авторизован, сразу переходим на создание статьи
+                  AutoRouter.of(context).push(const CreateBlogArticleRoute());
+                }
+              },
+              borderRadius: BorderRadius.circular(30),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(6.w),
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
+                      child: Icon(Icons.add, color: Colors.white, size: 20.sp),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text('Создать статью', style: AppStyles.bold14s.copyWith(color: Colors.white, letterSpacing: 0.5)),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          context.read<BlogCategoriesBloc>().add(const GetBlogCategoriesEvent());
-          _applyFilters();
-        },
-        child: ListView(
-          controller: _scrollController,
-          children: [
-            SizedBox(height: 8.h),
-            // Поиск и фильтры
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: Column(
-                children: [
-                  // Поле поиска
-                  SizedBox(
-                    height: 36.h,
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Поиск по статьям...',
-                        prefixIcon: Icon(Icons.search, color: const Color(0xFF9CA5AF), size: 18.sp),
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
-                                onPressed: _clearSearch,
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(),
-                              )
-                            : null,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            context.read<BlogCategoriesBloc>().add(const GetBlogCategoriesEvent());
+            _applyFilters();
+          },
+          child: ListView(
+            controller: _scrollController,
+            children: [
+              SizedBox(height: 8.h),
+              // Поиск и фильтры
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Column(
+                  children: [
+                    // Поле поиска
+                    SizedBox(
+                      height: 36.h,
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Поиск по статьям...',
+                          prefixIcon: Icon(Icons.search, color: const Color(0xFF9CA5AF), size: 18.sp),
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
+                                  onPressed: _clearSearch,
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                )
+                              : null,
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF0A6EFA), width: 2),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                          isDense: true,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: const Color(0xFF0A6EFA), width: 2),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
-                        isDense: true,
+                        style: AppStyles.regular12s,
                       ),
-                      style: AppStyles.regular12s,
                     ),
-                  ),
-                  SizedBox(height: 8.h),
-                  // Фильтр по самолётам и кнопка "Мои статьи"
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: _showAircraftFilter,
-                          child: Container(
-                            height: 36.h,
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFFD9E6F8)),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.flight, color: const Color(0xFF9CA5AF), size: 16.sp),
-                                SizedBox(width: 8.w),
-                                Expanded(
-                                  child: Text(
-                                    _selectedAircraftModelName ?? 'Фильтр по самолёту',
-                                    style: AppStyles.regular12s.copyWith(color: _selectedAircraftModelName != null ? const Color(0xFF374151) : const Color(0xFF9CA5AF)),
-                                    overflow: TextOverflow.ellipsis,
+                    SizedBox(height: 8.h),
+                    // Фильтр по самолётам и кнопка "Мои статьи"
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: _showAircraftFilter,
+                            child: Container(
+                              height: 36.h,
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: const Color(0xFFD9E6F8)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.flight, color: const Color(0xFF9CA5AF), size: 16.sp),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: Text(
+                                      _selectedAircraftModelName ?? 'Фильтр по самолёту',
+                                      style: AppStyles.regular12s.copyWith(
+                                        color: _selectedAircraftModelName != null
+                                            ? const Color(0xFF374151)
+                                            : const Color(0xFF9CA5AF),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                                Icon(Icons.arrow_drop_down, color: const Color(0xFF9CA5AF), size: 20.sp),
-                              ],
+                                  Icon(Icons.arrow_drop_down, color: const Color(0xFF9CA5AF), size: 20.sp),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      if (_selectedAircraftModelId != null) ...[
-                        SizedBox(width: 8.w),
-                        SizedBox(
-                          height: 36.h,
-                          width: 36.w,
-                          child: IconButton(
-                            icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
-                            onPressed: _clearAircraftFilter,
-                            tooltip: 'Очистить фильтр',
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
+                        if (_selectedAircraftModelId != null) ...[
+                          SizedBox(width: 8.w),
+                          SizedBox(
+                            height: 36.h,
+                            width: 36.w,
+                            child: IconButton(
+                              icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
+                              onPressed: _clearAircraftFilter,
+                              tooltip: 'Очистить фильтр',
+                              padding: EdgeInsets.zero,
+                              constraints: BoxConstraints(),
+                            ),
                           ),
-                        ),
-                      ],
-                      if (isAuthenticated) ...[
-                        SizedBox(width: 8.w),
-                        OutlinedButton.icon(
-                          onPressed: _toggleMyArticles,
-                          icon: Icon(_showMyArticles ? Icons.check_circle : Icons.person_outline, size: 16.sp, color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA)),
-                          label: Text('Мои', style: AppStyles.regular12s.copyWith(color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA))),
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                            minimumSize: Size(0, 36.h),
-                            backgroundColor: _showMyArticles ? const Color(0xFF0A6EFA) : Colors.white,
-                            side: BorderSide(color: _showMyArticles ? const Color(0xFF0A6EFA) : const Color(0xFF0A6EFA)),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ],
+                        if (isAuthenticated) ...[
+                          SizedBox(width: 8.w),
+                          OutlinedButton.icon(
+                            onPressed: _toggleMyArticles,
+                            icon: Icon(
+                              _showMyArticles ? Icons.check_circle : Icons.person_outline,
+                              size: 16.sp,
+                              color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA),
+                            ),
+                            label: Text(
+                              'Мои',
+                              style: AppStyles.regular12s.copyWith(
+                                color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA),
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                              minimumSize: Size(0, 36.h),
+                              backgroundColor: _showMyArticles ? const Color(0xFF0A6EFA) : Colors.white,
+                              side: BorderSide(
+                                color: _showMyArticles ? const Color(0xFF0A6EFA) : const Color(0xFF0A6EFA),
+                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8.h),
+              BlocBuilder<BlogCategoriesBloc, BlogCategoriesState>(
+                builder: (context, state) => state.maybeWhen(
+                  loading: () => const SizedBox(),
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
+                    textError: errorForUser,
+                    repeat: () {
+                      context.read<BlogCategoriesBloc>().add(const GetBlogCategoriesEvent());
+                    },
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: 8.h),
-            BlocBuilder<BlogCategoriesBloc, BlogCategoriesState>(
-              builder: (context, state) => state.maybeWhen(
-                loading: () => const SizedBox(),
-                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
-                  textError: errorForUser,
-                  repeat: () {
-                    context.read<BlogCategoriesBloc>().add(const GetBlogCategoriesEvent());
-                  },
+                  success: (categories) => _CategoryList(
+                    categories: categories,
+                    selectedCategoryId: _selectedCategoryId,
+                    onCategorySelected: _onCategorySelected,
+                    onCategoryDeselected: _onCategoryDeselected,
+                  ),
+                  orElse: () => const SizedBox(),
                 ),
-                success: (categories) =>
-                    _CategoryList(categories: categories, selectedCategoryId: _selectedCategoryId, onCategorySelected: _onCategorySelected, onCategoryDeselected: _onCategoryDeselected),
-                orElse: () => const SizedBox(),
               ),
-            ),
-            SizedBox(height: 12.h),
-            BlocBuilder<BlogArticlesBloc, BlogArticlesState>(
-              builder: (context, state) => state.maybeWhen(
-                loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
-                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
-                  textError: errorForUser,
-                  repeat: () {
-                    final searchQuery = _searchController.text.trim().isEmpty ? null : _searchController.text.trim();
-                    context.read<BlogArticlesBloc>().add(GetBlogArticlesEvent(categoryId: _selectedCategoryId, aircraftModelId: _selectedAircraftModelId, status: 'published', search: searchQuery));
-                  },
+              SizedBox(height: 12.h),
+              BlocBuilder<BlogArticlesBloc, BlogArticlesState>(
+                builder: (context, state) => state.maybeWhen(
+                  loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
+                    textError: errorForUser,
+                    repeat: () {
+                      final searchQuery = _searchController.text.trim().isEmpty ? null : _searchController.text.trim();
+                      context.read<BlogArticlesBloc>().add(
+                        GetBlogArticlesEvent(
+                          categoryId: _selectedCategoryId,
+                          aircraftModelId: _selectedAircraftModelId,
+                          status: 'published',
+                          search: searchQuery,
+                        ),
+                      );
+                    },
+                  ),
+                  loadingMore: (articles) =>
+                      _ArticleList(articles: articles, isLoadingMore: true, showStatus: _showMyArticles),
+                  success: (articles, hasMore) => _ArticleList(
+                    articles: articles,
+                    isLoadingMore: false,
+                    hasMore: hasMore,
+                    showStatus: _showMyArticles,
+                  ),
+                  orElse: () => const SizedBox(),
                 ),
-                loadingMore: (articles) => _ArticleList(articles: articles, isLoadingMore: true, showStatus: _showMyArticles),
-                success: (articles, hasMore) => _ArticleList(articles: articles, isLoadingMore: false, hasMore: hasMore, showStatus: _showMyArticles),
-                orElse: () => const SizedBox(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -437,7 +501,12 @@ class _CategoryList extends StatelessWidget {
   final void Function(BlogCategoryEntity) onCategorySelected;
   final VoidCallback onCategoryDeselected;
 
-  const _CategoryList({required this.categories, required this.selectedCategoryId, required this.onCategorySelected, required this.onCategoryDeselected});
+  const _CategoryList({
+    required this.categories,
+    required this.selectedCategoryId,
+    required this.onCategorySelected,
+    required this.onCategoryDeselected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -476,7 +545,12 @@ class _ArticleList extends StatelessWidget {
   final bool hasMore;
   final bool showStatus;
 
-  const _ArticleList({required this.articles, this.isLoadingMore = false, this.hasMore = false, this.showStatus = false});
+  const _ArticleList({
+    required this.articles,
+    this.isLoadingMore = false,
+    this.hasMore = false,
+    this.showStatus = false,
+  });
 
   @override
   Widget build(BuildContext context) {

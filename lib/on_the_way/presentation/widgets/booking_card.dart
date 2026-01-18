@@ -1,8 +1,8 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class BookingCard extends StatelessWidget {
   final BookingEntity booking;
@@ -13,8 +13,6 @@ class BookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final priceFormat = NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
-
     String statusText;
     Color statusColor;
     Color statusBgColor;
@@ -126,7 +124,7 @@ class BookingCard extends StatelessWidget {
                           Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
                           SizedBox(width: 6.w),
                           Text(
-                            DateFormat('dd.MM.yyyy', 'ru_RU').format(booking.flightDepartureDate!),
+                            formatDate(booking.flightDepartureDate!),
                             style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                           ),
                         ],
@@ -199,7 +197,7 @@ class BookingCard extends StatelessWidget {
                           Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
                           SizedBox(width: 6.w),
                           Text(
-                            DateFormat('dd.MM.yyyy', 'ru_RU').format(booking.flightDepartureDate!),
+                            formatDate(booking.flightDepartureDate!),
                             style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                           ),
                         ],
@@ -236,7 +234,7 @@ class BookingCard extends StatelessWidget {
                     Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
                     SizedBox(width: 6.w),
                     Text(
-                      '${priceFormat.format(booking.totalPrice)}',
+                      '${formatPrice(booking.totalPrice.toInt())}',
                       style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981)),
                     ),
                   ],

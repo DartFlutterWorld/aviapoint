@@ -40,9 +40,8 @@ Future<void> main() async {
     // Игнорируем некритичную ошибку QuillNativeBridgeApi.isIosSimulator
     if (details.exception is PlatformException) {
       final e = details.exception as PlatformException;
-      if (e.code == 'channel-error' && 
-          (e.message?.contains('isIosSimulator') == true || 
-           e.message?.contains('QuillNativeBridgeApi') == true)) {
+      if (e.code == 'channel-error' &&
+          (e.message?.contains('isIosSimulator') == true || e.message?.contains('QuillNativeBridgeApi') == true)) {
         // Это некритичная ошибка, просто игнорируем её
         return;
       }

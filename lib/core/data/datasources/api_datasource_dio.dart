@@ -245,15 +245,13 @@ class _TokenRefreshInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     // Пропускаем запросы на обновление токена, чтобы избежать бесконечного цикла
-    if (err.requestOptions.path.contains('/auth/refresh') || 
-        err.requestOptions.path.contains('/refresh-token')) {
+    if (err.requestOptions.path.contains('/auth/refresh') || err.requestOptions.path.contains('/refresh-token')) {
       handler.next(err);
       return;
     }
 
     // Проверяем, является ли это ошибкой авторизации
-    final isAuthError = err.response?.statusCode == 401 ||
-        _isTokenExpiredError(err.response?.data);
+    final isAuthError = err.response?.statusCode == 401 || _isTokenExpiredError(err.response?.data);
 
     if (isAuthError && _datasource._refreshToken != null && _datasource._onRefresh != null) {
       // Если уже идет обновление токена, добавляем запрос в очередь
@@ -279,7 +277,7 @@ class _TokenRefreshInterceptor extends Interceptor {
         if (newAccessToken != null && newAccessToken.isNotEmpty) {
           // Обновляем токен в заголовках
           _datasource._dio.options.headers['Authorization'] = 'Bearer $newAccessToken';
-          
+
           // Обновляем refreshToken в datasource из хранилища
           // (refreshToken уже обновлен в TokenStorage через auth_repository_impl.refreshToken)
           final tokens = await TokenStorage.getTokens();
@@ -288,10 +286,7 @@ class _TokenRefreshInterceptor extends Interceptor {
           }
 
           // Повторяем оригинальный запрос с новым токеном
-          final opts = Options(
-            method: err.requestOptions.method,
-            headers: err.requestOptions.headers,
-          );
+          final opts = Options(method: err.requestOptions.method, headers: err.requestOptions.headers);
           opts.headers!['Authorization'] = 'Bearer $newAccessToken';
 
           final response = await _datasource._dio.request<dynamic>(
@@ -311,8 +306,7 @@ class _TokenRefreshInterceptor extends Interceptor {
                 pending.requestOptions.path,
                 options: Options(
                   method: pending.requestOptions.method,
-                  headers: pending.requestOptions.headers
-                    ..['Authorization'] = 'Bearer $newAccessToken',
+                  headers: pending.requestOptions.headers..['Authorization'] = 'Bearer $newAccessToken',
                 ),
                 data: pending.requestOptions.data,
                 queryParameters: pending.requestOptions.queryParameters,
@@ -322,10 +316,7 @@ class _TokenRefreshInterceptor extends Interceptor {
               );
               pending.completer.complete(pendingResponse);
             } catch (e) {
-              pending.completer.completeError(DioException(
-                requestOptions: pending.requestOptions,
-                error: e,
-              ));
+              pending.completer.completeError(DioException(requestOptions: pending.requestOptions, error: e));
             }
           }
           _pendingRequests.clear();

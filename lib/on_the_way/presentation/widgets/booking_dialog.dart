@@ -74,31 +74,11 @@ class _BookingDialogState extends State<BookingDialog> {
               listener: (context, profileState) {
                 // Проверяем ФИО только если был запрос на проверку после бронирования
                 if (_shouldCheckProfileAfterBooking) {
-                  profileState.maybeWhen(
-                    success: (profile) {
-                      final firstName = profile.firstName?.trim() ?? '';
-                      final lastName = profile.lastName?.trim() ?? '';
-
-                      if (firstName.isEmpty || lastName.isEmpty) {
-                        // Если ФИО не заполнены, открываем редактирование профиля
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (context.mounted) {
-                            _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг
-                            openProfileEdit(context: context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Пожалуйста, заполните имя и фамилию для завершения бронирования'),
-                                backgroundColor: Colors.orange,
-                                duration: Duration(seconds: 4),
-                              ),
-                            );
-                          }
-                        });
-                      } else {
-                        _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг, если ФИО заполнены
-                      }
-                    },
-                    orElse: () {},
+                  _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг
+                  // Используем универсальную функцию для проверки ФИО
+                  checkDataProfileAndOpenEditIfNeeded(
+                    context: context,
+                    message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования',
                   );
                 }
               },
@@ -148,59 +128,25 @@ class _BookingDialogState extends State<BookingDialog> {
                     // Закрываем диалог с результатом, указывающим на необходимость переключения вкладки
                     Navigator.of(context).pop({'success': true, 'switchToMyBookings': true});
 
-                    // Проверяем, заполнены ли ФИО у пользователя
-                    try {
-                      final profileBloc = context.read<ProfileBloc>();
-                      final profileState = profileBloc.state;
+                    // Проверяем, заполнены ли ФИО у пользователя (универсальная функция)
+                    final profileCheckResult = checkDataProfileAndOpenEditIfNeeded(
+                      context: context,
+                      message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования',
+                    );
 
-                      profileState.maybeWhen(
-                        success: (profile) {
-                          // Проверяем, заполнены ли имя и фамилия
-                          final firstName = profile.firstName?.trim() ?? '';
-                          final lastName = profile.lastName?.trim() ?? '';
-
-                          if (firstName.isEmpty || lastName.isEmpty) {
-                            // Если ФИО не заполнены, открываем редактирование профиля
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (context.mounted) {
-                                openProfileEdit(context: context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Пожалуйста, заполните имя и фамилию для завершения бронирования'),
-                                    backgroundColor: Colors.orange,
-                                    duration: Duration(seconds: 4),
-                                  ),
-                                );
-                              }
-                            });
-                          } else {
-                            // Если ФИО заполнены, показываем обычное сообщение об успехе
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Бронирование успешно создано'),
-                                backgroundColor: Colors.green,
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        },
-                        orElse: () {
-                          // Если профиль не загружен, загружаем его и помечаем, что нужно проверить после загрузки
-                          _shouldCheckProfileAfterBooking = true;
-                          profileBloc.add(ProfileEvent.get());
-                          // Показываем сообщение об успехе
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Бронирование успешно создано'),
-                              backgroundColor: Colors.green,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        },
+                    // Если ФИО заполнены, показываем сообщение об успехе
+                    if (profileCheckResult == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Бронирование успешно создано'),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
                       );
-                    } catch (e) {
-                      print('❌ [BookingDialog] Ошибка при проверке профиля: $e');
-                      // В случае ошибки просто показываем сообщение об успехе
+                    } else if (profileCheckResult == null) {
+                      // Если профиль еще не загружен (null), устанавливаем флаг для проверки после загрузки
+                      _shouldCheckProfileAfterBooking = true;
+                      // Показываем сообщение об успехе
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Бронирование успешно создано'),

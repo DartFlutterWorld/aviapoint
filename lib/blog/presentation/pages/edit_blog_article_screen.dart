@@ -172,7 +172,8 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
   Future<void> _showAircraftModelSelector(BuildContext context) async {
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      builder: (context) => AircraftTypeSelectorDialog(initialValue: _aircraftModelController.text, returnModelId: true),
+      builder: (context) =>
+          AircraftTypeSelectorDialog(initialValue: _aircraftModelController.text, returnModelId: true),
     );
 
     if (result != null) {
@@ -186,7 +187,12 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
   Future<void> _pickCoverImage() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1920,
+        maxHeight: 1920,
+      );
 
       if (image != null) {
         if (kIsWeb) {
@@ -217,7 +223,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -240,7 +248,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
+            );
           }
         },
         (imageUrl) {
@@ -250,7 +260,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           // Преобразуем относительный путь в полный URL
           // Бэкенд возвращает относительный путь типа "blog_articles/1/images/..."
           // Нужно преобразовать его в полный URL для загрузки изображения
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           // Используем addPostFrameCallback для безопасной вставки после завершения текущего кадра
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -289,7 +301,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             } catch (e) {
               // Игнорируем ошибки вставки, если виджет уже удален
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
+                );
               }
             }
           });
@@ -298,7 +312,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -325,7 +341,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -352,7 +370,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
+            );
           }
         },
         (imageUrl) {
@@ -362,7 +382,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           // Преобразуем относительный путь в полный URL
           // Бэкенд возвращает относительный путь типа "blog_articles/1/images/..."
           // Нужно преобразовать его в полный URL для загрузки изображения
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           // Используем addPostFrameCallback для безопасной вставки после завершения текущего кадра
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -400,7 +422,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
+                );
               }
             }
           });
@@ -409,7 +433,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -432,7 +458,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+            Text(
+              'Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.',
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+            ),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -446,7 +475,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                   Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20),
                   SizedBox(width: 8.w),
                   Expanded(
-                    child: Text('Все данные статьи будут безвозвратно удалены.', style: AppStyles.regular12s.copyWith(color: Color(0xFF856404))),
+                    child: Text(
+                      'Все данные статьи будут безвозвратно удалены.',
+                      style: AppStyles.regular12s.copyWith(color: Color(0xFF856404)),
+                    ),
                   ),
                 ],
               ),
@@ -502,7 +534,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
 
           // Преобразуем относительный путь в полный URL для текущего окружения
           // Если это уже абсолютный URL, оставляем как есть
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           return {
             ...op,
@@ -571,7 +605,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     debugPrint('📝 Сохраняем JSON Delta: $content');
 
     if (title.isEmpty || content.trim().isEmpty || content == '[]') {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
       return;
     }
 
@@ -642,14 +678,26 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         state.maybeWhen(
           updated: (article) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно обновлена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Статья успешно обновлена'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
             AutoRouter.of(context).pop();
             // Обновляем детальную страницу
             context.read<BlogArticleDetailBloc>().add(GetBlogArticleByIdEvent(id: widget.articleId));
           },
           deleted: () {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно удалена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Статья успешно удалена'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
             // Закрываем диалог загрузки, если он открыт
             Navigator.of(context, rootNavigator: true).pop();
             // Обновляем список статей перед возвратом
@@ -667,7 +715,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             setState(() => _isLoading = false);
             // Закрываем диалог загрузки, если он открыт
             Navigator.of(context, rootNavigator: true).pop();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)),
+            );
           },
           orElse: () {},
         );
@@ -874,7 +924,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                 Transform.scale(
                                   scale: kIsWeb ? 1.0 : 0.85,
                                   alignment: Alignment.topLeft,
-                                  child: QuillSimpleToolbar(controller: _quillController, config: const QuillSimpleToolbarConfig()),
+                                  child: QuillSimpleToolbar(
+                                    controller: _quillController,
+                                    config: const QuillSimpleToolbarConfig(),
+                                  ),
                                 ),
                                 Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
                                 Container(
@@ -883,7 +936,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                   padding: EdgeInsets.all(12.w),
                                   child: QuillEditor.basic(
                                     controller: _quillController,
-                                    config: QuillEditorConfig(placeholder: 'Введите текст статьи...', embedBuilders: FlutterQuillEmbeds.editorBuilders()),
+                                    config: QuillEditorConfig(
+                                      placeholder: 'Введите текст статьи...',
+                                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                                    ),
                                     focusNode: _quillFocusNode,
                                   ),
                                 ),
@@ -915,7 +971,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                           OutlinedButton.icon(
                             onPressed: _pickCoverImage,
                             icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
-                            label: Text('Выберите изображение для статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                            label: Text(
+                              'Выберите изображение для статьи',
+                              style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
+                            ),
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                               side: BorderSide(color: Color(0xFF0A6EFA)),
@@ -938,7 +997,11 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                         SizedBox(height: 8.h),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12.r),
-                          child: CachedNetworkImage(imageUrl: getImageUrl(article.coverImageUrl!), height: 150.h, fit: BoxFit.cover),
+                          child: CachedNetworkImage(
+                            imageUrl: getImageUrl(article.coverImageUrl!),
+                            height: 150.h,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ],
                       SizedBox(height: 16.h),
@@ -1023,7 +1086,11 @@ class _SafeQuillEditorState extends State<_SafeQuillEditor> {
     return QuillEditor.basic(
       controller: widget.controller,
       focusNode: widget.focusNode,
-      config: QuillEditorConfig(placeholder: 'Введите текст статьи...', padding: EdgeInsets.zero, embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders()),
+      config: QuillEditorConfig(
+        placeholder: 'Введите текст статьи...',
+        padding: EdgeInsets.zero,
+        embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
+      ),
     );
   }
 }

@@ -12,4 +12,3 @@ class UploadImageResponseDto {
 
   Map<String, dynamic> toJson() => _$UploadImageResponseDtoToJson(this);
 }
-

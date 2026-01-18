@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileDto {
 
- int get id;@JsonKey(fromJson: _stringFromJsonNullable) String get phone; String? get email;@JsonKey(name: 'first_name') String? get firstName;@JsonKey(name: 'last_name') String? get lastName;@JsonKey(name: 'avatar_url') String? get avatarUrl; String? get telegram; String? get max;@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? get averageRating;@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? get reviewsCount;@JsonKey(name: 'owned_airports') dynamic get ownedAirports;
+ int get id;@JsonKey(fromJson: _stringFromJsonNullable) String get phone; String? get email;@JsonKey(name: 'first_name') String? get firstName;@JsonKey(name: 'last_name') String? get lastName;@JsonKey(name: 'avatar_url') String? get avatarUrl; String? get telegram; String? get max;@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? get averageRating;@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? get reviewsCount;@JsonKey(name: 'owned_airports') dynamic get ownedAirports;// JSONB массив ID аэропортов
+@JsonKey(name: 'is_admin', defaultValue: false) bool? get isAdmin;
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $ProfileDtoCopyWith<ProfileDto> get copyWith => _$ProfileDtoCopyWithImpl<Profile
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.telegram, telegram) || other.telegram == telegram)&&(identical(other.max, max) || other.max == max)&&(identical(other.averageRating, averageRating) || other.averageRating == averageRating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&const DeepCollectionEquality().equals(other.ownedAirports, ownedAirports));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.telegram, telegram) || other.telegram == telegram)&&(identical(other.max, max) || other.max == max)&&(identical(other.averageRating, averageRating) || other.averageRating == averageRating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&const DeepCollectionEquality().equals(other.ownedAirports, ownedAirports)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,phone,email,firstName,lastName,avatarUrl,telegram,max,averageRating,reviewsCount,const DeepCollectionEquality().hash(ownedAirports));
+int get hashCode => Object.hash(runtimeType,id,phone,email,firstName,lastName,avatarUrl,telegram,max,averageRating,reviewsCount,const DeepCollectionEquality().hash(ownedAirports),isAdmin);
 
 @override
 String toString() {
-  return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName, avatarUrl: $avatarUrl, telegram: $telegram, max: $max, averageRating: $averageRating, reviewsCount: $reviewsCount, ownedAirports: $ownedAirports)';
+  return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName, avatarUrl: $avatarUrl, telegram: $telegram, max: $max, averageRating: $averageRating, reviewsCount: $reviewsCount, ownedAirports: $ownedAirports, isAdmin: $isAdmin)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $ProfileDtoCopyWith<$Res>  {
   factory $ProfileDtoCopyWith(ProfileDto value, $Res Function(ProfileDto) _then) = _$ProfileDtoCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(fromJson: _stringFromJsonNullable) String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports
+ int id,@JsonKey(fromJson: _stringFromJsonNullable) String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports,@JsonKey(name: 'is_admin', defaultValue: false) bool? isAdmin
 });
 
 
@@ -65,7 +66,7 @@ class _$ProfileDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phone = null,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? avatarUrl = freezed,Object? telegram = freezed,Object? max = freezed,Object? averageRating = freezed,Object? reviewsCount = freezed,Object? ownedAirports = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phone = null,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? avatarUrl = freezed,Object? telegram = freezed,Object? max = freezed,Object? averageRating = freezed,Object? reviewsCount = freezed,Object? ownedAirports = freezed,Object? isAdmin = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
@@ -78,7 +79,8 @@ as String?,max: freezed == max ? _self.max : max // ignore: cast_nullable_to_non
 as String?,averageRating: freezed == averageRating ? _self.averageRating : averageRating // ignore: cast_nullable_to_non_nullable
 as double?,reviewsCount: freezed == reviewsCount ? _self.reviewsCount : reviewsCount // ignore: cast_nullable_to_non_nullable
 as int?,ownedAirports: freezed == ownedAirports ? _self.ownedAirports : ownedAirports // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as dynamic,isAdmin: freezed == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
@@ -163,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports, @JsonKey(name: 'is_admin', defaultValue: false)  bool? isAdmin)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileDto() when $default != null:
-return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports);case _:
+return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports,_that.isAdmin);case _:
   return orElse();
 
 }
@@ -184,10 +186,10 @@ return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports, @JsonKey(name: 'is_admin', defaultValue: false)  bool? isAdmin)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileDto():
-return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports);case _:
+return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports,_that.isAdmin);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +206,10 @@ return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(fromJson: _stringFromJsonNullable)  String phone,  String? email, @JsonKey(name: 'first_name')  String? firstName, @JsonKey(name: 'last_name')  String? lastName, @JsonKey(name: 'avatar_url')  String? avatarUrl,  String? telegram,  String? max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable)  double? averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable)  int? reviewsCount, @JsonKey(name: 'owned_airports')  dynamic ownedAirports, @JsonKey(name: 'is_admin', defaultValue: false)  bool? isAdmin)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileDto() when $default != null:
-return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports);case _:
+return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,_that.avatarUrl,_that.telegram,_that.max,_that.averageRating,_that.reviewsCount,_that.ownedAirports,_that.isAdmin);case _:
   return null;
 
 }
@@ -219,7 +221,7 @@ return $default(_that.id,_that.phone,_that.email,_that.firstName,_that.lastName,
 @JsonSerializable()
 
 class _ProfileDto implements ProfileDto {
-  const _ProfileDto({required this.id, @JsonKey(fromJson: _stringFromJsonNullable) required this.phone, this.email, @JsonKey(name: 'first_name') this.firstName, @JsonKey(name: 'last_name') this.lastName, @JsonKey(name: 'avatar_url') this.avatarUrl, this.telegram, this.max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) this.averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) this.reviewsCount, @JsonKey(name: 'owned_airports') this.ownedAirports});
+  const _ProfileDto({required this.id, @JsonKey(fromJson: _stringFromJsonNullable) required this.phone, this.email, @JsonKey(name: 'first_name') this.firstName, @JsonKey(name: 'last_name') this.lastName, @JsonKey(name: 'avatar_url') this.avatarUrl, this.telegram, this.max, @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) this.averageRating, @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) this.reviewsCount, @JsonKey(name: 'owned_airports') this.ownedAirports, @JsonKey(name: 'is_admin', defaultValue: false) this.isAdmin});
   factory _ProfileDto.fromJson(Map<String, dynamic> json) => _$ProfileDtoFromJson(json);
 
 @override final  int id;
@@ -233,6 +235,8 @@ class _ProfileDto implements ProfileDto {
 @override@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) final  double? averageRating;
 @override@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) final  int? reviewsCount;
 @override@JsonKey(name: 'owned_airports') final  dynamic ownedAirports;
+// JSONB массив ID аэропортов
+@override@JsonKey(name: 'is_admin', defaultValue: false) final  bool? isAdmin;
 
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.telegram, telegram) || other.telegram == telegram)&&(identical(other.max, max) || other.max == max)&&(identical(other.averageRating, averageRating) || other.averageRating == averageRating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&const DeepCollectionEquality().equals(other.ownedAirports, ownedAirports));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.telegram, telegram) || other.telegram == telegram)&&(identical(other.max, max) || other.max == max)&&(identical(other.averageRating, averageRating) || other.averageRating == averageRating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&const DeepCollectionEquality().equals(other.ownedAirports, ownedAirports)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,phone,email,firstName,lastName,avatarUrl,telegram,max,averageRating,reviewsCount,const DeepCollectionEquality().hash(ownedAirports));
+int get hashCode => Object.hash(runtimeType,id,phone,email,firstName,lastName,avatarUrl,telegram,max,averageRating,reviewsCount,const DeepCollectionEquality().hash(ownedAirports),isAdmin);
 
 @override
 String toString() {
-  return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName, avatarUrl: $avatarUrl, telegram: $telegram, max: $max, averageRating: $averageRating, reviewsCount: $reviewsCount, ownedAirports: $ownedAirports)';
+  return 'ProfileDto(id: $id, phone: $phone, email: $email, firstName: $firstName, lastName: $lastName, avatarUrl: $avatarUrl, telegram: $telegram, max: $max, averageRating: $averageRating, reviewsCount: $reviewsCount, ownedAirports: $ownedAirports, isAdmin: $isAdmin)';
 }
 
 
@@ -267,7 +271,7 @@ abstract mixin class _$ProfileDtoCopyWith<$Res> implements $ProfileDtoCopyWith<$
   factory _$ProfileDtoCopyWith(_ProfileDto value, $Res Function(_ProfileDto) _then) = __$ProfileDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(fromJson: _stringFromJsonNullable) String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports
+ int id,@JsonKey(fromJson: _stringFromJsonNullable) String phone, String? email,@JsonKey(name: 'first_name') String? firstName,@JsonKey(name: 'last_name') String? lastName,@JsonKey(name: 'avatar_url') String? avatarUrl, String? telegram, String? max,@JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,@JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,@JsonKey(name: 'owned_airports') dynamic ownedAirports,@JsonKey(name: 'is_admin', defaultValue: false) bool? isAdmin
 });
 
 
@@ -284,7 +288,7 @@ class __$ProfileDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phone = null,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? avatarUrl = freezed,Object? telegram = freezed,Object? max = freezed,Object? averageRating = freezed,Object? reviewsCount = freezed,Object? ownedAirports = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phone = null,Object? email = freezed,Object? firstName = freezed,Object? lastName = freezed,Object? avatarUrl = freezed,Object? telegram = freezed,Object? max = freezed,Object? averageRating = freezed,Object? reviewsCount = freezed,Object? ownedAirports = freezed,Object? isAdmin = freezed,}) {
   return _then(_ProfileDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
@@ -297,7 +301,8 @@ as String?,max: freezed == max ? _self.max : max // ignore: cast_nullable_to_non
 as String?,averageRating: freezed == averageRating ? _self.averageRating : averageRating // ignore: cast_nullable_to_non_nullable
 as double?,reviewsCount: freezed == reviewsCount ? _self.reviewsCount : reviewsCount // ignore: cast_nullable_to_non_nullable
 as int?,ownedAirports: freezed == ownedAirports ? _self.ownedAirports : ownedAirports // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as dynamic,isAdmin: freezed == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 

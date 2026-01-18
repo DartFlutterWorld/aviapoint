@@ -25,8 +25,8 @@ class BlogRepositoryImpl extends BlogRepository {
   final Dio _dio;
 
   BlogRepositoryImpl({required BlogService blogService})
-      : _blogService = blogService,
-        _dio = (getIt<ApiDatasource>() as ApiDatasourceDio).dio;
+    : _blogService = blogService,
+      _dio = (getIt<ApiDatasource>() as ApiDatasourceDio).dio;
 
   @override
   Future<Either<Failure, List<BlogCategoryEntity>>> getCategories() async {
@@ -88,7 +88,6 @@ class BlogRepositoryImpl extends BlogRepository {
     }
   }
 
-
   @override
   Future<Either<Failure, List<BlogTagEntity>>> getTags() async {
     try {
@@ -129,13 +128,10 @@ class BlogRepositoryImpl extends BlogRepository {
       // Если есть файл изображения или bytes, отправляем через FormData
       if (coverImageFile != null || coverImageBytes != null) {
         final formData = FormData();
-        
+
         // Добавляем текстовые поля
-        formData.fields.addAll([
-          MapEntry('title', title),
-          MapEntry('content', content),
-        ]);
-        
+        formData.fields.addAll([MapEntry('title', title), MapEntry('content', content)]);
+
         if (categoryId != null) {
           formData.fields.add(MapEntry('category_id', categoryId.toString()));
         }
@@ -166,7 +162,10 @@ class BlogRepositoryImpl extends BlogRepository {
           final fileName = coverImageFile!.path.split('/').last;
           multipartFile = MultipartFile.fromBytes(bytes, filename: fileName);
         } else if (coverImageFile != null) {
-          multipartFile = await MultipartFile.fromFile(coverImageFile!.path, filename: coverImageFile!.path.split('/').last);
+          multipartFile = await MultipartFile.fromFile(
+            coverImageFile!.path,
+            filename: coverImageFile!.path.split('/').last,
+          );
         } else {
           throw Exception('coverImageFile or coverImageBytes must be provided');
         }
@@ -185,7 +184,7 @@ class BlogRepositoryImpl extends BlogRepository {
               validateStatus: (status) => status! < 500, // Принимаем ответы до 500
             ),
           );
-          
+
           if (dioResponse.statusCode != null && dioResponse.statusCode! >= 400) {
             // Обрабатываем ошибку
             String? errorMessage;
@@ -197,21 +196,25 @@ class BlogRepositoryImpl extends BlogRepository {
                 errorMessage = dioResponse.data.toString();
               }
             }
-            return left(ServerFailure(
-              statusCode: dioResponse.statusCode.toString(),
-              message: errorMessage ?? 'Ошибка при создании статьи',
-              responseMessage: errorMessage,
-            ));
+            return left(
+              ServerFailure(
+                statusCode: dioResponse.statusCode.toString(),
+                message: errorMessage ?? 'Ошибка при создании статьи',
+                responseMessage: errorMessage,
+              ),
+            );
           }
-          
+
           response = BlogArticleDto.fromJson(dioResponse.data!);
         } on FormatException {
           // Обрабатываем ошибку декодирования UTF-8
-          return left(ServerFailure(
-            statusCode: '400',
-            message: 'Ошибка декодирования ответа сервера',
-            responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
-          ));
+          return left(
+            ServerFailure(
+              statusCode: '400',
+              message: 'Ошибка декодирования ответа сервера',
+              responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
+            ),
+          );
         }
       } else {
         // Если нет файла, отправляем JSON как обычно
@@ -243,11 +246,13 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -272,7 +277,7 @@ class BlogRepositoryImpl extends BlogRepository {
       // Если есть файл изображения или bytes, отправляем через FormData
       if (coverImageFile != null || coverImageBytes != null) {
         final formData = FormData();
-        
+
         // Добавляем текстовые поля
         if (title != null) {
           formData.fields.add(MapEntry('title', title));
@@ -310,7 +315,10 @@ class BlogRepositoryImpl extends BlogRepository {
           final fileName = coverImageFile!.path.split('/').last;
           multipartFile = MultipartFile.fromBytes(bytes, filename: fileName);
         } else if (coverImageFile != null) {
-          multipartFile = await MultipartFile.fromFile(coverImageFile!.path, filename: coverImageFile!.path.split('/').last);
+          multipartFile = await MultipartFile.fromFile(
+            coverImageFile!.path,
+            filename: coverImageFile!.path.split('/').last,
+          );
         } else {
           throw Exception('coverImageFile or coverImageBytes must be provided');
         }
@@ -329,7 +337,7 @@ class BlogRepositoryImpl extends BlogRepository {
               validateStatus: (status) => status! < 500, // Принимаем ответы до 500
             ),
           );
-          
+
           if (dioResponse.statusCode != null && dioResponse.statusCode! >= 400) {
             // Обрабатываем ошибку
             String? errorMessage;
@@ -341,21 +349,25 @@ class BlogRepositoryImpl extends BlogRepository {
                 errorMessage = dioResponse.data.toString();
               }
             }
-            return left(ServerFailure(
-              statusCode: dioResponse.statusCode.toString(),
-              message: errorMessage ?? 'Ошибка при обновлении статьи',
-              responseMessage: errorMessage,
-            ));
+            return left(
+              ServerFailure(
+                statusCode: dioResponse.statusCode.toString(),
+                message: errorMessage ?? 'Ошибка при обновлении статьи',
+                responseMessage: errorMessage,
+              ),
+            );
           }
-          
+
           response = BlogArticleDto.fromJson(dioResponse.data!);
         } on FormatException {
           // Обрабатываем ошибку декодирования UTF-8
-          return left(ServerFailure(
-            statusCode: '400',
-            message: 'Ошибка декодирования ответа сервера',
-            responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
-          ));
+          return left(
+            ServerFailure(
+              statusCode: '400',
+              message: 'Ошибка декодирования ответа сервера',
+              responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
+            ),
+          );
         }
       } else {
         // Если нет файла, отправляем JSON как обычно
@@ -384,11 +396,13 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -417,14 +431,11 @@ class BlogRepositoryImpl extends BlogRepository {
       final response = articleId != null
           ? await _blogService.uploadContentImage(articleId, multipartFile)
           : await _blogService.uploadContentImageTemporary(multipartFile);
-      
+
       if (response.url.isEmpty) {
-        return left(ServerFailure(
-          statusCode: null,
-          message: 'Не удалось получить URL загруженного изображения',
-        ));
+        return left(ServerFailure(statusCode: null, message: 'Не удалось получить URL загруженного изображения'));
       }
-      
+
       return right(response.url);
     } on DioException catch (e) {
       String? responseMessage;
@@ -435,35 +446,35 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     } catch (e) {
-      return left(ServerFailure(
-        statusCode: null,
-        message: 'Ошибка при загрузке изображения: ${e.toString()}',
-      ));
+      return left(ServerFailure(statusCode: null, message: 'Ошибка при загрузке изображения: ${e.toString()}'));
     }
   }
 
   @override
-  Future<Either<Failure, String>> uploadContentImageBytes(List<int> bytes, {required String fileName, int? articleId}) async {
+  Future<Either<Failure, String>> uploadContentImageBytes(
+    List<int> bytes, {
+    required String fileName,
+    int? articleId,
+  }) async {
     try {
       final multipartFile = MultipartFile.fromBytes(bytes, filename: fileName);
 
       final response = articleId != null
           ? await _blogService.uploadContentImage(articleId, multipartFile)
           : await _blogService.uploadContentImageTemporary(multipartFile);
-      
+
       if (response.url.isEmpty) {
-        return left(ServerFailure(
-          statusCode: null,
-          message: 'Не удалось получить URL загруженного изображения',
-        ));
+        return left(ServerFailure(statusCode: null, message: 'Не удалось получить URL загруженного изображения'));
       }
-      
+
       return right(response.url);
     } on DioException catch (e) {
       String? responseMessage;
@@ -474,16 +485,15 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     } catch (e) {
-      return left(ServerFailure(
-        statusCode: null,
-        message: 'Ошибка при загрузке изображения: ${e.toString()}',
-      ));
+      return left(ServerFailure(statusCode: null, message: 'Ошибка при загрузке изображения: ${e.toString()}'));
     }
   }
 
@@ -501,11 +511,13 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -531,11 +543,13 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -558,19 +572,18 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
   @override
-  Future<Either<Failure, void>> deleteComment({
-    required int commentId,
-    required int articleId,
-  }) async {
+  Future<Either<Failure, void>> deleteComment({required int commentId, required int articleId}) async {
     try {
       await _blogService.deleteComment(articleId, commentId);
       return right(null);
@@ -583,12 +596,13 @@ class BlogRepositoryImpl extends BlogRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(
-        statusCode: e.response?.statusCode.toString(),
-        message: e.message,
-        responseMessage: responseMessage,
-      ));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
-
 }

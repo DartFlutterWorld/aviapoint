@@ -17,6 +17,7 @@ abstract class ProfileDto with _$ProfileDto {
     @JsonKey(name: 'average_rating', fromJson: _doubleFromJsonNullable) double? averageRating,
     @JsonKey(name: 'reviews_count', fromJson: _intFromJsonNullable) int? reviewsCount,
     @JsonKey(name: 'owned_airports') dynamic ownedAirports, // JSONB массив ID аэропортов
+    @JsonKey(name: 'is_admin', defaultValue: false) bool? isAdmin,
   }) = _ProfileDto;
 
   // factory ProfileDto.fromEntity(ProfileEntity profile) => ProfileDto(

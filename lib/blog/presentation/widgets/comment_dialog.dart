@@ -16,13 +16,7 @@ class CommentDialog extends StatefulWidget {
   final String? parentCommentId; // ID родительского комментария для ответа
   final VoidCallback? onCommentCreated; // Callback для обновления списка в секции
 
-  const CommentDialog({
-    super.key,
-    required this.articleId,
-    this.comment,
-    this.parentCommentId,
-    this.onCommentCreated,
-  });
+  const CommentDialog({super.key, required this.articleId, this.comment, this.parentCommentId, this.onCommentCreated});
 
   @override
   State<CommentDialog> createState() => _CommentDialogState();
@@ -48,30 +42,22 @@ class _CommentDialogState extends State<CommentDialog> {
   void _submit() {
     final text = _textController.text.trim();
     if (text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Введите комментарий'), backgroundColor: Colors.red),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Введите комментарий'), backgroundColor: Colors.red));
       return;
     }
 
     if (widget.comment == null) {
       // Создание нового комментария
       context.read<BlogCommentsBloc>().add(
-            CreateCommentEvent(
-              articleId: widget.articleId,
-              parentCommentId: widget.parentCommentId,
-              content: text,
-            ),
-          );
+        CreateCommentEvent(articleId: widget.articleId, parentCommentId: widget.parentCommentId, content: text),
+      );
     } else {
       // Редактирование комментария
       context.read<BlogCommentsBloc>().add(
-            UpdateCommentEvent(
-              articleId: widget.articleId,
-              commentId: widget.comment!.id,
-              content: text,
-            ),
-          );
+        UpdateCommentEvent(articleId: widget.articleId, commentId: widget.comment!.id, content: text),
+      );
     }
   }
 
@@ -162,10 +148,7 @@ class _CommentDialogState extends State<CommentDialog> {
                 ),
                 SizedBox(height: 16.h),
                 // Поле ввода
-                Text(
-                  'Ваш комментарий',
-                  style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
-                ),
+                Text('Ваш комментарий', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 8.h),
                 TextField(
                   controller: _textController,

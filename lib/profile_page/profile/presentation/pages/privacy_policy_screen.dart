@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,7 +23,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             Text('Политика конфиденциальности', style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E))),
             SizedBox(height: 8.h),
             Text(
-              'Дата последнего обновления: ${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}',
+              'Дата последнего обновления: ${formatDate(DateTime.now())}',
               style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767)),
             ),
             SizedBox(height: 24.h),
