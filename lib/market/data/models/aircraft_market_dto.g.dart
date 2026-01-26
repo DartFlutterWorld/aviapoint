@@ -30,6 +30,8 @@ AircraftMarketDto _$AircraftMarketDtoFromJson(Map<String, dynamic> json) =>
       engineVolume: (json['engine_volume'] as num?)?.toInt(),
       seats: (json['seats'] as num?)?.toInt(),
       condition: json['condition'] as String?,
+      isLeasing: json['is_leasing'] as bool?,
+      leasingConditions: json['leasing_conditions'] as String?,
       isShareSale: json['is_share_sale'] as bool?,
       shareNumerator: (json['share_numerator'] as num?)?.toInt(),
       shareDenominator: (json['share_denominator'] as num?)?.toInt(),

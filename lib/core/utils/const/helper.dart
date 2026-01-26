@@ -162,3 +162,34 @@ String formatDateWithTime(DateTime? date) {
   final dateStr = formatDate(date);
   return '$dateStr ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
 }
+
+/// Форматирует строковую дату новости в формат дд.мм.гггг
+/// Поддерживает ISO формат (2026-01-25T17:52:06.765608) и формат дд.мм.гггг
+String formatNewsDate(String date) {
+  if (date.isEmpty) return '';
+  
+  // Пробуем распарсить ISO формат
+  final isoDate = DateTime.tryParse(date);
+  if (isoDate != null) {
+    return formatDate(isoDate);
+  }
+  
+  // Если уже в формате дд.мм.гггг, возвращаем как есть
+  // Проверяем формат дд.мм.гггг
+  final parts = date.split('.');
+  if (parts.length == 3) {
+    try {
+      final day = int.parse(parts[0]);
+      final month = int.parse(parts[1]);
+      final year = int.parse(parts[2]);
+      if (day > 0 && day <= 31 && month > 0 && month <= 12 && year > 1900) {
+        return date.split(' ').first; // Возвращаем только дату без времени, если есть
+      }
+    } catch (_) {
+      // Если не удалось распарсить, возвращаем как есть
+    }
+  }
+  
+  // Если не удалось распарсить, возвращаем исходную строку
+  return date;
+}

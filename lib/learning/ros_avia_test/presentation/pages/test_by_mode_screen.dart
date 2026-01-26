@@ -8,13 +8,13 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/core/utils/talker_config.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_test_repository.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/questions_by_type_certificate_and_categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/test_by_mode_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -32,15 +32,11 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   late QuestionsByTypeCertificateAndCategoriesBloc questionsByTypeCertificateAndCategoriesBloc;
 
   final ValueNotifier<int> indexQuestion = ValueNotifier<int>(0);
-  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(
-    null,
-  ); // Отслеживаем выбранный ответ для текущего вопроса
+  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(null); // Отслеживаем выбранный ответ для текущего вопроса
 
   @override
   void initState() {
-    questionsByTypeCertificateAndCategoriesBloc = QuestionsByTypeCertificateAndCategoriesBloc(
-      rosAviaTestRepository: getIt<RosAviaTestRepository>(),
-    );
+    questionsByTypeCertificateAndCategoriesBloc = QuestionsByTypeCertificateAndCategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>());
     super.initState();
   }
 
@@ -70,8 +66,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: questionsByTypeCertificateAndCategoriesBloc
-        ..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
+      value: questionsByTypeCertificateAndCategoriesBloc..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
       child: Scaffold(
         appBar: CustomAppBar(title: getNameOfTestMode(context.read<RosAviaTestCubit>().state.testMode), withBack: true),
         backgroundColor: AppColors.background,
@@ -81,9 +76,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
             error: (value) => ErrorCustom(
               textError: value.errorForUser,
               repeat: () {
-                questionsByTypeCertificateAndCategoriesBloc.add(
-                  GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId),
-                );
+                questionsByTypeCertificateAndCategoriesBloc.add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId));
               },
             ),
             success: (value) {
@@ -133,62 +126,49 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                        padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
                         child: Center(
-                          child: SizedBox(
-                            width: 200,
-                            child: ValueListenableBuilder<int?>(
-                              valueListenable: currentSelectedAnswerIndex,
-                              builder: (context, selectedIndex, _) {
-                                return CustomButton(
-                                  title: 'Следующий',
-                                  verticalPadding: 8.h,
-                                  onPressed: selectedIndex != null
-                                      ? () async {
-                                          // Сохраняем ответ в БД перед переходом к следующему вопросу
-                                          if (currentSelectedAnswerIndex.value != null) {
-                                            final question = filteredQuestions[indexQuestion.value];
-                                            await getIt<AppDb>().saveTestAnswer(
-                                              certificateTypeId: widget.typeCertificateId,
-                                              questionId: question.questionId,
-                                              selectedAnswerId: currentSelectedAnswerIndex.value!,
-                                              categoryId: question.categoryId,
-                                              isCorrect: question.answers[currentSelectedAnswerIndex.value!].isCorrect,
-                                            );
-                                          }
+                          child: ValueListenableBuilder<int?>(
+                            valueListenable: currentSelectedAnswerIndex,
+                            builder: (context, selectedIndex, _) {
+                              return CustomButton(
+                                title: 'Следующий',
+                                verticalPadding: 8.h,
+                                onPressed: selectedIndex != null
+                                    ? () async {
+                                        // Сохраняем ответ в БД перед переходом к следующему вопросу
+                                        if (currentSelectedAnswerIndex.value != null) {
+                                          final question = filteredQuestions[indexQuestion.value];
+                                          await getIt<AppDb>().saveTestAnswer(
+                                            certificateTypeId: widget.typeCertificateId,
+                                            questionId: question.questionId,
+                                            selectedAnswerId: currentSelectedAnswerIndex.value!,
+                                            categoryId: question.categoryId,
+                                            isCorrect: question.answers[currentSelectedAnswerIndex.value!].isCorrect,
+                                          );
+                                        }
 
-                                          // Переходим к следующему вопросу
-                                          if (indexQuestion.value + 1 < filteredQuestions.length) {
-                                            currentSelectedAnswerIndex.value =
-                                                null; // Сбрасываем выбор для нового вопроса
-                                            indexQuestion.value++;
-                                          } else {
-                                            // Все вопросы ответчены - переходим на результаты БЕЗ очистки
-                                            // Очистка будет при нажатии "Завершить" на экране результатов
-                                            if (mounted) {
-                                              context.router.push(
-                                                TestResultsRoute(certificateTypeId: widget.typeCertificateId),
-                                              );
-                                            }
+                                        // Переходим к следующему вопросу
+                                        if (indexQuestion.value + 1 < filteredQuestions.length) {
+                                          currentSelectedAnswerIndex.value = null; // Сбрасываем выбор для нового вопроса
+                                          indexQuestion.value++;
+                                        } else {
+                                          // Все вопросы ответчены - переходим на результаты БЕЗ очистки
+                                          // Очистка будет при нажатии "Завершить" на экране результатов
+                                          if (mounted) {
+                                            context.router.push(TestResultsRoute(certificateTypeId: widget.typeCertificateId));
                                           }
                                         }
-                                      : null, // Кнопка неактивна если ответ не выбран
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color(0xff0064D6).withOpacity(0.27),
-                                      blurRadius: 9,
-                                      spreadRadius: 0,
-                                      offset: Offset(0.0, 7.0),
-                                    ),
-                                  ],
-                                  textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-                                  borderColor: Colors.transparent,
-                                  backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,
-                                  borderRadius: 46,
-                                  rightSvg: Pictures.rightArrowMini,
-                                );
-                              },
-                            ),
+                                      }
+                                    : null, // Кнопка неактивна если ответ не выбран
+                                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                                textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                borderColor: Colors.transparent,
+                                backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,
+                                borderRadius: 46.r,
+                                rightSvg: Pictures.rightArrowMini,
+                              );
+                            },
                           ),
                         ),
                       ),

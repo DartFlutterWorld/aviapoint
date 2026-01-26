@@ -38,13 +38,13 @@ import 'package:aviapoint/news/presentation/cubit/news_cubit.dart';
 import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_categories_bloc.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_tags_bloc.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_article_detail_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
-import 'package:aviapoint/core/presentation/widgets/max_width_container.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
@@ -57,6 +57,7 @@ import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sh
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
+import 'package:aviapoint/core/services/app_messaging.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -240,7 +241,7 @@ class _AppState extends State<App> {
                                 Icon(Icons.check_circle, color: Colors.white),
                                 SizedBox(width: 8),
                                 Expanded(
-                                  child: Text('Авторизация успешна! Теперь вы можете добавлять фотографии.', style: TextStyle(color: Colors.white)),
+                                  child: Text('Авторизация успешна! Теперь вы можете добавлять фотографии.', style: AppStyles.regular14s.copyWith(color: Colors.white)),
                                 ),
                               ],
                             ),
@@ -266,29 +267,35 @@ class _AppState extends State<App> {
             }
           }
         },
-        child: Consumer<AppState>(
-          builder: (context, appState, child) {
-            // Слушаем изменения AppState.isAuthenticated
-            // Если пользователь авторизован, но профиль еще не загружен, запрашиваем его
-            if (appState.isAuthenticated && !_profileRequested) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (!mounted) return;
-                final profileBloc = context.read<ProfileBloc>();
-                final profileState = profileBloc.state;
-                // Запрашиваем профиль только если он еще не загружен (initial или error состояние)
-                if (profileState is InitialProfileState || (profileState is ErrorProfileState)) {
-                  _profileRequested = true;
-                  profileBloc.add(const GetProfileEvent());
-                }
-              });
-            } else if (!appState.isAuthenticated) {
-              // Сбрасываем флаг при выходе из системы
-              _profileRequested = false;
+        child: BlocListener<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            // Отправляем FCM токен на сервер после успешной загрузки профиля
+            // В этот момент уже известен user_id, поэтому токен можно привязать к пользователю
+            if (state is SuccessProfileState) {
+              AppMessaging().sendTokenToServer();
             }
-            return child!;
           },
-          child: MaxWidthContainer(
-            maxWidth: 834.0, // iPhone 13 Pro Max ширина
+          child: Consumer<AppState>(
+            builder: (context, appState, child) {
+              // Слушаем изменения AppState.isAuthenticated
+              // Если пользователь авторизован, но профиль еще не загружен, запрашиваем его
+              if (appState.isAuthenticated && !_profileRequested) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
+                  final profileBloc = context.read<ProfileBloc>();
+                  final profileState = profileBloc.state;
+                  // Запрашиваем профиль только если он еще не загружен (initial или error состояние)
+                  if (profileState is InitialProfileState || (profileState is ErrorProfileState)) {
+                    _profileRequested = true;
+                    profileBloc.add(const GetProfileEvent());
+                  }
+                });
+              } else if (!appState.isAuthenticated) {
+                // Сбрасываем флаг при выходе из системы
+                _profileRequested = false;
+              }
+              return child!;
+            },
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
               localizationsDelegates: [...context.localizationDelegates, S.delegate, FlutterQuillLocalizations.delegate],

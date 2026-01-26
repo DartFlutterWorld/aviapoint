@@ -16,5 +16,6 @@ abstract class ProfileRepository {
   });
   Future<Either<Failure, ProfileEntity>> uploadProfilePhoto(XFile photo);
   Future<Either<Failure, void>> saveFcmToken(String? fcmToken);
+  Future<Either<Failure, void>> saveAnonymousFcmToken(String? fcmToken);
   Future<Either<Failure, void>> deleteAccount();
 }

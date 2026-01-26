@@ -1,5 +1,3 @@
-import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
-import 'package:aviapoint/main_page/stories/domain/repositories/story_repository.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/domain/repositories/news_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

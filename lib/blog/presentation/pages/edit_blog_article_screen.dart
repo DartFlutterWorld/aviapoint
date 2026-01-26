@@ -10,6 +10,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
@@ -49,6 +50,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
   final FocusNode _quillFocusNode = FocusNode();
   final _coverImageUrlController = TextEditingController();
   final _aircraftModelController = TextEditingController();
+  final _statusController = TextEditingController();
 
   int? _selectedCategoryId;
   int? _selectedAircraftModelId;
@@ -78,6 +80,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     _quillFocusNode.dispose();
     _coverImageUrlController.dispose();
     _aircraftModelController.dispose();
+    _statusController.dispose();
     super.dispose();
   }
 
@@ -96,6 +99,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         _selectedCategoryId = article.categoryId;
         _selectedAircraftModelId = article.aircraftModelId;
         _status = article.status;
+        _statusController.text = _getStatusText();
         _selectedTagIds = article.tags?.map((tag) => tag.id).toList() ?? [];
         if (article.aircraftModel != null) {
           _aircraftModelController.text = article.aircraftModel!.getFullName();
@@ -172,8 +176,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
   Future<void> _showAircraftModelSelector(BuildContext context) async {
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      builder: (context) =>
-          AircraftTypeSelectorDialog(initialValue: _aircraftModelController.text, returnModelId: true),
+      builder: (context) => AircraftTypeSelectorDialog(initialValue: _aircraftModelController.text, returnModelId: true),
     );
 
     if (result != null) {
@@ -187,12 +190,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
   Future<void> _pickCoverImage() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 85,
-        maxWidth: 1920,
-        maxHeight: 1920,
-      );
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
 
       if (image != null) {
         if (kIsWeb) {
@@ -223,9 +221,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -248,9 +244,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
           }
         },
         (imageUrl) {
@@ -260,9 +254,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           // Преобразуем относительный путь в полный URL
           // Бэкенд возвращает относительный путь типа "blog_articles/1/images/..."
           // Нужно преобразовать его в полный URL для загрузки изображения
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
-              ? imageUrl
-              : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
 
           // Используем addPostFrameCallback для безопасной вставки после завершения текущего кадра
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -301,9 +293,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             } catch (e) {
               // Игнорируем ошибки вставки, если виджет уже удален
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
-                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
               }
             }
           });
@@ -312,9 +302,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -341,9 +329,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -370,9 +356,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
           }
         },
         (imageUrl) {
@@ -382,9 +366,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           // Преобразуем относительный путь в полный URL
           // Бэкенд возвращает относительный путь типа "blog_articles/1/images/..."
           // Нужно преобразовать его в полный URL для загрузки изображения
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
-              ? imageUrl
-              : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
 
           // Используем addPostFrameCallback для безопасной вставки после завершения текущего кадра
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -422,9 +404,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
-                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
               }
             }
           });
@@ -433,10 +413,76 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red));
       }
+    }
+  }
+
+  String _getStatusText() {
+    switch (_status) {
+      case 'published':
+        return 'Опубликовано';
+      case 'draft':
+        return 'Черновик';
+      case 'archived':
+        return 'Архив';
+      default:
+        return _status ?? 'Черновик';
+    }
+  }
+
+  Color _getStatusColor() {
+    switch (_status) {
+      case 'published':
+        return const Color(0xFF10B981); // Зеленый
+      case 'draft':
+        return const Color(0xFFF59E0B); // Оранжевый
+      case 'archived':
+        return const Color(0xFF9CA5AF); // Серый
+      default:
+        return const Color(0xFFF59E0B);
+    }
+  }
+
+  Future<void> _showStatusBottomSheet(BuildContext context) async {
+    final selectedStatus = await showUniversalBottomSheet<String>(
+      context: context,
+      title: 'Выберите статус',
+      child: Builder(
+        builder: (bottomSheetContext) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text('Черновик', style: AppStyles.regular14s),
+              trailing: _status == 'draft' ? Icon(Icons.check, color: Color(0xFF0A6EFA)) : null,
+              onTap: () {
+                Navigator.pop(bottomSheetContext, 'draft');
+              },
+            ),
+            ListTile(
+              title: Text('Опубликовано', style: AppStyles.regular14s),
+              trailing: _status == 'published' ? Icon(Icons.check, color: Color(0xFF0A6EFA)) : null,
+              onTap: () {
+                Navigator.pop(bottomSheetContext, 'published');
+              },
+            ),
+            ListTile(
+              title: Text('Архив', style: AppStyles.regular14s),
+              trailing: _status == 'archived' ? Icon(Icons.check, color: Color(0xFF0A6EFA)) : null,
+              onTap: () {
+                Navigator.pop(bottomSheetContext, 'archived');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (selectedStatus != null && mounted) {
+      setState(() {
+        _status = selectedStatus;
+        _statusController.text = _getStatusText();
+      });
     }
   }
 
@@ -447,7 +493,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
       builder: (dialogContext) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+            Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28.sp),
             SizedBox(width: 12.w),
             Expanded(
               child: Text('Удалить статью?', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
@@ -458,10 +504,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.',
-              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
-            ),
+            Text('Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -472,13 +515,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20),
+                  Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20.sp),
                   SizedBox(width: 8.w),
                   Expanded(
-                    child: Text(
-                      'Все данные статьи будут безвозвратно удалены.',
-                      style: AppStyles.regular12s.copyWith(color: Color(0xFF856404)),
-                    ),
+                    child: Text('Все данные статьи будут безвозвратно удалены.', style: AppStyles.regular12s.copyWith(color: Color(0xFF856404))),
                   ),
                 ],
               ),
@@ -534,9 +574,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
 
           // Преобразуем относительный путь в полный URL для текущего окружения
           // Если это уже абсолютный URL, оставляем как есть
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
-              ? imageUrl
-              : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
 
           return {
             ...op,
@@ -605,9 +643,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
     debugPrint('📝 Сохраняем JSON Delta: $content');
 
     if (title.isEmpty || content.trim().isEmpty || content == '[]') {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
       return;
     }
 
@@ -649,25 +685,23 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
 
     if (!isAuthenticated) {
       return Scaffold(
-        appBar: const CustomAppBar(title: 'Редактировать статью', withBack: true),
+        appBar: const CustomAppBar(title: 'Редактировать', withBack: true),
         backgroundColor: AppColors.background,
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.lock_outline, size: 64, color: Color(0xFF9CA5AF)),
-                SizedBox(height: 16.h),
-                Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                SizedBox(height: 8.h),
-                Text(
-                  'Для редактирования статьи необходимо войти в систему',
-                  style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.lock_outline, size: 64.sp, color: Color(0xFF9CA5AF)),
+              SizedBox(height: 16.h),
+              Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+              SizedBox(height: 8.h),
+              Text(
+                'Для редактирования статьи необходимо войти в систему',
+                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       );
@@ -678,26 +712,14 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
         state.maybeWhen(
           updated: (article) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Статья успешно обновлена'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно обновлена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
             AutoRouter.of(context).pop();
             // Обновляем детальную страницу
             context.read<BlogArticleDetailBloc>().add(GetBlogArticleByIdEvent(id: widget.articleId));
           },
           deleted: () {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Статья успешно удалена'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно удалена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
             // Закрываем диалог загрузки, если он открыт
             Navigator.of(context, rootNavigator: true).pop();
             // Обновляем список статей перед возвратом
@@ -715,9 +737,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             setState(() => _isLoading = false);
             // Закрываем диалог загрузки, если он открыт
             Navigator.of(context, rootNavigator: true).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
           },
           orElse: () {},
         );
@@ -744,63 +764,292 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
               withBack: true,
               actions: [
                 IconButton(
+                  iconSize: 28.sp,
                   icon: Icon(Icons.delete_outline, color: Colors.red),
                   onPressed: _isLoading ? null : () => _showDeleteArticleConfirmation(context),
                   tooltip: 'Удалить статью',
+                ),
+                IconButton(
+                  iconSize: 28.sp,
+                  icon: Icon(Icons.save_outlined, color: Color(0xFF7A0FD9)),
+                  onPressed: _isLoading ? null : _submit,
+                  tooltip: 'Сохранить изменения',
                 ),
               ],
             ),
             backgroundColor: AppColors.background,
             body: detailState.maybeWhen(
-              loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
+              loading: () => LoadingCustom(paddingTop: 200.h),
               error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                 textError: errorForUser,
                 repeat: () {
                   context.read<BlogArticleDetailBloc>().add(GetBlogArticleByIdEvent(id: widget.articleId));
                 },
               ),
-              success: (article) => SingleChildScrollView(
-                padding: EdgeInsets.all(16.w),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Заголовок
-                      TextFormField(
-                        controller: _titleController,
-                        decoration: InputDecoration(
-                          labelText: 'Заголовок *',
-                          hintText: 'Введите заголовок статьи',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+              success: (article) => Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Обложка
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Обложка статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                              SizedBox(height: 16),
+                              OutlinedButton.icon(
+                                onPressed: _pickCoverImage,
+                                icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
+                                label: Text('Выберите изображение для статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                                style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  side: BorderSide(color: Color(0xFF0A6EFA)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                ),
+                              ),
+                            ],
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
-                          ),
-                        ),
-                        validator: (value) => value?.trim().isEmpty ?? true ? 'Введите заголовок' : null,
-                      ),
-                      SizedBox(height: 16.h),
+                          if (_coverImage != null || _coverImageBytes != null) ...[
+                            SizedBox(height: 16),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12.r),
+                              child: kIsWeb && _coverImageBytes != null
+                                  ? Image.memory(_coverImageBytes!, height: 150.h, fit: BoxFit.cover)
+                                  : _coverImage != null
+                                  ? Image.file(_coverImage!, height: 150.h, fit: BoxFit.cover)
+                                  : SizedBox.shrink(),
+                            ),
+                          ] else if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty) ...[
+                            SizedBox(height: 16),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12.r),
+                              child: CachedNetworkImage(imageUrl: getImageUrl(article.coverImageUrl!), height: 150.h, fit: BoxFit.cover),
+                            ),
+                          ],
+                          SizedBox(height: 16),
 
-                      // Категория
-                      BlocBuilder<BlogCategoriesBloc, BlogCategoriesState>(
-                        builder: (context, state) => state.maybeWhen(
-                          success: (categories) => LayoutBuilder(
-                            builder: (context, constraints) => DropdownButtonFormField2<int>(
-                              value: _selectedCategoryId,
-                              isExpanded: true,
+                          // Заголовок
+                          TextFormField(
+                            controller: _titleController,
+                            decoration: InputDecoration(
+                              labelText: 'Заголовок *',
+                              hintText: 'Введите заголовок статьи',
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                                borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                                borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                                borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                              ),
+                            ),
+                            validator: (value) => value?.trim().isEmpty ?? true ? 'Введите заголовок' : null,
+                          ),
+                          SizedBox(height: 16),
+
+                          // Категория
+                          BlocBuilder<BlogCategoriesBloc, BlogCategoriesState>(
+                            builder: (context, state) => state.maybeWhen(
+                              success: (categories) => LayoutBuilder(
+                                builder: (context, constraints) => DropdownButtonFormField2<int>(
+                                  value: _selectedCategoryId,
+                                  isExpanded: true,
+                                  decoration: InputDecoration(
+                                    labelText: 'Категория',
+                                    hintText: 'Выберите категорию',
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                    ),
+                                  ),
+                                  items: categories.map((category) {
+                                    return DropdownMenuItem<int>(value: category.id, child: Text(category.name));
+                                  }).toList(),
+                                  onChanged: (value) => setState(() => _selectedCategoryId = value),
+                                ),
+                              ),
+                              orElse: () => const SizedBox(),
+                            ),
+                          ),
+                          SizedBox(height: 16),
+
+                          // Самолёт
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () => _showAircraftModelSelector(context),
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: TextFormField(
+                                      controller: _aircraftModelController,
+                                      enabled: false,
+                                      style: AppStyles.regular14s.copyWith(color: _selectedAircraftModelId != null ? const Color(0xFF374151) : const Color(0xFF9CA5AF)),
+                                      decoration: InputDecoration(
+                                        labelText: 'Самолёт',
+                                        labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                        hintText: 'Нажмите для выбора самолёта',
+                                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                                        isDense: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                                        ),
+                                        suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF), size: 20.sp),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (_selectedAircraftModelId != null) ...[
+                                SizedBox(width: 8.w),
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(color: const Color(0xFFD9E6F8)),
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedAircraftModelId = null;
+                                        _aircraftModelController.clear();
+                                      });
+                                    },
+                                    tooltip: 'Очистить выбор',
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          SizedBox(height: 16),
+
+                          // Краткое описание
+                          TextFormField(
+                            controller: _excerptController,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              labelText: 'Краткое описание',
+                              hintText: 'Краткое описание для превью',
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                                borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                                borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                                borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16),
+
+                          // Контент (Quill Editor)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Содержание статьи *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                              SizedBox(height: 8.h),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  border: Border.all(color: Color(0xFFD9E6F8)),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Transform.scale(
+                                      scale: kIsWeb ? 1.0 : 0.85,
+                                      alignment: Alignment.topLeft,
+                                      child: QuillSimpleToolbar(controller: _quillController, config: const QuillSimpleToolbarConfig()),
+                                    ),
+                                    Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
+                                    Container(
+                                      key: ValueKey('quill_editor_$_quillControllerKey'), // Ключ для пересоздания виджета
+                                      height: 300.h,
+                                      padding: EdgeInsets.all(12.w),
+                                      child: QuillEditor.basic(
+                                        controller: _quillController,
+                                        config: QuillEditorConfig(placeholder: 'Введите текст статьи...', embedBuilders: FlutterQuillEmbeds.editorBuilders()),
+                                        focusNode: _quillFocusNode,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Кнопка для вставки изображения
+                              SizedBox(height: 16),
+                              OutlinedButton.icon(
+                                onPressed: _isLoading ? null : _pickContentImage,
+                                icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
+                                label: Text('Вставить изображение в текст', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                                style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  side: BorderSide(color: Color(0xFF0A6EFA)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+
+                          // Статус
+                          InkWell(
+                            onTap: () => _showStatusBottomSheet(context),
+                            child: TextFormField(
+                              controller: _statusController,
+                              enabled: false,
+                              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                               decoration: InputDecoration(
-                                labelText: 'Категория',
-                                hintText: 'Выберите категорию',
+                                labelText: 'Статус',
+                                labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                hintText: 'Нажмите для выбора статуса',
+                                hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
@@ -813,246 +1062,48 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12.r),
-                                  borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                                  borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
                                 ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                                ),
+                                suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
                               ),
-                              items: categories.map((category) {
-                                return DropdownMenuItem<int>(value: category.id, child: Text(category.name));
-                              }).toList(),
-                              onChanged: (value) => setState(() => _selectedCategoryId = value),
                             ),
                           ),
-                          orElse: () => const SizedBox(),
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
+                          SizedBox(height: 16.h),
 
-                      // Самолёт
-                      InkWell(
-                        onTap: () => _showAircraftModelSelector(context),
-                        child: TextFormField(
-                          controller: _aircraftModelController,
-                          enabled: false,
-                          decoration: InputDecoration(
-                            labelText: 'Самолёт',
-                            hintText: 'Нажмите для выбора самолёта',
-                            hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                            ),
-                            suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
-                          ),
-                        ),
-                      ),
-                      if (_selectedAircraftModelId != null) ...[
-                        SizedBox(height: 8.h),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.clear, size: 18, color: Color(0xFF9CA5AF)),
-                              onPressed: () {
-                                setState(() {
-                                  _selectedAircraftModelId = null;
-                                  _aircraftModelController.clear();
-                                });
-                              },
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
-                            ),
-                            SizedBox(width: 8.w),
-                            Text('Очистить выбор', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                          ],
-                        ),
-                      ],
-                      SizedBox(height: 16.h),
-
-                      // Краткое описание
-                      TextFormField(
-                        controller: _excerptController,
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                          labelText: 'Краткое описание',
-                          hintText: 'Краткое описание для превью',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-
-                      // Контент (Quill Editor)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Содержание статьи *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                          SizedBox(height: 8.h),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: Color(0xFFD9E6F8)),
-                            ),
-                            child: Column(
-                              children: [
-                                Transform.scale(
-                                  scale: kIsWeb ? 1.0 : 0.85,
-                                  alignment: Alignment.topLeft,
-                                  child: QuillSimpleToolbar(
-                                    controller: _quillController,
-                                    config: const QuillSimpleToolbarConfig(),
-                                  ),
-                                ),
-                                Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
-                                Container(
-                                  key: ValueKey('quill_editor_$_quillControllerKey'), // Ключ для пересоздания виджета
-                                  height: 300.h,
-                                  padding: EdgeInsets.all(12.w),
-                                  child: QuillEditor.basic(
-                                    controller: _quillController,
-                                    config: QuillEditorConfig(
-                                      placeholder: 'Введите текст статьи...',
-                                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                                    ),
-                                    focusNode: _quillFocusNode,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Кнопка для вставки изображения
-                          SizedBox(height: 8.h),
-                          OutlinedButton.icon(
-                            onPressed: _isLoading ? null : _pickContentImage,
-                            icon: Icon(Icons.image, size: 18.sp),
-                            label: Text('Вставить изображение', style: AppStyles.regular12s),
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                              side: BorderSide(color: Color(0xFF0A6EFA)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                            ),
+                          // Кнопка сохранения
+                          CustomButton(
+                            verticalPadding: 14.h,
+                            backgroundColor: Color(0xFF7A0FD9),
+                            title: _isLoading ? 'Сохранение...' : 'Сохранить изменения',
+                            textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                            borderColor: Color(0xFF7A0FD9),
+                            borderRadius: 46.r,
+                            onPressed: _isLoading ? null : _submit,
                           ),
                         ],
                       ),
-                      SizedBox(height: 16.h),
-
-                      // Обложка
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Обложка статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                          SizedBox(height: 8.h),
-                          OutlinedButton.icon(
-                            onPressed: _pickCoverImage,
-                            icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
-                            label: Text(
-                              'Выберите изображение для статьи',
-                              style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                              side: BorderSide(color: Color(0xFF0A6EFA)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (_coverImage != null || _coverImageBytes != null) ...[
-                        SizedBox(height: 8.h),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12.r),
-                          child: kIsWeb && _coverImageBytes != null
-                              ? Image.memory(_coverImageBytes!, height: 150.h, fit: BoxFit.cover)
-                              : _coverImage != null
-                              ? Image.file(_coverImage!, height: 150.h, fit: BoxFit.cover)
-                              : SizedBox.shrink(),
-                        ),
-                      ] else if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty) ...[
-                        SizedBox(height: 8.h),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12.r),
-                          child: CachedNetworkImage(
-                            imageUrl: getImageUrl(article.coverImageUrl!),
-                            height: 150.h,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                      SizedBox(height: 16.h),
-
-                      // Статус
-                      LayoutBuilder(
-                        builder: (context, constraints) => DropdownButtonFormField2<String>(
-                          value: _status ?? 'draft',
-                          isExpanded: true,
-                          decoration: InputDecoration(
-                            labelText: 'Статус',
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
-                            ),
-                          ),
-                          items: const [
-                            DropdownMenuItem(value: 'draft', child: Text('Черновик')),
-                            DropdownMenuItem(value: 'published', child: Text('Опубликовано')),
-                            DropdownMenuItem(value: 'archived', child: Text('Архив')),
-                          ],
-                          onChanged: (value) => setState(() => _status = value),
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-
-                      // Кнопка сохранения
-                      CustomButton(
-                        verticalPadding: 14,
-                        backgroundColor: Color(0xFF7A0FD9),
-                        title: _isLoading ? 'Сохранение...' : 'Сохранить изменения',
-                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                        borderColor: Color(0xFF7A0FD9),
-                        borderRadius: 46,
-                        onPressed: _isLoading ? null : _submit,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  // Чипс со статусом в правом верхнем углу
+                  Positioned(
+                    top: 16.h,
+                    right: 8.w,
+                    child: GestureDetector(
+                      onTap: () => _showStatusBottomSheet(context),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                        decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8.r)),
+                        child: Text(_getStatusText(), style: AppStyles.regular12s.copyWith(color: Colors.white)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
+              orElse: () => LoadingCustom(paddingTop: 200.h),
             ),
           );
         },
@@ -1086,11 +1137,7 @@ class _SafeQuillEditorState extends State<_SafeQuillEditor> {
     return QuillEditor.basic(
       controller: widget.controller,
       focusNode: widget.focusNode,
-      config: QuillEditorConfig(
-        placeholder: 'Введите текст статьи...',
-        padding: EdgeInsets.zero,
-        embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
-      ),
+      config: QuillEditorConfig(placeholder: 'Введите текст статьи...', padding: EdgeInsets.zero, embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders()),
     );
   }
 }

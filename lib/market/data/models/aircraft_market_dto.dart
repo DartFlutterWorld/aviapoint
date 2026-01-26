@@ -40,6 +40,12 @@ class AircraftMarketDto {
   final int? seats;
   final String? condition;
 
+  // Лизинг
+  @JsonKey(name: 'is_leasing')
+  final bool? isLeasing;
+  @JsonKey(name: 'leasing_conditions')
+  final String? leasingConditions;
+
   // Продажа доли
   @JsonKey(name: 'is_share_sale')
   final bool? isShareSale;
@@ -88,6 +94,8 @@ class AircraftMarketDto {
     this.engineVolume,
     this.seats,
     this.condition,
+    this.isLeasing,
+    this.leasingConditions,
     this.isShareSale,
     this.shareNumerator,
     this.shareDenominator,

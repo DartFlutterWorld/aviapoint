@@ -6,6 +6,7 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_stars_widget.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -296,7 +297,7 @@ class PilotBookingCard extends StatelessWidget {
                       backgroundColor: Color(0xFF10B981),
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                     ),
-                    child: Text('Подтвердить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                    child: Text('Подтвердить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                   ),
                 ),
                 SizedBox(width: 8.w),
@@ -307,7 +308,7 @@ class PilotBookingCard extends StatelessWidget {
                       side: BorderSide(color: Color(0xFFEF4444)),
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                     ),
-                    child: Text('Отклонить', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+                    child: Text('Отклонить', style: AppStyles.bold16s.copyWith(color: Color(0xFFEF4444))),
                   ),
                 ),
               ],
@@ -320,20 +321,13 @@ class PilotBookingCard extends StatelessWidget {
 
   /// Просмотр фотографии в полноэкранном режиме
   void _showPassengerReviews(BuildContext context, int passengerId) {
-    showModalBottomSheet<void>(
+    showUniversalBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (bottomSheetContext) {
-        return Container(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(bottomSheetContext).size.height * 0.85),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-          ),
-          child: UserReviewsBottomSheet(userId: passengerId, title: 'Отзывы о пассажире'),
-        );
-      },
+      title: '',
+      height: MediaQuery.of(context).size.height * 0.9,
+      backgroundColor: Colors.white,
+      showCloseButton: false,
+      child: UserReviewsBottomSheet(userId: passengerId, title: 'Отзывы о пассажире'),
     );
   }
 

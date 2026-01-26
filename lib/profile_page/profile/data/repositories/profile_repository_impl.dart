@@ -125,6 +125,39 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
+  Future<Either<Failure, void>> saveAnonymousFcmToken(String? fcmToken) async {
+    try {
+      // Определяем платформу
+      String? platform;
+      if (kIsWeb) {
+        platform = 'web';
+      } else {
+        // Для мобильных устройств можно определить более точно
+        try {
+          if (Platform.isIOS) {
+            platform = 'ios';
+          } else if (Platform.isAndroid) {
+            platform = 'android';
+          } else {
+            platform = 'mobile';
+          }
+        } catch (e) {
+          // Если Platform недоступен, используем 'mobile' по умолчанию
+          platform = 'mobile';
+        }
+      }
+
+      await _profileService.saveAnonymousFcmToken({
+        'fcm_token': fcmToken,
+        'platform': platform,
+      });
+      return right(null);
+    } on DioException catch (e) {
+      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteAccount() async {
     try {
       await _profileService.deleteAccount();

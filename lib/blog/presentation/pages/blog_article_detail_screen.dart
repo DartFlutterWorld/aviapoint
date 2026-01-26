@@ -8,6 +8,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/core/utils/seo_helper.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
@@ -53,7 +54,6 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
     Share.share('$title\n\nЧитайте в АвиаБлоге');
   }
 
-
   String _getAuthorName() {
     return context.read<BlogArticleDetailBloc>().state.maybeWhen(
       success: (article) {
@@ -67,6 +67,32 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
       },
       orElse: () => 'Автор',
     );
+  }
+
+  String _getStatusText(String status) {
+    switch (status) {
+      case 'published':
+        return 'Опубликовано';
+      case 'draft':
+        return 'Черновик';
+      case 'archived':
+        return 'Архив';
+      default:
+        return status;
+    }
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'published':
+        return const Color(0xFF10B981); // Зеленый
+      case 'draft':
+        return const Color(0xFFF59E0B); // Оранжевый
+      case 'archived':
+        return const Color(0xFF9CA5AF); // Серый
+      default:
+        return const Color(0xFFF59E0B);
+    }
   }
 
   @override
@@ -98,10 +124,6 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
               builder: (context, state) {
                 final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
 
-                int? currentUserId;
-                final profileState = context.read<ProfileBloc>().state;
-                profileState.maybeWhen(success: (profile) => currentUserId = profile.id, orElse: () {});
-
                 return state.maybeWhen(
                   success: (article) {
                     final isAuthor = isAuthenticated && PermissionHelper.isOwnerOrAdmin(article.authorId, context);
@@ -110,15 +132,12 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                       children: [
                         if (isAuthor)
                           IconButton(
+                            iconSize: 28.sp,
                             icon: const Icon(Icons.edit),
                             onPressed: () => AutoRouter.of(context).push(EditBlogArticleRoute(articleId: article.id)),
                             tooltip: 'Редактировать статью',
                           ),
-                        IconButton(
-                          icon: const Icon(Icons.share),
-                          onPressed: () => _shareArticle(article.title),
-                          tooltip: 'Поделиться',
-                        ),
+                        IconButton(iconSize: 28.sp, icon: const Icon(Icons.share), onPressed: () => _shareArticle(article.title), tooltip: 'Поделиться'),
                       ],
                     );
                   },
@@ -131,7 +150,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
         backgroundColor: AppColors.background,
         body: BlocBuilder<BlogArticleDetailBloc, BlogArticleDetailState>(
           builder: (context, state) => state.maybeWhen(
-            loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 4),
+            loading: () => LoadingCustom(paddingTop: 200.h),
             error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
               textError: errorForUser,
               repeat: () {
@@ -150,34 +169,57 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                 );
               });
 
+              final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
+              final isAuthor = isAuthenticated && PermissionHelper.isOwnerOrAdmin(article.authorId, context);
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty)
-                      CachedNetworkImage(
-                        imageUrl: getImageUrl(article.coverImageUrl!),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 250.h,
-                        placeholder: (context, url) => Shimmer(
-                          duration: const Duration(milliseconds: 1000),
-                          color: const Color(0xFF8D66FE),
-                          colorOpacity: 0.2,
-                          child: Container(decoration: const BoxDecoration()),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          height: 250.h,
-                          color: const Color(0xFFD9E6F8),
-                          child: const Icon(Icons.image, size: 48),
-                        ),
+                      Stack(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: getImageUrl(article.coverImageUrl!),
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 250,
+                            placeholder: (context, url) => Shimmer(
+                              duration: const Duration(milliseconds: 1000),
+                              color: const Color(0xFF8D66FE),
+                              colorOpacity: 0.2,
+                              child: Container(decoration: const BoxDecoration()),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              height: 250,
+                              color: const Color(0xFFD9E6F8),
+                              child: Icon(Icons.image, size: 48.sp),
+                            ),
+                          ),
+                          // Чипс со статусом для автора в правом верхнем углу
+                          if (isAuthor)
+                            Positioned(
+                              top: 16,
+                              right: 8,
+                              child: StatusChip(
+                                text: _getStatusText(article.status),
+                                backgroundColor: _getStatusColor(article.status),
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                borderRadius: 8,
+                              ),
+                            ),
+                        ],
                       ),
                     Padding(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(article.title, style: AppStyles.bold20s.copyWith(color: const Color(0xFF374151))),
+                          if (article.excerpt != null && article.excerpt!.isNotEmpty) ...[
+                            SizedBox(height: 12.h),
+                            Text(article.excerpt!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF6B7280))),
+                          ],
                           SizedBox(height: 12.h),
                           Wrap(
                             spacing: 16.w,
@@ -189,10 +231,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                   children: [
                                     Icon(Icons.person_outline, size: 14.sp, color: const Color(0xFF9CA5AF)),
                                     SizedBox(width: 4.w),
-                                    Text(
-                                      _getAuthorName(),
-                                      style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
-                                    ),
+                                    Text(_getAuthorName(), style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
                                   ],
                                 ),
                               Row(
@@ -200,10 +239,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                 children: [
                                   Icon(Icons.calendar_today, size: 14.sp, color: const Color(0xFF9CA5AF)),
                                   SizedBox(width: 4.w),
-                                  Text(
-                                    article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
-                                    style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
-                                  ),
+                                  Text(article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '', style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
                                 ],
                               ),
                               Row(
@@ -211,10 +247,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                 children: [
                                   Icon(Icons.visibility_outlined, size: 14.sp, color: const Color(0xFF9CA5AF)),
                                   SizedBox(width: 4.w),
-                                  Text(
-                                    '${article.viewCount}',
-                                    style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
-                                  ),
+                                  Text('${article.viewCount}', style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
                                 ],
                               ),
                               if (article.aircraftModel != null)
@@ -249,37 +282,15 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                         }
                                       })()
                                     : AppColors.primary100p,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
-                              child: Text(
-                                article.category!.name,
-                                style: AppStyles.regular12s.copyWith(color: Colors.white),
-                              ),
+                              child: Text(article.category!.name, style: AppStyles.regular12s.copyWith(color: Colors.white)),
                             ),
                           ],
-                          if (article.tags != null && article.tags!.isNotEmpty) ...[
-                            SizedBox(height: 12.h),
-                            Wrap(
-                              spacing: 8.w,
-                              runSpacing: 8.h,
-                              children: article.tags!.map((tag) {
-                                return Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFD9E6F8),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    '#${tag.name}',
-                                    style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767)),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                          SizedBox(height: 24.h),
+
+                          SizedBox(height: 16),
                           _buildArticleContent(article.content),
-                          SizedBox(height: 24.h),
+                          SizedBox(height: 16),
                           _buildCommentsSection(article.id),
                         ],
                       ),
@@ -329,7 +340,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
       // Если ошибка парсинга - показываем сообщение об ошибке
       debugPrint('❌ Ошибка парсинга JSON Delta: $e');
       return Padding(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         child: Text('Ошибка загрузки содержимого статьи', style: AppStyles.regular14s.copyWith(color: Colors.red)),
       );
     }
@@ -369,9 +380,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
           }
 
           // Преобразуем относительный путь в полный URL для текущего окружения
-          final normalizedUrl = relativePath.startsWith('http://') || relativePath.startsWith('https://')
-              ? relativePath
-              : getImageUrl(relativePath);
+          final normalizedUrl = relativePath.startsWith('http://') || relativePath.startsWith('https://') ? relativePath : getImageUrl(relativePath);
 
           return {
             ...op,
@@ -395,133 +404,110 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
       },
       child: BlocBuilder<BlogCommentsBloc, BlogCommentsState>(
         builder: (context, commentsState) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Комментарии', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                SizedBox(height: 12.h),
-                // Кнопка "Оставить комментарий"
-                ElevatedButton.icon(
-                  onPressed: () => _showCommentDialog(context, articleId, isAuthenticated),
-                  icon: Icon(Icons.comment_outlined, size: 16),
-                  label: Text('Оставить комментарий', style: AppStyles.bold14s),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF0A6EFA),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Комментарии', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+              SizedBox(height: 12),
+              // Кнопка "Оставить комментарий"
+              ElevatedButton.icon(
+                onPressed: () => _showCommentDialog(context, articleId, isAuthenticated),
+                icon: Icon(Icons.comment_outlined, size: 16.sp),
+                label: Text('Оставить комментарий', style: AppStyles.bold16s),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF0A6EFA),
+                  foregroundColor: Colors.white,
+
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                ),
+              ),
+              SizedBox(height: 12.h),
+              commentsState.maybeWhen(
+                loading: () => Center(
+                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
+                ),
+                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                   ),
                 ),
-                SizedBox(height: 12.h),
-                commentsState.maybeWhen(
-                  loading: () => Center(
-                    child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                  ),
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.w),
-                      child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
-                    ),
-                  ),
-                  success: (comments) {
-                    if (comments.isEmpty) {
-                      return Container(
-                        padding: EdgeInsets.all(24.w),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF9FAFB),
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: Color(0xFFE5E7EB)),
-                        ),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Icon(Icons.comment_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                              SizedBox(height: 12.h),
-                              Text(
-                                'Пока нет комментариев',
-                                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-
-                    // Разделяем комментарии: основные и ответы
-                    final mainComments = comments.where((c) => c.parentCommentId == null).toList();
-                    final replies = comments.where((c) => c.parentCommentId != null).toList();
-
-                    // Получаем текущего пользователя для проверки прав
-                    final profileState = context.read<ProfileBloc>().state;
-                    final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
-
-                    return Column(
-                      children: mainComments.map((BlogCommentEntity comment) {
-                        final commentReplies = replies
-                            .where((BlogCommentEntity r) => r.parentCommentId == comment.id)
-                            .toList();
-                        final isAdmin = PermissionHelper.isAdmin(context);
-                        final canDelete = (currentUserId != null && comment.authorId == currentUserId) || isAdmin;
-                        final canEdit = (currentUserId != null && comment.authorId == currentUserId) || isAdmin;
-                        final canReply = isAuthenticated && currentUserId != null && currentUserId != comment.authorId;
-
-                        return Column(
+                success: (comments) {
+                  if (comments.isEmpty) {
+                    return Container(
+                      padding: EdgeInsets.all(24.w),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF9FAFB),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: Color(0xFFE5E7EB)),
+                      ),
+                      child: Center(
+                        child: Column(
                           children: [
-                            CommentCard(
-                              comment: comment,
-                              isReply: false,
-                              canDelete: canDelete,
-                              canEdit: canEdit,
-                              onDelete: canDelete
-                                  ? () => _showDeleteCommentDialog(context, articleId, comment.id)
-                                  : null,
-                              onEdit: canEdit
-                                  ? () => _showEditCommentDialog(context, articleId, comment, isAuthenticated)
-                                  : null,
-                              onReply: canReply
-                                  ? () => _showCommentDialog(
-                                      context,
-                                      articleId,
-                                      isAuthenticated,
-                                      parentCommentId: comment.id.toString(),
-                                    )
-                                  : null,
-                            ),
-                            // Отображаем ответы на комментарий (если они есть)
-                            if (commentReplies.isNotEmpty)
-                              Padding(
-                                padding: EdgeInsets.only(left: 40.w),
-                                child: Column(
-                                  children: commentReplies.map((BlogCommentEntity reply) {
-                                    final isAdmin = PermissionHelper.isAdmin(context);
-                                    final canDeleteReply = (currentUserId != null && reply.authorId == currentUserId) || isAdmin;
-                                    final canEditReply = (currentUserId != null && reply.authorId == currentUserId) || isAdmin;
-                                    return CommentCard(
-                                      comment: reply,
-                                      isReply: true,
-                                      canDelete: canDeleteReply,
-                                      canEdit: canEditReply,
-                                      onDelete: canDeleteReply
-                                          ? () => _showDeleteCommentDialog(context, articleId, reply.id)
-                                          : null,
-                                      onEdit: canEditReply
-                                          ? () => _showEditCommentDialog(context, articleId, reply, isAuthenticated)
-                                          : null,
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
+                            Icon(Icons.comment_outlined, size: 48, color: Color(0xFF9CA5AF)),
+                            SizedBox(height: 12.h),
+                            Text('Пока нет комментариев', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                           ],
-                        );
-                      }).toList(),
+                        ),
+                      ),
                     );
-                  },
-                  orElse: () => const SizedBox(),
-                ),
-              ],
-            ),
+                  }
+
+                  // Разделяем комментарии: основные и ответы
+                  final mainComments = comments.where((c) => c.parentCommentId == null).toList();
+                  final replies = comments.where((c) => c.parentCommentId != null).toList();
+
+                  // Получаем текущего пользователя для проверки прав
+                  final profileState = context.read<ProfileBloc>().state;
+                  final currentUserId = profileState.maybeWhen(success: (profile) => profile.id, orElse: () => null);
+
+                  return Column(
+                    children: mainComments.map((BlogCommentEntity comment) {
+                      final commentReplies = replies.where((BlogCommentEntity r) => r.parentCommentId == comment.id).toList();
+                      final isAdmin = PermissionHelper.isAdmin(context);
+                      final canDelete = (currentUserId != null && comment.authorId == currentUserId) || isAdmin;
+                      final canEdit = (currentUserId != null && comment.authorId == currentUserId) || isAdmin;
+                      final canReply = isAuthenticated && currentUserId != null && currentUserId != comment.authorId;
+
+                      return Column(
+                        children: [
+                          CommentCard(
+                            comment: comment,
+                            isReply: false,
+                            canDelete: canDelete,
+                            canEdit: canEdit,
+                            onDelete: canDelete ? () => _showDeleteCommentDialog(context, articleId, comment.id) : null,
+                            onEdit: canEdit ? () => _showEditCommentDialog(context, articleId, comment, isAuthenticated) : null,
+                            onReply: canReply ? () => _showCommentDialog(context, articleId, isAuthenticated, parentCommentId: comment.id.toString()) : null,
+                          ),
+                          // Отображаем ответы на комментарий (если они есть)
+                          if (commentReplies.isNotEmpty)
+                            Padding(
+                              padding: EdgeInsets.only(left: 40.w),
+                              child: Column(
+                                children: commentReplies.map((BlogCommentEntity reply) {
+                                  final isAdmin = PermissionHelper.isAdmin(context);
+                                  final canDeleteReply = (currentUserId != null && reply.authorId == currentUserId) || isAdmin;
+                                  final canEditReply = (currentUserId != null && reply.authorId == currentUserId) || isAdmin;
+                                  return CommentCard(
+                                    comment: reply,
+                                    isReply: true,
+                                    canDelete: canDeleteReply,
+                                    canEdit: canEditReply,
+                                    onDelete: canDeleteReply ? () => _showDeleteCommentDialog(context, articleId, reply.id) : null,
+                                    onEdit: canEditReply ? () => _showEditCommentDialog(context, articleId, reply, isAuthenticated) : null,
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                        ],
+                      );
+                    }).toList(),
+                  );
+                },
+                orElse: () => const SizedBox(),
+              ),
+            ],
           );
         },
       ),
@@ -529,12 +515,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
   }
 
   /// Показывает диалог для создания/редактирования комментария
-  Future<void> _showCommentDialog(
-    BuildContext context,
-    int articleId,
-    bool isAuthenticated, {
-    String? parentCommentId,
-  }) async {
+  Future<void> _showCommentDialog(BuildContext context, int articleId, bool isAuthenticated, {String? parentCommentId}) async {
     if (!isAuthenticated) {
       // Если не авторизован, показываем авторизацию
       await showLogin(
@@ -568,12 +549,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
   }
 
   /// Показывает диалог для редактирования комментария
-  Future<void> _showEditCommentDialog(
-    BuildContext context,
-    int articleId,
-    BlogCommentEntity comment,
-    bool isAuthenticated,
-  ) async {
+  Future<void> _showEditCommentDialog(BuildContext context, int articleId, BlogCommentEntity comment, bool isAuthenticated) async {
     if (!isAuthenticated) {
       return;
     }
@@ -652,14 +628,10 @@ class _QuillReadOnlyViewerState extends State<_QuillReadOnlyViewer> {
     // Блокируем редактирование через focusNode (canRequestFocus: false, skipTraversal: true)
     // QuillEditor сам управляет прокруткой для длинного контента
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.only(bottom: 30),
       child: QuillEditor.basic(
         controller: _controller,
-        config: QuillEditorConfig(
-          placeholder: '',
-          padding: EdgeInsets.zero,
-          embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
-        ),
+        config: QuillEditorConfig(placeholder: '', padding: EdgeInsets.zero, embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders()),
         focusNode: _focusNode,
       ),
     );

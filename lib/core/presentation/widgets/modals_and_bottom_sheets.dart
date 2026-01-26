@@ -20,6 +20,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/pages/type_sertifi
 import 'package:aviapoint/profile_page/profile/presentation/widget/profile_edit.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart' show UserReviewsBottomSheet;
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -37,6 +38,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
     enableDrag: false,
     barrierColor: AppColors.bgOverlay,
     backgroundColor: AppColors.background,
+    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
     builder: (context) {
       return SafeArea(
@@ -46,11 +48,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
             spacing: 24,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Карта контрольных проверок',
-                textAlign: TextAlign.center,
-                style: AppStyles.bigButtonCulture.copyWith(fontSize: 22),
-              ),
+              Text('Карта контрольных проверок', textAlign: TextAlign.center, style: AppStyles.bigButtonCulture.copyWith(fontSize: 22)),
               Table(
                 border: TableBorder.all(width: 0.5),
                 children: [
@@ -72,14 +70,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
                 textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                 borderColor: Color(0xFF0A6EFA),
                 borderRadius: 46,
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xff0064D6).withOpacity(0.25),
-                    blurRadius: 4,
-                    spreadRadius: 0,
-                    offset: Offset(0.0, 7.0),
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                 onPressed: () => context.router.maybePop(),
               ),
             ],
@@ -91,29 +82,20 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
 }
 
 Future<void> selectTypeCertificate({required BuildContext context, required Enum screen}) async {
-  final result = await showModalBottomSheet<TypeSertificatesEntity>(
-    useRootNavigator: true,
-    isDismissible: true,
+  final result = await showUniversalBottomSheet<TypeSertificatesEntity>(
     context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    barrierColor: AppColors.bgOverlay,
+    title: '',
+    height: MediaQuery.of(context).size.height - 100,
     backgroundColor: AppColors.background,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-    builder: (context) {
-      return SizedBox(
-        height: MediaQuery.of(context).size.height - 100,
-        child: TypeSertificatesScreen(title: 'Выбирите свидетельство'),
-      );
-    },
+    showCloseButton: false,
+    useRootNavigator: true,
+    child: TypeSertificatesScreen(title: 'Выбирите тип свидетельства'),
   );
   if (result != null) {
     if (screen == Screens.learning) {
       BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
 
-      BlocProvider.of<CategoriesWithListQuestionsBloc>(
-        context,
-      ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
+      BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
     }
     if (screen == Screens.selectTopicsScreen) {
       BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
@@ -132,10 +114,7 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
         child: Center(
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: ClearProgress(
-              onTap1: () => Navigator.pop(context, true),
-              onTap2: () => Navigator.pop(context, false),
-            ),
+            child: ClearProgress(onTap1: () => Navigator.pop(context, true), onTap2: () => Navigator.pop(context, false)),
           ),
         ),
       );
@@ -146,35 +125,15 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
   // if (result != null) {}
 }
 
-Future<void> openQuestion({
-  required BuildContext context,
-  required QuestionWithAnswersEntity? question,
-  required int questionId,
-  required String? categoryTitle,
-}) async {
-  await showModalBottomSheet<void>(
-    useRootNavigator: true,
-    isDismissible: true,
+Future<void> openQuestion({required BuildContext context, required QuestionWithAnswersEntity? question, required int questionId, required String? categoryTitle}) async {
+  await showUniversalBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    barrierColor: AppColors.bgOverlay,
+    title: '',
+    height: MediaQuery.of(context).size.height - 100,
     backgroundColor: AppColors.background,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-    builder: (bottomSheetContext) {
-      return ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        child: SizedBox(
-          height: MediaQuery.of(bottomSheetContext).size.height - 100,
-          child: DetailQuestionScreen(
-            questionId: questionId,
-            categoryTitle: categoryTitle,
-            question: question,
-            withClose: true,
-          ),
-        ),
-      );
-    },
+    showCloseButton: false,
+    useRootNavigator: true,
+    child: DetailQuestionScreen(questionId: questionId, categoryTitle: categoryTitle, question: question, withClose: true),
   );
 }
 
@@ -195,33 +154,15 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode}) a
 
     _log('🔵 selectTopics: открываю showModalBottomSheet');
 
-    final result =
-        await showModalBottomSheet<
-          (
-            int certificateTypeId,
-            bool mixAnswers,
-            bool buttonHint,
-            Set<int> selectedCategoryIds,
-            String title,
-            String image,
-            bool mixQuestions,
-          )
-        >(
-          useRootNavigator: true,
-          isDismissible: true,
-          context: context,
-          isScrollControlled: true,
-          enableDrag: true,
-          barrierColor: AppColors.bgOverlay,
-          backgroundColor: Color(0xFFF1F7FF),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-          builder: (context) {
-            return ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              child: SizedBox(height: MediaQuery.of(context).size.height - 100, child: SelectTopicsScreen()),
-            );
-          },
-        );
+    final result = await showUniversalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
+      context: context,
+      title: '',
+      height: MediaQuery.of(context).size.height - 100,
+      backgroundColor: const Color(0xFFF1F7FF),
+      showCloseButton: false,
+      useRootNavigator: true,
+      child: SelectTopicsScreen(),
+    );
 
     if (result != null) {
       // Очистить старые ответы и выбранные вопросы перед новым тестом
@@ -332,17 +273,10 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   verticalPadding: 4,
                   backgroundColor: Color(0xFF0A6EFA),
                   title: 'Продолжить',
-                  textStyle: AppStyles.bold15s.copyWith(color: Colors.white),
+                  textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff0064D6).withOpacity(0.25),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      offset: Offset(0.0, 7.0),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                   onPressed: () {
                     Navigator.pop(dialogContext);
                     // Продолжить тест
@@ -354,17 +288,10 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   verticalPadding: 4,
                   backgroundColor: Colors.white,
                   title: 'Начать сначала',
-                  textStyle: AppStyles.bold15s.copyWith(color: Color(0xFF0A6EFA)),
+                  textStyle: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff0064D6).withOpacity(0.25),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      offset: Offset(0.0, 7.0),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                   onPressed: () async {
                     Navigator.pop(dialogContext);
                     // Очистить ответы и начать заново
@@ -433,16 +360,16 @@ Future<void> testingModeDialog({required BuildContext context}) async {
 }
 
 /// Проверяет, заполнены ли все поля профиля пользователя
-/// 
+///
 /// Проверяются следующие поля:
 /// - firstName (имя)
 /// - lastName (фамилия)
 /// - email
 /// - telegram
 /// - max
-/// 
+///
 /// [context] - контекст для доступа к Bloc
-/// 
+///
 /// Возвращает:
 /// - `true` если все поля заполнены
 /// - `false` если хотя бы одно поле пустое
@@ -482,21 +409,18 @@ bool? checkProfileDataComplete(BuildContext context) {
 }
 
 /// Универсальная функция для проверки полей профиля и открытия модалки редактирования
-/// 
+///
 /// Проверяет, заполнены ли все поля профиля пользователя.
 /// Если хотя бы одно поле пустое, открывает форму редактирования профиля с указанным сообщением.
-/// 
+///
 /// [context] - контекст для доступа к Bloc и навигации
 /// [message] - сообщение, которое будет показано, если поля не заполнены (опционально)
-/// 
+///
 /// Возвращает:
 /// - `true` если все поля заполнены
 /// - `false` если хотя бы одно поле пустое (в этом случае открывается форма редактирования)
 /// - `null` если профиль еще не загружен (нужно проверить через BlocListener)
-bool? checkDataProfileAndOpenEditIfNeeded({
-  required BuildContext context,
-  String? message,
-}) {
+bool? checkDataProfileAndOpenEditIfNeeded({required BuildContext context, String? message}) {
   try {
     final profileBloc = context.read<ProfileBloc>();
     final profileState = profileBloc.state;
@@ -517,13 +441,9 @@ bool? checkDataProfileAndOpenEditIfNeeded({
               // Получаем контекст корневого навигатора для показа snackbar поверх всех окон
               final rootContext = Navigator.of(context, rootNavigator: true).context;
               openProfileEdit(context: context);
-              ScaffoldMessenger.of(rootContext).showSnackBar(
-                SnackBar(
-                  content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'),
-                  backgroundColor: Colors.orange,
-                  duration: Duration(seconds: 5),
-                ),
-              );
+              ScaffoldMessenger.of(
+                rootContext,
+              ).showSnackBar(SnackBar(content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'), backgroundColor: Colors.orange, duration: Duration(seconds: 5)));
             }
           });
           return false;
@@ -545,25 +465,14 @@ bool? checkDataProfileAndOpenEditIfNeeded({
 }
 
 Future<void> openProfileEdit({required BuildContext context}) async {
-  await showModalBottomSheet<void>(
-    useRootNavigator: true,
-    isDismissible: true,
+  await showUniversalBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    barrierColor: AppColors.bgOverlay,
+    title: '',
+    height: MediaQuery.of(context).size.height - 100,
     backgroundColor: AppColors.background,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-    builder: (bottomSheetContext) {
-      return ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        child: SizedBox(
-          height: MediaQuery.of(bottomSheetContext).size.height - 100,
-          // child: DetailQuestionScreen(questionId: questionId, categoryTitle: categoryTitle, question: question, withClose: true),
-          child: ProfileEdit(),
-        ),
-      );
-    },
+    showCloseButton: false,
+    useRootNavigator: true,
+    child: ProfileEdit(),
   ).then((_) {
     // После закрытия bottom sheet обновляем профиль, чтобы получить актуальное фото
     if (context.mounted) {
@@ -574,137 +483,95 @@ Future<void> openProfileEdit({required BuildContext context}) async {
 }
 
 Future<void> openContactUs({required BuildContext context}) async {
-  await showModalBottomSheet<void>(
-    useRootNavigator: true,
-    isDismissible: true,
+  await showUniversalBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    barrierColor: AppColors.bgOverlay,
+    title: 'Связаться с нами',
+    height: MediaQuery.of(context).size.height * 0.9,
     backgroundColor: AppColors.background,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-    builder: (bottomSheetContext) {
-      return SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Заголовок с кнопкой закрытия
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Связаться с нами', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                  GestureDetector(
-                    onTap: () => Navigator.of(bottomSheetContext).pop(),
-                    child: SvgPicture.asset(Pictures.closeAuth),
+    useRootNavigator: true,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Кнопки Telegram и WhatsApp
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: GestureDetector(
+                onTap: () async {
+                  // Формат: https://wa.me/79990697289 (без +)
+                  final uri = Uri.parse('https://wa.me/79990697289');
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    Navigator.of(context).pop();
+                  } else {
+                    // Если не удалось открыть, показываем сообщение
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+                    }
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(10.w),
+                  decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10.r)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(Pictures.whatsapp),
+                      SizedBox(width: 6.w),
+                      Text('Whatsapp', style: AppStyles.bold16s.copyWith(color: Color(0xFF01B40E))),
+                    ],
                   ),
-                ],
+                ),
               ),
-              SizedBox(height: 24),
-              // Кнопки Telegram и WhatsApp
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: GestureDetector(
-                      onTap: () async {
-                        // Формат: https://wa.me/79990697289 (без +)
-                        final uri = Uri.parse('https://wa.me/79990697289');
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri, mode: LaunchMode.externalApplication);
-                          Navigator.of(bottomSheetContext).pop();
-                        } else {
-                          // Если не удалось открыть, показываем сообщение
-                          if (bottomSheetContext.mounted) {
-                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                              const SnackBar(
-                                content: Text('Не удалось открыть WhatsApp'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(10.w),
-                        decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10.r)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(Pictures.whatsapp),
-                            SizedBox(width: 6.w),
-                            Text('Whatsapp', style: AppStyles.bold16s.copyWith(color: Color(0xFF01B40E))),
-                          ],
-                        ),
-                      ),
-                    ),
+            ),
+            SizedBox(width: 16.w),
+            Flexible(
+              child: GestureDetector(
+                onTap: () async {
+                  final uri = Uri.parse('https://t.me/dartflutterworld');
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    Navigator.of(context).pop();
+                  } else {
+                    // Если не удалось открыть, показываем сообщение
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+                    }
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(10.w),
+                  decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(Pictures.telegramm),
+                      SizedBox(width: 6.w),
+                      Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
+                    ],
                   ),
-                  SizedBox(width: 16.w),
-                  Flexible(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final uri = Uri.parse('https://t.me/dartflutterworld');
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri, mode: LaunchMode.externalApplication);
-                          Navigator.of(bottomSheetContext).pop();
-                        } else {
-                          // Если не удалось открыть, показываем сообщение
-                          if (bottomSheetContext.mounted) {
-                            ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                              const SnackBar(
-                                content: Text('Не удалось открыть Telegram'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(10.w),
-                        decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(Pictures.telegramm),
-                            SizedBox(width: 6.w),
-                            Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    },
+      ],
+    ),
   );
 }
 
 Future<void> openPilotReviews({required BuildContext context, required int pilotId}) async {
-  await showModalBottomSheet<void>(
-    useRootNavigator: true,
-    isDismissible: true,
+  await showUniversalBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    barrierColor: AppColors.bgOverlay,
+    title: '',
+    height: MediaQuery.of(context).size.height - 100,
     backgroundColor: AppColors.background,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-    builder: (bottomSheetContext) {
-      return ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        child: SizedBox(
-          height: MediaQuery.of(bottomSheetContext).size.height - 100,
-          child: UserReviewsBottomSheet(userId: pilotId, title: 'Отзывы о пилоте'),
-        ),
-      );
-    },
+    showCloseButton: false,
+    useRootNavigator: true,
+    child: UserReviewsBottomSheet(userId: pilotId, title: 'Отзывы о пилоте'),
   );
 }

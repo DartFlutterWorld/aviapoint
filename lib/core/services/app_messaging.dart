@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,40 +24,52 @@ class AppMessaging {
   Future<void> init() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    debugPrint('🔔 Запрос разрешения на уведомления...');
+    NotificationSettings settings = await messaging.requestPermission(alert: true, announcement: false, badge: true, carPlay: false, criticalAlert: false, provisional: false, sound: true);
+
+    debugPrint('🔔 Статус разрешения: ${settings.authorizationStatus}');
+    debugPrint('🔔 Alert: ${settings.alert}, Sound: ${settings.sound}, Badge: ${settings.badge}');
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      if (kDebugMode) {}
+      if (kDebugMode) {
+        debugPrint('✅ Разрешение на уведомления получено');
+      }
 
       if (kIsWeb) {
+        debugPrint('🌐 Инициализация FCM для веба...');
         // Для веба нужен VAPID ключ для Web Push API
         // firebase_options.dart содержит базовую конфигурацию Firebase, но НЕ содержит VAPID
         // VAPID - это отдельный ключ, необходимый для push-уведомлений в браузерах
-        // 
-        // Можно попробовать получить токен без VAPID, но это может не работать
-        // в Chrome и других браузерах. Для стабильной работы нужен VAPID.
         try {
-          // VAPID ключ для Web Push API (получен из Firebase Console)
-          const String vapidKey = 'BBVjvKV9xek3jh_kqIWArGLRUONL0LDzt1F9MtDaeRQJStGQ9HaCy9EvLJqL9hAESCMVQnI-OvW51vD2Ld7_95Y';
-          
-          // С VAPID ключом - стабильная работа push-уведомлений на всех браузерах
-          fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: vapidKey);
-          debugPrint("✅ FCM Token (Web with VAPID): $fcmToken");
+          // Пробуем получить токен без VAPID сначала (может сработать в некоторых случаях)
+          try {
+            fcmToken = await FirebaseMessaging.instance.getToken();
+            debugPrint("✅ FCM Token (Web without VAPID): $fcmToken");
+          } catch (e) {
+            // Если не получилось без VAPID, пробуем с VAPID
+            // VAPID ключ для Web Push API (получен из Firebase Console)
+            // Важно: VAPID ключ должен соответствовать проекту Firebase (aviapoint)
+            const String vapidKey = 'BBVjvKV9xek3jh_kqIWArGLRUONL0LDzt1F9MtDaeRQJStGQ9HaCy9EvLJqL9hAESCMVQnI-OvW51vD2Ld7_95Y';
+
+            debugPrint("⚠️ Попытка получения токена без VAPID не удалась: $e");
+            debugPrint("🔄 Пробуем с VAPID ключом...");
+
+            // С VAPID ключом - стабильная работа push-уведомлений на всех браузерах
+            fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: vapidKey);
+            debugPrint("✅ FCM Token (Web with VAPID): $fcmToken");
+          }
         } catch (err) {
           debugPrint("❌ Ошибка получения FCM токена на вебе: $err");
-          debugPrint("💡 Вероятно, нужен VAPID ключ. Получите его в Firebase Console:");
-          debugPrint("   1. https://console.firebase.google.com -> проект 'aviapoint'");
+          debugPrint("💡 Проблемы могут быть связаны с:");
+          debugPrint("   1. Несоответствие конфигурации Firebase между приложением и Service Worker");
+          debugPrint("   2. Неправильный или устаревший VAPID ключ");
+          debugPrint("   3. Service Worker не зарегистрирован или не может получить доступ к Firebase");
+          debugPrint("📝 Как исправить:");
+          debugPrint("   1. Откройте https://console.firebase.google.com -> проект 'aviapoint'");
           debugPrint("   2. Project Settings (⚙️) -> Cloud Messaging");
-          debugPrint("   3. Web Push certificates -> Generate key pair (если нет) -> скопируйте ключ");
-          debugPrint("   4. Добавьте в app_messaging.dart (строка 47): vapidKey = 'ваш_ключ'");
+          debugPrint("   3. Web Push certificates -> Generate key pair (если нет) или проверьте текущий");
+          debugPrint("   4. Убедитесь, что конфигурация в firebase_options.dart совпадает с firebase-messaging-sw.js");
+          debugPrint("   5. Проверьте, что Service Worker зарегистрирован (DevTools -> Application -> Service Workers)");
         }
       } else if (Platform.isIOS) {
         // Для iOS сначала получаем APNS токен
@@ -94,13 +107,19 @@ class AppMessaging {
       }
 
       log("PUSH Token: $fcmToken");
-      if (kDebugMode) {}
+      if (kDebugMode) {
+        if (fcmToken == null) {
+          debugPrint('⚠️ FCM токен не получен!');
+        } else {
+          debugPrint('✅ FCM токен успешно получен: ${fcmToken!.substring(0, 20)}...');
+        }
+      }
 
-      // Слушаем обновление токена и автоматически отправляем на сервер
+      // Слушаем обновление токена
       FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
         debugPrint('🔄 FCM токен обновлен: $newToken');
         fcmToken = newToken;
-        // Автоматически отправляем новый токен на сервер
+        // Отправляем новый токен на сервер (авторизованным или анонимно)
         await _sendTokenToServer(newToken);
       });
 
@@ -133,14 +152,22 @@ class AppMessaging {
         });
       }
 
-      // Автоматически отправляем токен на сервер при инициализации
+      // Отправляем токен на сервер сразу (анонимно, если пользователь не авторизован)
+      // Если пользователь авторизован, токен будет обновлен после загрузки профиля с user_id
+      // Это позволяет собирать токены даже от неавторизованных пользователей для массовых рассылок
       if (fcmToken != null && fcmToken!.isNotEmpty) {
+        debugPrint('💾 FCM токен получен: $fcmToken');
         await _sendTokenToServer(fcmToken!);
       }
     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      if (kDebugMode) {}
+      if (kDebugMode) {
+        debugPrint('⚠️ Разрешение на уведомления получено условно (provisional)');
+      }
     } else {
-      if (kDebugMode) {}
+      if (kDebugMode) {
+        debugPrint('❌ Разрешение на уведомления НЕ получено. Статус: ${settings.authorizationStatus}');
+        debugPrint('💡 Пользователь должен разрешить уведомления в настройках браузера');
+      }
     }
 
     //ServiceLocator.instance.get<PushHandlerRepository>()
@@ -242,9 +269,7 @@ class AppMessaging {
         context.router.push(
           BaseRoute(
             children: [
-              OnTheWayNavigationRoute(
-                children: [FlightDetailRoute(flightId: flightId)],
-              ),
+              OnTheWayNavigationRoute(children: [FlightDetailRoute(flightId: flightId)]),
             ],
           ),
         );
@@ -267,9 +292,7 @@ class AppMessaging {
         context.router.push(
           BaseRoute(
             children: [
-              MarketNavigationRoute(
-                children: [AircraftMarketDetailRoute(id: listingId)],
-              ),
+              MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: listingId)]),
             ],
           ),
         );
@@ -283,16 +306,61 @@ class AppMessaging {
     }
   }
 
-  /// Отправка токена на сервер
+  /// Отправка токена на сервер (работает для авторизованных и анонимных пользователей)
   Future<void> _sendTokenToServer(String token) async {
     try {
+      // Проверяем, зарегистрирован ли ProfileRepository в GetIt
+      if (!getIt.isRegistered<ProfileRepository>()) {
+        debugPrint('⚠️ ProfileRepository еще не зарегистрирован, пропускаем отправку токена');
+        return;
+      }
+
       final profileRepository = getIt<ProfileRepository>();
-      await profileRepository.saveFcmToken(token);
-      debugPrint('✅ FCM токен отправлен на сервер');
+
+      // Проверяем, авторизован ли пользователь
+      bool isAuthenticated = false;
+      if (getIt.isRegistered<AppState>()) {
+        final appState = getIt<AppState>();
+        isAuthenticated = appState.isAuthenticated;
+      }
+
+      if (isAuthenticated) {
+        // Для авторизованных пользователей - токен будет привязан к user_id
+        final result = await profileRepository.saveFcmToken(token);
+        result.fold(
+          (failure) {
+            debugPrint('❌ Ошибка сохранения FCM токена (авторизованный): ${failure.message}');
+          },
+          (_) {
+            debugPrint('✅ FCM токен отправлен на сервер (пользователь авторизован, будет привязан к user_id)');
+          },
+        );
+      } else {
+        // Для анонимных пользователей - отправляем как анонимный токен
+        final result = await profileRepository.saveAnonymousFcmToken(token);
+        result.fold(
+          (failure) {
+            debugPrint('❌ Ошибка сохранения анонимного FCM токена: ${failure.message}');
+            debugPrint('   Status code: ${failure.statusCode}');
+            debugPrint('   Response: ${failure.responseMessage}');
+          },
+          (_) {
+            debugPrint('✅ FCM токен отправлен на сервер (анонимный, для массовых рассылок)');
+          },
+        );
+      }
     } catch (e, stackTrace) {
       debugPrint('❌ Ошибка отправки FCM токена на сервер: $e');
       debugPrint('Stack trace: $stackTrace');
-      // Не критично, если не удалось отправить - пользователь еще может быть не авторизован
+      // Не критично, если не удалось отправить
+    }
+  }
+
+  /// Публичный метод для отправки токена (вызывается после загрузки профиля)
+  /// Обновляет анонимный токен на токен с user_id
+  Future<void> sendTokenToServer() async {
+    if (fcmToken != null && fcmToken!.isNotEmpty) {
+      await _sendTokenToServer(fcmToken!);
     }
   }
 

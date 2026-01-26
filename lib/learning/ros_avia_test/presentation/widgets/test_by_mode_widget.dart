@@ -196,7 +196,7 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
       padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
       child: Column(
         children: [
-          SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           Expanded(
             child: ListView(
@@ -207,10 +207,7 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                   children: [
                     ChipsWidget(questionWithAnswers: widget.question),
                     Flexible(
-                      child: Text(
-                        bigFirstSymbol(widget.categoryTitle),
-                        style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF)),
-                      ),
+                      child: Text(bigFirstSymbol(widget.categoryTitle), style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
                     ),
                   ],
                 ),
@@ -273,11 +270,11 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                 Row(
                   spacing: 6,
                   children: [
-                    SvgPicture.asset(Pictures.isCorrect),
+                    SvgPicture.asset(Pictures.isCorrect, width: 30, height: 30),
                     Flexible(
                       child: Text(
                         'При прохождении тестирования или тренировки верным засчитывается ответ, считающийся таковым в официальном тесте.',
-                        style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89)),
+                        style: AppStyles.light10s.copyWith(color: Color(0xFF6E7A89)),
                       ),
                     ),
                   ],
@@ -310,17 +307,14 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                                 children: [
                                   Text(
                                     'Обоснование',
-                                    style: AppStyles.bold14s.copyWith(
-                                      color: Color(0xFF374151),
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                    style: AppStyles.bold14s.copyWith(color: Color(0xFF374151), fontWeight: FontWeight.w600),
                                   ),
 
                                   /// Анимированная стрелка (поворот на 180° при раскрытии)
                                   AnimatedRotation(
                                     turns: _isExplanationExpanded ? 0.5 : 0,
                                     duration: Duration(milliseconds: 200),
-                                    child: SvgPicture.asset(Pictures.arrowDown, color: Color(0xFF4B5767)),
+                                    child: SvgPicture.asset(Pictures.arrowDown, color: Color(0xFF4B5767), height: 20.h),
                                   ),
                                 ],
                               ),
@@ -332,14 +326,8 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                                 width: double.infinity,
                                 padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
                                 child: widget.question.explanation != null
-                                    ? HtmlWidget(
-                                        widget.question.explanation!,
-                                        textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4),
-                                      )
-                                    : Text(
-                                        'Скоро появится',
-                                        style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4),
-                                      ),
+                                    ? HtmlWidget(widget.question.explanation!, textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4))
+                                    : Text('Скоро появится', style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.4)),
                               ),
                           ],
                         ),

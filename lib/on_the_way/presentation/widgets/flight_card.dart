@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sheet.dart';
@@ -23,272 +24,383 @@ class FlightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bottomMargin = AppSpacing.section;
+        final horizontalPadding = AppSpacing.horizontal;
+        final verticalPadding = 12.0;
+        final borderRadius16 = 16.0;
+        final borderRadius8 = 8.0;
+        final spacing8 = 8.0;
+        final spacing4 = 4.0;
+        final iconSize = 24.0; // Единый размер для всех иконок (увеличен для лучшей видимости)
+        final regular12s = AppStyles.regular12s;
+        final regular14s = AppStyles.regular14s;
+        final bold14s = AppStyles.bold14s;
+        final bold12s = AppStyles.bold12s;
+        final padding22 = 22.0;
+        final padding8 = AppSpacing.horizontal;
+        final padding4 = 4.0;
+        final photoSize = 80.0; // Фиксированный размер фото
+        final avatarSize = 40.0; // Фиксированный размер аватара
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 16.h),
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: Color(0xFFD9E6F8)),
-          color: Colors.white,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ID полета
-            Row(
-              children: [
-                Icon(Icons.tag, size: 14, color: Color(0xFF9CA5AF)),
-                SizedBox(width: 4.w),
-                Text('ID: ${flight.id}', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-              ],
+        return GestureDetector(
+          onTap: onTap,
+          child: Container(
+            margin: EdgeInsets.only(bottom: bottomMargin),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(borderRadius16),
+              border: Border.all(color: Color(0xFFD9E6F8)),
+              color: Colors.white,
             ),
-            SizedBox(height: 8.h),
-            // Маршрут
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Отображаем маршрут из waypoints, если они есть
-                      // ВСЕ точки маршрута (включая первую и последнюю) теперь в waypoints
-                      if (flight.waypoints != null && flight.waypoints!.isNotEmpty) ...[
-                        ...flight.waypoints!.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final waypoint = entry.value;
-                          final isFirst = index == 0;
-                          final isLast = index == flight.waypoints!.length - 1;
-
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (index > 0) ...[
-                                SizedBox(height: 8.h),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 22.w),
-                                  child: Icon(Icons.arrow_downward, size: 16, color: isLast ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
-                                ),
-                                SizedBox(height: 8.h),
-                              ],
-                              _buildAirportInfo(
-                                context: context,
-                                icon: isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
-                                code: waypoint.airportCode,
-                                identRu: waypoint.airportIdentRu,
-                                name: waypoint.airportName,
-                                city: waypoint.airportCity,
-                                region: waypoint.airportRegion,
-                                type: waypoint.airportType,
-                                isInternational: false,
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ],
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: flight.status == 'active'
-                        ? Color(0xFFD1FAE5)
-                        : flight.status == 'completed'
-                        ? Color(0xFFFFF4E6)
-                        : Color(0xFFFEE2E2),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Text(
-                    flight.status == 'active'
-                        ? 'Активен'
-                        : flight.status == 'completed'
-                        ? 'Завершен'
-                        : 'Отменен',
-                    style: AppStyles.regular12s.copyWith(
-                      color: flight.status == 'active'
-                          ? Color(0xFF10B981)
-                          : flight.status == 'completed'
-                          ? Color(0xFFFFA726)
-                          : Color(0xFFEF4444),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12.h),
-            // Дата и время
-            Row(
-              children: [
-                Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
-                SizedBox(width: 6.w),
-                Flexible(
-                  child: Text(formatDateWithTime(flight.departureDate), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                ),
-              ],
-            ),
-            SizedBox(height: 8.h),
-            // Цена и места
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Row(
-                    children: [
-                      Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
-                      SizedBox(width: 6.w),
-                      Flexible(
-                        child: Text('${formatPrice(flight.pricePerSeat.toInt())} / место', style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981))),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 8.w),
+                // ID полета и дата вылета в одной строке
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.event_seat, size: 16, color: Color(0xFF9CA5AF)),
-                    SizedBox(width: 6.w),
-                    Text('${flight.availableSeats} мест', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-                  ],
-                ),
-              ],
-            ),
-            // Модель самолёта (если указан)
-            if (flight.aircraftType != null && flight.aircraftType!.isNotEmpty) ...[
-              SizedBox(height: 8.h),
-              Row(
-                children: [
-                  Icon(Icons.flight, size: 16, color: Color(0xFF9CA5AF)),
-                  SizedBox(width: 6.w),
-                  Flexible(
-                    child: Text(flight.aircraftType!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                  ),
-                ],
-              ),
-            ],
-            // Фотографии самолета (если есть)
-            if (flight.photos != null && flight.photos!.isNotEmpty) ...[
-              SizedBox(height: 8.h),
-              SizedBox(
-                height: 60.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: flight.photos!.length,
-                  itemBuilder: (context, index) {
-                    final photoUrl = flight.photos![index];
-                    return GestureDetector(
-                      onTap: () => _showPhotoViewer(context, flight.photos!, index),
-                      child: Container(
-                        width: 60.w,
-                        height: 60.h,
-                        margin: EdgeInsets.only(right: 8.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(color: Color(0xFFE5E7EB)),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
-                          child: CachedNetworkImage(
-                            imageUrl: getImageUrl(photoUrl),
-                            fit: BoxFit.cover,
-                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                            cacheKey: photoUrl,
-                            placeholder: (context, url) => Container(
-                              color: Color(0xFFF3F4F6),
-                              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Color(0xFFF3F4F6),
-                              child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF), size: 20),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-            // Описание (если есть)
-            if (flight.description != null && flight.description!.isNotEmpty) ...[
-              SizedBox(height: 8.h),
-              Text(
-                flight.description!,
-                style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767)),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-            // Информация о пилоте
-            if (flight.pilotFullName != null || flight.pilotAverageRating != null) ...[
-              SizedBox(height: 12.h),
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Color(0xFFF9FAFB)),
-                child: Row(
-                  children: [
-                    // Аватар пилота
-                    Builder(
-                      builder: (context) {
-                        final avatarUrl = flight.pilotAvatarUrl;
-                        final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
-
-                        return GestureDetector(
-                          onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, [imageUrl], 0) : null,
-                          child: ClipOval(
-                            child: imageUrl != null && imageUrl.isNotEmpty
-                                ? CachedNetworkImage(
-                                    imageUrl: imageUrl,
-                                    width: 32.r,
-                                    height: 32.r,
-                                    fit: BoxFit.cover,
-                                    cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                    cacheKey: avatarUrl,
-                                    placeholder: (context, url) => Image.asset(Pictures.pilot, width: 32.r, height: 32.r, fit: BoxFit.cover),
-                                    errorWidget: (context, url, error) {
-                                      print('❌ [FlightCard] Ошибка загрузки аватара пилота: error=$error, url=$url, avatarUrl=$avatarUrl');
-                                      return Image.asset(Pictures.pilot, width: 32.r, height: 32.r, fit: BoxFit.cover);
-                                    },
-                                  )
-                                : Image.asset(Pictures.pilot, width: 32.r, height: 32.r, fit: BoxFit.cover),
-                          ),
-                        );
-                      },
+                    Row(
+                      children: [
+                        Icon(Icons.tag, size: iconSize, color: Color(0xFF9CA5AF)),
+                        SizedBox(width: spacing4),
+                        Text('ID: ${flight.id}', style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                      ],
                     ),
-                    SizedBox(width: 8.w),
-                    // Имя и рейтинг
-                    Flexible(
-                      child: Column(
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
+                      decoration: BoxDecoration(color: Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(borderRadius8)),
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(flight.pilotFullName ?? 'Пилот', style: AppStyles.bold12s.copyWith(color: Color(0xFF374151))),
-                          if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
-                            SizedBox(height: 2.h),
-                            Row(
-                              children: [
-                                Icon(Icons.star, size: 12, color: Color(0xFFFFA726)),
-                                SizedBox(width: 4.w),
-                                Text(flight.pilotAverageRating!.toStringAsFixed(1), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                              ],
-                            ),
-                          ],
+                          Icon(Icons.calendar_today, size: iconSize, color: Color(0xFF374151)),
+                          SizedBox(width: spacing4),
+                          Text('Вылет ', style: regular14s.copyWith(color: Color(0xFF374151))),
+
+                          Text(formatDateWithTime(flight.departureDate), style: regular14s.copyWith(color: Color(0xFF374151))),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ],
-        ),
-      ),
+                SizedBox(height: spacing8),
+                // Статус
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
+                      decoration: BoxDecoration(
+                        color: flight.status == 'active'
+                            ? Color(0xFFD1FAE5)
+                            : flight.status == 'completed'
+                            ? Color(0xFFFFF4E6)
+                            : Color(0xFFFEE2E2),
+                        borderRadius: BorderRadius.circular(borderRadius8),
+                      ),
+                      child: Text(
+                        flight.status == 'active'
+                            ? 'Активен'
+                            : flight.status == 'completed'
+                            ? 'Завершен'
+                            : 'Отменен',
+                        style: regular12s.copyWith(
+                          color: flight.status == 'active'
+                              ? Color(0xFF10B981)
+                              : flight.status == 'completed'
+                              ? Color(0xFFFFA726)
+                              : Color(0xFFEF4444),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: spacing8),
+                // Маршрут
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Отображаем маршрут из waypoints, если они есть
+                    // ВСЕ точки маршрута (включая первую и последнюю) теперь в waypoints
+                    if (flight.waypoints != null && flight.waypoints!.isNotEmpty) ...[
+                      ...flight.waypoints!.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final waypoint = entry.value;
+                        final isFirst = index == 0;
+                        final isLast = index == flight.waypoints!.length - 1;
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (index > 0) ...[
+                              SizedBox(height: spacing8),
+                              Padding(
+                                padding: EdgeInsets.only(left: padding22),
+                                child: Icon(Icons.arrow_downward, size: iconSize, color: isLast ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
+                              ),
+                              SizedBox(height: spacing8),
+                            ],
+                            _buildAirportInfo(
+                              context: context,
+                              icon: isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                              code: waypoint.airportCode,
+                              identRu: waypoint.airportIdentRu,
+                              name: waypoint.airportName,
+                              city: waypoint.airportCity,
+                              region: waypoint.airportRegion,
+                              type: waypoint.airportType,
+                              isInternational: false,
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ],
+                  ],
+                ),
+                SizedBox(height: AppSpacing.section + 8),
+                // Компенсация и свободных мест в едином сером контейнере (как "Дополнительная информация о полёте")
+                Container(
+                  padding: EdgeInsets.all(padding8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(borderRadius8),
+                    color: Color(0xFFF9FAFB),
+                    border: Border.all(color: Color(0xFFE5E7EB)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Компенсация
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Компенсация', style: regular12s.copyWith(color: Color(0xFF374151))),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
+                            decoration: BoxDecoration(color: Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.currency_ruble, size: iconSize, color: Color(0xFF0A6EFA)),
+                                SizedBox(width: spacing4),
+                                Text('${formatPrice(flight.pricePerSeat.toInt())} / место', style: regular12s.copyWith(color: Color(0xFF374151))),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: spacing8),
+                      // Свободных мест
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Свободных мест', style: regular12s.copyWith(color: Color(0xFF374151))),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
+                            decoration: BoxDecoration(color: Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.event_seat, size: iconSize, color: Color(0xFF0A6EFA)),
+                                SizedBox(width: spacing4),
+                                Text('${flight.availableSeats}', style: regular12s.copyWith(color: Color(0xFF374151))),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: AppSpacing.section),
+
+                // Информация о пилоте
+                if (flight.pilotFullName != null || flight.pilotAverageRating != null) ...[
+                  Container(
+                    padding: EdgeInsets.all(padding8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(borderRadius8),
+                      color: Color(0xFFF9FAFB),
+                      border: Border.all(color: Color(0xFFE5E7EB)),
+                    ),
+                    child: Row(
+                      children: [
+                        // Аватар пилота
+                        Builder(
+                          builder: (context) {
+                            final avatarUrl = flight.pilotAvatarUrl;
+                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+
+                            return GestureDetector(
+                              onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, [imageUrl], 0) : null, // Если нет фото, не открываем просмотр
+                              child: ClipOval(
+                                child: imageUrl != null && imageUrl.isNotEmpty
+                                    ? CachedNetworkImage(
+                                        imageUrl: imageUrl,
+                                        width: avatarSize,
+                                        height: avatarSize,
+                                        fit: BoxFit.cover,
+                                        cacheManager: GetIt.instance<DefaultCacheManager>(),
+                                        cacheKey: avatarUrl,
+                                        placeholder: (context, url) => Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                        errorWidget: (context, url, error) {
+                                          print('❌ [FlightCard] Ошибка загрузки аватара пилота: error=$error, url=$url, avatarUrl=$avatarUrl');
+                                          return Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover);
+                                        },
+                                      )
+                                    : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(width: padding8),
+                        // Имя и рейтинг
+                        Flexible(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(flight.pilotFullName ?? 'Пилот', style: bold12s.copyWith(color: Color(0xFF374151))),
+                              if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
+                                SizedBox(height: spacing4 / 2),
+                                Row(
+                                  children: [
+                                    Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
+                                    SizedBox(width: spacing4),
+                                    Text(flight.pilotAverageRating!.toStringAsFixed(1), style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: AppSpacing.section),
+                  // Комментарий под пилотом
+                  if (flight.description != null && flight.description!.isNotEmpty) ...[
+                    Container(
+                      padding: EdgeInsets.all(padding8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(borderRadius8),
+                        color: Color(0xFFF9FAFB),
+                        border: Border.all(color: Color(0xFFE5E7EB)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.comment_outlined, size: iconSize, color: Color(0xFF9CA5AF)),
+                              SizedBox(width: spacing4),
+                              Text('Доп информация о полёте', style: regular12s.copyWith(color: Color(0xFF374151))),
+                            ],
+                          ),
+                          SizedBox(height: spacing4),
+                          Text(flight.description!, style: regular12s.copyWith(color: Color(0xFF4B5767))),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.section),
+                    // Модель самолёта и фотографии в едином сером контейнере (как секции выше)
+                    if ((flight.aircraftType != null && flight.aircraftType!.isNotEmpty) || (flight.photos != null && flight.photos!.isNotEmpty)) ...[
+                      Container(
+                        padding: EdgeInsets.all(padding8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(borderRadius8),
+                          color: Color(0xFFF9FAFB),
+                          border: Border.all(color: Color(0xFFE5E7EB)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Модель самолёта (если указана)
+                            if (flight.aircraftType != null && flight.aircraftType!.isNotEmpty) ...[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    child: Text('Модель cамолёта', style: regular12s.copyWith(color: Color(0xFF374151))),
+                                  ),
+
+                                  Flexible(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: padding8, vertical: 4),
+                                      decoration: BoxDecoration(color: Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.flight, size: iconSize, color: Color(0xFF9CA5AF)),
+                                          SizedBox(width: spacing4),
+                                          Flexible(
+                                            child: Text(flight.aircraftType!, style: regular12s.copyWith(color: Color(0xFF374151))),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (flight.photos != null && flight.photos!.isNotEmpty) SizedBox(height: AppSpacing.section),
+                            ],
+                            // Фотографии самолёта (если есть)
+                            if (flight.photos != null && flight.photos!.isNotEmpty) ...[
+                              SizedBox(
+                                height: photoSize,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: flight.photos!.length,
+                                  itemBuilder: (context, index) {
+                                    final photoUrl = flight.photos![index];
+                                    return GestureDetector(
+                                      onTap: () => _showPhotoViewer(context, flight.photos!, index),
+                                      child: Container(
+                                        width: photoSize,
+                                        height: photoSize,
+                                        margin: EdgeInsets.only(right: padding8),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(borderRadius8),
+                                          border: Border.all(color: Color(0xFFE5E7EB)),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(borderRadius8),
+                                          child: CachedNetworkImage(
+                                            imageUrl: getImageUrl(photoUrl),
+                                            fit: BoxFit.cover,
+                                            cacheManager: GetIt.instance<DefaultCacheManager>(),
+                                            cacheKey: photoUrl,
+                                            placeholder: (context, url) => Container(
+                                              color: Color(0xFFF3F4F6),
+                                              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                            ),
+                                            errorWidget: (context, url, error) => Container(
+                                              color: Color(0xFFF3F4F6),
+                                              child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF), size: iconSize),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ],
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -304,43 +416,62 @@ class FlightCard extends StatelessWidget {
     String? type,
     bool isInternational = false,
   }) {
-    // Определяем иконку и цвет в зависимости от типа
-    IconData iconData = Icons.local_airport; // Иконка аэропорта (самолётик) по умолчанию
-    Color iconColor = Color(0xFF0A6EFA);
+    // Фиксированные размеры
+    final padding8 = AppSpacing.horizontal;
+    final borderRadius8 = 8.0;
+    final borderRadius4 = 4.0;
+    final iconSize = 24.0; // Единый размер для всех иконок (увеличен для лучшей видимости)
+    final spacing8 = AppSpacing.horizontal;
+    final spacing4 = 4.0;
+    final spacing6 = 6.0;
+    final spacing2 = 2.0;
+    final spacing2v = 2.0;
+    final bold16s = AppStyles.bold16s;
+    final regular12s = AppStyles.regular12s;
+    final medium10s = AppStyles.medium10s;
 
-    // Получаем отображаемый тип и определяем иконку
+    // Используем переданную иконку и определяем цвет в зависимости от неё (как в деталке)
+    IconData iconData = icon;
+    Color iconColor;
+
+    if (icon == Icons.flight_takeoff) {
+      // Зелёный для отправления
+      iconColor = Colors.green;
+    } else if (icon == Icons.flight_land) {
+      // Красный для прибытия
+      iconColor = Colors.red;
+    } else if (icon == Icons.flight) {
+      // Синий для промежуточных точек
+      iconColor = Colors.blue;
+    } else {
+      // По умолчанию синий
+      iconColor = Color(0xFF0A6EFA);
+    }
+
+    // Получаем отображаемый тип
     String typeDisplay = '';
     if (type != null && type.isNotEmpty) {
       final typeLower = type.toLowerCase().trim();
-
-      // Проверяем сначала на вертодромы
-      if (typeLower == 'heliport' || typeLower == 'вертодром' || typeLower.contains('heliport') || typeLower.contains('вертодром')) {
-        iconData = Icons.airplanemode_active; // Иконка вертолёта (альтернативная иконка самолёта для визуального отличия)
-        iconColor = Color(0xFF10B981);
-        typeDisplay = 'Вертодром';
-      } else {
-        // Для всех остальных типов - аэродром (самолётик)
-        iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
-        iconColor = Color(0xFF0A6EFA);
-
-        // Определяем отображаемый тип
-        switch (typeLower) {
-          case 'airport':
-          case 'аэродром':
-            typeDisplay = 'Аэродром';
-            break;
-          case 'small_airport':
-            typeDisplay = 'Малый аэродром';
-            break;
-          case 'medium_airport':
-            typeDisplay = 'Средний аэродром';
-            break;
-          case 'large_airport':
-            typeDisplay = 'Крупный аэродром';
-            break;
-          default:
-            typeDisplay = type;
-        }
+      switch (typeLower) {
+        case 'heliport':
+        case 'вертодром':
+          typeDisplay = 'Вертодром';
+          break;
+        case 'airport':
+        case 'аэродром':
+          typeDisplay = 'Аэродром';
+          break;
+        case 'small_airport':
+          typeDisplay = 'Малый аэродром';
+          break;
+        case 'medium_airport':
+          typeDisplay = 'Средний аэродром';
+          break;
+        case 'large_airport':
+          typeDisplay = 'Крупный аэродром';
+          break;
+        default:
+          typeDisplay = type;
       }
     }
 
@@ -352,11 +483,11 @@ class FlightCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.all(8.w),
-            decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8.r)),
-            child: Icon(iconData, color: iconColor, size: 16.r),
+            padding: EdgeInsets.all(padding8),
+            decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+            child: Icon(iconData, color: iconColor, size: iconSize),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: spacing8),
           Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -366,22 +497,22 @@ class FlightCard extends StatelessWidget {
                 Row(
                   children: [
                     Flexible(
-                      child: Text(code, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                      child: Text(code, style: bold16s.copyWith(color: Color(0xFF0A6EFA))),
                     ),
                     if (identRu != null && identRu != code) ...[
-                      SizedBox(width: 4.w),
+                      SizedBox(width: spacing4),
                       Flexible(
-                        child: Text('($identRu)', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                        child: Text('($identRu)', style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
                       ),
                     ],
                     if (isInternational) ...[
-                      SizedBox(width: 6.w),
+                      SizedBox(width: spacing6),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                        decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(4.r)),
+                        padding: EdgeInsets.symmetric(horizontal: spacing4, vertical: spacing2v),
+                        decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius4)),
                         child: Text(
                           'INT',
-                          style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.w600),
+                          style: medium10s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -389,27 +520,27 @@ class FlightCard extends StatelessWidget {
                 ),
                 // Название аэропорта
                 if (name != null) ...[
-                  SizedBox(height: 2.h),
+                  SizedBox(height: spacing2v),
                   Flexible(
-                    child: Text(name, style: AppStyles.regular12s.copyWith(color: Color(0xFF374151))),
+                    child: Text(name, style: regular12s.copyWith(color: Color(0xFF374151))),
                   ),
                 ],
                 // Город, регион, тип
                 if (city != null || region != null || typeDisplay.isNotEmpty) ...[
-                  SizedBox(height: 2.h),
+                  SizedBox(height: spacing2v),
                   Flexible(
                     child: Wrap(
-                      spacing: 6.w,
-                      runSpacing: 4.h,
+                      spacing: spacing6,
+                      runSpacing: spacing4,
                       children: [
                         if (city != null)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.location_city, size: 10.r, color: Color(0xFF9CA5AF)),
-                              SizedBox(width: 2.w),
+                              Icon(Icons.location_city, size: iconSize, color: Color(0xFF9CA5AF)),
+                              SizedBox(width: spacing2),
                               Flexible(
-                                child: Text(city, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                child: Text(city, style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
                               ),
                             ],
                           ),
@@ -417,9 +548,9 @@ class FlightCard extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (city != null) ...[Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 6.w)],
+                              if (city != null) ...[Text('•', style: regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: spacing6)],
                               Flexible(
-                                child: Text(region, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                child: Text(region, style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
                               ),
                             ],
                           ),
@@ -427,9 +558,9 @@ class FlightCard extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (city != null || region != null) ...[Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: 6.w)],
+                              if (city != null || region != null) ...[Text('•', style: regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: spacing6)],
                               Flexible(
-                                child: Text(typeDisplay, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                child: Text(typeDisplay, style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
                               ),
                             ],
                           ),

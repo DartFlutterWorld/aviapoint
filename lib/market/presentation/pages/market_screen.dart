@@ -1,17 +1,23 @@
 import 'dart:async';
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/domain/entities/market_category_entity.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
+import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:aviapoint/injection_container.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +39,11 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
   final ScrollController _scrollController = ScrollController();
 
   String _currentProductType = 'aircraft'; // 'aircraft' или 'parts'
-  int? _selectedCategoryId;
+
+  /// Выбранные категории (типы самолётов)
+  /// - Пустой список = выбраны все (фильтр по типу не применяется)
+  /// - Можно выбрать несколько категорий
+  /// - Повторное нажатие по выбранной категории снимает выбор
   List<int> _selectedCategoryIds = [];
   int? _priceFrom;
   int? _priceTo;
@@ -68,7 +78,6 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
     if (_tabController.indexIsChanging) return;
     setState(() {
       _currentProductType = _tabController.index == 0 ? 'aircraft' : 'parts';
-      _selectedCategoryId = null;
       _selectedCategoryIds = [];
     });
     context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
@@ -98,9 +107,14 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
 
   void _applyFilters() {
     final searchQuery = _searchController.text.trim().isEmpty ? null : _searchController.text.trim();
+
+    // Если выбрана одна категория – передаём её как одиночный id (для обратной совместимости).
+    // Если выбрано несколько – используем только список ids, чтобы на бэкенде фильтр был по нескольким категориям.
+    final int? singleCategoryId = _selectedCategoryIds.length == 1 ? _selectedCategoryIds.first : null;
+
     context.read<AircraftMarketBloc>().add(
       AircraftMarketEvent.getProducts(
-        aircraftSubcategoriesId: _selectedCategoryId,
+        aircraftSubcategoriesId: singleCategoryId,
         aircraftSubcategoriesIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : null,
         searchQuery: searchQuery,
         priceFrom: _priceFrom,
@@ -151,74 +165,142 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Маркет',
-        withBack: false,
-        withProfile: true,
-        actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.favorite_outline),
-          //   onPressed: () {
-          //     // TODO: Переход к избранному
-          //   },
-          // ),
-          // IconButton(
-          //   icon: const Icon(Icons.shopping_cart_outlined),
-          //   onPressed: () {
-          //     // TODO: Переход к корзине
-          //   },
-          // ),
-        ],
-      ),
       backgroundColor: AppColors.background,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _handleCreateAdButtonTap(context),
-        backgroundColor: AppColors.primary100p,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-      body: Column(
-        children: [
-          // Табы
-          TabBar(
-            controller: _tabController,
-            labelColor: AppColors.primary100p,
-            unselectedLabelColor: AppColors.textSecondary,
-            indicatorColor: AppColors.primary100p,
-            tabs: const [
-              Tab(text: 'Самолёты и вертолёты'),
-              Tab(text: 'Запчасти'),
-            ],
-          ),
-          // Категории
-          BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
-            builder: (context, state) => state.when(
-              loading: () => const SizedBox.shrink(),
-              error: (message) => const SizedBox.shrink(),
-              success: (categories) => _CategoriesSection(
-                categories: categories,
-                selectedCategoryId: _selectedCategoryId,
-                onCategorySelected: (category) {
-                  setState(() {
-                    _selectedCategoryId = category.id;
-                    _selectedCategoryIds = [category.id];
-                  });
-                  _applyFilters();
-                },
+      floatingActionButton: FloatingActionButtonWidget(title: 'Создать\nобъявление', onTap: () => _handleCreateAdButtonTap(context)),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              snap: false,
+              automaticallyImplyLeading: false,
+              backgroundColor: AppColors.backgroundAppBar,
+              elevation: 1,
+              shadowColor: const Color(0xFFA8A39C).withValues(alpha: 0.12),
+              leadingWidth: 60.w,
+              centerTitle: true,
+              title: Text(
+                'Маркет',
+                style: AppStyles.bold16s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+              actions: [if (Provider.of<AppState>(context, listen: false).isAuthenticated) _MarketProfileButton()],
+              bottom: TabBar(
+                controller: _tabController,
+                labelColor: Color(0xFF0A6EFA),
+                unselectedLabelColor: Color(0xFF9CA5AF),
+                indicatorColor: Color(0xFF0A6EFA),
+                dividerColor: Colors.transparent,
+                labelStyle: AppStyles.bold14s,
+                unselectedLabelStyle: AppStyles.regular14s,
+                tabs: const [
+                  Tab(text: 'Самолёты и вертолёты'),
+                  Tab(text: 'Запчасти'),
+                ],
               ),
             ),
+          ];
+        },
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            _MarketContent(
+              searchController: _searchController,
+              selectedCategoryIds: _selectedCategoryIds,
+              onCategorySelected: (MarketCategoryEntity category) {
+                setState(() {
+                  if (_selectedCategoryIds.contains(category.id)) {
+                    _selectedCategoryIds.remove(category.id);
+                  } else {
+                    _selectedCategoryIds.add(category.id);
+                  }
+                });
+                _applyFilters();
+              },
+              onFiltersDialog: _showFiltersDialog,
+              scrollController: _scrollController,
+              sortBy: _sortBy,
+              onApplyFilters: _applyFilters,
+            ),
+            _MarketContent(
+              searchController: _searchController,
+              selectedCategoryIds: _selectedCategoryIds,
+              onCategorySelected: (MarketCategoryEntity category) {
+                setState(() {
+                  if (_selectedCategoryIds.contains(category.id)) {
+                    _selectedCategoryIds.remove(category.id);
+                  } else {
+                    _selectedCategoryIds.add(category.id);
+                  }
+                });
+                _applyFilters();
+              },
+              onFiltersDialog: _showFiltersDialog,
+              scrollController: _scrollController,
+              sortBy: _sortBy,
+              onApplyFilters: _applyFilters,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Контент маркета с категориями, поиском и продуктами
+class _MarketContent extends StatelessWidget {
+  final TextEditingController searchController;
+  final List<int> selectedCategoryIds;
+  final void Function(MarketCategoryEntity) onCategorySelected;
+  final VoidCallback onFiltersDialog;
+  final ScrollController scrollController;
+  final String? sortBy;
+  final VoidCallback onApplyFilters;
+
+  const _MarketContent({
+    required this.searchController,
+    required this.selectedCategoryIds,
+    required this.onCategorySelected,
+    required this.onFiltersDialog,
+    required this.scrollController,
+    this.sortBy,
+    required this.onApplyFilters,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      controller: scrollController,
+      slivers: [
+        // Категории
+        BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
+          builder: (context, state) => state.when(
+            loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+            error: (message) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+            success: (categories) => SliverToBoxAdapter(
+              child: _CategoriesSection(categories: categories, selectedCategoryIds: selectedCategoryIds, onCategorySelected: onCategorySelected),
+            ),
           ),
-          // Поиск и фильтры
-          Padding(
+        ),
+        // Поиск и фильтры
+        SliverToBoxAdapter(
+          child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _searchController,
+                    controller: searchController,
                     decoration: InputDecoration(
-                      hintText: _currentProductType == 'aircraft' ? 'Поиск самолётов' : 'Поиск запчастей',
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(icon: const Icon(Icons.tune), onPressed: _showFiltersDialog),
+                      hintText: 'Поиск',
+                      prefixIcon: Icon(Icons.search, size: 20.sp),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.tune, size: 20.sp),
+                        onPressed: onFiltersDialog,
+                      ),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                       contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                     ),
@@ -227,93 +309,101 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
               ],
             ),
           ),
-          // Список продуктов
-          Expanded(
-            child: BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
-              builder: (context, state) => state.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                loadingMore: (products) => _ProductsGrid(products: products, isLoadingMore: true, scrollController: _scrollController),
-                error: (message) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(message, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-                      SizedBox(height: 16.h),
-                      ElevatedButton(onPressed: _applyFilters, child: const Text('Повторить')),
-                    ],
-                  ),
+        ),
+        // Список продуктов
+        BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
+          builder: (context, state) => state.when(
+            loading: () => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
+            loadingMore: (products) => _ProductsSliverGrid(products: products, isLoadingMore: true, sortBy: sortBy),
+            error: (message) => SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(message, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+                    SizedBox(height: 16.h),
+                    ElevatedButton(onPressed: onApplyFilters, child: const Text('Повторить')),
+                  ],
                 ),
-                success: (products, hasMore) => _ProductsGrid(products: products, isLoadingMore: false, hasMore: hasMore, scrollController: _scrollController),
-                creatingAirCraft: () {
-                  // Показываем текущий список продуктов с индикатором загрузки
-                  // Используем BlocBuilder для получения предыдущего состояния
-                  final previousState = context.read<AircraftMarketBloc>().state;
-                  if (previousState is SuccessAircraftMarketState) {
-                    return _ProductsGrid(products: previousState.products, isLoadingMore: false, hasMore: previousState.hasMore, scrollController: _scrollController);
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
-                createdAirCraft: (product) {
-                  // После создания обновляем список
-                  context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
-                  final previousState = context.read<AircraftMarketBloc>().state;
-                  if (previousState is SuccessAircraftMarketState) {
-                    return _ProductsGrid(products: previousState.products, isLoadingMore: false, hasMore: previousState.hasMore, scrollController: _scrollController);
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
-                updating: () {
-                  // Показываем текущий список продуктов с индикатором загрузки
-                  // Используем BlocBuilder для получения предыдущего состояния
-                  return BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
-                    buildWhen: (previous, current) => current is! UpdatingMarketProductState,
-                    builder: (context, previousState) {
-                      final currentProducts = previousState.maybeWhen(success: (products, hasMore) => products, loadingMore: (products) => products, orElse: () => <AircraftMarketEntity>[]);
-                      return _ProductsGrid(products: currentProducts, isLoadingMore: true, hasMore: true, scrollController: _scrollController);
-                    },
-                  );
-                },
-                updated: (product) {
-                  // После updated сразу возвращаемся к success, показываем обновленный список
-                  // Используем BlocBuilder для получения текущего состояния
-                  return BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
-                    buildWhen: (previous, current) => current is SuccessAircraftMarketState,
-                    builder: (context, currentState) {
-                      final products = currentState.maybeWhen(success: (products, hasMore) => products, orElse: () => <AircraftMarketEntity>[]);
-                      return _ProductsGrid(products: products, isLoadingMore: false, hasMore: true, scrollController: _scrollController);
-                    },
-                  );
-                },
               ),
             ),
+            success: (products, hasMore) => _ProductsSliverGrid(products: products, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
+            creatingAirCraft: () => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
+            createdAirCraft: (product) => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
+            updating: () => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
+            updated: (product) => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 // Виджет категорий
-class _CategoriesSection extends StatelessWidget {
+class _CategoriesSection extends StatefulWidget {
   final List<MarketCategoryEntity> categories;
-  final int? selectedCategoryId;
+  final List<int> selectedCategoryIds;
   final void Function(MarketCategoryEntity) onCategorySelected;
 
-  const _CategoriesSection({required this.categories, required this.selectedCategoryId, required this.onCategorySelected});
+  const _CategoriesSection({required this.categories, required this.selectedCategoryIds, required this.onCategorySelected});
+
+  @override
+  State<_CategoriesSection> createState() => _CategoriesSectionState();
+}
+
+class _CategoriesSectionState extends State<_CategoriesSection> {
+  late final ScrollController _scrollController;
+  bool _isDragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (categories.isEmpty) return const SizedBox.shrink();
+    if (widget.categories.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 8.h),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: 8.w),
-          child: Row(
-            children: [...categories.map((category) => _CategoryCard(category: category, isSelected: selectedCategoryId == category.id, onTap: () => onCategorySelected(category)))],
+        GestureDetector(
+          onPanStart: (_) {
+            setState(() {
+              _isDragging = true;
+            });
+          },
+          onPanUpdate: (details) {
+            if (_scrollController.hasClients) {
+              _scrollController.position.moveTo(
+                (_scrollController.position.pixels - details.delta.dx).clamp(
+                  0.0,
+                  _scrollController.position.maxScrollExtent,
+                ),
+              );
+            }
+          },
+          onPanEnd: (_) {
+            setState(() {
+              _isDragging = false;
+            });
+          },
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            physics: _isDragging ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Row(
+              children: [...widget.categories.map((category) => _CategoryCard(category: category, isSelected: widget.selectedCategoryIds.contains(category.id), onTap: _isDragging ? () {} : () => widget.onCategorySelected(category)))],
+            ),
           ),
         ),
         SizedBox(height: 8.h),
@@ -334,31 +424,34 @@ class _CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(right: 8.w),
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary100p.withOpacity(0.1) : Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: isSelected ? AppColors.primary100p : Colors.grey.shade300, width: isSelected ? 2 : 1),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (category.iconUrl != null && category.iconUrl!.isNotEmpty)
-              Padding(
-                padding: EdgeInsets.only(bottom: 6.h),
-                child: Image.network(getImageUrl(category.iconUrl!), height: 50.h, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => const SizedBox()),
+      child: Opacity(
+        opacity: isSelected ? 0.5 : 1.0,
+        child: Container(
+          margin: EdgeInsets.only(right: 8.w),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primary100p.withOpacity(0.1) : Colors.white,
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: isSelected ? AppColors.primary100p : Colors.grey.shade300, width: isSelected ? 2.w : 1.w),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (category.iconUrl != null && category.iconUrl!.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 0.h),
+                  child: Image.network(getImageUrl(category.iconUrl!), height: 50.h, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => const SizedBox()),
+                ),
+              Text(
+                category.name.replaceAll('самолёты', '').replaceAll('самолёт', '').replaceAll('Самолёт', '').trim(),
+                style: AppStyles.regular10s.copyWith(color: isSelected ? AppColors.primary100p : AppColors.textPrimary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
               ),
-            Text(
-              category.name.replaceAll('самолёт', '').replaceAll('Самолёт', '').trim(),
-              style: AppStyles.regular14s.copyWith(color: isSelected ? AppColors.primary100p : AppColors.textPrimary, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.left,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -474,52 +567,117 @@ class _FiltersDialogState extends State<_FiltersDialog> {
   }
 }
 
-// Сетка продуктов
-class _ProductsGrid extends StatelessWidget {
+// Сетка продуктов как Sliver
+class _ProductsSliverGrid extends StatelessWidget {
   final List<AircraftMarketEntity> products;
   final bool isLoadingMore;
   final bool hasMore;
-  final ScrollController scrollController;
+  final String? sortBy;
 
-  const _ProductsGrid({required this.products, this.isLoadingMore = false, this.hasMore = false, required this.scrollController});
+  const _ProductsSliverGrid({required this.products, this.isLoadingMore = false, this.hasMore = false, this.sortBy});
 
   @override
   Widget build(BuildContext context) {
-    if (products.isEmpty && !isLoadingMore) {
-      return Center(
-        child: Text('Продукты не найдены', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+    final isTablet = Provider.of<AppState>(context, listen: false).isTablet;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // По умолчанию и при сортировке "по дате" показываем последние добавленные товары сверху
+    final displayedProducts = [...products];
+    if (sortBy == null || sortBy == 'default' || sortBy == 'date') {
+      displayedProducts.sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+    }
+
+    if (displayedProducts.isEmpty && !isLoadingMore) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Text('Продукты не найдены', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+        ),
       );
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: GridView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.all(8.w),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: kIsWeb ? 3 : 2, crossAxisSpacing: 8.w, mainAxisSpacing: 8.h, childAspectRatio: kIsWeb ? 0.95 : 0.67),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return AircraftMarketCard(
-                product: product,
-                showEditButtons: false,
-                showYearAndLocation: true,
-                showInactiveBadge: false,
-                onTap: () {
-                  context.router.push(AircraftMarketDetailRoute(id: product.id));
-                },
-              );
+    // Определяем количество колонок: на вебе адаптивно по ширине, в ландшафте 3, иначе 2
+    final crossAxisCount = kIsWeb
+        ? () {
+            final width = MediaQuery.of(context).size.width;
+            if (width >= 1200) return 4;
+            if (width >= 900) return 3;
+            if (width >= 600) return 2;
+            return 1;
+          }()
+        : (isLandscape ? 3 : (isTablet ? 2 : 2));
+
+    return SliverPadding(
+      padding: EdgeInsets.all(8.w),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8.w, mainAxisSpacing: 8.h, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final product = displayedProducts[index];
+          return AircraftMarketCard(
+            product: product,
+            showEditButtons: false,
+            showYearAndLocation: true,
+            showInactiveBadge: false,
+            onTap: () {
+              context.router.push(AircraftMarketDetailRoute(id: product.id));
             },
+          );
+        }, childCount: displayedProducts.length),
+      ),
+    );
+  }
+}
+
+/// Кнопка профиля для маркета
+class _MarketProfileButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isAuthenticated = Provider.of<AppState>(context, listen: true).isAuthenticated;
+    final iconSize = 28.sp;
+
+    if (!isAuthenticated) {
+      return IconButton(
+        constraints: const BoxConstraints(),
+        iconSize: iconSize,
+        icon: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+        onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
+        tooltip: 'Профиль',
+      );
+    }
+
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
+
+        final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+
+        return IconButton(
+          constraints: BoxConstraints(),
+          iconSize: iconSize,
+          icon: ClipOval(
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: iconSize,
+              height: iconSize,
+              child: imageUrl != null && imageUrl.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      width: iconSize,
+                      height: iconSize,
+                      fit: BoxFit.cover,
+                      cacheManager: getIt<DefaultCacheManager>(),
+                      cacheKey: avatarUrl,
+                      placeholder: (context, url) =>
+                          SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      errorWidget: (context, url, error) =>
+                          SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                    )
+                  : SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+            ),
           ),
-        ),
-        if (isLoadingMore) Padding(padding: EdgeInsets.all(16.w), child: const CircularProgressIndicator()),
-        if (!hasMore && products.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Text('Все продукты загружены', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-          ),
-      ],
+          onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
+          tooltip: 'Профиль',
+        );
+      },
     );
   }
 }

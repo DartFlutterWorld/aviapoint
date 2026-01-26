@@ -65,17 +65,17 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
             child: BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
               builder: (context, state) => state.map(
                 loading: (value) => ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   child: Shimmer(
                     duration: const Duration(milliseconds: 1000),
                     interval: Duration(milliseconds: 0),
                     color: const Color(0xFF8D66FE),
                     colorOpacity: 0.5,
                     child: Container(
-                      padding: EdgeInsets.all(8),
-                      height: 97.7,
+                      padding: EdgeInsets.all(8.w),
+                      height: 97.7.h,
                       width: double.infinity,
-                      decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12.r)),
                     ),
                   ),
                 ),
@@ -171,19 +171,19 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                     BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
                       builder: (context, state) => state.map(
                         loading: (value) => ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                           child: Shimmer(
                             duration: const Duration(milliseconds: 1000),
                             interval: Duration(milliseconds: 0),
                             color: const Color(0xFF8D66FE),
                             colorOpacity: 0.5,
                             child: Container(
-                              padding: EdgeInsets.all(8),
-                              height: 1000,
+                              padding: EdgeInsets.all(8.w),
+                              height: 1000.h,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: Color(0xFFF3EFFF),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
                             ),
                           ),
@@ -268,7 +268,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                       type: MaterialType.transparency,
                       child: Center(
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(20)),
+                          borderRadius: BorderRadius.all(Radius.circular(20.r)),
                           child: SelectTopicsWarningDialog(),
                         ),
                       ),
@@ -277,14 +277,14 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                 }
               },
               borderRadius: 46.r,
-              textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
+              textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
               boxShadow: [
                 BoxShadow(
                   color: Color(0xff0064D6).withOpacity(0.28),
-                  blurRadius: 17.8,
+                  blurRadius: 17.8.r,
                   spreadRadius: 0,
-                  offset: Offset(0.0, 7.0),
+                  offset: Offset(0.0, 7.h),
                 ),
               ],
             ),

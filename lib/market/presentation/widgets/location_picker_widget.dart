@@ -477,15 +477,15 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
 
   Widget? _buildSuffixIcon() {
     if (_isLoadingSuggestions) {
-      return const SizedBox(
-        width: 20,
-        height: 20,
-        child: Padding(padding: EdgeInsets.all(12.0), child: CircularProgressIndicator(strokeWidth: 2)),
+      return SizedBox(
+        width: 20.w,
+        height: 20.h,
+        child: Padding(padding: EdgeInsets.all(12.w), child: CircularProgressIndicator(strokeWidth: 2.w)),
       );
     }
 
     if (_searchController.text.isNotEmpty) {
-      return IconButton(icon: const Icon(Icons.clear, size: 20), onPressed: _clearLocation, padding: EdgeInsets.zero, constraints: const BoxConstraints());
+      return IconButton(icon: Icon(Icons.clear, size: 20.sp), onPressed: _clearLocation, padding: EdgeInsets.zero, constraints: const BoxConstraints());
     }
 
     return null;
@@ -544,7 +544,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         child: Row(
                           children: [
-                            const Icon(Icons.location_on, color: AppColors.primary100p, size: 20),
+                            Icon(Icons.location_on, color: AppColors.primary100p, size: 20.sp),
                             SizedBox(width: 16.w),
                             Expanded(
                               child: Text(displayName.isNotEmpty ? displayName : 'Адрес не указан', style: AppStyles.regular14s, maxLines: 2, overflow: TextOverflow.ellipsis),
@@ -596,9 +596,9 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                       Marker(
                         key: ValueKey('marker_point_$_markerKey'),
                         point: _selectedLocation!,
-                        width: 40,
-                        height: 40,
-                        child: const Icon(Icons.location_on, color: AppColors.primary100p, size: 40),
+                        width: 40.w,
+                        height: 40.h,
+                        child: Icon(Icons.location_on, color: AppColors.primary100p, size: 40.sp),
                       ),
                     ],
                   ),

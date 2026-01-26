@@ -7,6 +7,7 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/pages/detail_question_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
@@ -81,7 +82,7 @@ class _ListQuestionByCategoryScreenState extends State<ListQuestionByCategoryScr
                               offset: Offset(0.0, 7.0),
                             ),
                           ],
-                          textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0A6EFA)),
+                          textStyle: AppStyles.bold16s.copyWith(color: const Color(0xFF0A6EFA)),
                           borderColor: Colors.transparent,
                           backgroundColor: Colors.white,
                           borderRadius: 46,
@@ -108,7 +109,7 @@ class _ListQuestionByCategoryScreenState extends State<ListQuestionByCategoryScr
                               offset: Offset(0.0, 7.0),
                             ),
                           ],
-                          textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                          textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                           borderColor: Colors.transparent,
                           backgroundColor: Color(0xFF0A6EFA),
                           borderRadius: 46,

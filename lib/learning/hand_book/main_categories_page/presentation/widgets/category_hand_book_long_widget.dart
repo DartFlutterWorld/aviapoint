@@ -52,12 +52,12 @@ class CategoryHandBookLongWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 18),
+                          SizedBox(height: 18.h),
                           Padding(
                             padding: const EdgeInsets.only(right: 13),
                             child: Text(title, style: AppStyles.bold15s.copyWith(color: Color(0xFF1F2937), height: 1)),
                           ),
-                          SizedBox(height: 5),
+                          SizedBox(height: 5.h),
                           Padding(
                             padding: const EdgeInsets.only(right: 13),
                             child: Text(

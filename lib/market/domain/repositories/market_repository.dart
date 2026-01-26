@@ -46,6 +46,8 @@ abstract class MarketRepository {
     bool? isShareSale,
     int? shareNumerator,
     int? shareDenominator,
+    bool? isLeasing,
+    String? leasingConditions,
     // Файлы изображений для загрузки
     XFile? mainImageFile,
     List<XFile>? additionalImageFiles,
@@ -70,6 +72,8 @@ abstract class MarketRepository {
     bool? isShareSale,
     int? shareNumerator,
     int? shareDenominator,
+    bool? isLeasing,
+    String? leasingConditions,
     // Файлы изображений для загрузки
     XFile? mainImageFile,
     List<XFile>? additionalImageFiles,

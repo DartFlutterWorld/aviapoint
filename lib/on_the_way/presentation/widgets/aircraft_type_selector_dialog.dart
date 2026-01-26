@@ -172,10 +172,16 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
         Navigator.of(context).pop(fullName);
       }
     } else if (_isManualMode && _manualInputController.text.trim().isNotEmpty) {
+      final manualModel = _manualInputController.text.trim();
+      final manufacturerName = _selectedManufacturer?.name.trim();
+      final fullName = manufacturerName != null && manufacturerName.isNotEmpty
+          ? // Если пользователь уже указал производителя вручную в начале, не дублируем его
+          (manualModel.toLowerCase().startsWith(manufacturerName.toLowerCase()) ? manualModel : '$manufacturerName $manualModel')
+          : manualModel;
       if (widget.returnModelId) {
-        Navigator.of(context).pop({'id': null, 'fullName': _manualInputController.text.trim()});
+        Navigator.of(context).pop({'id': null, 'fullName': fullName});
       } else {
-        Navigator.of(context).pop(_manualInputController.text.trim());
+        Navigator.of(context).pop(fullName);
       }
     }
   }
@@ -374,7 +380,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                           });
                                         },
                                         icon: Icon(Icons.edit, size: 18, color: Color(0xFF0A6EFA)),
-                                        label: Text('Ввести вручную', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                                        label: Text('Ввести вручную', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                                       ),
                                     ],
                                   ),
@@ -428,7 +434,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                         });
                                       },
                                       icon: Icon(Icons.edit, size: 16, color: Color(0xFF9CA5AF)),
-                                      label: Text('Ввести другую модель вручную', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                      label: Text('Ввести другую модель вручную', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
                                     ),
                                   ),
                                 ],

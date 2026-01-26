@@ -16,7 +16,7 @@ class YourSpecializationWidget extends StatelessWidget {
       padding: EdgeInsets.only(top: 10, left: 12, right: 12, bottom: 16),
       decoration: BoxDecoration(
         color: Color(0xFFE3F1FF),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(18.r),
         boxShadow: [BoxShadow(color: Color(0xFF000000).withOpacity(0.08), blurRadius: 4.0, offset: Offset(0.0, 4.0))],
       ),
       child: Column(
@@ -38,7 +38,7 @@ class YourSpecializationWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           GestureDetector(
             onTap: onTap,
             child: Container(

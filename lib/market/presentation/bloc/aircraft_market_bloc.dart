@@ -44,6 +44,8 @@ class AircraftMarketEvent with _$AircraftMarketEvent {
     bool? isShareSale,
     int? shareNumerator,
     int? shareDenominator,
+    bool? isLeasing,
+    String? leasingConditions,
     // Файлы изображений для загрузки
     XFile? mainImageFile,
     List<XFile>? additionalImageFiles,
@@ -68,6 +70,8 @@ class AircraftMarketEvent with _$AircraftMarketEvent {
     bool? isShareSale,
     int? shareNumerator,
     int? shareDenominator,
+    bool? isLeasing,
+    String? leasingConditions,
     // Файлы изображений для загрузки
     XFile? mainImageFile,
     List<XFile>? additionalImageFiles,
@@ -355,6 +359,11 @@ class AircraftMarketBloc extends Bloc<AircraftMarketEvent, AircraftMarketState> 
       engineVolume: event.engineVolume,
       seats: event.seats,
       condition: event.condition,
+      isShareSale: event.isShareSale,
+      shareNumerator: event.shareNumerator,
+      shareDenominator: event.shareDenominator,
+      isLeasing: event.isLeasing,
+      leasingConditions: event.leasingConditions,
       mainImageFile: event.mainImageFile,
       additionalImageFiles: event.additionalImageFiles,
     );
@@ -391,6 +400,8 @@ class AircraftMarketBloc extends Bloc<AircraftMarketEvent, AircraftMarketState> 
       isShareSale: event.isShareSale,
       shareNumerator: event.shareNumerator,
       shareDenominator: event.shareDenominator,
+      isLeasing: event.isLeasing,
+      leasingConditions: event.leasingConditions,
       mainImageFile: event.mainImageFile,
       additionalImageFiles: event.additionalImageFiles,
     );

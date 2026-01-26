@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class VideoForStudentsScreen extends StatefulWidget {
@@ -86,7 +87,7 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
             successById: (value) => (_videoPlayerController != null && _videoPlayerController!.value.isInitialized)
                 ? Center(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                       child: AspectRatio(
                         aspectRatio: _videoPlayerController!.value.aspectRatio,
                         child: VisibilityDetector(

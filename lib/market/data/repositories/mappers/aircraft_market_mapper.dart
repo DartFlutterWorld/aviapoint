@@ -23,6 +23,8 @@ class AircraftMarketMapper {
       engineVolume: dto.engineVolume,
       seats: dto.seats,
       condition: dto.condition,
+      isLeasing: dto.isLeasing,
+      leasingConditions: dto.leasingConditions,
       isShareSale: dto.isShareSale,
       shareNumerator: dto.shareNumerator,
       shareDenominator: dto.shareDenominator,

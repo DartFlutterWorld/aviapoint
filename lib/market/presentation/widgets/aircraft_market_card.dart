@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
+import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Универсальная карточка товара для использования в маркете и профиле
-class AircraftMarketCard extends StatelessWidget {
+class AircraftMarketCard extends StatefulWidget {
   final AircraftMarketEntity product;
   final bool showEditButtons; // Показывать ли кнопки редактирования/удаления
   final bool showYearAndLocation; // Показывать ли год выпуска и местоположение
@@ -21,143 +22,100 @@ class AircraftMarketCard extends StatelessWidget {
   const AircraftMarketCard({super.key, required this.product, this.showEditButtons = false, this.showYearAndLocation = true, this.showInactiveBadge = false, this.onTap, this.onEdit, this.onDelete});
 
   @override
+  State<AircraftMarketCard> createState() => _AircraftMarketCardState();
+}
+
+class _AircraftMarketCardState extends State<AircraftMarketCard> {
+  bool? _isImageHorizontal;
+
+  void _onImageOrientationDetected(bool isHorizontal) {
+    if (mounted && _isImageHorizontal != isHorizontal) {
+      setState(() {
+        _isImageHorizontal = isHorizontal;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final imageUrl = product.mainImageUrl ?? (product.additionalImageUrls.isNotEmpty ? product.additionalImageUrls.first : null);
+    final imageUrl = widget.product.mainImageUrl ?? (widget.product.additionalImageUrls.isNotEmpty ? widget.product.additionalImageUrls.first : null);
+    final isHorizontal = _isImageHorizontal;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Card(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            // Изображение
-            Expanded(
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), topRight: Radius.circular(8.r)),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        // Градиент для плавного перехода
-                      ),
-                      child: imageUrl != null ? _ProductImage(imageUrl: getImageUrl(imageUrl)) : Center(child: Icon(Icons.image, color: Colors.grey.shade400, size: 32)),
+            // Фоновое изображение заполняет весь контейнер (или уменьшается для горизонтальных)
+            if (imageUrl != null)
+              _ProductImage(imageUrl: getImageUrl(imageUrl), onOrientationDetected: _onImageOrientationDetected, isHorizontal: isHorizontal == true)
+            else
+              Container(
+                color: Colors.grey.shade200,
+                alignment: Alignment.center,
+                child: Icon(Icons.image, color: Colors.grey.shade400, size: 32.sp),
+              ),
+            // Нижний блок с текстом и ценой (с подложкой под текстом)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+                decoration: BoxDecoration(
+                  // color: Colors.black.withOpacity(0.75),
+                  color: isHorizontal == true ? Colors.black.withOpacity(1) : Colors.black.withOpacity(0.75),
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.product.title,
+                      style: AppStyles.bold12s.copyWith(color: Colors.white, height: 1.3),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  // Бейдж "Не активно" (если нужно и объявление неактивно)
-                  if (showInactiveBadge && !product.isActive)
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        ignoring: true,
-                        child: Container(
-                          color: Colors.black.withOpacity(0.25),
-                          alignment: Alignment.center,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(8.r)),
-                            child: Text('Не активно', style: AppStyles.regular12s.copyWith(color: Colors.white)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  // Чипс с долей
-                  if (product.isShareSale == true && product.shareNumerator != null && product.shareDenominator != null)
-                    Positioned(
-                      top: 8.h,
-                      left: showEditButtons ? 8.w : null, // Если есть кнопки редактирования - слева
-                      right: !showEditButtons ? 8.w : null, // Если нет кнопок - справа
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(12.r)),
-                        child: Text('Доля ${product.shareNumerator}/${product.shareDenominator}', style: AppStyles.regular12s.copyWith(color: Colors.white)),
-                      ),
-                    ),
-                  // Кнопки редактирования и удаления (если нужно)
-                  if (showEditButtons)
-                    Positioned(
-                      top: 8.h,
-                      right: 8.w,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                    if (widget.showYearAndLocation && (widget.product.year != null || (widget.product.location != null && widget.product.location!.isNotEmpty))) ...[
+                      SizedBox(height: 4.h),
+                      Row(
                         children: [
-                          // Кнопка редактирования
-                          Container(
-                            width: 32.w,
-                            height: 32.h,
-                            decoration: BoxDecoration(color: Colors.blue.withOpacity(0.7), shape: BoxShape.circle),
-                            child: IconButton(
-                              icon: Icon(Icons.edit, color: Colors.white, size: 18),
-                              onPressed:
-                                  onEdit ??
-                                  () {
-                                    context.router.push(
-                                      BaseRoute(
-                                        children: [
-                                          MarketNavigationRoute(children: [EditAircraftMarketRoute(product: product)]),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                              padding: EdgeInsets.zero,
+                          if (widget.product.year != null) Text('${widget.product.year}', style: AppStyles.medium8s.copyWith(color: Colors.white70)),
+                          if (widget.product.year != null && widget.product.location != null && widget.product.location!.isNotEmpty) ...[
+                            SizedBox(width: 8.w),
+                            Container(
+                              width: 3.w,
+                              height: 3.w,
+                              decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle),
                             ),
-                          ),
-                          SizedBox(width: 4.w),
-                          // Кнопка удаления
-                          Container(
-                            width: 32.w,
-                            height: 32.h,
-                            decoration: BoxDecoration(color: Colors.red.withOpacity(0.7), shape: BoxShape.circle),
-                            child: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.white, size: 18),
-                              onPressed: onDelete,
-                              padding: EdgeInsets.zero,
+                            SizedBox(width: 4.w),
+                          ],
+                          if (widget.product.location != null && widget.product.location!.isNotEmpty)
+                            Expanded(
+                              child: Text(
+                                widget.product.location!,
+                                style: AppStyles.medium8s.copyWith(color: Colors.white70),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
                         ],
                       ),
-                    ),
-                ],
-              ),
-            ),
-            // Информация
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 12.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Верхняя часть - заголовок и мета-информация
-                    Text(product.title, style: AppStyles.regular12s.copyWith(height: 1.4), maxLines: 3, overflow: TextOverflow.ellipsis),
-                    // Год выпуска и местоположение (если нужно)
-                    if (showYearAndLocation) ...[
-                      if (product.year != null) ...[
-                        SizedBox(height: 6.h),
-                        Text('Год выпуска ${product.year}', style: AppStyles.regular12s.copyWith(fontSize: 10, color: Color(0xFF9CA5AF), height: 1.3)),
-                      ],
-                      if (product.location != null && product.location!.isNotEmpty) ...[
-                        SizedBox(height: 3.h),
-                        Text(
-                          product.location!,
-                          style: AppStyles.regular12s.copyWith(fontSize: 10, color: Color(0xFF9CA5AF), height: 1.3),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                        ),
-                      ],
                     ],
-                    Spacer(),
-                    // Нижняя часть - цена (прижата к низу)
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.h),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '${formatPrice(product.price)} ₽',
-                          style: AppStyles.bold16s.copyWith(color: AppColors.primary100p),
-                          textAlign: TextAlign.right,
+                    SizedBox(height: 6.h),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${formatPrice(widget.product.price)} ₽',
+                        style: AppStyles.bold16s.copyWith(
+                          color: AppColors.primary100p, // Фиолетовый цвет для всех цен
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -165,6 +123,95 @@ class AircraftMarketCard extends StatelessWidget {
                 ),
               ),
             ),
+            // Бейдж "Не активно" (если нужно и объявление неактивно)
+            if (widget.showInactiveBadge && !widget.product.isActive)
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.35),
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.7), borderRadius: BorderRadius.circular(8.r)),
+                      child: Text('Не активно', style: AppStyles.regular12s.copyWith(color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ),
+            // Чипсы: доля и лизинг
+            if ((widget.product.isShareSale == true && widget.product.shareNumerator != null && widget.product.shareDenominator != null) || widget.product.isLeasing == true)
+              Positioned(
+                top: 8.h,
+                left: widget.showEditButtons ? 8.w : null,
+                right: !widget.showEditButtons ? 8.w : null,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.product.isShareSale == true && widget.product.shareNumerator != null && widget.product.shareDenominator != null)
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: StatusChip(
+                          text: 'Доля ${widget.product.shareNumerator}/${widget.product.shareDenominator}',
+                          backgroundColor: Colors.black.withOpacity(0.7),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          borderRadius: 12.r,
+                        ),
+                      ),
+                    if (widget.product.isLeasing == true)
+                      StatusChip(
+                        text: 'Лизинг',
+                        backgroundColor: Colors.black.withOpacity(0.7),
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        borderRadius: 12.r,
+                      ),
+                  ],
+                ),
+              ),
+            // Кнопки редактирования и удаления (если нужно)
+            if (widget.showEditButtons)
+              Positioned(
+                top: 8.h,
+                right: 8.w,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Кнопка редактирования
+                    Container(
+                      width: 32.w,
+                      height: 32.h,
+                      decoration: BoxDecoration(color: Colors.blue.withOpacity(0.8), shape: BoxShape.circle),
+                      child: IconButton(
+                        icon: Icon(Icons.edit, color: Colors.white, size: 18.sp),
+                        onPressed:
+                            widget.onEdit ??
+                            () {
+                              context.router.push(
+                                BaseRoute(
+                                  children: [
+                                    MarketNavigationRoute(children: [EditAircraftMarketRoute(product: widget.product)]),
+                                  ],
+                                ),
+                              );
+                            },
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    // Кнопка удаления
+                    Container(
+                      width: 32.w,
+                      height: 32.h,
+                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), shape: BoxShape.circle),
+                      child: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.white, size: 18.sp),
+                        onPressed: widget.onDelete,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -173,23 +220,94 @@ class AircraftMarketCard extends StatelessWidget {
 }
 
 /// Виджет для отображения изображения товара с обработкой вертикальных и горизонтальных фотографий
-class _ProductImage extends StatelessWidget {
+class _ProductImage extends StatefulWidget {
   final String imageUrl;
+  final ValueChanged<bool>? onOrientationDetected;
+  final bool isHorizontal;
 
-  const _ProductImage({required this.imageUrl});
+  const _ProductImage({required this.imageUrl, this.onOrientationDetected, this.isHorizontal = false});
+
+  @override
+  State<_ProductImage> createState() => _ProductImageState();
+}
+
+class _ProductImageState extends State<_ProductImage> {
+  Size? _imageSize;
+  bool _isLoadingSize = true;
+  ImageStreamListener? _imageStreamListener;
+  ImageStream? _imageStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImageSize();
+  }
+
+  @override
+  void dispose() {
+    // Удаляем listener при размонтировании виджета
+    if (_imageStream != null && _imageStreamListener != null) {
+      _imageStream!.removeListener(_imageStreamListener!);
+    }
+    super.dispose();
+  }
+
+  Future<void> _loadImageSize() async {
+    try {
+      final imageProvider = NetworkImage(widget.imageUrl);
+      _imageStream = imageProvider.resolve(ImageConfiguration.empty);
+      _imageStreamListener = ImageStreamListener((ImageInfo info, bool synchronousCall) {
+        if (mounted && _isLoadingSize) {
+          final size = Size(info.image.width.toDouble(), info.image.height.toDouble());
+          final isHorizontal = size.width > size.height;
+
+          // Откладываем setState и callback до следующего кадра, чтобы избежать ошибки "setState during build"
+          if (synchronousCall) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && _isLoadingSize) {
+                setState(() {
+                  _imageSize = size;
+                  _isLoadingSize = false;
+                });
+                if (mounted) {
+                  widget.onOrientationDetected?.call(isHorizontal);
+                }
+              }
+            });
+          } else {
+            setState(() {
+              _imageSize = size;
+              _isLoadingSize = false;
+            });
+            if (mounted) {
+              widget.onOrientationDetected?.call(isHorizontal);
+            }
+          }
+        }
+      });
+      _imageStream!.addListener(_imageStreamListener!);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingSize = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: Colors.grey.shade100,
+      // color: widget.isHorizontal ? Colors.black : Colors.transparent,
+      alignment: widget.isHorizontal ? Alignment.topCenter : Alignment.center,
       child: Image.network(
-        imageUrl,
-        // Сохраняем пропорции изображения, не сжимаем и не растягиваем
-        fit: BoxFit.cover,
-        alignment: Alignment.center,
-        // Плавная загрузка изображения
+        widget.imageUrl,
+        fit: widget.isHorizontal ? BoxFit.contain : BoxFit.cover,
+        alignment: widget.isHorizontal ? Alignment.topCenter : Alignment.center,
+        width: widget.isHorizontal ? double.infinity : double.infinity,
+        height: widget.isHorizontal ? null : double.infinity,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;
@@ -199,20 +317,18 @@ class _ProductImage extends StatelessWidget {
             child: Center(
               child: CircularProgressIndicator(
                 value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                strokeWidth: 2,
+                strokeWidth: 2.w,
                 color: Colors.grey.shade400,
               ),
             ),
           );
         },
-        // Обработка ошибок загрузки
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: Colors.grey.shade100,
-            child: Center(child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32)),
+            child: Center(child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.sp)),
           );
         },
-        // Плавное появление изображения
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded || frame != null) {
             return AnimatedOpacity(opacity: frame == null ? 0 : 1, duration: const Duration(milliseconds: 200), curve: Curves.easeOut, child: child);
@@ -222,8 +338,7 @@ class _ProductImage extends StatelessWidget {
             child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: Colors.grey.shade400)),
           );
         },
-        // Кеширование для лучшей производительности
-        cacheWidth: 600, // Больший размер для лучшего качества
+        cacheWidth: 600,
         cacheHeight: 600,
       ),
     );

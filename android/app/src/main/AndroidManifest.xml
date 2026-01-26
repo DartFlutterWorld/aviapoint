@@ -71,26 +71,13 @@ xmlns:tools="http://schemas.android.com/tools"
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+            <!-- Universal Links для avia-point.com -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="staging.silkagro.ru" />
-                <data android:scheme="https" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="xn--90abj.xn--80aanbj8adx2c.xn--p1ai" />
-                <data android:scheme="https" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="cenazerna.ru" />
-                <data android:scheme="https" />
+                <data android:scheme="https" android:host="avia-point.com" />
+                <data android:scheme="http" android:host="avia-point.com" />
             </intent-filter>
             <!-- Deep link для платежей: aviapoint://payment/success и aviapoint://payment/cancel -->
             <intent-filter>

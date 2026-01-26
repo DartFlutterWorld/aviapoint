@@ -14,6 +14,7 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/pre
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/bloc/preflight_inspection_categories_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
@@ -180,86 +181,88 @@ class _SuccessState extends State<_Success> {
       ),
     );
 
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8, top: 8, bottom: MediaQuery.of(context).padding.bottom + 40),
+    return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 8.h, bottom: 8.h),
         child: Column(
           children: [
-            LiveGrid.options(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              options: options,
-              itemBuilder: buildAnimatedItem,
-              itemCount: widget.preflightInspectionCheck.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 15,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-              ),
-            ),
-            SizedBox(height: 24),
-            Wrap(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    widget.preflightInspectionCheck[indexCheck].title.replaceAll("\\n", "\n"),
-                    style: AppStyles.bold20s.copyWith(color: Color(0xFF1F2937)),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(color: Color(0xFFFFF0ED), borderRadius: BorderRadius.circular(7)),
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              // margin: EdgeInsets.symmetric(vertical: 12),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  spacing: 6,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Column(
                   children: [
-                    SvgPicture.asset(Pictures.danger),
-                    Flexible(
-                      child: Text(
-                        widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(),
-                        style: AppStyles.regular15s.copyWith(color: Color(0xFF374151)),
+                    LiveGrid.options(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      options: options,
+                      itemBuilder: buildAnimatedItem,
+                      itemCount: widget.preflightInspectionCheck.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 15,
+                        crossAxisSpacing: 4.w,
+                        mainAxisSpacing: 4.h,
                       ),
                     ),
+                    SizedBox(height: 24.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Text(
+                        widget.preflightInspectionCheck[indexCheck].title.replaceAll("\\n", "\n"),
+                        style: AppStyles.bold20s.copyWith(color: Color(0xFF1F2937)),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(color: Color(0xFFFFF0ED), borderRadius: BorderRadius.circular(7.r)),
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      // margin: EdgeInsets.symmetric(vertical: 12),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4.h),
+                        child: Row(
+                          spacing: 6.w,
+                          children: [
+                            SvgPicture.asset(Pictures.danger),
+                            Flexible(
+                              child: Text(
+                                widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(),
+                                style: AppStyles.regular15s.copyWith(color: Color(0xFF374151)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 24.h),
+                    if (widget.preflightInspectionCheck[indexCheck].picture != null &&
+                        widget.preflightInspectionCheck[indexCheck].picture!.isNotEmpty)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: CachedNetworkImage(
+                          imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture),
+                          placeholder: (context, url) => LoadingCustom(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
+                      ),
+                    SizedBox(height: 24.h),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 24),
-            if (widget.preflightInspectionCheck[indexCheck].picture != null &&
-                widget.preflightInspectionCheck[indexCheck].picture!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: CachedNetworkImage(
-                  imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture),
-                  placeholder: (context, url) => LoadingCustom(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-
-            Spacer(),
-
             CustomButton(
-              verticalPadding: 8,
+              verticalPadding: 8.h,
               backgroundColor: Color(0xFF0A6EFA),
               title: 'Выполнено',
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              borderRadius: 46,
+              borderRadius: 46.r,
               boxShadow: [
                 BoxShadow(
                   color: Color(0xff0064D6).withOpacity(0.25),
-                  blurRadius: 4,
+                  blurRadius: 4.r,
                   spreadRadius: 0,
-                  offset: Offset(0.0, 7.0),
+                  offset: Offset(0.0, 7.h),
                 ),
               ],
               onPressed: () {

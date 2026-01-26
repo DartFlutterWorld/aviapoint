@@ -18,29 +18,39 @@ class AppFirebase {
 
   String? get fcmToken => _fcmToken;
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAUpF0WBtlj71lOIhqfOP8SGLg8PYpMlYM',
-    appId: '1:393856996606:web:3a9dbb7e9bd0bac16f81af',
-    messagingSenderId: '393856996606',
-    projectId: 'silk-42ca2',
-    authDomain: 'silk-42ca2.firebaseapp.com',
-    storageBucket: 'silk-42ca2.appspot.com',
-  );
-
   Future<void> init() async {
-    if (kIsWeb) {
-      await Firebase.initializeApp(options: web);
-    } else {
-      await Firebase.initializeApp(name: 'aviapoint', options: DefaultFirebaseOptions.currentPlatform).whenComplete(() {
-        if (kDebugMode) {}
-      });
+    // Проверяем, не был ли уже вызван init()
+    if (initialized) {
+      if (kDebugMode) {
+        debugPrint('⚠️ AppFirebase.init() уже был вызван, пропускаем повторную инициализацию');
+      }
+      return;
+    }
 
-      /// Инициализация Crashlytics.
-      await AppCrashlytics().init();
+    // Проверяем, не инициализирован ли уже Firebase
+    final apps = Firebase.apps;
+    if (apps.isNotEmpty) {
+      if (kDebugMode) {
+        debugPrint('⚠️ Firebase уже инициализирован (найдено ${apps.length} приложений), пропускаем повторную инициализацию');
+      }
+    } else {
+      // Firebase еще не инициализирован, инициализируем
+      if (kIsWeb) {
+        // Используем конфигурацию из firebase_options.dart для синхронизации с service worker
+        await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
+      } else {
+        await Firebase.initializeApp(name: 'aviapoint', options: DefaultFirebaseOptions.currentPlatform).whenComplete(() {
+          if (kDebugMode) {}
+        });
+
+        /// Инициализация Crashlytics.
+        await AppCrashlytics().init();
+      }
     }
 
     /// Инициализируем Firebase message (включая веб)
     await AppMessaging().init();
     _fcmToken = AppMessaging().fcmToken;
+    initialized = true;
   }
 }

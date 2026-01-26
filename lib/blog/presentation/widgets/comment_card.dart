@@ -26,16 +26,7 @@ class CommentCard extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onReply;
 
-  const CommentCard({
-    super.key,
-    required this.comment,
-    this.isReply = false,
-    this.canDelete = false,
-    this.canEdit = false,
-    this.onDelete,
-    this.onEdit,
-    this.onReply,
-  });
+  const CommentCard({super.key, required this.comment, this.isReply = false, this.canDelete = false, this.canEdit = false, this.onDelete, this.onEdit, this.onReply});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +62,7 @@ class CommentCard extends StatelessWidget {
                         // Кнопка редактирования
                         if (canEdit && onEdit != null)
                           IconButton(
-                            icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20),
+                            icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20.sp),
                             onPressed: onEdit,
                             padding: EdgeInsets.zero,
                             constraints: BoxConstraints(),
@@ -79,7 +70,7 @@ class CommentCard extends StatelessWidget {
                         // Кнопка удаления
                         if (canDelete && onDelete != null)
                           IconButton(
-                            icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20),
+                            icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20.sp),
                             onPressed: onDelete,
                             padding: EdgeInsets.zero,
                             constraints: BoxConstraints(),
@@ -94,9 +85,7 @@ class CommentCard extends StatelessWidget {
                   children: [
                     // Аватар автора
                     GestureDetector(
-                      onTap: comment.authorAvatarUrl != null && comment.authorAvatarUrl!.isNotEmpty
-                          ? () => _showPhotoViewer(context, getImageUrl(comment.authorAvatarUrl!))
-                          : null,
+                      onTap: comment.authorAvatarUrl != null && comment.authorAvatarUrl!.isNotEmpty ? () => _showPhotoViewer(context, getImageUrl(comment.authorAvatarUrl!)) : null,
                       child: ClipOval(
                         child: comment.authorAvatarUrl != null && comment.authorAvatarUrl!.isNotEmpty
                             ? CachedNetworkImage(
@@ -106,10 +95,8 @@ class CommentCard extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 cacheManager: GetIt.instance<DefaultCacheManager>(),
                                 cacheKey: comment.authorAvatarUrl,
-                                placeholder: (context, url) =>
-                                    Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                               )
                             : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                       ),
@@ -120,10 +107,7 @@ class CommentCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(comment.authorName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                          if (comment.authorRating != null && comment.authorRating! > 0) ...[
-                            SizedBox(height: 4.h),
-                            RatingWidget(rating: comment.authorRating!.round(), size: 12),
-                          ],
+                          if (comment.authorRating != null && comment.authorRating! > 0) ...[SizedBox(height: 4.h), RatingWidget(rating: comment.authorRating!.round(), size: 12)],
                         ],
                       ),
                     ),
@@ -137,8 +121,8 @@ class CommentCard extends StatelessWidget {
                   SizedBox(height: 12.h),
                   TextButton.icon(
                     onPressed: onReply,
-                    icon: Icon(Icons.reply, size: 16, color: Color(0xFF0A6EFA)),
-                    label: Text('Ответить', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                    icon: Icon(Icons.reply, size: 16.sp, color: Color(0xFF0A6EFA)),
+                    label: Text('Ответить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       minimumSize: Size(0, 0),
@@ -197,12 +181,9 @@ class CommentCard extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.broken_image, color: Colors.white70, size: 64),
+                                Icon(Icons.broken_image, color: Colors.white70, size: 64.sp),
                                 SizedBox(height: 16.h),
-                                Text(
-                                  'Не удалось загрузить изображение',
-                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
-                                ),
+                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                               ],
                             ),
                           ),
@@ -222,11 +203,7 @@ class CommentCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
-                          ),
+                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,34 +215,25 @@ class CommentCard extends StatelessWidget {
                               children: [
                                 // Кнопка "Поделиться"
                                 IconButton(
-                                  icon: Icon(Icons.share, color: Colors.white, size: 24),
+                                  icon: Icon(Icons.share, color: Colors.white, size: 24.sp),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8.w),
                                 // Кнопка "Скачать"
                                 IconButton(
-                                  icon: Icon(Icons.download, color: Colors.white, size: 24),
+                                  icon: Icon(Icons.download, color: Colors.white, size: 24.sp),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8.w),
                                 // Кнопка закрытия
                                 IconButton(
-                                  icon: Icon(Icons.close, color: Colors.white, size: 28),
+                                  icon: Icon(Icons.close, color: Colors.white, size: 28.sp),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black.withOpacity(0.5),
-                                    shape: CircleBorder(),
-                                  ),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                 ),
                               ],
                             ),
@@ -290,13 +258,7 @@ class CommentCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(photoUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось поделиться фотографией'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
       }
     }
   }
@@ -308,26 +270,14 @@ class CommentCard extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Правый клик по изображению → "Сохранить как"'),
-            backgroundColor: Colors.blue,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Необходимо разрешение на сохранение файлов'),
-            backgroundColor: Colors.orange,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         return;
       }
 
@@ -352,37 +302,21 @@ class CommentCard extends StatelessWidget {
       await dio.download(photoUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid
-          ? await getExternalStorageDirectory()
-          : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid
-            ? '${directory.path}/Download/$fileName'
-            : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Фотография сохранена'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 3)));
       }
     } catch (e) {
       scaffoldMessenger.hideCurrentSnackBar();
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось скачать фотографию: $e'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
     }
   }

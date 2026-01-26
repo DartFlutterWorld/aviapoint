@@ -13,8 +13,14 @@ NewsDto _$NewsDtoFromJson(Map<String, dynamic> json) => NewsDto(
   source: json['source'] as String,
   date: json['date'] as String,
   body: json['body'] as String,
+  content: json['content'] as String?,
   pictureMini: json['picture_mini'] as String,
   pictureBig: json['picture_big'] as String,
   isBigNews: json['is_big_news'] as bool,
   categoryId: (json['category_id'] as num).toInt(),
+  authorId: (json['author_id'] as num?)?.toInt(),
+  published: json['published'] as bool,
+  additionalImages: (json['additional_images'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
 );

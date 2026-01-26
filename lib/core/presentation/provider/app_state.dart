@@ -5,9 +5,7 @@ import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/config/environment.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
-import 'package:aviapoint/core/services/app_firebase.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,6 +17,19 @@ class AppState with ChangeNotifier {
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
+
+  /// Флаг планшета. Инициализируем один раз из UI.
+  bool? _isTablet;
+  bool get isTablet => _isTablet ?? false;
+
+  /// Устанавливаем тип устройства только один раз.
+  void setIsTabletIfUnset(bool value) {
+    if (_isTablet != null) return;
+    // Здесь нам не нужно вызывать notifyListeners, так как isTablet используется
+    // только с listen: false для чтения в местах, где мы его устанавливаем.
+    // Вызов notifyListeners во время build приводил к ошибке Flutter.
+    _isTablet = value;
+  }
 
   bool _useLocalServer = true;
 
@@ -65,8 +76,7 @@ class AppState with ChangeNotifier {
           onLogout: _logout,
         );
 
-        // Отправляем FCM токен на сервер при проверке статуса авторизации
-        _sendFcmTokenToServer();
+        // FCM токен будет отправлен автоматически после загрузки профиля
       } else {
         await _logout();
       }
@@ -86,17 +96,4 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Отправка FCM токена на сервер
-  Future<void> _sendFcmTokenToServer() async {
-    try {
-      final fcmToken = AppFirebase().fcmToken;
-      if (fcmToken != null && fcmToken.isNotEmpty) {
-        final profileRepository = getIt<ProfileRepository>();
-        await profileRepository.saveFcmToken(fcmToken);
-      }
-    } catch (e) {
-      // Не блокируем работу приложения, если не удалось отправить FCM токен
-      debugPrint('Ошибка отправки FCM токена: $e');
-    }
-  }
 }

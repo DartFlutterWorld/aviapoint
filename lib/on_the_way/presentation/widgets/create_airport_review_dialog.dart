@@ -213,7 +213,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                         TextButton.icon(
                           onPressed: isLoading ? null : _pickPhotos,
                           icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
-                          label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                          label: Text('Добавить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                             minimumSize: Size.zero,

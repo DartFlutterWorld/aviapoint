@@ -220,7 +220,7 @@ class QuestionCard extends StatelessWidget {
                   TextButton.icon(
                     onPressed: onAnswer,
                     icon: Icon(Icons.reply, size: 16, color: Color(0xFF0A6EFA)),
-                    label: Text('Ответить', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                    label: Text('Ответить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       minimumSize: Size(0, 0),

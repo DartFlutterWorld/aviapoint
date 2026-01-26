@@ -30,29 +30,22 @@ class BlogCategoryChip extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(right: 8.w),
-
         padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 0),
         decoration: BoxDecoration(
           color: isSelected ? color : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: isSelected ? color : const Color(0xFFD9E6F8), width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // if (category.iconUrl != null && category.iconUrl!.isNotEmpty)
             //   Padding(
             //     padding: EdgeInsets.only(right: 4.w),
             //     child: Image.network(category.iconUrl!, width: 14.w, height: 14.h, errorBuilder: (context, error, stackTrace) => const SizedBox()),
             //   ),
-            Text(
-              category.name,
-              style: AppStyles.regular12s.copyWith(
-                color: isSelected ? Colors.white : AppColors.textPrimary,
-                fontSize: 11.sp,
-              ),
-            ),
+            Text(category.name, style: AppStyles.regular12s.copyWith(color: isSelected ? Colors.white : AppColors.textPrimary)),
           ],
         ),
       ),

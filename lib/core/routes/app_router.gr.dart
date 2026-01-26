@@ -336,6 +336,22 @@ class CreateFlightRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CreateNewsScreen]
+class CreateNewsRoute extends PageRouteInfo<void> {
+  const CreateNewsRoute({List<PageRouteInfo>? children})
+    : super(CreateNewsRoute.name, initialChildren: children);
+
+  static const String name = 'CreateNewsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreateNewsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [DetailNewsScreen]
 class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
   DetailNewsRoute({
@@ -792,6 +808,54 @@ class EditFlightRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ flight.hashCode;
+}
+
+/// generated route for
+/// [EditNewsScreen]
+class EditNewsRoute extends PageRouteInfo<EditNewsRouteArgs> {
+  EditNewsRoute({Key? key, required int newsId, List<PageRouteInfo>? children})
+    : super(
+        EditNewsRoute.name,
+        args: EditNewsRouteArgs(key: key, newsId: newsId),
+        rawPathParams: {'id': newsId},
+        initialChildren: children,
+      );
+
+  static const String name = 'EditNewsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditNewsRouteArgs>(
+        orElse: () => EditNewsRouteArgs(newsId: pathParams.getInt('id')),
+      );
+      return EditNewsScreen(key: args.key, newsId: args.newsId);
+    },
+  );
+}
+
+class EditNewsRouteArgs {
+  const EditNewsRouteArgs({this.key, required this.newsId});
+
+  final Key? key;
+
+  final int newsId;
+
+  @override
+  String toString() {
+    return 'EditNewsRouteArgs{key: $key, newsId: $newsId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditNewsRouteArgs) return false;
+    return key == other.key && newsId == other.newsId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ newsId.hashCode;
 }
 
 /// generated route for
@@ -2171,6 +2235,22 @@ class TestingModeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const TestingModeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [UserNewsScreen]
+class UserNewsRoute extends PageRouteInfo<void> {
+  const UserNewsRoute({List<PageRouteInfo>? children})
+    : super(UserNewsRoute.name, initialChildren: children);
+
+  static const String name = 'UserNewsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const UserNewsScreen();
     },
   );
 }

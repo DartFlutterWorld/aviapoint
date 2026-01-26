@@ -77,6 +77,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    // Настройки для поддержки 16 КБ страниц памяти
+    // Используем новый формат упаковки JNI библиотек
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
 }
 
 flutter {
@@ -88,7 +96,6 @@ dependencies {
     // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // implementation 'ru.cryptopro.sdk:mydss:2.1.275'
     implementation 'com.google.code.gson:gson:2.8.7'
-    implementation 'com.yandex.android:maps.mobile:4.6.1-full'
     implementation platform('com.google.firebase:firebase-bom:33.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'

@@ -5,7 +5,6 @@ import 'package:aviapoint/auth_page/presentation/widgets/phone_form_field.dart';
 import 'package:aviapoint/auth_page/presentation/widgets/pin_themes.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/foundation.dart';
@@ -63,10 +62,10 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
           Container(
             decoration: const BoxDecoration(color: Color(0xFFF9FDFF)),
             padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 16,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 30,
+              left: 16.w,
+              right: 16.w,
+              top: 16.h,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 30.h,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,7 +81,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                 ),
                 Text(
                   'Авторизоваться',
-                  style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E)),
+                  style: AppStyles.bold20s.copyWith(color: const Color(0xFF2B373E)),
                   textAlign: TextAlign.center,
                 ),
                 // const SizedBox(height: 30),
@@ -91,31 +90,31 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   builder: (context, state) {
                     if (state is LoadingSmsState) {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 89, bottom: 90),
-                        child: Center(child: LoadingCustom()),
+                        padding: EdgeInsets.only(top: 89.h, bottom: 90.h),
+                        child: const Center(child: LoadingCustom()),
                       );
                     }
                     if (state is InitialSmsState) {
                       return Column(
                         children: [
-                          SizedBox(height: 155),
+                          SizedBox(height: 155.h),
                           CustomButton(
-                            verticalPadding: 8,
-                            backgroundColor: Color(0xFF0A6EFA),
+                            verticalPadding: 8.h,
+                            backgroundColor: const Color(0xFF0A6EFA),
                             title: 'Получить смс код',
                             textStyle: AppStyles.bold16s.copyWith(
                               color: (phone.isEmpty || phone.length < 15 ? true : false)
                                   ? Colors.white.withOpacity(0.5)
                                   : Colors.white,
                             ),
-                            borderColor: Color(0xFF0A6EFA),
-                            borderRadius: 46,
+                            borderColor: const Color(0xFF0A6EFA),
+                            borderRadius: 46.r,
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xff0064D6).withOpacity(0.25),
-                                blurRadius: 4,
+                                color: const Color(0xff0064D6).withOpacity(0.25),
+                                blurRadius: 4.r,
                                 spreadRadius: 0,
-                                offset: Offset(0.0, 7.0),
+                                offset: Offset(0.0, 7.h),
                               ),
                             ],
                             onPressed: (phone.isEmpty || phone.length < 15 ? true : false)
@@ -140,13 +139,13 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Text(
                             'На ваш номер телефона отправлен смс код, введите его',
-                            style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                            style: AppStyles.regular12s.copyWith(color: const Color(0xFF9CA5AF)),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Pinput(
                             focusNode: _focusNode,
                             enabled: state is! LoadingSmsState,
@@ -179,15 +178,15 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                             builder: (context, state) {
                               if (state is ErrorAuthState) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 16),
+                                  padding: EdgeInsets.only(top: 16.h),
                                   child: Text(
                                     state.errorForUser,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.red),
+                                    style: AppStyles.regular14s.copyWith(color: Colors.red),
                                   ),
                                 );
                               }
-                              return SizedBox();
+                              return const SizedBox();
                             },
                           ),
                           // CustomButton(
@@ -221,24 +220,24 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           //   ],
                           //   backgroundColor: Colors.white,
                           // ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                           CustomButton(
-                            verticalPadding: 8,
-                            backgroundColor: Color(0xFF0A6EFA),
+                            verticalPadding: 8.h,
+                            backgroundColor: const Color(0xFF0A6EFA),
                             title: 'Отправить',
                             textStyle: AppStyles.bold16s.copyWith(
                               color: (phone.isEmpty || phone.length < 15 ? true : false)
                                   ? Colors.white.withOpacity(0.5)
                                   : Colors.white,
                             ),
-                            borderColor: Color(0xFF0A6EFA),
-                            borderRadius: 46,
+                            borderColor: const Color(0xFF0A6EFA),
+                            borderRadius: 46.r,
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xff0064D6).withOpacity(0.25),
-                                blurRadius: 4,
+                                color: const Color(0xff0064D6).withOpacity(0.25),
+                                blurRadius: 4.r,
                                 spreadRadius: 0,
-                                offset: Offset(0.0, 7.0),
+                                offset: Offset(0.0, 7.h),
                               ),
                             ],
                             onPressed: (phone.isEmpty || phone.length < 15 ? true : false || code.length != 4)
@@ -262,13 +261,13 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                     }
                     if (state is ErrorSmsState) {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 16),
+                        padding: EdgeInsets.only(top: 16.h),
                         child: Column(
                           children: [Text(state.errorForUser, style: AppStyles.bold15s, textAlign: TextAlign.center)],
                         ),
                       );
                     }
-                    return SizedBox();
+                    return const SizedBox();
                   },
                 ),
               ],

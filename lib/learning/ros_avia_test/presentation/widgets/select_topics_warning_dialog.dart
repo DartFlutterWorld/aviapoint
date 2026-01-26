@@ -22,7 +22,7 @@ class SelectTopicsWarningDialog extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Image.asset(Pictures.planeProgress, height: 76),
-          SizedBox(height: 9),
+          SizedBox(height: 9.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -31,7 +31,7 @@ class SelectTopicsWarningDialog extends StatelessWidget {
                   verticalPadding: 4,
                   backgroundColor: Color(0xFF0A6EFA),
                   title: 'Понятно',
-                  textStyle: AppStyles.bold15s.copyWith(color: Colors.white),
+                  textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
                   boxShadow: [

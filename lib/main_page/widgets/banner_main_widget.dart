@@ -1,9 +1,8 @@
 import 'dart:ui';
 
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -39,60 +38,80 @@ class BannerMainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18.r),
+    final borderRadius = kIsWeb ? 18.0 : 18.r;
+    final padding = kIsWeb ? 14.0 : 14.w;
+    final spacing = kIsWeb ? 5.0 : 5.h;
+    final bottomPos = kIsWeb ? 12.0 : 12.h;
+    final horizontalPos = kIsWeb ? 12.0 : 12.w;
+    final buttonPadding = kIsWeb ? 8.0 : 8.h;
+    final buttonRadius = kIsWeb ? 46.0 : 46.r;
+    final shadowBlur = kIsWeb ? 4.0 : 4.r;
+    final shadowOffset = kIsWeb ? 7.0 : 7.h;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: GestureDetector(
+        onTap: onTap,
         child: Container(
-          height: 233.h,
+          // Убираем фиксированную высоту - пусть GridView определяет размер
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage(background), fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(18.r),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: Stack(
-            fit: StackFit.loose,
+            fit: StackFit.expand,
             children: [
-              Align(
-                alignment: pictureAlign,
-                child: Image.asset(picture, height: 150.h),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  // Используем процент от доступной высоты контейнера для адаптации к размеру GridView
+                  // В портрете контейнер ниже, в ландшафте выше, но картинка будет пропорциональна
+                  final imageHeight = constraints.maxHeight * 0.7; // 40% от высоты контейнера
+                  return Align(
+                    alignment: pictureAlign,
+                    child: Image.asset(
+                      picture,
+                      height: imageHeight,
+                      fit: BoxFit.contain, // Сохраняет пропорции изображения
+                    ),
+                  );
+                },
               ),
               Padding(
-                padding: EdgeInsets.all(16.h),
+                padding: EdgeInsets.all(padding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min, // Минимальный размер колонки
                   children: [
-                    Text(
-                      title,
-                      style: AppStyles.bold20s.copyWith(color: titleColor),
-                      textAlign: TextAlign.start,
+                    Flexible(
+                      child: Text(
+                        title,
+                        // style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.sp, height: 1, color: titleColor),
+                        style: AppStyles.bold16s.copyWith(color: titleColor),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
-                    SizedBox(height: 5.h),
-                    Text(description, style: AppStyles.regular12s.copyWith(color: descriptionColor)),
+                    SizedBox(height: spacing),
+                    Flexible(
+                      child: Text(description, style: AppStyles.regular12s.copyWith(color: descriptionColor)),
+                    ),
                   ],
                 ),
               ),
 
               Positioned(
-                bottom: 12,
-                left: 12,
-                right: 12,
+                bottom: bottomPos,
+                left: horizontalPos,
+                right: horizontalPos,
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: CustomButton(
-                    verticalPadding: 8,
+                    verticalPadding: buttonPadding,
                     backgroundColor: backgroundColorButton,
                     title: titleButton,
                     textStyle: AppStyles.bold16s.copyWith(color: textColorButton),
                     borderColor: borderColorButton,
-                    borderRadius: 46,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xff0064D6).withOpacity(0.25),
-                        blurRadius: 4,
-                        spreadRadius: 0,
-                        offset: Offset(0.0, 7.0),
-                      ),
-                    ],
-                    // onPressed: () => context.router.push(NewsNavigationRoute()),
+                    borderRadius: buttonRadius,
+                    boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: shadowBlur, spreadRadius: 0, offset: Offset(0.0, shadowOffset))],
                     onPressed: onTap,
                   ),
                 ),

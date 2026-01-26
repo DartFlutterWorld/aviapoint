@@ -10,10 +10,14 @@ class NewsMapper {
       source: model.source,
       date: model.date,
       body: model.body,
+      content: model.content,
       pictureMini: model.pictureMini,
       pictureBig: model.pictureBig,
       isBigNews: model.isBigNews,
       categoryId: model.categoryId,
+      published: model.published,
+      authorId: model.authorId,
+      additionalImages: model.additionalImages,
     );
   }
 

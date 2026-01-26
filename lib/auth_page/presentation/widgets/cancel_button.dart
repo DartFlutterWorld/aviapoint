@@ -1,5 +1,6 @@
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CancelButton extends StatelessWidget {
@@ -21,10 +22,9 @@ class CancelButton extends StatelessWidget {
         alignment: Alignment.bottomRight,
         child: Text(
           'Отмена',
-          style: TextStyle(
+          style: AppStyles.bold12s.copyWith(
             fontWeight: FontWeight.w600,
-            fontSize: 12.sp,
-            height: (13.92 / 12).sp,
+            height: 13.92 / 12,
             color: AppColors.textSeconds,
           ),
         ),

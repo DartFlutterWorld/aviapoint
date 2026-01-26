@@ -9,6 +9,7 @@ import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificat
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_sertificates_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -32,7 +33,7 @@ class _TypeSertificatesScreenState extends State<TypeSertificatesScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<TypeSertificatesBloc, TypeSertificatesState>(
       builder: (context, state) => state.map(
-        success: (value) => _Success(value.typeSertificates),
+        success: (value) => _Success(value.typeSertificates, widget.title),
         loading: (value) => LoadingCustom(),
         error: (value) => ErrorCustom(
           textError: value.errorForUser,
@@ -47,7 +48,8 @@ class _TypeSertificatesScreenState extends State<TypeSertificatesScreen> {
 
 class _Success extends StatelessWidget {
   final List<TypeSertificatesEntity> typeSertificatesEntity;
-  const _Success(this.typeSertificatesEntity);
+  final String title;
+  const _Success(this.typeSertificatesEntity, this.title);
 
   String getIcon(int index) {
     switch (index) {
@@ -73,7 +75,7 @@ class _Success extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Column(
         children: [
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
@@ -81,8 +83,8 @@ class _Success extends StatelessWidget {
               child: SizedBox(width: 30, height: 30, child: Center(child: SvgPicture.asset(Pictures.closeAuth))),
             ),
           ),
-          Text('Выберите тип свидетельства', style: AppStyles.semibpld14s.copyWith(color: Color(0xFF374151))),
-          SizedBox(height: 8),
+          Text(title, style: AppStyles.semibpld14s.copyWith(color: Color(0xFF374151))),
+          SizedBox(height: 8.h),
           Expanded(
             child: ListView.builder(
               // clipBehavior: Clip.none,
@@ -98,9 +100,7 @@ class _Success extends StatelessWidget {
                   clearCategory: () {},
                   withClear: false,
                   image: getIcon(typeSertificatesEntity[index].id),
-                  isSelect:
-                      BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title ==
-                      typeSertificatesEntity[index].title,
+                  isSelect: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title == typeSertificatesEntity[index].title,
                 ),
               ),
             ),

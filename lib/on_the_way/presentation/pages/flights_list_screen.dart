@@ -4,10 +4,12 @@ import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
@@ -18,9 +20,9 @@ import 'package:aviapoint/on_the_way/presentation/pages/my_flights_screen.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_search_bar_widget.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -225,38 +227,37 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
   }
 
   Widget _buildScaffold(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'По пути',
-        withBack: false,
-        withProfile: true,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: Color(0xFF0A6EFA),
-          unselectedLabelColor: Color(0xFF9CA5AF),
-          indicatorColor: Color(0xFF0A6EFA),
-          labelStyle: AppStyles.bold14s,
-          unselectedLabelStyle: AppStyles.regular14s,
-          tabs: const [
-            Tab(text: 'Поиск'),
-            Tab(text: 'Мои полеты'),
-            Tab(text: 'Мои бронирования'),
-          ],
-        ),
-      ),
-      backgroundColor: AppColors.background,
-      body: TabBarView(controller: _tabController, children: [_buildSearchTab(), MyFlightsScreen(), MyBookingsScreen()]),
-      floatingActionButton: _tabController.index == 0
-          ? Container(
-              margin: EdgeInsets.only(bottom: 16.h),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Color(0xFF0A6EFA), Color(0xFF7A0FD9)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [BoxShadow(color: const Color(0xFF0A6EFA).withOpacity(0.4), blurRadius: 12, spreadRadius: 0, offset: const Offset(0, 4))],
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final adaptiveBold14s = AppStyles.bold14s;
+        final adaptiveRegular14s = AppStyles.regular14s;
+        final fabMargin = 12.0;
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: 'По пути',
+            withBack: false,
+            withProfile: true,
+            bottom: TabBar(
+              controller: _tabController,
+              labelColor: Color(0xFF0A6EFA),
+              unselectedLabelColor: Color(0xFF9CA5AF),
+              indicatorColor: Color(0xFF0A6EFA),
+              labelStyle: adaptiveBold14s,
+              unselectedLabelStyle: adaptiveRegular14s,
+              tabs: const [
+                Tab(text: 'Поиск'),
+                Tab(text: 'Мои полеты'),
+                Tab(text: 'Мои брони'),
+              ],
+            ),
+          ),
+          backgroundColor: AppColors.background,
+          body: TabBarView(controller: _tabController, children: [_buildSearchTab(), MyFlightsScreen(), MyBookingsScreen()]),
+          floatingActionButton: _tabController.index == 0
+              ? FloatingActionButtonWidget(
+                  title: 'Создать\nполёт',
+                  margin: EdgeInsets.only(bottom: fabMargin),
                   onTap: () async {
                     final appState = Provider.of<AppState>(context, listen: false);
                     // Если не авторизован, показываем авторизацию
@@ -280,157 +281,190 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
                       AutoRouter.of(context).push(const CreateFlightRoute());
                     }
                   },
-                  borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(6.w),
-                          decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
-                          child: Icon(Icons.add, color: Colors.white, size: 20.sp),
-                        ),
-                        SizedBox(width: 12.w),
-                        Text('Создать полет', style: AppStyles.bold14s.copyWith(color: Colors.white, letterSpacing: 0.5)),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : null,
+                )
+              : null,
+        );
+      },
     );
   }
 
   Widget _buildSearchTab() {
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<FlightsBloc>().add(GetFlightsEvent(airport: _airport, dateFrom: _dateFrom, dateTo: _dateTo, isRefresh: true));
-      },
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 16.h),
-            // Поисковая строка - Поиск по аэропорту (включая промежуточные точки)
-            FlightSearchBarWidget(
-              hintText: 'Поиск по аэропорту (включая промежуточные точки)',
-              initialValue: _airport,
-              airportService: _airportService,
-              onSelected: (code) => _onSearch(code),
-              onClear: () => _onSearch(null),
-            ),
-            SizedBox(height: 16.h),
-            // Активные фильтры (чипсы)
-            if (_hasActiveFilters) ...[
-              Wrap(
-                spacing: 8.w,
-                runSpacing: 8.h,
-                children: [
-                  if (_airport != null)
-                    Chip(
-                      label: Text('Аэропорт: $_airport', style: AppStyles.regular12s),
-                      deleteIcon: Icon(Icons.close, size: 16),
-                      onDeleted: () => _onSearch(null),
-                      backgroundColor: Color(0xFFD9E6F8),
-                      labelStyle: AppStyles.regular12s.copyWith(color: Color(0xFF374151)),
-                    ),
-                  if (_dateFrom != null || _dateTo != null)
-                    Chip(
-                      label: Text(
-                        _dateFrom != null && _dateTo != null
-                            ? '${formatDate(_dateFrom!)} - ${formatDate(_dateTo!)}'
-                            : _dateFrom != null
-                            ? 'От: ${formatDate(_dateFrom!)}'
-                            : 'До: ${formatDate(_dateTo!)}',
-                        style: AppStyles.regular12s,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final adaptiveRegular12s = AppStyles.regular12s;
+        final spacing8 = AppSpacing.horizontal;
+        final borderRadius20 = 20.0;
+        final padding24 = 24.0;
+        final iconSize = 16.0; // Единый размер для всех иконок
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<FlightsBloc>().add(GetFlightsEvent(airport: _airport, dateFrom: _dateFrom, dateTo: _dateTo, isRefresh: true));
+          },
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.only(left: AppSpacing.horizontal, right: AppSpacing.horizontal, top: AppSpacing.section),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // SizedBox(height: AppSpacing.section),
+                // Поисковая строка и кнопка фильтра по дате
+                Row(
+                  children: [
+                    Expanded(
+                      child: FlightSearchBarWidget(
+                        hintText: 'Поиск по аэропортам',
+                        initialValue: _airport,
+                        airportService: _airportService,
+                        onSelected: (code) => _onSearch(code),
+                        onClear: () => _onSearch(null),
                       ),
-                      deleteIcon: Icon(Icons.close, size: 16),
-                      onDeleted: () => _applyFilters(null, null),
-                      backgroundColor: Color(0xFFD9E6F8),
-                      labelStyle: AppStyles.regular12s.copyWith(color: Color(0xFF374151)),
                     ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              // Кнопка "Сбросить все"
-              OutlinedButton.icon(
-                onPressed: _clearAllFilters,
-                icon: Icon(Icons.clear_all, color: Color(0xFFEF4444), size: 18),
-                label: Text('Сбросить все фильтры', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                  side: BorderSide(color: Color(0xFFEF4444)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                    SizedBox(width: spacing8),
+                    // Кнопка фильтра по дате - только иконка календаря
+                    Container(
+                      height: 48, // Высота как у TextField
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Color(0xFFD9E6F8)),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            if (kIsWeb) {
+                              // Для веба - модальное окно
+                              showDialog<void>(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius20)),
+                                  child: Container(
+                                    constraints: BoxConstraints(maxWidth: 500.0, maxHeight: 600.0),
+                                    padding: EdgeInsets.all(padding24),
+                                    child: FilterBottomSheet(initialDateFrom: _dateFrom, initialDateTo: _dateTo, onApply: _applyFilters),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              // Для мобильного - bottom sheet
+                              showUniversalBottomSheet<void>(
+                                context: context,
+                                title: '',
+                                height: MediaQuery.of(context).size.height * 0.9,
+                                backgroundColor: Colors.transparent,
+                                showCloseButton: false,
+                                child: FilterBottomSheet(initialDateFrom: _dateFrom, initialDateTo: _dateTo, onApply: _applyFilters),
+                              );
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Icon(Icons.calendar_today, color: Color(0xFF0A6EFA), size: iconSize),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 16.h),
-            ],
-            // Кнопка фильтров по дате
-            OutlinedButton.icon(
-              onPressed: () {
-                if (kIsWeb) {
-                  // Для веба - модальное окно
-                  showDialog<void>(
-                    context: context,
-                    builder: (context) => Dialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 500.w, maxHeight: 600.h),
-                        padding: EdgeInsets.all(24.w),
-                        child: FilterBottomSheet(initialDateFrom: _dateFrom, initialDateTo: _dateTo, onApply: _applyFilters),
+                SizedBox(height: AppSpacing.medium),
+                // Активные фильтры (чипсы)
+                if (_hasActiveFilters) ...[
+                  Row(
+                    children: [
+                      // Кнопка "Сбросить все" - красный крестик на белом фоне
+                      Container(
+                        height: 32, // Высота как у Chip
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16), // Закругления как у Chip
+                          border: Border.all(color: Color(0xFFEF4444), width: 1),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: _clearAllFilters,
+                            borderRadius: BorderRadius.circular(16),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              child: Icon(Icons.close, color: Color(0xFFEF4444), size: iconSize),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  // Для мобильного - bottom sheet
-                  showModalBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
-                    builder: (context) => FilterBottomSheet(initialDateFrom: _dateFrom, initialDateTo: _dateTo, onApply: _applyFilters),
-                  );
-                }
-              },
-              icon: Icon(Icons.filter_list, color: Color(0xFF0A6EFA)),
-              label: Text('Фильтры по дате', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 12.h),
-                side: BorderSide(color: Color(0xFFD9E6F8)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-              ),
+                      SizedBox(width: spacing8),
+                      if (_airport != null) ...[
+                        Chip(
+                          label: Text(_airport!, style: adaptiveRegular12s),
+                          deleteIcon: Icon(Icons.close, size: iconSize),
+                          onDeleted: () => _onSearch(null),
+                          backgroundColor: Color(0xFFD9E6F8),
+                          labelStyle: adaptiveRegular12s.copyWith(color: Color(0xFF374151)),
+                          labelPadding: EdgeInsets.symmetric(horizontal: 4),
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                        if (_dateFrom != null || _dateTo != null) SizedBox(width: spacing8),
+                      ],
+                      if (_dateFrom != null || _dateTo != null)
+                        Chip(
+                          label: Text(
+                            _dateFrom != null && _dateTo != null
+                                ? '${formatDate(_dateFrom!)} - ${formatDate(_dateTo!)}'
+                                : _dateFrom != null
+                                ? 'От: ${formatDate(_dateFrom!)}'
+                                : 'До: ${formatDate(_dateTo!)}',
+                            style: adaptiveRegular12s,
+                          ),
+                          deleteIcon: Icon(Icons.close, size: iconSize),
+                          onDeleted: () => _applyFilters(null, null),
+                          backgroundColor: Color(0xFFD9E6F8),
+                          labelStyle: adaptiveRegular12s.copyWith(color: Color(0xFF374151)),
+                          labelPadding: EdgeInsets.symmetric(horizontal: 4),
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: AppSpacing.section),
+                ],
+                // Список полетов
+                BlocBuilder<FlightsBloc, FlightsState>(
+                  builder: (context, state) {
+                    return state.when(
+                      loading: () => _buildLoadingState(context),
+                      error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => _buildErrorState(context, errorForUser),
+                      success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(context, flights),
+                      flightCreated: (flight) => _buildSuccessState(context, []), // Игнорируем состояние создания на экране списка
+                    );
+                  },
+                ),
+                SizedBox(height: AppSpacing.section),
+              ],
             ),
-            SizedBox(height: 16.h),
-            // Список полетов
-            BlocBuilder<FlightsBloc, FlightsState>(
-              builder: (context, state) {
-                return state.when(
-                  loading: () => _buildLoadingState(),
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => _buildErrorState(errorForUser),
-                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
-                  flightCreated: (flight) => _buildSuccessState([]), // Игнорируем состояние создания на экране списка
-                );
-              },
-            ),
-            SizedBox(height: 16.h),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(BuildContext context) {
+    final horizontalMargin = AppSpacing.horizontal;
+    final verticalMargin = AppSpacing.section;
+    final padding = 12.0;
+    final borderRadius16 = 16.0;
+    final borderRadius8 = 8.0;
+    final height = 120.0;
+
     return Column(
       children: List.generate(
         3,
         (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
-          padding: EdgeInsets.all(12.w),
+          margin: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: verticalMargin),
+          padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(borderRadius16),
             border: Border.all(color: Color(0xFFD9E6F8)),
             color: Colors.white,
           ),
@@ -439,8 +473,8 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
             color: const Color(0xFF8D66FE),
             colorOpacity: 0.2,
             child: Container(
-              height: 120.h,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Colors.grey[300]),
+              height: height,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(borderRadius8), color: Colors.grey[300]),
             ),
           ),
         ),
@@ -448,49 +482,63 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
     );
   }
 
-  Widget _buildErrorState(String error) {
+  Widget _buildErrorState(BuildContext context, String error) {
+    final padding = 16.0;
+    final borderRadius12 = 12.0;
+    final iconSize = 48.0;
+    final spacing = 12.0;
+    final adaptiveRegular14s = AppStyles.regular14s;
+    final adaptiveBold16s = AppStyles.bold16s;
+
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Color(0xFFFEE2E2),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(borderRadius12),
         border: Border.all(color: Color(0xFFEF4444)),
       ),
       child: Column(
         children: [
-          Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 48),
-          SizedBox(height: 12.h),
+          Icon(Icons.error_outline, color: Color(0xFFEF4444), size: iconSize),
+          SizedBox(height: spacing),
           Text(
             error,
-            style: AppStyles.regular14s.copyWith(color: Color(0xFF991B1B)),
+            style: adaptiveRegular14s.copyWith(color: Color(0xFF991B1B)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: spacing),
           ElevatedButton(
             onPressed: () {
               context.read<FlightsBloc>().add(GetFlightsEvent(airport: _airport, dateFrom: _dateFrom, dateTo: _dateTo, isRefresh: false));
             },
             style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA)),
-            child: Text('Повторить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+            child: Text('Повторить', style: adaptiveBold16s.copyWith(color: Colors.white)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSuccessState(List<FlightEntity> flights) {
+  Widget _buildSuccessState(BuildContext context, List<FlightEntity> flights) {
+    final padding = 32.0;
+    final iconSize = 64.0;
+    final spacing16 = AppSpacing.section;
+    final spacing8 = 8.0;
+    final adaptiveBold16s = AppStyles.bold16s;
+    final adaptiveRegular14s = AppStyles.regular14s;
+
     if (flights.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(32.w),
+        padding: EdgeInsets.all(padding),
         child: Column(
           children: [
-            Icon(Icons.flight_takeoff, size: 64, color: Color(0xFF9CA5AF)),
-            SizedBox(height: 16.h),
-            Text('Полеты не найдены', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-            SizedBox(height: 8.h),
+            Icon(Icons.flight_takeoff, size: iconSize, color: Color(0xFF9CA5AF)),
+            SizedBox(height: spacing16),
+            Text('Полеты не найдены', style: adaptiveBold16s.copyWith(color: Color(0xFF374151))),
+            SizedBox(height: spacing8),
             Text(
               'Попробуйте изменить параметры поиска',
-              style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+              style: adaptiveRegular14s.copyWith(color: Color(0xFF9CA5AF)),
               textAlign: TextAlign.center,
             ),
           ],

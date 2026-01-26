@@ -52,7 +52,7 @@ class CategoryHandBookSmallWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(title, style: AppStyles.bold15s.copyWith(color: Color(0xFF1F2937), height: 1)),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 5.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(subTitle, style: AppStyles.regular13s.copyWith(color: Color(0xFF4B5767), height: 1)),

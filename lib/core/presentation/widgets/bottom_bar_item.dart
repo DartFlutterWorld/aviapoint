@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomBarItem extends StatelessWidget {
@@ -23,45 +26,46 @@ class BottomBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isWeb = kIsWeb;
+    
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        padding: isWeb 
+            ? const EdgeInsets.symmetric(vertical: 6, horizontal: 6)
+            : EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
         decoration: BoxDecoration(
           color: activeColor,
-          borderRadius: BorderRadius.circular(12),
-          // boxShadow: isActive
-          //     ? [
-          //         BoxShadow(
-          //           color: Color(0xff000000).withOpacity(0.25),
-          //           blurRadius: 4,
-          //           spreadRadius: 0,
-          //           offset: Offset(
-          //             0.0,
-          //             4.0,
-          //           ),
-          //         ),
-          //       ]
-          //     : [],
+          borderRadius: BorderRadius.circular(isWeb ? 10 : 10.r),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                icon != null
-                    ? SvgPicture.asset(icon!, height: 24, colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn))
-                    : Icon(iconData!, size: 24, color: textColor),
-                const SizedBox(height: 6),
-                Text(
-                  text,
-                  style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 10),
-                ),
-              ],
-            ),
-          ],
-        ),
+        child: isWeb
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  icon != null
+                      ? SvgPicture.asset(icon!, height: 32, width: 32, colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn))
+                      : Icon(iconData!, size: 32, color: textColor),
+                  const SizedBox(width: 13),
+                  Text(
+                    text,
+                    style: AppStyles.medium10s.copyWith(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  icon != null
+                      ? SvgPicture.asset(icon!, height: 20.sp, width: 20.sp, colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn))
+                      : Icon(iconData!, size: 20.sp, color: textColor),
+                  SizedBox(height: 4.h),
+                  Text(
+                    text,
+                    style: AppStyles.medium10s.copyWith(color: textColor, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
       ),
     );
   }

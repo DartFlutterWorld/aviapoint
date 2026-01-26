@@ -73,6 +73,21 @@ class _FlightAppBarActions extends StatelessWidget {
 
   const _FlightAppBarActions({required this.flight});
 
+  /// Поделиться полетом
+  void _shareFlight(BuildContext context) {
+    final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
+    final flightUrl = '$baseUrl/on-the-way/${flight.id}';
+    
+    // Форматируем дату
+    final dateFormat = DateFormat('dd.MM.yyyy', 'ru');
+    final formattedDate = dateFormat.format(flight.departureDate);
+    
+    // Формируем маршрут
+    final route = '${flight.departureAirport} → ${flight.arrivalAirport}';
+    
+    Share.share('Полёт $route на $formattedDate\n\n$flightUrl\n\nСмотрите в AviaPoint');
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
@@ -80,11 +95,19 @@ class _FlightAppBarActions extends StatelessWidget {
         final isOwner = PermissionHelper.isOwnerOrAdmin(flight.pilotId, context);
         final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
 
-        // Показываем кнопки только для владельца или администратора активных полетов
+        // Кнопка "Поделиться" всегда видна
+        final shareButton = IconButton(
+          icon: Icon(Icons.share, color: Color(0xFF0A6EFA)),
+          onPressed: () => _shareFlight(context),
+          tooltip: 'Поделиться',
+        );
+
+        // Показываем кнопки редактирования и отмены только для владельца или администратора активных полетов
         if (isAuthenticated && isOwner && flight.status == 'active') {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              shareButton,
               IconButton(
                 icon: Icon(Icons.edit, color: Color(0xFF0A6EFA)),
                 onPressed: () async {
@@ -107,7 +130,8 @@ class _FlightAppBarActions extends StatelessWidget {
           );
         }
 
-        return SizedBox.shrink();
+        // Если не владелец, показываем только кнопку "Поделиться"
+        return shareButton;
       },
     );
   }
@@ -377,7 +401,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF9CA5AF))),
+            child: Text('Отмена', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
           ),
           TextButton(
             onPressed: () {
@@ -386,7 +410,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
               // Обновляем детали полета (список бронирований обновится автоматически через BLoC)
               context.read<FlightDetailBloc>().add(flightId);
             },
-            child: Text('Подтвердить', style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981))),
+            child: Text('Подтвердить', style: AppStyles.bold16s.copyWith(color: Color(0xFF10B981))),
           ),
         ],
       ),
@@ -402,7 +426,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF9CA5AF))),
+            child: Text('Отмена', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
           ),
           TextButton(
             onPressed: () {
@@ -412,7 +436,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
               context.read<BookingsBloc>().add(GetBookingsByFlightIdEvent(flightId: flightId));
               context.read<FlightDetailBloc>().add(flightId);
             },
-            child: Text('Отклонить', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+            child: Text('Отклонить', style: AppStyles.bold16s.copyWith(color: Color(0xFFEF4444))),
           ),
         ],
       ),
@@ -439,14 +463,14 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF9CA5AF))),
+            child: Text('Отмена', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
               context.read<FlightsBloc>().add(DeleteFlightEvent(flightId: flightId));
             },
-            child: Text('Отменить полёт', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+            child: Text('Отменить полёт', style: AppStyles.bold16s.copyWith(color: Color(0xFFEF4444))),
           ),
         ],
       ),
@@ -474,7 +498,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF9CA5AF))),
+            child: Text('Отмена', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
           ),
           TextButton(
             onPressed: () {
@@ -485,7 +509,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Полёт успешно завершён'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
               }
             },
-            child: Text('Завершить полёт', style: AppStyles.bold14s.copyWith(color: Color(0xFFFFA726))),
+            child: Text('Завершить полёт', style: AppStyles.bold16s.copyWith(color: Color(0xFFFFA726))),
           ),
         ],
       ),
@@ -493,59 +517,80 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
   }
 
   Widget _buildLoadingState() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
-      child: Column(
-        children: [
-          Shimmer(
-            duration: const Duration(milliseconds: 1000),
-            color: const Color(0xFF8D66FE),
-            colorOpacity: 0.2,
-            child: Container(
-              height: 200.h,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.r), color: Colors.grey[300]),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontalPadding = AppStyles.adaptivePadding(context, 8);
+        final verticalPadding = AppStyles.adaptiveVerticalSpacing(context, 16);
+        final spacing = AppStyles.adaptiveVerticalSpacing(context, 16);
+        final borderRadius16 = AppStyles.adaptivePadding(context, 16);
+        final height200 = AppStyles.adaptiveVerticalSpacing(context, 200);
+        final height100 = AppStyles.adaptiveVerticalSpacing(context, 100);
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+          child: Column(
+            children: [
+              Shimmer(
+                duration: const Duration(milliseconds: 1000),
+                color: const Color(0xFF8D66FE),
+                colorOpacity: 0.2,
+                child: Container(
+                  height: height200,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(borderRadius16), color: Colors.grey[300]),
+                ),
+              ),
+              SizedBox(height: spacing),
+              Shimmer(
+                duration: const Duration(milliseconds: 1000),
+                color: const Color(0xFF8D66FE),
+                colorOpacity: 0.2,
+                child: Container(
+                  height: height100,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(borderRadius16), color: Colors.grey[300]),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 16.h),
-          Shimmer(
-            duration: const Duration(milliseconds: 1000),
-            color: const Color(0xFF8D66FE),
-            colorOpacity: 0.2,
-            child: Container(
-              height: 100.h,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.r), color: Colors.grey[300]),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   Widget _buildErrorState(BuildContext context, String error) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 64),
-            SizedBox(height: 16.h),
-            Text(
-              error,
-              style: AppStyles.regular14s.copyWith(color: Color(0xFF991B1B)),
-              textAlign: TextAlign.center,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final padding = AppStyles.adaptivePadding(context, 16);
+        final spacing = AppStyles.adaptiveVerticalSpacing(context, 16);
+        final iconSize = AppStyles.adaptiveFontSize(context, 64);
+        final adaptiveRegular14s = AppStyles.adaptiveTextStyle(context, AppStyles.regular14s, baseSize: 14);
+        final adaptiveBold16s = AppStyles.adaptiveTextStyle(context, AppStyles.bold16s, baseSize: 16);
+
+        return Center(
+          child: Padding(
+            padding: EdgeInsets.all(padding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, color: Color(0xFFEF4444), size: iconSize),
+                SizedBox(height: spacing),
+                Text(
+                  error,
+                  style: adaptiveRegular14s.copyWith(color: Color(0xFF991B1B)),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: spacing),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<FlightDetailBloc>().add(widget.flightId);
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA)),
+                  child: Text('Повторить', style: adaptiveBold16s.copyWith(color: Colors.white)),
+                ),
+              ],
             ),
-            SizedBox(height: 16.h),
-            ElevatedButton(
-              onPressed: () {
-                context.read<FlightDetailBloc>().add(widget.flightId);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA)),
-              child: Text('Повторить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -817,36 +862,40 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                   Row(
                     children: [
                       // Аватар пилота
-                      if (flight.pilotAvatarUrl != null && flight.pilotAvatarUrl!.isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(40.r),
-                          child: CachedNetworkImage(
-                            imageUrl: getImageUrl(flight.pilotAvatarUrl!),
-                            width: 60.w,
-                            height: 60.w,
-                            fit: BoxFit.cover,
-                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                            placeholder: (context, url) => Container(
-                              width: 60.w,
-                              height: 60.w,
-                              color: Color(0xFFF3F4F6),
-                              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              width: 60.w,
-                              height: 60.w,
-                              color: Color(0xFFF3F4F6),
-                              child: Icon(Icons.person, size: 30, color: Color(0xFF9CA5AF)),
-                            ),
-                          ),
-                        )
-                      else
-                        Container(
-                          width: 60.w,
-                          height: 60.w,
-                          decoration: BoxDecoration(color: Color(0xFFF3F4F6), shape: BoxShape.circle),
-                          child: Icon(Icons.person, size: 30, color: Color(0xFF9CA5AF)),
-                        ),
+                      GestureDetector(
+                        onTap: flight.pilotAvatarUrl != null && flight.pilotAvatarUrl!.isNotEmpty
+                            ? () => _showPhotoViewer(context, flight, [getImageUrl(flight.pilotAvatarUrl!)], 0, isOwner)
+                            : null,
+                        child: flight.pilotAvatarUrl != null && flight.pilotAvatarUrl!.isNotEmpty
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(40.r),
+                                child: CachedNetworkImage(
+                                  imageUrl: getImageUrl(flight.pilotAvatarUrl!),
+                                  width: 60.w,
+                                  height: 60.w,
+                                  fit: BoxFit.cover,
+                                  cacheManager: GetIt.instance<DefaultCacheManager>(),
+                                  placeholder: (context, url) => Container(
+                                    width: 60.w,
+                                    height: 60.w,
+                                    color: Color(0xFFF3F4F6),
+                                    child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                  ),
+                                  errorWidget: (context, url, error) => Container(
+                                    width: 60.w,
+                                    height: 60.w,
+                                    color: Color(0xFFF3F4F6),
+                                    child: Icon(Icons.person, size: 30, color: Color(0xFF9CA5AF)),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                width: 60.w,
+                                height: 60.w,
+                                decoration: BoxDecoration(color: Color(0xFFF3F4F6), shape: BoxShape.circle),
+                                child: Icon(Icons.person, size: 30, color: Color(0xFF9CA5AF)),
+                              ),
+                      ),
                       SizedBox(width: 16.w),
                       // Информация о пилоте
                       Expanded(
@@ -979,7 +1028,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                                     }
                                   },
                                   icon: Icon(Icons.edit, color: Color(0xFF0A6EFA)),
-                                  label: Text('Редактировать', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                                  label: Text('Редактировать', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.symmetric(vertical: 14.h),
                                     side: BorderSide(color: Color(0xFFD9E6F8)),
@@ -994,7 +1043,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                                     _showCancelFlightDialog(context, flight.id);
                                   },
                                   icon: Icon(Icons.cancel, color: Color(0xFFEF4444)),
-                                  label: Text('Отменить полёт', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+                                  label: Text('Отменить полёт', style: AppStyles.bold16s.copyWith(color: Color(0xFFEF4444))),
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.symmetric(vertical: 14.h),
                                     side: BorderSide(color: Color(0xFFEF4444)),
@@ -1012,7 +1061,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                                 _showCompleteFlightDialog(context, flight.id);
                               },
                               icon: Icon(Icons.check_circle, color: Colors.white),
-                              label: Text('Завершить полёт', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                              label: Text('Завершить полёт', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFFFFA726),
                                 padding: EdgeInsets.symmetric(vertical: 14.h),
@@ -1116,7 +1165,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                       child: ElevatedButton.icon(
                         onPressed: () => _showAuthScreen(context),
                         icon: Icon(Icons.login, size: 18),
-                        label: Text('Войти', style: AppStyles.bold14s),
+                        label: Text('Войти', style: AppStyles.bold16s),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF0A6EFA),
                           foregroundColor: Colors.white,
@@ -1202,7 +1251,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                     TextButton.icon(
                       onPressed: () => _showCreateReviewDialog(context, flight, isOwner),
                       icon: Icon(Icons.add, size: 18, color: Color(0xFF0A6EFA)),
-                      label: Text('Оставить отзыв', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                      label: Text('Оставить отзыв', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                     ),
                 ],
               ),
@@ -1821,7 +1870,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+            child: Text('Отмена', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
           ),
           TextButton(
             onPressed: () async {
@@ -1840,7 +1889,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                 );
               }
             },
-            child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+            child: Text('Удалить', style: AppStyles.bold16s.copyWith(color: Color(0xFFEF4444))),
           ),
         ],
       ),
@@ -1909,7 +1958,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                 TextButton.icon(
                   onPressed: () => _showUploadPhotosDialog(context, flight),
                   icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
-                  label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+                  label: Text('Добавить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                   ),
@@ -2691,7 +2740,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                           );
                         },
                         icon: Icon(Icons.help_outline, size: 16),
-                        label: Text('Задать вопрос', style: AppStyles.bold14s),
+                        label: Text('Задать вопрос', style: AppStyles.bold16s),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF10B981),
                           foregroundColor: Colors.white,
@@ -2826,14 +2875,14 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF9CA5AF))),
+            child: Text('Отмена', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
               context.read<QuestionsBloc>().add(DeleteQuestionEvent(flightId: flightId, questionId: questionId));
             },
-            child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Color(0xFFEF4444))),
+            child: Text('Удалить', style: AppStyles.bold16s.copyWith(color: Color(0xFFEF4444))),
           ),
         ],
       ),

@@ -15,7 +15,6 @@ class BlogArticleCard extends StatelessWidget {
 
   const BlogArticleCard({super.key, required this.article, this.onTap, this.showStatus = false});
 
-
   String _getAuthorName() {
     if (article.author == null) return 'Автор';
     final firstName = article.author!.firstName ?? '';
@@ -60,7 +59,7 @@ class BlogArticleCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
         padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: const Color(0xFFD9E6F8)),
         ),
         child: Stack(
@@ -70,7 +69,7 @@ class BlogArticleCard extends StatelessWidget {
               children: [
                 if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty)
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     child: CachedNetworkImage(
                       imageUrl: getImageUrl(article.coverImageUrl!),
                       fit: BoxFit.cover,
@@ -92,15 +91,8 @@ class BlogArticleCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (article.category != null)
-                            Text(
-                              article.category!.name.toUpperCase(),
-                              style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
-                            ),
-                          Text(
-                            article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
-                            style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
-                          ),
+                          if (article.category != null) Text(article.category!.name.toUpperCase(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                          Text(article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                         ],
                       ),
                       SizedBox(height: 5.h),
@@ -129,10 +121,7 @@ class BlogArticleCard extends StatelessWidget {
                             children: [
                               Icon(Icons.person_outline, size: 12.sp, color: const Color(0xFF9CA5AF)),
                               SizedBox(width: 4.w),
-                              Text(
-                                _getAuthorName(),
-                                style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
-                              ),
+                              Text(_getAuthorName(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                             ],
                           ),
                           Row(
@@ -140,10 +129,7 @@ class BlogArticleCard extends StatelessWidget {
                             children: [
                               Icon(Icons.visibility_outlined, size: 12.sp, color: const Color(0xFF9CA5AF)),
                               SizedBox(width: 4.w),
-                              Text(
-                                '${article.viewCount}',
-                                style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
-                              ),
+                              Text('${article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                             ],
                           ),
                           if (article.aircraftModel != null)
@@ -165,12 +151,12 @@ class BlogArticleCard extends StatelessWidget {
                         ],
                       ),
                       if (showStatus) ...[
-                        SizedBox(height: 6.h),
+                        SizedBox(height: 6),
                         Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: Alignment.centerRight,
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                            decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8)),
+                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8.r)),
                             child: Text(
                               _getStatusText(),
                               style: AppStyles.light10s.copyWith(color: Colors.white, fontSize: 9.sp),

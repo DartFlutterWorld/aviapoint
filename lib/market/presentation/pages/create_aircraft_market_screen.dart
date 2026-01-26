@@ -12,6 +12,7 @@ import 'package:aviapoint/market/presentation/widgets/share_picker_widget.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
   late final TextEditingController _enginePowerController;
   late final TextEditingController _engineVolumeController;
   late final TextEditingController _seatsController;
+  late final TextEditingController _leasingConditionsController;
 
   String? _condition;
   int? _selectedCategoryId;
@@ -50,6 +52,9 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
   bool _isShareSale = false;
   int? _shareNumerator;
   int? _shareDenominator;
+
+  // Лизинг
+  bool _isLeasing = false;
 
   // Фотографии
   _PhotoItem? _mainPhoto; // Основная фотография
@@ -69,6 +74,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     _enginePowerController = TextEditingController();
     _engineVolumeController = TextEditingController();
     _seatsController = TextEditingController();
+    _leasingConditionsController = TextEditingController();
 
     // Загружаем категории для выбора
     context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: 'aircraft'));
@@ -85,6 +91,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     _enginePowerController.dispose();
     _engineVolumeController.dispose();
     _seatsController.dispose();
+    _leasingConditionsController.dispose();
     super.dispose();
   }
 
@@ -155,6 +162,8 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
         isShareSale: _isShareSale,
         shareNumerator: _isShareSale ? _shareNumerator : null,
         shareDenominator: _isShareSale ? _shareDenominator : null,
+        isLeasing: _isLeasing,
+        leasingConditions: _isLeasing && _leasingConditionsController.text.trim().isNotEmpty ? _leasingConditionsController.text.trim() : null,
         mainImageFile: mainImageFile,
         additionalImageFiles: additionalImageFiles,
       ),
@@ -277,7 +286,11 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                 return TextButton(
                   onPressed: isLoading ? null : _createProduct,
                   child: isLoading
-                      ? SizedBox(width: 20.w, height: 20.h, child: const CircularProgressIndicator(strokeWidth: 2))
+                      ? SizedBox(
+                          width: 20.w,
+                          height: 20.h,
+                          child: CircularProgressIndicator(strokeWidth: 2.w),
+                        )
                       : Text('Создать', style: AppStyles.bold16s.copyWith(color: AppColors.primary100p)),
                 );
               },
@@ -475,12 +488,8 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                 _buildConditionField(),
                 SizedBox(height: 16.h),
                 _buildShareSaleField(),
-                SizedBox(height: 24.h),
-                Text(
-                  'Объявление публикуется сроком на 1 месяц, потом при необходимости его можно снова опубликовать.',
-                  style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary),
-                  textAlign: TextAlign.center,
-                ),
+                SizedBox(height: 16.h),
+                _buildLeasingField(),
                 SizedBox(height: 24.h),
                 // Кнопка "Создать" (дублируем из AppBar)
                 BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
@@ -490,7 +499,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                       title: isLoading ? 'Создание...' : 'Создать',
                       verticalPadding: 12.h,
                       backgroundColor: AppColors.primary100p,
-                      textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                       borderColor: AppColors.primary100p,
                       borderRadius: 12.r,
                       onPressed: isLoading ? null : _createProduct,
@@ -583,7 +592,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       onTap: () => _showAircraftSelector(),
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'Бренд *',
+          labelText: 'Модель *',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
           filled: true,
           fillColor: Colors.white,
@@ -607,67 +616,35 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     }
   }
 
-  void _showCategoryBottomSheet(List<MarketCategoryEntity> categories) {
-    showModalBottomSheet<int>(
+  Future<void> _showCategoryBottomSheet(List<MarketCategoryEntity> categories) async {
+    await showUniversalBottomSheet<int>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(8.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-        ),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 8.h),
-              // Заголовок
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Text('Выберите категорию', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                  Positioned(
-                    right: 0,
-                    child: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              // Список категорий
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    final isSelected = _selectedCategoryId == category.id;
-                    return ListTile(
-                      title: Text(category.name, style: AppStyles.regular14s),
-                      trailing: isSelected ? Icon(Icons.check, color: AppColors.primary100p) : null,
-                      selected: isSelected,
-                      onTap: () {
-                        setState(() {
-                          _selectedCategoryId = category.id;
-                        });
-                        Navigator.pop(context, category.id);
-                      },
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
-            ],
-          ),
-        ),
+      title: 'Выберите категорию',
+      height: MediaQuery.of(context).size.height * 0.9,
+      backgroundColor: Colors.white,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final category = categories[index];
+          final isSelected = _selectedCategoryId == category.id;
+          return ListTile(
+            title: Text(category.name, style: AppStyles.regular14s),
+            trailing: isSelected ? Icon(Icons.check, color: AppColors.primary100p) : null,
+            selected: isSelected,
+            onTap: () {
+              setState(() {
+                _selectedCategoryId = category.id;
+              });
+              Navigator.pop(context, category.id);
+            },
+          );
+        },
       ),
     );
   }
 
-  void _showConditionBottomSheet() {
+  Future<void> _showConditionBottomSheet() async {
     final conditions = [
       {'value': 'new', 'label': 'Новый'},
       {'value': 'used', 'label': 'Б/у'},
@@ -675,61 +652,29 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       {'value': 'parts', 'label': 'На запчасти'},
     ];
 
-    showModalBottomSheet<String>(
+    await showUniversalBottomSheet<String>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(8.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-        ),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 8.h),
-              // Заголовок
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Text('Выберите состояние', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                  Positioned(
-                    right: 0,
-                    child: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              // Список состояний
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: conditions.length,
-                  itemBuilder: (context, index) {
-                    final condition = conditions[index];
-                    final isSelected = _condition == condition['value'];
-                    return ListTile(
-                      title: Text(condition['label']!, style: AppStyles.regular14s),
-                      trailing: isSelected ? Icon(Icons.check, color: AppColors.primary100p) : null,
-                      selected: isSelected,
-                      onTap: () {
-                        setState(() {
-                          _condition = condition['value'];
-                        });
-                        Navigator.pop(context, condition['value']);
-                      },
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
-            ],
-          ),
-        ),
+      title: 'Выберите состояние',
+      height: MediaQuery.of(context).size.height * 0.9,
+      backgroundColor: Colors.white,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: conditions.length,
+        itemBuilder: (context, index) {
+          final condition = conditions[index];
+          final isSelected = _condition == condition['value'];
+          return ListTile(
+            title: Text(condition['label']!, style: AppStyles.regular14s),
+            trailing: isSelected ? Icon(Icons.check, color: AppColors.primary100p) : null,
+            selected: isSelected,
+            onTap: () {
+              setState(() {
+                _condition = condition['value'];
+              });
+              Navigator.pop(context, condition['value']);
+            },
+          );
+        },
       ),
     );
   }
@@ -767,109 +712,132 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     );
   }
 
+  Widget _buildLeasingField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text('Самолёт можно купить в лизинг', style: AppStyles.regular14s.copyWith(color: AppColors.netural100p)),
+            ),
+            Switch(
+              value: _isLeasing,
+              activeColor: AppColors.primary100p,
+              onChanged: (value) {
+                setState(() {
+                  _isLeasing = value;
+                  if (!value) {
+                    _leasingConditionsController.clear();
+                  }
+                });
+              },
+            ),
+          ],
+        ),
+        if (_isLeasing) ...[
+          SizedBox(height: 8.h),
+          TextFormField(
+            controller: _leasingConditionsController,
+            maxLines: 3,
+            decoration: InputDecoration(
+              labelText: 'Условия лизинга',
+              alignLabelWithHint: true,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
   Future<void> _showSharePickerDialog() async {
     int? tempNumerator = _shareNumerator;
     int? tempDenominator = _shareDenominator;
     bool tempIsShareSale = _isShareSale;
 
-    await showModalBottomSheet<void>(
+    await showUniversalBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      enableDrag: true,
-      barrierColor: AppColors.bgOverlay,
+      title: 'Продажа доли',
+      height: MediaQuery.of(context).size.height * 0.9,
       backgroundColor: AppColors.background,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.h, bottom: 24.h),
-          child: StatefulBuilder(
-            builder: (context, setModalState) => Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: StatefulBuilder(
+        builder: (context, setModalState) => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Чекбокс
+            Row(
               children: [
-                // Заголовок с кнопкой закрытия
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Продажа доли', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                    IconButton(
-                      icon: Icon(Icons.close, color: Color(0xFF9CA5AF)),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
-                // Чекбокс
-                Row(
-                  children: [
-                    Checkbox(
-                      value: tempIsShareSale,
-                      onChanged: (value) {
-                        setModalState(() {
-                          tempIsShareSale = value ?? false;
-                          if (!tempIsShareSale) {
-                            tempNumerator = null;
-                            tempDenominator = null;
-                          }
-                        });
-                      },
-                    ),
-                    Text('Продаётся доля', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                  ],
-                ),
-                // Виджет выбора доли
-                if (tempIsShareSale) ...[
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Выберите долю:',
-                    style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 16.h),
-                  Center(
-                    child: SharePickerWidget(
-                      numerator: tempNumerator,
-                      denominator: tempDenominator,
-                      onNumeratorChanged: (value) {
-                        setModalState(() {
-                          tempNumerator = value;
-                          // Если знаменатель стал невалидным (<= числителя), обнуляем его
-                          if (value != null && tempDenominator != null && tempDenominator! <= value) {
-                            tempDenominator = null;
-                          }
-                        });
-                      },
-                      onDenominatorChanged: (value) {
-                        setModalState(() {
-                          tempDenominator = value;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-                SizedBox(height: 24.h),
-                // Кнопка Сохранить
-                CustomButton(
-                  title: 'Сохранить',
-                  verticalPadding: 12.h,
-                  backgroundColor: Color(0xFF0A6EFA),
-                  textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
-                  borderColor: Color(0xFF0A6EFA),
-                  borderRadius: 12.r,
-                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))],
-                  onPressed: () {
-                    setState(() {
-                      _isShareSale = tempIsShareSale;
-                      _shareNumerator = tempNumerator;
-                      _shareDenominator = tempDenominator;
+                Checkbox(
+                  value: tempIsShareSale,
+                  onChanged: (value) {
+                    setModalState(() {
+                      tempIsShareSale = value ?? false;
+                      if (!tempIsShareSale) {
+                        tempNumerator = null;
+                        tempDenominator = null;
+                      }
                     });
-                    Navigator.pop(context);
                   },
                 ),
-                SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+                Text('Продаётся доля', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
               ],
             ),
-          ),
+            // Виджет выбора доли
+            if (tempIsShareSale) ...[
+              SizedBox(height: 16.h),
+              Text(
+                'Выберите долю:',
+                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16.h),
+              Center(
+                child: SharePickerWidget(
+                  numerator: tempNumerator,
+                  denominator: tempDenominator,
+                  onNumeratorChanged: (value) {
+                    setModalState(() {
+                      tempNumerator = value;
+                      // Если знаменатель стал невалидным (<= числителя), обнуляем его
+                      if (value != null && tempDenominator != null && tempDenominator! <= value) {
+                        tempDenominator = null;
+                      }
+                    });
+                  },
+                  onDenominatorChanged: (value) {
+                    setModalState(() {
+                      tempDenominator = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+            SizedBox(height: 24.h),
+            // Кнопка Сохранить
+            CustomButton(
+              title: 'Сохранить',
+              verticalPadding: 12.h,
+              backgroundColor: Color(0xFF0A6EFA),
+              textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+              borderColor: Color(0xFF0A6EFA),
+              borderRadius: 12.r,
+              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+              onPressed: () {
+                setState(() {
+                  _isShareSale = tempIsShareSale;
+                  _shareNumerator = tempNumerator;
+                  _shareDenominator = tempDenominator;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+          ],
         ),
       ),
     );
@@ -897,14 +865,14 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Дополнительные фотографии', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-            TextButton.icon(
-              onPressed: _pickAdditionalPhotos,
-              icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
-              label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              ),
-            ),
+            // TextButton.icon(
+            //   onPressed: _pickAdditionalPhotos,
+            //   icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
+            //   label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+            //   style: TextButton.styleFrom(
+            //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            //   ),
+            // ),
           ],
         ),
         SizedBox(height: 12.h),

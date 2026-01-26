@@ -14,10 +14,13 @@ abstract class Environment {
   // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.159');
 
   // Кардон Вайфай
-  static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.105');
+  // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.1.101');
 
   // Megafon phone
-  // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '172.20.10.11');
+  static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '172.20.10.11');
+
+  //Автосервис Лебяжье
+  // static const String localServerIp = String.fromEnvironment('localServerIp', defaultValue: '192.168.0.121');
 
   /// API базовый URL
   static String get apiUrl {

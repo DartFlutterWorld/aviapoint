@@ -7,6 +7,7 @@ import 'package:aviapoint/blog/presentation/bloc/blog_categories_bloc.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
@@ -43,6 +44,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
 
   final _coverImageUrlController = TextEditingController();
   final _aircraftModelController = TextEditingController();
+  final _statusController = TextEditingController();
 
   int? _selectedCategoryId;
   int? _selectedAircraftModelId;
@@ -56,6 +58,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
   void initState() {
     super.initState();
     _quillController = QuillController.basic();
+    _statusController.text = 'Черновик'; // Инициализируем начальное значение
     context.read<BlogCategoriesBloc>().add(const GetBlogCategoriesEvent());
   }
 
@@ -67,14 +70,12 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
     _quillFocusNode.dispose();
     _coverImageUrlController.dispose();
     _aircraftModelController.dispose();
+    _statusController.dispose();
     super.dispose();
   }
 
   Future<void> _showAircraftModelSelector(BuildContext context) async {
-    final result = await showDialog<Map<String, dynamic>>(
-      context: context,
-      builder: (context) => AircraftTypeSelectorDialog(returnModelId: true),
-    );
+    final result = await showDialog<Map<String, dynamic>>(context: context, builder: (context) => AircraftTypeSelectorDialog(returnModelId: true));
 
     if (result != null) {
       setState(() {
@@ -84,15 +85,45 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
     }
   }
 
+  Future<void> _showStatusBottomSheet(BuildContext context) async {
+    final selectedStatus = await showUniversalBottomSheet<String>(
+      context: context,
+      title: 'Выберите статус',
+      child: Builder(
+        builder: (bottomSheetContext) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text('Черновик', style: AppStyles.regular14s),
+              trailing: _status == 'draft' ? Icon(Icons.check, color: Color(0xFF0A6EFA)) : null,
+              onTap: () {
+                Navigator.pop(bottomSheetContext, 'draft');
+              },
+            ),
+            ListTile(
+              title: Text('Опубликовано', style: AppStyles.regular14s),
+              trailing: _status == 'published' ? Icon(Icons.check, color: Color(0xFF0A6EFA)) : null,
+              onTap: () {
+                Navigator.pop(bottomSheetContext, 'published');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (selectedStatus != null && mounted) {
+      setState(() {
+        _status = selectedStatus;
+        _statusController.text = selectedStatus == 'draft' ? 'Черновик' : 'Опубликовано';
+      });
+    }
+  }
+
   Future<void> _pickCoverImage() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 85,
-        maxWidth: 1920,
-        maxHeight: 1920,
-      );
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
 
       if (image != null) {
         if (kIsWeb) {
@@ -102,8 +133,6 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
             _coverImageBytes = bytes;
             _coverImage = null;
             _coverImageUrlController.text = image.name; // Сохраняем имя файла
-            // Обновляем валидацию формы
-            _formKey.currentState?.validate();
           });
         } else {
           // Для других платформ используем File
@@ -111,8 +140,6 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
             _coverImage = File(image.path);
             _coverImageBytes = null;
             _coverImageUrlController.text = image.path; // Временно, потом нужно загрузить на сервер
-            // Обновляем валидацию формы
-            _formKey.currentState?.validate();
           });
         }
       }
@@ -123,9 +150,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -144,9 +169,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
           }
         },
         (imageUrl) {
@@ -154,9 +177,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
           if (!mounted) return;
 
           // Преобразуем относительный путь в полный URL
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
-              ? imageUrl
-              : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
 
           // Вставляем изображение в Quill
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -188,9 +209,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
-                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
               }
             }
           });
@@ -199,9 +218,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -228,9 +245,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -253,9 +268,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
           }
         },
         (imageUrl) {
@@ -263,9 +276,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
           if (!mounted) return;
 
           // Преобразуем относительный путь в полный URL
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
-              ? imageUrl
-              : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
 
           // Вставляем изображение в Quill
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -297,9 +308,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
-                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
               }
             }
           });
@@ -308,9 +317,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -375,25 +382,19 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
 
     // Проверка обязательных полей
     if (title.isEmpty || content.trim().isEmpty || content == '[]') {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
       return;
     }
 
     // Проверка категории
     if (_selectedCategoryId == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
       return;
     }
 
     // Проверка краткого описания
     if (excerpt.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Введите краткое описание'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите краткое описание'), backgroundColor: Colors.red));
       return;
     }
 
@@ -405,9 +406,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
 
     // Проверка обложки
     if (coverImageFile == null && coverImageBytes == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите изображение для обложки'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите изображение для обложки'), backgroundColor: Colors.red));
       return;
     }
 
@@ -450,7 +449,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.lock_outline, size: 64, color: Color(0xFF9CA5AF)),
+                Icon(Icons.lock_outline, size: 64.sp, color: Color(0xFF9CA5AF)),
                 SizedBox(height: 16.h),
                 Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 8.h),
@@ -471,13 +470,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         state.maybeWhen(
           created: (article) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Статья успешно создана'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно создана'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
 
             // Обновляем список статей перед возвратом
             context.read<BlogArticlesBloc>().add(const GetBlogArticlesEvent(status: 'published'));
@@ -494,22 +487,14 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
           },
           updated: (article) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Статья успешно обновлена'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно обновлена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
             // Обновляем список статей перед возвратом
             context.read<BlogArticlesBloc>().add(const GetBlogArticlesEvent(status: 'published'));
             AutoRouter.of(context).pop();
           },
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
           },
           orElse: () {},
         );
@@ -518,12 +503,44 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         appBar: const CustomAppBar(title: 'Создать статью', withBack: true),
         backgroundColor: AppColors.background,
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.disabled,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Обложка
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Обложка статьи *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                    SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: _pickCoverImage,
+                      icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
+                      label: Text('Выберите изображение для статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        side: BorderSide(color: Color(0xFF0A6EFA)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                      ),
+                    ),
+                  ],
+                ),
+                if (_coverImage != null || _coverImageBytes != null) ...[
+                  SizedBox(height: 16),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: kIsWeb && _coverImageBytes != null
+                        ? Image.memory(_coverImageBytes!, height: 150.h, fit: BoxFit.cover)
+                        : _coverImage != null
+                        ? Image.file(_coverImage!, height: 150.h, fit: BoxFit.cover)
+                        : SizedBox.shrink(),
+                  ),
+                ],
+                SizedBox(height: 16),
+
                 // Заголовок
                 TextFormField(
                   controller: _titleController,
@@ -546,50 +563,48 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
                     ),
                   ),
                   validator: (value) => value?.trim().isEmpty ?? true ? 'Введите заголовок' : null,
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Категория
                 BlocBuilder<BlogCategoriesBloc, BlogCategoriesState>(
                   builder: (context, state) => state.maybeWhen(
-                    success: (categories) => LayoutBuilder(
-                      builder: (context, constraints) => DropdownButtonFormField2<int>(
-                        value: _selectedCategoryId,
-                        isExpanded: true,
-                        decoration: InputDecoration(
-                          labelText: 'Категория *',
-                          labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                          hintText: 'Выберите категорию',
-                          hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFFD9E6F8)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
-                          ),
+                    success: (categories) => DropdownButtonFormField2<int>(
+                      value: _selectedCategoryId,
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        labelText: 'Категория *',
+                        labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                        hintText: 'Выберите категорию',
+                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
-                        items: categories.map((category) {
-                          return DropdownMenuItem<int>(
-                            value: category.id,
-                            child: Text(category.name, style: AppStyles.regular14s),
-                          );
-                        }).toList(),
-                        onChanged: (value) => setState(() => _selectedCategoryId = value),
-                        validator: (value) => value == null ? 'Выберите категорию' : null,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                        ),
                       ),
+                      items: categories.map((category) {
+                        return DropdownMenuItem<int>(
+                          value: category.id,
+                          child: Text(category.name, style: AppStyles.regular14s),
+                        );
+                      }).toList(),
+                      onChanged: (value) => setState(() => _selectedCategoryId = value),
+                      validator: (value) => value == null ? 'Выберите категорию' : null,
                     ),
                     orElse: () => const SizedBox(),
                   ),
@@ -621,7 +636,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
                       ),
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
@@ -636,7 +651,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.clear, size: 18, color: Color(0xFF9CA5AF)),
+                        icon: Icon(Icons.clear, size: 18.sp, color: Color(0xFF9CA5AF)),
                         onPressed: () {
                           setState(() {
                             _selectedAircraftModelId = null;
@@ -656,7 +671,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                 // Краткое описание
                 TextFormField(
                   controller: _excerptController,
-                  maxLines: 3,
+                  maxLines: 2,
                   style: AppStyles.regular14s,
                   decoration: InputDecoration(
                     labelText: 'Краткое описание *',
@@ -676,7 +691,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
                     ),
                   ),
                   validator: (value) => value?.trim().isEmpty ?? true ? 'Введите краткое описание' : null,
@@ -688,7 +703,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Содержание статьи *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 16),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -698,12 +713,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       child: Column(
                         children: [
                           Transform.scale(
-                            scale: kIsWeb ? 1.0 : 0.85,
+                            scale: 1,
                             alignment: Alignment.topLeft,
-                            child: QuillSimpleToolbar(
-                              controller: _quillController,
-                              config: const QuillSimpleToolbarConfig(showClipboardCut: true),
-                            ),
+                            child: QuillSimpleToolbar(controller: _quillController, config: const QuillSimpleToolbarConfig(showClipboardCut: true)),
                           ),
                           Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
                           Container(
@@ -711,10 +723,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                             padding: EdgeInsets.all(12.w),
                             child: QuillEditor.basic(
                               controller: _quillController,
-                              config: QuillEditorConfig(
-                                placeholder: 'Введите текст статьи...',
-                                embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                              ),
+                              config: QuillEditorConfig(placeholder: 'Введите текст статьи...', embedBuilders: FlutterQuillEmbeds.editorBuilders()),
                               focusNode: _quillFocusNode,
                             ),
                           ),
@@ -722,63 +731,32 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       ),
                     ),
                     // Кнопка для вставки изображения
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 12),
                     OutlinedButton.icon(
                       onPressed: _isLoading ? null : _pickContentImage,
-                      icon: Icon(Icons.image, size: 18.sp),
-                      label: Text('Вставить изображение', style: AppStyles.regular12s),
+                      icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
+                      label: Text('Вставить изображение в тексты', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
                       style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                         side: BorderSide(color: Color(0xFF0A6EFA)),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 16.h),
-
-                // Обложка
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Обложка статьи *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
-                    OutlinedButton.icon(
-                      onPressed: _pickCoverImage,
-                      icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
-                      label: Text(
-                        'Выберите изображение для статьи',
-                        style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                        side: BorderSide(color: Color(0xFF0A6EFA)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                      ),
-                    ),
-                  ],
-                ),
-                if (_coverImage != null || _coverImageBytes != null) ...[
-                  SizedBox(height: 8.h),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: kIsWeb && _coverImageBytes != null
-                        ? Image.memory(_coverImageBytes!, height: 150.h, fit: BoxFit.cover)
-                        : _coverImage != null
-                        ? Image.file(_coverImage!, height: 150.h, fit: BoxFit.cover)
-                        : SizedBox.shrink(),
-                  ),
-                ],
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Статус
-                LayoutBuilder(
-                  builder: (context, constraints) => DropdownButtonFormField2<String>(
-                    value: _status,
-                    isExpanded: true,
+                InkWell(
+                  onTap: () => _showStatusBottomSheet(context),
+                  child: TextFormField(
+                    controller: _statusController,
+                    enabled: false,
+                    style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                     decoration: InputDecoration(
                       labelText: 'Статус',
                       labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                      hintText: 'Нажмите для выбора статуса',
+                      hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                       filled: true,
                       fillColor: Colors.white,
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
@@ -792,32 +770,26 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
                       ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: BorderSide(color: Color(0xFFD9E6F8)),
+                      ),
+                      suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
                     ),
-                    items: [
-                      DropdownMenuItem(
-                        value: 'draft',
-                        child: Text('Черновик', style: AppStyles.regular14s),
-                      ),
-                      DropdownMenuItem(
-                        value: 'published',
-                        child: Text('Опубликовано', style: AppStyles.regular14s),
-                      ),
-                    ],
-                    onChanged: (value) => setState(() => _status = value ?? 'draft'),
                   ),
                 ),
                 SizedBox(height: 16.h),
 
                 // Кнопка создания
                 CustomButton(
-                  verticalPadding: 14,
+                  verticalPadding: 14.h,
                   backgroundColor: Color(0xFF7A0FD9),
                   title: _isLoading ? 'Создание...' : 'Создать статью',
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF7A0FD9),
-                  borderRadius: 46,
+                  borderRadius: 46.r,
                   onPressed: _isLoading ? null : _submit,
                 ),
               ],

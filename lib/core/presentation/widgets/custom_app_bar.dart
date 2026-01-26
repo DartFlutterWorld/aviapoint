@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,7 +13,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(height + (bottom?.preferredSize.height ?? 0));
+  Size get preferredSize {
+    return Size.fromHeight(height.h + (bottom?.preferredSize.height ?? 0));
+  }
 
   // void _pop(BuildContext context) {
   //   AutoRouter.of(context).maybePop();
@@ -62,9 +65,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = 28.sp;
     return AppBar(
+      toolbarHeight: height.h,
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
+      iconTheme: IconThemeData(size: iconSize),
+      actionsIconTheme: IconThemeData(size: iconSize),
       leading: withBack
           ? GestureDetector(
               onTap: onTap ?? () => _pop(context),
@@ -72,14 +79,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.transparent,
                 child: Row(
                   children: [
-                    SizedBox(width: 12.w),
-                    SvgPicture.asset(Pictures.arrowCircleLeft, height: 24),
+                    SizedBox(width: 12),
+                    SvgPicture.asset(Pictures.arrowCircleLeft, height: iconSize, width: iconSize),
                   ],
                 ),
               ),
             )
           : SizedBox(),
-      leadingWidth: 60.r,
+      leadingWidth: 60.w,
       centerTitle: true,
       backgroundColor: AppColors.backgroundAppBar,
       elevation: elevation,
@@ -89,18 +96,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: [SvgPicture.asset(Pictures.logoTitle)],
+              children: [SvgPicture.asset(Pictures.logoTitle, height: 40.h)],
             )
           : Text(
               title,
-              style: TextStyle(
-                color: Color(0xFF223B76),
-                fontSize: 14.sp,
-                fontFamily: 'Geologica-Medium',
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppStyles.bold16s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
               maxLines: 2,
               textAlign: titleTextAlign,
+              overflow: TextOverflow.ellipsis,
             ),
       actions: [...actions, if (withProfile) _ProfileButton()],
       bottom: bottom,
@@ -112,14 +115,13 @@ class _ProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAuthenticated = Provider.of<AppState>(context, listen: true).isAuthenticated;
+    final iconSize = 28.sp;
 
     if (!isAuthenticated) {
       return IconButton(
-        icon: SvgPicture.asset(
-          Pictures.profileNavbar,
-          height: 24,
-          colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-        ),
+        constraints: const BoxConstraints(),
+        iconSize: iconSize,
+        icon: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
         onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
         tooltip: 'Профиль',
       );
@@ -132,33 +134,28 @@ class _ProfileButton extends StatelessWidget {
         final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
 
         return IconButton(
-          padding: EdgeInsets.all(4),
           constraints: BoxConstraints(),
+          iconSize: iconSize,
           icon: ClipOval(
-            child: imageUrl != null && imageUrl.isNotEmpty
-                ? CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                    cacheManager: getIt<DefaultCacheManager>(),
-                    cacheKey: avatarUrl,
-                    placeholder: (context, url) => SvgPicture.asset(
-                      Pictures.profileNavbar,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-                    ),
-                    errorWidget: (context, url, error) => SvgPicture.asset(
-                      Pictures.profileNavbar,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-                    ),
-                  )
-                : SvgPicture.asset(
-                    Pictures.profileNavbar,
-                    height: 24,
-                    colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-                  ),
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: iconSize,
+              height: iconSize,
+              child: imageUrl != null && imageUrl.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      width: iconSize,
+                      height: iconSize,
+                      fit: BoxFit.cover,
+                      cacheManager: getIt<DefaultCacheManager>(),
+                      cacheKey: avatarUrl,
+                      placeholder: (context, url) =>
+                          SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      errorWidget: (context, url, error) =>
+                          SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                    )
+                  : SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+            ),
           ),
           onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
           tooltip: 'Профиль',

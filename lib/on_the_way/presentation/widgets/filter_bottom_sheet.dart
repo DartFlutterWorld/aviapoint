@@ -3,6 +3,8 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final DateTime? initialDateFrom;
@@ -39,8 +41,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Фильтры', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-              IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+              Text('Фильтры', style: AppStyles.bold20s.copyWith(color: const Color(0xFF374151))),
+              IconButton(
+                icon: SvgPicture.asset(Pictures.closeAuth),
+                onPressed: () => Navigator.pop(context),
+              ),
             ],
           ),
           SizedBox(height: 16.h),
@@ -71,7 +76,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           _dateTo = null;
                         });
                       },
-                      child: Icon(Icons.close, size: 18, color: Color(0xFF9CA5AF)),
+                      child: SvgPicture.asset(Pictures.closeAuth, width: 18.w, height: 18.w, colorFilter: const ColorFilter.mode(Color(0xFF9CA5AF), BlendMode.srcIn)),
                     ),
                 ],
               ),
@@ -128,7 +133,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     side: BorderSide(color: Color(0xFFD9E6F8)),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                   ),
-                  child: Text('Сбросить', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                  child: Text('Сбросить', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                 ),
               ),
               SizedBox(width: 12.w),
@@ -155,7 +160,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                   ),
-                  child: Text('Применить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                  child: Text('Применить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                 ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:mask/mask/mask.dart';
 
@@ -43,7 +44,7 @@ class PhoneFormFieldState extends State<PhoneFormField> {
       margin: const EdgeInsets.only(top: 18),
       padding: const EdgeInsets.all(1.45),
       width: double.infinity,
-      height: 50,
+      height: 60.h,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       child: TextField(
         //autofocus: true,

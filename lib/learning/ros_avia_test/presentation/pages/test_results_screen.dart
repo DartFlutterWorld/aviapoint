@@ -338,7 +338,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             offset: const Offset(0.0, 7.0),
                           ),
                         ],
-                        textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                         borderColor: Colors.transparent,
                         backgroundColor: const Color(0xFF0A6EFA),
                         borderRadius: 46,

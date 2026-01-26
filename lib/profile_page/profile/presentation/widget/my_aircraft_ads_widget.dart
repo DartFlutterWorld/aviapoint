@@ -296,7 +296,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
               ),
-              child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+              child: Text('Удалить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
             ),
           ],
         ),

@@ -72,10 +72,10 @@ class _Success extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: ListView(
         children: [
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           CategoryHandBookLongWidget(
             title: handBookCategories[0].title,
             subTitle: handBookCategories[0].subTitle,
@@ -84,7 +84,7 @@ class _Success extends StatelessWidget {
             imageHeight: 137.h,
             onTap: () => context.router.push(selectSubCategory(1)),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           CategoryHandBookLongWidget(
             title: handBookCategories[1].title,
             subTitle: handBookCategories[1].subTitle,
@@ -93,7 +93,7 @@ class _Success extends StatelessWidget {
             imageHeight: 130.h,
             onTap: () => context.router.push(selectSubCategory(2)),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           // Row(
           //   spacing: 12.w,
           //   children: [
@@ -125,7 +125,7 @@ class _Success extends StatelessWidget {
           //     ),
           //   ],
           // ),
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           CategoryHandBookLongWidget(
             title: handBookCategories[2].title,
             subTitle: handBookCategories[2].subTitle,

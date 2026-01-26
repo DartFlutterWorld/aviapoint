@@ -62,11 +62,11 @@ class _BaseQuestionsScreenState extends State<BaseQuestionsScreen> {
       ),
       backgroundColor: AppColors.background,
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
         children: [
-          SizedBox(height: 16),
+          SizedBox(height: 16.h),
           TestMySelfWidget(),
-          SizedBox(height: 12),
+          SizedBox(height: 12.h),
           BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
             builder: (context, state) => state.map(
               loading: (value) => SizedBox(),
@@ -78,7 +78,7 @@ class _BaseQuestionsScreenState extends State<BaseQuestionsScreen> {
               ),
             ),
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 12.h),
           BlocBuilder<TypeCorrectAnswersBloc, TypeCorrectAnswersState>(
             builder: (context, state) => state.maybeMap(
               orElse: () => SizedBox.shrink(),
@@ -92,13 +92,13 @@ class _BaseQuestionsScreenState extends State<BaseQuestionsScreen> {
               // ),
             ),
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 12.h),
           BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
             builder: (context, state) => state.map(
               success: (value) => _Success(value.categoryWithQuestions),
               loading: (value) => LoadingCustom(),
               error: (value) => ErrorCustom(
-                paddingTop: 100,
+                paddingTop: 100.h,
                 textError: value.errorForUser,
                 repeat: () {
                   BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(
@@ -127,10 +127,10 @@ class _SuccessTypeCorrectAnswers extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text('Правильность ответа', style: AppStyles.medium10s.copyWith(color: Color(0xFF374151))),
-        SizedBox(height: 7),
+        SizedBox(height: 7.h),
         Wrap(
-          spacing: 4,
-          runSpacing: 4,
+          spacing: 4.w,
+          runSpacing: 4.h,
           children: [
             ...typeCorrectAnswer.map(
               (e) => CorrectAnswer(color: getColors(e.id).$1, title: e.title, colorTitle: getColors(e.id).$2),
@@ -157,7 +157,7 @@ class _Success extends StatelessWidget {
           shrinkWrap: true,
           itemCount: categoryWithQuestions.length,
           itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6.0),
+            padding: EdgeInsets.symmetric(vertical: 6.h),
             child: Column(
               children: [
                 GestureDetector(
@@ -179,7 +179,7 @@ class _Success extends StatelessWidget {
                           children: List.generate(
                             categoryWithQuestions[index].questionsWithAnswers.length,
                             (index2) => Padding(
-                              padding: EdgeInsets.only(right: 3, left: 3, top: 3, bottom: 3),
+                              padding: EdgeInsets.only(right: 3.w, left: 3.w, top: 3.h, bottom: 3.h),
                               child: GestureDetector(
                                 onTap: () => openQuestion(
                                   context: context,
@@ -194,7 +194,7 @@ class _Success extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         Text(
                           'Всего вопросов: ${categoryWithQuestions[index].questionsCount.toString()}',
                           style: AppStyles.medium10s.copyWith(color: Color(0xFF9CA5AF)),

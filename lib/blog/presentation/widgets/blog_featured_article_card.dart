@@ -33,7 +33,7 @@ class BlogFeaturedArticleCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: const Color(0xFFD9E6F8)),
         ),
         child: Column(
@@ -42,7 +42,7 @@ class BlogFeaturedArticleCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(16.r), topRight: Radius.circular(16.r)),
                   child: CachedNetworkImage(
                     imageUrl: article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty
                         ? getImageUrl(article.coverImageUrl!)
@@ -59,7 +59,7 @@ class BlogFeaturedArticleCard extends StatelessWidget {
                     errorWidget: (context, url, error) => Container(
                       height: 200.h,
                       color: const Color(0xFFD9E6F8),
-                      child: const Icon(Icons.image, size: 48),
+                      child: Icon(Icons.image, size: 48.sp),
                     ),
                   ),
                 ),
@@ -68,7 +68,7 @@ class BlogFeaturedArticleCard extends StatelessWidget {
                   left: 12.w,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    decoration: BoxDecoration(color: AppColors.primary100p, borderRadius: BorderRadius.circular(20)),
+                    decoration: BoxDecoration(color: AppColors.primary100p, borderRadius: BorderRadius.circular(20.r)),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

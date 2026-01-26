@@ -3,6 +3,7 @@ import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
@@ -79,7 +80,12 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.only(
+              left: AppSpacing.horizontal,
+              right: AppSpacing.horizontal,
+              top: AppSpacing.section,
+              bottom: AppSpacing.section,
+            ),
             child: BlocBuilder<FlightsBloc, FlightsState>(
               builder: (context, state) {
                 return state.when(

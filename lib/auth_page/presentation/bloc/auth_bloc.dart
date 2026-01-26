@@ -1,9 +1,6 @@
 import 'package:aviapoint/auth_page/domain/entities/auth_entity.dart';
 import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
-import 'package:aviapoint/core/services/app_firebase.dart';
-import 'package:aviapoint/injection_container.dart';
-import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -75,8 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           // Теперь проверяем статус авторизации
           await _appState.checkAuthStatus();
 
-          // Отправляем FCM токен на сервер после успешного логина
-          _sendFcmTokenToServer();
+          // FCM токен будет отправлен автоматически после загрузки профиля
 
           emit(SuccessAuthState(r));
         } catch (e) {
@@ -86,17 +82,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  /// Отправка FCM токена на сервер
-  Future<void> _sendFcmTokenToServer() async {
-    try {
-      final fcmToken = AppFirebase().fcmToken;
-      if (fcmToken != null && fcmToken.isNotEmpty) {
-        final profileRepository = getIt<ProfileRepository>();
-        await profileRepository.saveFcmToken(fcmToken);
-      }
-    } catch (e) {
-      // Не блокируем авторизацию, если не удалось отправить FCM токен
-      debugPrint('Ошибка отправки FCM токена: $e');
-    }
-  }
 }

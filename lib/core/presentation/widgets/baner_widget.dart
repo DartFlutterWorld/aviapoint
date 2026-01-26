@@ -1,5 +1,5 @@
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
-import 'package:aviapoint/core/themes/app_colors.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -44,22 +44,11 @@ class BanerWidget extends StatelessWidget {
     this.backgroundColor2 = const Color(0xFF0A6EFA),
     this.borderColor = Colors.white,
     this.borderColor2 = const Color(0xFF0A6EFA),
-    this.boxShadowContainer = const [
-      BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0)),
-    ],
-    this.boxShadowButton = const [
-      BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0)),
-    ],
-    this.boxShadowButton2 = const [
-      BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0)),
-    ],
+    this.boxShadowContainer = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+    this.boxShadowButton = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+    this.boxShadowButton2 = const [BoxShadow(color: Color(0xff045EC5), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],
     this.titleStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
-    this.descStyle = const TextStyle(
-      fontWeight: FontWeight.normal,
-      fontSize: 13,
-      height: 1.3,
-      color: Color(0xFFF1F7FF),
-    ),
+    this.descStyle = const TextStyle(fontWeight: FontWeight.normal, fontSize: 13, height: 1.3, color: Color(0xFFF1F7FF)),
   });
 
   @override
@@ -67,27 +56,35 @@ class BanerWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18.r),
       child: Container(
-        height: 190,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18.r),
           image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background), isAntiAlias: true),
           boxShadow: boxShadowContainer,
         ),
         child: Stack(
+          clipBehavior: Clip.hardEdge,
           children: [
-            Align(
-              alignment: alignPicture,
-              child: Image.asset(picture, fit: BoxFit.contain, height: heightPicture),
+            Positioned(
+              bottom: 0,
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Align(
+                alignment: alignPicture,
+                child: Image.asset(picture, fit: BoxFit.contain, height: heightPicture ?? 150.h),
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             if (title.isNotEmpty) Text(title, style: titleStyle),
                             if (title.isNotEmpty) SizedBox(height: 4.h),
@@ -97,7 +94,7 @@ class BanerWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  SizedBox(height: 16.h),
                   Row(
                     spacing: 8,
                     children: [

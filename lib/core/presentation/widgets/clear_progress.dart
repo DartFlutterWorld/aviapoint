@@ -33,7 +33,7 @@ class ClearProgress extends StatelessWidget {
                   verticalPadding: 4,
                   backgroundColor: Color(0xFFFFFFFF),
                   title: 'Да',
-                  textStyle: AppStyles.bold15s.copyWith(color: Color(0xFF0A6EFA)),
+                  textStyle: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
                   borderColor: Color(0xFFFFFFFF),
                   borderRadius: 46,
                   boxShadow: [
@@ -53,7 +53,7 @@ class ClearProgress extends StatelessWidget {
                   verticalPadding: 4,
                   backgroundColor: Color(0xFF0A6EFA),
                   title: 'Нет',
-                  textStyle: AppStyles.bold15s.copyWith(color: Colors.white),
+                  textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
                   boxShadow: [

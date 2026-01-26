@@ -169,7 +169,7 @@ class _CommentDialogState extends State<CommentDialog> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.r),
-                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
                     ),
                   ),
                 ),

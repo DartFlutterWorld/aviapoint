@@ -6,6 +6,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
@@ -250,18 +251,12 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Заголовок секции в стиле остальных: иконка слева + текст
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Фото самолёта/вертолёта', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-            TextButton.icon(
-              onPressed: () => _showUploadPhotosDialog(context),
-              icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
-              label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              ),
-            ),
+            Icon(Icons.add_photo_alternate, size: 24, color: AppColors.netural100p),
+            SizedBox(width: 12.w),
+            Text('Фото самолёта/вертолёта', style: AppStyles.regular14s.copyWith(color: AppColors.netural100p)),
           ],
         ),
         SizedBox(height: 12.h),
@@ -318,7 +313,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         icon: Container(
                           padding: EdgeInsets.all(6.w),
                           decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
-                          child: Icon(Icons.more_vert, color: Colors.white, size: 18),
+                          child: Icon(Icons.more_vert, color: Colors.white, size: 24),
                         ),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                         onSelected: (value) {
@@ -339,7 +334,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                             value: 'share',
                             child: Row(
                               children: [
-                                Icon(Icons.share, size: 20, color: Color(0xFF374151)),
+                                Icon(Icons.share, size: 24, color: Color(0xFF374151)),
                                 SizedBox(width: 12.w),
                                 Text('Поделиться', style: AppStyles.regular14s),
                               ],
@@ -349,7 +344,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                             value: 'download',
                             child: Row(
                               children: [
-                                Icon(Icons.download, size: 20, color: Color(0xFF374151)),
+                                Icon(Icons.download, size: 24, color: Color(0xFF374151)),
                                 SizedBox(width: 12.w),
                                 Text('Скачать', style: AppStyles.regular14s),
                               ],
@@ -359,7 +354,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                             value: 'delete',
                             child: Row(
                               children: [
-                                Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                                Icon(Icons.delete_outline, size: 24, color: Colors.red),
                                 SizedBox(width: 12.w),
                                 Text('Удалить', style: AppStyles.regular14s.copyWith(color: Colors.red)),
                               ],
@@ -374,19 +369,33 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             },
           )
         else
-          Container(
-            padding: EdgeInsets.all(24.w),
-            decoration: BoxDecoration(
-              color: Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Color(0xFFE5E7EB)),
-            ),
-            child: Column(
-              children: [
-                Icon(Icons.photo_library_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                SizedBox(height: 12.h),
-                Text('Пока нет фотографий', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-              ],
+          // Пустой стейт: кликабельный серый контейнер "Добавить фото"
+          InkWell(
+            onTap: () => _showUploadPhotosDialog(context),
+            borderRadius: BorderRadius.circular(12.r),
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+              decoration: BoxDecoration(
+                color: Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(color: Color(0xFFE5E7EB)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.add_photo_alternate, size: 40, color: Color(0xFF0A6EFA)),
+                  SizedBox(height: 12.h),
+                  Text('Добавить фото', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                  SizedBox(height: 8.h),
+                  Text(
+                    'Добавьте фотографии самолёта или вертолёта, чтобы пассажирам было проще принять решение.',
+                    style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
       ],
@@ -758,9 +767,9 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.lock_outline, size: 64, color: Color(0xFF9CA5AF)),
+                Icon(Icons.lock_outline, size: 24, color: Color(0xFF9CA5AF)),
                 SizedBox(height: 16.h),
-                Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: AppColors.netural100p)),
                 SizedBox(height: 8.h),
                 Text(
                   'Для создания полета необходимо войти в систему',
@@ -843,24 +852,25 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
 
             return SingleChildScrollView(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    SizedBox(height: AppSpacing.section),
                     // Секция маршрута с несколькими точками
                     _buildRouteSection(),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: AppSpacing.section),
                     // Количество мест
                     Row(
                       children: [
-                        Icon(Icons.event_seat, size: 20, color: Color(0xFF9CA5AF)),
+                        Icon(Icons.event_seat, size: 24, color: AppColors.netural100p),
                         SizedBox(width: 12.w),
                         RichText(
                           text: TextSpan(
                             text: 'Свободных мест',
-                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            style: AppStyles.regular14s.copyWith(color: AppColors.netural100p),
                             children: [
                               TextSpan(
                                 text: ' *',
@@ -942,16 +952,16 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         );
                       },
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: AppSpacing.section),
                     // Компенсация за место
                     Row(
                       children: [
-                        Icon(Icons.currency_ruble, size: 20, color: Color(0xFF9CA5AF)),
+                        Icon(Icons.currency_ruble, size: 24, color: AppColors.netural100p),
                         SizedBox(width: 12.w),
                         RichText(
                           text: TextSpan(
                             text: 'Компенсация за место',
-                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            style: AppStyles.regular14s.copyWith(color: AppColors.netural100p),
                             children: [
                               TextSpan(
                                 text: ' *',
@@ -997,16 +1007,16 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: AppSpacing.section),
                     // Модель самолёта (обязательное поле)
                     Row(
                       children: [
-                        Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
+                        Icon(Icons.flight, size: 24, color: AppColors.netural100p),
                         SizedBox(width: 12.w),
                         RichText(
                           text: TextSpan(
                             text: 'Модель самолёта',
-                            style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                            style: AppStyles.regular14s.copyWith(color: AppColors.netural100p),
                             children: [
                               TextSpan(
                                 text: ' *',
@@ -1056,16 +1066,16 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: AppSpacing.section),
                     // Секция фотографий самолета
                     _buildPhotosSection(),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: AppSpacing.section),
                     // Описание (опционально)
                     Row(
                       children: [
-                        Icon(Icons.description, size: 20, color: Color(0xFF9CA5AF)),
+                        Icon(Icons.description, size: 24, color: AppColors.netural100p),
                         SizedBox(width: 12.w),
-                        Text('Дополнительная информация о полёте', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        Text('Дополнительная информация о полёте', style: AppStyles.regular14s.copyWith(color: AppColors.netural100p)),
                       ],
                     ),
                     SizedBox(height: 8.h),
@@ -1092,7 +1102,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: AppSpacing.section),
                     // Кнопка создания
                     ElevatedButton(
                       onPressed: (isLoading || !_isFormValid()) ? null : _submitForm,
@@ -1110,6 +1120,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                             )
                           : Text('Создать полет', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                     ),
+                    SizedBox(height: AppSpacing.section),
                   ],
                 ),
               ),
@@ -1127,11 +1138,11 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Маршрут', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+            Text('Маршрут', style: AppStyles.bold16s.copyWith(color: AppColors.netural100p)),
             TextButton.icon(
               onPressed: _addWaypoint,
-              icon: Icon(Icons.add, size: 18, color: Color(0xFF0A6EFA)),
-              label: Text('Добавить  точку', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
+              icon: Icon(Icons.add, size: 40, color: Color(0xFF0A6EFA)),
+              label: Text('Добавить точку', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
             ),
           ],
         ),
@@ -1206,7 +1217,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
 
     return Container(
       key: ValueKey('waypoint_card_${currentWaypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(AppSpacing.section),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
@@ -1228,7 +1239,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
                         : isLast
                         ? 'Прибытие'
                         : 'Промежуточная точка',
-                    style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                    style: AppStyles.bold14s.copyWith(color: AppColors.netural100p),
                     children: [
                       TextSpan(
                         text: ' *',
@@ -1240,7 +1251,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
               ),
               if (!isFirst && !isLast && onRemoved != null)
                 IconButton(
-                  icon: Icon(Icons.delete_outline, color: Colors.red),
+                  icon: Icon(Icons.delete_outline, color: Colors.red, size: 24),
                   onPressed: onRemoved,
                 ),
             ],
@@ -1259,7 +1270,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             RichText(
               text: TextSpan(
                 text: 'Укажите дату и время вылета из этого аэропорта',
-                style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                style: AppStyles.regular12s.copyWith(color: AppColors.netural100p),
                 children: [
                   TextSpan(
                     text: ' *',
@@ -1336,7 +1347,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           // Для последней точки - дата и время прибытия и комментарий
           if (isLast) ...[
             SizedBox(height: 16.h),
-            Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+            Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: AppColors.netural100p)),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('arrival_last_${currentWaypoint.id}_$index'),
@@ -1406,7 +1417,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
           if (!isFirst && !isLast) ...[
             SizedBox(height: 16.h),
             // Дата и время прибытия
-            Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+            Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: AppColors.netural100p)),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('arrival_inter_${currentWaypoint.id}_$index'),
@@ -1431,7 +1442,7 @@ class _CreateFlightScreenState extends State<CreateFlightScreen> {
             ),
             SizedBox(height: 12.h),
             // Дата и время отправления
-            Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+            Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: AppColors.netural100p)),
             SizedBox(height: 8.h),
             _buildDateTimeField(
               key: ValueKey('departure_inter_${currentWaypoint.id}_$index'),

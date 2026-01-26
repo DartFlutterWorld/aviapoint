@@ -318,14 +318,14 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
         },
         child: Scaffold(
           appBar: CustomAppBar(title: 'Выберите режим тестирования', withBack: true),
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
 
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   // На iOS показываем только если showPaidContent = true, на остальных платформах (веб, Android) всегда показываем
                   if (_shouldShowTrainingMode()) ...[
                     TestingModeElement(
@@ -336,12 +336,12 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                       bg: Pictures.traningTestBgPng,
                       isLock: !_hasActiveSubscription, // Показываем анимацию, если нет активной подписки
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     Text(
                       'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',
-                      style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.5),
+                      style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767), height: 1.5),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                   ],
                   TestingModeElement(
                     title: 'Стандартный\nтест',
@@ -350,11 +350,12 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                     image: Pictures.mozgi,
                     bg: Pictures.testMySelfBgPng,
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
                     'Стандартный режим позволит вам бесплатно готовиться к экзамену. Статистика по правильно отвечнным вопросам появится вконце всех вопросов',
-                    style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.5),
+                    style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767), height: 1.5),
                   ),
+                  SizedBox(height: 32),
                 ],
               ),
             ),

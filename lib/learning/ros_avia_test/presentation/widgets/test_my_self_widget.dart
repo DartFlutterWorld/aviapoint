@@ -13,9 +13,8 @@ class TestMySelfWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 118,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         // boxShadow: [
         //   BoxShadow(
         //     color: Color(0xff045EC5).withOpacity(0.08),
@@ -30,37 +29,40 @@ class TestMySelfWidget extends StatelessWidget {
         image: DecorationImage(image: AssetImage(Pictures.pilotWithFon), fit: BoxFit.cover),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 74, right: 14),
+        padding: EdgeInsets.only(left: 74.w, right: 14.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: 12.h),
             Text(
               Provider.of<RosAviaTestCubit>(context).state.typeSertificate.title,
-              style: AppStyles.bold16s.copyWith(color: Color(0xFF1F2937)),
+              style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937)),
             ),
             SizedBox(height: 4.h),
-            Text('Подготовьтесь к экзамену', style: AppStyles.regular13s.copyWith(color: Color(0xFF6E7A89))),
-            Spacer(),
+            Text(
+              'Подготовьтесь к экзамену',
+              style: AppStyles.regular13s.copyWith(color: const Color(0xFF6E7A89)),
+            ),
+            SizedBox(height: 12.h),
             CustomButton(
               title: 'Тестирование',
               verticalPadding: 8.h,
-              backgroundColor: Color(0xFF0A6EFA),
-              // onPressed: () => settingsTest(context: context),
+              backgroundColor: const Color(0xFF0A6EFA),
               onPressed: () => startTestingFlowNew(context: context),
               borderRadius: 46.r,
-              textStyle: AppStyles.bold14s.copyWith(color: Colors.white),
-              borderColor: Color(0xFF0A6EFA),
+              textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+              borderColor: const Color(0xFF0A6EFA),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xff0064D6).withOpacity(0.28),
+                  color: const Color(0xff0064D6).withOpacity(0.28),
                   blurRadius: 17.8,
                   spreadRadius: 0,
-                  offset: Offset(0.0, 7.0),
+                  offset: const Offset(0.0, 7.0),
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12.h),
           ],
         ),
       ),

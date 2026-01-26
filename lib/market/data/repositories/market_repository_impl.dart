@@ -4,7 +4,6 @@ import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/market/data/datasources/market_service.dart';
 import 'package:aviapoint/market/data/models/aircraft_market_dto.dart';
-import 'package:aviapoint/market/data/models/price_history_dto.dart';
 import 'package:aviapoint/market/data/repositories/mappers/market_category_mapper.dart';
 import 'package:aviapoint/market/data/repositories/mappers/aircraft_market_mapper.dart';
 import 'package:aviapoint/market/domain/entities/market_category_entity.dart';
@@ -152,6 +151,8 @@ class MarketRepositoryImpl implements MarketRepository {
     bool? isShareSale,
     int? shareNumerator,
     int? shareDenominator,
+    bool? isLeasing,
+    String? leasingConditions,
     XFile? mainImageFile,
     List<XFile>? additionalImageFiles,
   }) async {
@@ -181,6 +182,10 @@ class MarketRepositoryImpl implements MarketRepository {
         if (isShareSale != null) formData.fields.add(MapEntry('is_share_sale', isShareSale.toString()));
         if (shareNumerator != null) formData.fields.add(MapEntry('share_numerator', shareNumerator.toString()));
         if (shareDenominator != null) formData.fields.add(MapEntry('share_denominator', shareDenominator.toString()));
+        if (isLeasing != null) formData.fields.add(MapEntry('is_leasing', isLeasing.toString()));
+        if (leasingConditions != null && leasingConditions.isNotEmpty) {
+          formData.fields.add(MapEntry('leasing_conditions', leasingConditions));
+        }
 
         // Добавляем основное изображение
         if (hasMainImageFile) {
@@ -257,6 +262,10 @@ class MarketRepositoryImpl implements MarketRepository {
         if (isShareSale != null) body['is_share_sale'] = isShareSale;
         if (shareNumerator != null) body['share_numerator'] = shareNumerator;
         if (shareDenominator != null) body['share_denominator'] = shareDenominator;
+        if (isLeasing != null) body['is_leasing'] = isLeasing;
+        if (leasingConditions != null && leasingConditions.isNotEmpty) {
+          body['leasing_conditions'] = leasingConditions;
+        }
 
         response = await _service.createAirCraft(body);
       }
@@ -303,6 +312,8 @@ class MarketRepositoryImpl implements MarketRepository {
     int? shareDenominator,
     XFile? mainImageFile,
     List<XFile>? additionalImageFiles,
+    bool? isLeasing,
+    String? leasingConditions,
   }) async {
     try {
       AircraftMarketDto response;
@@ -342,6 +353,10 @@ class MarketRepositoryImpl implements MarketRepository {
         if (isShareSale != null) formData.fields.add(MapEntry('is_share_sale', isShareSale.toString()));
         if (shareNumerator != null) formData.fields.add(MapEntry('share_numerator', shareNumerator.toString()));
         if (shareDenominator != null) formData.fields.add(MapEntry('share_denominator', shareDenominator.toString()));
+        if (isLeasing != null) formData.fields.add(MapEntry('is_leasing', isLeasing.toString()));
+        if (leasingConditions != null && leasingConditions.isNotEmpty) {
+          formData.fields.add(MapEntry('leasing_conditions', leasingConditions));
+        }
 
         // Добавляем основное изображение
         if (hasMainImageFile) {
@@ -422,6 +437,10 @@ class MarketRepositoryImpl implements MarketRepository {
         if (isShareSale != null) body['is_share_sale'] = isShareSale;
         if (shareNumerator != null) body['share_numerator'] = shareNumerator;
         if (shareDenominator != null) body['share_denominator'] = shareDenominator;
+        if (isLeasing != null) body['is_leasing'] = isLeasing;
+        if (leasingConditions != null && leasingConditions.isNotEmpty) {
+          body['leasing_conditions'] = leasingConditions;
+        }
 
         response = await _service.updateProduct(productId, body);
       }

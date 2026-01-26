@@ -3,6 +3,7 @@ import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/bookings_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/booking_card.dart';
@@ -79,7 +80,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16.h),
+            padding: EdgeInsets.only(
+              left: AppSpacing.horizontal,
+              right: AppSpacing.horizontal,
+              top: AppSpacing.section,
+              bottom: AppSpacing.section,
+            ),
             child: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {
                 return state.when(

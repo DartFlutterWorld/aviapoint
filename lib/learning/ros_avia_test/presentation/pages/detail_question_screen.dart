@@ -61,7 +61,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
       child: Column(
         // shrinkWrap: true,
         children: [
-          SizedBox(height: 16),
+          SizedBox(height: 16.h),
           if (widget.withClose)
             Align(
               alignment: Alignment.centerRight,

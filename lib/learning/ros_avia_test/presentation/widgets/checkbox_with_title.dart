@@ -39,7 +39,7 @@ class CheckboxWithTitle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [Text('Настройки', style: AppStyles.medium14s.copyWith(color: const Color(0xFF223B76)))],
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 8),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),

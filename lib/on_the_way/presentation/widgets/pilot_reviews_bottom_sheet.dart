@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/reviews_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -33,9 +35,9 @@ class _UserReviewsBottomSheetState extends State<UserReviewsBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.title, style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                Text(widget.title, style: AppStyles.bold20s.copyWith(color: const Color(0xFF374151))),
                 IconButton(
-                  icon: Icon(Icons.close, color: Color(0xFF374151)),
+                  icon: SvgPicture.asset(Pictures.closeAuth),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],

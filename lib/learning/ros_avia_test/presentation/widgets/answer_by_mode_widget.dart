@@ -1,6 +1,7 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AnswerByModeWidget extends StatelessWidget {
@@ -11,15 +12,7 @@ class AnswerByModeWidget extends StatelessWidget {
   final bool isCorrect;
   final bool showResult;
 
-  const AnswerByModeWidget({
-    super.key,
-    required this.backgroundColor,
-    required this.title,
-    this.onTap,
-    this.isSelected = false,
-    this.isCorrect = false,
-    this.showResult = false,
-  });
+  const AnswerByModeWidget({super.key, required this.backgroundColor, required this.title, this.onTap, this.isSelected = false, this.isCorrect = false, this.showResult = false});
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +41,11 @@ class AnswerByModeWidget extends StatelessWidget {
           border: Border.all(color: borderColor, width: borderColor != Colors.transparent ? 2 : 0),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(7.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8).h,
           child: Row(
             spacing: 8,
             children: [
-              if (showResult && isCorrect) SvgPicture.asset(Pictures.isCorrect, width: 20, height: 20),
+              if (showResult && isCorrect) SvgPicture.asset(Pictures.isCorrect, width: 20.w, height: 20.h),
               Flexible(
                 child: Text(title, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
               ),

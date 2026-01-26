@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:aviapoint/core/themes/app_styles.dart';
 
 class DiagramWidget extends StatelessWidget {
   const DiagramWidget({
@@ -143,7 +144,7 @@ class _DefaultCenter extends StatelessWidget {
 
     return Text(
       '$value %',
-      style: TextStyle(
+      style: AppStyles.bold20s.copyWith(
         fontSize: fontSize,
         fontWeight: FontWeight.w800,
         color: const Color(0xFF233163),

@@ -257,7 +257,7 @@ class StoryScreenElement extends StatelessWidget {
                             // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);
                             startUrl(url: story.hyperlink, context: context);
                           },
-                          textStyle: AppStyles.button.copyWith(
+                          textStyle: AppStyles.adaptiveTextStyle(context, AppStyles.button, baseSize: 20).copyWith(
                             color: Color(int.parse('0xFF$textColor')),
                             overflow: TextOverflow.ellipsis,
                           ),

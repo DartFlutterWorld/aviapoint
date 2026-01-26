@@ -1,6 +1,7 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
@@ -183,10 +184,12 @@ Future<void> showFeedbackBottomSheet(
   String? airportCode,
   int? flightId,
 }) async {
-  await showModalBottomSheet<void>(
+  await showUniversalBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
+    title: '',
+    height: MediaQuery.of(context).size.height * 0.9,
     backgroundColor: Colors.transparent,
-    builder: (context) => FeedbackBottomSheet(sourcePage: sourcePage, airportCode: airportCode, flightId: flightId),
+    showCloseButton: false,
+    child: FeedbackBottomSheet(sourcePage: sourcePage, airportCode: airportCode, flightId: flightId),
   );
 }

@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:dio/dio.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 
 class AirportOwnershipRequestBottomSheet extends StatefulWidget {
   final String airportCode;
@@ -227,7 +228,7 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
             OutlinedButton.icon(
               onPressed: _isSubmitting ? null : _pickDocuments,
               icon: Icon(Icons.attach_file, size: 18),
-              label: Text('Прикрепить документы', style: AppStyles.regular14s),
+              label: Text('Прикрепить документы', style: AppStyles.bold16s),
               style: OutlinedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 side: BorderSide(color: Color(0xFF0A6EFA)),
@@ -328,10 +329,12 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
 
 /// Функция для показа bottom sheet с формой заявки на владение
 Future<void> showAirportOwnershipRequestBottomSheet(BuildContext context, {required String airportCode}) async {
-  await showModalBottomSheet<void>(
+  await showUniversalBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
+    title: '',
+    height: MediaQuery.of(context).size.height * 0.9,
     backgroundColor: Colors.transparent,
-    builder: (context) => AirportOwnershipRequestBottomSheet(airportCode: airportCode),
+    showCloseButton: false,
+    child: AirportOwnershipRequestBottomSheet(airportCode: airportCode),
   );
 }

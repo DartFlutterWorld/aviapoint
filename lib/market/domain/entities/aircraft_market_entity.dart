@@ -26,6 +26,10 @@ class AircraftMarketEntity extends Equatable {
   final int? seats;
   final String? condition;
 
+  // Лизинг
+  final bool? isLeasing;
+  final String? leasingConditions;
+
   // Продажа доли
   final bool? isShareSale;
   final int? shareNumerator;
@@ -71,6 +75,8 @@ class AircraftMarketEntity extends Equatable {
     this.engineVolume,
     this.seats,
     this.condition,
+    this.isLeasing,
+    this.leasingConditions,
     this.isShareSale,
     this.shareNumerator,
     this.shareDenominator,
@@ -105,6 +111,8 @@ class AircraftMarketEntity extends Equatable {
     engineVolume,
     seats,
     condition,
+    isLeasing,
+    leasingConditions,
     isShareSale,
     shareNumerator,
     shareDenominator,

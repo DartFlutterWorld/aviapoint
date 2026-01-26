@@ -51,9 +51,12 @@ import 'package:aviapoint/market/presentation/pages/aircraft_market_detail_scree
 import 'package:aviapoint/market/presentation/pages/edit_aircraft_market_screen.dart';
 import 'package:aviapoint/market/presentation/pages/create_aircraft_market_screen.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
+import 'package:aviapoint/news/presentation/pages/create_news_screen.dart';
 import 'package:aviapoint/news/presentation/pages/detail_news_screen.dart';
+import 'package:aviapoint/news/presentation/pages/edit_news_screen.dart';
 import 'package:aviapoint/news/presentation/pages/news_navigation_screen.dart';
 import 'package:aviapoint/news/presentation/pages/news_screen.dart';
+import 'package:aviapoint/news/presentation/pages/user_news_screen.dart';
 import 'package:aviapoint/blog/presentation/pages/blog_article_detail_screen.dart';
 import 'package:aviapoint/blog/presentation/pages/blog_navigation_screen.dart';
 import 'package:aviapoint/blog/presentation/pages/blog_screen.dart';
@@ -210,8 +213,15 @@ class AppRouter extends RootStackRouter {
           page: NewsNavigationRoute.page,
           children: [
             AutoRoute(initial: true, page: NewsRoute.page),
+            AutoRoute(path: 'create', page: CreateNewsRoute.page),
+            AutoRoute(path: 'edit/:id', page: EditNewsRoute.page),
             AutoRoute(path: ':id', page: DetailNewsRoute.page),
           ],
+        ),
+
+        AutoRoute(
+          path: 'user-news',
+          page: UserNewsRoute.page,
         ),
 
         AutoRoute(
