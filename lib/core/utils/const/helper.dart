@@ -20,24 +20,6 @@ String bigFirstSymbol(String input) {
   return input[0].toUpperCase() + input.substring(1).toLowerCase();
 }
 
-Future<void> showLogin(
-  BuildContext context, {
-  GlobalKey<ScaffoldState>? scaffoldKey,
-  final void Function()? callback,
-}) async {
-  final bool? result = await showCupertinoModalBottomSheet<bool>(
-    barrierColor: Colors.black12,
-    topRadius: const Radius.circular(20),
-    context: context,
-    builder: (context) => PhoneAuthScreen(callback: callback),
-  );
-  if (result == true) {
-    if (callback != null) {
-      callback.call();
-    }
-  }
-}
-
 void logOut(BuildContext context) async {
   final apiDatasource = getIt.get<ApiDatasource>();
   apiDatasource.delAuthHeader();
@@ -65,13 +47,7 @@ void logOut(BuildContext context) async {
   }
 }
 
-final emptyQuestion = QuestionWithAnswersEntity(
-  answers: List.empty(),
-  questionId: 0,
-  questionText: '',
-  categoryTitle: '',
-  categoryId: 0,
-);
+final emptyQuestion = QuestionWithAnswersEntity(answers: List.empty(), questionId: 0, questionText: '', categoryTitle: '', categoryId: 0);
 
 enum TestMode { training, standart }
 
@@ -96,10 +72,10 @@ class IntListJson extends TypeConverter<Set<int>, String> {
 /// Форматирует номер телефона в формат +7 (###) ###-##-##
 String formatPhone(String phone) {
   if (phone.isEmpty) return phone;
-  
+
   // Удаляем все нецифровые символы, кроме плюса в начале
   String digits = phone.replaceAll(RegExp(r'[^\d+]'), '');
-  
+
   // Если номер начинается с 8, заменяем на +7
   if (digits.startsWith('8')) {
     digits = '+7' + digits.substring(1);
@@ -109,20 +85,20 @@ String formatPhone(String phone) {
   } else if (digits.startsWith('7')) {
     digits = '+7' + digits.substring(1);
   }
-  
+
   // Удаляем плюс для форматирования
   String cleanDigits = digits.replaceAll('+', '');
-  
+
   // Если номер не содержит код страны 7, добавляем
   if (!cleanDigits.startsWith('7')) {
     cleanDigits = '7' + cleanDigits;
   }
-  
+
   // Удаляем первую 7 для форматирования
   if (cleanDigits.startsWith('7') && cleanDigits.length > 1) {
     cleanDigits = cleanDigits.substring(1);
   }
-  
+
   // Форматируем в (###) ###-##-##
   if (cleanDigits.length >= 10) {
     final area = cleanDigits.substring(0, 3);
@@ -167,13 +143,13 @@ String formatDateWithTime(DateTime? date) {
 /// Поддерживает ISO формат (2026-01-25T17:52:06.765608) и формат дд.мм.гггг
 String formatNewsDate(String date) {
   if (date.isEmpty) return '';
-  
+
   // Пробуем распарсить ISO формат
   final isoDate = DateTime.tryParse(date);
   if (isoDate != null) {
     return formatDate(isoDate);
   }
-  
+
   // Если уже в формате дд.мм.гггг, возвращаем как есть
   // Проверяем формат дд.мм.гггг
   final parts = date.split('.');
@@ -189,7 +165,7 @@ String formatNewsDate(String date) {
       // Если не удалось распарсить, возвращаем как есть
     }
   }
-  
+
   // Если не удалось распарсить, возвращаем исходную строку
   return date;
 }

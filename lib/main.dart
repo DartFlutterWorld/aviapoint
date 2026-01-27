@@ -118,7 +118,7 @@ Future<void> _run() async {
           child: BlocProvider<InternetConnectionBloc>(
             create: (context) => InternetConnectionBloc()..add(const InternetConnectionEvent.startMonitoring()),
             lazy: false,
-            child: AppWrapper(child: const App()),
+          child: AppWrapper(child: const App()),
           ),
         ),
       ),

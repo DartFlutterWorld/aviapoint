@@ -183,13 +183,15 @@ class PaymentHelper {
           return true;
         } else {
           // На мобильных: сохраняем paymentId и открываем WebView
-          if (context.mounted) {
+          // Используем глобальный контекст, так как локальный может стать невалидным после закрытия диалога
+          final rootContext = navigatorKey.currentContext;
+          if (rootContext != null && rootContext.mounted) {
             print('🔵 Открываем WebView на мобильном устройстве');
             // Сохраняем paymentId для проверки статуса после возврата
             await PaymentStorageHelper.savePaymentId(paymentId);
 
             // Используем rootNavigator, чтобы открыть поверх диалога
-            final result = await Navigator.of(context, rootNavigator: true).push<bool>(
+            final result = await Navigator.of(rootContext, rootNavigator: true).push<bool>(
               MaterialPageRoute<bool>(
                 builder: (context) {
                   print('🔵 PaymentWebViewScreen создан с URL: $paymentUrl');
@@ -204,37 +206,62 @@ class PaymentHelper {
 
             // После возврата из WebView проверяем статус через API
             // Используем глобальный контекст, так как локальный может стать невалидным
-            final rootContext = navigatorKey.currentContext;
+            final rootContextAfterReturn = navigatorKey.currentContext;
 
             if (result == true && paymentId.isNotEmpty) {
               print('🔵 WebView вернул true, проверяем статус через API');
-              if (rootContext != null && rootContext.mounted) {
-                await _handlePaymentReturn(rootContext, paymentId, returnRouteSource);
+              if (rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
+                await _handlePaymentReturn(rootContextAfterReturn, paymentId, returnRouteSource);
               } else {
                 print('❌ rootContext не доступен для проверки статуса');
               }
             } else if (result == false) {
               // Пользователь отменил оплату через кнопку закрытия - навигируем обратно
               print('⚠️ WebView вернул false (отмена), навигируем на исходный экран: $returnRouteSource');
-              if (rootContext != null && rootContext.mounted) {
-                navigateToSource(rootContext, returnRouteSource);
+              if (rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
+                navigateToSource(rootContextAfterReturn, returnRouteSource);
               } else {
                 print('❌ rootContext не доступен для навигации при отмене');
               }
             } else {
               print(
-                '⚠️ WebView закрыт, но result=$result, context.mounted=${context.mounted}, paymentId.isNotEmpty=${paymentId.isNotEmpty}',
+                '⚠️ WebView закрыт, но result=$result, rootContext.mounted=${rootContextAfterReturn?.mounted}, paymentId.isNotEmpty=${paymentId.isNotEmpty}',
               );
               // Даже если result null или неопределен, пытаемся навигировать обратно
-              if (rootContext != null && rootContext.mounted) {
-                navigateToSource(rootContext, returnRouteSource);
+              if (rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
+                navigateToSource(rootContextAfterReturn, returnRouteSource);
               }
             }
 
             print('✅ WebView закрыт, result: $result');
             return true;
           } else {
-            print('❌ Контекст не mounted, не можем открыть WebView');
+            print('❌ rootContext не доступен, не можем открыть WebView');
+            // Пытаемся использовать локальный контекст как fallback
+            if (context.mounted) {
+              print('🔵 Используем локальный контекст как fallback');
+              await PaymentStorageHelper.savePaymentId(paymentId);
+              final result = await Navigator.of(context, rootNavigator: true).push<bool>(
+                MaterialPageRoute<bool>(
+                  builder: (context) {
+                    print('🔵 PaymentWebViewScreen создан с URL: $paymentUrl');
+                    return PaymentWebViewScreen(
+                      paymentUrl: paymentUrl,
+                      returnRouteSource: returnRouteSource,
+                      paymentId: paymentId,
+                    );
+                  },
+                ),
+              );
+              // Обрабатываем результат аналогично
+              final rootContextAfterReturn = navigatorKey.currentContext;
+              if (result == true && paymentId.isNotEmpty && rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
+                await _handlePaymentReturn(rootContextAfterReturn, paymentId, returnRouteSource);
+              } else if (rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
+                navigateToSource(rootContextAfterReturn, returnRouteSource);
+              }
+              return true;
+            }
             return false;
           }
         }

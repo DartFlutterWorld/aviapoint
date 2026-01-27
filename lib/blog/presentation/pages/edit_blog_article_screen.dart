@@ -760,7 +760,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
 
           return Scaffold(
             appBar: CustomAppBar(
-              title: 'Редактировать статью',
+              title: 'Редактировать',
               withBack: true,
               actions: [
                 IconButton(

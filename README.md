@@ -77,12 +77,21 @@ ssh root@83.166.246.205
 cd /home/aviapoint_server
 docker-compose -f docker-compose.prod.yaml down
 docker-compose -f docker-compose.prod.yaml up -d
+
+
+
 ```
+
+# Пересобрать контейнер на серваке
+docker-compose -f docker-compose.prod.yaml up -d --build
+
 
 **Или просто перезапустить контейнеры без пересборки:**
 ```bash
 ssh root@83.166.246.205 'cd /home/aviapoint_server && docker-compose -f docker-compose.prod.yaml restart'
 ```
+
+
 
 ## Проверка папки public на VPS
 
@@ -91,6 +100,7 @@ ssh root@83.166.246.205 'cd /home/aviapoint_server && docker-compose -f docker-c
 ssh root@83.166.246.205 'docker exec aviapoint-nginx ls -la /app/public/'
 
 # Посмотреть структуру и размер
+
 ssh root@83.166.246.205 'docker exec aviapoint-nginx find /app/public/ -type f | head -20'
 ssh root@83.166.246.205 'docker exec aviapoint-nginx du -sh /app/public/'
 

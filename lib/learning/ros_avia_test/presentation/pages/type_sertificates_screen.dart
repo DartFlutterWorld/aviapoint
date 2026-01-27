@@ -74,8 +74,8 @@ class _Success extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 8.h),
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
@@ -85,23 +85,24 @@ class _Success extends StatelessWidget {
           ),
           Text(title, style: AppStyles.semibpld14s.copyWith(color: Color(0xFF374151))),
           SizedBox(height: 8.h),
-          Expanded(
-            child: ListView.builder(
-              // clipBehavior: Clip.none,
-              itemCount: typeSertificatesEntity.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: CategoryWidget(
-                  title: bigFirstSymbol(typeSertificatesEntity[index].title),
-                  onTap: () {
-                    context.router.maybePop(typeSertificatesEntity[index]);
-                  },
-                  subTitle: '',
-                  clearCategory: () {},
-                  withClear: false,
-                  image: getIcon(typeSertificatesEntity[index].id),
-                  isSelect: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title == typeSertificatesEntity[index].title,
-                ),
+          // Убрали Expanded, так как виджет используется внутри SingleChildScrollView
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            // clipBehavior: Clip.none,
+            itemCount: typeSertificatesEntity.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
+              child: CategoryWidget(
+                title: bigFirstSymbol(typeSertificatesEntity[index].title),
+                onTap: () {
+                  context.router.maybePop(typeSertificatesEntity[index]);
+                },
+                subTitle: '',
+                clearCategory: () {},
+                withClear: false,
+                image: getIcon(typeSertificatesEntity[index].id),
+                isSelect: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title == typeSertificatesEntity[index].title,
               ),
             ),
           ),

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/blog/domain/entities/blog_category_entity.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_categories_bloc.dart';
 import 'package:aviapoint/blog/presentation/widgets/blog_article_card.dart';
 import 'package:aviapoint/blog/presentation/widgets/blog_category_chip.dart';
+import 'package:aviapoint/blog/presentation/widgets/blog_featured_article_card.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
@@ -17,12 +17,11 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 
 @RoutePage()
 class BlogScreen extends StatefulWidget {
@@ -227,26 +226,21 @@ class _BlogScreenState extends State<BlogScreen> {
           },
           child: Scaffold(
             appBar: CustomAppBar(
-              title: 'АвиаБлог',
+              title: 'АвиаЖурнал',
               withBack: false,
               withProfile: true,
               actions: isAuthenticated
-                  ? [IconButton(padding: EdgeInsets.all(0.w), icon: Icon(Icons.add), onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()), tooltip: 'Создать статью')]
+                  ? [IconButton(padding: EdgeInsets.all(0.w), icon: Icon(Icons.add), onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()), tooltip: 'Сделать запись')]
                   : const [],
             ),
             backgroundColor: AppColors.background,
             floatingActionButton: FloatingActionButtonWidget(
-              title: 'Создать\nстатью',
+              title: 'Сделать\nзапись',
               onTap: () async {
                 final appState = Provider.of<AppState>(context, listen: false);
                 // Если не авторизован, показываем авторизацию
                 if (!appState.isAuthenticated) {
-                  final result = await showCupertinoModalBottomSheet<bool>(
-                    barrierColor: Colors.black12,
-                    topRadius: const Radius.circular(20),
-                    context: context,
-                    builder: (context) => PhoneAuthScreen(),
-                  );
+                  final result = await showLogin(context);
 
                   // После успешной авторизации обновляем статус и переходим на создание статьи
                   if (result == true && context.mounted) {
@@ -281,7 +275,7 @@ class _BlogScreenState extends State<BlogScreen> {
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
-                              hintText: 'Поиск по статьям...',
+                              hintText: 'Поиск по записям...',
                               prefixIcon: Icon(Icons.search, color: const Color(0xFF9CA5AF), size: 18.sp),
                               suffixIcon: _searchController.text.isNotEmpty
                                   ? IconButton(
@@ -523,22 +517,45 @@ class _ArticleList extends StatelessWidget {
       );
     }
 
-    if (kIsWeb) {
-      // На вебе используем Wrap для автоматического переноса (как в новостях)
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    // Hero + Grid (2 колонки) - одинаково для всех платформ, как в новостях
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Используем реальную доступную ширину контента
+        final availableWidth = constraints.maxWidth;
+        final padding = 0.0;
+        final spacing = 16.0;
+        final contentWidth = availableWidth - padding * 2;
+
+        final heroWidth = contentWidth;
+        final gridItemWidth = (contentWidth - spacing) / 2;
+
+        // Первая статья - Hero (на всю ширину)
+        final heroArticle = sortedArticles.first;
+        final remainingArticles = sortedArticles.skip(1).toList();
+
+        return Padding(
+          padding: EdgeInsets.all(padding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: sortedArticles.map((article) {
+              // Hero статья (большая, на всю ширину)
+              SizedBox(height: 12),
+              SizedBox(
+                width: heroWidth,
+                child: GestureDetector(
+                  onTap: () => AutoRouter.of(context).push(BlogArticleDetailRoute(articleId: heroArticle.id)),
+                  child: BlogFeaturedArticleCard(article: heroArticle),
+                ),
+              ),
+              if (remainingArticles.isNotEmpty) ...[
+                SizedBox(height: spacing),
+                // Остальные статьи в сетке 2 колонки
+                Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: remainingArticles.map((article) {
                     return SizedBox(
-                      width: 380,
-                      height: showStatus ? 145 : 110,
+                      width: gridItemWidth,
                       child: GestureDetector(
                         onTap: () => AutoRouter.of(context).push(BlogArticleDetailRoute(articleId: article.id)),
                         child: BlogArticleCard(article: article, showStatus: showStatus),
@@ -546,32 +563,13 @@ class _ArticleList extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-              ),
+              ],
               if (isLoadingMore) Padding(padding: EdgeInsets.all(16.w), child: const CircularProgressIndicator()),
             ],
-          );
-        },
-      );
-    } else {
-      // На мобильных - ListView как раньше
-      return Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: sortedArticles.length,
-            itemBuilder: (context, index) {
-              final article = sortedArticles[index];
-              return GestureDetector(
-                onTap: () => AutoRouter.of(context).push(BlogArticleDetailRoute(articleId: article.id)),
-                child: BlogArticleCard(article: article, showStatus: showStatus),
-              );
-            },
           ),
-          if (isLoadingMore) Padding(padding: EdgeInsets.all(16.w), child: const CircularProgressIndicator()),
-        ],
-      );
-    }
+        );
+      },
+    );
   }
 }
 

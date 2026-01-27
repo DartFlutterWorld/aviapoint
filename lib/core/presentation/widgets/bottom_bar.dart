@@ -120,10 +120,10 @@ class BottomBarState extends State<BottomBar> {
               isActive: widget.tabsRouter!.activeIndex == 4,
             ),
             const SizedBox(height: 13),
-            // Блог (индекс 5)
+            // Журнал (индекс 5)
             BottomBarItem(
               iconData: Icons.article,
-              text: 'Блог',
+              text: 'Журнал',
               activeColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
@@ -219,10 +219,10 @@ class BottomBarState extends State<BottomBar> {
                 },
                 isActive: widget.tabsRouter!.activeIndex == 4,
               ),
-            // Блог (индекс 5)
+            // Журнал (индекс 5)
             BottomBarItem(
                 iconData: Icons.article,
-                text: 'Блог',
+                text: 'Журнал',
                 activeColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFFE3F1FF) : Colors.transparent,
                 textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
                 onPressed: () {

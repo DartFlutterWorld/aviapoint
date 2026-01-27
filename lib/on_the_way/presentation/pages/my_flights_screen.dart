@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
@@ -10,8 +9,8 @@ import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MyFlightsScreen extends StatefulWidget {
@@ -125,12 +124,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
           SizedBox(height: 32.h),
           ElevatedButton.icon(
             onPressed: () async {
-              final result = await showCupertinoModalBottomSheet<bool>(
-                barrierColor: Colors.black12,
-                topRadius: const Radius.circular(20),
-                context: context,
-                builder: (context) => PhoneAuthScreen(),
-              );
+              final result = await showLogin(context);
 
               // После успешной авторизации обновляем статус и загружаем данные
               if (result == true && context.mounted) {

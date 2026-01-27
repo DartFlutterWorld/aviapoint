@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/clear_progress.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
@@ -28,6 +29,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+/// Единая функция для показа экрана авторизации во всём приложении
+/// Использует универсальный bottom sheet для единообразного отображения
+Future<bool?> showLogin(BuildContext context, {GlobalKey<ScaffoldState>? scaffoldKey, final void Function()? callback}) async {
+  final bool? result = await showUniversalBottomSheet<bool>(
+    context: context,
+    title: 'Авторизоваться',
+    child: PhoneAuthScreen(callback: callback),
+    onClose: () {
+      Navigator.of(context).pop();
+    },
+  );
+  if (result == true && callback != null) {
+    callback.call();
+  }
+  return result;
+}
 
 Future<void> checkList({required BuildContext context, required List<NormalCheckListEntity> checkList}) async {
   return await showModalBottomSheet<void>(
@@ -85,11 +103,11 @@ Future<void> selectTypeCertificate({required BuildContext context, required Enum
   final result = await showUniversalBottomSheet<TypeSertificatesEntity>(
     context: context,
     title: '',
-    height: MediaQuery.of(context).size.height - 100,
+
     backgroundColor: AppColors.background,
     showCloseButton: false,
     useRootNavigator: true,
-    child: TypeSertificatesScreen(title: 'Выбирите тип свидетельства'),
+    child: TypeSertificatesScreen(title: 'Выберите тип свидетельства'),
   );
   if (result != null) {
     if (screen == Screens.learning) {
@@ -129,7 +147,7 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
   await showUniversalBottomSheet<void>(
     context: context,
     title: '',
-    height: MediaQuery.of(context).size.height - 100,
+
     backgroundColor: AppColors.background,
     showCloseButton: false,
     useRootNavigator: true,
@@ -157,7 +175,6 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode}) a
     final result = await showUniversalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
       context: context,
       title: '',
-      height: MediaQuery.of(context).size.height - 100,
       backgroundColor: const Color(0xFFF1F7FF),
       showCloseButton: false,
       useRootNavigator: true,
@@ -465,15 +482,7 @@ bool? checkDataProfileAndOpenEditIfNeeded({required BuildContext context, String
 }
 
 Future<void> openProfileEdit({required BuildContext context}) async {
-  await showUniversalBottomSheet<void>(
-    context: context,
-    title: '',
-    height: MediaQuery.of(context).size.height - 100,
-    backgroundColor: AppColors.background,
-    showCloseButton: false,
-    useRootNavigator: true,
-    child: ProfileEdit(),
-  ).then((_) {
+  await showUniversalBottomSheet<void>(context: context, title: '', backgroundColor: AppColors.background, showCloseButton: false, useRootNavigator: true, child: ProfileEdit()).then((_) {
     // После закрытия bottom sheet обновляем профиль, чтобы получить актуальное фото
     if (context.mounted) {
       final profileBloc = context.read<ProfileBloc>();
@@ -568,7 +577,6 @@ Future<void> openPilotReviews({required BuildContext context, required int pilot
   await showUniversalBottomSheet<void>(
     context: context,
     title: '',
-    height: MediaQuery.of(context).size.height - 100,
     backgroundColor: AppColors.background,
     showCloseButton: false,
     useRootNavigator: true,

@@ -9,6 +9,7 @@ import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/core/utils/seo_helper.dart';
+import 'package:aviapoint/core/presentation/widgets/photo_viewer.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
 import 'package:aviapoint/news/domain/repositories/news_repository.dart';
@@ -24,10 +25,6 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:dio/dio.dart';
-import 'dart:io';
 
 @RoutePage()
 class DetailNewsScreen extends StatefulWidget {
@@ -55,238 +52,6 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
     Share.share('${news.title}\n\n$newsUrl\n\nЧитайте в AviaPoint');
   }
 
-  /// Поделиться фотографией
-  Future<void> _sharePhoto(BuildContext context, String photoUrl) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    try {
-      final imageUrl = getImageUrl(photoUrl);
-      await Share.shareUri(Uri.parse(imageUrl));
-    } catch (e) {
-      if (mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось поделиться фотографией'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    }
-  }
-
-  /// Скачать фотографию
-  Future<void> _downloadPhoto(BuildContext context, String photoUrl) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    try {
-      if (kIsWeb) {
-        // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Правый клик по изображению → "Сохранить как"'),
-            backgroundColor: Colors.blue,
-            duration: const Duration(seconds: 3),
-          ),
-        );
-        return;
-      }
-
-      final imageUrl = getImageUrl(photoUrl);
-      final dio = Dio();
-      final tempDir = await getTemporaryDirectory();
-      final fileName = photoUrl.split('/').last.split('?').first; // Убираем query параметры
-      final filePath = '${tempDir.path}/$fileName';
-
-      await dio.download(imageUrl, filePath);
-
-      // Запрашиваем разрешение на запись (для Android)
-      if (await Permission.storage.request().isGranted) {
-        final appDocDir = await getApplicationDocumentsDirectory();
-        final savedFile = await File(filePath).copy('${appDocDir.path}/$fileName');
-
-        if (mounted) {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text('Фотография сохранена: ${savedFile.path}'),
-              backgroundColor: Colors.green,
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-      } else {
-        if (mounted) {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text('Необходимо разрешение на сохранение файлов'),
-              backgroundColor: Colors.orange,
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось скачать фотографию: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    }
-  }
-
-  /// Полноэкранный просмотр фотографий
-  void _showPhotoViewer(BuildContext context, List<String?> photos, int initialIndex) {
-    final PageController pageController = PageController(initialPage: initialIndex);
-    int currentIndex = initialIndex;
-    bool showControls = true;
-
-    showDialog<void>(
-      context: context,
-      barrierColor: Colors.black87,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (dialogBuilderContext, setState) => GestureDetector(
-          onTap: () {
-            setState(() {
-              showControls = !showControls;
-            });
-          },
-          child: Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.zero,
-            child: Stack(
-              children: [
-                // Основной контент с фотографиями
-                PageView.builder(
-                  controller: pageController,
-                  itemCount: photos.length,
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentIndex = index;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    final photoUrl = photos[index];
-                    if (photoUrl == null || photoUrl.isEmpty) {
-                      return Container(
-                        color: Colors.black,
-                        child: Center(child: Icon(Icons.broken_image, color: Colors.white70, size: 64)),
-                      );
-                    }
-                    return InteractiveViewer(
-                      minScale: 0.8,
-                      maxScale: 5.0,
-                      child: Center(
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: Image.network(
-                            getImageUrl(photoUrl),
-                            fit: BoxFit.contain,
-                            width: double.infinity,
-                            height: double.infinity,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                color: Colors.black,
-                                child: Center(child: CircularProgressIndicator(color: Colors.white)),
-                              );
-                            },
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              color: Colors.black,
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.broken_image, color: Colors.white70, size: 64),
-                                    SizedBox(height: 16),
-                                    Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                // Верхняя панель с индикатором, кнопками действий и кнопкой закрытия
-                if (showControls)
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: SafeArea(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Левая часть: индикатор
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Индикатор текущей фотографии
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
-                                  child: Text(
-                                    '${currentIndex + 1} / ${photos.length}',
-                                    style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // Правая часть: кнопки действий и кнопка закрытия
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Кнопки действий (если есть фото)
-                                if (photos.isNotEmpty && photos[currentIndex] != null && photos[currentIndex]!.isNotEmpty) ...[
-                                  // Кнопка "Поделиться"
-                                  IconButton(
-                                    icon: Icon(Icons.share, color: Colors.white, size: 24),
-                                    onPressed: () => _sharePhoto(dialogContext, photos[currentIndex]!),
-                                    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
-                                    tooltip: 'Поделиться',
-                                  ),
-                                  SizedBox(width: 8),
-                                  // Кнопка "Скачать"
-                                  IconButton(
-                                    icon: Icon(Icons.download, color: Colors.white, size: 24),
-                                    onPressed: () => _downloadPhoto(dialogContext, photos[currentIndex]!),
-                                    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
-                                    tooltip: 'Скачать',
-                                  ),
-                                  SizedBox(width: 8),
-                                ],
-                                // Кнопка закрытия
-                                IconButton(
-                                  icon: Icon(Icons.close, color: Colors.white, size: 24),
-                                  onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -412,7 +177,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                         news.pictureBig,
                         ...(news.additionalImages ?? []),
                       ];
-                      _showPhotoViewer(context, allImages, 0);
+                      PhotoViewer.show(context, allImages, initialIndex: 0);
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
@@ -501,7 +266,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                                   ...(news.additionalImages ?? []),
                                 ];
                                 // Вычисляем индекс в общем списке (обложка + дополнительные)
-                                _showPhotoViewer(context, allImages, 1 + index);
+                                PhotoViewer.show(context, allImages, initialIndex: 1 + index);
                               },
                               child: Container(
                                 width: 100,

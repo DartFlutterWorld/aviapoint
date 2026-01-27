@@ -299,7 +299,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               child: Column(
                 children: [
-                  Text('АвиаБлог', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
+                  Text('АвиаЖурнал', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
                   SizedBox(height: AppSpacing.horizontal),
                   Text('Статьи, обзоры и советы для пилотов и авиаэнтузиастов', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
                   SizedBox(height: AppSpacing.section),

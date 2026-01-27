@@ -5,9 +5,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/domain/entities/review_entity.dart';
@@ -387,7 +385,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
 
   /// Показать экран авторизации
   Future<void> _showAuthScreen(BuildContext context) async {
-    await showCupertinoModalBottomSheet<bool>(barrierColor: Colors.black12, topRadius: const Radius.circular(20), context: context, builder: (context) => PhoneAuthScreen());
+    await showLogin(context);
     // После успешной авторизации пользователь останется на этой же странице
     // UI автоматически обновится через Provider/Bloc
   }

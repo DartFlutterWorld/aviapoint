@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/abnormal_landings/abnormal_landings_screen.dart';
 import 'package:aviapoint/learning/hand_book/emegrency_categories_page/presentation/pages/air_data_system_failure/air_data_system_failure_screen.dart';
@@ -87,7 +87,6 @@ import 'package:aviapoint/payment/presentation/pages/payment_webview_screen.dart
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/privacy_policy_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 part 'app_router.gr.dart';
 
@@ -219,10 +218,7 @@ class AppRouter extends RootStackRouter {
           ],
         ),
 
-        AutoRoute(
-          path: 'user-news',
-          page: UserNewsRoute.page,
-        ),
+        AutoRoute(path: 'user-news', page: UserNewsRoute.page),
 
         AutoRoute(
           path: 'market',
@@ -310,6 +306,6 @@ class AuthGuard extends AutoRouteGuard {
   }
 
   Future<bool?> _showLoginBottomSheet(BuildContext context) async {
-    return await showCupertinoModalBottomSheet<bool>(barrierColor: Colors.black12, topRadius: const Radius.circular(20), context: context, builder: (context) => PhoneAuthScreen());
+    return await showLogin(context);
   }
 }

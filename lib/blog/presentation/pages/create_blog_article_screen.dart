@@ -441,7 +441,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
 
     if (!isAuthenticated) {
       return Scaffold(
-        appBar: const CustomAppBar(title: 'Создать статью', withBack: true),
+        appBar: const CustomAppBar(title: 'Сделать запись', withBack: true),
         backgroundColor: AppColors.background,
         body: Center(
           child: Padding(
@@ -500,7 +500,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         );
       },
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'Создать статью', withBack: true),
+        appBar: const CustomAppBar(title: 'Сделать запись', withBack: true),
         backgroundColor: AppColors.background,
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -533,9 +533,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
                     child: kIsWeb && _coverImageBytes != null
-                        ? Image.memory(_coverImageBytes!, height: 150.h, fit: BoxFit.cover)
+                        ? Image.memory(_coverImageBytes!, fit: BoxFit.fill, width: double.infinity)
                         : _coverImage != null
-                        ? Image.file(_coverImage!, height: 150.h, fit: BoxFit.cover)
+                        ? Image.file(_coverImage!, fit: BoxFit.fill, width: double.infinity)
                         : SizedBox.shrink(),
                   ),
                 ],
@@ -786,7 +786,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                 CustomButton(
                   verticalPadding: 14.h,
                   backgroundColor: Color(0xFF7A0FD9),
-                  title: _isLoading ? 'Создание...' : 'Создать статью',
+                  title: _isLoading ? 'Создание...' : 'Сделать запись',
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF7A0FD9),
                   borderRadius: 46.r,

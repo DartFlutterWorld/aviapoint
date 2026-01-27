@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
@@ -13,11 +12,10 @@ import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
 import 'package:aviapoint/news/presentation/widgets/big_news_widget.dart';
 import 'package:aviapoint/news/presentation/widgets/small_news_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 
 @RoutePage()
 class NewsScreen extends StatefulWidget {
@@ -27,7 +25,6 @@ class NewsScreen extends StatefulWidget {
   State<NewsScreen> createState() => _NewsScreenState();
 }
 
-@override
 class _NewsScreenState extends State<NewsScreen> {
   bool _showMyNews = false;
   int? _selectedAuthorId;
@@ -36,7 +33,12 @@ class _NewsScreenState extends State<NewsScreen> {
   void initState() {
     super.initState();
     // Загружаем все новости при инициализации
-    BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
+    // Используем addPostFrameCallback, чтобы убедиться, что виджет полностью построен
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
+      }
+    });
   }
 
   void _refreshData() {
@@ -128,7 +130,7 @@ class _NewsScreenState extends State<NewsScreen> {
           final appState = Provider.of<AppState>(context, listen: false);
           // Если не авторизован, показываем авторизацию
           if (!appState.isAuthenticated) {
-            final result = await showCupertinoModalBottomSheet<bool>(barrierColor: Colors.black12, topRadius: const Radius.circular(20), context: context, builder: (context) => PhoneAuthScreen());
+            final result = await showLogin(context);
 
             // После успешной авторизации обновляем статус и переходим на создание новости
             if (result == true && context.mounted) {
@@ -279,80 +281,48 @@ class _Success extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        // На вебе используем Wrap для автоматического переноса
-        if (kIsWeb) {
-          // Вычисляем ширину для каждого элемента в зависимости от доступной ширины
-          final itemWidth = () {
-            if (availableWidth >= 1200) return (contentWidth - spacing * 3) / 4; // 4 колонки
-            if (availableWidth >= 900) return (contentWidth - spacing * 2) / 3; // 3 колонки
-            if (availableWidth >= 600) return (contentWidth - spacing) / 2; // 2 колонки
-            return contentWidth; // 1 колонка
-          }();
+        // Hero + Grid (2 колонки) - одинаково для всех платформ
+        final heroWidth = contentWidth;
+        final gridItemWidth = (contentWidth - spacing) / 2;
 
-          // Фиксированная высота для элементов
-          const itemHeight = 265.0;
+        // Первая новость - Hero (на всю ширину)
+        final heroNews = sortedNews.first;
+        final remainingNews = sortedNews.skip(1).toList();
 
-          return Padding(
-            padding: EdgeInsets.only(top: 16),
-            child: Wrap(
-              spacing: spacing,
-              runSpacing: spacing,
-              children: sortedNews.map((newsItem) {
-                return SizedBox(
-                  width: itemWidth,
-                  height: itemHeight,
-                  child: GestureDetector(
-                    onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: newsItem, newsId: newsItem.id)),
-                    child: newsItem.isBigNews ? BigNewsWidget(news: newsItem, showStatus: showStatus) : SmallNewsWidget(news: newsItem, showStatus: showStatus),
-                  ),
-                );
-              }).toList(),
-            ),
-          );
-        } else {
-          // На маленьких экранах - Hero + Grid (2 колонки)
-          final heroWidth = contentWidth;
-          final gridItemWidth = (contentWidth - spacing) / 2;
-
-          // Первая новость - Hero (на всю ширину)
-          final heroNews = sortedNews.first;
-          final remainingNews = sortedNews.skip(1).toList();
-
-          return Padding(
-            padding: EdgeInsets.all(padding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Hero новость (всегда большая, на всю ширину)
-                SizedBox(height: 12),
-                SizedBox(
-                  width: heroWidth,
-                  child: GestureDetector(
-                    onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: heroNews, newsId: heroNews.id)),
-                    child: BigNewsWidget(news: heroNews, showStatus: showStatus),
-                  ),
+        return Padding(
+          padding: EdgeInsets.all(padding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Hero новость (всегда большая, на всю ширину)
+              SizedBox(height: 12),
+              SizedBox(
+                width: heroWidth,
+                child: GestureDetector(
+                  onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: heroNews, newsId: heroNews.id)),
+                  child: BigNewsWidget(news: heroNews, showStatus: showStatus),
                 ),
-                if (remainingNews.isNotEmpty) ...[
-                  SizedBox(height: spacing),
-                  // Остальные новости в сетке 2 колонки
-                  Wrap(
-                    spacing: spacing,
-                    runSpacing: spacing,
-                    children: remainingNews.map((newsItem) {
-                      return SizedBox(
-                        width: gridItemWidth,
-                        child: GestureDetector(
-                          onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: newsItem, newsId: newsItem.id)),
-                          child: newsItem.isBigNews ? BigNewsWidget(news: newsItem, showStatus: showStatus) : SmallNewsWidget(news: newsItem, showStatus: showStatus),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
+              ),
+              if (remainingNews.isNotEmpty) ...[
+                SizedBox(height: spacing),
+                // Остальные новости в сетке 2 колонки
+                Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: remainingNews.map((newsItem) {
+                    return SizedBox(
+                      width: gridItemWidth,
+                      child: GestureDetector(
+                        onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: newsItem, newsId: newsItem.id)),
+                        child: newsItem.isBigNews ? BigNewsWidget(news: newsItem, showStatus: showStatus) : SmallNewsWidget(news: newsItem, showStatus: showStatus),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ],
-            ),
-          );
-        }
+            ],
+          ),
+        );
       },
     );
   }

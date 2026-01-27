@@ -57,11 +57,11 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
+      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 16),
       child: Column(
-        // shrinkWrap: true,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 16.h),
+          // SizedBox(height: 16.h),
           if (widget.withClose)
             Align(
               alignment: Alignment.centerRight,
@@ -70,85 +70,69 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                 child: SizedBox(width: 30, height: 30, child: Center(child: SvgPicture.asset(Pictures.closeAuth))),
               ),
             ),
-          Expanded(
-            child: ListView(
-              children: [
-                Row(
-                  spacing: 12.w,
-                  children: [
-                    ChipsWidget(questionWithAnswers: widget.question ?? emptyQuestion),
-                    Flexible(
-                      child: Text(
-                        bigFirstSymbol(widget.categoryTitle ?? ''),
-                        style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF)),
+          // Убрали Expanded, так как виджет используется внутри SingleChildScrollView
+          // Используем Column с shrinkWrap для правильной работы внутри скролла
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                spacing: 12.w,
+                children: [
+                  ChipsWidget(questionWithAnswers: widget.question ?? emptyQuestion),
+                  Flexible(
+                    child: Text(bigFirstSymbol(widget.categoryTitle ?? ''), style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              Text(widget.question?.questionText ?? '', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+              SizedBox(height: 12.h),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: widget.question?.answers.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Column(
+                    children: [
+                      AnswerWidget(
+                        backgroundColor: getIcon(isCorrect: widget.question?.answers[index].isCorrect ?? false, isOfficial: widget.question?.answers[index].isOfficial ?? false).$2,
+                        title: widget.question?.answers[index].answerText ?? '',
+                        icon: getIcon(isCorrect: widget.question?.answers[index].isCorrect ?? false, isOfficial: widget.question?.answers[index].isOfficial ?? false).$1,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                Text(widget.question?.questionText ?? '', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                SizedBox(height: 12.h),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: widget.question?.answers.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    child: Column(
-                      children: [
-                        AnswerWidget(
-                          backgroundColor: getIcon(
-                            isCorrect: widget.question?.answers[index].isCorrect ?? false,
-                            isOfficial: widget.question?.answers[index].isOfficial ?? false,
-                          ).$2,
-                          title: widget.question?.answers[index].answerText ?? '',
-                          icon: getIcon(
-                            isCorrect: widget.question?.answers[index].isCorrect ?? false,
-                            isOfficial: widget.question?.answers[index].isOfficial ?? false,
-                          ).$1,
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 16.h),
-                Row(
-                  spacing: 6,
-                  children: [
-                    SvgPicture.asset(Pictures.isCorrect),
-                    Flexible(
-                      child: Text(
-                        'Правильный и обоснованный вариант ответа',
-                        style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89)),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                Row(
-                  spacing: 6,
-                  children: [
-                    SvgPicture.asset(Pictures.isOfficial),
-                    Flexible(
-                      child: Text(
-                        'Вариант ответа, считающийся правильным в официальном тесте',
-                        style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89)),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 40.h),
-                if (widget.question?.explanation != null)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xFFF1F7FF)),
-                    child: HtmlWidget(
-                      widget.question!.explanation!,
-                      textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
-                    ),
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                spacing: 6,
+                children: [
+                  SvgPicture.asset(Pictures.isCorrect),
+                  Flexible(
+                    child: Text('Правильный и обоснованный вариант ответа', style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89))),
                   ),
-              ],
-            ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                spacing: 6,
+                children: [
+                  SvgPicture.asset(Pictures.isOfficial),
+                  Flexible(
+                    child: Text('Вариант ответа, считающийся правильным в официальном тесте', style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89))),
+                  ),
+                ],
+              ),
+              SizedBox(height: 40.h),
+              if (widget.question?.explanation != null)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xFFF1F7FF)),
+                  child: HtmlWidget(widget.question!.explanation!, textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                ),
+            ],
           ),
         ],
       ),

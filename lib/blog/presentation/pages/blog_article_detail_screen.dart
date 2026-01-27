@@ -31,6 +31,8 @@ import 'package:aviapoint/blog/presentation/widgets/comment_dialog.dart';
 import 'package:aviapoint/blog/domain/repositories/blog_repository.dart';
 import 'package:aviapoint/blog/domain/entities/blog_comment_entity.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
+import 'package:aviapoint/core/presentation/widgets/photo_viewer.dart';
 import 'package:aviapoint/injection_container.dart';
 
 @RoutePage()
@@ -51,7 +53,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
   }
 
   void _shareArticle(String title) {
-    Share.share('$title\n\nЧитайте в АвиаБлоге');
+    Share.share('$title\n\nЧитайте в АвиаЖурнале');
   }
 
   String _getAuthorName() {
@@ -112,7 +114,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
       },
       child: Scaffold(
         appBar: CustomAppBar(
-          title: 'АвиаБлог',
+          title: 'АвиаЖурнал',
           withBack: true,
           onTap: () {
             // Обновляем список статей перед возвратом
@@ -135,7 +137,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                             iconSize: 28.sp,
                             icon: const Icon(Icons.edit),
                             onPressed: () => AutoRouter.of(context).push(EditBlogArticleRoute(articleId: article.id)),
-                            tooltip: 'Редактировать статью',
+                            tooltip: 'Редактировать',
                           ),
                         IconButton(iconSize: 28.sp, icon: const Icon(Icons.share), onPressed: () => _shareArticle(article.title), tooltip: 'Поделиться'),
                       ],
@@ -179,21 +181,25 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                     if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty)
                       Stack(
                         children: [
-                          CachedNetworkImage(
-                            imageUrl: getImageUrl(article.coverImageUrl!),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 250,
-                            placeholder: (context, url) => Shimmer(
-                              duration: const Duration(milliseconds: 1000),
-                              color: const Color(0xFF8D66FE),
-                              colorOpacity: 0.2,
-                              child: Container(decoration: const BoxDecoration()),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              height: 250,
-                              color: const Color(0xFFD9E6F8),
-                              child: Icon(Icons.image, size: 48.sp),
+                          GestureDetector(
+                            onTap: () {
+                              // Открываем просмотр фотографии
+                              final allImages = <String?>[article.coverImageUrl];
+                              PhotoViewer.show(context, allImages, initialIndex: 0);
+                            },
+                            child: CachedNetworkImage(
+                              imageUrl: getImageUrl(article.coverImageUrl!),
+                              fit: BoxFit.fill, // Как в новостях - без ограничений по высоте
+                              placeholder: (context, url) => Shimmer(
+                                duration: const Duration(milliseconds: 1000),
+                                color: const Color(0xFF8D66FE),
+                                colorOpacity: 0.2,
+                                child: Container(decoration: const BoxDecoration()),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: const Color(0xFFD9E6F8),
+                                child: Icon(Icons.image, size: 48.sp),
+                              ),
                             ),
                           ),
                           // Чипс со статусом для автора в правом верхнем углу

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:aviapoint/auth_page/presentation/pages/phone_auth_screen.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
@@ -9,6 +8,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
@@ -23,7 +23,6 @@ import 'package:aviapoint/on_the_way/presentation/widgets/flight_search_bar_widg
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -262,12 +261,7 @@ class _FlightsListScreenState extends State<FlightsListScreen> with SingleTicker
                     final appState = Provider.of<AppState>(context, listen: false);
                     // Если не авторизован, показываем авторизацию
                     if (!appState.isAuthenticated) {
-                      final result = await showCupertinoModalBottomSheet<bool>(
-                        barrierColor: Colors.black12,
-                        topRadius: const Radius.circular(20),
-                        context: context,
-                        builder: (context) => PhoneAuthScreen(),
-                      );
+                      final result = await showLogin(context);
 
                       // После успешной авторизации обновляем статус и переходим на создание полета
                       if (result == true && context.mounted) {

@@ -49,6 +49,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0.w, right: 8.w, top: 8.h),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           BlocListener<RosAviaTestCubit, RosAviaTestState>(
             listener: (context, state) {
@@ -128,98 +129,97 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
             ),
           ),
           SizedBox(height: 8.h),
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                ValueListenableBuilder(
-                  valueListenable: settingsTest,
-                  builder: (context, value, child) {
-                    return CheckboxWithTitle(
-                      isSelectMixAnswers: value.mixAnswers,
-                      isSelectMixQuestions: value.mixQuestions,
-                      isSelectButtonHint: value.buttonHint,
-                      onToggleMixAnswers: () {
-                        settingsTest.value = (
-                          mixAnswers: !value.mixAnswers,
-                          mixQuestions: value.mixQuestions,
-                          buttonHint: value.buttonHint,
-                        );
-                      },
-                      onToggleMixQuestions: () {
-                        settingsTest.value = (
-                          mixAnswers: value.mixAnswers,
-                          mixQuestions: !value.mixQuestions,
-                          buttonHint: value.buttonHint,
-                        );
-                      },
-                      onToggleButtonHint: () {
-                        settingsTest.value = (
-                          mixAnswers: value.mixAnswers,
-                          mixQuestions: value.mixQuestions,
-                          buttonHint: !value.buttonHint,
-                        );
-                      },
-                    );
-                  },
-                ),
-                ListView(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  children: [
-                    SizedBox(height: 8.h),
-                    BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
-                      builder: (context, state) => state.map(
-                        loading: (value) => ClipRRect(
-                          borderRadius: BorderRadius.circular(12.r),
-                          child: Shimmer(
-                            duration: const Duration(milliseconds: 1000),
-                            interval: Duration(milliseconds: 0),
-                            color: const Color(0xFF8D66FE),
-                            colorOpacity: 0.5,
-                            child: Container(
-                              padding: EdgeInsets.all(8.w),
-                              height: 1000.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFF3EFFF),
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
+          // Убрали Expanded, так как виджет используется внутри SingleChildScrollView
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ValueListenableBuilder(
+                valueListenable: settingsTest,
+                builder: (context, value, child) {
+                  return CheckboxWithTitle(
+                    isSelectMixAnswers: value.mixAnswers,
+                    isSelectMixQuestions: value.mixQuestions,
+                    isSelectButtonHint: value.buttonHint,
+                    onToggleMixAnswers: () {
+                      settingsTest.value = (
+                        mixAnswers: !value.mixAnswers,
+                        mixQuestions: value.mixQuestions,
+                        buttonHint: value.buttonHint,
+                      );
+                    },
+                    onToggleMixQuestions: () {
+                      settingsTest.value = (
+                        mixAnswers: value.mixAnswers,
+                        mixQuestions: !value.mixQuestions,
+                        buttonHint: value.buttonHint,
+                      );
+                    },
+                    onToggleButtonHint: () {
+                      settingsTest.value = (
+                        mixAnswers: value.mixAnswers,
+                        mixQuestions: value.mixQuestions,
+                        buttonHint: !value.buttonHint,
+                      );
+                    },
+                  );
+                },
+              ),
+              ListView(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: [
+                  SizedBox(height: 8.h),
+                  BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
+                    builder: (context, state) => state.map(
+                      loading: (value) => ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Shimmer(
+                          duration: const Duration(milliseconds: 1000),
+                          interval: Duration(milliseconds: 0),
+                          color: const Color(0xFF8D66FE),
+                          colorOpacity: 0.5,
+                          child: Container(
+                            padding: EdgeInsets.all(8.w),
+                            height: 1000.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF3EFFF),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                           ),
                         ),
-                        error: (value) => SizedBox(),
-                        success: (state) => ValueListenableBuilder(
-                          valueListenable: selectedCategoryId,
-                          builder: (context, selected, child) {
-                            final allIds = state.categoryWithQuestions.map((e) => e.categoryId).toSet();
-                            final sortedCategories = [...state.categoryWithQuestions]
-                              ..sort((a, b) => a.categoryId.compareTo(b.categoryId));
-                            return SelectTopicsTestWidget(
-                              categories: sortedCategories,
-                              selectedCategoryId: selected,
-                              onToggle: (int id) {
-                                final next = Set<int>.from(selected);
-                                if (next.contains(id)) {
-                                  next.remove(id);
-                                } else {
-                                  next.add(id);
-                                }
-                                selectedCategoryId.value = next;
-                              },
-                              onToggleAll: () {
-                                final allSelected = selected.length == allIds.length && allIds.isNotEmpty;
-                                selectedCategoryId.value = allSelected ? <int>{} : allIds;
-                              },
-                            );
-                          },
-                        ),
+                      ),
+                      error: (value) => SizedBox(),
+                      success: (state) => ValueListenableBuilder(
+                        valueListenable: selectedCategoryId,
+                        builder: (context, selected, child) {
+                          final allIds = state.categoryWithQuestions.map((e) => e.categoryId).toSet();
+                          final sortedCategories = [...state.categoryWithQuestions]
+                            ..sort((a, b) => a.categoryId.compareTo(b.categoryId));
+                          return SelectTopicsTestWidget(
+                            categories: sortedCategories,
+                            selectedCategoryId: selected,
+                            onToggle: (int id) {
+                              final next = Set<int>.from(selected);
+                              if (next.contains(id)) {
+                                next.remove(id);
+                              } else {
+                                next.add(id);
+                              }
+                              selectedCategoryId.value = next;
+                            },
+                            onToggleAll: () {
+                              final allSelected = selected.length == allIds.length && allIds.isNotEmpty;
+                              selectedCategoryId.value = allSelected ? <int>{} : allIds;
+                            },
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
           Padding(
             padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 8.h),
