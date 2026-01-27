@@ -7,7 +7,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/news/data/repositories/news_repository_impl.dart';
 import 'package:aviapoint/news/domain/repositories/news_repository.dart';
@@ -578,11 +578,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                                       : _originalPictureBigUrl != null
                                       ? ClipRRect(
                                           borderRadius: BorderRadius.circular(12),
-                                          child: CachedNetworkImage(
+                                          child: NetworkImageWidget(
                                             imageUrl: getImageUrl(_originalPictureBigUrl!),
                                             fit: BoxFit.cover,
-                                            placeholder: (context, url) => _buildEmptyImagePlaceholder(),
-                                            errorWidget: (context, url, error) => _buildEmptyImagePlaceholder(),
+                                            errorWidget: _buildEmptyImagePlaceholder(),
                                           ),
                                         )
                                       : _buildEmptyImagePlaceholder(),

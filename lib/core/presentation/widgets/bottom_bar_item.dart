@@ -12,6 +12,7 @@ class BottomBarItem extends StatelessWidget {
   final Color textColor;
   final void Function() onPressed;
   final bool isActive;
+  final bool? useVerticalLayout; // Если true, использует Column (иконка сверху, текст снизу)
 
   const BottomBarItem({
     super.key,
@@ -22,11 +23,21 @@ class BottomBarItem extends StatelessWidget {
     required this.textColor,
     required this.onPressed,
     required this.isActive,
+    this.useVerticalLayout,
   }) : assert(icon != null || iconData != null, 'Either icon or iconData must be provided');
 
   @override
   Widget build(BuildContext context) {
     final isWeb = kIsWeb;
+    // Если useVerticalLayout явно указан, используем его, иначе определяем автоматически
+    final shouldUseVertical = useVerticalLayout ?? (!isWeb);
+    
+    // Для веба в портрете на мобилке используем вертикальную компоновку (как в приложении)
+    final isWebMobilePortrait = isWeb && 
+        MediaQuery.of(context).size.width < 600 && 
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    
+    final useVertical = shouldUseVertical || isWebMobilePortrait;
     
     return GestureDetector(
       onTap: onPressed,
@@ -38,8 +49,26 @@ class BottomBarItem extends StatelessWidget {
           color: activeColor,
           borderRadius: BorderRadius.circular(isWeb ? 10 : 10.r),
         ),
-        child: isWeb
-            ? Row(
+        child: useVertical
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  icon != null
+                      ? SvgPicture.asset(
+                          icon!, 
+                          height: isWebMobilePortrait ? 20.0 : 20.sp, 
+                          width: isWebMobilePortrait ? 20.0 : 20.sp, 
+                          colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn))
+                      : Icon(iconData!, size: isWebMobilePortrait ? 20.0 : 20.sp, color: textColor),
+                  SizedBox(height: isWebMobilePortrait ? 4.0 : 4.h),
+                  Text(
+                    text,
+                    style: AppStyles.medium10s.copyWith(color: textColor, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )
+            : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   icon != null
@@ -49,20 +78,6 @@ class BottomBarItem extends StatelessWidget {
                   Text(
                     text,
                     style: AppStyles.medium10s.copyWith(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ],
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  icon != null
-                      ? SvgPicture.asset(icon!, height: 20.sp, width: 20.sp, colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn))
-                      : Icon(iconData!, size: 20.sp, color: textColor),
-                  SizedBox(height: 4.h),
-                  Text(
-                    text,
-                    style: AppStyles.medium10s.copyWith(color: textColor, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

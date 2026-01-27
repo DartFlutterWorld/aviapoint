@@ -7,7 +7,7 @@ import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_stars_widget.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart';
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -107,46 +107,13 @@ class PilotBookingCard extends StatelessWidget {
                               : null,
                           child: ClipOval(
                             child: imageUrl != null && imageUrl.isNotEmpty
-                                ? CachedNetworkImage(
+                                ? NetworkImageWidget(
                                     imageUrl: imageUrl,
                                     width: 40.r,
                                     height: 40.r,
                                     fit: BoxFit.cover,
-                                    cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                    cacheKey: booking.passengerAvatarUrl,
-                                    // Очищаем кэш при ошибке декодирования
-                                    httpHeaders: const {},
-                                    placeholder: (context, url) =>
-                                        Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                    errorWidget: (context, url, error) {
-                                      // Детальное логирование ошибки
-                                      final errorType = error.runtimeType.toString();
-                                      final errorMessage = error.toString();
-                                      print(
-                                        '❌ [PilotBookingCard] Ошибка загрузки аватара пассажира:\n'
-                                        '   - Тип ошибки: $errorType\n'
-                                        '   - Сообщение: $errorMessage\n'
-                                        '   - URL: $url\n'
-                                        '   - avatarUrl из БД: ${booking.passengerAvatarUrl}\n'
-                                        '   - Сформированный imageUrl: $imageUrl',
-                                      );
-
-                                      // Очищаем кэш при ошибке декодирования (EncodingError)
-                                      // Это может помочь, если файл был поврежден в кэше
-                                      if (errorType.contains('EncodingError') ||
-                                          errorMessage.contains('cannot be decoded')) {
-                                        try {
-                                          GetIt.instance<DefaultCacheManager>().removeFile(url).catchError((Object e) {
-                                            print('⚠️ [PilotBookingCard] Не удалось очистить кэш: $e');
-                                          });
-                                          print('🔄 [PilotBookingCard] Кэш для поврежденного файла очищен');
-                                        } catch (e) {
-                                          print('⚠️ [PilotBookingCard] Ошибка при очистке кэша: $e');
-                                        }
-                                      }
-
-                                      return Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover);
-                                    },
+                                    placeholder: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                    errorWidget: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                                   )
                                 : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                           ),
@@ -357,17 +324,16 @@ class PilotBookingCard extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
                         width: double.infinity,
                         height: double.infinity,
-                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                        placeholder: (context, url) => Container(
+                        placeholder: Container(
                           color: Colors.black,
                           child: Center(child: CircularProgressIndicator(color: Colors.white)),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: Container(
                           color: Colors.black,
                           child: Center(
                             child: Column(

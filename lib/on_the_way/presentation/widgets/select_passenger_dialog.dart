@@ -4,7 +4,7 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_stars_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -85,26 +85,13 @@ class SelectPassengerDialog extends StatelessWidget {
                                   : null,
                               child: ClipOval(
                                 child: booking.passengerAvatarUrl != null && booking.passengerAvatarUrl!.isNotEmpty
-                                    ? CachedNetworkImage(
+                                    ? NetworkImageWidget(
                                         imageUrl: getImageUrl(booking.passengerAvatarUrl!),
                                         width: 48.r,
                                         height: 48.r,
                                         fit: BoxFit.cover,
-                                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                        cacheKey: booking.passengerAvatarUrl,
-                                        placeholder: (context, url) =>
-                                            Image.asset(Pictures.pilot, width: 48.r, height: 48.r, fit: BoxFit.cover),
-                                        errorWidget: (context, url, error) {
-                                          print(
-                                            '❌ [SelectPassengerDialog] Ошибка загрузки аватара пассажира: error=$error, url=$url, avatarUrl=${booking.passengerAvatarUrl}',
-                                          );
-                                          return Image.asset(
-                                            Pictures.pilot,
-                                            width: 48.r,
-                                            height: 48.r,
-                                            fit: BoxFit.cover,
-                                          );
-                                        },
+                                        placeholder: Image.asset(Pictures.pilot, width: 48.r, height: 48.r, fit: BoxFit.cover),
+                                        errorWidget: Image.asset(Pictures.pilot, width: 48.r, height: 48.r, fit: BoxFit.cover),
                                       )
                                     : Image.asset(Pictures.pilot, width: 48.r, height: 48.r, fit: BoxFit.cover),
                               ),
@@ -173,17 +160,16 @@ class SelectPassengerDialog extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
                         width: double.infinity,
                         height: double.infinity,
-                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                        placeholder: (context, url) => Container(
+                        placeholder: Container(
                           color: Colors.black,
                           child: Center(child: CircularProgressIndicator(color: Colors.white)),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: Container(
                           color: Colors.black,
                           child: Center(
                             child: Column(

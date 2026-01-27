@@ -8,12 +8,11 @@ import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/presentation/widgets/story_player.dart';
 import 'package:aviapoint/main_page/stories/presentation/widgets/up_animation.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -90,11 +89,15 @@ class StoryScreenElement extends StatelessWidget {
                   child: GestureDetector(
                     onLongPress: onLongPress,
                     onLongPressEnd: onLongPressEnd,
-                    child: CachedNetworkImage(
+                    child: NetworkImageWidget(
                       imageUrl: getImageUrl(story.image),
                       fit: BoxFit.cover,
-                      cacheManager: getIt<DefaultCacheManager>(),
-                      cacheKey: getImageUrl(story.image),
+                      errorWidget: Container(
+                        color: Colors.black.withOpacity(0.3),
+                        child: const Center(
+                          child: Icon(Icons.image_not_supported, color: Colors.white70, size: 48),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -117,11 +120,15 @@ class StoryScreenElement extends StatelessWidget {
                   aspectRatio: 9 / 16,
                   child: Stack(
                     children: [
-                      CachedNetworkImage(
-                        fit: BoxFit.cover,
+                      NetworkImageWidget(
                         imageUrl: getImageUrl(story.image),
-                        cacheManager: getIt<DefaultCacheManager>(),
-                        cacheKey: getImageUrl(story.image),
+                        fit: BoxFit.cover,
+                        errorWidget: Container(
+                          color: Colors.black.withOpacity(0.3),
+                          child: const Center(
+                            child: Icon(Icons.image_not_supported, color: Colors.white70, size: 48),
+                          ),
+                        ),
                       ),
                       const Center(child: LoadingCustom()),
                     ],

@@ -22,7 +22,7 @@ import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
 import 'package:aviapoint/main_page/widgets/home_section_button.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -427,15 +427,9 @@ class _SuccessNews extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CachedNetworkImage(
+                NetworkImageWidget(
                   imageUrl: getImageUrl(sortedNews[index].pictureMini),
                   fit: BoxFit.fitHeight,
-                  placeholder: (context, url) => Shimmer(
-                    duration: const Duration(milliseconds: 1000),
-                    color: const Color(0xFF8D66FE),
-                    colorOpacity: 0.2,
-                    child: Container(decoration: const BoxDecoration()),
-                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -625,20 +619,19 @@ class _SuccessBlogArticles extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CachedNetworkImage(
-                  imageUrl: sortedArticles[index].coverImageUrl != null && sortedArticles[index].coverImageUrl!.isNotEmpty ? getImageUrl(sortedArticles[index].coverImageUrl!) : '',
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer(
-                    duration: const Duration(milliseconds: 1000),
-                    color: const Color(0xFF8D66FE),
-                    colorOpacity: 0.2,
-                    child: Container(decoration: const BoxDecoration()),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    color: const Color(0xFFD9E6F8),
-                    child: const Icon(Icons.article, size: 48, color: Color(0xFF9CA5AF)),
-                  ),
-                ),
+                sortedArticles[index].coverImageUrl != null && sortedArticles[index].coverImageUrl!.isNotEmpty
+                    ? NetworkImageWidget(
+                        imageUrl: getImageUrl(sortedArticles[index].coverImageUrl!),
+                        fit: BoxFit.cover,
+                        errorWidget: Container(
+                          color: const Color(0xFFD9E6F8),
+                          child: const Icon(Icons.article, size: 48, color: Color(0xFF9CA5AF)),
+                        ),
+                      )
+                    : Container(
+                        color: const Color(0xFFD9E6F8),
+                        child: const Icon(Icons.article, size: 48, color: Color(0xFF9CA5AF)),
+                      ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(

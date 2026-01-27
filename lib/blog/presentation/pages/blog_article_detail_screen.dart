@@ -12,7 +12,7 @@ import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/core/utils/seo_helper.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -187,16 +187,10 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                               final allImages = <String?>[article.coverImageUrl];
                               PhotoViewer.show(context, allImages, initialIndex: 0);
                             },
-                            child: CachedNetworkImage(
+                            child: NetworkImageWidget(
                               imageUrl: getImageUrl(article.coverImageUrl!),
                               fit: BoxFit.fill, // Как в новостях - без ограничений по высоте
-                              placeholder: (context, url) => Shimmer(
-                                duration: const Duration(milliseconds: 1000),
-                                color: const Color(0xFF8D66FE),
-                                colorOpacity: 0.2,
-                                child: Container(decoration: const BoxDecoration()),
-                              ),
-                              errorWidget: (context, url, error) => Container(
+                              errorWidget: Container(
                                 color: const Color(0xFFD9E6F8),
                                 child: Icon(Icons.image, size: 48.sp),
                               ),

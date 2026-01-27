@@ -1,16 +1,15 @@
+import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
-import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
-class SmallNewsWidget extends StatelessWidget {
-  const SmallNewsWidget({super.key, required this.news, this.showStatus = false});
+class SmallBlogArticleWidget extends StatelessWidget {
+  const SmallBlogArticleWidget({super.key, required this.article, this.showStatus = false});
 
-  final NewsEntity news;
+  final BlogArticleEntity article;
   final bool showStatus;
 
   @override
@@ -26,12 +25,19 @@ class SmallNewsWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: NetworkImageWidget(
-              imageUrl: getImageUrl(news.pictureMini),
-              fit: BoxFit.fill,
-              height: 75,
-              width: 75,
-            ),
+            child: article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty
+                ? NetworkImageWidget(
+                    imageUrl: getImageUrl(article.coverImageUrl!),
+                    fit: BoxFit.fill,
+                    height: 75,
+                    width: 75,
+                  )
+                : Container(
+                    height: 75,
+                    width: 75,
+                    color: Color(0xFFD9E6F8),
+                    child: Icon(Icons.image, size: 32, color: Color(0xFF9CA5AF)),
+                  ),
           ),
           SizedBox(width: 8),
           Expanded(
@@ -42,8 +48,8 @@ class SmallNewsWidget extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(bottom: 4),
                     child: StatusChip(
-                      text: news.published ? 'Опубликовано' : 'Не опубликовано',
-                      backgroundColor: news.published ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+                      text: article.status == 'published' ? 'Опубликовано' : 'Не опубликовано',
+                      backgroundColor: article.status == 'published' ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
                       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
                       borderRadius: 10,
                       height: 20,
@@ -51,16 +57,16 @@ class SmallNewsWidget extends StatelessWidget {
                     ),
                   ),
                 SizedBox(height: 5),
-                Text(news.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
+                Text(article.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 5),
-                if (news.subTitle.isNotEmpty)
-                  Text(news.subTitle, style: AppStyles.light10s.copyWith(color: Color(0xFF374151))),
+                if (article.excerpt != null && article.excerpt!.isNotEmpty)
+                  Text(article.excerpt!, style: AppStyles.light10s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 4),
                 // Дата в правом нижнем углу
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    formatNewsDate(news.date),
+                    article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
                     style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF), fontSize: 8),
                   ),
                 ),

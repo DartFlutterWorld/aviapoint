@@ -7,7 +7,7 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -266,18 +266,13 @@ class _ProfileEditState extends State<ProfileEdit> {
                                             )
                                           : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100))
                                     : _currentAvatarUrl != null && _currentAvatarUrl!.isNotEmpty
-                                    ? CachedNetworkImage(
+                                    ? NetworkImageWidget(
                                         imageUrl: getImageUrl(_currentAvatarUrl!),
                                         fit: BoxFit.cover,
                                         width: 100,
                                         height: 100,
-                                        cacheManager: getIt<DefaultCacheManager>(),
-                                        cacheKey:
-                                            _currentAvatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
-                                        placeholder: (context, url) =>
-                                            Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
-                                        errorWidget: (context, url, error) =>
-                                            Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                                        placeholder: Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
+                                        errorWidget: Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                                       )
                                     : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                               ),

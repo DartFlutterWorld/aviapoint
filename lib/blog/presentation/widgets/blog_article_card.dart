@@ -2,7 +2,7 @@ import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -127,16 +127,9 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                 if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
-                    child: CachedNetworkImage(
+                    child: NetworkImageWidget(
                       imageUrl: getImageUrl(widget.article.coverImageUrl!),
                       fit: BoxFit.cover,
-                      alignment: Alignment.center, // Центрируем кадр по центру для всех изображений
-                      placeholder: (context, url) => Shimmer(
-                        duration: const Duration(milliseconds: 1000),
-                        color: const Color(0xFF8D66FE),
-                        colorOpacity: 0.2,
-                        child: Container(width: imageWidth, height: imageHeight, decoration: const BoxDecoration()),
-                      ),
                       height: imageHeight,
                       width: imageWidth,
                     ),

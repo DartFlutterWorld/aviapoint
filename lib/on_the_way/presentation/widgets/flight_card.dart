@@ -6,7 +6,7 @@ import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sheet.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -237,18 +237,13 @@ class FlightCard extends StatelessWidget {
                               onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, [imageUrl], 0) : null, // Если нет фото, не открываем просмотр
                               child: ClipOval(
                                 child: imageUrl != null && imageUrl.isNotEmpty
-                                    ? CachedNetworkImage(
+                                    ? NetworkImageWidget(
                                         imageUrl: imageUrl,
                                         width: avatarSize,
                                         height: avatarSize,
                                         fit: BoxFit.cover,
-                                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                        cacheKey: avatarUrl,
-                                        placeholder: (context, url) => Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                        errorWidget: (context, url, error) {
-                                          print('❌ [FlightCard] Ошибка загрузки аватара пилота: error=$error, url=$url, avatarUrl=$avatarUrl');
-                                          return Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover);
-                                        },
+                                        placeholder: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                        errorWidget: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
                                       )
                                     : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
                               ),
@@ -369,16 +364,14 @@ class FlightCard extends StatelessWidget {
                                         ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(borderRadius8),
-                                          child: CachedNetworkImage(
+                                          child: NetworkImageWidget(
                                             imageUrl: getImageUrl(photoUrl),
                                             fit: BoxFit.cover,
-                                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                            cacheKey: photoUrl,
-                                            placeholder: (context, url) => Container(
+                                            placeholder: Container(
                                               color: Color(0xFFF3F4F6),
                                               child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                                             ),
-                                            errorWidget: (context, url, error) => Container(
+                                            errorWidget: Container(
                                               color: Color(0xFFF3F4F6),
                                               child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF), size: iconSize),
                                             ),
@@ -614,18 +607,16 @@ class FlightCard extends StatelessWidget {
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
-                          child: CachedNetworkImage(
+                          child: NetworkImageWidget(
                             imageUrl: getImageUrl(photos[index]),
                             fit: BoxFit.contain,
                             width: double.infinity,
                             height: double.infinity,
-                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                            cacheKey: photos[index],
-                            placeholder: (context, url) => Container(
+                            placeholder: Container(
                               color: Colors.black,
                               child: Center(child: CircularProgressIndicator(color: Colors.white)),
                             ),
-                            errorWidget: (context, url, error) => Container(
+                            errorWidget: Container(
                               color: Colors.black,
                               child: Center(
                                 child: Column(

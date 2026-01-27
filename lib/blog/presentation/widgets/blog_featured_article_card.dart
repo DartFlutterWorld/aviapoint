@@ -2,7 +2,7 @@ import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -46,20 +46,19 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(16.r), topRight: Radius.circular(16.r)),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty ? getImageUrl(widget.article.coverImageUrl!) : '',
-                    fit: BoxFit.fill, // Как в новостях - без ограничений по высоте
-                    placeholder: (context, url) => Shimmer(
-                      duration: const Duration(milliseconds: 1000),
-                      color: const Color(0xFF8D66FE),
-                      colorOpacity: 0.2,
-                      child: Container(decoration: const BoxDecoration()),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: const Color(0xFFD9E6F8),
-                      child: Icon(Icons.image, size: 48.sp),
-                    ),
-                  ),
+                  child: widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty
+                      ? NetworkImageWidget(
+                          imageUrl: getImageUrl(widget.article.coverImageUrl!),
+                          fit: BoxFit.fill, // Как в новостях - без ограничений по высоте
+                          errorWidget: Container(
+                            color: const Color(0xFFD9E6F8),
+                            child: Icon(Icons.image, size: 48.sp),
+                          ),
+                        )
+                      : Container(
+                          color: const Color(0xFFD9E6F8),
+                          child: Icon(Icons.image, size: 48.sp),
+                        ),
                 ),
               ],
             ),

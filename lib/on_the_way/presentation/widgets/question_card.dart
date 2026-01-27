@@ -5,7 +5,7 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_question_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -103,17 +103,13 @@ class QuestionCard extends StatelessWidget {
                           : null,
                       child: ClipOval(
                         child: question.authorAvatarUrl != null && question.authorAvatarUrl!.isNotEmpty
-                            ? CachedNetworkImage(
+                            ? NetworkImageWidget(
                                 imageUrl: getImageUrl(question.authorAvatarUrl!),
                                 width: 40.r,
                                 height: 40.r,
                                 fit: BoxFit.cover,
-                                cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                cacheKey: question.authorAvatarUrl,
-                                placeholder: (context, url) =>
-                                    Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                placeholder: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                errorWidget: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                               )
                             : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                       ),
@@ -154,17 +150,13 @@ class QuestionCard extends StatelessWidget {
                                   : null,
                               child: ClipOval(
                                 child: question.answeredByAvatarUrl != null && question.answeredByAvatarUrl!.isNotEmpty
-                                    ? CachedNetworkImage(
+                                    ? NetworkImageWidget(
                                         imageUrl: getImageUrl(question.answeredByAvatarUrl!),
                                         width: 40.r,
                                         height: 40.r,
                                         fit: BoxFit.cover,
-                                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                        cacheKey: question.answeredByAvatarUrl,
-                                        placeholder: (context, url) =>
-                                            Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                        errorWidget: (context, url, error) =>
-                                            Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                        placeholder: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                        errorWidget: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                                       )
                                     : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                               ),
@@ -263,17 +255,16 @@ class QuestionCard extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
                         width: double.infinity,
                         height: double.infinity,
-                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                        placeholder: (context, url) => Container(
+                        placeholder: Container(
                           color: Colors.black,
                           child: Center(child: CircularProgressIndicator(color: Colors.white)),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: Container(
                           color: Colors.black,
                           child: Center(
                             child: Column(

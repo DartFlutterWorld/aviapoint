@@ -16,7 +16,7 @@ import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart'
 import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart';
@@ -660,17 +660,13 @@ class _MarketProfileButton extends StatelessWidget {
               width: iconSize,
               height: iconSize,
               child: imageUrl != null && imageUrl.isNotEmpty
-                  ? CachedNetworkImage(
+                  ? NetworkImageWidget(
                       imageUrl: imageUrl,
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.cover,
-                      cacheManager: getIt<DefaultCacheManager>(),
-                      cacheKey: avatarUrl,
-                      placeholder: (context, url) =>
-                          SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
-                      errorWidget: (context, url, error) =>
-                          SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      placeholder: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      errorWidget: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
                     )
                   : SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
             ),

@@ -14,7 +14,7 @@ import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/bloc/news_bloc.dart';
 import 'package:aviapoint/news/domain/repositories/news_repository.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -181,15 +181,9 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: getImageUrl(news.pictureBig),
                         fit: BoxFit.fill,
-                        placeholder: (context, url) => Shimmer(
-                          duration: const Duration(milliseconds: 1000),
-                          color: const Color(0xFF8D66FE),
-                          colorOpacity: 0.2,
-                          child: Container(decoration: const BoxDecoration()),
-                        ),
                       ),
                     ),
                   ),
@@ -278,17 +272,11 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: CachedNetworkImage(
+                                  child: NetworkImageWidget(
                                     imageUrl: getImageUrl(imageUrl),
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) => Shimmer(
-                                      duration: const Duration(milliseconds: 1000),
-                                      color: const Color(0xFF8D66FE),
-                                      colorOpacity: 0.2,
-                                      child: Container(decoration: const BoxDecoration()),
-                                    ),
                                   ),
                                 ),
                               ),

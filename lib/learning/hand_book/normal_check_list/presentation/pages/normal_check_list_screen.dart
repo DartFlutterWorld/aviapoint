@@ -17,7 +17,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -252,10 +252,10 @@ class _SuccessState extends State<_Success> {
                       Center(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16.r),
-                          child: CachedNetworkImage(
+                          child: NetworkImageWidget(
                             imageUrl: getImageUrl(normalCheck[indexCheck].picture),
-                            placeholder: (context, url) => LoadingCustom(),
-                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            placeholder: LoadingCustom(),
+                            errorWidget: Icon(Icons.error),
                             width: 700.w,
                           ),
                         ),

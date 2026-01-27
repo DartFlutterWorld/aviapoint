@@ -61,6 +61,8 @@ import 'package:aviapoint/core/services/app_messaging.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -78,15 +80,49 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   bool _profileRequested = false;
+  // FirebaseAnalytics инициализируется лениво, только если Firebase доступен
+  // Может использоваться для аналитики в будущем
+  // ignore: unused_field
+  FirebaseAnalytics? _analytics;
 
   @override
   void initState() {
     super.initState();
+    // Инициализируем FirebaseAnalytics только если Firebase доступен
+    _initAnalytics();
   }
 
-  // Получаем зависимости через get_it
-
-  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  /// Инициализирует FirebaseAnalytics только если Firebase доступен
+  void _initAnalytics() {
+    try {
+      // Проверяем, инициализирован ли Firebase
+      if (Firebase.apps.isNotEmpty) {
+        _analytics = FirebaseAnalytics.instance;
+        if (kDebugMode) {
+          debugPrint('✅ FirebaseAnalytics инициализирован');
+        }
+      } else {
+        // Если Firebase не инициализирован, пробуем подождать немного
+        // и инициализировать позже (Firebase инициализируется в фоне)
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted && Firebase.apps.isNotEmpty) {
+            setState(() {
+              _analytics = FirebaseAnalytics.instance;
+            });
+            if (kDebugMode) {
+              debugPrint('✅ FirebaseAnalytics инициализирован (отложенная инициализация)');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('⚠️ Не удалось инициализировать FirebaseAnalytics: $e');
+        debugPrint('💡 Приложение продолжит работу без аналитики');
+      }
+      // Не критично, продолжаем без аналитики
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

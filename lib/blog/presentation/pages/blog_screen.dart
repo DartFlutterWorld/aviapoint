@@ -4,9 +4,8 @@ import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
 import 'package:aviapoint/blog/domain/entities/blog_category_entity.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_categories_bloc.dart';
-import 'package:aviapoint/blog/presentation/widgets/blog_article_card.dart';
+import 'package:aviapoint/blog/presentation/widgets/big_blog_article_widget.dart';
 import 'package:aviapoint/blog/presentation/widgets/blog_category_chip.dart';
-import 'package:aviapoint/blog/presentation/widgets/blog_featured_article_card.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
@@ -17,6 +16,7 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -544,7 +544,7 @@ class _ArticleList extends StatelessWidget {
                 width: heroWidth,
                 child: GestureDetector(
                   onTap: () => AutoRouter.of(context).push(BlogArticleDetailRoute(articleId: heroArticle.id)),
-                  child: BlogFeaturedArticleCard(article: heroArticle),
+                  child: BigBlogArticleWidget(article: heroArticle, showStatus: showStatus),
                 ),
               ),
               if (remainingArticles.isNotEmpty) ...[
@@ -558,7 +558,7 @@ class _ArticleList extends StatelessWidget {
                       width: gridItemWidth,
                       child: GestureDetector(
                         onTap: () => AutoRouter.of(context).push(BlogArticleDetailRoute(articleId: article.id)),
-                        child: BlogArticleCard(article: article, showStatus: showStatus),
+                        child: BigBlogArticleWidget(article: article, showStatus: showStatus),
                       ),
                     );
                   }).toList(),

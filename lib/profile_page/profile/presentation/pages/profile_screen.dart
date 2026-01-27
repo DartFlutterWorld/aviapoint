@@ -15,7 +15,7 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/generated/l10n.dart';
 import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
@@ -410,15 +410,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                               child: ClipOval(
                                                 child: imageUrl != null && imageUrl.isNotEmpty
-                                                    ? CachedNetworkImage(
+                                                    ? NetworkImageWidget(
                                                         imageUrl: imageUrl,
                                                         width: 120.w,
                                                         height: 120.w,
                                                         fit: BoxFit.cover,
-                                                        cacheManager: getIt<DefaultCacheManager>(),
-                                                        cacheKey: avatarUrl, // Используем avatarUrl как ключ кеша (уникален благодаря timestamp)
-                                                        placeholder: (context, url) => Image.asset(Pictures.pilot, width: 120.w, height: 120.w, fit: BoxFit.cover),
-                                                        errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 120.w, height: 120.w, fit: BoxFit.cover),
+                                                        placeholder: Image.asset(Pictures.pilot, width: 120.w, height: 120.w, fit: BoxFit.cover),
+                                                        errorWidget: Image.asset(Pictures.pilot, width: 120.w, height: 120.w, fit: BoxFit.cover),
                                                       )
                                                     : Image.asset(Pictures.pilot, height: 120.w, width: 120.w, fit: BoxFit.cover),
                                               ),
@@ -819,17 +817,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
                         width: double.infinity,
                         height: double.infinity,
-                        cacheManager: getIt<DefaultCacheManager>(),
-                        placeholder: (context, url) => Container(
+                        placeholder: Container(
                           color: Colors.black,
                           child: Center(child: CircularProgressIndicator(color: Colors.white)),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: Container(
                           color: Colors.black,
                           child: Center(
                             child: Column(

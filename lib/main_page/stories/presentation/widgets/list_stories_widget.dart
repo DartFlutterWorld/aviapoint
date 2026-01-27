@@ -6,10 +6,10 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/cache_manager_bloc.dart';
 import 'package:aviapoint/main_page/stories/presentation/bloc/story_cubit.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -76,17 +76,9 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
-                                CachedNetworkImage(
+                                NetworkImageWidget(
                                   imageUrl: getImageUrl(state.story[index].logoStory),
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => Shimmer(
-                                    duration: const Duration(milliseconds: 1000),
-                                    color: const Color(0xFF8D66FE),
-                                    colorOpacity: 0.2,
-                                    child: Container(decoration: const BoxDecoration()),
-                                  ),
-                                  cacheManager: getIt<DefaultCacheManager>(),
-                                  cacheKey: getImageUrl(state.story[index].logoStory),
                                 ),
                                 Positioned(
                                   left: 0,

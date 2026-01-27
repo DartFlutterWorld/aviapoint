@@ -20,7 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 
@@ -1132,15 +1132,14 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                                       child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                                     ),
                                   )
-                          : CachedNetworkImage(
+                          : NetworkImageWidget(
                               imageUrl: _getImageUrl(photoItem.url!),
                               fit: BoxFit.cover,
-                              cacheManager: DefaultCacheManager(),
-                              placeholder: (context, url) => Container(
+                              placeholder: Container(
                                 color: Color(0xFFF3F4F6),
                                 child: Center(child: CircularProgressIndicator()),
                               ),
-                              errorWidget: (context, url, error) => Container(
+                              errorWidget: Container(
                                 color: Color(0xFFF3F4F6),
                                 child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                               ),

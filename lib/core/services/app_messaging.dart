@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io' show Platform;
 
@@ -22,13 +23,52 @@ class AppMessaging {
   factory AppMessaging() => _instance ?? AppMessaging._internal();
 
   Future<void> init() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    debugPrint('🔔 Запрос разрешения на уведомления...');
-    NotificationSettings settings = await messaging.requestPermission(alert: true, announcement: false, badge: true, carPlay: false, criticalAlert: false, provisional: false, sound: true);
+      debugPrint('🔔 Запрос разрешения на уведомления...');
+      // Добавляем таймаут для requestPermission, особенно важно для iOS Safari
+      NotificationSettings settings;
+      try {
+        settings = await messaging
+            .requestPermission(alert: true, announcement: false, badge: true, carPlay: false, criticalAlert: false, provisional: false, sound: true)
+            .timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            if (kDebugMode) {
+              debugPrint('⏱️ Запрос разрешения на уведомления превысил таймаут (5 сек)');
+            }
+            // Возвращаем дефолтные настройки при таймауте
+            throw TimeoutException('requestPermission timeout');
+          },
+        );
+      } catch (e) {
+        if (kDebugMode) {
+          debugPrint('❌ Ошибка запроса разрешения на уведомления: $e');
+          debugPrint('💡 Продолжаем без push-уведомлений');
+        }
+        return; // Выходим, если не удалось получить разрешение
+      }
 
-    debugPrint('🔔 Статус разрешения: ${settings.authorizationStatus}');
-    debugPrint('🔔 Alert: ${settings.alert}, Sound: ${settings.sound}, Badge: ${settings.badge}');
+      debugPrint('🔔 Статус разрешения: ${settings.authorizationStatus}');
+      debugPrint('🔔 Alert: ${settings.alert}, Sound: ${settings.sound}, Badge: ${settings.badge}');
+
+      // На веб-платформе (особенно Safari на iOS) отдельные настройки могут быть notSupported,
+      // но если AuthorizationStatus.authorized, то Web Push API все равно работает
+      if (kIsWeb && settings.authorizationStatus != AuthorizationStatus.authorized) {
+        final isNotSupported = settings.alert.toString().contains('notSupported') ||
+            settings.sound.toString().contains('notSupported') ||
+            settings.badge.toString().contains('notSupported');
+        
+        if (isNotSupported) {
+          if (kDebugMode) {
+            debugPrint('ℹ️ Push-уведомления не поддерживаются на этой веб-платформе');
+            debugPrint('💡 Это нормальное поведение для некоторых браузеров');
+          }
+          // Выходим только если статус не authorized И настройки notSupported
+          return;
+        }
+      }
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       if (kDebugMode) {
@@ -43,7 +83,17 @@ class AppMessaging {
         try {
           // Пробуем получить токен без VAPID сначала (может сработать в некоторых случаях)
           try {
-            fcmToken = await FirebaseMessaging.instance.getToken();
+            fcmToken = await FirebaseMessaging.instance
+                .getToken()
+                .timeout(
+              const Duration(seconds: 5),
+              onTimeout: () {
+                if (kDebugMode) {
+                  debugPrint('⏱️ Получение FCM токена без VAPID превысило таймаут (5 сек)');
+                }
+                throw TimeoutException('getToken timeout');
+              },
+            );
             debugPrint("✅ FCM Token (Web without VAPID): $fcmToken");
           } catch (e) {
             // Если не получилось без VAPID, пробуем с VAPID
@@ -55,8 +105,25 @@ class AppMessaging {
             debugPrint("🔄 Пробуем с VAPID ключом...");
 
             // С VAPID ключом - стабильная работа push-уведомлений на всех браузерах
-            fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: vapidKey);
-            debugPrint("✅ FCM Token (Web with VAPID): $fcmToken");
+            try {
+              fcmToken = await FirebaseMessaging.instance
+                  .getToken(vapidKey: vapidKey)
+                  .timeout(
+                const Duration(seconds: 5),
+                onTimeout: () {
+                  if (kDebugMode) {
+                    debugPrint('⏱️ Получение FCM токена с VAPID превысило таймаут (5 сек)');
+                  }
+                  throw TimeoutException('getToken with VAPID timeout');
+                },
+              );
+              debugPrint("✅ FCM Token (Web with VAPID): $fcmToken");
+            } catch (vapidError) {
+              if (kDebugMode) {
+                debugPrint("❌ Ошибка получения FCM токена с VAPID: $vapidError");
+              }
+              rethrow;
+            }
           }
         } catch (err) {
           debugPrint("❌ Ошибка получения FCM токена на вебе: $err");
@@ -64,46 +131,117 @@ class AppMessaging {
           debugPrint("   1. Несоответствие конфигурации Firebase между приложением и Service Worker");
           debugPrint("   2. Неправильный или устаревший VAPID ключ");
           debugPrint("   3. Service Worker не зарегистрирован или не может получить доступ к Firebase");
+          debugPrint("   4. iOS Safari может блокировать Firebase инициализацию");
           debugPrint("📝 Как исправить:");
           debugPrint("   1. Откройте https://console.firebase.google.com -> проект 'aviapoint'");
           debugPrint("   2. Project Settings (⚙️) -> Cloud Messaging");
           debugPrint("   3. Web Push certificates -> Generate key pair (если нет) или проверьте текущий");
           debugPrint("   4. Убедитесь, что конфигурация в firebase_options.dart совпадает с firebase-messaging-sw.js");
           debugPrint("   5. Проверьте, что Service Worker зарегистрирован (DevTools -> Application -> Service Workers)");
+          // Не прерываем выполнение, продолжаем без токена
         }
       } else if (Platform.isIOS) {
-        // Для iOS сначала получаем APNS токен
-        String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-
-        if (apnsToken != null) {
-          debugPrint("APNS Token: $apnsToken");
-          fcmToken = await FirebaseMessaging.instance.getToken();
-          debugPrint("FCM Token: $fcmToken");
-        } else {
-          debugPrint("APNS Token not available, waiting ...");
-
-          await Future<void>.delayed(const Duration(seconds: 3));
-
-          apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+        // Для iOS сначала получаем APNS токен с таймаутом
+        try {
+          String? apnsToken = await FirebaseMessaging.instance
+              .getAPNSToken()
+              .timeout(
+            const Duration(seconds: 3),
+            onTimeout: () {
+              if (kDebugMode) {
+                debugPrint('⏱️ Получение APNS токена превысило таймаут (3 сек)');
+              }
+              return null;
+            },
+          );
 
           if (apnsToken != null) {
             debugPrint("APNS Token: $apnsToken");
-            fcmToken = await FirebaseMessaging.instance.getToken();
-            debugPrint("FCM Token: $fcmToken");
+            try {
+              fcmToken = await FirebaseMessaging.instance
+                  .getToken()
+                  .timeout(
+                const Duration(seconds: 5),
+                onTimeout: () {
+                  if (kDebugMode) {
+                    debugPrint('⏱️ Получение FCM токена превысило таймаут (5 сек)');
+                  }
+                  throw TimeoutException('getToken timeout');
+                },
+              );
+              debugPrint("FCM Token: $fcmToken");
+            } catch (e) {
+              debugPrint("FCM Token not available ($e)");
+            }
           } else {
-            debugPrint("APNS Token not available, trying to get FCM token anyway ...");
+            debugPrint("APNS Token not available, waiting ...");
+
+            await Future<void>.delayed(const Duration(seconds: 2));
 
             try {
-              fcmToken = await FirebaseMessaging.instance.getToken();
-            } catch (err) {
-              debugPrint("FCM Token not available ($err)");
+              apnsToken = await FirebaseMessaging.instance
+                  .getAPNSToken()
+                  .timeout(
+                const Duration(seconds: 3),
+                onTimeout: () => null,
+              );
+
+              if (apnsToken != null) {
+                debugPrint("APNS Token: $apnsToken");
+                try {
+                  fcmToken = await FirebaseMessaging.instance
+                      .getToken()
+                      .timeout(
+                    const Duration(seconds: 5),
+                    onTimeout: () {
+                      throw TimeoutException('getToken timeout');
+                    },
+                  );
+                  debugPrint("FCM Token: $fcmToken");
+                } catch (e) {
+                  debugPrint("FCM Token not available ($e)");
+                }
+              } else {
+                debugPrint("APNS Token not available, trying to get FCM token anyway ...");
+
+                try {
+                  fcmToken = await FirebaseMessaging.instance
+                      .getToken()
+                      .timeout(
+                    const Duration(seconds: 5),
+                    onTimeout: () {
+                      throw TimeoutException('getToken timeout');
+                    },
+                  );
+                } catch (err) {
+                  debugPrint("FCM Token not available ($err)");
+                }
+              }
+            } catch (e) {
+              debugPrint("Error getting APNS token: $e");
             }
           }
+        } catch (e) {
+          debugPrint("Error in iOS token initialization: $e");
         }
       } else {
-        // Для Android получаем токен напрямую
-        fcmToken = await FirebaseMessaging.instance.getToken();
-        debugPrint("FCM Token (Android): $fcmToken");
+        // Для Android получаем токен напрямую с таймаутом
+        try {
+          fcmToken = await FirebaseMessaging.instance
+              .getToken()
+              .timeout(
+            const Duration(seconds: 5),
+            onTimeout: () {
+              if (kDebugMode) {
+                debugPrint('⏱️ Получение FCM токена (Android) превысило таймаут (5 сек)');
+              }
+              throw TimeoutException('getToken timeout');
+            },
+          );
+          debugPrint("FCM Token (Android): $fcmToken");
+        } catch (e) {
+          debugPrint("FCM Token (Android) not available: $e");
+        }
       }
 
       log("PUSH Token: $fcmToken");
@@ -141,15 +279,31 @@ class AppMessaging {
         _handleNotificationTap(message.data);
       });
 
-      // Обработка уведомления, когда приложение запущено из закрытого состояния
-      final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-      if (initialMessage != null) {
-        debugPrint('📬 Приложение запущено по уведомлению: ${initialMessage.notification?.title}');
-        debugPrint('📬 Данные уведомления: ${initialMessage.data}');
-        // Обработаем после инициализации приложения (через WidgetsBinding)
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _handleNotificationTap(initialMessage.data);
-        });
+      // Обработка уведомления, когда приложение запущено из закрытого состояния (с таймаутом)
+      try {
+        final initialMessage = await FirebaseMessaging.instance
+            .getInitialMessage()
+            .timeout(
+          const Duration(seconds: 2),
+          onTimeout: () {
+            if (kDebugMode) {
+              debugPrint('⏱️ Получение initial message превысило таймаут (2 сек)');
+            }
+            return null;
+          },
+        );
+        if (initialMessage != null) {
+          debugPrint('📬 Приложение запущено по уведомлению: ${initialMessage.notification?.title}');
+          debugPrint('📬 Данные уведомления: ${initialMessage.data}');
+          // Обработаем после инициализации приложения (через WidgetsBinding)
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _handleNotificationTap(initialMessage.data);
+          });
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          debugPrint('⚠️ Ошибка получения initial message: $e');
+        }
       }
 
       // Отправляем токен на сервер сразу (анонимно, если пользователь не авторизован)
@@ -168,6 +322,14 @@ class AppMessaging {
         debugPrint('❌ Разрешение на уведомления НЕ получено. Статус: ${settings.authorizationStatus}');
         debugPrint('💡 Пользователь должен разрешить уведомления в настройках браузера');
       }
+    }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        debugPrint('❌ Критическая ошибка инициализации AppMessaging: $e');
+        debugPrint('Stack trace: $stackTrace');
+        debugPrint('💡 Приложение продолжит работу без push-уведомлений');
+      }
+      // Не прерываем выполнение, продолжаем без push-уведомлений
     }
 
     //ServiceLocator.instance.get<PushHandlerRepository>()

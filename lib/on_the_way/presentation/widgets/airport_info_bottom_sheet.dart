@@ -30,7 +30,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:dio/dio.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
@@ -532,16 +532,14 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                     onTap: () => _showPhotoViewer(context, airport, airport.photos!, index),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: getImageUrl(photoUrl),
                         fit: BoxFit.cover,
-                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                        cacheKey: photoUrl,
-                        placeholder: (context, url) => Container(
+                        placeholder: Container(
                           color: Color(0xFFF3F4F6),
                           child: Center(child: CircularProgressIndicator()),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: Container(
                           color: Color(0xFFF3F4F6),
                           child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                         ),
@@ -787,18 +785,16 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
-                          child: CachedNetworkImage(
+                          child: NetworkImageWidget(
                             imageUrl: getImageUrl(photos[index]),
                             fit: BoxFit.contain,
                             width: double.infinity,
                             height: double.infinity,
-                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                            cacheKey: photos[index],
-                            placeholder: (context, url) => Container(
+                            placeholder: Container(
                               color: Colors.black,
                               child: Center(child: CircularProgressIndicator(color: Colors.white)),
                             ),
-                            errorWidget: (context, url, error) => Container(
+                            errorWidget: Container(
                               color: Colors.black,
                               child: Center(
                                 child: Column(
@@ -1187,18 +1183,16 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
-                          child: CachedNetworkImage(
+                          child: NetworkImageWidget(
                             imageUrl: getImageUrl(photos[index]),
                             fit: BoxFit.contain,
                             width: double.infinity,
                             height: double.infinity,
-                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                            cacheKey: photos[index],
-                            placeholder: (context, url) => Container(
+                            placeholder: Container(
                               color: Colors.black,
                               child: Center(child: CircularProgressIndicator(color: Colors.white)),
                             ),
-                            errorWidget: (context, url, error) => Container(
+                            errorWidget: Container(
                               color: Colors.black,
                               child: Center(
                                 child: Column(
@@ -1425,16 +1419,14 @@ class _VisitorPhotosGalleryWidget extends StatelessWidget {
                       onTap: () => onPhotoTap(context, allPhotos, index),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.r),
-                        child: CachedNetworkImage(
+                        child: NetworkImageWidget(
                           imageUrl: _getImageUrl(photoUrl),
                           fit: BoxFit.cover,
-                          cacheManager: GetIt.instance<DefaultCacheManager>(),
-                          cacheKey: photoUrl,
-                          placeholder: (context, url) => Container(
+                          placeholder: Container(
                             color: Color(0xFFF3F4F6),
                             child: Center(child: CircularProgressIndicator()),
                           ),
-                          errorWidget: (context, url, error) => Container(
+                          errorWidget: Container(
                             color: Color(0xFFF3F4F6),
                             child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                           ),
@@ -1783,18 +1775,16 @@ class _ReviewsSectionWidget extends StatelessWidget {
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
-                          child: CachedNetworkImage(
+                          child: NetworkImageWidget(
                             imageUrl: _getImageUrl(photos[index]),
                             fit: BoxFit.contain,
                             width: double.infinity,
                             height: double.infinity,
-                            cacheManager: GetIt.instance<DefaultCacheManager>(),
-                            cacheKey: photos[index],
-                            placeholder: (context, url) => Container(
+                            placeholder: Container(
                               color: Colors.black,
                               child: Center(child: CircularProgressIndicator(color: Colors.white)),
                             ),
-                            errorWidget: (context, url, error) => Container(
+                            errorWidget: Container(
                               color: Colors.black,
                               child: Center(
                                 child: Column(

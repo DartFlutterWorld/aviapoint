@@ -5,7 +5,7 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -88,15 +88,13 @@ class CommentCard extends StatelessWidget {
                       onTap: comment.authorAvatarUrl != null && comment.authorAvatarUrl!.isNotEmpty ? () => _showPhotoViewer(context, getImageUrl(comment.authorAvatarUrl!)) : null,
                       child: ClipOval(
                         child: comment.authorAvatarUrl != null && comment.authorAvatarUrl!.isNotEmpty
-                            ? CachedNetworkImage(
+                            ? NetworkImageWidget(
                                 imageUrl: getImageUrl(comment.authorAvatarUrl!),
                                 width: 40.r,
                                 height: 40.r,
                                 fit: BoxFit.cover,
-                                cacheManager: GetIt.instance<DefaultCacheManager>(),
-                                cacheKey: comment.authorAvatarUrl,
-                                placeholder: (context, url) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                errorWidget: (context, url, error) => Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                placeholder: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                errorWidget: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                               )
                             : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
                       ),
@@ -165,17 +163,16 @@ class CommentCard extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: CachedNetworkImage(
+                      child: NetworkImageWidget(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
                         width: double.infinity,
                         height: double.infinity,
-                        cacheManager: GetIt.instance<DefaultCacheManager>(),
-                        placeholder: (context, url) => Container(
+                        placeholder: Container(
                           color: Colors.black,
                           child: Center(child: CircularProgressIndicator(color: Colors.white)),
                         ),
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: Container(
                           color: Colors.black,
                           child: Center(
                             child: Column(

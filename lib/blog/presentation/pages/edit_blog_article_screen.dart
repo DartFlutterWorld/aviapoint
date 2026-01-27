@@ -15,7 +15,7 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/injection_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -827,7 +827,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                             SizedBox(height: 16),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(12.r),
-                              child: CachedNetworkImage(imageUrl: getImageUrl(article.coverImageUrl!), height: 150.h, fit: BoxFit.cover),
+                              child: NetworkImageWidget(imageUrl: getImageUrl(article.coverImageUrl!), height: 150.h, fit: BoxFit.cover),
                             ),
                           ],
                           SizedBox(height: 16),

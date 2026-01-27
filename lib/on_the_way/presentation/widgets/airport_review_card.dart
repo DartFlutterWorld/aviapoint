@@ -5,7 +5,7 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/airport_review_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -114,16 +114,13 @@ class AirportReviewCard extends StatelessWidget {
     final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
     return ClipOval(
       child: imageUrl != null && imageUrl.isNotEmpty
-          ? CachedNetworkImage(
+          ? NetworkImageWidget(
               imageUrl: imageUrl,
               width: size,
               height: size,
               fit: BoxFit.cover,
-              cacheManager: GetIt.instance<DefaultCacheManager>(),
-              cacheKey: avatarUrl,
-              placeholder: (context, url) => Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
-              errorWidget: (context, url, error) =>
-                  Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
+              placeholder: Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
+              errorWidget: Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
             )
           : Image.asset(Pictures.pilot, width: size, height: size, fit: BoxFit.cover),
     );
@@ -157,16 +154,14 @@ class AirportReviewCard extends StatelessWidget {
               onTap: onPhotoTap != null ? () => onPhotoTap!(context, review.photoUrls!, index) : null,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
-                child: CachedNetworkImage(
+                child: NetworkImageWidget(
                   imageUrl: getImageUrl(photoUrl),
                   fit: BoxFit.cover,
-                  cacheManager: GetIt.instance<DefaultCacheManager>(),
-                  cacheKey: photoUrl,
-                  placeholder: (context, url) => Container(
+                  placeholder: Container(
                     color: Color(0xFFF3F4F6),
                     child: Center(child: CircularProgressIndicator()),
                   ),
-                  errorWidget: (context, url, error) => Container(
+                  errorWidget: Container(
                     color: Color(0xFFF3F4F6),
                     child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                   ),

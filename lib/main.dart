@@ -78,7 +78,14 @@ Future<void> _run() async {
   /// Инициализация ServiceLocator (должна быть до Firebase, чтобы зависимости были доступны)
   await setupDependencies();
 
-  await AppFirebase().init();
+  // Инициализируем Firebase в фоне, не блокируя запуск приложения
+  // Это особенно важно для iOS Safari, где Firebase может зависать
+  AppFirebase().init().catchError((Object error) {
+    if (kDebugMode) {
+      debugPrint('⚠️ Firebase инициализация завершилась с ошибкой: $error');
+      debugPrint('💡 Приложение продолжит работу без Firebase');
+    }
+  });
 
   Bloc.observer = AppBlocObserver.instance();
   Bloc.transformer = bloc_concurrency.sequential<Object?>();
