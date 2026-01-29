@@ -6,11 +6,10 @@ import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sheet.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
+import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -36,7 +35,6 @@ class FlightCard extends StatelessWidget {
         final iconSize = 24.0; // Единый размер для всех иконок (увеличен для лучшей видимости)
         final regular12s = AppStyles.regular12s;
         final regular14s = AppStyles.regular14s;
-        final bold14s = AppStyles.bold14s;
         final bold12s = AppStyles.bold12s;
         final padding22 = 22.0;
         final padding8 = AppSpacing.horizontal;
@@ -225,51 +223,93 @@ class FlightCard extends StatelessWidget {
                       color: Color(0xFFF9FAFB),
                       border: Border.all(color: Color(0xFFE5E7EB)),
                     ),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Аватар пилота
-                        Builder(
-                          builder: (context) {
-                            final avatarUrl = flight.pilotAvatarUrl;
-                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+                        Row(
+                          children: [
+                            // Аватар пилота
+                            Builder(
+                              builder: (context) {
+                                final avatarUrl = flight.pilotAvatarUrl;
+                                final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
 
-                            return GestureDetector(
-                              onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, [imageUrl], 0) : null, // Если нет фото, не открываем просмотр
-                              child: ClipOval(
-                                child: imageUrl != null && imageUrl.isNotEmpty
-                                    ? NetworkImageWidget(
-                                        imageUrl: imageUrl,
-                                        width: avatarSize,
-                                        height: avatarSize,
-                                        fit: BoxFit.cover,
-                                        placeholder: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                        errorWidget: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                      )
-                                    : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(width: padding8),
-                        // Имя и рейтинг
-                        Flexible(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(flight.pilotFullName ?? 'Пилот', style: bold12s.copyWith(color: Color(0xFF374151))),
-                              if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
-                                SizedBox(height: spacing4 / 2),
-                                Row(
-                                  children: [
-                                    Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
-                                    SizedBox(width: spacing4),
-                                    Text(flight.pilotAverageRating!.toStringAsFixed(1), style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                return GestureDetector(
+                                  onTap: avatarUrl != null && avatarUrl.isNotEmpty ? () => _showPhotoViewer(context, [avatarUrl], 0) : null, // Если нет фото, не открываем просмотр
+                                  child: ClipOval(
+                                    child: imageUrl != null && imageUrl.isNotEmpty
+                                        ? NetworkImageWidget(
+                                            imageUrl: imageUrl,
+                                            width: avatarSize,
+                                            height: avatarSize,
+                                            fit: BoxFit.cover,
+                                            placeholder: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                            errorWidget: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                          )
+                                        : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(width: padding8),
+                            // Имя и рейтинг
+                            Flexible(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(flight.pilotFullName ?? 'Пилот', style: bold12s.copyWith(color: Color(0xFF374151))),
+                                  if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
+                                    SizedBox(height: spacing4 / 2),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
+                                            SizedBox(width: spacing4),
+                                            Text(flight.pilotAverageRating!.toStringAsFixed(1), style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                          ],
+                                        ),
+                                        // Кнопка отзывов о пилоте
+                                        TextButton(
+                                          onPressed: () {
+                                            showUniversalBottomSheet<void>(
+                                              context: context,
+                                              title: 'Отзывы о пилоте',
+                                              height: MediaQuery.of(context).size.height * 0.9,
+                                              backgroundColor: Colors.white,
+                                              showCloseButton: false,
+                                              child: UserReviewsBottomSheet(userId: flight.pilotId, title: 'Отзывы о пилоте'),
+                                            );
+                                          },
+                                          child: Text('Отзывы', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                        ),
+                                      ],
+                                    ),
+                                  ] else ...[
+                                    // Кнопка отзывов о пилоте (если нет рейтинга)
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          showUniversalBottomSheet<void>(
+                                            context: context,
+                                            title: 'Отзывы о пилоте',
+                                            height: MediaQuery.of(context).size.height * 0.9,
+                                            backgroundColor: Colors.white,
+                                            showCloseButton: false,
+                                            child: UserReviewsBottomSheet(userId: flight.pilotId, title: 'Отзывы о пилоте'),
+                                          );
+                                        },
+                                        child: Text('Отзывы', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ],
-                            ],
-                          ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -571,6 +611,8 @@ class FlightCard extends StatelessWidget {
 
   /// Просмотр фотографии в полноэкранном режиме
   void _showPhotoViewer(BuildContext context, List<String> photos, int initialIndex) {
+    // Преобразуем относительные пути в полные URL
+    final fullUrls = photos.map((photo) => getImageUrl(photo)).toList();
     final PageController pageController = PageController(initialPage: initialIndex);
     int currentIndex = initialIndex;
     bool showControls = true;
@@ -593,7 +635,7 @@ class FlightCard extends StatelessWidget {
                 // Основной контент с фотографиями
                 PageView.builder(
                   controller: pageController,
-                  itemCount: photos.length,
+                  itemCount: fullUrls.length,
                   onPageChanged: (index) {
                     setState(() {
                       currentIndex = index;
@@ -608,7 +650,7 @@ class FlightCard extends StatelessWidget {
                           width: double.infinity,
                           height: double.infinity,
                           child: NetworkImageWidget(
-                            imageUrl: getImageUrl(photos[index]),
+                            imageUrl: fullUrls[index],
                             fit: BoxFit.contain,
                             width: double.infinity,
                             height: double.infinity,
@@ -623,7 +665,7 @@ class FlightCard extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                                   ],
                                 ),
@@ -644,7 +686,7 @@ class FlightCard extends StatelessWidget {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -653,10 +695,10 @@ class FlightCard extends StatelessWidget {
                           children: [
                             // Индикатор текущей фотографии
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20.r)),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
                               child: Text(
-                                '${currentIndex + 1} / ${photos.length}',
+                                '${currentIndex + 1} / ${fullUrls.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
                               ),
                             ),
@@ -671,7 +713,7 @@ class FlightCard extends StatelessWidget {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка "Скачать"
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
@@ -679,7 +721,7 @@ class FlightCard extends StatelessWidget {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка закрытия
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
@@ -695,14 +737,14 @@ class FlightCard extends StatelessWidget {
                   ),
 
                 // Нижняя панель с навигацией (только если больше 1 фото)
-                if (showControls && photos.length > 1)
+                if (showControls && fullUrls.length > 1)
                   Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -719,18 +761,18 @@ class FlightCard extends StatelessWidget {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
 
                             // Индикатор точек
                             Expanded(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: List.generate(
-                                  photos.length,
+                                  fullUrls.length,
                                   (index) => Container(
-                                    width: 6.w,
-                                    height: 6.w,
-                                    margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                    width: 6,
+                                    height: 6,
+                                    margin: EdgeInsets.symmetric(horizontal: 3),
                                     decoration: BoxDecoration(shape: BoxShape.circle, color: index == currentIndex ? Colors.white : Colors.white.withOpacity(0.4)),
                                   ),
                                 ),
@@ -738,7 +780,7 @@ class FlightCard extends StatelessWidget {
                             ),
 
                             // Кнопка "Вперед"
-                            if (currentIndex < photos.length - 1)
+                            if (currentIndex < fullUrls.length - 1)
                               IconButton(
                                 icon: Icon(Icons.chevron_right, color: Colors.white, size: 32),
                                 onPressed: () {
@@ -747,7 +789,7 @@ class FlightCard extends StatelessWidget {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
                           ],
                         ),
                       ),
@@ -783,7 +825,9 @@ class FlightCard extends StatelessWidget {
       final imageUrl = getImageUrl(photoUrl);
       final dio = Dio();
       final tempDir = await getTemporaryDirectory();
-      final fileName = photoUrl.split('/').last;
+      // Извлекаем имя файла из URL (может быть полным или относительным)
+      final uri = Uri.tryParse(imageUrl);
+      final fileName = uri != null ? uri.pathSegments.last : imageUrl.split('/').last;
       final filePath = '${tempDir.path}/$fileName';
 
       await dio.download(imageUrl, filePath);

@@ -1,9 +1,9 @@
-#include "win32_window.h"
+#include "win32_window"
 
-#include <dwmapi.h>
-#include <flutter_windows.h>
+#include <dwmapi>
+#include <flutter_windows>
 
-#include "resource.h"
+#include "resource"
 
 namespace {
 

@@ -5,7 +5,6 @@ import 'package:aviapoint/on_the_way/presentation/bloc/questions_bloc.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -16,13 +15,7 @@ class QuestionDialog extends StatefulWidget {
   final bool isAnswer; // Если true - редактирование ответа пилота
   final VoidCallback? onQuestionCreated; // Callback для обновления списка в секции
 
-  const QuestionDialog({
-    super.key,
-    required this.flightId,
-    this.question,
-    this.isAnswer = false,
-    this.onQuestionCreated,
-  });
+  const QuestionDialog({super.key, required this.flightId, this.question, this.isAnswer = false, this.onQuestionCreated});
 
   @override
   State<QuestionDialog> createState() => _QuestionDialogState();
@@ -52,9 +45,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
   void _submit() {
     final text = _textController.text.trim();
     if (text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(widget.isAnswer ? 'Введите ответ' : 'Введите вопрос'), backgroundColor: Colors.red),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(widget.isAnswer ? 'Введите ответ' : 'Введите вопрос'), backgroundColor: Colors.red));
       return;
     }
 
@@ -64,12 +55,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
     } else {
       // Редактирование вопроса или ответа
       context.read<QuestionsBloc>().add(
-        UpdateQuestionEvent(
-          flightId: widget.flightId,
-          questionId: widget.question!.id,
-          questionText: widget.isAnswer ? null : text,
-          answerText: widget.isAnswer ? text : null,
-        ),
+        UpdateQuestionEvent(flightId: widget.flightId, questionId: widget.question!.id, questionText: widget.isAnswer ? null : text, answerText: widget.isAnswer ? text : null),
       );
     }
   }
@@ -79,40 +65,24 @@ class _QuestionDialogState extends State<QuestionDialog> {
     return BlocListener<QuestionsBloc, QuestionsState>(
       listener: (context, state) {
         if (state is ErrorQuestionsState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.responseMessage ?? state.errorForUser),
-              backgroundColor: Colors.red,
-              duration: Duration(seconds: 4),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.responseMessage ?? state.errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
         } else if (state is QuestionCreatedState) {
           // Вызываем callback для обновления списка в секции (если блоки разные)
           widget.onQuestionCreated?.call();
           Navigator.of(context).pop(true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Вопрос успешно создан'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Вопрос успешно создан'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
         } else if (state is QuestionUpdatedState) {
           // Вызываем callback для обновления списка в секции (если блоки разные)
           widget.onQuestionCreated?.call();
           Navigator.of(context).pop(true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(widget.isAnswer ? 'Ответ успешно обновлён' : 'Вопрос успешно обновлён'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(widget.isAnswer ? 'Ответ успешно обновлён' : 'Вопрос успешно обновлён'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
         }
       },
       child: kIsWeb
           ? Dialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               child: _buildContent(),
             )
           : _buildBottomSheet(),
@@ -139,8 +109,8 @@ class _QuestionDialogState extends State<QuestionDialog> {
 
         return SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(20.w),
-            constraints: BoxConstraints(maxWidth: 400.w),
+            padding: EdgeInsets.all(20),
+            constraints: BoxConstraints(maxWidth: 400),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -152,11 +122,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
                     Text(
                       widget.question == null
                           ? 'Задать вопрос пилоту'
-                          : (widget.isAnswer
-                                ? (widget.question!.answerText == null || widget.question!.answerText!.isEmpty
-                                      ? 'Ответить на вопрос'
-                                      : 'Редактировать ответ')
-                                : 'Редактировать вопрос'),
+                          : (widget.isAnswer ? (widget.question!.answerText == null || widget.question!.answerText!.isEmpty ? 'Ответить на вопрос' : 'Редактировать ответ') : 'Редактировать вопрос'),
                       style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
                     ),
                     IconButton(
@@ -165,31 +131,25 @@ class _QuestionDialogState extends State<QuestionDialog> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 // Текст вопроса (если редактируем ответ)
                 if (widget.question != null && widget.isAnswer) ...[
                   Text('Вопрос:', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Container(
-                    padding: EdgeInsets.all(12.w),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Color(0xFFF9FAFB),
-                      borderRadius: BorderRadius.circular(8.r),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Color(0xFFE5E7EB)),
                     ),
-                    child: Text(
-                      widget.question!.questionText,
-                      style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
-                    ),
+                    child: Text(widget.question!.questionText, style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 20),
                 ],
                 // Поле ввода
-                Text(
-                  widget.isAnswer ? 'Ответ' : 'Ваш вопрос',
-                  style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
-                ),
-                SizedBox(height: 8.h),
+                Text(widget.isAnswer ? 'Ответ' : 'Ваш вопрос', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                SizedBox(height: 8),
                 TextField(
                   controller: _textController,
                   maxLines: widget.isAnswer ? 5 : 3,
@@ -200,41 +160,31 @@ class _QuestionDialogState extends State<QuestionDialog> {
                     filled: true,
                     fillColor: Color(0xFFF9FAFB),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Color(0xFFE5E7EB)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Color(0xFFE5E7EB)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                     ),
                   ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 20),
                 // Кнопка отправки
                 ElevatedButton(
                   onPressed: isLoading ? null : _submit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF0A6EFA),
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                    padding: EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: isLoading
-                      ? SizedBox(
-                          height: 20.h,
-                          width: 20.w,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        )
-                      : Text(
-                          widget.question == null ? 'Отправить вопрос' : 'Сохранить',
-                          style: AppStyles.bold14s.copyWith(color: Colors.white),
-                        ),
+                      ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                      : Text(widget.question == null ? 'Отправить вопрос' : 'Сохранить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                 ),
               ],
             ),
@@ -263,21 +213,11 @@ Future<bool?> showQuestionDialog({
       builder: (dialogContext) => questionsBloc != null
           ? BlocProvider.value(
               value: bloc,
-              child: QuestionDialog(
-                flightId: flightId,
-                question: question,
-                isAnswer: isAnswer,
-                onQuestionCreated: onQuestionCreated,
-              ),
+              child: QuestionDialog(flightId: flightId, question: question, isAnswer: isAnswer, onQuestionCreated: onQuestionCreated),
             )
           : BlocProvider(
               create: (context) => bloc,
-              child: QuestionDialog(
-                flightId: flightId,
-                question: question,
-                isAnswer: isAnswer,
-                onQuestionCreated: onQuestionCreated,
-              ),
+              child: QuestionDialog(flightId: flightId, question: question, isAnswer: isAnswer, onQuestionCreated: onQuestionCreated),
             ),
     );
   } else {
@@ -287,21 +227,11 @@ Future<bool?> showQuestionDialog({
       builder: (dialogContext) => questionsBloc != null
           ? BlocProvider.value(
               value: bloc,
-              child: QuestionDialog(
-                flightId: flightId,
-                question: question,
-                isAnswer: isAnswer,
-                onQuestionCreated: onQuestionCreated,
-              ),
+              child: QuestionDialog(flightId: flightId, question: question, isAnswer: isAnswer, onQuestionCreated: onQuestionCreated),
             )
           : BlocProvider(
               create: (context) => bloc,
-              child: QuestionDialog(
-                flightId: flightId,
-                question: question,
-                isAnswer: isAnswer,
-                onQuestionCreated: onQuestionCreated,
-              ),
+              child: QuestionDialog(flightId: flightId, question: question, isAnswer: isAnswer, onQuestionCreated: onQuestionCreated),
             ),
     );
   }

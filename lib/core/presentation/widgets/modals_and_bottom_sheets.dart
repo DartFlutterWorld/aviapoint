@@ -26,7 +26,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,7 +37,8 @@ Future<bool?> showLogin(BuildContext context, {GlobalKey<ScaffoldState>? scaffol
     title: 'Авторизоваться',
     child: PhoneAuthScreen(callback: callback),
     onClose: () {
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
+      context.router.maybePop();
     },
   );
   if (result == true && callback != null) {
@@ -57,7 +57,7 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
     barrierColor: AppColors.bgOverlay,
     backgroundColor: AppColors.background,
     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10.r))),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     builder: (context) {
       return SafeArea(
         child: Padding(
@@ -453,14 +453,25 @@ bool? checkDataProfileAndOpenEditIfNeeded({required BuildContext context, String
 
         // Если хотя бы одно поле пустое, открываем форму редактирования
         if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || telegram.isEmpty || max.isEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (context.mounted) {
-              // Получаем контекст корневого навигатора для показа snackbar поверх всех окон
-              final rootContext = Navigator.of(context, rootNavigator: true).context;
-              openProfileEdit(context: context);
-              ScaffoldMessenger.of(
-                rootContext,
-              ).showSnackBar(SnackBar(content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'), backgroundColor: Colors.orange, duration: Duration(seconds: 5)));
+          // Используем Future.delayed вместо addPostFrameCallback, чтобы избежать конфликтов
+          // во время навигации или рендеринга других страниц
+          Future.delayed(const Duration(milliseconds: 600), () {
+            try {
+              // ВАЖНО: после создания полёта экран может уже закрыться (context станет unmounted),
+              // поэтому открываем bottom sheet через root navigator context.
+              final rootContext = navigatorKey.currentContext ?? Navigator.of(context, rootNavigator: true).context;
+              if (!rootContext.mounted) return;
+
+              openProfileEdit(context: rootContext);
+              ScaffoldMessenger.of(rootContext).showSnackBar(
+                SnackBar(
+                  content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'),
+                  backgroundColor: Colors.orange,
+                  duration: Duration(seconds: 5),
+                ),
+              );
+            } catch (e) {
+              debugPrint('Ошибка при открытии профиля: $e');
             }
           });
           return false;
@@ -482,13 +493,55 @@ bool? checkDataProfileAndOpenEditIfNeeded({required BuildContext context, String
 }
 
 Future<void> openProfileEdit({required BuildContext context}) async {
-  await showUniversalBottomSheet<void>(context: context, title: '', backgroundColor: AppColors.background, showCloseButton: false, useRootNavigator: true, child: ProfileEdit()).then((_) {
-    // После закрытия bottom sheet обновляем профиль, чтобы получить актуальное фото
-    if (context.mounted) {
-      final profileBloc = context.read<ProfileBloc>();
-      profileBloc.add(ProfileEvent.get());
+  try {
+    // Проверяем, что контекст валиден перед открытием
+    if (!context.mounted) {
+      debugPrint('❌ [openProfileEdit] Контекст не валиден');
+      return;
     }
-  });
+
+    // Используем небольшую задержку, чтобы убедиться, что UI готов
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    
+    if (!context.mounted) {
+      debugPrint('❌ [openProfileEdit] Контекст не валиден после задержки');
+      return;
+    }
+
+    await showUniversalBottomSheet<void>(
+      context: context,
+      title: '',
+      backgroundColor: AppColors.background,
+      showCloseButton: false,
+      useRootNavigator: true,
+      isDismissible: true,
+      enableDrag: true,
+      child: ProfileEdit(),
+    ).then((_) {
+      // После закрытия bottom sheet обновляем профиль, чтобы получить актуальное фото
+      if (context.mounted) {
+        try {
+          final profileBloc = context.read<ProfileBloc>();
+          profileBloc.add(ProfileEvent.get());
+        } catch (e) {
+          debugPrint('❌ [openProfileEdit] Ошибка при обновлении профиля: $e');
+        }
+      }
+    });
+  } catch (e, stackTrace) {
+    debugPrint('❌ [openProfileEdit] Ошибка при открытии bottom sheet: $e');
+    debugPrint('❌ [openProfileEdit] Stack trace: $stackTrace');
+    // Показываем сообщение об ошибке пользователю
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Не удалось открыть форму редактирования профиля'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
 }
 
 Future<void> openContactUs({required BuildContext context}) async {
@@ -523,20 +576,20 @@ Future<void> openContactUs({required BuildContext context}) async {
                 },
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(10.w),
-                  decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10.r)),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Color(0xFFD5FDD8), borderRadius: BorderRadius.circular(10)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(Pictures.whatsapp),
-                      SizedBox(width: 6.w),
+                      SizedBox(width: 6),
                       Text('Whatsapp', style: AppStyles.bold16s.copyWith(color: Color(0xFF01B40E))),
                     ],
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: 16),
             Flexible(
               child: GestureDetector(
                 onTap: () async {
@@ -553,13 +606,13 @@ Future<void> openContactUs({required BuildContext context}) async {
                 },
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(10.w),
-                  decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(Pictures.telegramm),
-                      SizedBox(width: 6.w),
+                      SizedBox(width: 6),
                       Text('Telegram', style: AppStyles.bold16s.copyWith(color: Color(0xFF008EC3))),
                     ],
                   ),
@@ -576,9 +629,9 @@ Future<void> openContactUs({required BuildContext context}) async {
 Future<void> openPilotReviews({required BuildContext context, required int pilotId}) async {
   await showUniversalBottomSheet<void>(
     context: context,
-    title: '',
+    title: 'Отзывы о пилоте',
     backgroundColor: AppColors.background,
-    showCloseButton: false,
+    showCloseButton: true,
     useRootNavigator: true,
     child: UserReviewsBottomSheet(userId: pilotId, title: 'Отзывы о пилоте'),
   );

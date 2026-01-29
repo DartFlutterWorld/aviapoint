@@ -5,7 +5,6 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class TestingModeElement extends StatefulWidget {
@@ -214,7 +213,7 @@ class _TestingModeElementState extends State<TestingModeElement> with SingleTick
         children: [
           // Основной контейнер с фоном и контентом
           Container(
-            height: 100,
+            // height: 100,
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             decoration: BoxDecoration(
               boxShadow: [BoxShadow(color: Color(0xff045EC5).withOpacity(0.08), blurRadius: 9.3, spreadRadius: 0, offset: Offset(0.0, 4.0))],

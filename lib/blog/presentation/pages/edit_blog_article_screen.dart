@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:dart_quill_delta/dart_quill_delta.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
@@ -493,8 +492,8 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
       builder: (dialogContext) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28.sp),
-            SizedBox(width: 12.w),
+            Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28.0),
+            SizedBox(width: 12),
             Expanded(
               child: Text('Удалить статью?', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
             ),
@@ -505,18 +504,18 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Container(
-              padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Color(0xFFFFF3CD),
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Color(0xFFFFC107)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20.sp),
-                  SizedBox(width: 8.w),
+                  Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20.0),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text('Все данные статьи будут безвозвратно удалены.', style: AppStyles.regular12s.copyWith(color: Color(0xFF856404))),
                   ),
@@ -525,7 +524,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             ),
           ],
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
@@ -538,8 +537,8 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
             child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
           ),
@@ -692,10 +691,10 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.lock_outline, size: 64.sp, color: Color(0xFF9CA5AF)),
-              SizedBox(height: 16.h),
+              Icon(Icons.lock_outline, size: 64.0, color: Color(0xFF9CA5AF)),
+              SizedBox(height: 16),
               Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               Text(
                 'Для редактирования статьи необходимо войти в систему',
                 style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
@@ -764,13 +763,11 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
               withBack: true,
               actions: [
                 IconButton(
-                  iconSize: 28.sp,
                   icon: Icon(Icons.delete_outline, color: Colors.red),
                   onPressed: _isLoading ? null : () => _showDeleteArticleConfirmation(context),
                   tooltip: 'Удалить статью',
                 ),
                 IconButton(
-                  iconSize: 28.sp,
                   icon: Icon(Icons.save_outlined, color: Color(0xFF7A0FD9)),
                   onPressed: _isLoading ? null : _submit,
                   tooltip: 'Сохранить изменения',
@@ -779,7 +776,7 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
             ),
             backgroundColor: AppColors.background,
             body: detailState.maybeWhen(
-              loading: () => LoadingCustom(paddingTop: 200.h),
+              loading: () => LoadingCustom(paddingTop: 200),
               error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                 textError: errorForUser,
                 repeat: () {
@@ -806,9 +803,9 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                 icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
                                 label: Text('Выберите изображение для статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
                                 style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                   side: BorderSide(color: Color(0xFF0A6EFA)),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 ),
                               ),
                             ],
@@ -816,18 +813,18 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                           if (_coverImage != null || _coverImageBytes != null) ...[
                             SizedBox(height: 16),
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(12.r),
+                              borderRadius: BorderRadius.circular(12),
                               child: kIsWeb && _coverImageBytes != null
-                                  ? Image.memory(_coverImageBytes!, height: 150.h, fit: BoxFit.cover)
+                                  ? Image.memory(_coverImageBytes!, height: 150, fit: BoxFit.cover)
                                   : _coverImage != null
-                                  ? Image.file(_coverImage!, height: 150.h, fit: BoxFit.cover)
+                                  ? Image.file(_coverImage!, height: 150, fit: BoxFit.cover)
                                   : SizedBox.shrink(),
                             ),
                           ] else if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty) ...[
                             SizedBox(height: 16),
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(12.r),
-                              child: NetworkImageWidget(imageUrl: getImageUrl(article.coverImageUrl!), height: 150.h, fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(12),
+                              child: NetworkImageWidget(imageUrl: getImageUrl(article.coverImageUrl!), height: 150, fit: BoxFit.cover),
                             ),
                           ],
                           SizedBox(height: 16),
@@ -841,16 +838,16 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                               ),
                             ),
                             validator: (value) => value?.trim().isEmpty ?? true ? 'Введите заголовок' : null,
@@ -870,16 +867,16 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                     filled: true,
                                     fillColor: Colors.white,
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12.r),
+                                      borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12.r),
+                                      borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12.r),
-                                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                                     ),
                                   ),
                                   items: categories.map((category) {
@@ -900,54 +897,53 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                 child: InkWell(
                                   onTap: () => _showAircraftModelSelector(context),
                                   child: SizedBox(
-                                    height: 50,
                                     child: TextFormField(
                                       controller: _aircraftModelController,
                                       enabled: false,
-                                      style: AppStyles.regular14s.copyWith(color: _selectedAircraftModelId != null ? const Color(0xFF374151) : const Color(0xFF9CA5AF)),
+                                      style: AppStyles.regular10s.copyWith(color: _selectedAircraftModelId != null ? const Color(0xFF374151) : const Color(0xFF9CA5AF)),
                                       decoration: InputDecoration(
                                         labelText: 'Самолёт',
-                                        labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                        // labelStyle: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                                         hintText: 'Нажмите для выбора самолёта',
-                                        hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                        hintStyle: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                                         filled: true,
                                         fillColor: Colors.white,
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                                         isDense: true,
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderRadius: BorderRadius.circular(12),
                                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderRadius: BorderRadius.circular(12),
                                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                         ),
                                         focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12.r),
-                                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                                         ),
                                         disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderRadius: BorderRadius.circular(12),
                                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                         ),
-                                        suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF), size: 20.sp),
+                                        suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF), size: 20.0),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                               if (_selectedAircraftModelId != null) ...[
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 Container(
                                   height: 50,
                                   width: 50,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12.r),
+                                    borderRadius: BorderRadius.circular(12),
                                     border: Border.all(color: const Color(0xFFD9E6F8)),
                                   ),
                                   child: IconButton(
-                                    icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
+                                    icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.0),
                                     onPressed: () {
                                       setState(() {
                                         _selectedAircraftModelId = null;
@@ -974,16 +970,16 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                               ),
                             ),
                           ),
@@ -994,11 +990,11 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Содержание статьи *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                              SizedBox(height: 8.h),
+                              SizedBox(height: 8),
                               Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: Color(0xFFD9E6F8)),
                                 ),
                                 child: Column(
@@ -1011,8 +1007,8 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                     Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
                                     Container(
                                       key: ValueKey('quill_editor_$_quillControllerKey'), // Ключ для пересоздания виджета
-                                      height: 300.h,
-                                      padding: EdgeInsets.all(12.w),
+                                      height: 300,
+                                      padding: EdgeInsets.all(12),
                                       child: QuillEditor.basic(
                                         controller: _quillController,
                                         config: QuillEditorConfig(placeholder: 'Введите текст статьи...', embedBuilders: FlutterQuillEmbeds.editorBuilders()),
@@ -1029,14 +1025,14 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                                 icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
                                 label: Text('Вставить изображение в текст', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
                                 style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                   side: BorderSide(color: Color(0xFF0A6EFA)),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 24.h),
+                          SizedBox(height: 24),
 
                           // Статус
                           InkWell(
@@ -1044,44 +1040,44 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                             child: TextFormField(
                               controller: _statusController,
                               enabled: false,
-                              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                              style: AppStyles.regular10s.copyWith(color: Color(0xFF374151)),
                               decoration: InputDecoration(
                                 labelText: 'Статус',
-                                labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                // labelStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                                 hintText: 'Нажмите для выбора статуса',
-                                hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                                hintStyle: AppStyles.regular10s.copyWith(color: Color(0xFF9CA5AF)),
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                                 ),
                                 disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                 ),
                                 suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
                               ),
                             ),
                           ),
-                          SizedBox(height: 16.h),
+                          SizedBox(height: 16),
 
                           // Кнопка сохранения
                           CustomButton(
-                            verticalPadding: 14.h,
+                            verticalPadding: 14,
                             backgroundColor: Color(0xFF7A0FD9),
                             title: _isLoading ? 'Сохранение...' : 'Сохранить изменения',
                             textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                             borderColor: Color(0xFF7A0FD9),
-                            borderRadius: 46.r,
+                            borderRadius: 46,
                             onPressed: _isLoading ? null : _submit,
                           ),
                         ],
@@ -1090,20 +1086,20 @@ class _EditBlogArticleScreenState extends State<EditBlogArticleScreen> {
                   ),
                   // Чипс со статусом в правом верхнем углу
                   Positioned(
-                    top: 16.h,
-                    right: 8.w,
+                    top: 16,
+                    right: 8,
                     child: GestureDetector(
                       onTap: () => _showStatusBottomSheet(context),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                        decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8.r)),
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8)),
                         child: Text(_getStatusText(), style: AppStyles.regular12s.copyWith(color: Colors.white)),
                       ),
                     ),
                   ),
                 ],
               ),
-              orElse: () => LoadingCustom(paddingTop: 200.h),
+              orElse: () => LoadingCustom(paddingTop: 200),
             ),
           );
         },

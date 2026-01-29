@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
@@ -29,7 +28,7 @@ Future<void> showUpdateRequiredBottomSheet(BuildContext context, {Upgrader? upgr
       barrierColor: Colors.black54,
       backgroundColor: AppColors.background,
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => UpdateRequiredBottomSheet(storeUrl: storeUrl),
     );
   }
@@ -48,14 +47,14 @@ class UpdateRequiredBottomSheet extends StatelessWidget {
       onWillPop: () async => false, // блокируем кнопку \"назад\"
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Иконка стора
               _buildStoreIcon(isIOS),
-              SizedBox(height: 24.h),
+              SizedBox(height: 24),
 
               // Заголовок
               Text(
@@ -63,7 +62,7 @@ class UpdateRequiredBottomSheet extends StatelessWidget {
                 style: AppStyles.bold20s.copyWith(color: AppColors.textPrimary),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
 
               // Текст
               Text(
@@ -71,7 +70,7 @@ class UpdateRequiredBottomSheet extends StatelessWidget {
                 style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 32.h),
+              SizedBox(height: 32),
 
               // Кнопка обновления
               SizedBox(
@@ -81,15 +80,15 @@ class UpdateRequiredBottomSheet extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary100p,
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(isIOS ? 'Открыть App Store' : 'Открыть Google Play', style: AppStyles.regular14s.copyWith(color: Colors.white)),
-                      SizedBox(width: 8.w),
-                      Icon(Icons.arrow_forward, size: 20.sp),
+                      SizedBox(width: 8),
+                      Icon(Icons.arrow_forward, size: 20.0),
                     ],
                   ),
                 ),
@@ -105,22 +104,22 @@ class UpdateRequiredBottomSheet extends StatelessWidget {
     if (isIOS) {
       // Иконка App Store
       return Container(
-        width: 80.w,
-        height: 80.w,
-        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20.r)),
-        child: Icon(Icons.apple, color: Colors.white, size: 40.sp),
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20)),
+        child: Icon(Icons.apple, color: Colors.white, size: 40.0),
       );
     } else {
       // Иконка Google Play
       return Container(
-        width: 80.w,
-        height: 80.w,
+        width: 80,
+        height: 80,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.strokeForDarkArea, width: 1),
         ),
-        child: Icon(Icons.android, color: Colors.green, size: 40.sp),
+        child: Icon(Icons.android, color: Colors.green, size: 40.0),
       );
     }
   }

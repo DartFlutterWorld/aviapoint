@@ -4,7 +4,6 @@ import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/ros_avia_test_category_with_questions_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/check_box_row.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SelectTopicsTestWidget extends StatelessWidget {
@@ -33,7 +32,7 @@ class SelectTopicsTestWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [Text('Выберите темы тестирования', style: AppStyles.medium14s.copyWith(color: const Color(0xFF223B76)))],
           ),
-          SizedBox(height: 14.h),
+          SizedBox(height: 14),
           GestureDetector(
             onTap: onToggleAll,
             child: Container(
@@ -43,8 +42,8 @@ class SelectTopicsTestWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    SvgPicture.asset(allSelected ? Pictures.checkBoxActive : Pictures.checkBox, height: 20.h),
-                    SizedBox(width: 8.w),
+                    SvgPicture.asset(allSelected ? Pictures.checkBoxActive : Pictures.checkBox, height: 20),
+                    SizedBox(width: 8),
                     Expanded(
                       child: Text('Выбрать все темы', style: AppStyles.regular12s.copyWith(color: const Color(0xFF4B5767))),
                     ),
@@ -54,9 +53,9 @@ class SelectTopicsTestWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 14.h),
+          SizedBox(height: 14),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),
             child: ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
@@ -66,7 +65,7 @@ class SelectTopicsTestWidget extends StatelessWidget {
                 final cat = categories[index];
                 final active = selectedCategoryId.contains(cat.categoryId);
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0).h,
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: CheckBoxRow(title: bigFirstSymbol(cat.categoryTitle), active: active, onTap: () => onToggle(cat.categoryId), questionCount: cat.questionCount.toString()),
                 );
               },

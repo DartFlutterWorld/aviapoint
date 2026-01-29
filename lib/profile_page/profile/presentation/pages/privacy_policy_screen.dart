@@ -4,7 +4,6 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -16,17 +15,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
       appBar: CustomAppBar(title: 'Политика конфиденциальности', withBack: true),
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.r),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Политика конфиденциальности', style: AppStyles.bold20s.copyWith(color: Color(0xFF2B373E))),
-            SizedBox(height: 8.h),
-            Text(
-              'Дата последнего обновления: ${formatDate(DateTime.now())}',
-              style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767)),
-            ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 8),
+            Text('Дата последнего обновления: ${formatDate(DateTime.now())}', style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767))),
+            SizedBox(height: 24),
             _buildSection(
               '1. Общие положения',
               'Настоящая Политика конфиденциальности определяет порядок обработки и защиты персональных данных пользователей мобильного приложения AviaPoint (далее — "Приложение").\n\n'
@@ -95,7 +91,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'Телефон: +7 (XXX) XXX-XX-XX\n\n'
                   'Мы постараемся ответить на ваш запрос в течение 30 дней.',
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 24),
           ],
         ),
       ),
@@ -104,12 +100,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   Widget _buildSection(String title, String content) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 24.h),
+      padding: EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           Text(content, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767), height: 1.5)),
         ],
       ),

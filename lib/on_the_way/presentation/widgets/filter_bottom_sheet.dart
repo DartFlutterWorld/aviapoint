@@ -2,7 +2,6 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 
@@ -31,8 +30,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20.r)),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,22 +41,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Фильтры', style: AppStyles.bold20s.copyWith(color: const Color(0xFF374151))),
-              IconButton(
-                icon: SvgPicture.asset(Pictures.closeAuth),
-                onPressed: () => Navigator.pop(context),
-              ),
+              IconButton(icon: SvgPicture.asset(Pictures.closeAuth), onPressed: () => Navigator.pop(context)),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           // Информация о выбранном диапазоне
           if (_dateFrom != null || _dateTo != null)
             Container(
-              padding: EdgeInsets.all(12.w),
-              decoration: BoxDecoration(color: Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(8.r)),
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(color: Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(8)),
               child: Row(
                 children: [
                   Icon(Icons.calendar_today, size: 16, color: Color(0xFF0A6EFA)),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _dateFrom != null && _dateTo != null
@@ -76,12 +72,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           _dateTo = null;
                         });
                       },
-                      child: SvgPicture.asset(Pictures.closeAuth, width: 18.w, height: 18.w, colorFilter: const ColorFilter.mode(Color(0xFF9CA5AF), BlendMode.srcIn)),
+                      child: SvgPicture.asset(Pictures.closeAuth, width: 18, height: 18, colorFilter: const ColorFilter.mode(Color(0xFF9CA5AF), BlendMode.srcIn)),
                     ),
                 ],
               ),
             ),
-          if (_dateFrom != null || _dateTo != null) SizedBox(height: 16.h),
+          if (_dateFrom != null || _dateTo != null) SizedBox(height: 16),
           // Календарь
           CalendarDatePicker2(
             config: CalendarDatePicker2Config(
@@ -116,7 +112,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               });
             },
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           // Кнопки
           Row(
             children: [
@@ -129,14 +125,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     });
                   },
                   style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                     side: BorderSide(color: Color(0xFFD9E6F8)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text('Сбросить', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                 ),
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -157,8 +153,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF0A6EFA),
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text('Применить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                 ),

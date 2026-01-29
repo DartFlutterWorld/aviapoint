@@ -37,7 +37,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -363,7 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             backgroundColor: AppColors.background,
             body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 children: [
                   Expanded(
@@ -374,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     // Чипс "Администратор" в правом верхнем углу
                                     BlocBuilder<ProfileBloc, ProfileState>(
                                       builder: (context, profileState) {
@@ -384,15 +383,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ? Align(
                                                 alignment: Alignment.centerRight,
                                                 child: Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                  decoration: BoxDecoration(color: AppColors.primary100p, borderRadius: BorderRadius.circular(12.r)),
+                                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                  decoration: BoxDecoration(color: AppColors.primary100p, borderRadius: BorderRadius.circular(12)),
                                                   child: Text('Администратор', style: AppStyles.regular12s.copyWith(color: Colors.white)),
                                                 ),
                                               )
                                             : SizedBox.shrink();
                                       },
                                     ),
-                                    SizedBox(height: 8.h),
+                                    SizedBox(height: 8),
                                     Row(
                                       children: [
                                         BlocBuilder<ProfileBloc, ProfileState>(
@@ -412,13 +411,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 child: imageUrl != null && imageUrl.isNotEmpty
                                                     ? NetworkImageWidget(
                                                         imageUrl: imageUrl,
-                                                        width: 120.w,
-                                                        height: 120.w,
+                                                        width: 120,
+                                                        height: 120,
                                                         fit: BoxFit.cover,
-                                                        placeholder: Image.asset(Pictures.pilot, width: 120.w, height: 120.w, fit: BoxFit.cover),
-                                                        errorWidget: Image.asset(Pictures.pilot, width: 120.w, height: 120.w, fit: BoxFit.cover),
+                                                        placeholder: Image.asset(Pictures.pilot, width: 120, height: 120, fit: BoxFit.cover),
+                                                        errorWidget: Image.asset(Pictures.pilot, width: 120, height: 120, fit: BoxFit.cover),
                                                       )
-                                                    : Image.asset(Pictures.pilot, height: 120.w, width: 120.w, fit: BoxFit.cover),
+                                                    : Image.asset(Pictures.pilot, height: 120, width: 120, fit: BoxFit.cover),
                                               ),
                                             );
                                           },
@@ -427,65 +426,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         BlocBuilder<ProfileBloc, ProfileState>(
                                           builder: (context, state) => state.map(
                                             success: (state) => Padding(
-                                              padding: EdgeInsets.only(left: 12.w),
+                                              padding: EdgeInsets.only(left: 12),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
 
                                                 children: [
                                                   Text('${state.profile.firstName ?? ''} ${state.profile.lastName ?? ''}', style: AppStyles.bold16s.copyWith(color: const Color(0xFF2B373E))),
-                                                  SizedBox(height: 4.h),
+                                                  SizedBox(height: 4),
                                                   Row(
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
                                                       const Icon(Icons.phone, size: 16, color: Color(0xFF4B5767)),
-                                                      SizedBox(width: 6.w),
+                                                      SizedBox(width: 6),
                                                       Text(formatPhone(state.profile.phone), style: AppStyles.regular14s.copyWith(color: const Color(0xFF4B5767))),
                                                     ],
                                                   ),
                                                   if (state.profile.telegram != null && state.profile.telegram!.isNotEmpty) ...[
-                                                    SizedBox(height: 4.h),
+                                                    SizedBox(height: 4),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         const Icon(Icons.telegram, size: 16, color: Color(0xFF4B5767)),
-                                                        SizedBox(width: 6.w),
+                                                        SizedBox(width: 6),
                                                         Text(state.profile.telegram!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF4B5767))),
                                                       ],
                                                     ),
                                                   ],
                                                   if (state.profile.max != null && state.profile.max!.isNotEmpty) ...[
-                                                    SizedBox(height: 4.h),
+                                                    SizedBox(height: 4),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         const Icon(Icons.chat, size: 16, color: Color(0xFF4B5767)),
-                                                        SizedBox(width: 6.w),
+                                                        SizedBox(width: 6),
                                                         Text(state.profile.max!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF4B5767))),
                                                       ],
                                                     ),
                                                   ],
                                                   if (state.profile.email != null && state.profile.email!.isNotEmpty) ...[
-                                                    SizedBox(height: 4.h),
+                                                    SizedBox(height: 4),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         const Icon(Icons.email, size: 16, color: Color(0xFF4B5767)),
-                                                        SizedBox(width: 6.w),
+                                                        SizedBox(width: 6),
                                                         Text(state.profile.email!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF4B5767))),
                                                       ],
                                                     ),
                                                   ],
                                                   // Рейтинг пользователя
                                                   if (state.profile.averageRating != null && state.profile.averageRating! > 0) ...[
-                                                    SizedBox(height: 8.h),
+                                                    SizedBox(height: 8),
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         RatingWidget(rating: state.profile.averageRating!.round(), size: 16),
-                                                        SizedBox(width: 8.w),
+                                                        SizedBox(width: 8),
                                                         Text('${state.profile.averageRating!.toStringAsFixed(1)}', style: AppStyles.bold14s.copyWith(color: const Color(0xFF374151))),
                                                         if (state.profile.reviewsCount != null && state.profile.reviewsCount! > 0) ...[
-                                                          SizedBox(width: 4.w),
+                                                          SizedBox(width: 4),
                                                           Text(
                                                             '(${state.profile.reviewsCount} ${_getReviewsCountText(state.profile.reviewsCount!)})',
                                                             style: AppStyles.regular12s.copyWith(color: const Color(0xFF9CA5AF)),
@@ -516,7 +515,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ],
                                     ),
 
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     // На iOS показываем только если showPaidContent = true, на остальных платформах всегда показываем
                                     if (_shouldShowSubscriptionWidget()) ...[
                                       if (_isLoadingSubscription)
@@ -546,7 +545,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           // Если типов подписок нет, показываем заглушку
                                           const SizedBox(height: 225),
                                       ],
-                                      SizedBox(height: 16.h),
+                                      SizedBox(height: 16),
                                     ],
                                     // Кнопка очистки БД
                                     // ElevatedButton.icon(
@@ -577,23 +576,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     //   label: Text('Очистить прогресс'),
                                     //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.1), foregroundColor: Colors.red),
                                     // ),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     ProfileDataWidget(
                                       title: 'Изменить данные',
                                       icon: Pictures.user,
                                       onTap: () => openProfileEdit(context: context),
                                     ),
-                                    Divider(height: 18.h),
+                                    Divider(height: 18),
                                     ProfileDataWidget(title: 'Политика конфиденциальности', icon: Pictures.securitySafe, onTap: () => context.router.push(const PrivacyPolicyRoute())),
-                                    Divider(height: 18.h),
+                                    Divider(height: 18),
                                     ProfileDataWidget(
                                       title: 'Связаться с нами',
                                       icon: Pictures.smsEdit,
                                       onTap: () => openContactUs(context: context),
                                     ),
-                                    Divider(height: 18.h),
+                                    Divider(height: 18),
                                     ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     // Секция моих объявлений
                                     BlocBuilder<ProfileBloc, ProfileState>(
                                       builder: (context, profileState) {
@@ -603,18 +602,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         );
                                       },
                                     ),
-                                    SizedBox(height: 24.h),
+                                    SizedBox(height: 24),
                                     // Секция отзывов
                                     BlocBuilder<ProfileBloc, ProfileState>(
                                       builder: (context, profileState) {
                                         return profileState.maybeWhen(success: (profile) => _buildReviewsSection(context, profile.id), orElse: () => SizedBox.shrink());
                                       },
                                     ),
-                                    SizedBox(height: 24.h),
+                                    SizedBox(height: 24),
                                     // Версия приложения (незаметно внизу)
                                     if (_appVersion.isNotEmpty)
                                       Padding(
-                                        padding: EdgeInsets.only(bottom: 16.h),
+                                        padding: EdgeInsets.only(bottom: 16),
                                         child: Center(
                                           child: Text('Версия $_appVersion', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10)),
                                         ),
@@ -628,7 +627,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Image.asset(Pictures.planeProfile, height: 374, width: 286),
-                                      SizedBox(height: 16.h),
+                                      SizedBox(height: 16),
 
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
@@ -646,7 +645,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       // Версия приложения (незаметно внизу)
                                       if (_appVersion.isNotEmpty)
                                         Padding(
-                                          padding: EdgeInsets.only(top: 24.h, bottom: 16.h),
+                                          padding: EdgeInsets.only(top: 24, bottom: 16),
                                           child: Text('Версия $_appVersion', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10)),
                                         ),
                                     ],
@@ -680,14 +679,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Отзывы о вас', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               reviewsState.map(
                 loading: (_) => Center(
-                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
+                  child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                 ),
                 error: (state) => Center(
                   child: Padding(
-                    padding: EdgeInsets.all(16.w),
+                    padding: EdgeInsets.all(16),
                     child: Text(state.errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                   ),
                 ),
@@ -696,17 +695,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   final flights = state.flights;
                   if (reviews.isEmpty) {
                     return Container(
-                      padding: EdgeInsets.all(24.w),
+                      padding: EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: Color(0xFFF9FAFB),
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Color(0xFFE5E7EB)),
                       ),
                       child: Center(
                         child: Column(
                           children: [
                             Icon(Icons.reviews_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                            SizedBox(height: 12.h),
+                            SizedBox(height: 12),
                             Text('Пока нет отзывов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                           ],
                         ),
@@ -752,7 +751,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           // Ответы на отзыв
                           if (reviewReplies.isNotEmpty)
                             Padding(
-                              padding: EdgeInsets.only(left: 40.w),
+                              padding: EdgeInsets.only(left: 40),
                               child: Column(
                                 children: reviewReplies.map((reply) {
                                   return ReviewCard(
@@ -833,7 +832,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 16),
                                 Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                               ],
                             ),
@@ -852,14 +851,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(width: 48.w), // Для центрирования
+                            SizedBox(width: 48), // Для центрирования
                             // Кнопки действий
                             Row(
                               mainAxisSize: MainAxisSize.min,
@@ -871,7 +870,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка "Скачать"
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
@@ -879,7 +878,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка закрытия
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
@@ -955,7 +954,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Row(
           children: [
             Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
-            SizedBox(width: 12.w),
+            SizedBox(width: 12),
             Expanded(
               child: Text(S.of(context).atantion_delete_acc, style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
             ),
@@ -966,18 +965,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(S.of(context).description_delete_acc, style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Container(
-              padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Color(0xFFFFF3CD),
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Color(0xFFFFC107)),
               ),
               child: Row(
                 children: [
                   Icon(Icons.info_outline, color: Color(0xFFFF9800), size: 20),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text('Это действие нельзя отменить. Все ваши данные будут безвозвратно удалены.', style: AppStyles.regular12s.copyWith(color: Color(0xFF856404))),
                   ),
@@ -986,7 +985,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ],
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
@@ -1000,7 +999,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(S.of(context).yes_delete_acc, style: AppStyles.bold16s.copyWith(color: Colors.white)),
           ),

@@ -5,7 +5,6 @@ import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_a
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/answer_by_mode_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
@@ -196,14 +195,14 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
       padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
       child: Column(
         children: [
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
 
           Expanded(
             child: ListView(
               children: [
                 /// Строка с категорией и иконкой
                 Row(
-                  spacing: 12.w,
+                  spacing: 12,
                   children: [
                     ChipsWidget(questionWithAnswers: widget.question),
                     Flexible(
@@ -211,11 +210,11 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 /// Текст вопроса
                 Text(widget.question.questionText, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
 
                 /// Список вариантов ответов
                 ListView.builder(
@@ -264,7 +263,7 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                     );
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 /// Информационная подсказка о правильности ответа
                 Row(
@@ -280,7 +279,7 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                   ],
                 ),
 
-                SizedBox(height: 40.h),
+                SizedBox(height: 40),
 
                 /// Секция "Обоснование" с объяснением правильного ответа
                 /// Показывается только если buttonHint = true
@@ -314,7 +313,7 @@ class _TestByModeWidgetState extends State<TestByModeWidget> {
                                   AnimatedRotation(
                                     turns: _isExplanationExpanded ? 0.5 : 0,
                                     duration: Duration(milliseconds: 200),
-                                    child: SvgPicture.asset(Pictures.arrowDown, color: Color(0xFF4B5767), height: 20.h),
+                                    child: SvgPicture.asset(Pictures.arrowDown, color: Color(0xFF4B5767), height: 20),
                                   ),
                                 ],
                               ),

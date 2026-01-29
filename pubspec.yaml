@@ -1,7 +1,7 @@
 name: aviapoint
 description: service for pilot.
 publish_to: "none"
-version: 0.0.0+27
+version: 0.0.1+36
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -55,7 +55,6 @@ dependencies:
   url_strategy: ^0.3.0
   meta_seo: ^3.0.9
   onesignal_flutter: ^5.2.9
-  flutter_screenutil: ^5.9.3
   flutter_typeahead: ^5.2.0
   shimmer_animation: ^2.2.1
   cached_video_player_plus: ^4.0.4
@@ -72,6 +71,8 @@ dependencies:
   flutter_quill_extensions: ^11.0.0
   dart_quill_delta: ^10.8.3
   internet_connection_checker_plus: ^2.9.1+2
+  drift: ^2.29.0
+  sqlite3_flutter_libs: ^0.5.18
 
 #dart run build_runner build --delete-conflicting-outputs
 dev_dependencies:

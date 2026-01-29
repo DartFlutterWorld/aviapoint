@@ -313,6 +313,13 @@ class _AppState extends State<App> {
           },
           child: Consumer<AppState>(
             builder: (context, appState, child) {
+              // Определяем тип устройства (планшет/телефон) при первом построении
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  appState.setIsTabletIfUnset(context);
+                }
+              });
+              
               // Слушаем изменения AppState.isAuthenticated
               // Если пользователь авторизован, но профиль еще не загружен, запрашиваем его
               if (appState.isAuthenticated && !_profileRequested) {

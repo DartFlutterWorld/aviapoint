@@ -21,6 +21,13 @@ class BookingEntity extends Equatable {
   final String? flightDepartureAirport;
   final String? flightArrivalAirport;
   final List<String>? flightWaypoints; // Все точки маршрута в порядке следования
+  // Данные пилота (загружаются через JOIN в SQL)
+  final String? pilotFirstName;
+  final String? pilotLastName;
+  final String? pilotPhone;
+  final String? pilotEmail;
+  final String? pilotTelegram;
+  final String? pilotMax;
 
   const BookingEntity({
     required this.id,
@@ -41,6 +48,12 @@ class BookingEntity extends Equatable {
     this.flightDepartureAirport,
     this.flightArrivalAirport,
     this.flightWaypoints,
+    this.pilotFirstName,
+    this.pilotLastName,
+    this.pilotPhone,
+    this.pilotEmail,
+    this.pilotTelegram,
+    this.pilotMax,
   });
 
   /// Получить полное имя пассажира
@@ -75,5 +88,23 @@ class BookingEntity extends Equatable {
     flightDepartureAirport,
     flightArrivalAirport,
     flightWaypoints,
+    pilotFirstName,
+    pilotLastName,
+    pilotPhone,
+    pilotEmail,
+    pilotTelegram,
+    pilotMax,
   ];
+
+  /// Получить полное имя пилота
+  String? get pilotFullName {
+    if (pilotFirstName != null && pilotLastName != null) {
+      return '$pilotFirstName $pilotLastName';
+    } else if (pilotFirstName != null) {
+      return pilotFirstName;
+    } else if (pilotLastName != null) {
+      return pilotLastName;
+    }
+    return null;
+  }
 }

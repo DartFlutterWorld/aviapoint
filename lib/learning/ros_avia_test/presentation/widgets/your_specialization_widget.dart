@@ -1,7 +1,6 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class YourSpecializationWidget extends StatelessWidget {
@@ -16,7 +15,7 @@ class YourSpecializationWidget extends StatelessWidget {
       padding: EdgeInsets.only(top: 10, left: 12, right: 12, bottom: 16),
       decoration: BoxDecoration(
         color: Color(0xFFE3F1FF),
-        borderRadius: BorderRadius.circular(18.r),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [BoxShadow(color: Color(0xFF000000).withOpacity(0.08), blurRadius: 4.0, offset: Offset(0.0, 4.0))],
       ),
       child: Column(
@@ -38,11 +37,11 @@ class YourSpecializationWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           GestureDetector(
             onTap: onTap,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 9.5.h),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 9.5),
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -3,7 +3,6 @@ import 'package:aviapoint/on_the_way/data/datasources/airport_service.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -85,9 +84,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
                       color: markerColor,
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2)),
-                      ],
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2))],
                     ),
                     child: Icon(markerIcon, color: Colors.white, size: 24),
                   ),
@@ -135,23 +132,17 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
               width: 80,
               height: 28,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(6.r),
+                  borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: Color(0xFF0A6EFA), width: 1),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 2)),
-                  ],
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 2))],
                 ),
                 child: Center(
                   child: Text(
                     distanceText,
-                    style: AppStyles.regular12s.copyWith(
-                      color: Color(0xFF0A6EFA),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
+                    style: AppStyles.regular12s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.bold, fontSize: 11),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -199,8 +190,8 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
   Widget build(BuildContext context) {
     if (widget.flight.waypoints == null || widget.flight.waypoints!.isEmpty) {
       return Container(
-        height: widget.height.h,
-        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12.r)),
+        height: widget.height,
+        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
         child: Center(
           child: Text('Маршрут не указан', style: AppStyles.regular14s.copyWith(color: Colors.grey[600])),
         ),
@@ -209,8 +200,8 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
 
     if (_isLoading) {
       return Container(
-        height: widget.height.h,
-        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12.r)),
+        height: widget.height,
+        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -226,13 +217,13 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
     }
 
     return Container(
-      height: widget.height.h,
+      height: widget.height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4))],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         child: FlutterMap(
           mapController: _mapController,
           options: MapOptions(
@@ -253,11 +244,7 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
             },
           ),
           children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.aviapoint.app',
-              maxZoom: 19,
-            ),
+            TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.aviapoint.app', maxZoom: 19),
             if (_routePoints.length > 1)
               PolylineLayer(
                 polylines: [Polyline(points: _routePoints, strokeWidth: 3.0, color: const Color(0xFF0A6EFA))],

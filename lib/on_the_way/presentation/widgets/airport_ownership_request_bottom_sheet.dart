@@ -5,7 +5,6 @@ import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:dio/dio.dart';
@@ -55,12 +54,7 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
     }
 
     if (_selectedDocuments.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Пожалуйста, прикрепите документы, подтверждающие право собственности'),
-          backgroundColor: Color(0xFFEF4444),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, прикрепите документы, подтверждающие право собственности'), backgroundColor: Color(0xFFEF4444)));
       return;
     }
 
@@ -103,18 +97,14 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Заявка на владение аэродромом успешно подана'), backgroundColor: Color(0xFF10B981)),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Заявка на владение аэродромом успешно подана'), backgroundColor: Color(0xFF10B981)));
 
         // Закрываем bottom sheet
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) {
@@ -128,10 +118,10 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Form(
         key: _formKey,
@@ -144,32 +134,26 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    'Заявка на владение аэродромом',
-                    style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
-                  ),
+                  child: Text('Заявка на владение аэродромом', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
                 ),
                 IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
               ],
             ),
-            SizedBox(height: 16.h),
-            Text(
-              'Для подтверждения права собственности на аэродром, пожалуйста, заполните форму и прикрепите документы',
-              style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280)),
-            ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
+            Text('Для подтверждения права собственности на аэродром, пожалуйста, заполните форму и прикрепите документы', style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280))),
+            SizedBox(height: 16),
             // Поле ФИО
             TextFormField(
               controller: _fullNameController,
               decoration: InputDecoration(
                 labelText: 'ФИО',
                 hintText: 'Введите ваше полное имя',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Поле email
             TextFormField(
               controller: _emailController,
@@ -177,7 +161,7 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
               decoration: InputDecoration(
                 labelText: 'Email',
                 hintText: 'Введите ваш email',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -192,7 +176,7 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
                 return null;
               },
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Поле телефона
             TextFormField(
               controller: _phoneController,
@@ -200,12 +184,12 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
               decoration: InputDecoration(
                 labelText: 'Телефон',
                 hintText: 'Введите ваш телефон',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Поле комментария
             TextFormField(
               controller: _commentController,
@@ -213,50 +197,47 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
               decoration: InputDecoration(
                 labelText: 'Комментарий',
                 hintText: 'Дополнительная информация о праве собственности',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Загрузка документов
-            Text(
-              'Документы, подтверждающие право собственности *',
-              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
-            ),
-            SizedBox(height: 8.h),
+            Text('Документы, подтверждающие право собственности *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+            SizedBox(height: 8),
             OutlinedButton.icon(
               onPressed: _isSubmitting ? null : _pickDocuments,
               icon: Icon(Icons.attach_file, size: 18),
               label: Text('Прикрепить документы', style: AppStyles.bold16s),
               style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 side: BorderSide(color: Color(0xFF0A6EFA)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
             // Отображение выбранных документов
             if (_selectedDocuments.isNotEmpty) ...[
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               SizedBox(
-                height: 100.h,
+                height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _selectedDocuments.length,
                   itemBuilder: (context, index) {
                     final doc = _selectedDocuments[index];
                     return Container(
-                      width: 100.w,
-                      margin: EdgeInsets.only(right: 8.w),
+                      width: 100,
+                      margin: EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Color(0xFFE5E7EB)),
                       ),
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: BorderRadius.circular(8),
                             child: kIsWeb
                                 ? FutureBuilder<Uint8List>(
                                     future: doc.readAsBytes(),
@@ -274,8 +255,8 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
                           ),
                           // Кнопка удаления
                           Positioned(
-                            top: 4.h,
-                            right: 4.w,
+                            top: 4,
+                            right: 4,
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -283,7 +264,7 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.all(4.w),
+                                padding: EdgeInsets.all(4),
                                 decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                                 child: Icon(Icons.close, size: 16, color: Colors.white),
                               ),
@@ -296,7 +277,7 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
                 ),
               ),
             ],
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Кнопка отправки
             SizedBox(
               width: double.infinity,
@@ -304,18 +285,11 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
                 onPressed: _isSubmitting ? null : _submitRequest,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0A6EFA),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 child: _isSubmitting
-                    ? SizedBox(
-                        height: 20.h,
-                        width: 20.w,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
+                    ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
                     : Text('Отправить заявку', style: AppStyles.bold14s.copyWith(color: Colors.white)),
               ),
             ),

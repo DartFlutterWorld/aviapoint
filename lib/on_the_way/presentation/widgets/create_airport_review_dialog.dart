@@ -4,7 +4,6 @@ import 'package:aviapoint/on_the_way/presentation/bloc/airport_reviews_bloc.dart
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:typed_data';
@@ -15,12 +14,7 @@ class CreateAirportReviewDialog extends StatefulWidget {
   final int reviewerId;
   final int? replyToReviewId;
 
-  const CreateAirportReviewDialog({
-    super.key,
-    required this.airportCode,
-    required this.reviewerId,
-    this.replyToReviewId,
-  });
+  const CreateAirportReviewDialog({super.key, required this.airportCode, required this.reviewerId, this.replyToReviewId});
 
   @override
   State<CreateAirportReviewDialog> createState() => _CreateAirportReviewDialogState();
@@ -40,9 +34,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
   void _submitReview() {
     // Для ответов рейтинг не требуется, для основных отзывов - обязателен
     if (widget.replyToReviewId == null && _rating == 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
@@ -74,13 +66,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Не удалось выбрать фотографии: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
     }
   }
@@ -98,39 +84,27 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
         state.when(
           loading: () {},
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(responseMessage ?? errorForUser),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 4),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
           },
           success: (reviews) {},
           reviewCreated: (review) {
             Navigator.of(context).pop(true);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Отзыв успешно создан'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Отзыв успешно создан'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
           },
           reviewUpdated: (review) {},
           reviewDeleted: () {},
         );
       },
       child: Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: BlocBuilder<AirportReviewsBloc, AirportReviewsState>(
           builder: (context, state) {
             final isLoading = state is LoadingAirportReviewsState;
 
             return SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20.w),
-                constraints: BoxConstraints(maxWidth: 500.w),
+                padding: EdgeInsets.all(20),
+                constraints: BoxConstraints(maxWidth: 500),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,11 +113,8 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                     Stack(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 40.w),
-                          child: Text(
-                            widget.replyToReviewId != null ? 'Ответить на отзыв' : 'Оставить отзыв об аэропорте',
-                            style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
-                          ),
+                          padding: EdgeInsets.only(right: 40),
+                          child: Text(widget.replyToReviewId != null ? 'Ответить на отзыв' : 'Оставить отзыв об аэропорте', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
                         ),
                         Positioned(
                           top: 0,
@@ -157,11 +128,11 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Рейтинг (только для основных отзывов, не для ответов)
                     if (widget.replyToReviewId == null) ...[
                       Text('Оценка', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 12),
                       RatingWidget(
                         rating: _rating,
                         readOnly: false,
@@ -172,11 +143,11 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                         },
                         size: 32,
                       ),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 20),
                     ],
                     // Комментарий
                     Text('Комментарий (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextField(
                       controller: _commentController,
                       maxLines: 5,
@@ -187,52 +158,43 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
-                        contentPadding: EdgeInsets.all(12.w),
+                        contentPadding: EdgeInsets.all(12),
                       ),
                       style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Фотографии
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 8.w,
+                      spacing: 8,
                       children: [
                         Text('Фотографии (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                         TextButton.icon(
                           onPressed: isLoading ? null : _pickPhotos,
                           icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
                           label: Text('Добавить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
+                          style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), minimumSize: Size.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                         ),
                       ],
                     ),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 12),
                     if (_photos.isNotEmpty)
                       GridView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 8.w,
-                          mainAxisSpacing: 8.h,
-                          childAspectRatio: 1.0,
-                        ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.0),
                         itemCount: _photos.length,
                         itemBuilder: (context, index) {
                           final photo = _photos[index];
@@ -240,7 +202,7 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                             fit: StackFit.expand,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(8.r),
+                                borderRadius: BorderRadius.circular(8),
                                 child: kIsWeb
                                     ? FutureBuilder<Uint8List>(
                                         future: photo.readAsBytes(),
@@ -257,14 +219,14 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                                     : Image.file(File(photo.path), fit: BoxFit.cover),
                               ),
                               Positioned(
-                                top: 4.h,
-                                right: 4.w,
+                                top: 4,
+                                right: 4,
                                 child: GestureDetector(
                                   onTap: () => _deletePhoto(index),
                                   child: Container(
-                                    padding: EdgeInsets.all(4.w),
+                                    padding: EdgeInsets.all(4),
                                     decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                                    child: Icon(Icons.close, size: 16.r, color: Colors.white),
+                                    child: Icon(Icons.close, size: 16, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -274,24 +236,21 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                       )
                     else
                       Container(
-                        padding: EdgeInsets.all(16.w),
+                        padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Color(0xFFF9FAFB),
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Color(0xFFE5E7EB)),
                         ),
                         child: Row(
                           children: [
                             Icon(Icons.photo_library_outlined, size: 24, color: Color(0xFF9CA5AF)),
-                            SizedBox(width: 12.w),
-                            Text(
-                              'Фотографии не добавлены',
-                              style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                            ),
+                            SizedBox(width: 12),
+                            Text('Фотографии не добавлены', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                           ],
                         ),
                       ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Кнопки
                     Row(
                       children: [
@@ -299,31 +258,24 @@ class _CreateAirportReviewDialogState extends State<CreateAirportReviewDialog> {
                           child: OutlinedButton(
                             onPressed: isLoading ? null : () => Navigator.of(context).pop(),
                             style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              padding: EdgeInsets.symmetric(vertical: 12),
                               side: BorderSide(color: Color(0xFFD1D5DB)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                           ),
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: isLoading ? null : _submitReview,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFF0A6EFA),
-                              padding: EdgeInsets.symmetric(vertical: 12.h),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             child: isLoading
-                                ? SizedBox(
-                                    height: 20.h,
-                                    width: 20.w,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                    ),
-                                  )
+                                ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
                                 : Text('Отправить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                           ),
                         ),

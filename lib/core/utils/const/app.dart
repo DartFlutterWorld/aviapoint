@@ -1,5 +1,6 @@
 // Импортируем Environment
 import 'package:aviapoint/config/environment.dart';
+import 'package:flutter/foundation.dart';
 
 // ===== ПЕРЕКЛЮЧАТЕЛЬ СЕРВЕРА =====
 // Окружения контролируются через build flags в Environment
@@ -27,6 +28,17 @@ String getBackUrl({bool useLocal = true}) {
 String getImageUrl(String? imagePath) {
   if (imagePath == null || imagePath.isEmpty) {
     return '';
+  }
+
+  // Если путь уже является полным URL (начинается с http:// или https://), 
+  // это ошибка - бэкенд не должен возвращать полные URL
+  // Логируем и возвращаем как есть, чтобы не сломать приложение
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    if (kDebugMode) {
+      debugPrint('⚠️ [getImageUrl] Получен полный URL вместо относительного пути: $imagePath');
+      debugPrint('   Это ошибка бэкенда - в БД должны храниться только относительные пути!');
+    }
+    return imagePath;
   }
 
   // Нормализуем baseUrl: убираем завершающий слеш, если есть

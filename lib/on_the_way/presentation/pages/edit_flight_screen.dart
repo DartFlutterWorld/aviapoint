@@ -15,7 +15,6 @@ import 'package:aviapoint/core/presentation/widgets/date_time_field_widget.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -432,7 +431,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
             final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
 
             return SingleChildScrollView(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(16),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -440,12 +439,12 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                   children: [
                     // Секция маршрута с несколькими точками
                     _buildRouteSection(),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     // Свободных мест
                     Row(
                       children: [
                         Icon(Icons.event_seat, size: 20, color: Color(0xFF9CA5AF)),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         RichText(
                           text: TextSpan(
                             text: 'Свободных мест',
@@ -460,7 +459,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextFormField(
                       controller: _seatsController,
                       style: AppStyles.regular14s,
@@ -472,18 +471,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -496,12 +495,12 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     // Цена за место
                     Row(
                       children: [
                         Icon(Icons.attach_money, size: 20, color: Color(0xFF9CA5AF)),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         RichText(
                           text: TextSpan(
                             text: 'Цена за место',
@@ -516,7 +515,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextFormField(
                       controller: _priceController,
                       style: AppStyles.regular14s,
@@ -528,18 +527,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -552,12 +551,12 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     // Модель самолёта
                     Row(
                       children: [
                         Icon(Icons.flight, size: 20, color: Color(0xFF9CA5AF)),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         RichText(
                           text: TextSpan(
                             text: 'Модель самолёта',
@@ -572,7 +571,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     InkWell(
                       onTap: () => _showAircraftTypeSelector(context),
                       child: TextFormField(
@@ -586,23 +585,23 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                           ),
                           disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                           ),
                           suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -612,10 +611,10 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     // Дополнительная информация о полёте
                     Text('Дополнительная информация о полёте', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextFormField(
                       controller: _descriptionController,
                       style: AppStyles.regular14s,
@@ -626,39 +625,35 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       ),
                     ),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 24),
                     // Секция фотографий
                     _buildPhotosSection(),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 24),
                     // Кнопка сохранения
                     ElevatedButton(
                       onPressed: (isLoading || !_isFormValid()) ? null : _submitForm,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0A6EFA),
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         disabledBackgroundColor: Color(0xFF9CA5AF),
                       ),
                       child: isLoading
-                          ? SizedBox(
-                              height: 20.h,
-                              width: 20.w,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                            )
+                          ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                           : Text('Сохранить изменения', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                     ),
                   ],
@@ -686,7 +681,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
             ),
           ],
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         // Все точки маршрута (включая первую и последнюю)
         ..._waypoints.asMap().entries.map((entry) {
           final index = entry.key;
@@ -696,7 +691,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
 
           return Padding(
             key: ValueKey('waypoint_padding_${waypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
-            padding: EdgeInsets.only(top: index > 0 ? 12.h : 0),
+            padding: EdgeInsets.only(top: index > 0 ? 12 : 0),
             child: _buildWaypointCard(
               index: index,
               waypoint: waypoint,
@@ -751,10 +746,10 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
 
     return Container(
       key: ValueKey('waypoint_card_${currentWaypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFD9E6F8)),
       ),
       child: Column(
@@ -765,8 +760,8 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
             children: [
               Row(
                 children: [
-                  Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue), size: 20.r),
-                  SizedBox(width: 8.w),
+                  Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), color: isFirst ? Colors.green : (isLast ? Colors.red : Colors.blue), size: 20),
+                  SizedBox(width: 8),
                   RichText(
                     text: TextSpan(
                       text: isFirst
@@ -793,7 +788,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                     ),
                 ],
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               SearchBarWidget(
                 key: ValueKey('airport_search_${currentWaypoint.id}_$index'), // Используем ID и индекс для гарантии уникальности
                 initialValue: currentCode.isEmpty || currentCode == '' ? null : currentCode, // Явно проверяем на пустую строку
@@ -805,7 +800,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           ),
           // Для первой точки - дата и время вылета и комментарий
           if (isFirst) ...[
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             RichText(
               text: TextSpan(
                 text: 'Укажите дату и время вылета из этого аэропорта',
@@ -818,7 +813,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             _buildDateTimeField(
               key: ValueKey('departure_first_${currentWaypoint.id}_$index'),
               label: 'Дата и время вылета *',
@@ -839,7 +834,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 }
               },
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             TextFormField(
               key: ValueKey('comment_first_${currentWaypoint.id}_$index'),
               controller: _getCommentController(index),
@@ -853,18 +848,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 filled: true,
                 fillColor: Color(0xFFF9FAFB),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                 ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),
               onChanged: (value) {
                 if (onUpdated != null) {
@@ -885,9 +880,9 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           ],
           // Для последней точки - дата и время прибытия и комментарий
           if (isLast) ...[
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             _buildDateTimeField(
               key: ValueKey('arrival_last_${currentWaypoint.id}_$index'),
               label: 'Дата и время прибытия',
@@ -908,7 +903,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 }
               },
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             TextFormField(
               key: ValueKey('comment_last_${currentWaypoint.id}_$index'),
               controller: _getCommentController(index),
@@ -922,18 +917,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 filled: true,
                 fillColor: Color(0xFFF9FAFB),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                 ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),
               onChanged: (value) {
                 if (onUpdated != null) {
@@ -954,9 +949,9 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           ],
           // Для промежуточных точек - дата и время прибытия, отправления и комментарий
           if (!isFirst && !isLast) ...[
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Text('Укажите дату и время прибытия в этот аэропорт', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             _buildDateTimeField(
               key: ValueKey('arrival_inter_${currentWaypoint.id}_$index'),
               label: 'Дата и время прибытия',
@@ -977,9 +972,9 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 }
               },
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             Text('Укажите дату и время вылета из этого аэропорта', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             _buildDateTimeField(
               key: ValueKey('departure_inter_${currentWaypoint.id}_$index'),
               label: 'Дата и время отправления',
@@ -1000,7 +995,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 }
               },
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             TextFormField(
               key: ValueKey('comment_inter_${currentWaypoint.id}_$index'),
               controller: _getCommentController(index),
@@ -1014,18 +1009,18 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                 filled: true,
                 fillColor: Color(0xFFF9FAFB),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                 ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),
               onChanged: (value) {
                 if (onUpdated != null) {
@@ -1082,23 +1077,21 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
               onPressed: () => _showUploadPhotosDialog(context),
               icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
               label: Text('Добавить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              ),
+              style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
             ),
           ],
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         if (hasPhotos)
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
             itemCount: displayPhotos.length,
             itemBuilder: (context, index) {
               final photoItem = displayPhotos[index];
               return ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 child: Stack(
                   children: [
                     // Изображение занимает всё доступное пространство
@@ -1146,12 +1139,12 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                             ),
                     ),
                     Positioned(
-                      top: 8.h,
-                      right: 8.w,
+                      top: 8,
+                      right: 8,
                       child: GestureDetector(
                         onTap: () => _deletePhoto(photoItem),
                         child: Container(
-                          padding: EdgeInsets.all(6.w),
+                          padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                           child: Icon(Icons.close, size: 16, color: Colors.white),
                         ),
@@ -1164,16 +1157,16 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
           )
         else
           Container(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Color(0xFFE5E7EB)),
             ),
             child: Column(
               children: [
                 Icon(Icons.photo_library_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 Text('Пока нет фотографий', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
               ],
             ),

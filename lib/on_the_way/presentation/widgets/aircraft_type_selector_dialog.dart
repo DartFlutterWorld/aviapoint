@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
@@ -176,7 +175,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
       final manufacturerName = _selectedManufacturer?.name.trim();
       final fullName = manufacturerName != null && manufacturerName.isNotEmpty
           ? // Если пользователь уже указал производителя вручную в начале, не дублируем его
-          (manualModel.toLowerCase().startsWith(manufacturerName.toLowerCase()) ? manualModel : '$manufacturerName $manualModel')
+            (manualModel.toLowerCase().startsWith(manufacturerName.toLowerCase()) ? manualModel : '$manufacturerName $manualModel')
           : manualModel;
       if (widget.returnModelId) {
         Navigator.of(context).pop({'id': null, 'fullName': fullName});
@@ -189,11 +188,11 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.antiAlias,
       child: Container(
-        height: 500.h,
-        width: 450.w,
+        height: 500,
+        width: 450,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -204,11 +203,11 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 8.h, right: 8.w),
+                    padding: EdgeInsets.only(top: 8, right: 8),
                     child: IconButton(
                       icon: Icon(Icons.close, color: Color(0xFF9CA5AF), size: 22),
                       onPressed: () => Navigator.of(context).pop(),
-                      padding: EdgeInsets.all(8.w),
+                      padding: EdgeInsets.all(8),
                       constraints: BoxConstraints(),
                     ),
                   ),
@@ -237,13 +236,13 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                   children: [
                     // Поиск производителя
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _isLoadingManufacturers
                               ? Center(
-                                  child: Padding(padding: EdgeInsets.all(16.w), child: CircularProgressIndicator(strokeWidth: 2)),
+                                  child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator(strokeWidth: 2)),
                                 )
                               : TextField(
                                   controller: _manufacturerSearchController,
@@ -291,22 +290,22 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                     filled: true,
                                     fillColor: Colors.white,
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.r),
+                                      borderRadius: BorderRadius.circular(10),
                                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.r),
+                                      borderRadius: BorderRadius.circular(10),
                                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.r),
+                                      borderRadius: BorderRadius.circular(10),
                                       borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 1.5),
                                     ),
                                     disabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.r),
+                                      borderRadius: BorderRadius.circular(10),
                                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                   ),
                                 ),
                         ],
@@ -316,12 +315,12 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                     // Подсказки производителей
                     if (_showManufacturerSuggestions && _selectedManufacturer == null && _filteredManufacturers.isNotEmpty)
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Container(
-                          constraints: BoxConstraints(maxHeight: 320.h),
+                          constraints: BoxConstraints(maxHeight: 320),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Color(0xFFD9E6F8)),
                             boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 4))],
                           ),
@@ -335,7 +334,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                 onTap: () => _selectManufacturer(manufacturer),
                                 child: Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                   decoration: BoxDecoration(
                                     border: index != _filteredManufacturers.length - 1 ? Border(bottom: BorderSide(color: Color(0xFFE5E7EB), width: 1)) : null,
                                   ),
@@ -355,24 +354,24 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                     // Список моделей
                     if (_selectedManufacturer != null && !_isManualMode)
                       Container(
-                        height: 320.h,
+                        height: 320,
                         child: _isLoadingModels
                             ? Center(child: CircularProgressIndicator())
                             : _models.isEmpty
                             ? Center(
                                 child: Padding(
-                                  padding: EdgeInsets.all(40.w),
+                                  padding: EdgeInsets.all(40),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(Icons.airplanemode_inactive, size: 64, color: Color(0xFF9CA5AF)),
-                                      SizedBox(height: 16.h),
+                                      SizedBox(height: 16),
                                       Text(
                                         'Модели не найдены',
                                         style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                                         textAlign: TextAlign.center,
                                       ),
-                                      SizedBox(height: 16.h),
+                                      SizedBox(height: 16),
                                       TextButton.icon(
                                         onPressed: () {
                                           setState(() {
@@ -390,12 +389,12 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
+                                    padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
                                     child: Text('Модели', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                                   ),
                                   Expanded(
                                     child: ListView.builder(
-                                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                      padding: EdgeInsets.symmetric(horizontal: 8),
                                       itemCount: _models.length,
                                       itemBuilder: (context, index) {
                                         final model = _models[index];
@@ -403,13 +402,13 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                         final isSelected = _selectedModel?.id == model.id;
                                         return InkWell(
                                           onTap: () => _selectModel(model),
-                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderRadius: BorderRadius.circular(12),
                                           child: Container(
-                                            margin: EdgeInsets.only(bottom: 8.h),
-                                            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+                                            margin: EdgeInsets.only(bottom: 8),
+                                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                                             decoration: BoxDecoration(
                                               color: isSelected ? Color(0xFFE3F1FF) : Colors.white,
-                                              borderRadius: BorderRadius.circular(12.r),
+                                              borderRadius: BorderRadius.circular(12),
                                               border: Border.all(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFFE5E7EB), width: isSelected ? 2 : 1),
                                             ),
                                             child: Row(
@@ -426,7 +425,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                                     child: TextButton.icon(
                                       onPressed: () {
                                         setState(() {
@@ -444,12 +443,12 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                     // Ручной ввод
                     if (_isManualMode)
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 20.h),
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Введите название модели вручную', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                            SizedBox(height: 12.h),
+                            SizedBox(height: 12),
                             TextField(
                               controller: _manualInputController,
                               autofocus: true,
@@ -459,22 +458,22 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                               ),
                               onSubmitted: (_) => _confirmSelection(),
                             ),
-                            SizedBox(height: 8.h),
+                            SizedBox(height: 8),
                             TextButton(
                               onPressed: () {
                                 setState(() {
@@ -493,7 +492,7 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
 
             // Кнопки
             Padding(
-              padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 16.h),
+              padding: EdgeInsets.fromLTRB(8, 8, 8, 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -501,13 +500,13 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                   ),
-                  SizedBox(width: 24.w),
+                  SizedBox(width: 24),
                   ElevatedButton(
                     onPressed: _confirmSelection,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF0A6EFA),
-                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                     child: Text('Сохранить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                   ),

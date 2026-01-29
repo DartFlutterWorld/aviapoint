@@ -1,11 +1,11 @@
-#include "my_application.h"
+#include "my_application"
 
-#include <flutter_linux/flutter_linux.h>
+#include <flutter_linux/flutter_linux>
 #ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
+#include <gdk/gdkx>
 #endif
 
-#include "flutter/generated_plugin_registrant.h"
+#include "flutter/generated_plugin_registrant"
 
 struct _MyApplication {
   GtkApplication parent_instance;

@@ -1,10 +1,12 @@
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class SubscribeWidget extends StatelessWidget {
   final SubscriptionTypeModel subscriptionType;
@@ -47,15 +49,16 @@ class SubscribeWidget extends StatelessWidget {
     //  final isActive = subscription!.isActive && subscription.endDate.isAfter(DateTime.now());
     // final isExpired = subscription!.endDate.isBefore(DateTime.now());
     return ClipRRect(
-      borderRadius: BorderRadius.circular(9.r),
+      borderRadius: BorderRadius.circular(9),
       clipBehavior: Clip.antiAlias,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-        height: 225.h,
-        width: 176.w,
+
+        height: Provider.of<AppState>(context).isTablet ? 450 : 225,
+        width: Provider.of<AppState>(context).isTablet ? 350 : 176,
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(fon), fit: BoxFit.cover),
-          borderRadius: BorderRadius.circular(9.r),
+          borderRadius: BorderRadius.circular(9),
         ),
 
         child: Column(
@@ -63,11 +66,7 @@ class SubscribeWidget extends StatelessWidget {
           children: [
             Text(
               subscriptionType.name,
-              style: AppStyles.extraBold.copyWith(
-                color: Color(0xFF223B76),
-                fontStyle: FontStyle.italic,
-                fontSize: 16.sp,
-              ),
+              style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76), fontStyle: FontStyle.italic, fontSize: 16.0),
             ),
             SizedBox(height: 8),
             Text(subscriptionType.description, style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
@@ -90,20 +89,13 @@ class SubscribeWidget extends StatelessWidget {
             Spacer(),
             CustomButton(
               title: 'Оформить подписку',
-              verticalPadding: 8.h,
+              verticalPadding: 8,
               backgroundColor: Color(0xFF0A6EFA),
               onPressed: () => _navigateToPayment(context),
-              borderRadius: 46.r,
+              borderRadius: 46,
               textStyle: AppStyles.bold12s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xff0064D6).withOpacity(0.28),
-                  blurRadius: 17.8,
-                  spreadRadius: 0,
-                  offset: Offset(0.0, 7.0),
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.28), blurRadius: 17.8, spreadRadius: 0, offset: Offset(0.0, 7.0))],
             ),
           ],
         ),

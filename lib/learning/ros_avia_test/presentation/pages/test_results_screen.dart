@@ -15,7 +15,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_with
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/ros_avia_test_category_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/categories_with_list_questions_bloc.dart';
@@ -127,7 +126,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
     grouped.forEach((category, categoryAnswers) {
       result.add(
         Padding(
-          padding: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.only(bottom: 12),
           child: RosAviaTestCategoryWidget(
             withArrow: false,
             title: bigFirstSymbol(category),
@@ -151,9 +150,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Без категории',
                           ).catchError((Object error) {
                             if (context.mounted) {
-                              ScaffoldMessenger.of(
-                                context,
-                              ).showSnackBar(const SnackBar(content: Text('Ошибка при открытии вопроса')));
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка при открытии вопроса')));
                             }
                           });
                         } catch (e) {}
@@ -163,8 +160,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                           questionId: answer.questionId,
                           questionText: '',
                           answers: [],
-                          categoryTitle:
-                              _questionsMap[answer.questionId]?.categoryTitle ?? 'Категория ${answer.categoryId}',
+                          categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Категория ${answer.categoryId}',
                           categoryId: answer.categoryId,
                         ),
                         colorBackground: isCorrect ? const Color(0xFFD8F9EC) : const Color(0xFFFFE0E0),
@@ -200,11 +196,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: CustomAppBar(
-          title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}',
-          titleTextAlign: TextAlign.center,
-          withBack: false,
-        ),
+        appBar: CustomAppBar(title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}', titleTextAlign: TextAlign.center, withBack: false),
         body: FutureBuilder<List<TestAnswer>>(
           future: _answersFuture,
           builder: (context, snapshot) {
@@ -239,11 +231,11 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Row(
-                            spacing: 12.w,
+                            spacing: 12,
                             children: [
                               DiagramWidget(
                                 percent: percentage / 100, // 80%
-                                width: 160.w, // подгоните под ваш дизайн
+                                width: 160, // подгоните под ваш дизайн
                                 strokeWidth: 30,
                                 gradientColors: const [
                                   Color(0xFF2F7C5A), // тёмно-зелёный
@@ -255,12 +247,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                                   padding: const EdgeInsets.only(top: 50.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${percentage.toInt().toString()}%',
-                                        style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76)),
-                                      ),
-                                    ],
+                                    children: [Text('${percentage.toInt().toString()}%', style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76)))],
                                   ),
                                 ),
                               ),
@@ -269,38 +256,24 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   // mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Тем: ${categorizedResults.length}',
-                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89)),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    Text(
-                                      'Вопросов: ${totalCount}',
-                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89)),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    ChipsWithTitleWidget(
-                                      title: 'правильных ${correctCount}',
-                                      colorBackground: const Color(0xFFD8F9EC),
-                                      colorTitle: const Color(0xFF15D585),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    ChipsWithTitleWidget(
-                                      title: 'неправильных ${totalCount - correctCount}',
-                                      colorBackground: const Color(0xFFFFE0E0),
-                                      colorTitle: const Color(0xFFFF6B6B),
-                                    ),
+                                    Text('Тем: ${categorizedResults.length}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    SizedBox(height: 8),
+                                    Text('Вопросов: ${totalCount}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    SizedBox(height: 8),
+                                    ChipsWithTitleWidget(title: 'правильных ${correctCount}', colorBackground: const Color(0xFFD8F9EC), colorTitle: const Color(0xFF15D585)),
+                                    SizedBox(height: 8),
+                                    ChipsWithTitleWidget(title: 'неправильных ${totalCount - correctCount}', colorBackground: const Color(0xFFFFE0E0), colorTitle: const Color(0xFFFF6B6B)),
                                   ],
                                 ),
                               ),
                             ],
                           ),
 
-                          SizedBox(height: 24.h),
+                          SizedBox(height: 24),
 
                           // Таблица результатов, сгруппированная по категориям
                           ...categorizedResults,
-                          SizedBox(height: 24.h),
+                          SizedBox(height: 24),
                         ],
                       ),
                     ),
@@ -308,13 +281,13 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                 ),
                 // Кнопка завершения - прибита к низу
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   child: Center(
                     child: SizedBox(
                       // width: 200,
                       child: CustomButton(
                         title: 'Завершить',
-                        verticalPadding: 8.h,
+                        verticalPadding: 8,
                         onPressed: () async {
                           // Очистить ответы и выбранные вопросы перед уходом
                           await getIt<AppDb>().deleteAnswersByCertificateType(widget.certificateTypeId);
@@ -330,14 +303,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             );
                           }
                         },
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xff0064D6).withOpacity(0.27),
-                            blurRadius: 9,
-                            spreadRadius: 0,
-                            offset: const Offset(0.0, 7.0),
-                          ),
-                        ],
+                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: const Offset(0.0, 7.0))],
                         textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                         borderColor: Colors.transparent,
                         backgroundColor: const Color(0xFF0A6EFA),

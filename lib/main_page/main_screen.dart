@@ -21,13 +21,14 @@ import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
+import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
+import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
 import 'package:aviapoint/main_page/widgets/home_section_button.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:upgrader/upgrader.dart';
 
 @RoutePage()
@@ -63,6 +64,14 @@ class _MainScreenState extends State<MainScreen> {
       BlocProvider.of<BlogArticlesBloc>(context).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
     }
 
+    // Загружаем полеты "По пути"
+    final flightsState = BlocProvider.of<FlightsBloc>(context).state;
+    // Начальное состояние FlightsBloc уже SuccessFlightsState с пустым списком,
+    // поэтому дополнительно проверяем, что список полётов пуст
+    if (flightsState is! SuccessFlightsState || flightsState.flights.isEmpty) {
+      BlocProvider.of<FlightsBloc>(context).add(const GetFlightsEvent(isRefresh: false));
+    }
+
     // Проверяем версию приложения после загрузки главной страницы
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkForUpdate();
@@ -82,6 +91,9 @@ class _MainScreenState extends State<MainScreen> {
 
     // Обновляем статьи блога
     BlocProvider.of<BlogArticlesBloc>(context).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
+
+    // Обновляем полеты "По пути"
+    BlocProvider.of<FlightsBloc>(context).add(const GetFlightsEvent(isRefresh: false));
 
     // Обновляем истории
     BlocProvider.of<CacheManagerBloc>(context).add(const CacheManagerEvent.getStories());
@@ -212,7 +224,7 @@ class _MainScreenState extends State<MainScreen> {
                   return GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: isLandscape ? 3 : 2, mainAxisSpacing: 11.w, crossAxisSpacing: 11.w, childAspectRatio: childAspectRatio),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: isLandscape ? 3 : 2, mainAxisSpacing: 11, crossAxisSpacing: 11, childAspectRatio: childAspectRatio),
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       if (index == 0) {
@@ -252,13 +264,62 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
             SizedBox(height: AppSpacing.section),
+            // По пути
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+              ),
+              child: Column(
+                children: [
+                  Text('По пути', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
+                  SizedBox(height: AppSpacing.horizontal),
+                  Text('Найдите попутные полёты или предложите свой', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  SizedBox(height: AppSpacing.section),
+                  BlocBuilder<FlightsBloc, FlightsState>(
+                    builder: (context, state) => state.maybeWhen(
+                      error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
+                        textError: errorForUser,
+                        repeat: () {
+                          BlocProvider.of<FlightsBloc>(context).add(const GetFlightsEvent(isRefresh: false));
+                        },
+                      ),
+                      loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
+                      success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _SuccessFlights(flights: flights, context: context),
+                      flightCreated: (flight) {
+                        // После создания полёта обновляем список
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          BlocProvider.of<FlightsBloc>(context).add(const GetFlightsEvent(isRefresh: false));
+                        });
+                        // Показываем текущий список (если есть) или загрузку
+                        final currentState = BlocProvider.of<FlightsBloc>(context).state;
+                        if (currentState is SuccessFlightsState) {
+                          return _SuccessFlights(flights: currentState.flights, context: context);
+                        }
+                        return LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4);
+                      },
+                      orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
+                    ),
+                  ),
+                  SizedBox(height: AppSpacing.section),
+                  HomeSectionButton(
+                    title: 'Все полёты',
+                    color: const Color(0xFF0A6EFA),
+                    onPressed: () => AutoRouter.of(context).push(const BaseRoute(children: [OnTheWayNavigationRoute()])),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: AppSpacing.section),
             // Маркет
             Container(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(18.r),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10.r, spreadRadius: 0, offset: Offset(0, 4.h))],
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
               ),
               child: Column(
                 children: [
@@ -274,9 +335,9 @@ class _MainScreenState extends State<MainScreen> {
                           BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 4, includeInactive: false));
                         },
                       ),
-                      loading: () => LoadingCustom(paddingTop: 1.sw / 4),
+                      loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       success: (products, hasMore) => _SuccessMarketProducts(products: products, context: context),
-                      orElse: () => LoadingCustom(paddingTop: 1.sw / 4),
+                      orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                     ),
                   ),
                   SizedBox(height: AppSpacing.section),
@@ -294,8 +355,8 @@ class _MainScreenState extends State<MainScreen> {
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(18.r),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10.r, spreadRadius: 0, offset: Offset(0, 4.h))],
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
               ),
               child: Column(
                 children: [
@@ -311,9 +372,9 @@ class _MainScreenState extends State<MainScreen> {
                           BlocProvider.of<BlogArticlesBloc>(context).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
                         },
                       ),
-                      loading: () => LoadingCustom(paddingTop: 1.sw / 4),
+                      loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       success: (articles, hasMore) => _SuccessBlogArticles(articles: articles, context: context),
-                      orElse: () => LoadingCustom(paddingTop: 1.sw / 4),
+                      orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                     ),
                   ),
                   SizedBox(height: AppSpacing.section),
@@ -331,8 +392,8 @@ class _MainScreenState extends State<MainScreen> {
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(18.r),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10.r, spreadRadius: 0, offset: Offset(0, 4.h))],
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
               ),
               child: Column(
                 children: [
@@ -350,13 +411,13 @@ class _MainScreenState extends State<MainScreen> {
                           BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
                         },
                       ),
-                      loading: (state) => LoadingCustom(paddingTop: 1.sw / 4),
+                      loading: (state) => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       success: (state) => _SuccessNews(news: state.news, context: context),
-                      creating: (state) => LoadingCustom(paddingTop: 1.sw / 4),
+                      creating: (state) => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       created: (state) => _SuccessNews(news: [state.news], context: context),
-                      updating: (state) => LoadingCustom(paddingTop: 1.sw / 4),
+                      updating: (state) => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       updated: (state) => _SuccessNews(news: [state.news], context: context),
-                      deleting: (state) => LoadingCustom(paddingTop: 1.sw / 4),
+                      deleting: (state) => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       deleted: (state) => _SuccessNews(news: [], context: context),
                     ),
                   ),
@@ -369,7 +430,7 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 40.h),
+            SizedBox(height: 40),
           ],
         ),
       ),
@@ -408,7 +469,7 @@ class _SuccessNews extends StatelessWidget {
     return SizedBox(
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10.w, crossAxisSpacing: 10.w, crossAxisCount: crossAxisCount),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount),
         itemCount: itemCount,
         shrinkWrap: true,
         itemBuilder: (context, index) => GestureDetector(
@@ -423,20 +484,17 @@ class _SuccessNews extends StatelessWidget {
           ),
           // DetailNewsRoute(news: news[index], newsId: news[index].id)),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(10),
             child: Stack(
               fit: StackFit.expand,
               children: [
-                NetworkImageWidget(
-                  imageUrl: getImageUrl(sortedNews[index].pictureMini),
-                  fit: BoxFit.fitHeight,
-                ),
+                NetworkImageWidget(imageUrl: getImageUrl(sortedNews[index].pictureMini), fit: BoxFit.fitHeight),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(AppSpacing.horizontal),
-                    decoration: BoxDecoration(color: const Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10.r)),
+                    decoration: BoxDecoration(color: const Color(0xFFD0F2FF), borderRadius: BorderRadius.circular(10)),
                     child: Text(sortedNews[index].title, style: AppStyles.regular12s.copyWith(color: Colors.black)),
                   ),
                 ),
@@ -537,7 +595,7 @@ class _SuccessMarketProducts extends StatelessWidget {
         return SizedBox(
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10.w, crossAxisSpacing: 10.w, crossAxisCount: crossAxisCount, childAspectRatio: childAspectRatio),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount, childAspectRatio: childAspectRatio),
             itemCount: itemCount,
             shrinkWrap: true,
             itemBuilder: (context, index) => AircraftMarketCard(
@@ -556,6 +614,52 @@ class _SuccessMarketProducts extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _SuccessFlights extends StatelessWidget {
+  final List<FlightEntity> flights;
+  final BuildContext context;
+
+  const _SuccessFlights({required this.flights, required this.context});
+
+  @override
+  Widget build(BuildContext context) {
+    // Фильтруем только активные полеты и сортируем по ID (последние созданные = больший ID)
+    final activeFlights = flights.where((f) => f.status == 'active').toList()..sort((a, b) => b.id.compareTo(a.id)); // Сортируем по убыванию ID (новые первыми)
+
+    if (activeFlights.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(AppSpacing.section),
+        child: Text(
+          'Полёты скоро появятся',
+          style: AppStyles.light14s.copyWith(color: Color(0xFF4B5767)),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    // Берем 2 последних созданных активных полета
+    final displayFlights = activeFlights.take(2).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: displayFlights.map((flight) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: AppSpacing.horizontal),
+          child: FlightCard(
+            flight: flight,
+            onTap: () => AutoRouter.of(context).push(
+              BaseRoute(
+                children: [
+                  OnTheWayNavigationRoute(children: [FlightDetailRoute(flightId: flight.id)]),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -603,7 +707,7 @@ class _SuccessBlogArticles extends StatelessWidget {
     return SizedBox(
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10.w, crossAxisSpacing: 10.w, crossAxisCount: crossAxisCount),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount),
         itemCount: itemCount,
         shrinkWrap: true,
         itemBuilder: (context, index) => GestureDetector(
@@ -615,7 +719,7 @@ class _SuccessBlogArticles extends StatelessWidget {
             ),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(10),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -636,8 +740,8 @@ class _SuccessBlogArticles extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(color: Color(0xFFE8D5FF), borderRadius: BorderRadius.circular(10.r)),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: Color(0xFFE8D5FF), borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       sortedArticles[index].title,
                       style: AppStyles.regular12s.copyWith(color: Colors.black),

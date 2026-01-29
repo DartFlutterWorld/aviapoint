@@ -2,7 +2,6 @@ import 'package:aviapoint/blog/domain/entities/blog_category_entity.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BlogCategoryChip extends StatelessWidget {
   final BlogCategoryEntity category;
@@ -29,11 +28,11 @@ class BlogCategoryChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(right: 8.w),
-        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 0),
+        margin: EdgeInsets.only(right: 8),
+        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? color : Colors.transparent,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: isSelected ? color : const Color(0xFFD9E6F8), width: 1),
         ),
         child: Row(
@@ -42,8 +41,8 @@ class BlogCategoryChip extends StatelessWidget {
           children: [
             // if (category.iconUrl != null && category.iconUrl!.isNotEmpty)
             //   Padding(
-            //     padding: EdgeInsets.only(right: 4.w),
-            //     child: Image.network(category.iconUrl!, width: 14.w, height: 14.h, errorBuilder: (context, error, stackTrace) => const SizedBox()),
+            //     padding: EdgeInsets.only(right: 4),
+            //     child: Image.network(category.iconUrl!, width: 14, height: 14, errorBuilder: (context, error, stackTrace) => const SizedBox()),
             //   ),
             Text(category.name, style: AppStyles.regular12s.copyWith(color: isSelected ? Colors.white : AppColors.textPrimary)),
           ],

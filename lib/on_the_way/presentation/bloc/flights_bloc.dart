@@ -269,6 +269,8 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       (r) {
         // После успешного создания возвращаем отдельное состояние для создания
         emit(FlightsState.flightCreated(flight: r));
+        // Обновляем список полётов после создания
+        add(const GetFlightsEvent(isRefresh: false));
       },
     );
   }

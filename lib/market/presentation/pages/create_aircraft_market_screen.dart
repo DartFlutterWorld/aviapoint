@@ -16,7 +16,6 @@ import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart'
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -286,11 +285,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                 return TextButton(
                   onPressed: isLoading ? null : _createProduct,
                   child: isLoading
-                      ? SizedBox(
-                          width: 20.w,
-                          height: 20.h,
-                          child: CircularProgressIndicator(strokeWidth: 2.w),
-                        )
+                      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                       : Text('Создать', style: AppStyles.bold16s.copyWith(color: AppColors.primary100p)),
                 );
               },
@@ -299,7 +294,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
         ),
         backgroundColor: AppColors.background,
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
@@ -307,18 +302,18 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
               children: [
                 // Основная фотография
                 _buildMainPhotoSection(),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 // Дополнительные фотографии
                 _buildAdditionalPhotosSection(),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 // Категория
                 _buildCategoryDropdown(),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _titleController,
                   decoration: InputDecoration(
                     labelText: 'Название *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -329,12 +324,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _descriptionController,
                   decoration: InputDecoration(
                     labelText: 'Описание *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -346,12 +341,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _priceController,
                   decoration: InputDecoration(
                     labelText: 'Цена (₽) *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -367,9 +362,9 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 _buildBrandField(),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 LocationPickerWidget(
                   initialLocation: _selectedLocation,
                   onLocationSelected: (locationData) {
@@ -379,12 +374,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     });
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _yearController,
                   decoration: InputDecoration(
                     labelText: 'Год выпуска *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -400,12 +395,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _totalFlightHoursController,
                   decoration: InputDecoration(
                     labelText: 'Общий налёт часов *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -421,12 +416,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _enginePowerController,
                   decoration: InputDecoration(
                     labelText: 'Мощность двигателя *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -442,12 +437,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _engineVolumeController,
                   decoration: InputDecoration(
                     labelText: 'Объём двигателя *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -463,12 +458,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _seatsController,
                   decoration: InputDecoration(
                     labelText: 'Количество мест *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -484,30 +479,30 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                     return null;
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 _buildConditionField(),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 _buildShareSaleField(),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 _buildLeasingField(),
-                SizedBox(height: 24.h),
+                SizedBox(height: 24),
                 // Кнопка "Создать" (дублируем из AppBar)
                 BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
                   builder: (context, state) {
                     final isLoading = state is CreatingAircraftMarketProductState;
                     return CustomButton(
                       title: isLoading ? 'Создание...' : 'Создать',
-                      verticalPadding: 12.h,
+                      verticalPadding: 12,
                       backgroundColor: AppColors.primary100p,
                       textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                       borderColor: AppColors.primary100p,
-                      borderRadius: 12.r,
+                      borderRadius: 12,
                       onPressed: isLoading ? null : _createProduct,
                       disabled: isLoading,
                     );
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
               ],
             ),
           ),
@@ -541,7 +536,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: 'Категория *',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           filled: true,
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
@@ -575,7 +570,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: 'Состояние *',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           filled: true,
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
@@ -593,7 +588,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: 'Модель *',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           filled: true,
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
@@ -683,16 +678,16 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     return InkWell(
       onTap: () => _showSharePickerDialog(),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Color(0xFFE5E7EB)),
         ),
         child: Row(
           children: [
             Icon(Icons.percent, size: 18, color: Color(0xFF9CA5AF)),
-            SizedBox(width: 12.w),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -737,14 +732,14 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           ],
         ),
         if (_isLeasing) ...[
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           TextFormField(
             controller: _leasingConditionsController,
             maxLines: 3,
             decoration: InputDecoration(
               labelText: 'Условия лизинга',
               alignLabelWithHint: true,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               filled: true,
               fillColor: Colors.white,
             ),
@@ -789,13 +784,13 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
             ),
             // Виджет выбора доли
             if (tempIsShareSale) ...[
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               Text(
                 'Выберите долю:',
                 style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               Center(
                 child: SharePickerWidget(
                   numerator: tempNumerator,
@@ -817,15 +812,15 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                 ),
               ),
             ],
-            SizedBox(height: 24.h),
+            SizedBox(height: 24),
             // Кнопка Сохранить
             CustomButton(
               title: 'Сохранить',
-              verticalPadding: 12.h,
+              verticalPadding: 12,
               backgroundColor: Color(0xFF0A6EFA),
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              borderRadius: 12.r,
+              borderRadius: 12,
               boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))],
               onPressed: () {
                 setState(() {
@@ -851,8 +846,8 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-        SizedBox(height: 12.h),
-        if (hasValidPhoto) SizedBox(height: 200.h, child: _buildPhotoItem(_mainPhoto!, isMain: true)) else _buildEmptyPhotoPlaceholder(isMain: true),
+        SizedBox(height: 12),
+        if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true)) else _buildEmptyPhotoPlaceholder(isMain: true),
       ],
     );
   }
@@ -870,17 +865,17 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
             //   icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
             //   label: Text('Добавить', style: AppStyles.bold14s.copyWith(color: Color(0xFF0A6EFA))),
             //   style: TextButton.styleFrom(
-            //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             //   ),
             // ),
           ],
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         if (_additionalPhotos.isNotEmpty)
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
             itemCount: _additionalPhotos.length,
             itemBuilder: (context, index) {
               return _buildPhotoItem(_additionalPhotos[index], isMain: false);
@@ -894,7 +889,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
 
   Widget _buildPhotoItem(_PhotoItem photoItem, {required bool isMain}) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: BorderRadius.circular(12),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -946,12 +941,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           ),
           // Кнопка удаления
           Positioned(
-            top: 8.h,
-            right: 8.w,
+            top: 8,
+            right: 8,
             child: GestureDetector(
               onTap: () => _deletePhoto(photoItem, isMain: isMain),
               child: Container(
-                padding: EdgeInsets.all(6.w),
+                padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                 child: Icon(Icons.close, size: 16, color: Colors.white),
               ),
@@ -966,18 +961,18 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     return GestureDetector(
       onTap: isMain ? _pickMainPhoto : _pickAdditionalPhotos,
       child: Container(
-        height: isMain ? 200.h : 150.h,
-        padding: EdgeInsets.all(24.w),
+        height: isMain ? 200 : 150,
+        padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Color(0xFFE5E7EB)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.add_photo_alternate, size: 48, color: Color(0xFF9CA5AF)),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             Text(isMain ? 'Добавить основную фотографию' : 'Добавить фотографии', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
           ],
         ),

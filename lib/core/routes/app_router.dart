@@ -247,7 +247,7 @@ class AppRouter extends RootStackRouter {
           path: 'blog',
           page: BlogNavigationRoute.page,
           children: [
-            AutoRoute(initial: true, page: BlogRoute.page),
+            AutoRoute(initial: true, page: BlogRoute.page, path: ''),
             AutoRoute(path: 'create', page: CreateBlogArticleRoute.page),
             AutoRoute(path: ':id', page: BlogArticleDetailRoute.page),
             AutoRoute(path: ':id/edit', page: EditBlogArticleRoute.page),

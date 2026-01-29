@@ -1,6 +1,5 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChipsWithTitleWidget extends StatelessWidget {
   const ChipsWithTitleWidget({super.key, required this.title, required this.colorBackground, required this.colorTitle});
@@ -12,7 +11,7 @@ class ChipsWithTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 55.w,
+      width: 55,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: colorBackground),
       child: Center(

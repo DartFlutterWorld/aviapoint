@@ -43,7 +43,6 @@ class BigBlogArticleWidget extends StatelessWidget {
                     backgroundColor: article.status == 'published' ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
                     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
                     borderRadius: 10,
-                    height: 20,
                   ),
                 ),
             ],

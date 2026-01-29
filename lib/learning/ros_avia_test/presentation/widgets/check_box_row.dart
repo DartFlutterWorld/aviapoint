@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CheckBoxRow extends StatelessWidget {
@@ -25,11 +24,11 @@ class CheckBoxRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 13, horizontal: 0.w),
+              padding: EdgeInsets.symmetric(vertical: 13, horizontal: 0),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),
-              child: SvgPicture.asset(active ? Pictures.checkBoxActive : Pictures.checkBox, fit: BoxFit.cover, height: 20.h),
+              child: SvgPicture.asset(active ? Pictures.checkBoxActive : Pictures.checkBox, fit: BoxFit.cover, height: 20),
             ),
-            SizedBox(width: 8.w),
+            SizedBox(width: 8),
             Expanded(
               child: Text(title, style: AppStyles.regular12s.copyWith(color: const Color(0xFF4B5767))),
             ),

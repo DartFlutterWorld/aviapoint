@@ -2,7 +2,6 @@ import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectTopicsWarningDialog extends StatelessWidget {
   const SelectTopicsWarningDialog({super.key});
@@ -10,9 +9,9 @@ class SelectTopicsWarningDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-      width: 313.w,
-      height: 195.h,
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      width: 313,
+      height: 195,
       color: Colors.white,
       child: Column(
         children: [
@@ -22,7 +21,7 @@ class SelectTopicsWarningDialog extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Image.asset(Pictures.planeProgress, height: 76),
-          SizedBox(height: 9.h),
+          SizedBox(height: 9),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -34,14 +33,7 @@ class SelectTopicsWarningDialog extends StatelessWidget {
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff0064D6).withOpacity(0.25),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      offset: Offset(0.0, 7.0),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),

@@ -7,7 +7,6 @@ import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.da
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class BookingDialog extends StatefulWidget {
@@ -32,9 +31,7 @@ class _BookingDialogState extends State<BookingDialog> {
 
   void _submitBooking(FlightEntity flight) {
     if (_seatsCount <= 0 || _seatsCount > flight.availableSeats) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Выберите корректное количество мест'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Выберите корректное количество мест'), backgroundColor: Colors.red));
       return;
     }
 
@@ -76,10 +73,7 @@ class _BookingDialogState extends State<BookingDialog> {
                 if (_shouldCheckProfileAfterBooking) {
                   _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг
                   // Используем универсальную функцию для проверки ФИО
-                  checkDataProfileAndOpenEditIfNeeded(
-                    context: context,
-                    message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования',
-                  );
+                  checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования');
                 }
               },
             ),
@@ -90,16 +84,9 @@ class _BookingDialogState extends State<BookingDialog> {
                     // Не показываем ничего при loading
                   },
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(responseMessage ?? errorForUser),
-                        backgroundColor: Colors.red,
-                        duration: Duration(seconds: 4),
-                      ),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
                     // Если ошибка связана с недостатком мест, обновляем информацию о полете
-                    if (responseMessage != null &&
-                        (responseMessage.contains('недостаточно') || responseMessage.contains('Not enough'))) {
+                    if (responseMessage != null && (responseMessage.contains('недостаточно') || responseMessage.contains('Not enough'))) {
                       // Обновляем информацию о полете через FlightDetailBloc
                       try {
                         final flightDetailBloc = context.read<FlightDetailBloc>();
@@ -118,9 +105,7 @@ class _BookingDialogState extends State<BookingDialog> {
                     try {
                       final flightDetailBloc = context.read<FlightDetailBloc>();
                       flightDetailBloc.add(flight.id);
-                      print(
-                        '✅ [BookingDialog] Обновление информации о полете после успешного бронирования для flightId=${flight.id}',
-                      );
+                      print('✅ [BookingDialog] Обновление информации о полете после успешного бронирования для flightId=${flight.id}');
                     } catch (e) {
                       print('❌ [BookingDialog] Не удалось обновить информацию о полете: $e');
                     }
@@ -129,31 +114,16 @@ class _BookingDialogState extends State<BookingDialog> {
                     Navigator.of(context).pop({'success': true, 'switchToMyBookings': true});
 
                     // Проверяем, заполнены ли ФИО у пользователя (универсальная функция)
-                    final profileCheckResult = checkDataProfileAndOpenEditIfNeeded(
-                      context: context,
-                      message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования',
-                    );
+                    final profileCheckResult = checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования');
 
                     // Если ФИО заполнены, показываем сообщение об успехе
                     if (profileCheckResult == true) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Бронирование успешно создано'),
-                          backgroundColor: Colors.green,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Бронирование успешно создано'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
                     } else if (profileCheckResult == null) {
                       // Если профиль еще не загружен (null), устанавливаем флаг для проверки после загрузки
                       _shouldCheckProfileAfterBooking = true;
                       // Показываем сообщение об успехе
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Бронирование успешно создано'),
-                          backgroundColor: Colors.green,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Бронирование успешно создано'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
                     }
                   },
                   bookingConfirmed: (booking) {
@@ -167,7 +137,7 @@ class _BookingDialogState extends State<BookingDialog> {
             ),
           ],
           child: Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {
                 // Проверяем только состояние loading, игнорируем bookingCreated
@@ -175,8 +145,8 @@ class _BookingDialogState extends State<BookingDialog> {
 
                 return SingleChildScrollView(
                   child: Container(
-                    padding: EdgeInsets.all(20.w),
-                    constraints: BoxConstraints(maxWidth: 400.w),
+                    padding: EdgeInsets.all(20),
+                    constraints: BoxConstraints(maxWidth: 600),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -192,13 +162,13 @@ class _BookingDialogState extends State<BookingDialog> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 16),
                         // Информация о полете
                         Container(
-                          padding: EdgeInsets.all(12.w),
+                          padding: EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: Color(0xFFF9FAFB),
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Color(0xFFD9E6F8)),
                           ),
                           child: Column(
@@ -206,35 +176,23 @@ class _BookingDialogState extends State<BookingDialog> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    flight.departureAirport,
-                                    style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
-                                  ),
-                                  SizedBox(width: 8.w),
+                                  Text(flight.departureAirport, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                  SizedBox(width: 8),
                                   Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    flight.arrivalAirport,
-                                    style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
-                                  ),
+                                  SizedBox(width: 8),
+                                  Text(flight.arrivalAirport, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                                 ],
                               ),
-                              SizedBox(height: 8.h),
-                              Text(
-                                'Свободных мест: ${flight.availableSeats}',
-                                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                              ),
-                              Text(
-                                'Цена за место: ${priceFormat.format(flight.pricePerSeat)}',
-                                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                              ),
+                              SizedBox(height: 8),
+                              Text('Свободных мест: ${flight.availableSeats}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                              Text('Цена за место: ${priceFormat.format(flight.pricePerSeat)}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                             ],
                           ),
                         ),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 20),
                         // Количество мест - выпадающий список
                         Text('Количество мест', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: 8),
                         DropdownButton2<int>(
                           value: _seatsCount,
                           isExpanded: true,
@@ -261,48 +219,39 @@ class _BookingDialogState extends State<BookingDialog> {
                                   }
                                 },
                           buttonStyleData: ButtonStyleData(
-                            height: 50.h,
-                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            height: 50,
+                            padding: EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.r),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: Color(0xFFD9E6F8)),
                             ),
                           ),
                           dropdownStyleData: DropdownStyleData(
-                            maxHeight: 200.h,
+                            maxHeight: 200,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.r),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: Color(0xFFD9E6F8)),
                             ),
                           ),
-                          menuItemStyleData: MenuItemStyleData(
-                            height: 48.h,
-                            padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          ),
+                          menuItemStyleData: MenuItemStyleData(height: 48, padding: EdgeInsets.symmetric(horizontal: 16)),
                           iconStyleData: IconStyleData(icon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF))),
                         ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 16),
                         // Итоговая стоимость
                         Container(
-                          padding: EdgeInsets.all(12.w),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE3F1FF),
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(color: Color(0xFFE3F1FF), borderRadius: BorderRadius.circular(12)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Итого:', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                              Text(
-                                priceFormat.format(totalPrice),
-                                style: AppStyles.bold20s.copyWith(color: Color(0xFF0A6EFA)),
-                              ),
+                              Text(priceFormat.format(totalPrice), style: AppStyles.bold20s.copyWith(color: Color(0xFF0A6EFA))),
                             ],
                           ),
                         ),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 20),
                         // Кнопки
                         Row(
                           children: [
@@ -310,29 +259,25 @@ class _BookingDialogState extends State<BookingDialog> {
                               child: OutlinedButton(
                                 onPressed: () => Navigator.of(context).pop(), // Всегда можно закрыть
                                 style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                                  padding: EdgeInsets.symmetric(vertical: 14),
                                   side: BorderSide(color: Color(0xFFD9E6F8)),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 ),
                                 child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                               ),
                             ),
-                            SizedBox(width: 12.w),
+                            SizedBox(width: 12),
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: isLoading ? null : () => _submitBooking(flight),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Color(0xFF0A6EFA),
-                                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  padding: EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   disabledBackgroundColor: Color(0xFF9CA5AF),
                                 ),
                                 child: isLoading
-                                    ? SizedBox(
-                                        height: 20.h,
-                                        width: 20.w,
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                                      )
+                                    ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                                     : Text('Забронировать', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                               ),
                             ),

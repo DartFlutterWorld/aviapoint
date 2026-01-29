@@ -415,6 +415,70 @@ class AppMessaging {
             _navigateToFlightDetail(flightId);
           }
         }
+      } else if (type == 'new_question') {
+        // Уведомление о новом вопросе (для пилота)
+        final flightIdStr = data['flight_id'] as String?;
+        final screen = data['screen'] as String?;
+
+        if (flightIdStr != null && screen == 'flight_detail') {
+          final flightId = int.tryParse(flightIdStr);
+          if (flightId != null) {
+            debugPrint('🔔 Переход на детальную страницу полета #$flightId (новый вопрос)');
+            _navigateToFlightDetail(flightId);
+          } else {
+            debugPrint('⚠️ Не удалось распарсить flight_id: $flightIdStr');
+          }
+        } else {
+          debugPrint('⚠️ Отсутствуют необходимые данные для навигации: flight_id=$flightIdStr, screen=$screen');
+        }
+      } else if (type == 'question_answered') {
+        // Уведомление об ответе на вопрос (для пассажира)
+        final flightIdStr = data['flight_id'] as String?;
+        final screen = data['screen'] as String?;
+
+        if (flightIdStr != null && screen == 'flight_detail') {
+          final flightId = int.tryParse(flightIdStr);
+          if (flightId != null) {
+            debugPrint('🔔 Переход на детальную страницу полета #$flightId (ответ на вопрос)');
+            _navigateToFlightDetail(flightId);
+          } else {
+            debugPrint('⚠️ Не удалось распарсить flight_id: $flightIdStr');
+          }
+        } else {
+          debugPrint('⚠️ Отсутствуют необходимые данные для навигации: flight_id=$flightIdStr, screen=$screen');
+        }
+      } else if (type == 'new_review') {
+        // Уведомление о новом отзыве (для пилота)
+        final flightIdStr = data['flight_id'] as String?;
+        final screen = data['screen'] as String?;
+
+        if (flightIdStr != null && screen == 'flight_detail') {
+          final flightId = int.tryParse(flightIdStr);
+          if (flightId != null) {
+            debugPrint('🔔 Переход на детальную страницу полета #$flightId (новый отзыв)');
+            _navigateToFlightDetail(flightId);
+          } else {
+            debugPrint('⚠️ Не удалось распарсить flight_id: $flightIdStr');
+          }
+        } else {
+          debugPrint('⚠️ Отсутствуют необходимые данные для навигации: flight_id=$flightIdStr, screen=$screen');
+        }
+      } else if (type == 'review_received') {
+        // Уведомление о получении отзыва (для пассажира)
+        final flightIdStr = data['flight_id'] as String?;
+        final screen = data['screen'] as String?;
+
+        if (flightIdStr != null && screen == 'flight_detail') {
+          final flightId = int.tryParse(flightIdStr);
+          if (flightId != null) {
+            debugPrint('🔔 Переход на детальную страницу полета #$flightId (получен отзыв)');
+            _navigateToFlightDetail(flightId);
+          } else {
+            debugPrint('⚠️ Не удалось распарсить flight_id: $flightIdStr');
+          }
+        } else {
+          debugPrint('⚠️ Отсутствуют необходимые данные для навигации: flight_id=$flightIdStr, screen=$screen');
+        }
       }
     } catch (e, stackTrace) {
       debugPrint('❌ Ошибка при обработке нажатия на уведомление: $e');

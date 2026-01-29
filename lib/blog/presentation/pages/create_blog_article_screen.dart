@@ -18,7 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:dart_quill_delta/dart_quill_delta.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/aircraft_type_selector_dialog.dart';
@@ -445,14 +444,14 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         backgroundColor: AppColors.background,
         body: Center(
           child: Padding(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.lock_outline, size: 64.sp, color: Color(0xFF9CA5AF)),
-                SizedBox(height: 16.h),
+                Icon(Icons.lock_outline, size: 64.0, color: Color(0xFF9CA5AF)),
+                SizedBox(height: 16),
                 Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                SizedBox(height: 8.h),
+                SizedBox(height: 8),
                 Text(
                   'Для создания статьи необходимо войти в систему',
                   style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
@@ -521,9 +520,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
                       label: Text('Выберите изображение для статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
                       style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         side: BorderSide(color: Color(0xFF0A6EFA)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                     ),
                   ],
@@ -531,7 +530,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                 if (_coverImage != null || _coverImageBytes != null) ...[
                   SizedBox(height: 16),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
+                    borderRadius: BorderRadius.circular(12),
                     child: kIsWeb && _coverImageBytes != null
                         ? Image.memory(_coverImageBytes!, fit: BoxFit.fill, width: double.infinity)
                         : _coverImage != null
@@ -552,18 +551,18 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                     ),
                   ),
                   validator: (value) => value?.trim().isEmpty ?? true ? 'Введите заголовок' : null,
@@ -583,18 +582,18 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                         hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                         filled: true,
                         fillColor: Colors.white,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
                       ),
                       items: categories.map((category) {
@@ -609,7 +608,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     orElse: () => const SizedBox(),
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Самолёт
                 InkWell(
@@ -625,21 +624,21 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                       ),
                       disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                       ),
                       suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
@@ -647,11 +646,11 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                   ),
                 ),
                 if (_selectedAircraftModelId != null) ...[
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.clear, size: 18.sp, color: Color(0xFF9CA5AF)),
+                        icon: Icon(Icons.clear, size: 18.0, color: Color(0xFF9CA5AF)),
                         onPressed: () {
                           setState(() {
                             _selectedAircraftModelId = null;
@@ -661,12 +660,12 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 8),
                       Text('Очистить выбор', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                     ],
                   ),
                 ],
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Краткое описание
                 TextFormField(
@@ -680,23 +679,23 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                     ),
                   ),
                   validator: (value) => value?.trim().isEmpty ?? true ? 'Введите краткое описание' : null,
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Контент (HTML Editor)
                 Column(
@@ -707,7 +706,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Color(0xFFD9E6F8)),
                       ),
                       child: Column(
@@ -719,8 +718,8 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                           ),
                           Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
                           Container(
-                            height: 300.h,
-                            padding: EdgeInsets.all(12.w),
+                            height: 300,
+                            padding: EdgeInsets.all(12),
                             child: QuillEditor.basic(
                               controller: _quillController,
                               config: QuillEditorConfig(placeholder: 'Введите текст статьи...', embedBuilders: FlutterQuillEmbeds.editorBuilders()),
@@ -738,7 +737,7 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       label: Text('Вставить изображение в тексты', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: Color(0xFF0A6EFA)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                     ),
                   ],
@@ -759,37 +758,37 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                       hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2.w),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                       ),
                       disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                       ),
                       suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF)),
                     ),
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Кнопка создания
                 CustomButton(
-                  verticalPadding: 14.h,
+                  verticalPadding: 14,
                   backgroundColor: Color(0xFF7A0FD9),
                   title: _isLoading ? 'Создание...' : 'Сделать запись',
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF7A0FD9),
-                  borderRadius: 46.r,
+                  borderRadius: 46,
                   onPressed: _isLoading ? null : _submit,
                 ),
               ],

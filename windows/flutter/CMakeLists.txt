@@ -25,11 +25,11 @@ set(PROJECT_BUILD_DIR "${PROJECT_DIR}/build/" PARENT_SCOPE)
 set(AOT_LIBRARY "${PROJECT_DIR}/build/windows/app.so" PARENT_SCOPE)
 
 list(APPEND FLUTTER_LIBRARY_HEADERS
-  "flutter_export.h"
-  "flutter_windows.h"
-  "flutter_messenger.h"
-  "flutter_plugin_registrar.h"
-  "flutter_texture_registrar.h"
+  "flutter_export"
+  "flutter_windows"
+  "flutter_messenger"
+  "flutter_plugin_registrar"
+  "flutter_texture_registrar"
 )
 list(TRANSFORM FLUTTER_LIBRARY_HEADERS PREPEND "${EPHEMERAL_DIR}/")
 add_library(flutter INTERFACE)

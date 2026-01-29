@@ -6,9 +6,7 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -214,25 +212,24 @@ class _ProfileEditState extends State<ProfileEdit> {
       },
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
-          return SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: _isLoading ? MainAxisSize.max : MainAxisSize.min,
-                children: [
-                  // Заголовок с кнопкой закрытия
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Изменить данные', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: SvgPicture.asset(Pictures.closeAuth),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24),
+          return Padding(
+            padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Заголовок с кнопкой закрытия
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Изменить данные', style: AppStyles.bold16s.copyWith(color: Color(0xFF2B373E))),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: SvgPicture.asset(Pictures.closeAuth),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24),
                   // Фото профиля
                   Center(
                     child: GestureDetector(
@@ -299,10 +296,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                   SizedBox(height: 24),
                   // Поля для редактирования
                   if (_isLoading)
-                    Expanded(
-                      child: Center(
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             CircularProgressIndicator(),
                             SizedBox(height: 16),
@@ -312,46 +310,42 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     )
                   else
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
-                            SizedBox(height: 16),
-                            _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
-                            SizedBox(height: 16),
-                            _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
-                            SizedBox(height: 16),
-                            _buildTextField(controller: _telegramController, hintText: 'Telegram', label: 'Telegram'),
-                            SizedBox(height: 16),
-                            _buildTextField(controller: _maxController, hintText: 'Max', label: 'Max'),
-                            SizedBox(height: 24),
-                            // Кнопка сохранения
-                            CustomButton(
-                              verticalPadding: 8,
-                              backgroundColor: Color(0xFF0A6EFA),
-                              title: 'Сохранить',
-                              textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                              borderColor: Color(0xFF0A6EFA),
-                              borderRadius: 46,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xff0064D6).withOpacity(0.25),
-                                  blurRadius: 4,
-                                  spreadRadius: 0,
-                                  offset: Offset(0.0, 7.0),
-                                ),
-                              ],
-                              onPressed: _isLoading ? null : _handleSave,
-                              disabled: _isLoading,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
+                        SizedBox(height: 16),
+                        _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
+                        SizedBox(height: 16),
+                        _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
+                        SizedBox(height: 16),
+                        _buildTextField(controller: _telegramController, hintText: 'Telegram', label: 'Telegram'),
+                        SizedBox(height: 16),
+                        _buildTextField(controller: _maxController, hintText: 'Max', label: 'Max'),
+                        SizedBox(height: 24),
+                        // Кнопка сохранения
+                        CustomButton(
+                          verticalPadding: 8,
+                          backgroundColor: Color(0xFF0A6EFA),
+                          title: 'Сохранить',
+                          textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                          borderColor: Color(0xFF0A6EFA),
+                          borderRadius: 46,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xff0064D6).withOpacity(0.25),
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0.0, 7.0),
                             ),
                           ],
+                          onPressed: _isLoading ? null : _handleSave,
+                          disabled: _isLoading,
                         ),
-                      ),
+                      ],
                     ),
-                ],
-              ),
+              ],
             ),
           );
         },

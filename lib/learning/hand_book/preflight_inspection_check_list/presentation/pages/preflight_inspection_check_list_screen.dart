@@ -14,7 +14,6 @@ import 'package:aviapoint/learning/hand_book/preflight_inspection_check_list/pre
 import 'package:aviapoint/learning/hand_book/preflight_inspection_categories_page/presentation/bloc/preflight_inspection_categories_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,10 +22,7 @@ import 'package:provider/provider.dart';
 @RoutePage()
 class PreflightInspectionCheckListScreen extends StatefulWidget {
   final String preflihgtInspectionCategoryId;
-  const PreflightInspectionCheckListScreen({
-    super.key,
-    @PathParam('preflihgtInspectionCategoryId') required this.preflihgtInspectionCategoryId,
-  });
+  const PreflightInspectionCheckListScreen({super.key, @PathParam('preflihgtInspectionCategoryId') required this.preflihgtInspectionCategoryId});
 
   @override
   State<PreflightInspectionCheckListScreen> createState() => _PreflightInspectionCheckListScreenState();
@@ -39,9 +35,7 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
     if (!mounted) return;
     // Загружаем список категорий для получения названия
     context.read<PreflightInspectionCategoriesBloc>().add(GetPreflightInspectionCategoriesEvent());
-    context.read<PreflightInspectionCheckListByCategoryBloc>().add(
-      GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId),
-    );
+    context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
   }
 
   String _getCategoryName(BuildContext context) {
@@ -79,9 +73,7 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
               error: (value) => ErrorCustom(
                 textError: value.errorForUser,
                 repeat: () {
-                  context.read<PreflightInspectionCheckListByCategoryBloc>().add(
-                    GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId),
-                  );
+                  context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
                 },
               ),
               initial: (value) => Center(child: LoadingCustom()),
@@ -99,12 +91,7 @@ class _Success extends StatefulWidget {
   final String categoryName;
   final String categoryId;
 
-  const _Success({
-    required this.preflightInspectionCheck,
-    required this.indexCheck,
-    required this.categoryName,
-    required this.categoryId,
-  });
+  const _Success({required this.preflightInspectionCheck, required this.indexCheck, required this.categoryName, required this.categoryId});
 
   @override
   State<_Success> createState() => _SuccessState();
@@ -135,9 +122,7 @@ class _SuccessState extends State<_Success> {
     // По preflightInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
     // с айдишниками и смотрим в нем,
     // если согласно индексу +1 (+1 потому что счетает индекс от 0) есть уже такой то показываем зелёный кубик, иначе красный
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
-      (e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId,
-    );
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId);
     if (index == indexCheck) {
       return Color(0xFFF1F7FF);
     }
@@ -149,9 +134,7 @@ class _SuccessState extends State<_Success> {
     // По preflightInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
     // с айдишниками и смотрим в нем,
     // если согласно индексу +1 (+1 потому что счетает индекс от 0) есть уже такой то показываем зелёный кубик, иначе красный
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
-      (e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId,
-    );
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId);
     if (index == indexCheck) {
       return Color(0xFF223B76);
     }
@@ -183,12 +166,12 @@ class _SuccessState extends State<_Success> {
 
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 8.h, bottom: 8.h),
+        padding: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 8.h),
+                padding: EdgeInsets.symmetric(vertical: 8),
                 child: Column(
                   children: [
                     LiveGrid.options(
@@ -197,79 +180,57 @@ class _SuccessState extends State<_Success> {
                       options: options,
                       itemBuilder: buildAnimatedItem,
                       itemCount: widget.preflightInspectionCheck.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 15,
-                        crossAxisSpacing: 4.w,
-                        mainAxisSpacing: 4.h,
-                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 15, crossAxisSpacing: 4, mainAxisSpacing: 4),
                     ),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 24),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         widget.preflightInspectionCheck[indexCheck].title.replaceAll("\\n", "\n"),
                         style: AppStyles.bold20s.copyWith(color: Color(0xFF1F2937)),
                         textAlign: TextAlign.start,
                       ),
                     ),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 12),
                     Container(
                       width: double.infinity,
-                      decoration: BoxDecoration(color: Color(0xFFFFF0ED), borderRadius: BorderRadius.circular(7.r)),
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      decoration: BoxDecoration(color: Color(0xFFFFF0ED), borderRadius: BorderRadius.circular(7)),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       // margin: EdgeInsets.symmetric(vertical: 12),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.h),
+                        padding: EdgeInsets.symmetric(vertical: 4),
                         child: Row(
-                          spacing: 6.w,
+                          spacing: 6,
                           children: [
                             SvgPicture.asset(Pictures.danger),
                             Flexible(
-                              child: Text(
-                                widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(),
-                                style: AppStyles.regular15s.copyWith(color: Color(0xFF374151)),
-                              ),
+                              child: Text(widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(), style: AppStyles.regular15s.copyWith(color: Color(0xFF374151))),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 24.h),
-                    if (widget.preflightInspectionCheck[indexCheck].picture != null &&
-                        widget.preflightInspectionCheck[indexCheck].picture!.isNotEmpty)
+                    SizedBox(height: 24),
+                    if (widget.preflightInspectionCheck[indexCheck].picture != null && widget.preflightInspectionCheck[indexCheck].picture!.isNotEmpty)
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(16.r),
-                        child: NetworkImageWidget(
-                          imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture),
-                          placeholder: LoadingCustom(),
-                          errorWidget: Icon(Icons.error),
-                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        child: NetworkImageWidget(imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture), placeholder: LoadingCustom(), errorWidget: Icon(Icons.error)),
                       ),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
             CustomButton(
-              verticalPadding: 8.h,
+              verticalPadding: 8,
               backgroundColor: Color(0xFF0A6EFA),
               title: 'Выполнено',
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              borderRadius: 46.r,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xff0064D6).withOpacity(0.25),
-                  blurRadius: 4.r,
-                  spreadRadius: 0,
-                  offset: Offset(0.0, 7.h),
-                ),
-              ],
+              borderRadius: 46,
+              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
               onPressed: () {
-                context.read<PreflightCheckedCubit>().setCheck(
-                  idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId,
-                  idCheck: indexCheck + 1,
-                );
+                context.read<PreflightCheckedCubit>().setCheck(idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId, idCheck: indexCheck + 1);
 
                 if (widget.preflightInspectionCheck.length - 1 > indexCheck) {
                   setState(() => indexCheck++);

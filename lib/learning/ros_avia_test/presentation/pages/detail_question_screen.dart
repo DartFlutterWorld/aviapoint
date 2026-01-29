@@ -6,7 +6,6 @@ import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_a
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/answer_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
@@ -61,7 +60,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // SizedBox(height: 16.h),
+          // SizedBox(height: 16),
           if (widget.withClose)
             Align(
               alignment: Alignment.centerRight,
@@ -77,7 +76,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                spacing: 12.w,
+                spacing: 12,
                 children: [
                   ChipsWidget(questionWithAnswers: widget.question ?? emptyQuestion),
                   Flexible(
@@ -85,9 +84,9 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               Text(widget.question?.questionText ?? '', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -105,7 +104,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               Row(
                 spacing: 6,
                 children: [
@@ -115,7 +114,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               Row(
                 spacing: 6,
                 children: [
@@ -125,7 +124,7 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 40.h),
+              SizedBox(height: 40),
               if (widget.question?.explanation != null)
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),

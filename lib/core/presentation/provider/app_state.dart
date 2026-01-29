@@ -5,6 +5,7 @@ import 'package:aviapoint/auth_page/domain/repositories/auth_repository.dart';
 import 'package:aviapoint/config/environment.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource.dart';
 import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
+import 'package:aviapoint/core/utils/device_utils.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -23,12 +24,19 @@ class AppState with ChangeNotifier {
   bool get isTablet => _isTablet ?? false;
 
   /// Устанавливаем тип устройства только один раз.
-  void setIsTabletIfUnset(bool value) {
+  /// Определяет, является ли устройство планшетом, используя DeviceUtils.
+  void setIsTabletIfUnset(BuildContext? context) {
     if (_isTablet != null) return;
-    // Здесь нам не нужно вызывать notifyListeners, так как isTablet используется
-    // только с listen: false для чтения в местах, где мы его устанавливаем.
-    // Вызов notifyListeners во время build приводил к ошибке Flutter.
-    _isTablet = value;
+
+    // Используем DeviceUtils для определения типа устройства
+    // DeviceUtils.initialize() вызывается в main.dart, поэтому кэш должен быть заполнен
+    final isTabletValue = DeviceUtils.isTabletSync();
+
+    _isTablet = isTabletValue;
+    // Вызываем notifyListeners в post-frame callback, чтобы избежать ошибок во время build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   bool _useLocalServer = true;
@@ -95,5 +103,4 @@ class AppState with ChangeNotifier {
     getIt<ApiDatasource>().delAuthHeader();
     notifyListeners();
   }
-
 }

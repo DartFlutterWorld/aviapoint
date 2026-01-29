@@ -9,7 +9,6 @@ import 'package:aviapoint/learning/ros_avia_test/domain/entities/type_sertificat
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/type_sertificates_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -84,7 +83,7 @@ class _Success extends StatelessWidget {
             ),
           ),
           Text(title, style: AppStyles.semibpld14s.copyWith(color: Color(0xFF374151))),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           // Убрали Expanded, так как виджет используется внутри SingleChildScrollView
           ListView.builder(
             shrinkWrap: true,

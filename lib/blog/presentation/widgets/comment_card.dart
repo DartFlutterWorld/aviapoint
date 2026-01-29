@@ -9,7 +9,6 @@ import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,17 +30,17 @@ class CommentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE5E7EB)),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: Offset(0, 2))],
       ),
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.w),
+            padding: EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,7 +52,7 @@ class CommentCard extends StatelessWidget {
                     if (comment.createdAt != null)
                       Text(
                         formatDateWithTime(comment.createdAt!),
-                        style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.sp),
+                        style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF), fontSize: 10.0),
                       ),
                     // Кнопки редактирования и удаления справа
                     Row(
@@ -62,7 +61,7 @@ class CommentCard extends StatelessWidget {
                         // Кнопка редактирования
                         if (canEdit && onEdit != null)
                           IconButton(
-                            icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20.sp),
+                            icon: Icon(Icons.edit_outlined, color: Color(0xFF0A6EFA), size: 20.0),
                             onPressed: onEdit,
                             padding: EdgeInsets.zero,
                             constraints: BoxConstraints(),
@@ -70,7 +69,7 @@ class CommentCard extends StatelessWidget {
                         // Кнопка удаления
                         if (canDelete && onDelete != null)
                           IconButton(
-                            icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20.sp),
+                            icon: Icon(Icons.delete_outline, color: Color(0xFFEF4444), size: 20.0),
                             onPressed: onDelete,
                             padding: EdgeInsets.zero,
                             constraints: BoxConstraints(),
@@ -79,7 +78,7 @@ class CommentCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 // Автор комментария
                 Row(
                   children: [
@@ -90,42 +89,38 @@ class CommentCard extends StatelessWidget {
                         child: comment.authorAvatarUrl != null && comment.authorAvatarUrl!.isNotEmpty
                             ? NetworkImageWidget(
                                 imageUrl: getImageUrl(comment.authorAvatarUrl!),
-                                width: 40.r,
-                                height: 40.r,
+                                width: 40,
+                                height: 40,
                                 fit: BoxFit.cover,
-                                placeholder: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
-                                errorWidget: Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                                placeholder: Image.asset(Pictures.pilot, width: 40, height: 40, fit: BoxFit.cover),
+                                errorWidget: Image.asset(Pictures.pilot, width: 40, height: 40, fit: BoxFit.cover),
                               )
-                            : Image.asset(Pictures.pilot, width: 40.r, height: 40.r, fit: BoxFit.cover),
+                            : Image.asset(Pictures.pilot, width: 40, height: 40, fit: BoxFit.cover),
                       ),
                     ),
-                    SizedBox(width: 12.w),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(comment.authorName, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                          if (comment.authorRating != null && comment.authorRating! > 0) ...[SizedBox(height: 4.h), RatingWidget(rating: comment.authorRating!.round(), size: 12)],
+                          if (comment.authorRating != null && comment.authorRating! > 0) ...[SizedBox(height: 4), RatingWidget(rating: comment.authorRating!.round(), size: 12)],
                         ],
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 // Текст комментария
                 Text(comment.content, style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
                 // Кнопка "Ответить" (только для основных комментариев, не для ответов)
                 if (!isReply && onReply != null) ...[
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 12),
                   TextButton.icon(
                     onPressed: onReply,
-                    icon: Icon(Icons.reply, size: 16.sp, color: Color(0xFF0A6EFA)),
+                    icon: Icon(Icons.reply, size: 16.0, color: Color(0xFF0A6EFA)),
                     label: Text('Ответить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      minimumSize: Size(0, 0),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
+                    style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), minimumSize: Size(0, 0), tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                   ),
                 ],
               ],
@@ -178,8 +173,8 @@ class CommentCard extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.broken_image, color: Colors.white70, size: 64.sp),
-                                SizedBox(height: 16.h),
+                                Icon(Icons.broken_image, color: Colors.white70, size: 64.0),
+                                SizedBox(height: 16),
                                 Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                               ],
                             ),
@@ -198,37 +193,37 @@ class CommentCard extends StatelessWidget {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(width: 48.w), // Для центрирования
+                            SizedBox(width: 48), // Для центрирования
                             // Кнопки действий
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 // Кнопка "Поделиться"
                                 IconButton(
-                                  icon: Icon(Icons.share, color: Colors.white, size: 24.sp),
+                                  icon: Icon(Icons.share, color: Colors.white, size: 24.0),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка "Скачать"
                                 IconButton(
-                                  icon: Icon(Icons.download, color: Colors.white, size: 24.sp),
+                                  icon: Icon(Icons.download, color: Colors.white, size: 24.0),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка закрытия
                                 IconButton(
-                                  icon: Icon(Icons.close, color: Colors.white, size: 28.sp),
+                                  icon: Icon(Icons.close, color: Colors.white, size: 28.0),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                 ),
@@ -283,7 +278,7 @@ class CommentCard extends StatelessWidget {
           content: Row(
             children: [
               CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-              SizedBox(width: 16.w),
+              SizedBox(width: 16),
               Text('Скачивание...'),
             ],
           ),

@@ -1,14 +1,14 @@
 // Microsoft Visual C++ generated resource script.
 //
 #pragma code_page(65001)
-#include "resource.h"
+#include "resource"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "winres.h"
+#include "winres"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -27,12 +27,12 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 1 TEXTINCLUDE
 BEGIN
-    "resource.h\0"
+    "resource\0"
 END
 
 2 TEXTINCLUDE
 BEGIN
-    "#include ""winres.h""\r\n"
+    "#include ""winres""\r\n"
     "\0"
 END
 

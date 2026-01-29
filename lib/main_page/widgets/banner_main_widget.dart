@@ -4,7 +4,6 @@ import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BannerMainWidget extends StatelessWidget {
   final String title;
@@ -38,15 +37,15 @@ class BannerMainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = kIsWeb ? 18.0 : 18.r;
-    final padding = kIsWeb ? 14.0 : 14.w;
-    final spacing = kIsWeb ? 5.0 : 5.h;
-    final bottomPos = kIsWeb ? 12.0 : 12.h;
-    final horizontalPos = kIsWeb ? 12.0 : 12.w;
-    final buttonPadding = kIsWeb ? 8.0 : 8.h;
-    final buttonRadius = kIsWeb ? 46.0 : 46.r;
-    final shadowBlur = kIsWeb ? 4.0 : 4.r;
-    final shadowOffset = kIsWeb ? 7.0 : 7.h;
+    final borderRadius = kIsWeb ? 18.0 : 18.0;
+    final padding = kIsWeb ? 14.0 : 14.0;
+    final spacing = kIsWeb ? 5.0 : 5.0;
+    final bottomPos = kIsWeb ? 12.0 : 12.0;
+    final horizontalPos = kIsWeb ? 12.0 : 12.0;
+    final buttonPadding = kIsWeb ? 8.0 : 8.0;
+    final buttonRadius = kIsWeb ? 46.0 : 46.0;
+    final shadowBlur = kIsWeb ? 4.0 : 4.0;
+    final shadowOffset = kIsWeb ? 7.0 : 7.0;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
@@ -85,7 +84,7 @@ class BannerMainWidget extends StatelessWidget {
                     Flexible(
                       child: Text(
                         title,
-                        // style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.sp, height: 1, color: titleColor),
+                        // style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.0, height: 1, color: titleColor),
                         style: AppStyles.bold16s.copyWith(color: titleColor),
                         textAlign: TextAlign.start,
                       ),

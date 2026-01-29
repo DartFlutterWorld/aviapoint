@@ -16,10 +16,8 @@ import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:aviapoint/on_the_way/data/models/aircraft_model_dto.dart';
 import 'dart:convert';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -119,7 +117,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
           onTap: () {
             // Обновляем список статей перед возвратом
             _refreshArticlesList();
-            AutoRouter.of(context).pop();
+            AutoRouter.of(context).maybePop();
           },
           actions: [
             BlocBuilder<BlogArticleDetailBloc, BlogArticleDetailState>(
@@ -134,12 +132,12 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                       children: [
                         if (isAuthor)
                           IconButton(
-                            iconSize: 28.sp,
+                            iconSize: 28,
                             icon: const Icon(Icons.edit),
                             onPressed: () => AutoRouter.of(context).push(EditBlogArticleRoute(articleId: article.id)),
                             tooltip: 'Редактировать',
                           ),
-                        IconButton(iconSize: 28.sp, icon: const Icon(Icons.share), onPressed: () => _shareArticle(article.title), tooltip: 'Поделиться'),
+                        IconButton(iconSize: 28, icon: const Icon(Icons.share), onPressed: () => _shareArticle(article.title), tooltip: 'Поделиться'),
                       ],
                     );
                   },
@@ -152,7 +150,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
         backgroundColor: AppColors.background,
         body: BlocBuilder<BlogArticleDetailBloc, BlogArticleDetailState>(
           builder: (context, state) => state.maybeWhen(
-            loading: () => LoadingCustom(paddingTop: 200.h),
+            loading: () => LoadingCustom(paddingTop: 200),
             error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
               textError: errorForUser,
               repeat: () {
@@ -190,10 +188,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                             child: NetworkImageWidget(
                               imageUrl: getImageUrl(article.coverImageUrl!),
                               fit: BoxFit.fill, // Как в новостях - без ограничений по высоте
-                              errorWidget: Container(
-                                color: const Color(0xFFD9E6F8),
-                                child: Icon(Icons.image, size: 48.sp),
-                              ),
+                              errorWidget: Container(color: const Color(0xFFD9E6F8), child: Icon(Icons.image, size: 48.0)),
                             ),
                           ),
                           // Чипс со статусом для автора в правом верхнем углу
@@ -217,36 +212,36 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                         children: [
                           Text(article.title, style: AppStyles.bold20s.copyWith(color: const Color(0xFF374151))),
                           if (article.excerpt != null && article.excerpt!.isNotEmpty) ...[
-                            SizedBox(height: 12.h),
+                            SizedBox(height: 12),
                             Text(article.excerpt!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF6B7280))),
                           ],
-                          SizedBox(height: 12.h),
+                          SizedBox(height: 12),
                           Wrap(
-                            spacing: 16.w,
-                            runSpacing: 8.h,
+                            spacing: 16,
+                            runSpacing: 8,
                             children: [
                               if (article.author != null)
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.person_outline, size: 14.sp, color: const Color(0xFF9CA5AF)),
-                                    SizedBox(width: 4.w),
+                                    Icon(Icons.person_outline, size: 14.0, color: const Color(0xFF9CA5AF)),
+                                    SizedBox(width: 4),
                                     Text(_getAuthorName(), style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
                                   ],
                                 ),
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.calendar_today, size: 14.sp, color: const Color(0xFF9CA5AF)),
-                                  SizedBox(width: 4.w),
+                                  Icon(Icons.calendar_today, size: 14.0, color: const Color(0xFF9CA5AF)),
+                                  SizedBox(width: 4),
                                   Text(article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '', style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
                                 ],
                               ),
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.visibility_outlined, size: 14.sp, color: const Color(0xFF9CA5AF)),
-                                  SizedBox(width: 4.w),
+                                  Icon(Icons.visibility_outlined, size: 14.0, color: const Color(0xFF9CA5AF)),
+                                  SizedBox(width: 4),
                                   Text('${article.viewCount}', style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
                                 ],
                               ),
@@ -254,8 +249,8 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.flight, size: 14.sp, color: const Color(0xFF9CA5AF)),
-                                    SizedBox(width: 4.w),
+                                    Icon(Icons.flight, size: 14.0, color: const Color(0xFF9CA5AF)),
+                                    SizedBox(width: 4),
                                     Flexible(
                                       child: Text(
                                         article.aircraftModel!.getFullName(),
@@ -269,9 +264,9 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                             ],
                           ),
                           if (article.category != null) ...[
-                            SizedBox(height: 8.h),
+                            SizedBox(height: 8),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
                                 color: article.category!.color != null && article.category!.color!.isNotEmpty
                                     ? (() {
@@ -282,7 +277,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                                         }
                                       })()
                                     : AppColors.primary100p,
-                                borderRadius: BorderRadius.circular(20.r),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(article.category!.name, style: AppStyles.regular12s.copyWith(color: Colors.white)),
                             ),
@@ -412,40 +407,40 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
               // Кнопка "Оставить комментарий"
               ElevatedButton.icon(
                 onPressed: () => _showCommentDialog(context, articleId, isAuthenticated),
-                icon: Icon(Icons.comment_outlined, size: 16.sp),
+                icon: Icon(Icons.comment_outlined, size: 16),
                 label: Text('Оставить комментарий', style: AppStyles.bold16s),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0A6EFA),
                   foregroundColor: Colors.white,
 
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               commentsState.maybeWhen(
                 loading: () => Center(
-                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
+                  child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                 ),
                 error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
                   child: Padding(
-                    padding: EdgeInsets.all(16.w),
+                    padding: EdgeInsets.all(16),
                     child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                   ),
                 ),
                 success: (comments) {
                   if (comments.isEmpty) {
                     return Container(
-                      padding: EdgeInsets.all(24.w),
+                      padding: EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: Color(0xFFF9FAFB),
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Color(0xFFE5E7EB)),
                       ),
                       child: Center(
                         child: Column(
                           children: [
                             Icon(Icons.comment_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                            SizedBox(height: 12.h),
+                            SizedBox(height: 12),
                             Text('Пока нет комментариев', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                           ],
                         ),
@@ -483,7 +478,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                           // Отображаем ответы на комментарий (если они есть)
                           if (commentReplies.isNotEmpty)
                             Padding(
-                              padding: EdgeInsets.only(left: 40.w),
+                              padding: EdgeInsets.only(left: 40),
                               child: Column(
                                 children: commentReplies.map((BlogCommentEntity reply) {
                                   final isAdmin = PermissionHelper.isAdmin(context);

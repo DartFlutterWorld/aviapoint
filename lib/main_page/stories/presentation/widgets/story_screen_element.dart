@@ -13,7 +13,6 @@ import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -94,9 +93,7 @@ class StoryScreenElement extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorWidget: Container(
                         color: Colors.black.withOpacity(0.3),
-                        child: const Center(
-                          child: Icon(Icons.image_not_supported, color: Colors.white70, size: 48),
-                        ),
+                        child: const Center(child: Icon(Icons.image_not_supported, color: Colors.white70, size: 48)),
                       ),
                     ),
                   ),
@@ -107,15 +104,11 @@ class StoryScreenElement extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: videoPlayer!.controller.value.aspectRatio,
-                  child: GestureDetector(
-                    onLongPress: onLongPress,
-                    onLongPressEnd: onLongPressEnd,
-                    child: VideoPlayer(videoPlayer!.controller),
-                  ),
+                  child: GestureDetector(onLongPress: onLongPress, onLongPressEnd: onLongPressEnd, child: VideoPlayer(videoPlayer!.controller)),
                 ),
               )
             : ClipRRect(
-                borderRadius: BorderRadius.circular(12).r,
+                borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: 9 / 16,
                   child: Stack(
@@ -125,9 +118,7 @@ class StoryScreenElement extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorWidget: Container(
                           color: Colors.black.withOpacity(0.3),
-                          child: const Center(
-                            child: Icon(Icons.image_not_supported, color: Colors.white70, size: 48),
-                          ),
+                          child: const Center(child: Icon(Icons.image_not_supported, color: Colors.white70, size: 48)),
                         ),
                       ),
                       const Center(child: LoadingCustom()),
@@ -144,12 +135,7 @@ class StoryScreenElement extends StatelessWidget {
                 Row(
                   children: [
                     ...stories.asMap().map((index, e) {
-                      return MapEntry(
-                        index,
-                        animController != null
-                            ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex)
-                            : const SizedBox(),
-                      );
+                      return MapEntry(index, animController != null ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex) : const SizedBox());
                     }).values,
                     SizedBox(width: 13),
                     // Заглушка для кнопки закрытия (чтобы не было прыжков в layout)
@@ -240,7 +226,7 @@ class StoryScreenElement extends StatelessWidget {
                 return Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 45, left: 21, right: 21).r,
+                    padding: const EdgeInsets.only(bottom: 45, left: 21, right: 21),
                     child: UpAnimation(
                       withFadeTransition: true,
                       milSecDuration: 300,
@@ -249,8 +235,8 @@ class StoryScreenElement extends StatelessWidget {
                       end: Offset.zero,
                       curve: Curves.ease,
                       child: SizedBox(
-                        // height: 50.h,
-                        height: kIsWeb ? constraints.maxHeight / 60 + 50 : 50.h,
+                        // height: 50,
+                        height: kIsWeb ? constraints.maxHeight / 60 + 50 : 50,
                         child: CustomButton(
                           title: story.textButton,
                           backgroundColor: Color(int.parse('0xFF$buttonColor')),
@@ -264,10 +250,7 @@ class StoryScreenElement extends StatelessWidget {
                             // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);
                             startUrl(url: story.hyperlink, context: context);
                           },
-                          textStyle: AppStyles.adaptiveTextStyle(context, AppStyles.button, baseSize: 20).copyWith(
-                            color: Color(int.parse('0xFF$textColor')),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          textStyle: AppStyles.adaptiveTextStyle(context, AppStyles.button, baseSize: 20).copyWith(color: Color(int.parse('0xFF$textColor')), overflow: TextOverflow.ellipsis),
                           borderColor: Color(int.parse('0xFF$buttonColor')),
                           boxShadow: const [],
                         ),

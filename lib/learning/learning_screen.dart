@@ -6,7 +6,6 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/spacing.dart';
 
@@ -35,7 +34,7 @@ class _LearningScreenState extends State<LearningScreen> {
           children: [
             SizedBox(height: AppSpacing.section),
             BanerWidget(
-              heightPicture: 150.h,
+              heightPicture: 150,
               background: Pictures.watchVideoBackground,
               picture: Pictures.aviaWatch,
               title: 'CESSNA-172S NAV III',
@@ -49,7 +48,7 @@ class _LearningScreenState extends State<LearningScreen> {
             ),
             SizedBox(height: AppSpacing.section),
             BanerWidget(
-              heightPicture: 150.h,
+              heightPicture: 150,
               background: Pictures.startLearningBackground,
               picture: Pictures.bookLearning,
               title: 'Учебное пособие',
@@ -63,7 +62,7 @@ class _LearningScreenState extends State<LearningScreen> {
             ),
             SizedBox(height: AppSpacing.section),
             BanerWidget(
-              heightPicture: 150.h,
+              heightPicture: 150,
               background: Pictures.backgroundRta,
               picture: Pictures.pilotRta,
               title: 'РосАвиаТест 2026',
@@ -77,8 +76,8 @@ class _LearningScreenState extends State<LearningScreen> {
               alignPicture: Alignment.bottomRight,
               titleButton2: 'Тестирование',
               titleButtonStyle2: AppStyles.bold16s.copyWith(color: Colors.white),
-              boxShadowButton: [BoxShadow(color: Color(0xff106BD2).withOpacity(0.11), blurRadius: 9.r, spreadRadius: 0, offset: Offset(0.0, 7.h))],
-              boxShadowButton2: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9.r, spreadRadius: 0, offset: Offset(0.0, 7.h))],
+              boxShadowButton: [BoxShadow(color: Color(0xff106BD2).withOpacity(0.11), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7))],
+              boxShadowButton2: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7))],
             ),
           ],
         ),

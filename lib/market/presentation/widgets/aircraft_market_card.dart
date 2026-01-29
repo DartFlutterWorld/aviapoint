@@ -7,7 +7,6 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Универсальная карточка товара для использования в маркете и профиле
 class AircraftMarketCard extends StatefulWidget {
@@ -45,7 +44,7 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
       onTap: widget.onTap,
       child: Card(
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         clipBehavior: Clip.antiAlias,
         child: Stack(
           fit: StackFit.expand,
@@ -57,7 +56,7 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
               Container(
                 color: Colors.grey.shade200,
                 alignment: Alignment.center,
-                child: Icon(Icons.image, color: Colors.grey.shade400, size: 32.sp),
+                child: Icon(Icons.image, color: Colors.grey.shade400, size: 32.0),
               ),
             // Нижний блок с текстом и ценой (с подложкой под текстом)
             Positioned(
@@ -66,11 +65,11 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
               bottom: 0,
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 decoration: BoxDecoration(
                   // color: Colors.black.withOpacity(0.75),
                   color: isHorizontal == true ? Colors.black.withOpacity(1) : Colors.black.withOpacity(0.75),
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -83,18 +82,18 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (widget.showYearAndLocation && (widget.product.year != null || (widget.product.location != null && widget.product.location!.isNotEmpty))) ...[
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 4),
                       Row(
                         children: [
                           if (widget.product.year != null) Text('${widget.product.year}', style: AppStyles.medium8s.copyWith(color: Colors.white70)),
                           if (widget.product.year != null && widget.product.location != null && widget.product.location!.isNotEmpty) ...[
-                            SizedBox(width: 8.w),
+                            SizedBox(width: 8),
                             Container(
-                              width: 3.w,
-                              height: 3.w,
+                              width: 3,
+                              height: 3,
                               decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle),
                             ),
-                            SizedBox(width: 4.w),
+                            SizedBox(width: 4),
                           ],
                           if (widget.product.location != null && widget.product.location!.isNotEmpty)
                             Expanded(
@@ -108,7 +107,7 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                         ],
                       ),
                     ],
-                    SizedBox(height: 6.h),
+                    SizedBox(height: 6),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
@@ -132,8 +131,8 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                     color: Colors.black.withOpacity(0.35),
                     alignment: Alignment.center,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.7), borderRadius: BorderRadius.circular(8.r)),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.7), borderRadius: BorderRadius.circular(8)),
                       child: Text('Не активно', style: AppStyles.regular12s.copyWith(color: Colors.white)),
                     ),
                   ),
@@ -142,47 +141,42 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
             // Чипсы: доля и лизинг
             if ((widget.product.isShareSale == true && widget.product.shareNumerator != null && widget.product.shareDenominator != null) || widget.product.isLeasing == true)
               Positioned(
-                top: 8.h,
-                left: widget.showEditButtons ? 8.w : null,
-                right: !widget.showEditButtons ? 8.w : null,
+                top: 8,
+                left: widget.showEditButtons ? 8 : null,
+                right: !widget.showEditButtons ? 8 : null,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (widget.product.isShareSale == true && widget.product.shareNumerator != null && widget.product.shareDenominator != null)
                       Padding(
-                        padding: EdgeInsets.only(bottom: 4.h),
+                        padding: EdgeInsets.only(bottom: 4),
                         child: StatusChip(
                           text: 'Доля ${widget.product.shareNumerator}/${widget.product.shareDenominator}',
                           backgroundColor: Colors.black.withOpacity(0.7),
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                          borderRadius: 12.r,
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          borderRadius: 12,
                         ),
                       ),
                     if (widget.product.isLeasing == true)
-                      StatusChip(
-                        text: 'Лизинг',
-                        backgroundColor: Colors.black.withOpacity(0.7),
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                        borderRadius: 12.r,
-                      ),
+                      StatusChip(text: 'Лизинг', backgroundColor: Colors.black.withOpacity(0.7), padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), borderRadius: 12),
                   ],
                 ),
               ),
             // Кнопки редактирования и удаления (если нужно)
             if (widget.showEditButtons)
               Positioned(
-                top: 8.h,
-                right: 8.w,
+                top: 8,
+                right: 8,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Кнопка редактирования
                     Container(
-                      width: 32.w,
-                      height: 32.h,
+                      width: 32,
+                      height: 32,
                       decoration: BoxDecoration(color: Colors.blue.withOpacity(0.8), shape: BoxShape.circle),
                       child: IconButton(
-                        icon: Icon(Icons.edit, color: Colors.white, size: 18.sp),
+                        icon: Icon(Icons.edit, color: Colors.white, size: 18.0),
                         onPressed:
                             widget.onEdit ??
                             () {
@@ -197,14 +191,14 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                         padding: EdgeInsets.zero,
                       ),
                     ),
-                    SizedBox(width: 4.w),
+                    SizedBox(width: 4),
                     // Кнопка удаления
                     Container(
-                      width: 32.w,
-                      height: 32.h,
+                      width: 32,
+                      height: 32,
                       decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), shape: BoxShape.circle),
                       child: IconButton(
-                        icon: Icon(Icons.delete, color: Colors.white, size: 18.sp),
+                        icon: Icon(Icons.delete, color: Colors.white, size: 18.0),
                         onPressed: widget.onDelete,
                         padding: EdgeInsets.zero,
                       ),
@@ -317,7 +311,7 @@ class _ProductImageState extends State<_ProductImage> {
             child: Center(
               child: CircularProgressIndicator(
                 value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                strokeWidth: 2.w,
+                strokeWidth: 2,
                 color: Colors.grey.shade400,
               ),
             ),
@@ -326,7 +320,9 @@ class _ProductImageState extends State<_ProductImage> {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: Colors.grey.shade100,
-            child: Center(child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.sp)),
+            child: Center(
+              child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.0),
+            ),
           );
         },
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {

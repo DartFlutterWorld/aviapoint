@@ -1,6 +1,5 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Виджет для выбора доли продажи (например, 1/2, 2/3, 3/4, 4/5)
 class SharePickerWidget extends StatelessWidget {
@@ -9,13 +8,7 @@ class SharePickerWidget extends StatelessWidget {
   final ValueChanged<int?>? onNumeratorChanged;
   final ValueChanged<int?>? onDenominatorChanged;
 
-  const SharePickerWidget({
-    super.key,
-    this.numerator,
-    this.denominator,
-    this.onNumeratorChanged,
-    this.onDenominatorChanged,
-  });
+  const SharePickerWidget({super.key, this.numerator, this.denominator, this.onNumeratorChanged, this.onDenominatorChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +16,7 @@ class SharePickerWidget extends StatelessWidget {
     final numeratorOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     // Доступные значения для знаменателя (1-10), но фильтруем чтобы знаменатель был больше числителя
     final allDenominatorOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    final denominatorOptions = numerator != null
-        ? allDenominatorOptions.where((d) => d > numerator!).toList()
-        : allDenominatorOptions;
+    final denominatorOptions = numerator != null ? allDenominatorOptions.where((d) => d > numerator!).toList() : allDenominatorOptions;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -33,10 +24,10 @@ class SharePickerWidget extends StatelessWidget {
       children: [
         // Числитель
         Container(
-          width: 60.w,
+          width: 60,
           decoration: BoxDecoration(
             color: Color(0xFFF9FAFB),
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Color(0xFFE5E7EB)),
           ),
           child: DropdownButtonHideUnderline(
@@ -65,19 +56,16 @@ class SharePickerWidget extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: 8),
         // Разделитель "/"
-        Text(
-          '/',
-          style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
-        ),
-        SizedBox(width: 8.w),
+        Text('/', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+        SizedBox(width: 8),
         // Знаменатель
         Container(
-          width: 60.w,
+          width: 60,
           decoration: BoxDecoration(
             color: Color(0xFFF9FAFB),
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Color(0xFFE5E7EB)),
           ),
           child: DropdownButtonHideUnderline(

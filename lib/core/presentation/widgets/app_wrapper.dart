@@ -3,7 +3,6 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppWrapper extends StatefulWidget {
   final Widget child;
@@ -25,8 +24,8 @@ class _AppWrapperState extends State<AppWrapper> {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.wifi_off, color: Colors.white, size: 20.sp),
-            SizedBox(width: 8.w),
+            Icon(Icons.wifi_off, color: Colors.white, size: 20.0),
+            SizedBox(width: 8),
             Expanded(
               child: Text('Нет подключения к интернету', style: AppStyles.regular14s.copyWith(color: Colors.white)),
             ),
@@ -48,8 +47,8 @@ class _AppWrapperState extends State<AppWrapper> {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.wifi, color: Colors.white, size: 20.sp),
-            SizedBox(width: 8.w),
+            Icon(Icons.wifi, color: Colors.white, size: 20.0),
+            SizedBox(width: 8),
             Expanded(
               child: Text('Подключение к интернету восстановлено', style: AppStyles.regular14s.copyWith(color: Colors.white)),
             ),

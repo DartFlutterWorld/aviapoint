@@ -27,6 +27,13 @@ abstract class BookingDto with _$BookingDto {
     @JsonKey(name: 'flight_departure_airport') String? flightDepartureAirport,
     @JsonKey(name: 'flight_arrival_airport') String? flightArrivalAirport,
     @JsonKey(name: 'flight_waypoints') dynamic flightWaypoints, // JSON массив кодов аэропортов
+    // Данные пилота (загружаются через JOIN в SQL)
+    @JsonKey(name: 'pilot_first_name') String? pilotFirstName,
+    @JsonKey(name: 'pilot_last_name') String? pilotLastName,
+    @JsonKey(name: 'pilot_phone') String? pilotPhone,
+    @JsonKey(name: 'pilot_email') String? pilotEmail,
+    @JsonKey(name: 'pilot_telegram') String? pilotTelegram,
+    @JsonKey(name: 'pilot_max') String? pilotMax,
   }) = _BookingDto;
 
   factory BookingDto.fromJson(Map<String, dynamic> json) => _$BookingDtoFromJson(json);

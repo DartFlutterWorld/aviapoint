@@ -8,7 +8,6 @@ import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:dio/dio.dart';
@@ -51,28 +50,25 @@ class AirportReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Color(0xFFE5E7EB)),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: Offset(0, 2))],
       ),
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(context),
-                SizedBox(height: 12.h),
-                if (review.rating != null && review.rating! > 0) ...[
-                  RatingWidget(rating: review.rating!, size: 16),
-                  SizedBox(height: 12.h),
-                ],
-                if (review.comment != null && review.comment!.isNotEmpty) ...[_buildComment(), SizedBox(height: 12.h)],
-                if (review.hasPhotos) ...[_buildPhotos(context), SizedBox(height: 12.h)],
+                SizedBox(height: 12),
+                if (review.rating != null && review.rating! > 0) ...[RatingWidget(rating: review.rating!, size: 16), SizedBox(height: 12)],
+                if (review.comment != null && review.comment!.isNotEmpty) ...[_buildComment(), SizedBox(height: 12)],
+                if (review.hasPhotos) ...[_buildPhotos(context), SizedBox(height: 12)],
                 if (onReply != null && !isReply) _buildReplyButton(),
               ],
             ),
@@ -88,20 +84,14 @@ class AirportReviewCard extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Row(
       children: [
-        _buildAvatar(context, review.reviewerAvatarUrl, 40.r),
-        SizedBox(width: 12.w),
+        _buildAvatar(context, review.reviewerAvatarUrl, 40),
+        SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF1E293B))),
-              if (review.createdAt != null) ...[
-                SizedBox(height: 4.h),
-                Text(
-                  formatDate(review.createdAt!),
-                  style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-                ),
-              ],
+              if (review.createdAt != null) ...[SizedBox(height: 4), Text(formatDate(review.createdAt!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
             ],
           ),
         ),
@@ -138,12 +128,7 @@ class AirportReviewCard extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8.w,
-        mainAxisSpacing: 8.h,
-        childAspectRatio: 1.0,
-      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.0),
       itemCount: review.photoUrls!.length,
       itemBuilder: (context, index) {
         final photoUrl = review.photoUrls![index];
@@ -153,7 +138,7 @@ class AirportReviewCard extends StatelessWidget {
             GestureDetector(
               onTap: onPhotoTap != null ? () => onPhotoTap!(context, review.photoUrls!, index) : null,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(8),
                 child: NetworkImageWidget(
                   imageUrl: getImageUrl(photoUrl),
                   fit: BoxFit.cover,
@@ -170,15 +155,15 @@ class AirportReviewCard extends StatelessWidget {
             ),
             // Кнопка меню в правом верхнем углу
             Positioned(
-              top: -4.h,
-              right: -4.w,
+              top: -4,
+              right: -4,
               child: PopupMenuButton<String>(
                 icon: Container(
-                  padding: EdgeInsets.all(4.w),
+                  padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
                   child: Icon(Icons.more_vert, color: Colors.white, size: 16),
                 ),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 onSelected: (value) {
                   switch (value) {
                     case 'share':
@@ -200,7 +185,7 @@ class AirportReviewCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.share, size: 20, color: Color(0xFF374151)),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Text('Поделиться', style: AppStyles.regular14s),
                       ],
                     ),
@@ -210,7 +195,7 @@ class AirportReviewCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.download, size: 20, color: Color(0xFF374151)),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Text('Скачать', style: AppStyles.regular14s),
                       ],
                     ),
@@ -222,7 +207,7 @@ class AirportReviewCard extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 12),
                           Text('Удалить', style: AppStyles.regular14s.copyWith(color: Colors.red)),
                         ],
                       ),
@@ -245,13 +230,7 @@ class AirportReviewCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(imageUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось поделиться фотографией'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
       }
     }
   }
@@ -263,26 +242,14 @@ class AirportReviewCard extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Правый клик по изображению → "Сохранить как"'),
-            backgroundColor: Colors.blue,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Необходимо разрешение на сохранение файлов'),
-            backgroundColor: Colors.orange,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
         return;
       }
 
@@ -291,7 +258,7 @@ class AirportReviewCard extends StatelessWidget {
           content: Row(
             children: [
               CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-              SizedBox(width: 16.w),
+              SizedBox(width: 16),
               Text('Скачивание...'),
             ],
           ),
@@ -308,37 +275,21 @@ class AirportReviewCard extends StatelessWidget {
       await dio.download(imageUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid
-          ? await getExternalStorageDirectory()
-          : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid
-            ? '${directory.path}/Download/$fileName'
-            : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Фотография сохранена'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
       }
     } catch (e) {
       if (context.mounted) {
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось скачать фотографию'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
     }
   }
@@ -373,10 +324,7 @@ class AirportReviewCard extends StatelessWidget {
       onPressed: onReply,
       icon: Icon(Icons.reply, size: 16, color: Color(0xFF0A6EFA)),
       label: Text('Ответить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-        minimumSize: Size(0, 0),
-      ),
+      style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), minimumSize: Size(0, 0)),
     );
   }
 
@@ -385,12 +333,9 @@ class AirportReviewCard extends StatelessWidget {
     if (review.createdAt == null) return SizedBox.shrink();
 
     return Positioned(
-      top: 16.h,
-      right: 16.w,
-      child: Text(
-        formatDateWithTime(review.createdAt!),
-        style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
-      ),
+      top: 16,
+      right: 16,
+      child: Text(formatDateWithTime(review.createdAt!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
     );
   }
 
@@ -399,8 +344,8 @@ class AirportReviewCard extends StatelessWidget {
     if (!canEdit && !canDelete) return SizedBox.shrink();
 
     return Positioned(
-      top: 16.h,
-      right: 16.w,
+      top: 16,
+      right: 16,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -1,8 +1,8 @@
-#include "flutter_window.h"
+#include "flutter_window"
 
 #include <optional>
 
-#include "flutter/generated_plugin_registrant.h"
+#include "flutter/generated_plugin_registrant"
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}

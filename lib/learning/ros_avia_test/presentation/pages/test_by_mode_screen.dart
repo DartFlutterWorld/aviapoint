@@ -16,7 +16,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/test_by_mo
 import 'package:flutter/material.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class TestByModeScreen extends StatefulWidget {
@@ -126,14 +125,14 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
                         child: Center(
                           child: ValueListenableBuilder<int?>(
                             valueListenable: currentSelectedAnswerIndex,
                             builder: (context, selectedIndex, _) {
                               return CustomButton(
                                 title: 'Следующий',
-                                verticalPadding: 8.h,
+                                verticalPadding: 8,
                                 onPressed: selectedIndex != null
                                     ? () async {
                                         // Сохраняем ответ в БД перед переходом к следующему вопросу
@@ -165,7 +164,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                                 textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                                 borderColor: Colors.transparent,
                                 backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,
-                                borderRadius: 46.r,
+                                borderRadius: 46,
                                 rightSvg: Pictures.rightArrowMini,
                               );
                             },

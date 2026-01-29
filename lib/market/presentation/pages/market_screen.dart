@@ -22,7 +22,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -179,7 +178,7 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
               backgroundColor: AppColors.backgroundAppBar,
               elevation: 1,
               shadowColor: const Color(0xFFA8A39C).withValues(alpha: 0.12),
-              leadingWidth: 60.w,
+              leadingWidth: 60,
               centerTitle: true,
               title: Text(
                 'Маркет',
@@ -289,7 +288,7 @@ class _MarketContent extends StatelessWidget {
         // Поиск и фильтры
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               children: [
                 Expanded(
@@ -297,13 +296,13 @@ class _MarketContent extends StatelessWidget {
                     controller: searchController,
                     decoration: InputDecoration(
                       hintText: 'Поиск',
-                      prefixIcon: Icon(Icons.search, size: 20.sp),
+                      prefixIcon: Icon(Icons.search, size: 20.0),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.tune, size: 20.sp),
+                        icon: Icon(Icons.tune, size: 20.0),
                         onPressed: onFiltersDialog,
                       ),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     ),
                   ),
                 ),
@@ -322,7 +321,7 @@ class _MarketContent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(message, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     ElevatedButton(onPressed: onApplyFilters, child: const Text('Повторить')),
                   ],
                 ),
@@ -375,7 +374,7 @@ class _CategoriesSectionState extends State<_CategoriesSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
         GestureDetector(
           onPanStart: (_) {
             setState(() {
@@ -384,12 +383,7 @@ class _CategoriesSectionState extends State<_CategoriesSection> {
           },
           onPanUpdate: (details) {
             if (_scrollController.hasClients) {
-              _scrollController.position.moveTo(
-                (_scrollController.position.pixels - details.delta.dx).clamp(
-                  0.0,
-                  _scrollController.position.maxScrollExtent,
-                ),
-              );
+              _scrollController.position.moveTo((_scrollController.position.pixels - details.delta.dx).clamp(0.0, _scrollController.position.maxScrollExtent));
             }
           },
           onPanEnd: (_) {
@@ -401,13 +395,17 @@ class _CategoriesSectionState extends State<_CategoriesSection> {
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             physics: _isDragging ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              children: [...widget.categories.map((category) => _CategoryCard(category: category, isSelected: widget.selectedCategoryIds.contains(category.id), onTap: _isDragging ? () {} : () => widget.onCategorySelected(category)))],
+              children: [
+                ...widget.categories.map(
+                  (category) => _CategoryCard(category: category, isSelected: widget.selectedCategoryIds.contains(category.id), onTap: _isDragging ? () {} : () => widget.onCategorySelected(category)),
+                ),
+              ],
             ),
           ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
       ],
     );
   }
@@ -428,12 +426,12 @@ class _CategoryCard extends StatelessWidget {
       child: Opacity(
         opacity: isSelected ? 0.5 : 1.0,
         child: Container(
-          margin: EdgeInsets.only(right: 8.w),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          margin: EdgeInsets.only(right: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary100p.withOpacity(0.1) : Colors.white,
-            borderRadius: BorderRadius.circular(8.r),
-            border: Border.all(color: isSelected ? AppColors.primary100p : Colors.grey.shade300, width: isSelected ? 2.w : 1.w),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: isSelected ? AppColors.primary100p : Colors.grey.shade300, width: isSelected ? 2 : 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -441,8 +439,8 @@ class _CategoryCard extends StatelessWidget {
             children: [
               if (category.iconUrl != null && category.iconUrl!.isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(bottom: 0.h),
-                  child: Image.network(getImageUrl(category.iconUrl!), height: 50.h, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => const SizedBox()),
+                  padding: EdgeInsets.only(bottom: 0),
+                  child: Image.network(getImageUrl(category.iconUrl!), height: 50, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => const SizedBox()),
                 ),
               Text(
                 category.name.replaceAll('самолёты', '').replaceAll('самолёт', '').replaceAll('Самолёт', '').trim(),
@@ -499,7 +497,7 @@ class _FiltersDialogState extends State<_FiltersDialog> {
           children: [
             // Цена
             Text('Цена', style: AppStyles.bold16s),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -507,21 +505,21 @@ class _FiltersDialogState extends State<_FiltersDialog> {
                     controller: TextEditingController(text: _priceFromText),
                     decoration: InputDecoration(
                       labelText: 'От',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => _priceFromText = value.isEmpty ? null : value,
                   ),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 8),
                 Expanded(
                   child: TextField(
                     controller: TextEditingController(text: _priceToText),
                     decoration: InputDecoration(
                       labelText: 'До',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => _priceToText = value.isEmpty ? null : value,
@@ -529,10 +527,10 @@ class _FiltersDialogState extends State<_FiltersDialog> {
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Сортировка
             Text('Сортировка', style: AppStyles.bold16s),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             ...['default', 'date', 'price_asc', 'price_desc'].map((sort) {
               return RadioListTile<String>(title: Text(_getSortName(sort)), value: sort, groupValue: _sortBy, onChanged: (value) => setState(() => _sortBy = value!));
             }).toList(),
@@ -608,9 +606,9 @@ class _ProductsSliverGrid extends StatelessWidget {
         : (isLandscape ? 3 : (isTablet ? 2 : 2));
 
     return SliverPadding(
-      padding: EdgeInsets.all(8.w),
+      padding: EdgeInsets.all(8),
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8.w, mainAxisSpacing: 8.h, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
         delegate: SliverChildBuilderDelegate((context, index) {
           final product = displayedProducts[index];
           return AircraftMarketCard(
@@ -633,7 +631,7 @@ class _MarketProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAuthenticated = Provider.of<AppState>(context, listen: true).isAuthenticated;
-    final iconSize = 28.sp;
+    final iconSize = 28.0;
 
     if (!isAuthenticated) {
       return IconButton(

@@ -10,7 +10,6 @@ import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -49,7 +48,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
           builder: (context, storyState) {
             if (state is SuccessCacheManagerState && state.story.isNotEmpty) {
               // Фиксированный размер 100x100 для всех элементов (квадрат)
-              final itemSize = Provider.of<AppState>(context, listen: false).isTablet ? 200.0 : 120.0;
+              final itemSize = Provider.of<AppState>(context, listen: true).isTablet ? 200.0 : 120.0;
 
               return SizedBox(
                 height: itemSize,
@@ -68,18 +67,15 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                         height: itemSize,
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             border: storyState.listStories.contains(state.story[index].id) ? null : Border.all(color: const Color(0xFF0A6EFA), width: 1),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(12),
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
-                                NetworkImageWidget(
-                                  imageUrl: getImageUrl(state.story[index].logoStory),
-                                  fit: BoxFit.cover,
-                                ),
+                                NetworkImageWidget(imageUrl: getImageUrl(state.story[index].logoStory), fit: BoxFit.cover),
                                 Positioned(
                                   left: 0,
                                   right: 0,
@@ -110,7 +106,7 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
             }
 
             // Loading state
-            final itemSize = 100.w;
+            final itemSize = 100.0;
 
             return SizedBox(
               height: itemSize,
@@ -120,9 +116,9 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                 itemCount: 3,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: EdgeInsets.only(right: 8.w),
+                    padding: EdgeInsets.only(right: 8),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       child: Shimmer(
                         duration: const Duration(milliseconds: 1000),
                         color: const Color(0xFF8D66FE),

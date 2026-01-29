@@ -19,7 +19,6 @@ import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.da
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 
@@ -230,7 +229,7 @@ class _BlogScreenState extends State<BlogScreen> {
               withBack: false,
               withProfile: true,
               actions: isAuthenticated
-                  ? [IconButton(padding: EdgeInsets.all(0.w), icon: Icon(Icons.add), onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()), tooltip: 'Сделать запись')]
+                  ? [IconButton(padding: EdgeInsets.all(0), icon: Icon(Icons.add), onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()), tooltip: 'Сделать запись')]
                   : const [],
             ),
             backgroundColor: AppColors.background,
@@ -263,23 +262,23 @@ class _BlogScreenState extends State<BlogScreen> {
               child: ListView(
                 controller: _scrollController,
                 children: [
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   // Поиск и фильтры
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
                         // Поле поиска
                         SizedBox(
-                          height: 36.h,
+                          // height: 36,
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
                               hintText: 'Поиск по записям...',
-                              prefixIcon: Icon(Icons.search, color: const Color(0xFF9CA5AF), size: 18.sp),
+                              prefixIcon: Icon(Icons.search, color: const Color(0xFF9CA5AF), size: 18.0),
                               suffixIcon: _searchController.text.isNotEmpty
                                   ? IconButton(
-                                      icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
+                                      icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.0),
                                       onPressed: _clearSearch,
                                       padding: EdgeInsets.zero,
                                       constraints: BoxConstraints(),
@@ -288,24 +287,24 @@ class _BlogScreenState extends State<BlogScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: BorderSide(color: const Color(0xFF0A6EFA), width: 2.w),
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: const Color(0xFF0A6EFA), width: 2),
                               ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 18),
                               isDense: true,
                             ),
                             style: AppStyles.regular12s,
                           ),
                         ),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: 8),
                         // Фильтр по самолётам и кнопка "Мои статьи"
                         Row(
                           children: [
@@ -313,17 +312,16 @@ class _BlogScreenState extends State<BlogScreen> {
                               child: GestureDetector(
                                 onTap: _showAircraftFilter,
                                 child: Container(
-                                  height: 36.h,
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12.r),
+                                    borderRadius: BorderRadius.circular(12),
                                     border: Border.all(color: const Color(0xFFD9E6F8)),
                                   ),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.flight, color: const Color(0xFF9CA5AF), size: 16.sp),
-                                      SizedBox(width: 8.w),
+                                      Icon(Icons.flight, color: const Color(0xFF9CA5AF), size: 16),
+                                      SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
                                           _selectedAircraftModelName ?? 'Фильтр по самолёту',
@@ -331,19 +329,19 @@ class _BlogScreenState extends State<BlogScreen> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      Icon(Icons.arrow_drop_down, color: const Color(0xFF9CA5AF), size: 20.sp),
+                                      Icon(Icons.arrow_drop_down, color: const Color(0xFF9CA5AF), size: 20.0),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
                             if (_selectedAircraftModelId != null) ...[
-                              SizedBox(width: 8.w),
+                              SizedBox(width: 8),
                               SizedBox(
-                                height: 36.h,
-                                width: 36.w,
+                                // height: 36,
+                                width: 36,
                                 child: IconButton(
-                                  icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.sp),
+                                  icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.0),
                                   onPressed: _clearAircraftFilter,
                                   tooltip: 'Очистить фильтр',
                                   padding: EdgeInsets.zero,
@@ -352,17 +350,17 @@ class _BlogScreenState extends State<BlogScreen> {
                               ),
                             ],
                             if (isAuthenticated) ...[
-                              SizedBox(width: 8.w),
+                              SizedBox(width: 8),
                               OutlinedButton.icon(
                                 onPressed: _toggleMyArticles,
-                                icon: Icon(_showMyArticles ? Icons.check_circle : Icons.person_outline, size: 16.sp, color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA)),
+                                icon: Icon(_showMyArticles ? Icons.check_circle : Icons.person_outline, size: 16.0, color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA)),
                                 label: Text('Мои', style: AppStyles.bold16s.copyWith(color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA))),
                                 style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                                  minimumSize: Size(0, 36.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+
                                   backgroundColor: _showMyArticles ? const Color(0xFF0A6EFA) : Colors.white,
                                   side: BorderSide(color: _showMyArticles ? const Color(0xFF0A6EFA) : const Color(0xFF0A6EFA)),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 ),
                               ),
                             ],
@@ -371,7 +369,7 @@ class _BlogScreenState extends State<BlogScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   BlocBuilder<BlogCategoriesBloc, BlogCategoriesState>(
                     builder: (context, state) => state.maybeWhen(
                       loading: () => const SizedBox(),
@@ -386,10 +384,10 @@ class _BlogScreenState extends State<BlogScreen> {
                       orElse: () => const SizedBox(),
                     ),
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 12),
                   BlocBuilder<BlogArticlesBloc, BlogArticlesState>(
                     builder: (context, state) => state.maybeWhen(
-                      loading: () => LoadingCustom(paddingTop: 200.h),
+                      loading: () => LoadingCustom(paddingTop: 200),
                       error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                         textError: errorForUser,
                         repeat: () {
@@ -445,34 +443,31 @@ class _CategoryListState extends State<_CategoryList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 0.w),
-      child: SizedBox(
-        height: 25.h,
-        child: GestureDetector(
-          onPanStart: (_) {
-            setState(() {
-              _isDragging = true;
-            });
-          },
-          onPanUpdate: (details) {
-            if (_scrollController.hasClients) {
-              _scrollController.position.moveTo((_scrollController.position.pixels - details.delta.dx).clamp(0.0, _scrollController.position.maxScrollExtent));
-            }
-          },
-          onPanEnd: (_) {
-            setState(() {
-              _isDragging = false;
-            });
-          },
-          child: ListView.builder(
-            controller: _scrollController,
-            padding: EdgeInsets.only(left: 8.w),
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            physics: _isDragging ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
-            itemCount: widget.categories.length,
-            itemBuilder: (context, index) {
-              final category = widget.categories[index];
+      padding: EdgeInsets.only(left: 0, top: 8, bottom: 12),
+      child: GestureDetector(
+        onPanStart: (_) {
+          setState(() {
+            _isDragging = true;
+          });
+        },
+        onPanUpdate: (details) {
+          if (_scrollController.hasClients) {
+            _scrollController.position.moveTo((_scrollController.position.pixels - details.delta.dx).clamp(0.0, _scrollController.position.maxScrollExtent));
+          }
+        },
+        onPanEnd: (_) {
+          setState(() {
+            _isDragging = false;
+          });
+        },
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          padding: EdgeInsets.only(left: 8),
+          scrollDirection: Axis.horizontal,
+          physics: _isDragging ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.categories.map((category) {
               final isSelected = widget.selectedCategoryId == category.id;
               return BlogCategoryChip(
                 category: category,
@@ -487,7 +482,7 @@ class _CategoryListState extends State<_CategoryList> {
                         }
                       },
               );
-            },
+            }).toList(),
           ),
         ),
       ),
@@ -510,7 +505,7 @@ class _ArticleList extends StatelessWidget {
 
     if (sortedArticles.isEmpty) {
       return Padding(
-        padding: EdgeInsets.all(32.w),
+        padding: EdgeInsets.all(32),
         child: Center(
           child: Text('Статьи не найдены', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
         ),
@@ -564,7 +559,7 @@ class _ArticleList extends StatelessWidget {
                   }).toList(),
                 ),
               ],
-              if (isLoadingMore) Padding(padding: EdgeInsets.all(16.w), child: const CircularProgressIndicator()),
+              if (isLoadingMore) Padding(padding: EdgeInsets.all(16), child: const CircularProgressIndicator()),
             ],
           ),
         );

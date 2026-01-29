@@ -2,7 +2,6 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Переиспользуемый виджет для выбора даты и времени
 class DateTimeFieldWidget extends StatelessWidget {
@@ -11,13 +10,7 @@ class DateTimeFieldWidget extends StatelessWidget {
   final void Function(DateTime?) onDateTimeSelected;
   final Key? fieldKey;
 
-  const DateTimeFieldWidget({
-    Key? key,
-    this.label,
-    this.initialDateTime,
-    required this.onDateTimeSelected,
-    this.fieldKey,
-  }) : super(key: key);
+  const DateTimeFieldWidget({Key? key, this.label, this.initialDateTime, required this.onDateTimeSelected, this.fieldKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,24 +18,20 @@ class DateTimeFieldWidget extends StatelessWidget {
       key: fieldKey,
       onTap: () => _showDateTimePicker(context),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Color(0xFFE5E7EB)),
         ),
         child: Row(
           children: [
             Icon(Icons.calendar_today, size: 18, color: Color(0xFF9CA5AF)),
-            SizedBox(width: 12.w),
+            SizedBox(width: 12),
             Expanded(
               child: Text(
-                initialDateTime != null
-                    ? formatDateWithTime(initialDateTime!)
-                    : 'Выберите дату и время',
-                style: AppStyles.regular14s.copyWith(
-                  color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF),
-                ),
+                initialDateTime != null ? formatDateWithTime(initialDateTime!) : 'Выберите дату и время',
+                style: AppStyles.regular14s.copyWith(color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF)),
               ),
             ),
             Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFF9CA5AF)),
@@ -84,13 +73,7 @@ class DateTimeFieldWidget extends StatelessWidget {
     );
 
     if (timeResult != null) {
-      final dateTime = DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        timeResult.hour,
-        timeResult.minute,
-      );
+      final dateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, timeResult.hour, timeResult.minute);
       onDateTimeSelected(dateTime);
     }
   }

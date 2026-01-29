@@ -10,7 +10,6 @@ import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart'
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyAircraftAdsWidget extends StatefulWidget {
   final int userId;
@@ -26,7 +25,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
   Widget build(BuildContext context) {
     // Получаем глобальный BLoC из app.dart
     final globalBloc = context.read<AircraftMarketBloc>();
-    
+
     return BlocProvider(
       create: (context) {
         final bloc = AircraftMarketBloc(repository: getIt<MarketRepository>());
@@ -50,12 +49,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                 }
               }
               // Реагируем на создание, обновление и ошибки
-              return current.maybeWhen(
-                createdAirCraft: (_) => true,
-                updated: (_) => true,
-                error: (_) => true,
-                orElse: () => false,
-              );
+              return current.maybeWhen(createdAirCraft: (_) => true, updated: (_) => true, error: (_) => true, orElse: () => false);
             },
             listener: (context, state) {
               // Обновляем список после создания, обновления или удаления
@@ -69,18 +63,11 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                 success: (products, hasMore) {
                   // После успешного удаления товар уже убран из списка через _currentProducts.removeWhere
                   // Показываем сообщение об успешном удалении (будет показано только если количество уменьшилось)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Объявление успешно удалено'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление успешно удалено'), backgroundColor: Colors.green));
                 },
                 error: (message) {
                   // Показываем ошибку удаления, если она произошла
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(message), backgroundColor: Colors.red),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
                 },
                 orElse: () {},
               );
@@ -122,71 +109,69 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
         ],
         child: BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
           builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Мои объявления', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-                  TextButton(
-                    onPressed: () {
-                      context.router.push(
-                        BaseRoute(
-                          children: [
-                            MarketNavigationRoute(
-                              children: [CreateAircraftMarketRoute()],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.add, size: 18, color: AppColors.primary100p),
-                        SizedBox(width: 4.w),
-                        Text('Создать', style: AppStyles.regular14s.copyWith(color: AppColors.primary100p)),
-                      ],
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Мои объявления', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                    TextButton(
+                      onPressed: () {
+                        context.router.push(
+                          BaseRoute(
+                            children: [
+                              MarketNavigationRoute(children: [CreateAircraftMarketRoute()]),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.add, size: 18, color: AppColors.primary100p),
+                          SizedBox(width: 4),
+                          Text('Создать', style: AppStyles.regular14s.copyWith(color: AppColors.primary100p)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                state.when(
+                  loading: () => Center(
+                    child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
+                  ),
+                  loadingMore: (products) => _buildAdsGrid(context, products, isLoading: true),
+                  error: (message) => Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text(message, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              state.when(
-                loading: () => Center(
-                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                ),
-                loadingMore: (products) => _buildAdsGrid(context, products, isLoading: true),
-                error: (message) => Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.w),
-                    child: Text(message, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
+                  success: (products, hasMore) => _buildAdsGrid(context, products, isLoading: false),
+                  creatingAirCraft: () => Center(
+                    child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                   ),
+                  createdAirCraft: (product) {
+                    // Список обновится через BlocListener
+                    return Center(
+                      child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
+                    );
+                  },
+                  updating: () => Center(
+                    child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
+                  ),
+                  updated: (product) {
+                    // Список обновится через BlocListener
+                    return Center(
+                      child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
+                    );
+                  },
                 ),
-                success: (products, hasMore) => _buildAdsGrid(context, products, isLoading: false),
-                creatingAirCraft: () => Center(
-                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                ),
-                createdAirCraft: (product) {
-                  // Список обновится через BlocListener
-                  return Center(
-                    child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                  );
-                },
-                updating: () => Center(
-                  child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                ),
-                updated: (product) {
-                  // Список обновится через BlocListener
-                  return Center(
-                    child: Padding(padding: EdgeInsets.all(20.w), child: CircularProgressIndicator()),
-                  );
-                },
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
         ),
       ),
     );
@@ -195,27 +180,25 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
   Widget _buildAdsGrid(BuildContext context, List<AircraftMarketEntity> products, {required bool isLoading}) {
     if (products.isEmpty && !isLoading) {
       return Container(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Color(0xFFE5E7EB)),
         ),
         child: Center(
           child: Column(
             children: [
               Icon(Icons.airplanemode_inactive, size: 48, color: Color(0xFF9CA5AF)),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               Text('У вас пока нет объявлений', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               TextButton(
                 onPressed: () {
                   context.router.push(
                     BaseRoute(
                       children: [
-                        MarketNavigationRoute(
-                          children: [CreateAircraftMarketRoute()],
-                        ),
+                        MarketNavigationRoute(children: [CreateAircraftMarketRoute()]),
                       ],
                     ),
                   );
@@ -231,13 +214,8 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(8.w),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: kIsWeb ? 3 : 2,
-        crossAxisSpacing: 8.w,
-        mainAxisSpacing: 8.h,
-        childAspectRatio: kIsWeb ? 0.95 : 0.67,
-      ),
+      padding: EdgeInsets.all(8),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: kIsWeb ? 3 : 2, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : 0.67),
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
@@ -273,7 +251,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
   void _showDeleteConfirmation(AircraftMarketEntity product) {
     // Важно: используем локальный BLoC из BlocProvider
     final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
-    
+
     showDialog<void>(
       context: context,
       builder: (dialogContext) => BlocProvider.value(
@@ -294,7 +272,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               child: Text('Удалить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
             ),
@@ -308,7 +286,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
     // Используем локальный AircraftMarketBloc для удаления
     // Важно: используем BlocProvider.of, чтобы получить именно локальный BLoC из BlocProvider
     final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
-    
+
     // Отправляем событие удаления
     // После успешного удаления BLoC автоматически удалит товар из _currentProducts
     // и эмитнет success с обновленным списком
@@ -316,4 +294,3 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
     localBloc.add(AircraftMarketEvent.deleteProduct(product.id));
   }
 }
-

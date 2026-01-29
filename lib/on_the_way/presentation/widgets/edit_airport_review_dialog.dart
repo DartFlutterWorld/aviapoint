@@ -6,7 +6,6 @@ import 'package:aviapoint/on_the_way/presentation/bloc/airport_reviews_bloc.dart
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:typed_data';
@@ -58,13 +57,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Не удалось выбрать фотографии: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
       }
     }
   }
@@ -86,9 +79,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
   void _submitReview() {
     // Для основных отзывов (не replies) рейтинг обязателен
     if (widget.review.replyToReviewId == null && _rating == 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
@@ -97,11 +88,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
 
     // Сначала обновляем отзыв (рейтинг и комментарий)
     context.read<AirportReviewsBloc>().add(
-      UpdateAirportReviewEvent(
-        reviewId: widget.review.id,
-        rating: ratingValue,
-        comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
-      ),
+      UpdateAirportReviewEvent(reviewId: widget.review.id, rating: ratingValue, comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim()),
     );
 
     // Удаляем и добавляем фотографии будут обработаны после закрытия диалога
@@ -115,13 +102,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
         state.when(
           loading: () {},
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(responseMessage ?? errorForUser),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 4),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
           },
           success: (reviews) {},
           reviewCreated: (review) {},
@@ -134,34 +115,26 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
 
             // Закрываем диалог с информацией о фотографиях
             if (Navigator.of(context).canPop()) {
-              Navigator.of(
-                context,
-              ).pop({'updated': true, 'photosToDelete': _photosToDelete, 'photosToAdd': _photosToAdd});
+              Navigator.of(context).pop({'updated': true, 'photosToDelete': _photosToDelete, 'photosToAdd': _photosToAdd});
             }
 
             if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Отзыв успешно обновлён'),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Отзыв успешно обновлён'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
             }
           },
           reviewDeleted: () {},
         );
       },
       child: Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: BlocBuilder<AirportReviewsBloc, AirportReviewsState>(
           builder: (context, state) {
             final isLoading = state is LoadingAirportReviewsState;
 
             return SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20.w),
-                constraints: BoxConstraints(maxWidth: 500.w),
+                padding: EdgeInsets.all(20),
+                constraints: BoxConstraints(maxWidth: 500),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -172,7 +145,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         Align(
                           alignment: Alignment.center,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40.w),
+                            padding: EdgeInsets.symmetric(horizontal: 40),
                             child: Text(
                               'Редактировать отзыв',
                               style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
@@ -192,11 +165,11 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Рейтинг (только для основных отзывов, не для replies)
                     if (widget.review.replyToReviewId == null) ...[
                       Text('Оценка', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 12),
                       RatingWidget(
                         rating: _rating,
                         readOnly: false,
@@ -207,11 +180,11 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         },
                         size: 32,
                       ),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 20),
                     ],
                     // Комментарий
                     Text('Комментарий (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextField(
                       controller: _commentController,
                       maxLines: 5,
@@ -222,70 +195,58 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
-                        contentPadding: EdgeInsets.all(12.w),
+                        contentPadding: EdgeInsets.all(12),
                       ),
                       style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Фотографии для добавления
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 8.w,
+                      spacing: 8,
                       children: [
-                        Text(
-                          'Добавить фотографии (необязательно)',
-                          style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
-                        ),
+                        Text('Добавить фотографии (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                         TextButton.icon(
                           onPressed: isLoading ? null : _pickPhotos,
                           icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
                           label: Text('Добавить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
+                          style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), minimumSize: Size.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                         ),
                       ],
                     ),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 12),
                     // Отображаем существующие фотографии (кроме удаленных) и новые
                     Builder(
                       builder: (context) {
                         // Фильтруем существующие фотографии (исключая помеченные для удаления)
-                        final existingPhotos = (widget.review.photoUrls ?? [])
-                            .where((url) => !_photosToDelete.contains(url))
-                            .toList();
+                        final existingPhotos = (widget.review.photoUrls ?? []).where((url) => !_photosToDelete.contains(url)).toList();
                         final totalPhotosCount = existingPhotos.length + _photosToAdd.length;
 
                         if (totalPhotosCount == 0) {
                           return Container(
-                            padding: EdgeInsets.all(16.w),
+                            padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Color(0xFFF9FAFB),
-                              borderRadius: BorderRadius.circular(12.r),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: Color(0xFFE5E7EB)),
                             ),
                             child: Row(
                               children: [
                                 Icon(Icons.photo_library_outlined, size: 24, color: Color(0xFF9CA5AF)),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  'Фотографии не добавлены',
-                                  style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                                ),
+                                SizedBox(width: 12),
+                                Text('Фотографии не добавлены', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                               ],
                             ),
                           );
@@ -294,12 +255,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         return GridView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 8.w,
-                            mainAxisSpacing: 8.h,
-                            childAspectRatio: 1.0,
-                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.0),
                           itemCount: totalPhotosCount,
                           itemBuilder: (context, index) {
                             // Существующие фотографии
@@ -309,7 +265,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                 fit: StackFit.expand,
                                 children: [
                                   ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.r),
+                                    borderRadius: BorderRadius.circular(8),
                                     child: NetworkImageWidget(
                                       imageUrl: _getImageUrl(photoUrl),
                                       fit: BoxFit.cover,
@@ -324,14 +280,14 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 4.h,
-                                    right: 4.w,
+                                    top: 4,
+                                    right: 4,
                                     child: GestureDetector(
                                       onTap: () => _deleteExistingPhoto(photoUrl),
                                       child: Container(
-                                        padding: EdgeInsets.all(4.w),
+                                        padding: EdgeInsets.all(4),
                                         decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                                        child: Icon(Icons.close, size: 16.r, color: Colors.white),
+                                        child: Icon(Icons.close, size: 16, color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -346,7 +302,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                               fit: StackFit.expand,
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.r),
+                                  borderRadius: BorderRadius.circular(8),
                                   child: kIsWeb
                                       ? FutureBuilder<Uint8List>(
                                           future: photo.readAsBytes(),
@@ -363,14 +319,14 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                                       : Image.file(File(photo.path), fit: BoxFit.cover),
                                 ),
                                 Positioned(
-                                  top: 4.h,
-                                  right: 4.w,
+                                  top: 4,
+                                  right: 4,
                                   child: GestureDetector(
                                     onTap: () => _deleteNewPhoto(newPhotoIndex),
                                     child: Container(
-                                      padding: EdgeInsets.all(4.w),
+                                      padding: EdgeInsets.all(4),
                                       decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                                      child: Icon(Icons.close, size: 16.r, color: Colors.white),
+                                      child: Icon(Icons.close, size: 16, color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -380,7 +336,7 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         );
                       },
                     ),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 24),
                     // Кнопка сохранения
                     SizedBox(
                       width: double.infinity,
@@ -388,18 +344,11 @@ class _EditAirportReviewDialogState extends State<EditAirportReviewDialog> {
                         onPressed: isLoading ? null : _submitReview,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF0A6EFA),
-                          padding: EdgeInsets.symmetric(vertical: 14.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         child: isLoading
-                            ? SizedBox(
-                                height: 20.h,
-                                width: 20.w,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                ),
-                              )
+                            ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
                             : Text('Сохранить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                       ),
                     ),

@@ -9,7 +9,6 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
@@ -64,22 +63,22 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
               builder: (context, state) {
                 if (state is LoadingSmsState) {
                   return Padding(
-                    padding: EdgeInsets.only(top: 89.h, bottom: 90.h),
+                    padding: EdgeInsets.only(top: 89, bottom: 90),
                     child: const Center(child: LoadingCustom()),
                   );
                 }
                 if (state is InitialSmsState) {
                   return Column(
                     children: [
-                      SizedBox(height: 155.h),
+                      SizedBox(height: 155),
                       CustomButton(
-                        verticalPadding: 8.h,
+                        verticalPadding: 8,
                         backgroundColor: const Color(0xFF0A6EFA),
                         title: 'Получить смс код',
                         textStyle: AppStyles.bold16s.copyWith(color: (phone.isEmpty || phone.length < 15 ? true : false) ? Colors.white.withOpacity(0.5) : Colors.white),
                         borderColor: const Color(0xFF0A6EFA),
-                        borderRadius: 46.r,
-                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.25), blurRadius: 4.r, spreadRadius: 0, offset: Offset(0.0, 7.h))],
+                        borderRadius: 46,
+                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
                         onPressed: (phone.isEmpty || phone.length < 15 ? true : false)
                             ? null
                             : () {
@@ -95,13 +94,13 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 16),
                       Text(
                         'На ваш номер телефона отправлен смс код, введите его',
                         style: AppStyles.regular12s.copyWith(color: const Color(0xFF9CA5AF)),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 16),
                       Pinput(
                         focusNode: _focusNode,
                         enabled: state is! LoadingSmsState,
@@ -134,7 +133,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         builder: (context, state) {
                           if (state is ErrorAuthState) {
                             return Padding(
-                              padding: EdgeInsets.only(top: 16.h),
+                              padding: EdgeInsets.only(top: 16),
                               child: Text(
                                 state.errorForUser,
                                 textAlign: TextAlign.center,
@@ -149,7 +148,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       //   title: 'Отправить',
                       //   textStyle: TextStyle(
                       //     fontWeight: FontWeight.w700,
-                      //     fontSize: 20.sp,
+                      //     fontSize: 20.0,
                       //     height: 1,
                       //     color: (phone.isEmpty || phone.length < 15 ? true : false || code.length != 4) ? AppColors.mainSolid.withOpacity(0.5) : AppColors.mainSolid,
                       //   ),
@@ -176,15 +175,15 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       //   ],
                       //   backgroundColor: Colors.white,
                       // ),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 20),
                       CustomButton(
-                        verticalPadding: 8.h,
+                        verticalPadding: 8,
                         backgroundColor: const Color(0xFF0A6EFA),
                         title: 'Отправить',
                         textStyle: AppStyles.bold16s.copyWith(color: (phone.isEmpty || phone.length < 15 ? true : false) ? Colors.white.withOpacity(0.5) : Colors.white),
                         borderColor: const Color(0xFF0A6EFA),
-                        borderRadius: 46.r,
-                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.25), blurRadius: 4.r, spreadRadius: 0, offset: Offset(0.0, 7.h))],
+                        borderRadius: 46,
+                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
                         onPressed: (phone.isEmpty || phone.length < 15 ? true : false || code.length != 4)
                             ? null
                             : () {
@@ -198,7 +197,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                 }
                 if (state is ErrorSmsState) {
                   return Padding(
-                    padding: EdgeInsets.only(top: 16.h),
+                    padding: EdgeInsets.only(top: 16),
                     child: Column(
                       children: [Text(state.errorForUser, style: AppStyles.bold15s, textAlign: TextAlign.center)],
                     ),

@@ -19,7 +19,6 @@ import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.da
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -122,7 +121,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
   void _shareProduct(BuildContext context, AircraftMarketEntity product) {
     final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
     final productUrl = '$baseUrl/market/${product.id}';
-    
+
     Share.share('${product.title}\n\n$productUrl\n\nСмотрите в AviaPoint');
   }
 
@@ -146,16 +145,16 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
         Container(
-          height: 250.h,
+          height: 250,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4))],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(12),
             child: _isLoadingLocation || _locationCoordinates == null
                 ? Container(
                     color: Colors.grey.shade200,
@@ -171,9 +170,9 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                           markers: [
                             Marker(
                               point: _locationCoordinates!,
-                              width: 40.w,
-                              height: 40.h,
-                              child: Icon(Icons.location_on, color: AppColors.primary100p, size: 40.sp),
+                              width: 40,
+                              height: 40,
+                              child: Icon(Icons.location_on, color: AppColors.primary100p, size: 40.0),
                             ),
                           ],
                         ),
@@ -226,13 +225,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
       await Share.shareUri(Uri.parse(imageUrl));
     } catch (e) {
       if (mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось поделиться фотографией'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
       }
     }
   }
@@ -244,13 +237,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Правый клик по изображению → "Сохранить как"'),
-            backgroundColor: Colors.blue,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
         return;
       }
 
@@ -268,34 +255,16 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
         final savedFile = await File(filePath).copy('${appDocDir.path}/$fileName');
 
         if (mounted) {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text('Фотография сохранена: ${savedFile.path}'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена: ${savedFile.path}'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
         }
       } else {
         if (mounted) {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text('Необходимо разрешение на сохранение файлов'),
-              backgroundColor: Colors.orange,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 2)));
         }
       }
     } catch (e) {
       if (mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('Не удалось скачать фотографию: $e'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
       }
     }
   }
@@ -335,7 +304,9 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     if (photoUrl == null || photoUrl.isEmpty) {
                       return Container(
                         color: Colors.black,
-                        child: Center(child: Icon(Icons.broken_image, color: Colors.white70, size: 64.sp)),
+                        child: Center(
+                          child: Icon(Icons.broken_image, color: Colors.white70, size: 64.0),
+                        ),
                       );
                     }
                     return InteractiveViewer(
@@ -363,8 +334,8 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.broken_image, color: Colors.white70, size: 64.sp),
-                                    SizedBox(height: 16.h),
+                                    Icon(Icons.broken_image, color: Colors.white70, size: 64.0),
+                                    SizedBox(height: 16),
                                     Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                                   ],
                                 ),
@@ -384,7 +355,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -394,16 +365,16 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                             // Левая часть: индикатор
                             Row(
                               mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Индикатор текущей фотографии
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20.r)),
-                              child: Text(
-                                '${currentIndex + 1} / ${photos.length}',
-                                style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                              ),
-                            ),
+                              children: [
+                                // Индикатор текущей фотографии
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
+                                  child: Text(
+                                    '${currentIndex + 1} / ${photos.length}',
+                                    style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                               ],
                             ),
                             // Правая часть: кнопки действий и кнопка закрытия
@@ -414,26 +385,26 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                                 if (photos.isNotEmpty && photos[currentIndex] != null && photos[currentIndex]!.isNotEmpty) ...[
                                   // Кнопка "Поделиться"
                                   IconButton(
-                                    icon: Icon(Icons.share, color: Colors.white, size: 24.sp),
+                                    icon: Icon(Icons.share, color: Colors.white, size: 24.0),
                                     onPressed: () => _sharePhoto(dialogContext, photos[currentIndex]!),
                                     style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                     tooltip: 'Поделиться',
                                   ),
-                                  SizedBox(width: 8.w),
+                                  SizedBox(width: 8),
                                   // Кнопка "Скачать"
                                   IconButton(
-                                    icon: Icon(Icons.download, color: Colors.white, size: 24.sp),
+                                    icon: Icon(Icons.download, color: Colors.white, size: 24.0),
                                     onPressed: () => _downloadPhoto(dialogContext, photos[currentIndex]!),
                                     style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                     tooltip: 'Скачать',
                                   ),
-                                  SizedBox(width: 8.w),
+                                  SizedBox(width: 8),
                                 ],
-                            // Кнопка закрытия
-                            IconButton(
-                                  icon: Icon(Icons.close, color: Colors.white, size: 24.sp),
-                              onPressed: () => Navigator.of(dialogContext).pop(),
-                              style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                // Кнопка закрытия
+                                IconButton(
+                                  icon: Icon(Icons.close, color: Colors.white, size: 24.0),
+                                  onPressed: () => Navigator.of(dialogContext).pop(),
+                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                 ),
                               ],
                             ),
@@ -615,59 +586,59 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
           title: 'История цены',
           height: MediaQuery.of(context).size.height * 0.9,
           backgroundColor: AppColors.background,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: priceHistory.length,
-                      itemBuilder: (context, index) {
-                        // Инвертируем индекс для отображения от новой к старой
-                        final reversedIndex = priceHistory.length - 1 - index;
-                        final historyItem = priceHistory[reversedIndex];
-                        final isFirst = reversedIndex == priceHistory.length - 1; // Самая старая запись - это первая (публикация)
-                        // Сравниваем с предыдущей записью (более новой)
-                        final previousPrice = reversedIndex > 0 ? priceHistory[reversedIndex - 1].price : null;
-                        final priceChange = previousPrice != null ? previousPrice - historyItem.price : null;
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: priceHistory.length,
+            itemBuilder: (context, index) {
+              // Инвертируем индекс для отображения от новой к старой
+              final reversedIndex = priceHistory.length - 1 - index;
+              final historyItem = priceHistory[reversedIndex];
+              final isFirst = reversedIndex == priceHistory.length - 1; // Самая старая запись - это первая (публикация)
+              // Сравниваем с предыдущей записью (более новой)
+              final previousPrice = reversedIndex > 0 ? priceHistory[reversedIndex - 1].price : null;
+              final priceChange = previousPrice != null ? previousPrice - historyItem.price : null;
 
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 16.h),
-                          padding: EdgeInsets.all(16.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.r),
-                            border: Border.all(color: Color(0xFFE5E7EB)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Container(
+                margin: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Color(0xFFE5E7EB)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(formatDate(historyItem.createdAt), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                          if (isFirst) ...[SizedBox(height: 4), Text('Публикация', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('${formatPrice(historyItem.price)} ₽', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                        if (priceChange != null && priceChange != 0) ...[
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(formatDate(historyItem.createdAt), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                                    if (isFirst) ...[SizedBox(height: 4.h), Text('Публикация', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
-                                  ],
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text('${formatPrice(historyItem.price)} ₽', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                                  if (priceChange != null && priceChange != 0) ...[
-                                    SizedBox(height: 4.h),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                              Icon(priceChange > 0 ? Icons.arrow_upward : Icons.arrow_downward, size: 14.sp, color: priceChange > 0 ? Colors.red : Colors.green),
-                                        SizedBox(width: 4.w),
-                                        Text('${formatPrice(priceChange.abs())} ₽', style: AppStyles.regular12s.copyWith(color: priceChange > 0 ? Colors.red : Colors.green)),
-                                      ],
-                                    ),
-                                  ],
-                                ],
-                              ),
+                              Icon(priceChange > 0 ? Icons.arrow_upward : Icons.arrow_downward, size: 14.0, color: priceChange > 0 ? Colors.red : Colors.green),
+                              SizedBox(width: 4),
+                              Text('${formatPrice(priceChange.abs())} ₽', style: AppStyles.regular12s.copyWith(color: priceChange > 0 ? Colors.red : Colors.green)),
                             ],
                           ),
-                        );
-                      },
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
@@ -775,7 +746,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                         return state.maybeWhen(
                           success: (product) {
                             final isOwner = _isCurrentUserOwner(product.sellerId, context);
-                            
+
                             // Кнопка "Поделиться" всегда видна
                             final shareButton = IconButton(
                               icon: const Icon(Icons.share, color: AppColors.primary100p),
@@ -857,54 +828,54 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
               onTap: () => _showPhotoViewer(context, allImages, 0),
               child: Stack(
                 children: [
-                  SizedBox(height: 300.h, width: double.infinity, child: _buildImageWidget(mainImage)),
+                  SizedBox(height: 300, width: double.infinity, child: _buildImageWidget(mainImage)),
                   // Чипсы: доля и лизинг
-                    Positioned(
-                      top: 8.h,
-                      right: 8.w,
+                  Positioned(
+                    top: 8,
+                    right: 8,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         if (product.isShareSale == true && product.shareNumerator != null && product.shareDenominator != null)
                           Container(
-                            margin: EdgeInsets.only(bottom: 8.h),
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(12.r)),
-                        child: Text(
-                          'Доля ${product.shareNumerator}/${product.shareDenominator}',
-                          style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
-                        ),
+                            margin: EdgeInsets.only(bottom: 8),
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(12)),
+                            child: Text(
+                              'Доля ${product.shareNumerator}/${product.shareDenominator}',
+                              style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                            ),
                           ),
                         if (product.isLeasing == true)
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(12.r)),
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(12)),
                             child: Text(
                               'Лизинг',
                               style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
                             ),
                           ),
                       ],
-                      ),
                     ),
+                  ),
                 ],
               ),
             ),
           ] else
             Container(
-              height: 300.h,
+              height: 300,
               color: Colors.grey.shade200,
-              child: Center(child: Icon(Icons.image, size: 64.sp)),
+              child: Center(child: Icon(Icons.image, size: 64.0)),
             ),
 
           // Дополнительные фотографии в горизонтальном списке
           if (additionalImages.isNotEmpty) ...[
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             SizedBox(
-              height: 100.h,
+              height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 itemCount: additionalImages.length,
                 itemBuilder: (context, index) {
                   final photoUrl = additionalImages[index];
@@ -915,14 +886,14 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                       _showPhotoViewer(context, allImages, startIndex + index);
                     },
                     child: Container(
-                      width: 100.w,
-                      height: 100.h,
-                      margin: EdgeInsets.only(right: 12.w),
+                      width: 100,
+                      height: 100,
+                      margin: EdgeInsets.only(right: 12),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Color(0xFFE5E7EB), width: 1),
                       ),
-                      child: ClipRRect(borderRadius: BorderRadius.circular(12.r), child: _buildImageWidget(photoUrl)),
+                      child: ClipRRect(borderRadius: BorderRadius.circular(12), child: _buildImageWidget(photoUrl)),
                     ),
                   );
                 },
@@ -931,64 +902,62 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
           ],
 
           Padding(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Заголовок и цена
                 Text(product.title, style: AppStyles.bold20s),
-                SizedBox(height: 8.h),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Text(
                       '${_formatPrice(product.price)} ₽',
-                      style: AppStyles.bold20s.copyWith(color: AppColors.primary100p, fontSize: 24.sp),
+                      style: AppStyles.bold20s.copyWith(color: AppColors.primary100p, fontSize: 24.0),
                     ),
-                    SizedBox(width: 12.w),
+                    SizedBox(width: 12),
                     TextButton.icon(
                       onPressed: () => _showPriceHistoryModal(context, product.id),
                       icon: Icon(Icons.history, size: 18, color: Color(0xFF0A6EFA)),
                       label: Text('История цены', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      ),
+                      style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4)),
                     ),
                   ],
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 // Описание
                 if (product.description != null && product.description!.isNotEmpty) ...[
                   Text('Описание', style: AppStyles.bold16s),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(product.description!, style: AppStyles.regular14s),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 24),
                 ],
 
                 // Особые условия
                 if ((product.isShareSale == true && product.shareNumerator != null && product.shareDenominator != null) || product.isLeasing == true) ...[
                   Text('Особые условия', style: AppStyles.bold16s),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 12),
                   if (product.isShareSale == true && product.shareNumerator != null && product.shareDenominator != null)
                     Container(
-                      padding: EdgeInsets.all(12.w),
-                      margin: EdgeInsets.only(bottom: 8.h),
+                      padding: EdgeInsets.all(12),
+                      margin: EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
                         color: AppColors.primary100p.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppColors.primary100p.withOpacity(0.3)),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(Icons.pie_chart, color: AppColors.primary100p, size: 20),
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Продажа доли', style: AppStyles.bold14s.copyWith(color: AppColors.primary100p)),
-                                SizedBox(height: 4.h),
+                                SizedBox(height: 4),
                                 Text('Доля ${product.shareNumerator}/${product.shareDenominator}', style: AppStyles.regular14s),
                               ],
                             ),
@@ -998,23 +967,23 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     ),
                   if (product.isLeasing == true)
                     Container(
-                      padding: EdgeInsets.all(12.w),
+                      padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AppColors.primary100p.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppColors.primary100p.withOpacity(0.3)),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(Icons.account_balance, color: AppColors.primary100p, size: 20),
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Лизинг', style: AppStyles.bold14s.copyWith(color: AppColors.primary100p)),
-                                SizedBox(height: 4.h),
+                                SizedBox(height: 4),
                                 Text(
                                   product.leasingConditions != null && product.leasingConditions!.isNotEmpty ? product.leasingConditions! : 'Самолёт доступен для покупки в лизинг',
                                   style: AppStyles.regular14s,
@@ -1025,12 +994,12 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                         ],
                       ),
                     ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 24),
                 ],
 
                 // Характеристики
                 Text('Характеристики', style: AppStyles.bold16s),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 // Категория (берём из MarketCategoriesBloc)
                 Builder(
                   builder: (context) {
@@ -1063,11 +1032,11 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                 _buildInfoRow('Состояние', _formatCondition(product.condition)),
                 _buildInfoRow('Местоположение', product.location),
                 if (product.location != null && product.location!.isNotEmpty) _buildLocationMap(product.location),
-                SizedBox(height: 24.h),
+                SizedBox(height: 24),
 
                 // Информация о продавце
                 Text('Продавец', style: AppStyles.bold16s),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 if (product.sellerFullName != null) _buildInfoRow('Имя', product.sellerFullName),
                 if (product.sellerPhone != null)
                   _buildContactRow('Телефон', formatPhone(product.sellerPhone!), Icons.phone, () async {
@@ -1090,20 +1059,20 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                       await launchUrl(uri);
                     }
                   }),
-                SizedBox(height: 24.h),
+                SizedBox(height: 24),
 
                 // Метаданные
                 Text('Информация', style: AppStyles.bold16s),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 _buildInfoRow('Просмотры', product.viewsCount.toString()),
                 _buildInfoRow('Дата публикации', formatDate(product.createdAt)),
                 if (product.updatedAt != null && product.updatedAt != product.createdAt) _buildInfoRow('Дата обновления', formatDate(product.updatedAt)),
                 if (isOwner) _buildInfoRow('Опубликовано до', formatDate(product.publishedUntil)),
                 if (isOwner && remainingDays != null) _buildInfoRow('Осталось дней', remainingDays.toString()),
                 _buildInfoRow('ID объявления', product.id.toString()),
-                SizedBox(height: 24.h),
+                SizedBox(height: 24),
                 if (isOwner) ...[
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   // Кнопка "Редактировать"
                   SizedBox(
                     width: double.infinity,
@@ -1118,13 +1087,13 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary100p,
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text('Редактировать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                     ),
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 12),
                   // Кнопка "Снять с публикации" / "Опубликовать"
                   SizedBox(
                     width: double.infinity,
@@ -1139,13 +1108,13 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                       style: ElevatedButton.styleFrom(
                         backgroundColor: product.isActive ? Colors.red : AppColors.primary100p,
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(product.isActive ? 'Снять с публикации' : 'Опубликовать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                 ],
               ],
             ),
@@ -1158,12 +1127,12 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
   Widget _buildInfoRow(String label, String? value) {
     if (value == null || value.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: EdgeInsets.only(bottom: 8.h),
+      padding: EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 160.w,
+            width: 160,
             child: Text(label, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
           ),
           Expanded(child: Text(value, style: AppStyles.regular14s)),
@@ -1174,12 +1143,12 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
 
   Widget _buildContactRow(String label, String value, IconData icon, VoidCallback onTap) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8.h),
+      padding: EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 160.w,
+            width: 160,
             child: Text(label, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
           ),
           Expanded(
@@ -1188,7 +1157,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
               child: Row(
                 children: [
                   Icon(icon, size: 16, color: AppColors.primary100p),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 8),
                   Text(value, style: AppStyles.regular14s.copyWith(color: AppColors.primary100p)),
                 ],
               ),

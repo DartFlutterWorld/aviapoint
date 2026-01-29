@@ -10,7 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:aviapoint/core/domain/app_bloc_observer.dart';
 import 'package:aviapoint/core/utils/talker_config.dart';
@@ -95,28 +94,7 @@ Future<void> _run() async {
   runApp(
     TalkerWrapper(
       talker: AppTalker.instance,
-      child: ScreenUtilInit(
-        enableScaleWH: () => !kIsWeb, // Отключаем масштабирование ширины/высоты на вебе
-        enableScaleText: () => !kIsWeb, // Отключаем масштабирование текста на вебе
-        designSize: const Size(375, 812),
-        minTextAdapt: !kIsWeb, // Отключаем адаптацию текста на вебе
-        splitScreenMode: !kIsWeb, // Отключаем splitScreenMode на вебе
-        rebuildFactor: kIsWeb ? RebuildFactors.none : RebuildFactors.size, // Не пересчитывать на вебе
-        useInheritedMediaQuery: true,
-        ensureScreenSize: !kIsWeb, // Отключаем ensureScreenSize на вебе
-        fontSizeResolver: kIsWeb
-            ? (fontSize, screenUtil) => fontSize
-                  .toDouble() // На вебе возвращаем исходный размер
-            : (fontSize, screenUtil) {
-                // Используем минимальную сторону экрана для масштабирования
-                // Это гарантирует, что размеры остаются стабильными при повороте
-                final screenWidth = screenUtil.screenWidth;
-                final screenHeight = screenUtil.screenHeight;
-                final minDimension = screenWidth < screenHeight ? screenWidth : screenHeight;
-                // Базовый дизайн: 375px (минимальная сторона в портретной ориентации)
-                return (fontSize * (minDimension / 375.0)).toDouble();
-              },
-        child: EasyLocalization(
+      child: EasyLocalization(
           supportedLocales: [Locale('en', 'EN'), Locale('ru', 'RU')],
           path: 'assets/translations',
           useOnlyLangCode: false,
@@ -128,7 +106,6 @@ Future<void> _run() async {
           child: AppWrapper(child: const App()),
           ),
         ),
-      ),
     ),
   );
 }

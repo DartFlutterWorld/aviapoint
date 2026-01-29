@@ -2,7 +2,6 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChipsWidget extends StatelessWidget {
   const ChipsWidget({super.key, required this.questionWithAnswers, this.colorBackground, this.colorTitle});
@@ -14,19 +13,11 @@ class ChipsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 55.w,
+      width: 55,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: colorBackground ?? getColors(questionWithAnswers.correctAnswer ?? 0).$1,
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: colorBackground ?? getColors(questionWithAnswers.correctAnswer ?? 0).$1),
       child: Center(
-        child: Text(
-          questionWithAnswers.questionId.toString(),
-          style: AppStyles.regular13s.copyWith(
-            color: colorTitle ?? getColors(questionWithAnswers.correctAnswer ?? 0).$2,
-          ),
-        ),
+        child: Text(questionWithAnswers.questionId.toString(), style: AppStyles.regular13s.copyWith(color: colorTitle ?? getColors(questionWithAnswers.correctAnswer ?? 0).$2)),
       ),
     );
   }

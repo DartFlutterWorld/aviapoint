@@ -6,9 +6,9 @@ import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/on_the_way/domain/entities/booking_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/bookings_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/booking_card.dart';
+import 'package:aviapoint/on_the_way/presentation/widgets/pilot_contacts_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -79,25 +79,24 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.only(
-              left: AppSpacing.horizontal,
-              right: AppSpacing.horizontal,
-              top: AppSpacing.section,
-              bottom: AppSpacing.section,
-            ),
+            padding: EdgeInsets.only(left: AppSpacing.horizontal, right: AppSpacing.horizontal, top: AppSpacing.section, bottom: AppSpacing.section),
             child: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {
                 return state.when(
                   loading: () => _buildLoadingState(),
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
-                      _buildErrorState(errorForUser),
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => _buildErrorState(errorForUser),
                   success: (bookings) => _buildSuccessState(bookings),
-                  bookingCreated: (booking) =>
-                      _buildSuccessState([]), // После создания показываем пустой список, т.к. нужно перезагрузить
-                  bookingConfirmed: (booking) =>
-                      _buildSuccessState([]), // После подтверждения показываем пустой список, т.к. нужно перезагрузить
-                  bookingCancelled: (booking) =>
-                      _buildSuccessState([]), // После отмены показываем пустой список, т.к. нужно перезагрузить
+                  bookingCreated: (booking) => _buildSuccessState([]), // После создания показываем пустой список, т.к. нужно перезагрузить
+                  bookingConfirmed: (booking) {
+                    // Показываем модальное окно с контактами пилота после подтверждения
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (context.mounted) {
+                        showPilotContactsBottomSheet(context: context, booking: booking);
+                      }
+                    });
+                    return _buildSuccessState([]); // После подтверждения показываем пустой список, т.к. нужно перезагрузить
+                  },
+                  bookingCancelled: (booking) => _buildSuccessState([]), // После отмены показываем пустой список, т.к. нужно перезагрузить
                 );
               },
             ),
@@ -110,21 +109,21 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
   Widget _buildUnauthenticatedState(BuildContext context) {
     return SingleChildScrollView(
       physics: AlwaysScrollableScrollPhysics(),
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 60.h),
+          SizedBox(height: 60),
           Icon(Icons.lock_outline, size: 80, color: Color(0xFF9CA5AF)),
-          SizedBox(height: 24.h),
+          SizedBox(height: 24),
           Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-          SizedBox(height: 12.h),
+          SizedBox(height: 12),
           Text(
             'Для просмотра ваших бронирований необходимо войти в систему',
             style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 32.h),
+          SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () async {
               final result = await showLogin(context);
@@ -142,8 +141,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             label: Text('Войти', style: AppStyles.bold16s.copyWith(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF0A6EFA),
-              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
           ),
         ],
@@ -156,10 +155,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
       children: List.generate(
         3,
         (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
-          padding: EdgeInsets.all(12.w),
+          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Color(0xFFD9E6F8)),
             color: Colors.white,
           ),
@@ -168,8 +167,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             color: const Color(0xFF8D66FE),
             colorOpacity: 0.2,
             child: Container(
-              height: 120.h,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Colors.grey[300]),
+              height: 120,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.grey[300]),
             ),
           ),
         ),
@@ -179,27 +178,24 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
 
   Widget _buildErrorState(String error) {
     return Container(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.all(24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, size: 64, color: Color(0xFF9CA5AF)),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           Text(
             error,
             style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               context.read<BookingsBloc>().add(GetBookingsEvent());
             },
             child: Text('Повторить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF0A6EFA),
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA), padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
           ),
         ],
       ),
@@ -222,13 +218,13 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
 
     if (bookingsList.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.bookmark, size: 64, color: Color(0xFF9CA5AF)),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Center(
               child: Text(
                 'У вас пока нет бронирований',
@@ -236,7 +232,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             Center(
               child: Text(
                 'Забронируйте место на любом доступном полете',

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:dio/dio.dart';
@@ -478,14 +477,19 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
   Widget? _buildSuffixIcon() {
     if (_isLoadingSuggestions) {
       return SizedBox(
-        width: 20.w,
-        height: 20.h,
-        child: Padding(padding: EdgeInsets.all(12.w), child: CircularProgressIndicator(strokeWidth: 2.w)),
+        width: 20,
+        height: 20,
+        child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator(strokeWidth: 2)),
       );
     }
 
     if (_searchController.text.isNotEmpty) {
-      return IconButton(icon: Icon(Icons.clear, size: 20.sp), onPressed: _clearLocation, padding: EdgeInsets.zero, constraints: const BoxConstraints());
+      return IconButton(
+        icon: Icon(Icons.clear, size: 20.0),
+        onPressed: _clearLocation,
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(),
+      );
     }
 
     return null;
@@ -506,7 +510,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
               decoration: InputDecoration(
                 labelText: 'Местоположение *',
                 hintText: 'Введите адрес',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: const Icon(Icons.search),
@@ -520,11 +524,11 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
             // Список подсказок
             if (_showSuggestions && _suggestions.isNotEmpty)
               Container(
-                margin: EdgeInsets.only(top: 4.h),
-                constraints: BoxConstraints(maxHeight: 200.h),
+                margin: EdgeInsets.only(top: 4),
+                constraints: BoxConstraints(maxHeight: 200),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.grey.shade300),
                   boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4))],
                 ),
@@ -541,11 +545,11 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                         _selectSuggestion(suggestion);
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         child: Row(
                           children: [
-                            Icon(Icons.location_on, color: AppColors.primary100p, size: 20.sp),
-                            SizedBox(width: 16.w),
+                            Icon(Icons.location_on, color: AppColors.primary100p, size: 20.0),
+                            SizedBox(width: 16),
                             Expanded(
                               child: Text(displayName.isNotEmpty ? displayName : 'Адрес не указан', style: AppStyles.regular14s, maxLines: 2, overflow: TextOverflow.ellipsis),
                             ),
@@ -558,16 +562,16 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
               ),
           ],
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
         // Карта
         Container(
-          height: 300.h,
+          height: 300,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.grey.shade300),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             child: FlutterMap(
               key: kIsWeb ? ValueKey('flutter_map_${_markerKey}_${_selectedLocation?.latitude}_${_selectedLocation?.longitude}') : null,
               mapController: _mapController,
@@ -596,9 +600,9 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                       Marker(
                         key: ValueKey('marker_point_$_markerKey'),
                         point: _selectedLocation!,
-                        width: 40.w,
-                        height: 40.h,
-                        child: Icon(Icons.location_on, color: AppColors.primary100p, size: 40.sp),
+                        width: 40,
+                        height: 40,
+                        child: Icon(Icons.location_on, color: AppColors.primary100p, size: 40.0),
                       ),
                     ],
                   ),

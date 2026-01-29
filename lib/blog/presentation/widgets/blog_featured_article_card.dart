@@ -4,8 +4,6 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:aviapoint/on_the_way/data/models/aircraft_model_dto.dart';
 
 class BlogFeaturedArticleCard extends StatefulWidget {
@@ -34,9 +32,9 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFD9E6F8)),
         ),
         child: Column(
@@ -45,26 +43,20 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(16.r), topRight: Radius.circular(16.r)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
                   child: widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty
                       ? NetworkImageWidget(
                           imageUrl: getImageUrl(widget.article.coverImageUrl!),
                           fit: BoxFit.fill, // Как в новостях - без ограничений по высоте
-                          errorWidget: Container(
-                            color: const Color(0xFFD9E6F8),
-                            child: Icon(Icons.image, size: 48.sp),
-                          ),
+                          errorWidget: Container(color: const Color(0xFFD9E6F8), child: Icon(Icons.image, size: 48)),
                         )
-                      : Container(
-                          color: const Color(0xFFD9E6F8),
-                          child: Icon(Icons.image, size: 48.sp),
-                        ),
+                      : Container(color: const Color(0xFFD9E6F8), child: Icon(Icons.image, size: 48)),
                 ),
               ],
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -75,7 +67,7 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                       Text(widget.article.publishedAt != null ? formatDate(DateTime.parse(widget.article.publishedAt!)) : '', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                     ],
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 4),
                   Text(
                     widget.article.title,
                     style: AppStyles.bold14s.copyWith(color: const Color(0xFF374151)),
@@ -83,7 +75,7 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (widget.article.excerpt != null && widget.article.excerpt!.isNotEmpty) ...[
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 4),
                     Text(
                       widget.article.excerpt!,
                       style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767)),
@@ -91,24 +83,24 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Wrap(
-                    spacing: 12.w,
-                    runSpacing: 4.h,
+                    spacing: 12,
+                    runSpacing: 4,
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.person_outline, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                          SizedBox(width: 4.w),
+                          Icon(Icons.person_outline, size: 12, color: const Color(0xFF9CA5AF)),
+                          SizedBox(width: 4),
                           Text(_getAuthorName(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                         ],
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.visibility_outlined, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                          SizedBox(width: 4.w),
+                          Icon(Icons.visibility_outlined, size: 12, color: const Color(0xFF9CA5AF)),
+                          SizedBox(width: 4),
                           Text('${widget.article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                         ],
                       ),
@@ -116,8 +108,8 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.flight, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                            SizedBox(width: 4.w),
+                            Icon(Icons.flight, size: 12.0, color: const Color(0xFF9CA5AF)),
+                            SizedBox(width: 4),
                             Flexible(
                               child: Text(
                                 widget.article.aircraftModel!.getFullName(),
@@ -130,7 +122,7 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                         ),
                     ],
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                 ],
               ),
             ),

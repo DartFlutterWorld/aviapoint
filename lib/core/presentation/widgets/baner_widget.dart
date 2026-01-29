@@ -1,7 +1,6 @@
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BanerWidget extends StatelessWidget {
   final String title;
@@ -54,10 +53,10 @@ class BanerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(18.r),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18.r),
+          borderRadius: BorderRadius.circular(18),
           image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background), isAntiAlias: true),
           boxShadow: boxShadowContainer,
         ),
@@ -71,11 +70,11 @@ class BanerWidget extends StatelessWidget {
               right: 0,
               child: Align(
                 alignment: alignPicture,
-                child: Image.asset(picture, fit: BoxFit.contain, height: heightPicture ?? 150.h),
+                child: Image.asset(picture, fit: BoxFit.contain, height: heightPicture ?? 150),
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -87,24 +86,24 @@ class BanerWidget extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             if (title.isNotEmpty) Text(title, style: titleStyle),
-                            if (title.isNotEmpty) SizedBox(height: 4.h),
+                            if (title.isNotEmpty) SizedBox(height: 4),
                             Text(desc, style: descStyle),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Row(
                     spacing: 8,
                     children: [
                       Flexible(
                         child: CustomButton(
                           title: titleButton,
-                          verticalPadding: 8.h,
+                          verticalPadding: 8,
                           backgroundColor: backgroundColor,
                           onPressed: onTap,
-                          borderRadius: 46.r,
+                          borderRadius: 46,
                           textStyle: titleButtonStyle,
                           borderColor: borderColor,
                           boxShadow: boxShadowButton,
@@ -114,10 +113,10 @@ class BanerWidget extends StatelessWidget {
                         Flexible(
                           child: CustomButton(
                             title: titleButton2!,
-                            verticalPadding: 8.h,
+                            verticalPadding: 8,
                             backgroundColor: backgroundColor2,
                             onPressed: onTap2,
-                            borderRadius: 46.r,
+                            borderRadius: 46,
                             textStyle: titleButtonStyle2,
                             borderColor: borderColor2,
                             boxShadow: boxShadowButton2,

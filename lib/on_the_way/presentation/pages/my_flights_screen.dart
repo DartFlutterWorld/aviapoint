@@ -8,7 +8,6 @@ import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -79,22 +78,14 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.only(
-              left: AppSpacing.horizontal,
-              right: AppSpacing.horizontal,
-              top: AppSpacing.section,
-              bottom: AppSpacing.section,
-            ),
+            padding: EdgeInsets.only(left: AppSpacing.horizontal, right: AppSpacing.horizontal, top: AppSpacing.section, bottom: AppSpacing.section),
             child: BlocBuilder<FlightsBloc, FlightsState>(
               builder: (context, state) {
                 return state.when(
                   loading: () => _buildLoadingState(),
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
-                      _buildErrorState(errorForUser),
-                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) =>
-                      _buildSuccessState(flights),
-                  flightCreated: (flight) =>
-                      _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => _buildErrorState(errorForUser),
+                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
+                  flightCreated: (flight) => _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
                 );
               },
             ),
@@ -107,21 +98,21 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
   Widget _buildUnauthenticatedState(BuildContext context) {
     return SingleChildScrollView(
       physics: AlwaysScrollableScrollPhysics(),
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 60.h),
+          SizedBox(height: 60),
           Icon(Icons.lock_outline, size: 80, color: Color(0xFF9CA5AF)),
-          SizedBox(height: 24.h),
+          SizedBox(height: 24),
           Text('Требуется авторизация', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
-          SizedBox(height: 12.h),
+          SizedBox(height: 12),
           Text(
             'Для просмотра ваших полетов необходимо войти в систему',
             style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 32.h),
+          SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () async {
               final result = await showLogin(context);
@@ -139,8 +130,8 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
             label: Text('Войти', style: AppStyles.bold16s.copyWith(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF0A6EFA),
-              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
           ),
         ],
@@ -153,10 +144,10 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
       children: List.generate(
         3,
         (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 16.h),
-          padding: EdgeInsets.all(12.w),
+          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Color(0xFFD9E6F8)),
             color: Colors.white,
           ),
@@ -165,8 +156,8 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
             color: const Color(0xFF8D66FE),
             colorOpacity: 0.2,
             child: Container(
-              height: 120.h,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r), color: Colors.grey[300]),
+              height: 120,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.grey[300]),
             ),
           ),
         ),
@@ -176,27 +167,24 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
 
   Widget _buildErrorState(String error) {
     return Container(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.all(24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, size: 64, color: Color(0xFF9CA5AF)),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           Text(
             error,
             style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
             },
             child: Text('Повторить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF0A6EFA),
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA), padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
           ),
         ],
       ),
@@ -206,13 +194,13 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
   Widget _buildSuccessState(List<FlightEntity> flights) {
     if (flights.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.flight, size: 64, color: Color(0xFF9CA5AF)),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Center(
               child: Text(
                 'У вас пока нет созданных полетов',
@@ -220,7 +208,7 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             Center(
               child: Text(
                 'Создайте свой первый полет, нажав кнопку "Создать полет" на вкладке "Поиск"',

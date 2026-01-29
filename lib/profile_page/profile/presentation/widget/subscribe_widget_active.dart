@@ -2,7 +2,6 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubscribeWidgetActive extends StatelessWidget {
   final SubscriptionDto subscription;
@@ -10,39 +9,31 @@ class SubscribeWidgetActive extends StatelessWidget {
 
   const SubscribeWidgetActive({super.key, required this.subscription, required this.fon});
 
-
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(9.r),
+      borderRadius: BorderRadius.circular(9),
       clipBehavior: Clip.antiAlias,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-        height: 225.h,
-        width: 176.w,
+        height: 225,
+        width: 176,
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(fon), fit: BoxFit.cover),
-          borderRadius: BorderRadius.circular(9.r),
+          borderRadius: BorderRadius.circular(9),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               'Подписка на обучение\nактивна',
-              style: AppStyles.extraBold.copyWith(
-                color: Color(0xFF223B76),
-                fontStyle: FontStyle.italic,
-                fontSize: 16.sp,
-              ),
+              style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76), fontStyle: FontStyle.italic, fontSize: 16.0),
             ),
             SizedBox(height: 8),
             Text('Вам доступен - Тренировочный режим', style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
             SizedBox(height: 8),
             ...[
-              Text(
-                '${formatDate(subscription.startDate)} - ${formatDate(subscription.endDate)}',
-                style: AppStyles.light12s.copyWith(color: Color(0xFF374151)),
-              ),
+              Text('${formatDate(subscription.startDate)} - ${formatDate(subscription.endDate)}', style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
               SizedBox(height: 4),
               RichText(
                 text: TextSpan(

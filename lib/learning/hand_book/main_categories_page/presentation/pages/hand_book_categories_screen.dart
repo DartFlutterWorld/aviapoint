@@ -13,7 +13,6 @@ import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/w
 import 'package:aviapoint/learning/hand_book/main_categories_page/presentation/widgets/category_hand_book_small_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class HandBookMainCategoriesScreen extends StatefulWidget {
@@ -72,66 +71,66 @@ class _Success extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      padding: EdgeInsets.symmetric(horizontal: 8),
       child: ListView(
         children: [
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           CategoryHandBookLongWidget(
             title: handBookCategories[0].title,
             subTitle: handBookCategories[0].subTitle,
             background: Pictures.preflightBackground,
             picturePlane: Pictures.preflightPlane,
-            imageHeight: 137.h,
+            imageHeight: 137,
             onTap: () => context.router.push(selectSubCategory(1)),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           CategoryHandBookLongWidget(
             title: handBookCategories[1].title,
             subTitle: handBookCategories[1].subTitle,
             background: Pictures.preflightBackground,
             picturePlane: Pictures.normalPlane,
-            imageHeight: 130.h,
+            imageHeight: 130,
             onTap: () => context.router.push(selectSubCategory(2)),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           // Row(
-          //   spacing: 12.w,
+          //   spacing: 12,
           //   children: [
           //     Flexible(
           //       child: CategoryHandBookSmallWidget(
-          //         height: 190.h,
+          //         height: 190,
           //         width: 100,
           //         title: handBookCategories[3].title,
           //         subTitle: handBookCategories[3].subTitle,
           //         background: Pictures.limitationBackground,
           //         picturePlane: Pictures.limitationPlane,
-          //         imageHeight: 121.h,
+          //         imageHeight: 121,
           //         onTap: () => context.router.push(selectSubCategory(0)),
           //         aligmentPlane: Alignment.bottomLeft,
           //       ),
           //     ),
           //     Flexible(
           //       child: CategoryHandBookSmallWidget(
-          //         height: 190.h,
+          //         height: 190,
           //         width: 100,
           //         title: handBookCategories[4].title,
           //         subTitle: handBookCategories[4].subTitle,
           //         background: Pictures.perfomanceBackground,
           //         picturePlane: Pictures.perfomancePlane,
-          //         imageHeight: 107.h,
+          //         imageHeight: 107,
           //         onTap: () => context.router.push(selectSubCategory(0)),
           //         aligmentPlane: Alignment.bottomRight,
           //       ),
           //     ),
           //   ],
           // ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           CategoryHandBookLongWidget(
             title: handBookCategories[2].title,
             subTitle: handBookCategories[2].subTitle,
             background: Pictures.preflightBackground,
             picturePlane: Pictures.emergencyPlane,
-            imageHeight: 137.h,
+            imageHeight: 137,
             onTap: () => context.router.push(selectSubCategory(3)),
           ),
         ],

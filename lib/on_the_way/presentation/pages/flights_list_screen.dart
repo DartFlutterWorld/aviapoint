@@ -24,8 +24,8 @@ import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 @RoutePage()
 class FlightsListScreen extends StatefulWidget {

@@ -5,7 +5,6 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 class BigNewsWidget extends StatelessWidget {
   final NewsEntity news;

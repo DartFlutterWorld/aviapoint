@@ -1,7 +1,6 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AnswerByModeWidget extends StatelessWidget {
@@ -41,11 +40,11 @@ class AnswerByModeWidget extends StatelessWidget {
           border: Border.all(color: borderColor, width: borderColor != Colors.transparent ? 2 : 0),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8).h,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             spacing: 8,
             children: [
-              if (showResult && isCorrect) SvgPicture.asset(Pictures.isCorrect, width: 20.w, height: 20.h),
+              if (showResult && isCorrect) SvgPicture.asset(Pictures.isCorrect, width: 20, height: 20),
               Flexible(
                 child: Text(title, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
               ),

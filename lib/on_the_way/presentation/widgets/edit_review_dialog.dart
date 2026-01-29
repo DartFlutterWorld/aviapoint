@@ -4,7 +4,6 @@ import 'package:aviapoint/on_the_way/presentation/bloc/reviews_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Диалог для редактирования отзыва
 class EditReviewDialog extends StatefulWidget {
@@ -35,19 +34,11 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
 
   void _submitReview() {
     if (_rating == 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
-    context.read<ReviewsBloc>().add(
-      UpdateReviewEvent(
-        reviewId: widget.review.id,
-        rating: _rating,
-        comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
-      ),
-    );
+    context.read<ReviewsBloc>().add(UpdateReviewEvent(reviewId: widget.review.id, rating: _rating, comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim()));
   }
 
   @override
@@ -57,37 +48,25 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
         state.when(
           loading: () {},
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(responseMessage ?? errorForUser),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 4),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
           },
           success: (reviews, flights) {},
           reviewCreated: (review) {},
           reviewUpdated: (review) {
             Navigator.of(context).pop(true);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Отзыв успешно обновлён'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Отзыв успешно обновлён'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
           },
           reviewDeleted: () {},
         );
       },
       child: Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: BlocBuilder<ReviewsBloc, ReviewsState>(
           builder: (context, state) {
             final isLoading = state is LoadingReviewsState;
             return Container(
-              padding: EdgeInsets.all(20.w),
-              constraints: BoxConstraints(maxWidth: 400.w),
+              padding: EdgeInsets.all(20),
+              constraints: BoxConstraints(maxWidth: 400),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -104,10 +83,10 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Рейтинг
                     Text('Оценка', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 12),
                     RatingWidget(
                       rating: _rating,
                       readOnly: false,
@@ -118,30 +97,30 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
                       },
                       size: 32,
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Комментарий
                     Text('Комментарий (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextField(
                       controller: _commentController,
                       maxLines: 4,
                       decoration: InputDecoration(
                         hintText: 'Оставьте комментарий...',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFE5E7EB)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFE5E7EB)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
                       ),
                     ),
-                    SizedBox(height: 24.h),
+                    SizedBox(height: 24),
                     // Кнопка отправки
                     SizedBox(
                       width: double.infinity,
@@ -149,18 +128,11 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
                         onPressed: isLoading ? null : _submitReview,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF0A6EFA),
-                          padding: EdgeInsets.symmetric(vertical: 14.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         child: isLoading
-                            ? SizedBox(
-                                height: 20.h,
-                                width: 20.w,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                ),
-                              )
+                            ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
                             : Text('Сохранить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                       ),
                     ),

@@ -1,6 +1,5 @@
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AnswerWidget extends StatelessWidget {
@@ -18,7 +17,7 @@ class AnswerWidget extends StatelessWidget {
         child: Row(
           spacing: 6,
           children: [
-            SvgPicture.asset(icon, width: 16.w, height: 16.h),
+            SvgPicture.asset(icon, width: 16, height: 16),
             Flexible(
               child: Text(title, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
             ),

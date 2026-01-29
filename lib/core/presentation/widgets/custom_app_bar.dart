@@ -5,7 +5,6 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
@@ -48,7 +47,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    return Size.fromHeight(height.h + (bottom?.preferredSize.height ?? 0));
+    return Size.fromHeight(height + (bottom?.preferredSize.height ?? 0));
   }
 
   // void _pop(BuildContext context) {
@@ -65,9 +64,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = 28.sp;
+    final iconSize = 30.0;
     return AppBar(
-      toolbarHeight: height.h,
+      toolbarHeight: height,
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
       iconTheme: IconThemeData(size: iconSize),
@@ -86,21 +85,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : SizedBox(),
-      leadingWidth: 60.w,
+      leadingWidth: 60,
       centerTitle: true,
       backgroundColor: AppColors.backgroundAppBar,
       elevation: elevation,
       shadowColor: kIsWeb ? null : shadowColor ?? const Color(0xFFA8A39C).withValues(alpha: 0.12),
       title: withLogo
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [SvgPicture.asset(Pictures.logoTitle, height: 40.h)],
-            )
+          ? Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [SvgPicture.asset(Pictures.logoTitle, height: 40)])
           : Text(
               title,
-              style: AppStyles.bold16s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
+              style: AppStyles.bold14s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
               maxLines: 2,
               textAlign: titleTextAlign,
               overflow: TextOverflow.ellipsis,
@@ -115,7 +109,7 @@ class _ProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAuthenticated = Provider.of<AppState>(context, listen: true).isAuthenticated;
-    final iconSize = 28.sp;
+    final iconSize = 28.0;
 
     if (!isAuthenticated) {
       return IconButton(

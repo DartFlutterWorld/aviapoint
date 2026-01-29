@@ -1,6 +1,5 @@
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -58,7 +57,7 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
                   color: widget.backgroundColor ?? AppColors.background,
                   // borderRadius не нужен здесь, он задается через topRadius в showCupertinoModalBottomSheet
                 ),
-                padding: EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, top: 16.h, bottom: mediaQuery.viewInsets.bottom + 16.h + mediaQuery.padding.bottom),
+                padding: EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, top: 16, bottom: mediaQuery.viewInsets.bottom + 16 + mediaQuery.padding.bottom),
                 child: Material(
                   color: Colors.transparent,
                   child: Column(
@@ -71,13 +70,13 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
                           child: GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: widget.onClose ?? () => Navigator.of(context).pop(),
-                            child: SvgPicture.asset(Pictures.closeAuth, width: 30.sp, height: 30.sp),
+                            child: SvgPicture.asset(Pictures.closeAuth, width: 30.0, height: 30.0),
                           ),
                         ),
                       // Header с заголовком
                       if (widget.title.isNotEmpty) ...[
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text(
                             widget.title,
                             style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
@@ -85,7 +84,7 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
                           ),
                         ),
                       ],
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 16),
                       // Контент с прокруткой - используем Flexible для ограничения высоты
                       Flexible(child: SingleChildScrollView(child: widget.child)),
                     ],
@@ -120,7 +119,7 @@ Future<T?> showUniversalBottomSheet<T>({
   return await showCupertinoModalBottomSheet<T>(
     context: context,
     barrierColor: barrierColor ?? AppColors.bgOverlay,
-    topRadius: Radius.circular(18.r),
+    topRadius: Radius.circular(18),
     backgroundColor: Colors.transparent,
     expand: false,
     useRootNavigator: useRootNavigator,

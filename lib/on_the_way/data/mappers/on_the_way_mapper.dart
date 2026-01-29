@@ -109,6 +109,12 @@ class OnTheWayMapper {
       flightDepartureAirport: dto.flightDepartureAirport,
       flightArrivalAirport: dto.flightArrivalAirport,
       flightWaypoints: flightWaypoints,
+      pilotFirstName: dto.pilotFirstName,
+      pilotLastName: dto.pilotLastName,
+      pilotPhone: dto.pilotPhone,
+      pilotEmail: dto.pilotEmail,
+      pilotTelegram: dto.pilotTelegram,
+      pilotMax: dto.pilotMax,
     );
 
     print('✅ [OnTheWayMapper] BookingEntity создан:');

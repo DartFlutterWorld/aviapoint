@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// Настраиваемая кнопка.
@@ -53,17 +52,9 @@ class CustomButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 16,
             children: [
-              if (leftSvg != null)
-                Opacity(
-                  opacity: disabled ? 0.5 : 1,
-                  child: SvgPicture.asset(leftSvg!, height: 20.h),
-                ),
+              if (leftSvg != null) Opacity(opacity: disabled ? 0.5 : 1, child: SvgPicture.asset(leftSvg!, height: 20)),
               Text(title, style: disabled ? textStyle.copyWith(color: textStyle.color?.withOpacity(0.5)) : textStyle),
-              if (rightSvg != null)
-                Opacity(
-                  opacity: disabled ? 0.5 : 1,
-                  child: SvgPicture.asset(rightSvg!, height: 20.h),
-                ),
+              if (rightSvg != null) Opacity(opacity: disabled ? 0.5 : 1, child: SvgPicture.asset(rightSvg!, height: 20)),
             ],
           ),
         ),

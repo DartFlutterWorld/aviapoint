@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/bottom_bar_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:aviapoint/core/routes/app_router.dart';
@@ -29,12 +28,12 @@ class BottomBarState extends State<BottomBar> {
     if (kIsWeb) {
       // Определяем, является ли это мобильным устройством (ширина < 600px)
       final isMobile = MediaQuery.of(context).size.width < 600;
-      
+
       if (isMobile) {
         // На мобильных устройствах определяем ориентацию
         final orientation = MediaQuery.of(context).orientation;
         final isLandscape = orientation == Orientation.landscape;
-        
+
         if (isLandscape) {
           // В ландшафтной ориентации - вертикальный sidebar слева
           return Container(
@@ -46,12 +45,7 @@ class BottomBarState extends State<BottomBar> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // Логотип
-                Center(
-                  child: SvgPicture.asset(
-                    Pictures.logoTitle,
-                    height: 30,
-                  ),
-                ),
+                Center(child: SvgPicture.asset(Pictures.logoTitle, height: 30)),
                 const SizedBox(height: 16),
                 // Главная (индекс 0)
                 BottomBarItem(
@@ -152,7 +146,7 @@ class BottomBarState extends State<BottomBar> {
           return _buildMobileBottomBar(context);
         }
       }
-      
+
       // На десктопе - вертикальный sidebar слева с иконкой и текстом в строку
       return Container(
         width: 200, // Фиксированная ширина для веба
@@ -163,12 +157,7 @@ class BottomBarState extends State<BottomBar> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Логотип
-            Center(
-              child: SvgPicture.asset(
-                Pictures.logoTitle,
-                height: 40,
-              ),
-            ),
+            Center(child: SvgPicture.asset(Pictures.logoTitle, height: 40)),
             const SizedBox(height: 24),
             // Главная (индекс 0)
             BottomBarItem(
@@ -275,18 +264,13 @@ class BottomBarState extends State<BottomBar> {
     // На вебе ScreenUtil отключен, поэтому используем фиксированные значения
     // которые соответствуют масштабированным значениям на нативных платформах
     final screenWidth = MediaQuery.of(context).size.width;
-    final paddingLeft = kIsWeb ? (6.0 * screenWidth / 375.0) : 6.w;
-    final paddingRight = kIsWeb ? (6.0 * screenWidth / 375.0) : 6.w;
-    final paddingTop = kIsWeb ? (3.0 * screenWidth / 375.0) : 3.h;
-    
+    final paddingLeft = kIsWeb ? (6.0 * screenWidth / 375.0) : 6.0;
+    final paddingRight = kIsWeb ? (6.0 * screenWidth / 375.0) : 6.0;
+    final paddingTop = kIsWeb ? (3.0 * screenWidth / 375.0) : 3.0;
+
     return Container(
-      width: kIsWeb ? double.infinity : 1.sw,
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.viewPaddingOf(context).bottom / 2,
-        left: paddingLeft,
-        right: paddingRight,
-        top: paddingTop,
-      ),
+      width: kIsWeb ? double.infinity : MediaQuery.of(context).size.width,
+      padding: EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom / 2, left: paddingLeft, right: paddingRight, top: paddingTop),
       decoration: const BoxDecoration(color: Color(0xFFF9FDFF)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

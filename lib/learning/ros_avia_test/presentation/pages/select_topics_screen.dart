@@ -13,7 +13,6 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/select_top
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/your_specialization_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 typedef SettingsTest = ({bool mixAnswers, bool mixQuestions, bool buttonHint});
@@ -28,26 +27,20 @@ class SelectTopicsScreen extends StatefulWidget {
 class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
   final ValueNotifier<Set<int>> selectedCategoryId = ValueNotifier<Set<int>>({});
   final ValueNotifier<int> categoriesLenght = ValueNotifier<int>(0);
-  final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((
-    mixAnswers: true,
-    mixQuestions: true,
-    buttonHint: true,
-  ));
+  final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((mixAnswers: true, mixQuestions: true, buttonHint: true));
   late int _lastCertificateTypeId;
 
   @override
   void initState() {
     super.initState();
     _lastCertificateTypeId = BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id;
-    BlocProvider.of<CategoriesWithListQuestionsBloc>(
-      context,
-    ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: _lastCertificateTypeId));
+    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: _lastCertificateTypeId));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 8.0.w, right: 8.w, top: 8.h),
+      padding: EdgeInsets.only(left: 8.0, right: 8, top: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -58,25 +51,23 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                 _lastCertificateTypeId = state.typeSertificate.id;
                 selectedCategoryId.value = <int>{};
                 settingsTest.value = (mixAnswers: true, mixQuestions: true, buttonHint: true);
-                BlocProvider.of<CategoriesWithListQuestionsBloc>(
-                  context,
-                ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: state.typeSertificate.id));
+                BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: state.typeSertificate.id));
               }
             },
             child: BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
               builder: (context, state) => state.map(
                 loading: (value) => ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   child: Shimmer(
                     duration: const Duration(milliseconds: 1000),
                     interval: Duration(milliseconds: 0),
                     color: const Color(0xFF8D66FE),
                     colorOpacity: 0.5,
                     child: Container(
-                      padding: EdgeInsets.all(8.w),
-                      height: 97.7.h,
+                      padding: EdgeInsets.all(8),
+                      height: 97.7,
                       width: double.infinity,
-                      decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12.r)),
+                      decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
                     ),
                   ),
                 ),
@@ -101,11 +92,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
 
                       if (settings != null && mounted) {
                         // Загружаем сохраненные настройки
-                        settingsTest.value = (
-                          mixAnswers: settings.mixAnswers,
-                          mixQuestions: settings.mixQuestions,
-                          buttonHint: settings.buttonHint,
-                        );
+                        settingsTest.value = (mixAnswers: settings.mixAnswers, mixQuestions: settings.mixQuestions, buttonHint: settings.buttonHint);
                         selectedCategoryId.value = Set.from(settings.selectedCategoryIds);
                       } else if (mounted) {
                         // Если нет сохраненных, выбираем все категории
@@ -128,7 +115,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
               ),
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8),
           // Убрали Expanded, так как виджет используется внутри SingleChildScrollView
           Column(
             mainAxisSize: MainAxisSize.min,
@@ -141,25 +128,13 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                     isSelectMixQuestions: value.mixQuestions,
                     isSelectButtonHint: value.buttonHint,
                     onToggleMixAnswers: () {
-                      settingsTest.value = (
-                        mixAnswers: !value.mixAnswers,
-                        mixQuestions: value.mixQuestions,
-                        buttonHint: value.buttonHint,
-                      );
+                      settingsTest.value = (mixAnswers: !value.mixAnswers, mixQuestions: value.mixQuestions, buttonHint: value.buttonHint);
                     },
                     onToggleMixQuestions: () {
-                      settingsTest.value = (
-                        mixAnswers: value.mixAnswers,
-                        mixQuestions: !value.mixQuestions,
-                        buttonHint: value.buttonHint,
-                      );
+                      settingsTest.value = (mixAnswers: value.mixAnswers, mixQuestions: !value.mixQuestions, buttonHint: value.buttonHint);
                     },
                     onToggleButtonHint: () {
-                      settingsTest.value = (
-                        mixAnswers: value.mixAnswers,
-                        mixQuestions: value.mixQuestions,
-                        buttonHint: !value.buttonHint,
-                      );
+                      settingsTest.value = (mixAnswers: value.mixAnswers, mixQuestions: value.mixQuestions, buttonHint: !value.buttonHint);
                     },
                   );
                 },
@@ -168,24 +143,21 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 children: [
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
                     builder: (context, state) => state.map(
                       loading: (value) => ClipRRect(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                         child: Shimmer(
                           duration: const Duration(milliseconds: 1000),
                           interval: Duration(milliseconds: 0),
                           color: const Color(0xFF8D66FE),
                           colorOpacity: 0.5,
                           child: Container(
-                            padding: EdgeInsets.all(8.w),
-                            height: 1000.h,
+                            padding: EdgeInsets.all(8),
+                            height: 1000,
                             width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF3EFFF),
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
+                            decoration: BoxDecoration(color: Color(0xFFF3EFFF), borderRadius: BorderRadius.circular(12)),
                           ),
                         ),
                       ),
@@ -194,8 +166,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                         valueListenable: selectedCategoryId,
                         builder: (context, selected, child) {
                           final allIds = state.categoryWithQuestions.map((e) => e.categoryId).toSet();
-                          final sortedCategories = [...state.categoryWithQuestions]
-                            ..sort((a, b) => a.categoryId.compareTo(b.categoryId));
+                          final sortedCategories = [...state.categoryWithQuestions]..sort((a, b) => a.categoryId.compareTo(b.categoryId));
                           return SelectTopicsTestWidget(
                             categories: sortedCategories,
                             selectedCategoryId: selected,
@@ -222,10 +193,10 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 8.h),
+            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
             child: CustomButton(
               title: 'Начать тестирование',
-              verticalPadding: 8.h,
+              verticalPadding: 8,
               backgroundColor: Color(0xFF0A6EFA),
               onPressed: () {
                 if (selectedCategoryId.value.isNotEmpty) {
@@ -267,29 +238,19 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                     builder: (context) => Material(
                       type: MaterialType.transparency,
                       child: Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                          child: SelectTopicsWarningDialog(),
-                        ),
+                        child: ClipRRect(borderRadius: BorderRadius.all(Radius.circular(20)), child: SelectTopicsWarningDialog()),
                       ),
                     ),
                   );
                 }
               },
-              borderRadius: 46.r,
+              borderRadius: 46,
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xff0064D6).withOpacity(0.28),
-                  blurRadius: 17.8.r,
-                  spreadRadius: 0,
-                  offset: Offset(0.0, 7.h),
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.28), blurRadius: 17.8, spreadRadius: 0, offset: Offset(0.0, 7))],
             ),
           ),
-          SizedBox(height: 46.h),
+          SizedBox(height: 46),
         ],
       ),
     );

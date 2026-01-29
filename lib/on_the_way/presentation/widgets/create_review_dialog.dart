@@ -4,7 +4,6 @@ import 'package:aviapoint/on_the_way/presentation/bloc/reviews_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Диалог для создания отзыва
 class CreateReviewDialog extends StatefulWidget {
@@ -13,13 +12,7 @@ class CreateReviewDialog extends StatefulWidget {
   final int? replyToReviewId;
   final String? reviewedName;
 
-  const CreateReviewDialog({
-    super.key,
-    required this.booking,
-    required this.reviewedId,
-    this.replyToReviewId,
-    this.reviewedName,
-  });
+  const CreateReviewDialog({super.key, required this.booking, required this.reviewedId, this.replyToReviewId, this.reviewedName});
 
   @override
   State<CreateReviewDialog> createState() => _CreateReviewDialogState();
@@ -38,9 +31,7 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
   void _submitReview() {
     // Для ответов рейтинг не требуется, для основных отзывов - обязателен
     if (widget.replyToReviewId == null && _rating == 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
@@ -62,39 +53,27 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
         state.when(
           loading: () {},
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(responseMessage ?? errorForUser),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 4),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
           },
           success: (reviews, flights) {},
           reviewCreated: (review) {
             Navigator.of(context).pop(true);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Отзыв успешно создан'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Отзыв успешно создан'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
           },
           reviewUpdated: (review) {},
           reviewDeleted: () {},
         );
       },
       child: Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: BlocBuilder<ReviewsBloc, ReviewsState>(
           builder: (context, state) {
             final isLoading = state is LoadingReviewsState;
 
             return SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20.w),
-                constraints: BoxConstraints(maxWidth: 400.w),
+                padding: EdgeInsets.all(20),
+                constraints: BoxConstraints(maxWidth: 400),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,28 +82,21 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.replyToReviewId != null ? 'Ответить на отзыв' : 'Оставить отзыв',
-                          style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
-                        ),
+                        Text(widget.replyToReviewId != null ? 'Ответить на отзыв' : 'Оставить отзыв', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
                         IconButton(
                           icon: Icon(Icons.close, color: Color(0xFF9CA5AF)),
                           onPressed: isLoading ? null : () => Navigator.of(context).pop(),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     // Информация о том, кому оставляем отзыв
-                    if (widget.reviewedName != null)
-                      Text(
-                        'Отзыв для: ${widget.reviewedName}',
-                        style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
-                      ),
-                    SizedBox(height: 20.h),
+                    if (widget.reviewedName != null) Text('Отзыв для: ${widget.reviewedName}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                    SizedBox(height: 20),
                     // Рейтинг (только для основных отзывов, не для ответов)
                     if (widget.replyToReviewId == null) ...[
                       Text('Оценка', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 12),
                       RatingWidget(
                         rating: _rating,
                         readOnly: false,
@@ -135,11 +107,11 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
                         },
                         size: 32,
                       ),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 20),
                     ],
                     // Комментарий
                     Text('Комментарий (необязательно)', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     TextField(
                       controller: _commentController,
                       maxLines: 5,
@@ -150,22 +122,22 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFFD9E6F8)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Color(0xFF0A6EFA), width: 2),
                         ),
-                        contentPadding: EdgeInsets.all(12.w),
+                        contentPadding: EdgeInsets.all(12),
                       ),
                       style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     // Кнопки
                     Row(
                       children: [
@@ -173,31 +145,24 @@ class _CreateReviewDialogState extends State<CreateReviewDialog> {
                           child: OutlinedButton(
                             onPressed: isLoading ? null : () => Navigator.of(context).pop(),
                             style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              padding: EdgeInsets.symmetric(vertical: 12),
                               side: BorderSide(color: Color(0xFFD1D5DB)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             child: Text('Отмена', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                           ),
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: isLoading ? null : _submitReview,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFF0A6EFA),
-                              padding: EdgeInsets.symmetric(vertical: 12.h),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             child: isLoading
-                                ? SizedBox(
-                                    height: 20.h,
-                                    width: 20.w,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                    ),
-                                  )
+                                ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
                                 : Text('Отправить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                           ),
                         ),

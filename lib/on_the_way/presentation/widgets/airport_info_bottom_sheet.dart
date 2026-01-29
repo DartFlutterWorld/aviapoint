@@ -23,7 +23,6 @@ import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.d
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -174,24 +173,21 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
             // Контент
             if (_isLoading)
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.h),
+                padding: EdgeInsets.symmetric(vertical: 32),
                 child: Center(child: CircularProgressIndicator()),
               )
             else if (_error != null)
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.h),
+                padding: EdgeInsets.symmetric(vertical: 32),
                 child: Column(
                   children: [
                     Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 48),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     Text(_error!, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _loadAirport,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0A6EFA),
-                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                      ),
+                      style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA), padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
                       child: Text('Повторить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                     ),
                   ],
@@ -221,8 +217,8 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
       children: [
         // Основная информация
         Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(12.r)),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -231,11 +227,11 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(12.w),
-                    decoration: BoxDecoration(color: iconColor, borderRadius: BorderRadius.circular(10.r)),
-                    child: Icon(iconData, color: Colors.white, size: 32.r),
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: iconColor, borderRadius: BorderRadius.circular(10)),
+                    child: Icon(iconData, color: Colors.white, size: 32),
                   ),
-                  SizedBox(width: 16.w),
+                  SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,14 +240,14 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                           children: [
                             Text(airport.code, style: AppStyles.bold20s.copyWith(color: iconColor)),
                             if (airport.identRu != null && airport.identRu != airport.code) ...[
-                              SizedBox(width: 8.w),
+                              SizedBox(width: 8),
                               Text('(${airport.identRu})', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                             ],
                             if (airport.isInternational) ...[
-                              SizedBox(width: 8.w),
+                              SizedBox(width: 8),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                                decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),
+                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
                                 child: Text(
                                   'INT',
                                   style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.w600),
@@ -265,8 +261,8 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                   ),
                   // Статус активности в правом верхнем углу
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                    decoration: BoxDecoration(color: airport.isActive ? Color(0xFF10B981).withOpacity(0.1) : Color(0xFFEF4444).withOpacity(0.1), borderRadius: BorderRadius.circular(6.r)),
+                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(color: airport.isActive ? Color(0xFF10B981).withOpacity(0.1) : Color(0xFFEF4444).withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
                     child: Text(
                       airport.isActive ? 'Действующий' : 'Недействующий',
                       style: AppStyles.medium10s.copyWith(color: airport.isActive ? Color(0xFF10B981) : Color(0xFFEF4444), fontWeight: FontWeight.w600),
@@ -274,22 +270,22 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                   ),
                 ],
               ),
-              SizedBox(height: 4.h),
+              SizedBox(height: 4),
               // Название аэропорта
               Padding(
-                padding: EdgeInsets.only(left: 60.w), // Отступ для выравнивания с кодом
+                padding: EdgeInsets.only(left: 60), // Отступ для выравнивания с кодом
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(airport.name, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                    if (airport.nameEng != null && airport.nameEng!.isNotEmpty) ...[SizedBox(height: 2.h), Text(airport.nameEng!, style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)))],
+                    if (airport.nameEng != null && airport.nameEng!.isNotEmpty) ...[SizedBox(height: 2), Text(airport.nameEng!, style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)))],
                   ],
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
         // Расположение
         _buildSection(
           title: 'Расположение',
@@ -305,7 +301,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
         ),
         // Координаты
         if (airport.latitudeDeg != null && airport.longitudeDeg != null) ...[
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           _buildSection(
             title: 'Координаты',
             children: [
@@ -317,7 +313,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
           ),
         ],
         // Коды
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
         _buildSection(
           title: 'Коды',
           children: [
@@ -328,7 +324,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
           ],
         ),
         // Тип и характеристики
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
         _buildSection(
           title: 'Характеристики',
           children: [
@@ -341,7 +337,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
         ),
         // Услуги
         if (airport.services != null && airport.services!.isNotEmpty) ...[
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           _buildSection(
             title: 'Услуги',
             children: [
@@ -357,7 +353,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
         ],
         // ВПП
         if (airport.runwayName != null || airport.runwayLength != null || airport.runwayWidth != null || airport.runwaySurface != null) ...[
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           _buildSection(
             title: 'Взлётно-посадочная полоса',
             children: [
@@ -372,7 +368,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
         ],
         // Контакты
         if (airport.email != null || airport.website != null) ...[
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           _buildSection(
             title: 'Контакты',
             children: [if (airport.email != null) _buildInfoRow(Icons.email, 'Email', airport.email!), if (airport.website != null) _buildInfoRow(Icons.language, 'Веб-сайт', airport.website!)],
@@ -380,45 +376,42 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
         ],
         // Заметки
         if (airport.notes != null && airport.notes!.isNotEmpty) ...[
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           _buildSection(
             title: 'Заметки',
             children: [Text(airport.notes!, style: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)))],
           ),
         ],
         // Официальные фотографии аэропорта
-        if (airport.photos != null && airport.photos!.isNotEmpty) ...[SizedBox(height: 24.h), _buildPhotosSection(airport)],
+        if (airport.photos != null && airport.photos!.isNotEmpty) ...[SizedBox(height: 24), _buildPhotosSection(airport)],
         // Фото посетителей и отзывы (используют общий BlocProvider)
         _buildReviewsSections(airport),
         // Информация для владельцев
-        SizedBox(height: 24.h),
+        SizedBox(height: 24),
         Container(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Color(0xFFF0F9FF),
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Color(0xFF0A6EFA).withOpacity(0.2)),
           ),
           child: Row(
             children: [
               Icon(Icons.info_outline, color: Color(0xFF0A6EFA), size: 20),
-              SizedBox(width: 8.w),
+              SizedBox(width: 8),
               Expanded(
                 child: Text('Если вы владелец, то вы можете управлять данными на этой странице', style: AppStyles.regular12s.copyWith(color: Color(0xFF374151))),
               ),
             ],
           ),
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         // Кнопка "Я владелец" или "Редактировать"
         if (_isCheckingOwner)
           SizedBox(
             width: double.infinity,
             child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 14.h),
-                child: CircularProgressIndicator(),
-              ),
+              child: Padding(padding: EdgeInsets.symmetric(vertical: 14), child: CircularProgressIndicator()),
             ),
           )
         else if (_isOwner == true)
@@ -434,8 +427,8 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
               label: Text('Редактировать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF0A6EFA),
-                padding: EdgeInsets.symmetric(vertical: 14.h),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                padding: EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
           )
@@ -464,13 +457,13 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
               icon: Icon(Icons.business, color: Color(0xFF0A6EFA)),
               label: Text('Я владелец', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
               style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 14.h),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 side: BorderSide(color: Color(0xFF0A6EFA)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
           ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         // Кнопка обратной связи
         SizedBox(
           width: double.infinity,
@@ -482,13 +475,13 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
             icon: Icon(Icons.report_problem, color: Color(0xFF0A6EFA)),
             label: Text('Сообщить о неточности', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
             style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 14.h),
+              padding: EdgeInsets.symmetric(vertical: 14),
               side: BorderSide(color: Color(0xFF0A6EFA)),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
       ],
     );
   }
@@ -509,18 +502,16 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                 onPressed: () => _showUploadPhotosDialog(context, airport),
                 icon: Icon(Icons.add_photo_alternate, size: 18, color: Color(0xFF0A6EFA)),
                 label: Text('Добавить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                ),
+                style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
               ),
           ],
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         if (hasPhotos)
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
             itemCount: airport.photos!.length,
             itemBuilder: (context, index) {
               final photoUrl = airport.photos![index];
@@ -531,7 +522,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                   GestureDetector(
                     onTap: () => _showPhotoViewer(context, airport, airport.photos!, index),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       child: NetworkImageWidget(
                         imageUrl: getImageUrl(photoUrl),
                         fit: BoxFit.cover,
@@ -548,15 +539,15 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                   ),
                   // Кнопка меню в правом верхнем углу
                   Positioned(
-                    top: 8.h,
-                    right: 8.w,
+                    top: 8,
+                    right: 8,
                     child: PopupMenuButton<String>(
                       icon: Container(
-                        padding: EdgeInsets.all(6.w),
+                        padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
                         child: Icon(Icons.more_vert, color: Colors.white, size: 18),
                       ),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       onSelected: (value) {
                         switch (value) {
                           case 'share':
@@ -578,7 +569,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                           child: Row(
                             children: [
                               Icon(Icons.share, size: 20, color: Color(0xFF374151)),
-                              SizedBox(width: 12.w),
+                              SizedBox(width: 12),
                               Text('Поделиться', style: AppStyles.regular14s),
                             ],
                           ),
@@ -588,7 +579,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                           child: Row(
                             children: [
                               Icon(Icons.download, size: 20, color: Color(0xFF374151)),
-                              SizedBox(width: 12.w),
+                              SizedBox(width: 12),
                               Text('Скачать', style: AppStyles.regular14s),
                             ],
                           ),
@@ -599,7 +590,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                             child: Row(
                               children: [
                                 Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                                SizedBox(width: 12.w),
+                                SizedBox(width: 12),
                                 Text('Удалить', style: AppStyles.regular14s.copyWith(color: Colors.red)),
                               ],
                             ),
@@ -613,16 +604,16 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
           )
         else
           Container(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Color(0xFFE5E7EB)),
             ),
             child: Column(
               children: [
                 Icon(Icons.photo_library_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 Text('Пока нет фотографий', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
               ],
             ),
@@ -643,10 +634,10 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
         Container(
-          padding: EdgeInsets.all(12.w),
-          decoration: BoxDecoration(color: Color(0xFFF9FAFB), borderRadius: BorderRadius.circular(8.r)),
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(color: Color(0xFFF9FAFB), borderRadius: BorderRadius.circular(8)),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
         ),
       ],
@@ -655,13 +646,13 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
 
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8.h),
+      padding: EdgeInsets.only(bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: 18, color: Color(0xFF9CA5AF)),
-          SizedBox(width: 8.w),
+          SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -671,7 +662,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                   style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
                   textAlign: TextAlign.left,
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 2),
                 Text(
                   value,
                   style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
@@ -704,7 +695,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               Text('Загрузка фотографий...', style: AppStyles.regular14s),
             ],
           ),
@@ -801,7 +792,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                                   ],
                                 ),
@@ -822,7 +813,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -831,8 +822,8 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                           children: [
                             // Индикатор текущей фотографии
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20.r)),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
                               child: Text(
                                 '${currentIndex + 1} / ${photos.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -849,7 +840,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка "Скачать"
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
@@ -858,7 +849,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                   tooltip: 'Скачать',
                                 ),
                                 if (_isOwner == true) ...[
-                                  SizedBox(width: 8.w),
+                                  SizedBox(width: 8),
                                   // Кнопка "Удалить" (только для владельца)
                                   IconButton(
                                     icon: Icon(Icons.delete_outline, color: Colors.red, size: 24),
@@ -867,7 +858,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                     tooltip: 'Удалить',
                                   ),
                                 ],
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка закрытия
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
@@ -890,7 +881,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -907,7 +898,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
 
                             // Индикатор точек
                             Expanded(
@@ -916,9 +907,9 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                 children: List.generate(
                                   photos.length,
                                   (index) => Container(
-                                    width: 6.w,
-                                    height: 6.w,
-                                    margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                    width: 6,
+                                    height: 6,
+                                    margin: EdgeInsets.symmetric(horizontal: 3),
                                     decoration: BoxDecoration(shape: BoxShape.circle, color: index == currentIndex ? Colors.white : Colors.white.withOpacity(0.4)),
                                   ),
                                 ),
@@ -935,7 +926,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
                           ],
                         ),
                       ),
@@ -985,7 +976,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
           content: Row(
             children: [
               CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-              SizedBox(width: 16.w),
+              SizedBox(width: 16),
               Text('Скачивание...'),
             ],
           ),
@@ -1135,10 +1126,10 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
       child: Column(
         children: [
           // Фото посетителей (из отзывов)
-          SizedBox(height: 24.h),
+          SizedBox(height: 24),
           _VisitorPhotosGalleryWidget(airportCode: airport.code, onPhotoTap: (context, photos, index) => _showVisitorPhotosGalleryViewer(context, photos, index)),
           // Отзывы об аэропорте
-          SizedBox(height: 24.h),
+          SizedBox(height: 24),
           _ReviewsSectionWidget(airportCode: airport.code, isAuthenticated: isAuthenticated, currentUserId: currentUserId),
         ],
       ),
@@ -1199,7 +1190,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                                   ],
                                 ),
@@ -1220,7 +1211,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -1229,8 +1220,8 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                           children: [
                             // Индикатор текущей фотографии
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20.r)),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
                               child: Text(
                                 '${currentIndex + 1} / ${photos.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -1247,7 +1238,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка "Скачать"
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
@@ -1255,7 +1246,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Скачать',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка закрытия
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
@@ -1278,7 +1269,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -1295,7 +1286,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
 
                             // Индикатор точек
                             Expanded(
@@ -1304,9 +1295,9 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                 children: List.generate(
                                   photos.length,
                                   (index) => Container(
-                                    width: 6.w,
-                                    height: 6.w,
-                                    margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                    width: 6,
+                                    height: 6,
+                                    margin: EdgeInsets.symmetric(horizontal: 3),
                                     decoration: BoxDecoration(shape: BoxShape.circle, color: index == currentIndex ? Colors.white : Colors.white.withOpacity(0.4)),
                                   ),
                                 ),
@@ -1323,7 +1314,7 @@ class _AirportInfoBottomSheetState extends State<AirportInfoBottomSheet> {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
                           ],
                         ),
                       ),
@@ -1351,32 +1342,32 @@ class _VisitorPhotosGalleryWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Фото посетителей', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-        SizedBox(height: 4.h),
+        SizedBox(height: 4),
         Text('Фото из отзывов об аэропорте', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         BlocBuilder<AirportReviewsBloc, AirportReviewsState>(
           builder: (context, state) {
             return state.when(
               loading: () => Container(
-                padding: EdgeInsets.all(24.w),
+                padding: EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Color(0xFFE5E7EB)),
                 ),
                 child: Center(child: CircularProgressIndicator()),
               ),
               error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Container(
-                padding: EdgeInsets.all(24.w),
+                padding: EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Color(0xFFE5E7EB)),
                 ),
                 child: Column(
                   children: [
                     Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 48),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 12),
                     Text('Не удалось загрузить фотографии', style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                   ],
                 ),
@@ -1392,16 +1383,16 @@ class _VisitorPhotosGalleryWidget extends StatelessWidget {
 
                 if (allPhotos.isEmpty) {
                   return Container(
-                    padding: EdgeInsets.all(24.w),
+                    padding: EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Color(0xFFF9FAFB),
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Color(0xFFE5E7EB)),
                     ),
                     child: Column(
                       children: [
                         Icon(Icons.photo_library_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                        SizedBox(height: 12.h),
+                        SizedBox(height: 12),
                         Text('Пока нет фотографий', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                     ),
@@ -1411,14 +1402,14 @@ class _VisitorPhotosGalleryWidget extends StatelessWidget {
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8.w, mainAxisSpacing: 8.h, childAspectRatio: 1.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.0),
                   itemCount: allPhotos.length,
                   itemBuilder: (context, index) {
                     final photoUrl = allPhotos[index];
                     return GestureDetector(
                       onTap: () => onPhotoTap(context, allPhotos, index),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(8),
                         child: NetworkImageWidget(
                           imageUrl: _getImageUrl(photoUrl),
                           fit: BoxFit.cover,
@@ -1476,26 +1467,24 @@ class _ReviewsSectionWidget extends StatelessWidget {
                 onPressed: () => _showCreateReviewDialog(context),
                 icon: Icon(Icons.add, size: 18, color: Color(0xFF0A6EFA)),
                 label: Text('Добвить', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                ),
+                style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
               ),
           ],
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         BlocBuilder<AirportReviewsBloc, AirportReviewsState>(
           builder: (context, state) {
             return state.when(
               loading: () => Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.h),
+                padding: EdgeInsets.symmetric(vertical: 24),
                 child: Center(child: CircularProgressIndicator()),
               ),
               error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.h),
+                padding: EdgeInsets.symmetric(vertical: 24),
                 child: Column(
                   children: [
                     Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 48),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 12),
                     Text(
                       responseMessage ?? errorForUser,
                       style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444)),
@@ -1507,16 +1496,16 @@ class _ReviewsSectionWidget extends StatelessWidget {
               success: (reviews) {
                 if (reviews.isEmpty) {
                   return Container(
-                    padding: EdgeInsets.all(24.w),
+                    padding: EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Color(0xFFF9FAFB),
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Color(0xFFE5E7EB)),
                     ),
                     child: Column(
                       children: [
                         Icon(Icons.rate_review_outlined, size: 48, color: Color(0xFF9CA5AF)),
-                        SizedBox(height: 12.h),
+                        SizedBox(height: 12),
                         Text('Пока нет отзывов', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                       ],
                     ),
@@ -1548,7 +1537,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                         // Ответы на отзыв
                         if (reviewReplies.isNotEmpty)
                           Padding(
-                            padding: EdgeInsets.only(left: 32.w),
+                            padding: EdgeInsets.only(left: 32),
                             child: Column(
                               children: reviewReplies.map((reply) {
                                 final canDeleteReply = currentUserId != null && reply.reviewerId == currentUserId;
@@ -1791,7 +1780,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: 16),
                                     Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
                                   ],
                                 ),
@@ -1812,7 +1801,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -1821,8 +1810,8 @@ class _ReviewsSectionWidget extends StatelessWidget {
                           children: [
                             // Индикатор текущей фотографии
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20.r)),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
                               child: Text(
                                 '${currentIndex + 1} / ${photos.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -1839,7 +1828,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                   style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                                   tooltip: 'Поделиться',
                                 ),
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка "Скачать"
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
@@ -1848,7 +1837,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                   tooltip: 'Скачать',
                                 ),
                                 if (canEdit) ...[
-                                  SizedBox(width: 8.w),
+                                  SizedBox(width: 8),
                                   // Кнопка "Удалить" (только для автора отзыва)
                                   IconButton(
                                     icon: Icon(Icons.delete_outline, color: Colors.red, size: 24),
@@ -1857,7 +1846,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                     tooltip: 'Удалить',
                                   ),
                                 ],
-                                SizedBox(width: 8.w),
+                                SizedBox(width: 8),
                                 // Кнопка закрытия
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
@@ -1880,7 +1869,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                     right: 0,
                     child: SafeArea(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
                         ),
@@ -1897,7 +1886,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
 
                             // Индикатор точек
                             Expanded(
@@ -1906,9 +1895,9 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                 children: List.generate(
                                   photos.length,
                                   (index) => Container(
-                                    width: 6.w,
-                                    height: 6.w,
-                                    margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                    width: 6,
+                                    height: 6,
+                                    margin: EdgeInsets.symmetric(horizontal: 3),
                                     decoration: BoxDecoration(shape: BoxShape.circle, color: index == currentIndex ? Colors.white : Colors.white.withOpacity(0.4)),
                                   ),
                                 ),
@@ -1925,7 +1914,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
                                 style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
                               )
                             else
-                              SizedBox(width: 48.w),
+                              SizedBox(width: 48),
                           ],
                         ),
                       ),
@@ -1982,7 +1971,7 @@ class _ReviewsSectionWidget extends StatelessWidget {
           content: Row(
             children: [
               CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-              SizedBox(width: 16.w),
+              SizedBox(width: 16),
               Text('Скачивание...'),
             ],
           ),

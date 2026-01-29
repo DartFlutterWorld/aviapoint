@@ -4,8 +4,6 @@ import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:aviapoint/on_the_way/data/models/aircraft_model_dto.dart';
 
 class BlogArticleCard extends StatefulWidget {
@@ -37,28 +35,30 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
     try {
       final imageProvider = NetworkImage(getImageUrl(widget.article.coverImageUrl!));
       final imageStream = imageProvider.resolve(ImageConfiguration.empty);
-      imageStream.addListener(ImageStreamListener((ImageInfo info, bool synchronousCall) {
-        if (mounted && _isLoadingSize) {
-          final size = Size(info.image.width.toDouble(), info.image.height.toDouble());
-          final isHorizontal = size.width > size.height;
+      imageStream.addListener(
+        ImageStreamListener((ImageInfo info, bool synchronousCall) {
+          if (mounted && _isLoadingSize) {
+            final size = Size(info.image.width.toDouble(), info.image.height.toDouble());
+            final isHorizontal = size.width > size.height;
 
-          if (synchronousCall) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted && _isLoadingSize) {
-                setState(() {
-                  _isHorizontal = isHorizontal;
-                  _isLoadingSize = false;
-                });
-              }
-            });
-          } else {
-            setState(() {
-              _isHorizontal = isHorizontal;
-              _isLoadingSize = false;
-            });
+            if (synchronousCall) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted && _isLoadingSize) {
+                  setState(() {
+                    _isHorizontal = isHorizontal;
+                    _isLoadingSize = false;
+                  });
+                }
+              });
+            } else {
+              setState(() {
+                _isHorizontal = isHorizontal;
+                _isLoadingSize = false;
+              });
+            }
           }
-        }
-      }));
+        }),
+      );
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -107,16 +107,16 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
   @override
   Widget build(BuildContext context) {
     // Для горизонтальных изображений делаем меньше высоту, для вертикальных - больше ширина
-    final imageWidth = _isHorizontal == true ? 60.w : 60.w;
-    final imageHeight = _isHorizontal == true ? 60.h : 80.h;
+    final imageWidth = _isHorizontal == true ? 60.0 : 60.0;
+    final imageHeight = _isHorizontal == true ? 60.0 : 80.0;
 
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-        padding: EdgeInsets.all(6.w),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: EdgeInsets.all(6),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFD9E6F8)),
         ),
         child: Stack(
@@ -126,15 +126,10 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
               children: [
                 if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty)
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: NetworkImageWidget(
-                      imageUrl: getImageUrl(widget.article.coverImageUrl!),
-                      fit: BoxFit.cover,
-                      height: imageHeight,
-                      width: imageWidth,
-                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    child: NetworkImageWidget(imageUrl: getImageUrl(widget.article.coverImageUrl!), fit: BoxFit.cover, height: imageHeight, width: imageWidth),
                   ),
-                if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty) SizedBox(width: 8.w),
+                if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty) SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +141,7 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                           Text(widget.article.publishedAt != null ? formatDate(DateTime.parse(widget.article.publishedAt!)) : '', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                         ],
                       ),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 4),
                       Text(
                         widget.article.title,
                         style: AppStyles.medium14s.copyWith(color: const Color(0xFF374151)),
@@ -154,7 +149,7 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (widget.article.excerpt != null && widget.article.excerpt!.isNotEmpty) ...[
-                        SizedBox(height: 4.h),
+                        SizedBox(height: 4),
                         Text(
                           widget.article.excerpt!,
                           style: AppStyles.light10s.copyWith(color: const Color(0xFF4B5767)),
@@ -162,24 +157,24 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                      SizedBox(height: 6.h),
+                      SizedBox(height: 6),
                       Wrap(
-                        spacing: 12.w,
-                        runSpacing: 4.h,
+                        spacing: 12,
+                        runSpacing: 4,
                         children: [
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.person_outline, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                              SizedBox(width: 4.w),
+                              Icon(Icons.person_outline, size: 12.0, color: const Color(0xFF9CA5AF)),
+                              SizedBox(width: 4),
                               Text(_getAuthorName(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                             ],
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.visibility_outlined, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                              SizedBox(width: 4.w),
+                              Icon(Icons.visibility_outlined, size: 12.0, color: const Color(0xFF9CA5AF)),
+                              SizedBox(width: 4),
                               Text('${widget.article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
                             ],
                           ),
@@ -187,8 +182,8 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.flight, size: 12.sp, color: const Color(0xFF9CA5AF)),
-                                SizedBox(width: 4.w),
+                                Icon(Icons.flight, size: 12.0, color: const Color(0xFF9CA5AF)),
+                                SizedBox(width: 4),
                                 Flexible(
                                   child: Text(
                                     widget.article.aircraftModel!.getFullName(),
@@ -202,16 +197,13 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                         ],
                       ),
                       if (widget.showStatus) ...[
-                        SizedBox(height: 4.h),
+                        SizedBox(height: 4),
                         Align(
                           alignment: Alignment.centerRight,
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8.r)),
-                            child: Text(
-                              _getStatusText(),
-                              style: AppStyles.light10s.copyWith(color: Colors.white, fontSize: 9.sp),
-                            ),
+                            decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8)),
+                            child: Text(_getStatusText(), style: AppStyles.light10s.copyWith(color: Colors.white, fontSize: 9)),
                           ),
                         ),
                       ],

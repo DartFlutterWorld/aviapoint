@@ -3,7 +3,6 @@ import 'package:aviapoint/core/data/datasources/api_datasource_dio.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 
 class FeedbackBottomSheet extends StatefulWidget {
@@ -56,18 +55,14 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
       await dio.post<Map<String, dynamic>>('/api/feedback', data: formData);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Обратная связь успешно отправлена'), backgroundColor: Color(0xFF10B981)),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Обратная связь успешно отправлена'), backgroundColor: Color(0xFF10B981)));
 
         // Закрываем bottom sheet
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) {
@@ -81,10 +76,10 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Form(
         key: _formKey,
@@ -97,15 +92,12 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    'Если вы заметили неточность пожалуйста сообщите нам',
-                    style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
-                  ),
+                  child: Text('Если вы заметили неточность пожалуйста сообщите нам', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                 ),
                 IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
               ],
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Поле email
             TextFormField(
               controller: _emailController,
@@ -113,7 +105,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
               decoration: InputDecoration(
                 labelText: 'Email',
                 hintText: 'Введите ваш email',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -127,7 +119,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
                 return null;
               },
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             // Поле комментария
             TextFormField(
               controller: _commentController,
@@ -135,7 +127,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
               decoration: InputDecoration(
                 labelText: 'Комментарий',
                 hintText: 'Опишите неточность или проблему',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -146,7 +138,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
                 return null;
               },
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             // Кнопка отправки
             SizedBox(
               width: double.infinity,
@@ -154,18 +146,11 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
                 onPressed: _isSubmitting ? null : _submitFeedback,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0A6EFA),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 child: _isSubmitting
-                    ? SizedBox(
-                        height: 20.h,
-                        width: 20.w,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
+                    ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
                     : Text('Отправить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
               ),
             ),
@@ -178,12 +163,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
 }
 
 /// Функция для показа bottom sheet с формой обратной связи
-Future<void> showFeedbackBottomSheet(
-  BuildContext context, {
-  required String sourcePage,
-  String? airportCode,
-  int? flightId,
-}) async {
+Future<void> showFeedbackBottomSheet(BuildContext context, {required String sourcePage, String? airportCode, int? flightId}) async {
   await showUniversalBottomSheet<void>(
     context: context,
     title: '',
