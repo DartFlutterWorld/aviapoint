@@ -9,6 +9,8 @@ class AircraftMarketDto {
   final String title;
   final String? description;
   final int price;
+  @JsonKey(defaultValue: 'RUB')
+  final String currency;
   @JsonKey(name: 'aircraft_subcategories_id')
   final int? aircraftSubcategoriesId;
   @JsonKey(name: 'seller_id')
@@ -22,6 +24,8 @@ class AircraftMarketDto {
 
   final String? brand;
   final String? location;
+  @JsonKey(name: 'is_published')
+  final bool? isPublished;
   @JsonKey(name: 'is_active')
   final bool? isActive;
   @JsonKey(name: 'views_count')
@@ -79,12 +83,14 @@ class AircraftMarketDto {
     required this.title,
     this.description,
     required this.price,
+    this.currency = 'RUB',
     this.aircraftSubcategoriesId,
     required this.sellerId,
     this.mainImageUrl,
     this.additionalImageUrls = const [],
     this.brand,
     this.location,
+    this.isPublished,
     this.isActive,
     this.viewsCount,
     this.isFavorite,

@@ -94,7 +94,7 @@ Future<void> _run() async {
   runApp(
     TalkerWrapper(
       talker: AppTalker.instance,
-      child: EasyLocalization(
+        child: EasyLocalization(
           supportedLocales: [Locale('en', 'EN'), Locale('ru', 'RU')],
           path: 'assets/translations',
           useOnlyLangCode: false,
@@ -104,8 +104,8 @@ Future<void> _run() async {
             create: (context) => InternetConnectionBloc()..add(const InternetConnectionEvent.startMonitoring()),
             lazy: false,
           child: AppWrapper(child: const App()),
-          ),
         ),
+      ),
     ),
   );
 }

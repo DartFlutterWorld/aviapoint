@@ -24,6 +24,10 @@ import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 @RoutePage()
 class DetailNewsScreen extends StatefulWidget {
@@ -48,7 +52,128 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
     final news = _currentNews ?? widget.news;
     final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
     final newsUrl = '$baseUrl/news/${widget.newsId}';
-    Share.share('${news.title}\n\n$newsUrl\n\nЧитайте в AviaPoint');
+
+    // Форматируем дату
+    String? formattedDate;
+    if (news.date.isNotEmpty) {
+      try {
+        // Пробуем разные форматы даты
+        DateTime? dateTime;
+        try {
+          dateTime = DateTime.parse(news.date);
+        } catch (_) {
+          // Если не удалось распарсить, пробуем другие форматы
+          try {
+            dateTime = DateFormat('dd.MM.yyyy').parse(news.date);
+          } catch (_) {
+            // Игнорируем ошибки парсинга
+          }
+        }
+        if (dateTime != null) {
+          formattedDate = DateFormat('dd.MM.yyyy', 'ru').format(dateTime);
+        }
+      } catch (_) {
+        // Используем дату как есть, если не удалось распарсить
+        formattedDate = news.date;
+      }
+    }
+
+    // Формируем текст для шаринга
+    final buffer = StringBuffer();
+    buffer.writeln('📰 ${news.title}');
+    buffer.writeln('');
+
+    // Добавляем подзаголовок, если есть
+    if (news.subTitle.isNotEmpty) {
+      buffer.writeln(news.subTitle);
+      buffer.writeln('');
+    }
+
+    // Добавляем краткое описание (первые 200 символов body)
+    if (news.body.isNotEmpty) {
+      final description = news.body.length > 200 
+          ? '${news.body.substring(0, 200)}...' 
+          : news.body;
+      buffer.writeln(description);
+      buffer.writeln('');
+    }
+
+    // Добавляем источник, если есть
+    if (news.source.isNotEmpty) {
+      buffer.writeln('📌 Источник: ${news.source}');
+    }
+
+    // Добавляем дату, если есть
+    if (formattedDate != null && formattedDate.isNotEmpty) {
+      buffer.writeln('📅 Дата: $formattedDate');
+    }
+
+    // Добавляем информацию о важности новости
+    if (news.isBigNews) {
+      buffer.writeln('⭐ Важная новость');
+    }
+
+    buffer.writeln('');
+    buffer.writeln('🔗 $newsUrl');
+    buffer.writeln('');
+    buffer.writeln('Читайте полную новость в AviaPoint');
+
+    final shareText = buffer.toString();
+
+    // Если есть обложка, делимся с изображением
+    if (news.pictureBig.isNotEmpty) {
+      _shareNewsWithImage(context, news.pictureBig, shareText);
+    } else {
+      Share.share(shareText);
+    }
+  }
+
+  /// Поделиться новостью с изображением обложки
+  Future<void> _shareNewsWithImage(BuildContext context, String imageUrl, String text) async {
+    try {
+      if (kIsWeb) {
+        // На вебе просто делимся текстом и ссылкой на изображение
+        final fullImageUrl = getImageUrl(imageUrl);
+        Share.share('$text\n\n🖼️ Обложка: $fullImageUrl');
+        return;
+      }
+
+      // На мобильных платформах скачиваем изображение и делимся файлом
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+              SizedBox(width: 16),
+              Text('Подготовка к отправке...'),
+            ],
+          ),
+          duration: Duration(seconds: 10),
+        ),
+      );
+
+      final fullImageUrl = getImageUrl(imageUrl);
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+      final fileName = imageUrl.split('/').last.split('?').first;
+      final filePath = '${tempDir.path}/$fileName';
+
+      await dio.download(fullImageUrl, filePath);
+
+      if (context.mounted) {
+        scaffoldMessenger.hideCurrentSnackBar();
+        await Share.shareXFiles([XFile(filePath)], text: text);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось поделиться с изображением: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        // В случае ошибки делимся только текстом
+        Share.share(text);
+      }
+    }
   }
 
 

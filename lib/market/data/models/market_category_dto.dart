@@ -14,6 +14,8 @@ class MarketCategoryDto {
   final String productType;
   @JsonKey(name: 'parent_id')
   final int? parentId;
+  @JsonKey(name: 'parts_main_category_id')
+  final int? partsMainCategoryId;
   @JsonKey(name: 'display_order')
   final int? displayOrder;
   @JsonKey(name: 'is_main')
@@ -26,6 +28,7 @@ class MarketCategoryDto {
     this.iconUrl,
     required this.productType,
     this.parentId,
+    this.partsMainCategoryId,
     this.displayOrder,
     this.isMain,
   });

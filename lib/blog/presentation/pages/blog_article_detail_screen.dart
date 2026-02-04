@@ -32,6 +32,11 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/presentation/widgets/photo_viewer.dart';
 import 'package:aviapoint/injection_container.dart';
+import 'package:intl/intl.dart';
+import 'package:aviapoint/blog/domain/entities/blog_article_entity.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 @RoutePage()
 class BlogArticleDetailScreen extends StatefulWidget {
@@ -50,8 +55,137 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
     context.read<BlogArticleDetailBloc>().add(GetBlogArticleByIdEvent(id: widget.articleId));
   }
 
-  void _shareArticle(String title) {
-    Share.share('$title\n\nЧитайте в АвиаЖурнале');
+  /// Поделиться статьей
+  void _shareArticle(BlogArticleEntity article) {
+    final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
+    final articleUrl = '$baseUrl/blog/${article.id}';
+
+    // Форматируем дату публикации
+    String? formattedDate;
+    if (article.publishedAt != null && article.publishedAt!.isNotEmpty) {
+      try {
+        final date = DateTime.parse(article.publishedAt!);
+        final dateFormat = DateFormat('dd.MM.yyyy', 'ru');
+        formattedDate = dateFormat.format(date);
+      } catch (e) {
+        // Игнорируем ошибки парсинга даты
+      }
+    }
+
+    // Получаем имя автора (без телефона)
+    String? authorName;
+    if (article.author != null) {
+      final firstName = article.author!.firstName ?? '';
+      final lastName = article.author!.lastName ?? '';
+      if (firstName.isNotEmpty || lastName.isNotEmpty) {
+        authorName = '$firstName $lastName'.trim();
+      }
+    }
+
+    // Формируем текст для шаринга
+    final buffer = StringBuffer();
+    buffer.writeln('📰 ${article.title}');
+    buffer.writeln('');
+
+    // Добавляем краткое описание, если есть
+    if (article.excerpt != null && article.excerpt!.isNotEmpty) {
+      buffer.writeln(article.excerpt!);
+      buffer.writeln('');
+    }
+
+    // Добавляем категорию, если есть
+    if (article.category != null && article.category!.name.isNotEmpty) {
+      buffer.writeln('📂 Категория: ${article.category!.name}');
+    }
+
+    // Добавляем автора, если есть
+    if (authorName != null && authorName.isNotEmpty) {
+      buffer.writeln('✍️ Автор: $authorName');
+    }
+
+    // Добавляем дату публикации, если есть
+    if (formattedDate != null) {
+      buffer.writeln('📅 Опубликовано: $formattedDate');
+    }
+
+    // Добавляем теги, если есть
+    if (article.tags != null && article.tags!.isNotEmpty) {
+      final tagsList = article.tags!.map((tag) => tag.name).join(', ');
+      buffer.writeln('🏷️ Теги: $tagsList');
+    }
+
+    // Добавляем модель самолета, если указана
+    if (article.aircraftModel != null) {
+      buffer.writeln('✈️ Модель: ${article.aircraftModel!.getFullName()}');
+    }
+
+    buffer.writeln('');
+    buffer.writeln('🔗 $articleUrl');
+    buffer.writeln('');
+    buffer.writeln('Читайте полную статью в АвиаЖурнале');
+
+    final shareText = buffer.toString();
+
+    // Если есть обложка, делимся с изображением
+    if (article.coverImageUrl != null && article.coverImageUrl!.isNotEmpty) {
+      _shareArticleWithImage(context, article.coverImageUrl!, shareText);
+    } else {
+      Share.share(shareText);
+    }
+  }
+
+  /// Поделиться статьей с изображением обложки
+  Future<void> _shareArticleWithImage(BuildContext context, String coverImageUrl, String text) async {
+    try {
+      if (kIsWeb) {
+        // На вебе просто делимся текстом и ссылкой на изображение
+        final imageUrl = getImageUrl(coverImageUrl);
+        Share.share('$text\n\n🖼️ Обложка: $imageUrl');
+        return;
+      }
+
+      // На мобильных платформах скачиваем изображение и делимся файлом
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+              SizedBox(width: 16),
+              Text('Подготовка к отправке...'),
+            ],
+          ),
+          duration: Duration(seconds: 10),
+        ),
+      );
+
+      final imageUrl = getImageUrl(coverImageUrl);
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+      final fileName = coverImageUrl.split('/').last.split('?').first;
+      final filePath = '${tempDir.path}/$fileName';
+
+      await dio.download(imageUrl, filePath);
+
+      if (context.mounted) {
+        scaffoldMessenger.hideCurrentSnackBar();
+        await Share.shareXFiles([XFile(filePath)], text: text);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться с изображением: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        // В случае ошибки делимся только текстом
+        Share.share(text);
+      }
+    }
   }
 
   String _getAuthorName() {
@@ -137,7 +271,7 @@ class _BlogArticleDetailScreenState extends State<BlogArticleDetailScreen> {
                             onPressed: () => AutoRouter.of(context).push(EditBlogArticleRoute(articleId: article.id)),
                             tooltip: 'Редактировать',
                           ),
-                        IconButton(iconSize: 28, icon: const Icon(Icons.share), onPressed: () => _shareArticle(article.title), tooltip: 'Поделиться'),
+                        IconButton(iconSize: 28, icon: const Icon(Icons.share), onPressed: () => _shareArticle(article), tooltip: 'Поделиться'),
                       ],
                     );
                   },

@@ -43,6 +43,7 @@ import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
 import 'package:aviapoint/blog/presentation/bloc/blog_article_detail_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
+import 'package:aviapoint/market/presentation/bloc/parts_market_bloc.dart';
 import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
@@ -90,6 +91,7 @@ class _AppState extends State<App> {
     super.initState();
     // Инициализируем FirebaseAnalytics только если Firebase доступен
     _initAnalytics();
+    // БД инициализируется автоматически при первом использовании через Drift
   }
 
   /// Инициализирует FirebaseAnalytics только если Firebase доступен
@@ -166,6 +168,7 @@ class _AppState extends State<App> {
         BlocProvider<BlogArticleDetailBloc>(create: (context) => BlogArticleDetailBloc(blogRepository: getIt<BlogRepository>())),
         BlocProvider<MarketCategoriesBloc>(create: (context) => MarketCategoriesBloc(repository: getIt<MarketRepository>())),
         BlocProvider<AircraftMarketBloc>(create: (context) => AircraftMarketBloc(repository: getIt<MarketRepository>())),
+        BlocProvider<PartsMarketBloc>(create: (context) => PartsMarketBloc(repository: getIt<MarketRepository>())),
         BlocProvider<TypeSertificatesBloc>(create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
         BlocProvider<TypeCorrectAnswersBloc>(create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
         BlocProvider<CategoriesWithListQuestionsBloc>(create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
@@ -319,7 +322,7 @@ class _AppState extends State<App> {
                   appState.setIsTabletIfUnset(context);
                 }
               });
-              
+
               // Слушаем изменения AppState.isAuthenticated
               // Если пользователь авторизован, но профиль еще не загружен, запрашиваем его
               if (appState.isAuthenticated && !_profileRequested) {

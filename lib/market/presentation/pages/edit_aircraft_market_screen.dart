@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
@@ -8,6 +10,7 @@ import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
+import 'package:aviapoint/market/presentation/bloc/aircraft_market_edit_bloc.dart';
 import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/market/domain/entities/market_category_entity.dart';
 import 'package:aviapoint/market/presentation/widgets/location_picker_widget.dart';
@@ -25,9 +28,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 @RoutePage()
 class EditAircraftMarketScreen extends StatefulWidget {
-  final AircraftMarketEntity product;
+  final int productId;
 
-  const EditAircraftMarketScreen({super.key, required this.product});
+  const EditAircraftMarketScreen({super.key, @PathParam('id') required this.productId});
 
   @override
   State<EditAircraftMarketScreen> createState() => _EditAircraftMarketScreenState();
@@ -35,6 +38,7 @@ class EditAircraftMarketScreen extends StatefulWidget {
 
 class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
   final _formKey = GlobalKey<FormState>();
+  AircraftMarketEditState? _previousStateBeforeLoading; // Сохраняем состояние перед loading для определения publish/unpublish
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _priceController;
@@ -50,6 +54,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
   int? _selectedCategoryId;
   String? _selectedBrand;
   String? _selectedLocation;
+  String _currency = 'RUB';
 
   // Продажа доли
   bool _isShareSale = false;
@@ -65,37 +70,68 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
   // Лизинг
   bool _isLeasing = false;
 
+  // Флаг админа
+  bool _isAdmin = false;
+
+  // BLoC для редактирования
+  late AircraftMarketEditBloc _editBloc;
+
+  // Сохраняем productId для безопасного использования
+  late final int _productId;
+
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.product.title);
-    _descriptionController = TextEditingController(text: widget.product.description ?? '');
-    _priceController = TextEditingController(text: widget.product.price.toString());
-    _brandController = TextEditingController(text: widget.product.brand ?? '');
-    _yearController = TextEditingController(text: widget.product.year?.toString() ?? '');
-    _totalFlightHoursController = TextEditingController(text: widget.product.totalFlightHours?.toString() ?? '');
-    _enginePowerController = TextEditingController(text: widget.product.enginePower?.toString() ?? '');
-    _engineVolumeController = TextEditingController(text: widget.product.engineVolume?.toString() ?? '');
-    _seatsController = TextEditingController(text: widget.product.seats?.toString() ?? '');
-    // Валидация значений из БД - только если значение присутствует в списке допустимых
-    _condition = widget.product.condition != null && _validConditionValues.contains(widget.product.condition) ? widget.product.condition : null;
-    _selectedCategoryId = widget.product.aircraftSubcategoriesId;
-    _selectedBrand = widget.product.brand;
-    _selectedLocation = widget.product.location;
-    _isShareSale = widget.product.isShareSale ?? false;
-    _shareNumerator = widget.product.shareNumerator;
-    _shareDenominator = widget.product.shareDenominator;
-    _isLeasing = widget.product.isLeasing ?? false;
-    _leasingConditionsController = TextEditingController(text: widget.product.leasingConditions ?? '');
+    // Сохраняем productId
+    _productId = widget.productId;
+    // Создаем BLoC для редактирования
+    _editBloc = AircraftMarketEditBloc(repository: getIt<MarketRepository>())..add(AircraftMarketEditEvent.getProduct(_productId));
+
+    // Инициализируем контроллеры пустыми, заполним после загрузки данных
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+    _priceController = TextEditingController();
+    _brandController = TextEditingController();
+    _yearController = TextEditingController();
+    _totalFlightHoursController = TextEditingController();
+    _enginePowerController = TextEditingController();
+    _engineVolumeController = TextEditingController();
+    _seatsController = TextEditingController();
+    _leasingConditionsController = TextEditingController();
 
     // Загружаем категории для выбора
     context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: 'aircraft'));
 
-    // Инициализируем фотографии (только непустые URL)
-    if (widget.product.mainImageUrl != null && widget.product.mainImageUrl!.isNotEmpty) {
-      _mainPhoto = _PhotoItem(url: widget.product.mainImageUrl, file: null, isNew: false);
+    // Проверяем, является ли пользователь админом
+    _isAdmin = PermissionHelper.isAdmin(context);
+  }
+
+  void _initializeFromProduct(AircraftMarketEntity product) {
+    _titleController.text = product.title;
+    _descriptionController.text = product.description ?? '';
+    _priceController.text = product.price.toString();
+    _brandController.text = product.brand ?? '';
+    _yearController.text = product.year?.toString() ?? '';
+    _totalFlightHoursController.text = product.totalFlightHours?.toString() ?? '';
+    _enginePowerController.text = product.enginePower?.toString() ?? '';
+    _engineVolumeController.text = product.engineVolume?.toString() ?? '';
+    _seatsController.text = product.seats?.toString() ?? '';
+    _condition = product.condition != null && _validConditionValues.contains(product.condition) ? product.condition : null;
+    _selectedCategoryId = product.aircraftSubcategoriesId;
+    _selectedBrand = product.brand;
+    _selectedLocation = product.location;
+    _currency = product.currency;
+    _isShareSale = product.isShareSale ?? false;
+    _shareNumerator = product.shareNumerator;
+    _shareDenominator = product.shareDenominator;
+    _isLeasing = product.isLeasing ?? false;
+    _leasingConditionsController.text = product.leasingConditions ?? '';
+
+    // Инициализируем фотографии
+    if (product.mainImageUrl != null && product.mainImageUrl!.isNotEmpty) {
+      _mainPhoto = _PhotoItem(url: product.mainImageUrl, file: null, isNew: false);
     }
-    _additionalPhotos = widget.product.additionalImageUrls.where((url) => url.isNotEmpty).map((url) => _PhotoItem(url: url, file: null, isNew: false)).toList();
+    _additionalPhotos = product.additionalImageUrls.where((url) => url.isNotEmpty).map((url) => _PhotoItem(url: url, file: null, isNew: false)).toList();
   }
 
   @override
@@ -110,6 +146,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     _engineVolumeController.dispose();
     _seatsController.dispose();
     _leasingConditionsController.dispose();
+    _editBloc.close();
     super.dispose();
   }
 
@@ -148,13 +185,17 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
 
     if (!mounted) return;
 
-    final bloc = context.read<AircraftMarketBloc>();
+    // Получаем текущий продукт из состояния BLoC
+    final currentState = _editBloc.state;
+    final currentProduct = currentState.maybeWhen(loaded: (product) => product, saved: (product) => product, published: (product) => product, unpublished: (product) => product, orElse: () => null);
+
+    if (currentProduct == null) return;
 
     // Подготавливаем данные для основной фотографии
     String? mainImageUrl;
     XFile? mainImageFile;
 
-    final hadOldMainImage = widget.product.mainImageUrl != null && widget.product.mainImageUrl!.isNotEmpty;
+    final hadOldMainImage = currentProduct.mainImageUrl != null && currentProduct.mainImageUrl!.isNotEmpty;
 
     if (_mainPhoto != null && _mainPhoto!.isNew) {
       // Новая фотография - передаем только файл, бэкенд сам заменит старую
@@ -184,17 +225,18 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     }
 
     // Если все удалены, передаем пустой список
-    if (additionalImageUrls.isEmpty && newAdditionalPhotos.isEmpty && widget.product.additionalImageUrls.isNotEmpty) {
+    if (additionalImageUrls.isEmpty && newAdditionalPhotos.isEmpty && currentProduct.additionalImageUrls.isNotEmpty) {
       additionalImageUrls = [];
     }
 
-    // Отправляем запрос на обновление товара - ответ обработается в listener
-    bloc.add(
-      AircraftMarketEvent.updateProduct(
-        productId: widget.product.id,
+    // Отправляем запрос на обновление товара через новый BLoC
+    _editBloc.add(
+      AircraftMarketEditEvent.updateProduct(
+        productId: currentProduct.id,
         title: _titleController.text.trim(),
         description: _descriptionController.text.trim().isEmpty ? null : _descriptionController.text.trim(),
-        price: int.tryParse(_priceController.text.trim()) ?? widget.product.price,
+        price: int.tryParse(_priceController.text.trim()) ?? currentProduct.price,
+        currency: _currency,
         aircraftSubcategoriesId: _selectedCategoryId,
         brand: _selectedBrand,
         location: _selectedLocation,
@@ -217,57 +259,110 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     );
   }
 
-  void _showUnpublishConfirmation() {
-    showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Снять с публикации?'),
-        content: const Text('Объявление станет неактивным и не будет видно другим пользователям.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Отмена')),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              _unpublishProduct();
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Снять'),
-          ),
-        ],
-      ),
+  void _unpublishProduct() {
+    _editBloc.add(AircraftMarketEditEvent.unpublishProduct(_productId));
+  }
+
+  void _publishProduct() {
+    _editBloc.add(AircraftMarketEditEvent.publishProduct(_productId));
+  }
+
+  Widget _buildPublishButtons() {
+    return BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+      builder: (context, state) {
+        // Получаем актуальный продукт из состояния BLoC
+        final currentProduct = state.maybeWhen(published: (product) => product, unpublished: (product) => product, saved: (product) => product, loaded: (product) => product, orElse: () => null);
+
+        if (currentProduct == null) return const SizedBox.shrink();
+
+        final isPublished = currentProduct.isPublished;
+        final isActive = currentProduct.isActive;
+
+        // Показываем индикатор загрузки во время публикации/снятия с публикации
+        final isLoading = state is PublishingAircraftMarketEditState || state is UnpublishingAircraftMarketEditState;
+
+        return Column(
+          children: [
+            if (isPublished)
+              CustomButton(
+                title: isLoading ? 'Снятие...' : 'Снять с публикации',
+                verticalPadding: 12,
+                backgroundColor: Colors.red,
+                textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                borderColor: Colors.red,
+                borderRadius: 12,
+                onPressed: isLoading ? null : _unpublishProduct,
+                disabled: isLoading,
+              )
+            else
+              CustomButton(
+                title: isLoading ? 'Публикация...' : 'Опубликовать',
+                verticalPadding: 12,
+                backgroundColor: AppColors.primary100p,
+                textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                borderColor: AppColors.primary100p,
+                borderRadius: 12,
+                onPressed: isLoading ? null : _publishProduct,
+                disabled: isLoading,
+              ),
+            SizedBox(height: 12),
+            // Кнопки для админов: Заблокировать/Разблокировать
+            if (_isAdmin)
+              isActive
+                  ? CustomButton(
+                      title: 'Заблокировать',
+                      verticalPadding: 12,
+                      backgroundColor: Colors.orange,
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                      borderColor: Colors.orange,
+                      borderRadius: 12,
+                      onPressed: () => _blockProduct(context),
+                    )
+                  : CustomButton(
+                      title: 'Разблокировать',
+                      verticalPadding: 12,
+                      backgroundColor: Colors.green,
+                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                      borderColor: Colors.green,
+                      borderRadius: 12,
+                      onPressed: () => _unblockProduct(context),
+                    ),
+          ],
+        );
+      },
     );
   }
 
-  Future<void> _unpublishProduct() async {
+  Future<void> _blockProduct(BuildContext context) async {
     final repository = getIt<MarketRepository>();
-    final result = await repository.unpublishProduct(widget.product.id);
+    final result = await repository.deactivateProduct(_productId);
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка снятия публикации'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка блокировки'), backgroundColor: Colors.red));
       },
       (product) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление снято с публикации'), backgroundColor: Colors.green));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление заблокировано'), backgroundColor: Colors.orange));
         context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
-        context.router.maybePop();
+        context.router.maybePop(); // Закрываем экран редактирования
       },
     );
   }
 
-  Future<void> _publishProduct() async {
+  Future<void> _unblockProduct(BuildContext context) async {
     final repository = getIt<MarketRepository>();
-    final result = await repository.publishProduct(widget.product.id);
+    final result = await repository.activateProduct(_productId);
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка публикации'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка разблокировки'), backgroundColor: Colors.red));
       },
       (product) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление опубликовано'), backgroundColor: Colors.green));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление разблокировано'), backgroundColor: Colors.green));
         context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
-        context.router.maybePop();
+        context.router.maybePop(); // Закрываем экран редактирования
       },
     );
   }
@@ -278,310 +373,405 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AircraftMarketBloc, AircraftMarketState>(
-      listenWhen: (previous, current) {
-        // Реагируем только на updated или error после updating
-        if (previous is UpdatingMarketProductState) {
-          return current is UpdatedMarketProductState || current is ErrorAircraftMarketState;
-        }
-        return false;
-      },
-      listener: (context, state) {
-        if (!mounted) return;
-
-        state.maybeWhen(
-          updated: (product) async {
-            // Показываем сообщение об успехе
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Товар успешно обновлен'), backgroundColor: Colors.green));
-
-            // Проверяем, откуда мы редактируем - проверяем путь до закрытия экрана
-            final currentPath = context.router.currentPath;
-            final isFromMarket = currentPath.contains('/market');
-
-            // Обновляем список товаров
-            if (isFromMarket) {
-              // Если мы в маркете, обновляем глобальный BLoC
-              final productsBloc = context.read<AircraftMarketBloc>();
-              productsBloc.add(const AircraftMarketEvent.refresh());
-            }
-            // Если мы редактируем из профиля, BlocListener в MyAircraftAdsWidget
-            // автоматически обновит список при получении состояния updated
-
-            // Закрываем экран через maybePop для безопасного возврата
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (context.mounted) {
-                context.router.maybePop();
+    return BlocProvider.value(
+      value: _editBloc,
+      child: MultiBlocListener(
+        listeners: [
+          // Слушаем новый BLoC для редактирования
+          BlocListener<AircraftMarketEditBloc, AircraftMarketEditState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                loaded: (product) {
+                  // Данные загружены, заполняем форму
+                  _initializeFromProduct(product);
+                },
+                saved: (product) {
+                  // Успешно сохранено
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Товар успешно обновлен'), backgroundColor: Colors.green));
+                  // Обновляем список в главном BLoC
+                  context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
+                  // Закрываем экран
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (context.mounted) {
+                      context.router.maybePop();
+                    }
+                  });
+                },
+                error: (message) {
+                  // Ошибка сохранения - показываем snackbar, остаемся на экране
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                },
+                orElse: () {},
+              );
+            },
+          ),
+          // Слушаем AircraftMarketEditBloc для publish/unpublish операций
+          BlocListener<AircraftMarketEditBloc, AircraftMarketEditState>(
+            listenWhen: (previous, current) {
+              // Реагируем на published/unpublished
+              if (previous is PublishingAircraftMarketEditState) {
+                return current is PublishedAircraftMarketEditState || current is ErrorAircraftMarketEditState;
               }
-            });
-          },
-          error: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
-          },
-          orElse: () {},
-        );
-      },
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Редактировать',
-          withBack: true,
-          actions: [
-            BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
-              builder: (context, state) {
-                final isLoading = state is UpdatingMarketProductState;
-                return TextButton(
-                  onPressed: isLoading ? null : _saveChanges,
-                  child: isLoading
-                      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : Text('Сохранить', style: AppStyles.bold14s.copyWith(color: AppColors.primary100p)),
-                );
-              },
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.background,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Основная фотография
-                _buildMainPhotoSection(),
-                SizedBox(height: 16),
-                // Дополнительные фотографии
-                _buildAdditionalPhotosSection(),
-                SizedBox(height: 16),
-                // Категория
-                _buildCategoryDropdown(),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    labelText: 'Название *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите название товара';
+              if (previous is UnpublishingAircraftMarketEditState) {
+                return current is UnpublishedAircraftMarketEditState || current is ErrorAircraftMarketEditState;
+              }
+              // Сохраняем состояние перед loading (когда вызываем getProduct после publish/unpublish)
+              if (previous is PublishedAircraftMarketEditState || previous is UnpublishedAircraftMarketEditState) {
+                if (current is LoadingAircraftMarketEditState) {
+                  _previousStateBeforeLoading = previous;
+                  return false; // Не обрабатываем здесь, ждем loaded
+                }
+              }
+              // Реагируем на loaded после loading, если перед loading было published/unpublished
+              if (previous is LoadingAircraftMarketEditState && _previousStateBeforeLoading != null) {
+                return current is LoadedAircraftMarketEditState || current is ErrorAircraftMarketEditState;
+              }
+              return false;
+            },
+            listener: (context, state) {
+              if (!mounted) return;
+              state.maybeWhen(
+                published: (product) {
+                  // Обновляем список в главном BLoC
+                  context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
+                  // Запрашиваем обновленный продукт с сервера для обновления формы
+                  _editBloc.add(AircraftMarketEditEvent.getProduct(_productId));
+                },
+                unpublished: (product) {
+                  // Обновляем список в главном BLoC
+                  context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
+                  // Запрашиваем обновленный продукт с сервера для обновления формы
+                  _editBloc.add(AircraftMarketEditEvent.getProduct(_productId));
+                },
+                loaded: (product) {
+                  // Проверяем, что это обновление после publish/unpublish
+                  if (_previousStateBeforeLoading != null) {
+                    final wasPublished = _previousStateBeforeLoading is PublishedAircraftMarketEditState;
+                    final wasUnpublished = _previousStateBeforeLoading is UnpublishedAircraftMarketEditState;
+                    if (wasPublished || wasUnpublished) {
+                      // Показываем сообщение только после получения обновленного состояния
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(product.isPublished ? 'Объявление опубликовано' : 'Объявление снято с публикации'), backgroundColor: Colors.green));
+                      _previousStateBeforeLoading = null; // Сбрасываем после использования
+                      // Возвращаемся на детальную страницу после успешного publish/unpublish
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          context.router.maybePop();
+                        }
+                      });
                     }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    labelText: 'Описание *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  maxLines: 4,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите описание';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _priceController,
-                  decoration: InputDecoration(
-                    labelText: 'Цена (₽) *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите цену';
-                    }
-                    final price = int.tryParse(value.trim());
-                    if (price == null || price <= 0) {
-                      return 'Введите корректную цену';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildBrandField(),
-                SizedBox(height: 16),
-                LocationPickerWidget(
-                  initialLocation: _selectedLocation,
-                  onLocationSelected: (locationData) {
-                    setState(() {
-                      _selectedLocation = locationData['address'] as String?;
-                    });
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _yearController,
-                  decoration: InputDecoration(
-                    labelText: 'Год выпуска *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите год выпуска';
-                    }
-                    final year = int.tryParse(value.trim());
-                    if (year == null || year <= 0) {
-                      return 'Введите корректный год';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _totalFlightHoursController,
-                  decoration: InputDecoration(
-                    labelText: 'Общий налёт часов *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите общий налёт часов';
-                    }
-                    final hours = int.tryParse(value.trim());
-                    if (hours == null || hours < 0) {
-                      return 'Введите корректный общий налёт часов';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  controller: _enginePowerController,
-                  style: AppStyles.light10s,
-                  decoration: InputDecoration(
-                    labelText: 'Мощность двигателя *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите мощность двигателя';
-                    }
-                    final power = int.tryParse(value.trim());
-                    if (power == null || power <= 0) {
-                      return 'Введите корректную мощность двигателя';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _engineVolumeController,
-                  decoration: InputDecoration(
-                    labelText: 'Объём двигателя *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите объём двигателя';
-                    }
-                    final volume = int.tryParse(value.trim());
-                    if (volume == null || volume <= 0) {
-                      return 'Введите корректный объём двигателя';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  style: AppStyles.light10s,
-                  controller: _seatsController,
-                  decoration: InputDecoration(
-                    labelText: 'Количество мест *',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите количество мест';
-                    }
-                    final seats = int.tryParse(value.trim());
-                    if (seats == null || seats <= 0) {
-                      return 'Введите корректное количество мест';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildConditionField(),
-                SizedBox(height: 16),
-                _buildShareSaleField(),
-                SizedBox(height: 16),
-                _buildLeasingField(),
-                // Кнопки доступны только автору
-                if (_isCurrentUserOwner(widget.product.sellerId)) ...[
-                  SizedBox(height: 24),
-                  // Кнопка "Сохранить" (дублируем из AppBar)
-                  BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
-                    builder: (context, state) {
-                      final isLoading = state is UpdatingMarketProductState;
-                      return CustomButton(
-                        title: isLoading ? 'Сохранение...' : 'Сохранить',
-                        verticalPadding: 12,
-                        backgroundColor: AppColors.primary100p,
-                        textStyle: AppStyles.light10s.copyWith(color: Colors.white),
-                        borderColor: AppColors.primary100p,
-                        borderRadius: 12,
-                        onPressed: isLoading ? null : _saveChanges,
-                        disabled: isLoading,
-                      );
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  // Кнопка "Снять с публикации" или "Опубликовать" в зависимости от статуса
-                  if (widget.product.isActive)
-                    CustomButton(
-                      title: 'Снять с публикации',
-                      verticalPadding: 12,
-                      backgroundColor: Colors.red,
-                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                      borderColor: Colors.red,
-                      borderRadius: 12,
-                      onPressed: _showUnpublishConfirmation,
-                    )
-                  else
-                    CustomButton(
-                      title: 'Опубликовать',
-                      verticalPadding: 12,
-                      backgroundColor: AppColors.primary100p,
-                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                      borderColor: AppColors.primary100p,
-                      borderRadius: 12,
-                      onPressed: _publishProduct,
+                  }
+                },
+                error: (message) {
+                  _previousStateBeforeLoading = null; // Сбрасываем при ошибке
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                },
+                orElse: () {},
+              );
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: 'Редактирование',
+            withBack: true,
+            actions: [
+              BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+                builder: (context, state) {
+                  final isLoading = state is SavingAircraftMarketEditState;
+                  return TextButton(
+                    onPressed: isLoading ? null : _saveChanges,
+                    child: isLoading
+                        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                        : Text('Сохранить', style: AppStyles.bold14s.copyWith(color: AppColors.primary100p)),
+                  );
+                },
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.background,
+          body: BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+            builder: (context, state) {
+              return state.when(
+                initial: () => const Center(child: LoadingCustom()),
+                loading: () => const Center(child: LoadingCustom()),
+                loaded: (_) => SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Основная фотография
+                        _buildMainPhotoSection(),
+                        SizedBox(height: 16),
+                        // Дополнительные фотографии
+                        _buildAdditionalPhotosSection(),
+                        SizedBox(height: 16),
+                        // Категория
+                        _buildCategoryDropdown(),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            labelText: 'Название *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите название товара';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            labelText: 'Описание *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          maxLines: 4,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите описание';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _priceController,
+                                decoration: InputDecoration(
+                                  labelText: 'Цена *',
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                                keyboardType: TextInputType.number,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Введите цену';
+                                  }
+                                  final price = int.tryParse(value.trim());
+                                  if (price == null || price <= 0) {
+                                    return 'Введите корректную цену';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            SizedBox(
+                              width: 90,
+                              child: DropdownButtonFormField<String>(
+                                value: _currency,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                ),
+                                items: ['RUB', 'USD', 'EUR'].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _currency = value;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        _buildBrandField(),
+                        SizedBox(height: 16),
+                        LocationPickerWidget(
+                          initialLocation: _selectedLocation,
+                          onLocationSelected: (locationData) {
+                            setState(() {
+                              _selectedLocation = locationData['address'] as String?;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _yearController,
+                          decoration: InputDecoration(
+                            labelText: 'Год выпуска *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите год выпуска';
+                            }
+                            final year = int.tryParse(value.trim());
+                            if (year == null || year <= 0) {
+                              return 'Введите корректный год';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _totalFlightHoursController,
+                          decoration: InputDecoration(
+                            labelText: 'Общий налёт часов *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите общий налёт часов';
+                            }
+                            final hours = int.tryParse(value.trim());
+                            if (hours == null || hours < 0) {
+                              return 'Введите корректный общий налёт часов';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _enginePowerController,
+                          decoration: InputDecoration(
+                            labelText: 'Мощность двигателя *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите мощность двигателя';
+                            }
+                            final power = int.tryParse(value.trim());
+                            if (power == null || power <= 0) {
+                              return 'Введите корректную мощность двигателя';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _engineVolumeController,
+                          decoration: InputDecoration(
+                            labelText: 'Объём двигателя *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите объём двигателя';
+                            }
+                            final volume = int.tryParse(value.trim());
+                            if (volume == null || volume <= 0) {
+                              return 'Введите корректный объём двигателя';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          controller: _seatsController,
+                          decoration: InputDecoration(
+                            labelText: 'Количество мест *',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите количество мест';
+                            }
+                            final seats = int.tryParse(value.trim());
+                            if (seats == null || seats <= 0) {
+                              return 'Введите корректное количество мест';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        _buildConditionField(),
+                        SizedBox(height: 16),
+                        _buildShareSaleField(),
+                        SizedBox(height: 16),
+                        _buildLeasingField(),
+                        // Кнопки доступны только автору
+                        BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+                          builder: (context, state) {
+                            final currentProduct = state.maybeWhen(
+                              loaded: (product) => product,
+                              saved: (product) => product,
+                              published: (product) => product,
+                              unpublished: (product) => product,
+                              orElse: () => null,
+                            );
+                            if (currentProduct == null || !_isCurrentUserOwner(currentProduct.sellerId)) {
+                              return const SizedBox.shrink();
+                            }
+                            return Column(
+                              children: [
+                                SizedBox(height: 24),
+                                // Кнопка "Сохранить" (дублируем из AppBar)
+                                BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+                                  builder: (context, state) {
+                                    final isLoading = state is SavingAircraftMarketEditState;
+                                    return CustomButton(
+                                      title: isLoading ? 'Сохранение...' : 'Сохранить',
+                                      verticalPadding: 12,
+                                      backgroundColor: AppColors.primary100p,
+                                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                      borderColor: AppColors.primary100p,
+                                      borderRadius: 12,
+                                      onPressed: isLoading ? null : _saveChanges,
+                                      disabled: isLoading,
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 16),
+                                // Кнопка "Снять с публикации" или "Опубликовать" в зависимости от статуса
+                                // Пользователь управляет только isPublished
+                                // Используем актуальный продукт (обновляется после публикации/снятия с публикации)
+                                _buildPublishButtons(),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                ],
-              ],
-            ),
+                  ),
+                ),
+                saving: () => const Center(child: LoadingCustom()),
+                saved: (_) => const Center(child: LoadingCustom()), // Будет закрыт через listener
+                deleting: () => const Center(child: LoadingCustom()),
+                deleted: (_) => const Center(child: LoadingCustom()),
+                publishing: () => const Center(child: LoadingCustom()),
+                published: (_) => const Center(child: LoadingCustom()),
+                unpublishing: () => const Center(child: LoadingCustom()),
+                unpublished: (_) => const Center(child: LoadingCustom()),
+                error: (message) => Center(
+                  child: ErrorCustom(textError: message, repeat: () => _editBloc.add(AircraftMarketEditEvent.getProduct(_productId))),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -741,7 +931,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
               setState(() {
                 _selectedCategoryId = category.id;
               });
-              Navigator.pop(context, category.id);
+              context.router.pop(category.id);
             },
           );
         },
@@ -776,7 +966,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
               setState(() {
                 _condition = condition['value'];
               });
-              Navigator.pop(context, condition['value']);
+              context.router.pop(condition['value']);
             },
           );
         },
@@ -938,7 +1128,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                   _shareNumerator = tempNumerator;
                   _shareDenominator = tempDenominator;
                 });
-                Navigator.pop(context);
+                context.router.maybePop();
               },
             ),
             SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
@@ -952,14 +1142,20 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     // Проверяем, есть ли валидная фотография (новая или с непустым URL)
     final hasValidPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+      builder: (context, state) {
+        final product = state.maybeWhen(loaded: (p) => p, saved: (p) => p, published: (p) => p, unpublished: (p) => p, orElse: () => null);
+        final isBlocked = product != null && !product.isActive;
 
-      children: [
-        Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
-        SizedBox(height: 16),
-        if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true)) else _buildEmptyPhotoPlaceholder(isMain: true),
-      ],
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+            SizedBox(height: 16),
+            if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true, isBlocked: isBlocked)) else _buildEmptyPhotoPlaceholder(isMain: true),
+          ],
+        );
+      },
     );
   }
 
@@ -1001,7 +1197,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     );
   }
 
-  Widget _buildPhotoItem(_PhotoItem photoItem, {required bool isMain}) {
+  Widget _buildPhotoItem(_PhotoItem photoItem, {required bool isMain, bool isBlocked = false}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Stack(
@@ -1053,6 +1249,25 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                     child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                   ),
           ),
+          // Бейдж "Заблокировано администратором" по центру
+          if (isBlocked && isMain)
+            Positioned.fill(
+              child: IgnorePointer(
+                ignoring: true,
+                child: Container(
+                  color: Colors.black.withOpacity(0.35),
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                    child: Text(
+                      'Заблокировано администратором',
+                      style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           // Кнопка удаления
           Positioned(
             top: 8,

@@ -5,6 +5,7 @@ class AircraftMarketEntity extends Equatable {
   final String title;
   final String? description;
   final int price;
+  final String currency;
   final int? aircraftSubcategoriesId; // Заменяет categoryId
   final int sellerId;
 
@@ -14,6 +15,7 @@ class AircraftMarketEntity extends Equatable {
 
   final String? brand;
   final String? location;
+  final bool isPublished;
   final bool isActive;
   final int viewsCount;
   final bool? isFavorite;
@@ -60,12 +62,14 @@ class AircraftMarketEntity extends Equatable {
     required this.title,
     this.description,
     required this.price,
+    this.currency = 'RUB',
     this.aircraftSubcategoriesId,
     required this.sellerId,
     this.mainImageUrl,
     this.additionalImageUrls = const [],
     this.brand,
     this.location,
+    this.isPublished = true,
     this.isActive = true,
     this.viewsCount = 0,
     this.isFavorite,
@@ -96,12 +100,14 @@ class AircraftMarketEntity extends Equatable {
     title,
     description,
     price,
+    currency,
     aircraftSubcategoriesId,
     sellerId,
     mainImageUrl,
     additionalImageUrls,
     brand,
     location,
+    isPublished,
     isActive,
     viewsCount,
     isFavorite,

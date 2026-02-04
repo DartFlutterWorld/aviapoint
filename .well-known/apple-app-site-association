@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "V29J78WH24.ru.dartflutter.aviapoint",
+        "paths": [
+          "/on-the-way/*",
+          "/market/*",
+          "/blog/*",
+          "/news/*",
+          "/profile/*",
+          "/payment/*"
+        ]
+      }
+    ]
+  }
+}

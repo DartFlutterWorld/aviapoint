@@ -20,7 +20,7 @@ class SelectTopicsTestWidget extends StatelessWidget {
     final allSelected = selectedCategoryId.length == allIds.length && allIds.isNotEmpty && selectedCategoryId.containsAll(allIds);
 
     return Container(
-      padding: const EdgeInsets.only(top: 10, left: 12, right: 12, bottom: 16),
+      padding: const EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 16),
       decoration: BoxDecoration(
         color: const Color(0xFFE3F1FF),
         borderRadius: BorderRadius.circular(16),

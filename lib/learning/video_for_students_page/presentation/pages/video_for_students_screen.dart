@@ -5,6 +5,7 @@ import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
+import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/learning/video_for_students_page/presentation/bloc/video_for_students_bloc.dart';
 import 'package:chewie/chewie.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:provider/provider.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 
 @RoutePage()
 class VideoForStudentsScreen extends StatefulWidget {
@@ -63,7 +65,21 @@ class _VideoForStudentsScreenState extends State<VideoForStudentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Учебное пособие', withBack: true),
+      appBar: CustomAppBar(
+        title: 'Учебное пособие',
+        withBack: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: AppColors.primary100p),
+            onPressed: () => LearningShareHelper.shareLearningPage(
+              context,
+              title: 'Учебное пособие',
+              description: 'Обучающий видеоролик о полётах с навигацией Garmin G1000',
+            ),
+            tooltip: 'Поделиться',
+          ),
+        ],
+      ),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: BlocConsumer<VideoForStudentsBloc, VideoForStudentsState>(

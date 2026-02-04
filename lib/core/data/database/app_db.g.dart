@@ -34,7 +34,7 @@ class $AppSettingsTable extends AppSettings
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("mix_answers" IN (0, 1))',
     ),
-    defaultValue: const Constant(true),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _mixQuestionsMeta = const VerificationMeta(
     'mixQuestions',
@@ -49,7 +49,7 @@ class $AppSettingsTable extends AppSettings
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("mix_questions" IN (0, 1))',
     ),
-    defaultValue: const Constant(true),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _buttonHintMeta = const VerificationMeta(
     'buttonHint',
@@ -64,7 +64,7 @@ class $AppSettingsTable extends AppSettings
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("button_hint" IN (0, 1))',
     ),
-    defaultValue: const Constant(true),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override

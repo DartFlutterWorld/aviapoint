@@ -22,6 +22,7 @@ import 'package:aviapoint/profile_page/profile/presentation/widget/profile_edit.
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart' show UserReviewsBottomSheet;
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
+import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -155,55 +156,122 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
   );
 }
 
-Future<void> selectTopics({required BuildContext context, TestMode? testMode}) async {
+Future<void> selectTopics({required BuildContext context, TestMode? testMode, bool? hasActiveSubscription}) async {
   try {
-    _log('🔵 selectTopics вызван, context.mounted: ${context.mounted}');
+    print('🔵 [selectTopics] Вызван, testMode: $testMode');
+    print('🔵 [selectTopics] context.mounted: ${context.mounted}');
+    print('🔵 [selectTopics] kIsWeb: $kIsWeb');
 
     // Небольшая задержка для веб-платформы, чтобы предыдущий диалог успел закрыться
     if (kIsWeb) {
-      _log('🔵 selectTopics: веб-платформа, ждем 200ms');
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      print('🔵 [selectTopics] Веб-платформа, ждем 100ms');
+      await Future<void>.delayed(const Duration(milliseconds: 100));
     }
 
     if (!context.mounted) {
-      _log('⚠️ selectTopics: context не mounted после задержки');
+      print('❌ [selectTopics] context не mounted после задержки');
       return;
     }
 
-    _log('🔵 selectTopics: открываю showModalBottomSheet');
+    print('🔵 [selectTopics] Открываю showUniversalBottomSheet');
+
+    // Получаем статус подписки один раз перед открытием bottom sheet, чтобы не делать запросы внутри
+    // Если статус уже передан извне, используем его, иначе делаем запрос
+    bool? subscriptionStatus = hasActiveSubscription;
+    if (subscriptionStatus == null) {
+      try {
+        final paymentRepository = getIt<PaymentRepository>();
+        final subscriptions = await paymentRepository.getSubscriptionStatus();
+        subscriptionStatus = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+        print('🔵 [selectTopics] Статус подписки получен: $subscriptionStatus');
+      } catch (e) {
+        print('⚠️ [selectTopics] Ошибка при получении статуса подписки: $e');
+        // В случае ошибки оставляем null, SelectTopicsScreen сделает запрос сам
+      }
+    } else {
+      print('🔵 [selectTopics] Статус подписки передан извне: $subscriptionStatus');
+    }
 
     final result = await showUniversalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
       context: context,
-      title: '',
+      title: 'Выберите настройки тестирования',
       backgroundColor: const Color(0xFFF1F7FF),
-      showCloseButton: false,
+      showCloseButton: true,
       useRootNavigator: true,
-      child: SelectTopicsScreen(),
+      child: SelectTopicsScreen(hasActiveSubscription: subscriptionStatus),
     );
 
+    print('🔵 [selectTopics] Bottom sheet закрыт, result: $result');
+    print('🔵 [selectTopics] result != null: ${result != null}');
+
     if (result != null) {
-      // Очистить старые ответы и выбранные вопросы перед новым тестом
-      await getIt<AppDb>().deleteAnswersByCertificateType(result.$1);
-      await getIt<AppDb>().deleteSelectedQuestions(result.$1);
+      print('🔵 [selectTopics] Обрабатываю результат, certificateTypeId: ${result.$1}');
+      print('🔵 [selectTopics] context.mounted: ${context.mounted}');
 
-      await getIt<AppDb>().saveSettings(
-        certificateTypeId: result.$1,
-        mixAnswers: result.$2,
-        buttonHint: result.$3,
-        selectedCategoryIds: result.$4,
-        title: result.$5,
-        image: result.$6,
-        mixQuestions: result.$7,
-      );
+      try {
+        final db = getIt<AppDb>();
 
-      // Установить режим тестирования если он был передан
-      if (testMode != null && context.mounted) {
-        BlocProvider.of<RosAviaTestCubit>(context).setTestMode(testMode);
-      }
+        // Очищаем старые ответы и вопросы
+        print('🔵 [selectTopics] Очищаю старые ответы и вопросы...');
+        await db.deleteAnswersByCertificateType(result.$1);
+        await db.deleteSelectedQuestions(result.$1);
+        print('✅ [selectTopics] Старые ответы и вопросы очищены');
 
-      // Переходим на экран тестирования
-      if (context.mounted) {
-        context.router.push(TestByModeRoute(typeCertificateId: result.$1));
+        if (!context.mounted) {
+          print('❌ [selectTopics] Context не mounted после очистки БД');
+          return;
+        }
+
+        // Сохраняем настройки
+        print('🔵 [selectTopics] Сохраняю настройки...');
+        await db.saveSettings(certificateTypeId: result.$1, mixAnswers: result.$2, buttonHint: result.$3, selectedCategoryIds: result.$4, title: result.$5, image: result.$6, mixQuestions: result.$7);
+        print('✅ [selectTopics] Настройки сохранены');
+
+        if (!context.mounted) {
+          print('❌ [selectTopics] Context не mounted после сохранения настроек');
+          return;
+        }
+
+        // Установить режим тестирования если он был передан
+        if (testMode != null) {
+          print('🔵 [selectTopics] Устанавливаю режим тестирования: $testMode');
+          BlocProvider.of<RosAviaTestCubit>(context).setTestMode(testMode);
+        }
+
+        if (!context.mounted) {
+          print('❌ [selectTopics] Context не mounted после установки режима');
+          return;
+        }
+
+        if (!context.mounted) {
+          print('❌ [selectTopics] Context не mounted после сохранения настроек');
+          return;
+        }
+
+        // Переходим на экран тестирования
+        print('🔵 [selectTopics] Перехожу на экран тестирования, typeCertificateId: ${result.$1}');
+        print('🔵 [selectTopics] context.mounted перед push: ${context.mounted}');
+
+        // Используем root context для навигации на веб-платформе
+        final rootContext = navigatorKey.currentContext;
+        final contextToUse = (kIsWeb && rootContext != null && rootContext.mounted) ? rootContext : context;
+
+        if (contextToUse.mounted) {
+          print('🔵 [selectTopics] Вызываю context.router.push...');
+          try {
+            contextToUse.router.push(TestByModeRoute(typeCertificateId: result.$1));
+            print('✅ [selectTopics] Навигация выполнена');
+          } catch (e, stackTrace) {
+            print('❌ [selectTopics] Ошибка при навигации: $e');
+            print('❌ [selectTopics] StackTrace: $stackTrace');
+          }
+        } else {
+          print('❌ [selectTopics] Context не mounted, не могу перейти на экран тестирования');
+        }
+      } catch (e, stackTrace) {
+        print('❌ [selectTopics] Ошибка при обработке результата: $e');
+        print('❌ [selectTopics] StackTrace: $stackTrace');
+        rethrow;
       }
     }
   } catch (e, stackTrace) {
@@ -223,21 +291,16 @@ void _log(String message) {
 /// Новая логика: проверить есть ли активный тест и показать соответствующий диалог
 Future<void> startTestingFlowNew({required BuildContext context}) async {
   try {
+    if (!context.mounted) return;
+
     final rosAviaTestCubit = context.read<RosAviaTestCubit>();
     final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
     final db = getIt<AppDb>();
 
-    // Проверяем есть ли активный тест (ответы в БД)
-    bool hasActive = false;
-    try {
-      hasActive = await db.hasActiveTest(certificateTypeId);
-    } catch (e) {
-      // Если ошибка при проверке БД, считаем что нет активного теста
-      if (kDebugMode) {
-        print('Ошибка при проверке активного теста: $e');
-      }
-      hasActive = false;
-    }
+    // Проверяем БД перед открытием экрана выбора режима (для всех платформ)
+    print('🔵 [startTestingFlowNew] Проверяю активный тест...');
+    final hasActive = await db.hasActiveTest(certificateTypeId);
+    print('🔵 [startTestingFlowNew] hasActive: $hasActive');
 
     if (!context.mounted) return;
 
@@ -297,7 +360,13 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   onPressed: () {
                     Navigator.pop(dialogContext);
                     // Продолжить тест
-                    context.router.push(TestByModeRoute(typeCertificateId: certificateTypeId));
+                    // TestByModeRoute находится внутри LearningNavigationRoute
+                    final route = BaseRoute(
+                      children: [
+                        LearningNavigationRoute(children: [TestByModeRoute(typeCertificateId: certificateTypeId)]),
+                      ],
+                    );
+                    context.router.push(route);
                   },
                 ),
                 SizedBox(height: 16),
@@ -327,7 +396,7 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
     } else {
       // Нет активного теста - показываем выбор режима
       if (context.mounted) {
-        testingModeDialog(context: context);
+        await testingModeDialog(context: context);
       }
     }
   } catch (e, stackTrace) {
@@ -339,7 +408,7 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
     // В случае ошибки все равно пытаемся показать диалог выбора режима
     if (context.mounted) {
       try {
-        testingModeDialog(context: context);
+        await testingModeDialog(context: context);
       } catch (e2) {
         if (kDebugMode) {
           print('Ошибка при показе testingModeDialog: $e2');
@@ -351,28 +420,43 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
 
 // Экран выбора режима тестирования
 Future<void> testingModeDialog({required BuildContext context}) async {
+  if (!context.mounted) {
+    print('❌ [testingModeDialog] Context не mounted');
+    return;
+  }
+
+  print('🔵 [testingModeDialog] Открываю экран выбора режима');
+
+  // TestingModeRoute находится внутри LearningNavigationRoute (path: 'learning')
+  final route = BaseRoute(
+    children: [
+      LearningNavigationRoute(children: [const TestingModeRoute()]),
+    ],
+  );
+
+  // Используем BaseRoute для навигации, как в main_screen.dart и payment_helper.dart
   try {
-    if (!context.mounted) {
-      _log('⚠️ testingModeDialog: context не mounted');
-      return;
-    }
-
-    _log('🔵 testingModeDialog: открываю экран выбора режима');
-
-    // Просто открываем экран, вся логика теперь в TestingModeScreen
-    await context.router.push(
-      BaseRoute(
-        children: [
-          LearningNavigationRoute(children: [TestingModeRoute()]),
-        ],
-      ),
-    );
-
-    _log('🔵 testingModeDialog: экран закрыт');
+    print('🔵 [testingModeDialog] Навигирую через BaseRoute');
+    await context.router.push(route);
+    print('✅ [testingModeDialog] Навигация выполнена');
   } catch (e, stackTrace) {
-    // Обработка ошибок
-    _log('❌ Ошибка в testingModeDialog: $e');
-    _log('StackTrace: $stackTrace');
+    print('❌ [testingModeDialog] Ошибка при навигации: $e');
+    print('❌ [testingModeDialog] StackTrace: $stackTrace');
+    // Fallback: пробуем через rootContext
+    try {
+      print('🔵 [testingModeDialog] Пробую через rootContext');
+      final rootContext = navigatorKey.currentContext;
+      if (rootContext != null && rootContext.mounted) {
+        await rootContext.router.push(route);
+        print('✅ [testingModeDialog] Навигация выполнена через rootContext');
+      } else {
+        print('❌ [testingModeDialog] rootContext недоступен');
+        rethrow;
+      }
+    } catch (e2) {
+      print('❌ [testingModeDialog] Ошибка при fallback: $e2');
+      rethrow;
+    }
   }
 }
 
@@ -463,13 +547,9 @@ bool? checkDataProfileAndOpenEditIfNeeded({required BuildContext context, String
               if (!rootContext.mounted) return;
 
               openProfileEdit(context: rootContext);
-              ScaffoldMessenger.of(rootContext).showSnackBar(
-                SnackBar(
-                  content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'),
-                  backgroundColor: Colors.orange,
-                  duration: Duration(seconds: 5),
-                ),
-              );
+              ScaffoldMessenger.of(
+                rootContext,
+              ).showSnackBar(SnackBar(content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'), backgroundColor: Colors.orange, duration: Duration(seconds: 5)));
             } catch (e) {
               debugPrint('Ошибка при открытии профиля: $e');
             }
@@ -502,7 +582,7 @@ Future<void> openProfileEdit({required BuildContext context}) async {
 
     // Используем небольшую задержку, чтобы убедиться, что UI готов
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    
+
     if (!context.mounted) {
       debugPrint('❌ [openProfileEdit] Контекст не валиден после задержки');
       return;
@@ -533,13 +613,7 @@ Future<void> openProfileEdit({required BuildContext context}) async {
     debugPrint('❌ [openProfileEdit] Stack trace: $stackTrace');
     // Показываем сообщение об ошибке пользователю
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Не удалось открыть форму редактирования профиля'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось открыть форму редактирования профиля'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
     }
   }
 }

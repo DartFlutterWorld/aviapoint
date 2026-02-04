@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 import 'package:easy_localization/easy_localization.dart' as hello;
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,13 @@ class ExcessiveFuelVaporScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: 'excessive_fuel_vapor'.tr(),
         withBack: true,
-        // actions: [
-        //   IconButton(
-        //     onPressed: () => context.read<EmergencyCheckedCubit>().clearAllCategory(),
-        //     icon: SvgPicture.asset(Pictures.round_clear2),
-        //   ),
-        // ],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: AppColors.primary100p),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'excessive_fuel_vapor'.tr()),
+            tooltip: 'Поделиться',
+          ),
+        ],
       ),
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
@@ -31,17 +33,9 @@ class ExcessiveFuelVaporScreen extends StatelessWidget {
             children: [
               SizedBox(height: 8),
               Center(
-                child: Text(
-                  'fuel_flow_stabilization_procedures',
-                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
-                ).tr(),
+                child: Text('fuel_flow_stabilization_procedures', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
               ),
-              Center(
-                child: Text(
-                  'if_flow_fluctuations_of_1_gph_or_more_or_power_surges_occur',
-                  textAlign: TextAlign.center,
-                ).tr(),
-              ),
+              Center(child: Text('if_flow_fluctuations_of_1_gph_or_more_or_power_surges_occur', textAlign: TextAlign.center).tr()),
               SizedBox(height: 8),
               Table(
                 columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},

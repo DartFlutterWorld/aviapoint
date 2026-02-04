@@ -21,6 +21,9 @@ import 'package:aviapoint/blog/presentation/bloc/blog_articles_bloc.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
+import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
+import 'package:aviapoint/market/presentation/bloc/parts_market_bloc.dart';
+import 'package:aviapoint/market/presentation/widgets/parts_market_card.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
@@ -52,10 +55,16 @@ class _MainScreenState extends State<MainScreen> {
       BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
     }
 
-    // Загружаем продукты маркета
+    // Загружаем продукты маркета (самолёты)
     final marketState = BlocProvider.of<AircraftMarketBloc>(context).state;
     if (marketState is! SuccessAircraftMarketState) {
-      BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 4, includeInactive: false));
+      BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
+    }
+
+    // Загружаем запчасти маркета
+    final partsState = BlocProvider.of<PartsMarketBloc>(context).state;
+    if (partsState is! SuccessPartsMarketState) {
+      BlocProvider.of<PartsMarketBloc>(context).add(const PartsMarketEvent.getParts(limit: 2, includeInactive: false));
     }
 
     // Загружаем статьи блога
@@ -86,8 +95,11 @@ class _MainScreenState extends State<MainScreen> {
     // Загружаем все новости из всех категорий
     BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
 
-    // Обновляем продукты маркета
-    BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 4, includeInactive: false));
+    // Обновляем продукты маркета (самолёты) — на главной специально берём только 2
+    BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
+
+    // Обновляем запчасти маркета — на главной специально берём только 2
+    BlocProvider.of<PartsMarketBloc>(context).add(const PartsMarketEvent.getParts(limit: 2, includeInactive: false));
 
     // Обновляем статьи блога
     BlocProvider.of<BlogArticlesBloc>(context).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
@@ -100,12 +112,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _checkForUpdate() async {
-    // В debug режиме не проверяем версию
-    if (kDebugMode) {
-      debugPrint('🔧 Debug режим: проверка версии пропущена');
-      return;
-    }
-
     if (!mounted || _versionChecked) return;
     _versionChecked = true;
 
@@ -122,7 +128,7 @@ class _MainScreenState extends State<MainScreen> {
       await upgrader.initialize();
 
       // Ждем немного, чтобы upgrader успел проверить версию
-      await Future<void>.delayed(const Duration(milliseconds: 1000));
+      await Future<void>.delayed(const Duration(milliseconds: 2000));
 
       // Проверяем, нужно ли обновление
       if (upgrader.isUpdateAvailable()) {
@@ -282,6 +288,7 @@ class _MainScreenState extends State<MainScreen> {
                     builder: (context, state) => state.maybeWhen(
                       error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                         textError: errorForUser,
+                        paddingTop: 0,
                         repeat: () {
                           BlocProvider.of<FlightsBloc>(context).add(const GetFlightsEvent(isRefresh: false));
                         },
@@ -306,14 +313,14 @@ class _MainScreenState extends State<MainScreen> {
                   SizedBox(height: AppSpacing.section),
                   HomeSectionButton(
                     title: 'Все полёты',
-                    color: const Color(0xFF0A6EFA),
+                    color: const Color.fromARGB(255, 150, 196, 32),
                     onPressed: () => AutoRouter.of(context).push(const BaseRoute(children: [OnTheWayNavigationRoute()])),
                   ),
                 ],
               ),
             ),
             SizedBox(height: AppSpacing.section),
-            // Маркет
+            // Авиатехника
             Container(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
               decoration: BoxDecoration(
@@ -323,28 +330,73 @@ class _MainScreenState extends State<MainScreen> {
               ),
               child: Column(
                 children: [
-                  Text('Маркет', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
+                  Text('Авиатехника', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
                   SizedBox(height: AppSpacing.horizontal),
-                  Text('Самолёты, вертолёты и запчасти для авиации', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  Text('Самолёты и вертолёты', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
                   SizedBox(height: AppSpacing.section),
                   BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
                     builder: (context, state) => state.maybeWhen(
-                      error: (message) => ErrorCustom(
-                        textError: message,
+                      error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
+                        textError: errorForUser,
                         repeat: () {
-                          BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 4, includeInactive: false));
+                          BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
                         },
                       ),
                       loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
-                      success: (products, hasMore) => _SuccessMarketProducts(products: products, context: context),
+                      success: (products, hasMore) => _SuccessAircraftProducts(products: products, context: context),
                       orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                     ),
                   ),
                   SizedBox(height: AppSpacing.section),
                   HomeSectionButton(
-                    title: 'Весь маркет',
+                    title: 'Вся авиатехника',
                     color: const Color(0xFF10B981),
                     onPressed: () => AutoRouter.of(context).push(const BaseRoute(children: [MarketNavigationRoute()])),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: AppSpacing.section),
+            // Запчасти
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+              ),
+              child: Column(
+                children: [
+                  Text('Запчасти', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
+                  SizedBox(height: AppSpacing.horizontal),
+                  Text('Запчасти для авиационной техники', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  SizedBox(height: AppSpacing.section),
+                  BlocBuilder<PartsMarketBloc, PartsMarketState>(
+                    builder: (context, state) => state.maybeWhen(
+                      error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) => ErrorCustom(
+                        textError: errorForUser,
+                        repeat: () {
+                          BlocProvider.of<PartsMarketBloc>(context).add(const PartsMarketEvent.getParts(limit: 2, includeInactive: false));
+                        },
+                      ),
+                      loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
+                      success: (parts, hasMore) => _SuccessPartsProducts(parts: parts, context: context),
+                      orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
+                    ),
+                  ),
+                  SizedBox(height: AppSpacing.section),
+                  HomeSectionButton(
+                    title: 'Все запчасти',
+                    color: const Color(0xFF10B981),
+                    onPressed: () => AutoRouter.of(context).push(
+                      BaseRoute(
+                        children: [
+                          MarketNavigationRoute(
+                            children: [MarketRoute(initialTab: 1)], // 1 = вкладка "Запчасти"
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -547,18 +599,21 @@ DateTime _parseBlogDateTime(String? value) {
   return DateTime.fromMillisecondsSinceEpoch(0);
 }
 
-class _SuccessMarketProducts extends StatelessWidget {
+class _SuccessAircraftProducts extends StatelessWidget {
   final List<AircraftMarketEntity> products;
   final BuildContext context;
 
-  const _SuccessMarketProducts({required this.products, required this.context});
+  const _SuccessAircraftProducts({required this.products, required this.context});
 
   @override
   Widget build(BuildContext context) {
     // Сортируем товары по дате создания: последние добавленные сверху
     final sortedProducts = [...products]..sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
 
-    if (products.isEmpty) {
+    // Берём только 2 последних
+    final displayProducts = sortedProducts.take(2).toList();
+
+    if (displayProducts.isEmpty) {
       return Padding(
         padding: EdgeInsets.all(AppSpacing.section),
         child: Text(
@@ -588,9 +643,7 @@ class _SuccessMarketProducts extends StatelessWidget {
               }()
             : (isLandscape ? 3 : 2);
 
-        final itemCount = kIsWeb
-            ? (sortedProducts.length > crossAxisCount ? crossAxisCount : sortedProducts.length)
-            : (isLandscape ? (sortedProducts.length > 3 ? 3 : sortedProducts.length) : (sortedProducts.length > 4 ? 4 : sortedProducts.length));
+        final itemCount = displayProducts.length > crossAxisCount ? crossAxisCount : displayProducts.length;
 
         return SizedBox(
           child: GridView.builder(
@@ -599,14 +652,86 @@ class _SuccessMarketProducts extends StatelessWidget {
             itemCount: itemCount,
             shrinkWrap: true,
             itemBuilder: (context, index) => AircraftMarketCard(
-              product: sortedProducts[index],
+              product: displayProducts[index],
               showEditButtons: false,
               showYearAndLocation: true,
               showInactiveBadge: false,
               onTap: () => AutoRouter.of(context).push(
                 BaseRoute(
                   children: [
-                    MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: sortedProducts[index].id)]),
+                    MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: displayProducts[index].id)]),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SuccessPartsProducts extends StatelessWidget {
+  final List<PartsMarketEntity> parts;
+  final BuildContext context;
+
+  const _SuccessPartsProducts({required this.parts, required this.context});
+
+  @override
+  Widget build(BuildContext context) {
+    // Сортируем запчасти по дате создания: последние добавленные сверху
+    final sortedParts = [...parts]..sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+
+    // Берём только 2 последних
+    final displayParts = sortedParts.take(2).toList();
+
+    if (displayParts.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(AppSpacing.section),
+        child: Text(
+          'Запчасти скоро появятся',
+          style: AppStyles.light14s.copyWith(color: Color(0xFF4B5767)),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    return Builder(
+      builder: (context) {
+        // Адаптируем childAspectRatio в зависимости от ориентации
+        final orientation = MediaQuery.of(context).orientation;
+        final isLandscape = orientation == Orientation.landscape;
+        // В landscape делаем элементы выше (меньше childAspectRatio)
+        final childAspectRatio = isLandscape ? 0.9 : 0.77;
+
+        // Определяем количество колонок: на вебе адаптивно по ширине, в ландшафте 3, иначе 2
+        final crossAxisCount = kIsWeb
+            ? () {
+                final width = MediaQuery.of(context).size.width;
+                if (width >= 1200) return 4;
+                if (width >= 900) return 3;
+                if (width >= 600) return 2;
+                return 1;
+              }()
+            : (isLandscape ? 3 : 2);
+
+        final itemCount = displayParts.length > crossAxisCount ? crossAxisCount : displayParts.length;
+
+        return SizedBox(
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount, childAspectRatio: childAspectRatio),
+            itemCount: itemCount,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => PartsMarketCard(
+              part: displayParts[index],
+              showEditButtons: false,
+              showCategoryAndManufacturer: true,
+              showInactiveBadge: false,
+              onTap: () => AutoRouter.of(context).push(
+                BaseRoute(
+                  children: [
+                    MarketNavigationRoute(children: [PartsMarketDetailRoute(id: displayParts[index].id)]),
                   ],
                 ),
               ),

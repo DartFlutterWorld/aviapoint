@@ -7,7 +7,10 @@ import 'payment_url_helper_stub.dart' if (dart.library.html) 'payment_url_helper
 /// Вспомогательный класс для генерации URL для платежей
 class PaymentUrlHelper {
   /// Генерирует URL для успешного возврата после оплаты
-  /// ЮKassa требует полные HTTP/HTTPS URL, поэтому всегда возвращаем полный URL
+  /// 
+  /// НА ВЕБ: используем HTTP/HTTPS URL для редиректа на сайт
+  /// НА МОБИЛЬНЫХ: используем HTTP/HTTPS URL (ЮKassa требует, чтобы return_url начинался с http:// или https://)
+  /// 
   /// [source] - опциональный параметр для указания исходного экрана (например, 'profile' или 'testing_mode')
   static String buildReturnUrl({String? source}) {
     if (kIsWeb) {
@@ -23,7 +26,8 @@ class PaymentUrlHelper {
       // По умолчанию возвращаем на профиль
       return '$origin/profile';
     } else {
-      // На мобильных используем Environment.apiUrl
+      // На мобильных используем HTTP/HTTPS URL (ЮKassa требует, чтобы return_url начинался с http:// или https://)
+      // Используем Environment.apiUrl для получения правильного базового URL
       final baseUrl = Environment.apiUrl;
       final url = baseUrl.endsWith('/') ? baseUrl : '$baseUrl/';
       if (source != null) {

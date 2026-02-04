@@ -47,9 +47,16 @@ import 'package:aviapoint/learning/video_for_students_page/presentation/pages/vi
 import 'package:aviapoint/main_page/stories/domain/entities/story_entity.dart';
 import 'package:aviapoint/main_page/stories/presentation/pages/detail_story_screen.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
 import 'package:aviapoint/market/presentation/pages/aircraft_market_detail_screen.dart';
 import 'package:aviapoint/market/presentation/pages/edit_aircraft_market_screen.dart';
 import 'package:aviapoint/market/presentation/pages/create_aircraft_market_screen.dart';
+import 'package:aviapoint/market/presentation/pages/parts_market_detail_screen.dart';
+import 'package:aviapoint/market/presentation/pages/edit_parts_market_screen.dart';
+import 'package:aviapoint/market/presentation/pages/create_parts_market_screen.dart';
 import 'package:aviapoint/news/domain/entities/news_entity.dart';
 import 'package:aviapoint/news/presentation/pages/create_news_screen.dart';
 import 'package:aviapoint/news/presentation/pages/detail_news_screen.dart';
@@ -226,6 +233,9 @@ class AppRouter extends RootStackRouter {
           children: [
             AutoRoute(initial: true, page: MarketRoute.page),
             AutoRoute(path: 'create-aircraft', page: CreateAircraftMarketRoute.page),
+            AutoRoute(path: 'create-part', page: CreatePartsMarketRoute.page),
+            AutoRoute(path: 'parts/:id', page: PartsMarketDetailRoute.page),
+            AutoRoute(path: 'parts/:id/edit', page: EditPartsMarketRoute.page),
             AutoRoute(path: ':id', page: AircraftMarketDetailRoute.page),
             AutoRoute(path: ':id/edit', page: EditAircraftMarketRoute.page),
           ],

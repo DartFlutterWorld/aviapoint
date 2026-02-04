@@ -86,12 +86,13 @@ extension MarketCategoriesEventPatterns on MarketCategoriesEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetMainMarketCategoriesEvent value)?  getMainCategories,TResult Function( GetAllMarketCategoriesEvent value)?  getAllCategories,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetMainMarketCategoriesEvent value)?  getMainCategories,TResult Function( GetAllMarketCategoriesEvent value)?  getAllCategories,TResult Function( GetSubcategoriesEvent value)?  getSubcategories,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case GetMainMarketCategoriesEvent() when getMainCategories != null:
 return getMainCategories(_that);case GetAllMarketCategoriesEvent() when getAllCategories != null:
-return getAllCategories(_that);case _:
+return getAllCategories(_that);case GetSubcategoriesEvent() when getSubcategories != null:
+return getSubcategories(_that);case _:
   return orElse();
 
 }
@@ -109,12 +110,13 @@ return getAllCategories(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetMainMarketCategoriesEvent value)  getMainCategories,required TResult Function( GetAllMarketCategoriesEvent value)  getAllCategories,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetMainMarketCategoriesEvent value)  getMainCategories,required TResult Function( GetAllMarketCategoriesEvent value)  getAllCategories,required TResult Function( GetSubcategoriesEvent value)  getSubcategories,}){
 final _that = this;
 switch (_that) {
 case GetMainMarketCategoriesEvent():
 return getMainCategories(_that);case GetAllMarketCategoriesEvent():
-return getAllCategories(_that);case _:
+return getAllCategories(_that);case GetSubcategoriesEvent():
+return getSubcategories(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -131,12 +133,13 @@ return getAllCategories(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetMainMarketCategoriesEvent value)?  getMainCategories,TResult? Function( GetAllMarketCategoriesEvent value)?  getAllCategories,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetMainMarketCategoriesEvent value)?  getMainCategories,TResult? Function( GetAllMarketCategoriesEvent value)?  getAllCategories,TResult? Function( GetSubcategoriesEvent value)?  getSubcategories,}){
 final _that = this;
 switch (_that) {
 case GetMainMarketCategoriesEvent() when getMainCategories != null:
 return getMainCategories(_that);case GetAllMarketCategoriesEvent() when getAllCategories != null:
-return getAllCategories(_that);case _:
+return getAllCategories(_that);case GetSubcategoriesEvent() when getSubcategories != null:
+return getSubcategories(_that);case _:
   return null;
 
 }
@@ -153,11 +156,12 @@ return getAllCategories(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String productType)?  getMainCategories,TResult Function( String productType)?  getAllCategories,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String productType)?  getMainCategories,TResult Function( String productType)?  getAllCategories,TResult Function( String productType,  int? parentId,  int? mainCategoryId)?  getSubcategories,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case GetMainMarketCategoriesEvent() when getMainCategories != null:
 return getMainCategories(_that.productType);case GetAllMarketCategoriesEvent() when getAllCategories != null:
-return getAllCategories(_that.productType);case _:
+return getAllCategories(_that.productType);case GetSubcategoriesEvent() when getSubcategories != null:
+return getSubcategories(_that.productType,_that.parentId,_that.mainCategoryId);case _:
   return orElse();
 
 }
@@ -175,11 +179,12 @@ return getAllCategories(_that.productType);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String productType)  getMainCategories,required TResult Function( String productType)  getAllCategories,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String productType)  getMainCategories,required TResult Function( String productType)  getAllCategories,required TResult Function( String productType,  int? parentId,  int? mainCategoryId)  getSubcategories,}) {final _that = this;
 switch (_that) {
 case GetMainMarketCategoriesEvent():
 return getMainCategories(_that.productType);case GetAllMarketCategoriesEvent():
-return getAllCategories(_that.productType);case _:
+return getAllCategories(_that.productType);case GetSubcategoriesEvent():
+return getSubcategories(_that.productType,_that.parentId,_that.mainCategoryId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,11 +201,12 @@ return getAllCategories(_that.productType);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String productType)?  getMainCategories,TResult? Function( String productType)?  getAllCategories,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String productType)?  getMainCategories,TResult? Function( String productType)?  getAllCategories,TResult? Function( String productType,  int? parentId,  int? mainCategoryId)?  getSubcategories,}) {final _that = this;
 switch (_that) {
 case GetMainMarketCategoriesEvent() when getMainCategories != null:
 return getMainCategories(_that.productType);case GetAllMarketCategoriesEvent() when getAllCategories != null:
-return getAllCategories(_that.productType);case _:
+return getAllCategories(_that.productType);case GetSubcategoriesEvent() when getSubcategories != null:
+return getSubcategories(_that.productType,_that.parentId,_that.mainCategoryId);case _:
   return null;
 
 }
@@ -334,6 +340,76 @@ class _$GetAllMarketCategoriesEventCopyWithImpl<$Res>
   return _then(GetAllMarketCategoriesEvent(
 productType: null == productType ? _self.productType : productType // ignore: cast_nullable_to_non_nullable
 as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class GetSubcategoriesEvent extends MarketCategoriesEvent {
+  const GetSubcategoriesEvent({required this.productType, this.parentId, this.mainCategoryId}): super._();
+  
+
+@override final  String productType;
+ final  int? parentId;
+ final  int? mainCategoryId;
+
+/// Create a copy of MarketCategoriesEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetSubcategoriesEventCopyWith<GetSubcategoriesEvent> get copyWith => _$GetSubcategoriesEventCopyWithImpl<GetSubcategoriesEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetSubcategoriesEvent&&(identical(other.productType, productType) || other.productType == productType)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.mainCategoryId, mainCategoryId) || other.mainCategoryId == mainCategoryId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,productType,parentId,mainCategoryId);
+
+@override
+String toString() {
+  return 'MarketCategoriesEvent.getSubcategories(productType: $productType, parentId: $parentId, mainCategoryId: $mainCategoryId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GetSubcategoriesEventCopyWith<$Res> implements $MarketCategoriesEventCopyWith<$Res> {
+  factory $GetSubcategoriesEventCopyWith(GetSubcategoriesEvent value, $Res Function(GetSubcategoriesEvent) _then) = _$GetSubcategoriesEventCopyWithImpl;
+@override @useResult
+$Res call({
+ String productType, int? parentId, int? mainCategoryId
+});
+
+
+
+
+}
+/// @nodoc
+class _$GetSubcategoriesEventCopyWithImpl<$Res>
+    implements $GetSubcategoriesEventCopyWith<$Res> {
+  _$GetSubcategoriesEventCopyWithImpl(this._self, this._then);
+
+  final GetSubcategoriesEvent _self;
+  final $Res Function(GetSubcategoriesEvent) _then;
+
+/// Create a copy of MarketCategoriesEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? productType = null,Object? parentId = freezed,Object? mainCategoryId = freezed,}) {
+  return _then(GetSubcategoriesEvent(
+productType: null == productType ? _self.productType : productType // ignore: cast_nullable_to_non_nullable
+as String,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
+as int?,mainCategoryId: freezed == mainCategoryId ? _self.mainCategoryId : mainCategoryId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

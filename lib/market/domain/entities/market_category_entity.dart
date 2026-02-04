@@ -5,6 +5,7 @@ class MarketCategoryEntity {
   final String? iconUrl;
   final String productType; // 'aircraft' или 'parts'
   final int? parentId;
+  final int? partsMainCategoryId; // Для запчастей: ID главной категории
   final int displayOrder;
   final bool isMain;
 
@@ -15,6 +16,7 @@ class MarketCategoryEntity {
     this.iconUrl,
     required this.productType,
     this.parentId,
+    this.partsMainCategoryId,
     this.displayOrder = 0,
     this.isMain = false,
   });

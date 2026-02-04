@@ -1,0 +1,15 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls",
+            "delegate_permission/common.get_login_creds"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "ru.dartflutter.aviapoint",
+            "sha256_cert_fingerprints": [
+                "8B:D4:AE:55:55:10:3B:38:3F:83:97:85:D3:14:00:0D:BD:64:37:EA:B4:04:CE:DF:94:BF:A2:38:40:26:0A:16"
+            ]
+        }
+    }
+]

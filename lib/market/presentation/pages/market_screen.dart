@@ -5,19 +5,21 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
-import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
+import 'package:aviapoint/market/presentation/bloc/parts_market_bloc.dart';
 import 'package:aviapoint/market/domain/entities/market_category_entity.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
+import 'package:aviapoint/market/presentation/widgets/parts_market_card.dart';
 import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,9 @@ import 'package:provider/provider.dart';
 
 @RoutePage()
 class MarketScreen extends StatefulWidget {
-  const MarketScreen({super.key});
+  final int? initialTab; // 0 для авиатехники, 1 для запчастей
+
+  const MarketScreen({super.key, this.initialTab});
 
   @override
   State<MarketScreen> createState() => _MarketScreenState();
@@ -53,14 +57,25 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    // Устанавливаем начальную вкладку из параметра (0 = авиатехника, 1 = запчасти)
+    final initialIndex = widget.initialTab ?? 0;
+    _tabController = TabController(length: 2, vsync: this, initialIndex: initialIndex);
     _tabController.addListener(_onTabChanged);
     _scrollController.addListener(_onScroll);
     _searchController.addListener(_onSearchChanged);
 
-    // Загружаем начальные данные
-    context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
-    context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.getProducts());
+    // Устанавливаем текущий тип продукта в зависимости от начальной вкладки
+    _currentProductType = initialIndex == 0 ? 'aircraft' : 'parts';
+
+    // Загружаем начальные данные (категории)
+    _loadInitialData();
+
+    // После построения экрана применяем фильтры для текущей вкладки.
+    // Это сбрасывает лимит 2, который используется на главной, на стандартный лимит пагинации,
+    // но НЕ грузит все товары сразу — только первую страницу.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyFilters();
+    });
   }
 
   @override
@@ -74,27 +89,67 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
+  void _loadInitialData() {
+    context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
+  }
+
   void _onTabChanged() {
     if (_tabController.indexIsChanging) return;
+
+    // Только обновляем состояние, без перезагрузки категорий
     setState(() {
       _currentProductType = _tabController.index == 0 ? 'aircraft' : 'parts';
       _selectedCategoryIds = [];
     });
-    context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
-    context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.getProducts());
+
+    // Загружаем категории только если они еще не загружены для этого типа
+    final categoriesState = context.read<MarketCategoriesBloc>().state;
+    categoriesState.maybeWhen(
+      success: (categories) {
+        // Проверяем, есть ли категории для текущего типа продукта
+        final hasCategoriesForType = categories.any((cat) => cat.productType == _currentProductType);
+        if (!hasCategoriesForType) {
+          context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
+        }
+      },
+      orElse: () {
+        context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
+      },
+    );
+
+    // Обновляем список для новой вкладки с текущими фильтрами/поиском
+    _applyFilters();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
-      final state = context.read<AircraftMarketBloc>().state;
-      state.maybeWhen(
-        success: (products, hasMore) {
-          if (hasMore) {
-            context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.loadMore());
-          }
-        },
-        orElse: () {},
-      );
+      if (_currentProductType == 'aircraft') {
+        final state = context.read<AircraftMarketBloc>().state;
+        state.maybeWhen(
+          success: (products, hasMore) {
+            if (hasMore) {
+              context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.loadMore());
+            }
+          },
+          orElse: () {},
+        );
+      } else {
+        final state = context.read<PartsMarketBloc>().state;
+        state.when(
+          loading: () {},
+          loadingMore: (List<PartsMarketEntity> parts) {},
+          error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) {},
+          success: (List<PartsMarketEntity> parts, bool hasMore) {
+            if (hasMore) {
+              context.read<PartsMarketBloc>().add(const PartsMarketEvent.loadMore());
+            }
+          },
+          creatingPart: () {},
+          createdPart: (PartsMarketEntity part) {},
+          updating: () {},
+          updated: (PartsMarketEntity part) {},
+        );
+      }
     }
   }
 
@@ -108,21 +163,37 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
   void _applyFilters() {
     final searchQuery = _searchController.text.trim().isEmpty ? null : _searchController.text.trim();
 
-    // Если выбрана одна категория – передаём её как одиночный id (для обратной совместимости).
-    // Если выбрано несколько – используем только список ids, чтобы на бэкенде фильтр был по нескольким категориям.
-    final int? singleCategoryId = _selectedCategoryIds.length == 1 ? _selectedCategoryIds.first : null;
+    if (_currentProductType == 'aircraft') {
+      // Если выбрана одна категория – передаём её как одиночный id (для обратной совместимости).
+      // Если выбрано несколько – используем только список ids, чтобы на бэкенде фильтр был по нескольким категориям.
+      final int? singleCategoryId = _selectedCategoryIds.length == 1 ? _selectedCategoryIds.first : null;
 
-    context.read<AircraftMarketBloc>().add(
-      AircraftMarketEvent.getProducts(
-        aircraftSubcategoriesId: singleCategoryId,
-        aircraftSubcategoriesIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : null,
-        searchQuery: searchQuery,
-        priceFrom: _priceFrom,
-        priceTo: _priceTo,
-        brand: _brand,
-        sortBy: _sortBy,
-      ),
-    );
+      context.read<AircraftMarketBloc>().add(
+        AircraftMarketEvent.getProducts(
+          aircraftSubcategoriesId: singleCategoryId,
+          aircraftSubcategoriesIds: _selectedCategoryIds.isNotEmpty ? _selectedCategoryIds : null,
+          searchQuery: searchQuery,
+          priceFrom: _priceFrom,
+          priceTo: _priceTo,
+          brand: _brand,
+          sortBy: _sortBy,
+        ),
+      );
+    } else {
+      // Для запчастей
+      final int? singleCategoryId = _selectedCategoryIds.length == 1 ? _selectedCategoryIds.first : null;
+
+      context.read<PartsMarketBloc>().add(
+        PartsMarketEvent.getParts(
+          subcategoryId: singleCategoryId,
+          mainCategoryId: _selectedCategoryIds.isNotEmpty && _selectedCategoryIds.length > 1 ? null : null, // TODO: нужно будет доработать логику для main category
+          searchQuery: searchQuery,
+          priceFrom: _priceFrom,
+          priceTo: _priceTo,
+          sortBy: _sortBy,
+        ),
+      );
+    }
   }
 
   Future<void> _handleCreateAdButtonTap(BuildContext context) async {
@@ -135,13 +206,21 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
         callback: () {
           // После успешной авторизации переходим на создание объявления
           if (mounted) {
-            context.router.push(const CreateAircraftMarketRoute());
+            if (_currentProductType == 'aircraft') {
+              context.router.push(const CreateAircraftMarketRoute());
+            } else {
+              context.router.push(const CreatePartsMarketRoute());
+            }
           }
         },
       );
     } else {
       // Если авторизован, сразу переходим на создание объявления
-      context.router.push(const CreateAircraftMarketRoute());
+      if (_currentProductType == 'aircraft') {
+        context.router.push(const CreateAircraftMarketRoute());
+      } else {
+        context.router.push(const CreatePartsMarketRoute());
+      }
     }
   }
 
@@ -164,86 +243,128 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      floatingActionButton: FloatingActionButtonWidget(title: 'Создать\nобъявление', onTap: () => _handleCreateAdButtonTap(context)),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              floating: true,
-              pinned: true,
-              snap: false,
-              automaticallyImplyLeading: false,
-              backgroundColor: AppColors.backgroundAppBar,
-              elevation: 1,
-              shadowColor: const Color(0xFFA8A39C).withValues(alpha: 0.12),
-              leadingWidth: 60,
-              centerTitle: true,
-              title: Text(
-                'Маркет',
-                style: AppStyles.bold16s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
-              actions: [if (Provider.of<AppState>(context, listen: false).isAuthenticated) _MarketProfileButton()],
-              bottom: TabBar(
-                controller: _tabController,
-                labelColor: Color(0xFF0A6EFA),
-                unselectedLabelColor: Color(0xFF9CA5AF),
-                indicatorColor: Color(0xFF0A6EFA),
-                dividerColor: Colors.transparent,
-                labelStyle: AppStyles.bold14s,
-                unselectedLabelStyle: AppStyles.regular14s,
-                tabs: const [
-                  Tab(text: 'Самолёты и вертолёты'),
-                  Tab(text: 'Запчасти'),
-                ],
-              ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _MarketContent(
-              searchController: _searchController,
-              selectedCategoryIds: _selectedCategoryIds,
-              onCategorySelected: (MarketCategoryEntity category) {
-                setState(() {
-                  if (_selectedCategoryIds.contains(category.id)) {
-                    _selectedCategoryIds.remove(category.id);
-                  } else {
-                    _selectedCategoryIds.add(category.id);
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<PartsMarketBloc, PartsMarketState>(
+          listenWhen: (previous, current) {
+            // Слушаем когда создание или обновление завершилось успешно
+            return (previous is CreatingPartsMarketState && current is CreatedPartsMarketState) || (previous is UpdatingPartsMarketState && current is UpdatedPartsMarketState);
+          },
+          listener: (context, state) {
+            state.maybeWhen(
+              createdPart: (part) {
+                // Обновляем список после успешного создания
+                // Используем небольшую задержку, чтобы экран создания успел закрыться
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  if (context.mounted) {
+                    context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
                   }
                 });
-                _applyFilters();
               },
-              onFiltersDialog: _showFiltersDialog,
-              scrollController: _scrollController,
-              sortBy: _sortBy,
-              onApplyFilters: _applyFilters,
-            ),
-            _MarketContent(
-              searchController: _searchController,
-              selectedCategoryIds: _selectedCategoryIds,
-              onCategorySelected: (MarketCategoryEntity category) {
-                setState(() {
-                  if (_selectedCategoryIds.contains(category.id)) {
-                    _selectedCategoryIds.remove(category.id);
-                  } else {
-                    _selectedCategoryIds.add(category.id);
+              updated: (part) {
+                // Обновляем список после успешного обновления
+                // Используем небольшую задержку, чтобы экран редактирования успел закрыться
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  if (context.mounted) {
+                    context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
                   }
                 });
-                _applyFilters();
               },
-              onFiltersDialog: _showFiltersDialog,
-              scrollController: _scrollController,
-              sortBy: _sortBy,
-              onApplyFilters: _applyFilters,
-            ),
-          ],
+              orElse: () {},
+            );
+          },
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        floatingActionButton: FloatingActionButtonWidget(title: 'Создать\nобъявление', onTap: () => _handleCreateAdButtonTap(context)),
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                floating: true,
+                pinned: true,
+                snap: false,
+                automaticallyImplyLeading: false,
+                backgroundColor: AppColors.backgroundAppBar,
+                elevation: 1,
+                shadowColor: const Color(0xFFA8A39C).withValues(alpha: 0.12),
+                leadingWidth: 60,
+                centerTitle: true,
+                title: Text(
+                  'Маркет',
+                  style: AppStyles.bold16s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                actions: [if (Provider.of<AppState>(context, listen: false).isAuthenticated) _MarketProfileButton()],
+                bottom: TabBar(
+                  padding: EdgeInsets.zero,
+                  controller: _tabController,
+                  labelColor: const Color(0xFF0A6EFA),
+                  unselectedLabelColor: const Color(0xFF9CA5AF),
+                  dividerColor: Colors.transparent,
+                  // Чуть меньше шрифт, чтобы визуально уменьшить высоту таббара
+                  labelStyle: AppStyles.bold12s,
+                  unselectedLabelStyle: AppStyles.regular12s,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicator: const UnderlineTabIndicator(
+                    borderSide: BorderSide(width: 2.5, color: Color(0xFF0A6EFA)),
+                    // Подчёркивание максимально близко к тексту
+                    insets: EdgeInsets.zero,
+                  ),
+                  labelPadding: EdgeInsets.zero,
+                  tabs: const [
+                    Tab(text: 'Авиатехника'),
+                    Tab(text: 'Запчасти'),
+                  ],
+                ),
+              ),
+            ];
+          },
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              _MarketContent(
+                productType: 'aircraft',
+                searchController: _searchController,
+                selectedCategoryIds: _selectedCategoryIds,
+                onCategorySelected: (MarketCategoryEntity category) {
+                  setState(() {
+                    if (_selectedCategoryIds.contains(category.id)) {
+                      _selectedCategoryIds.remove(category.id);
+                    } else {
+                      _selectedCategoryIds.add(category.id);
+                    }
+                  });
+                  _applyFilters();
+                },
+                onFiltersDialog: _showFiltersDialog,
+                scrollController: _scrollController,
+                sortBy: _sortBy,
+                onApplyFilters: _applyFilters,
+              ),
+              _PartsMarketContent(
+                searchController: _searchController,
+                selectedCategoryIds: _selectedCategoryIds,
+                onCategorySelected: (MarketCategoryEntity category) {
+                  setState(() {
+                    if (_selectedCategoryIds.contains(category.id)) {
+                      _selectedCategoryIds.remove(category.id);
+                    } else {
+                      _selectedCategoryIds.add(category.id);
+                    }
+                  });
+                  _applyFilters();
+                },
+                onFiltersDialog: _showFiltersDialog,
+                scrollController: _scrollController,
+                sortBy: _sortBy,
+                onApplyFilters: _applyFilters,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -252,6 +373,7 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
 
 // Контент маркета с категориями, поиском и продуктами
 class _MarketContent extends StatelessWidget {
+  final String productType; // 'aircraft' или 'parts'
   final TextEditingController searchController;
   final List<int> selectedCategoryIds;
   final void Function(MarketCategoryEntity) onCategorySelected;
@@ -261,6 +383,7 @@ class _MarketContent extends StatelessWidget {
   final VoidCallback onApplyFilters;
 
   const _MarketContent({
+    required this.productType,
     required this.searchController,
     required this.selectedCategoryIds,
     required this.onCategorySelected,
@@ -272,69 +395,65 @@ class _MarketContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: [
-        // Категории
-        BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
-          builder: (context, state) => state.when(
-            loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-            error: (message) => const SliverToBoxAdapter(child: SizedBox.shrink()),
-            success: (categories) => SliverToBoxAdapter(
-              child: _CategoriesSection(categories: categories, selectedCategoryIds: selectedCategoryIds, onCategorySelected: onCategorySelected),
-            ),
-          ),
-        ),
-        // Поиск и фильтры
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Поиск',
-                      prefixIcon: Icon(Icons.search, size: 20.0),
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.tune, size: 20.0),
-                        onPressed: onFiltersDialog,
-                      ),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        // Список продуктов
-        BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
-          builder: (context, state) => state.when(
-            loading: () => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
-            loadingMore: (products) => _ProductsSliverGrid(products: products, isLoadingMore: true, sortBy: sortBy),
-            error: (message) => SliverFillRemaining(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(message, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-                    SizedBox(height: 16),
-                    ElevatedButton(onPressed: onApplyFilters, child: const Text('Повторить')),
-                  ],
-                ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
+        // Ждем немного, чтобы показать индикатор обновления
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+      },
+      child: CustomScrollView(
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          // Категории
+          BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
+            builder: (context, state) => state.when(
+              loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (message) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              success: (categories) => SliverToBoxAdapter(
+                child: _CategoriesSection(categories: categories, selectedCategoryIds: selectedCategoryIds, onCategorySelected: onCategorySelected),
               ),
             ),
-            success: (products, hasMore) => _ProductsSliverGrid(products: products, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
-            creatingAirCraft: () => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
-            createdAirCraft: (product) => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
-            updating: () => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
-            updated: (product) => SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
           ),
-        ),
-      ],
+          // Поиск и фильтры
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Поиск',
+                        prefixIcon: Icon(Icons.search, size: 20.0),
+                        suffixIcon: IconButton(icon: Icon(Icons.tune, size: 20.0), onPressed: onFiltersDialog),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Список продуктов
+          BlocBuilder<AircraftMarketBloc, AircraftMarketState>(
+            builder: (context, state) => state.when(
+              loading: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
+              loadingMore: (products) => _ProductsSliverGrid(products: products, isLoadingMore: true, sortBy: sortBy),
+              error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => SliverFillRemaining(
+                child: ErrorCustom(
+                  paddingTop: 0,
+                  textError: errorForUser,
+                  repeat: onApplyFilters,
+                ),
+              ),
+              success: (products, hasMore) => _ProductsSliverGrid(products: products, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -566,6 +685,101 @@ class _FiltersDialogState extends State<_FiltersDialog> {
   }
 }
 
+// Контент маркета для запчастей
+class _PartsMarketContent extends StatelessWidget {
+  final TextEditingController searchController;
+  final List<int> selectedCategoryIds;
+  final void Function(MarketCategoryEntity) onCategorySelected;
+  final VoidCallback onFiltersDialog;
+  final ScrollController scrollController;
+  final String? sortBy;
+  final VoidCallback onApplyFilters;
+
+  const _PartsMarketContent({
+    required this.searchController,
+    required this.selectedCategoryIds,
+    required this.onCategorySelected,
+    required this.onFiltersDialog,
+    required this.scrollController,
+    this.sortBy,
+    required this.onApplyFilters,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
+        // Ждем немного, чтобы показать индикатор обновления
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+      },
+      child: CustomScrollView(
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          // Категории
+          BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
+            builder: (context, state) => state.when(
+              loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (message) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              success: (categories) => SliverToBoxAdapter(
+                child: _CategoriesSection(categories: categories, selectedCategoryIds: selectedCategoryIds, onCategorySelected: onCategorySelected),
+              ),
+            ),
+          ),
+          // Поиск и фильтры
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Поиск',
+                        prefixIcon: Icon(Icons.search, size: 20.0),
+                        suffixIcon: IconButton(icon: Icon(Icons.tune, size: 20.0), onPressed: onFiltersDialog),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Список запчастей
+          BlocBuilder<PartsMarketBloc, PartsMarketState>(
+            builder: (context, state) => state.when(
+              loading: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
+              loadingMore: (List<PartsMarketEntity> parts) => _PartsSliverGrid(parts: parts, isLoadingMore: true, sortBy: sortBy),
+              error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) => SliverFillRemaining(
+                child: ErrorCustom(
+                  paddingTop: 0,
+                  textError: errorForUser,
+                  repeat: onApplyFilters,
+                ),
+              ),
+              success: (List<PartsMarketEntity> parts, bool hasMore) => _PartsSliverGrid(parts: parts, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
+              creatingPart: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
+              createdPart: (PartsMarketEntity part) {
+                // После создания показываем loading, refresh загрузит данные
+                return const SliverFillRemaining(child: Center(child: LoadingCustom()));
+              },
+              updating: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
+              updated: (PartsMarketEntity part) {
+                // После обновления показываем loading, refresh загрузит данные
+                return const SliverFillRemaining(child: Center(child: LoadingCustom()));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 // Сетка продуктов как Sliver
 class _ProductsSliverGrid extends StatelessWidget {
   final List<AircraftMarketEntity> products;
@@ -606,7 +820,7 @@ class _ProductsSliverGrid extends StatelessWidget {
         : (isLandscape ? 3 : (isTablet ? 2 : 2));
 
     return SliverPadding(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
         delegate: SliverChildBuilderDelegate((context, index) {
@@ -621,6 +835,76 @@ class _ProductsSliverGrid extends StatelessWidget {
             },
           );
         }, childCount: displayedProducts.length),
+      ),
+    );
+  }
+}
+
+// Сетка запчастей как Sliver
+class _PartsSliverGrid extends StatelessWidget {
+  final List<PartsMarketEntity> parts;
+  final bool isLoadingMore;
+  final bool hasMore;
+  final String? sortBy;
+
+  const _PartsSliverGrid({required this.parts, this.isLoadingMore = false, this.hasMore = false, this.sortBy});
+
+  @override
+  Widget build(BuildContext context) {
+    final isTablet = Provider.of<AppState>(context, listen: false).isTablet;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // По умолчанию и при сортировке "по дате" показываем последние добавленные запчасти сверху
+    final displayedParts = [...parts];
+    if (sortBy == null || sortBy == 'default' || sortBy == 'date') {
+      displayedParts.sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+    } else if (sortBy == 'price_asc') {
+      displayedParts.sort((a, b) => a.price.compareTo(b.price));
+    } else if (sortBy == 'price_desc') {
+      displayedParts.sort((a, b) => b.price.compareTo(a.price));
+    }
+
+    if (displayedParts.isEmpty && !isLoadingMore) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey.shade400),
+              SizedBox(height: 16),
+              Text('Запчасти не найдены', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final crossAxisCount = kIsWeb
+        ? () {
+            final width = MediaQuery.of(context).size.width;
+            if (width >= 1200) return 4;
+            if (width >= 900) return 3;
+            if (width >= 600) return 2;
+            return 1;
+          }()
+        : (isLandscape ? 3 : (isTablet ? 2 : 2));
+
+    return SliverPadding(
+      padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final part = displayedParts[index];
+          return PartsMarketCard(
+            part: part,
+            showEditButtons: false,
+            showCategoryAndManufacturer: true,
+            showInactiveBadge: false,
+            onTap: () {
+              context.router.push(PartsMarketDetailRoute(id: part.id));
+            },
+          );
+        }, childCount: displayedParts.length),
       ),
     );
   }

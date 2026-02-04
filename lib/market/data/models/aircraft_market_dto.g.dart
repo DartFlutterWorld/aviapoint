@@ -12,6 +12,7 @@ AircraftMarketDto _$AircraftMarketDtoFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       description: json['description'] as String?,
       price: (json['price'] as num).toInt(),
+      currency: json['currency'] as String? ?? 'RUB',
       aircraftSubcategoriesId: (json['aircraft_subcategories_id'] as num?)
           ?.toInt(),
       sellerId: (json['seller_id'] as num).toInt(),
@@ -21,6 +22,7 @@ AircraftMarketDto _$AircraftMarketDtoFromJson(Map<String, dynamic> json) =>
           : _imageUrlsFromJson(json['additional_image_urls']),
       brand: json['brand'] as String?,
       location: json['location'] as String?,
+      isPublished: json['is_published'] as bool?,
       isActive: json['is_active'] as bool?,
       viewsCount: (json['views_count'] as num?)?.toInt(),
       isFavorite: json['is_favorite'] as bool?,

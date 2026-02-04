@@ -17,6 +17,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,10 @@ class NormalCheckListScreen extends StatefulWidget {
 }
 
 class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
+  final ValueNotifier<String?> currentImageUrl = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> currentTitle = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> currentDoing = ValueNotifier<String?>(null);
+
   @override
   void initState() {
     super.initState();
@@ -37,6 +42,14 @@ class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
     // Загружаем список категорий для получения названия
     context.read<NormalCategoriesBloc>().add(GetNormalCategoriesEvent());
     context.read<NormalCheckListByCategoryBloc>().add(GetNormalCheckListByCategoryEvent(widget.normalCategoryId));
+  }
+
+  @override
+  void dispose() {
+    currentImageUrl.dispose();
+    currentTitle.dispose();
+    currentDoing.dispose();
+    super.dispose();
   }
 
   String _getCategoryName(BuildContext context) {
@@ -60,11 +73,44 @@ class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
       builder: (context, categoriesState) {
         final categoryName = _getCategoryName(context);
         return Scaffold(
-          appBar: CustomAppBar(title: categoryName, withBack: true),
+          appBar: CustomAppBar(
+            title: categoryName,
+            withBack: true,
+            actions: [
+              ValueListenableBuilder<String?>(
+                valueListenable: currentImageUrl,
+                builder: (context, imageUrl, _) {
+                  return ValueListenableBuilder<String?>(
+                    valueListenable: currentTitle,
+                    builder: (context, title, _) {
+                      return ValueListenableBuilder<String?>(
+                        valueListenable: currentDoing,
+                        builder: (context, doing, _) {
+                          return IconButton(
+                icon: const Icon(Icons.share, color: AppColors.primary100p),
+                            onPressed: () => LearningShareHelper.shareLearningPage(context, title: title, description: doing, imageUrl: imageUrl),
+                tooltip: 'Поделиться',
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
           backgroundColor: AppColors.background,
           body: BlocBuilder<NormalCheckListByCategoryBloc, NormalCheckListByCategoryState>(
             builder: (context, state) => state.map(
-              success: (value) => _Success(normalCheck: value.normalCheckListByCategory, indexCheck: value.index, categoryName: categoryName, categoryId: widget.normalCategoryId),
+              success: (value) => _Success(
+                normalCheck: value.normalCheckListByCategory,
+                indexCheck: value.index,
+                categoryName: categoryName,
+                categoryId: widget.normalCategoryId,
+                onImageUrlChanged: (url) => currentImageUrl.value = url,
+                onTitleChanged: (title) => currentTitle.value = title,
+                onDoingChanged: (doing) => currentDoing.value = doing,
+              ),
               loading: (value) => LoadingCustom(),
               error: (value) => ErrorCustom(
                 textError: value.errorForUser,
@@ -86,8 +132,19 @@ class _Success extends StatefulWidget {
   final int indexCheck;
   final String categoryName;
   final String categoryId;
+  final ValueChanged<String?> onImageUrlChanged;
+  final ValueChanged<String?> onTitleChanged;
+  final ValueChanged<String?> onDoingChanged;
 
-  const _Success({required this.normalCheck, required this.indexCheck, required this.categoryName, required this.categoryId});
+  const _Success({
+    required this.normalCheck,
+    required this.indexCheck,
+    required this.categoryName,
+    required this.categoryId,
+    required this.onImageUrlChanged,
+    required this.onTitleChanged,
+    required this.onDoingChanged,
+  });
 
   @override
   State<_Success> createState() => _SuccessState();
@@ -102,6 +159,21 @@ class _SuccessState extends State<_Success> {
     // Если какие то проверки уже были проведены то при заходе в категории начинаем
     // показывать проверки с следующей (после последней)
     indexCheck = widget.indexCheck;
+    // Откладываем обновление до завершения текущего кадра сборки
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateImageUrl();
+    });
+  }
+
+  void _updateImageUrl() {
+    final normalCheck = widget.normalCheck.where((e) => e.checkList == false).toList();
+    if (indexCheck < normalCheck.length) {
+      final item = normalCheck[indexCheck];
+      final picture = item.picture;
+      widget.onImageUrlChanged(picture != null && picture.isNotEmpty ? picture : null);
+      widget.onTitleChanged(item.title);
+      widget.onDoingChanged(item.doing);
+    }
   }
 
   final LiveOptions options = LiveOptions(
@@ -245,7 +317,10 @@ class _SuccessState extends State<_Success> {
                 context.read<NormalCheckedCubit>().setCheck(idCategory: normalCheck[indexCheck].normalCategoryId, idCheck: indexCheck + 1);
 
                 if (normalCheck.length - 1 > indexCheck) {
-                  setState(() => indexCheck++);
+                  setState(() {
+                    indexCheck++;
+                    _updateImageUrl();
+                  });
                   // Если контрольная проверка находится в середине списка
                   if (indexChecklist != null && indexCheck == indexChecklist - 1) {
                     checkList(context: context, checkList: normalCheckList);

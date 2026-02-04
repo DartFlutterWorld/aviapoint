@@ -352,6 +352,22 @@ class CreateNewsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CreatePartsMarketScreen]
+class CreatePartsMarketRoute extends PageRouteInfo<void> {
+  const CreatePartsMarketRoute({List<PageRouteInfo>? children})
+    : super(CreatePartsMarketRoute.name, initialChildren: children);
+
+  static const String name = 'CreatePartsMarketRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreatePartsMarketScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [DetailNewsScreen]
 class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
   DetailNewsRoute({
@@ -622,11 +638,12 @@ class EditAircraftMarketRoute
     extends PageRouteInfo<EditAircraftMarketRouteArgs> {
   EditAircraftMarketRoute({
     Key? key,
-    required AircraftMarketEntity product,
+    required int productId,
     List<PageRouteInfo>? children,
   }) : super(
          EditAircraftMarketRoute.name,
-         args: EditAircraftMarketRouteArgs(key: key, product: product),
+         args: EditAircraftMarketRouteArgs(key: key, productId: productId),
+         rawPathParams: {'id': productId},
          initialChildren: children,
        );
 
@@ -635,33 +652,37 @@ class EditAircraftMarketRoute
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<EditAircraftMarketRouteArgs>();
-      return EditAircraftMarketScreen(key: args.key, product: args.product);
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditAircraftMarketRouteArgs>(
+        orElse: () =>
+            EditAircraftMarketRouteArgs(productId: pathParams.getInt('id')),
+      );
+      return EditAircraftMarketScreen(key: args.key, productId: args.productId);
     },
   );
 }
 
 class EditAircraftMarketRouteArgs {
-  const EditAircraftMarketRouteArgs({this.key, required this.product});
+  const EditAircraftMarketRouteArgs({this.key, required this.productId});
 
   final Key? key;
 
-  final AircraftMarketEntity product;
+  final int productId;
 
   @override
   String toString() {
-    return 'EditAircraftMarketRouteArgs{key: $key, product: $product}';
+    return 'EditAircraftMarketRouteArgs{key: $key, productId: $productId}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! EditAircraftMarketRouteArgs) return false;
-    return key == other.key && product == other.product;
+    return key == other.key && productId == other.productId;
   }
 
   @override
-  int get hashCode => key.hashCode ^ product.hashCode;
+  int get hashCode => key.hashCode ^ productId.hashCode;
 }
 
 /// generated route for
@@ -856,6 +877,58 @@ class EditNewsRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ newsId.hashCode;
+}
+
+/// generated route for
+/// [EditPartsMarketScreen]
+class EditPartsMarketRoute extends PageRouteInfo<EditPartsMarketRouteArgs> {
+  EditPartsMarketRoute({
+    Key? key,
+    required int productId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditPartsMarketRoute.name,
+         args: EditPartsMarketRouteArgs(key: key, productId: productId),
+         rawPathParams: {'id': productId},
+         initialChildren: children,
+       );
+
+  static const String name = 'EditPartsMarketRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditPartsMarketRouteArgs>(
+        orElse: () =>
+            EditPartsMarketRouteArgs(productId: pathParams.getInt('id')),
+      );
+      return EditPartsMarketScreen(key: args.key, productId: args.productId);
+    },
+  );
+}
+
+class EditPartsMarketRouteArgs {
+  const EditPartsMarketRouteArgs({this.key, required this.productId});
+
+  final Key? key;
+
+  final int productId;
+
+  @override
+  String toString() {
+    return 'EditPartsMarketRouteArgs{key: $key, productId: $productId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditPartsMarketRouteArgs) return false;
+    return key == other.key && productId == other.productId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ productId.hashCode;
 }
 
 /// generated route for
@@ -1564,18 +1637,48 @@ class MarketNavigationRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [MarketScreen]
-class MarketRoute extends PageRouteInfo<void> {
-  const MarketRoute({List<PageRouteInfo>? children})
-    : super(MarketRoute.name, initialChildren: children);
+class MarketRoute extends PageRouteInfo<MarketRouteArgs> {
+  MarketRoute({Key? key, int? initialTab, List<PageRouteInfo>? children})
+    : super(
+        MarketRoute.name,
+        args: MarketRouteArgs(key: key, initialTab: initialTab),
+        initialChildren: children,
+      );
 
   static const String name = 'MarketRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const MarketScreen();
+      final args = data.argsAs<MarketRouteArgs>(
+        orElse: () => const MarketRouteArgs(),
+      );
+      return MarketScreen(key: args.key, initialTab: args.initialTab);
     },
   );
+}
+
+class MarketRouteArgs {
+  const MarketRouteArgs({this.key, this.initialTab});
+
+  final Key? key;
+
+  final int? initialTab;
+
+  @override
+  String toString() {
+    return 'MarketRouteArgs{key: $key, initialTab: $initialTab}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MarketRouteArgs) return false;
+    return key == other.key && initialTab == other.initialTab;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialTab.hashCode;
 }
 
 /// generated route for
@@ -1699,6 +1802,57 @@ class OnTheWayNavigationRoute extends PageRouteInfo<void> {
       return const OnTheWayNavigationScreen();
     },
   );
+}
+
+/// generated route for
+/// [PartsMarketDetailScreen]
+class PartsMarketDetailRoute extends PageRouteInfo<PartsMarketDetailRouteArgs> {
+  PartsMarketDetailRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PartsMarketDetailRoute.name,
+         args: PartsMarketDetailRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'PartsMarketDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<PartsMarketDetailRouteArgs>(
+        orElse: () => PartsMarketDetailRouteArgs(id: pathParams.getInt('id')),
+      );
+      return PartsMarketDetailScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class PartsMarketDetailRouteArgs {
+  const PartsMarketDetailRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'PartsMarketDetailRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PartsMarketDetailRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
 }
 
 /// generated route for

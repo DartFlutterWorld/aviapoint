@@ -43,6 +43,7 @@ import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
+import 'package:aviapoint/core/utils/seo_helper.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_contacts_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
@@ -78,11 +79,123 @@ class _FlightAppBarActions extends StatelessWidget {
     // Форматируем дату
     final dateFormat = DateFormat('dd.MM.yyyy', 'ru');
     final formattedDate = dateFormat.format(flight.departureDate);
+    final timeFormat = DateFormat('HH:mm', 'ru');
+    final formattedTime = timeFormat.format(flight.departureDate);
 
-    // Формируем маршрут
-    final route = '${flight.departureAirport} → ${flight.arrivalAirport}';
+    // Формируем маршрут: используем waypoints, если есть, иначе старую логику
+    String route;
+    if (flight.waypoints != null && flight.waypoints!.isNotEmpty) {
+      // Формируем маршрут из всех точек waypoints
+      final routeParts = flight.waypoints!.map((waypoint) {
+        String airport = waypoint.airportCode;
+        if (waypoint.airportName != null && waypoint.airportName!.isNotEmpty) {
+          airport = '${waypoint.airportName} ($airport)';
+        }
+        return airport;
+      }).toList();
+      route = routeParts.join(' → ');
+    } else {
+      // Старая логика для обратной совместимости
+      String departure = flight.departureAirport;
+      if (flight.departureAirportName != null && flight.departureAirportName!.isNotEmpty) {
+        departure = '${flight.departureAirportName} ($departure)';
+      }
 
-    Share.share('Полёт $route на $formattedDate\n\n$flightUrl\n\nСмотрите в AviaPoint');
+      String arrival = flight.arrivalAirport;
+      if (flight.arrivalAirportName != null && flight.arrivalAirportName!.isNotEmpty) {
+        arrival = '${flight.arrivalAirportName} ($arrival)';
+      }
+
+      route = '$departure → $arrival';
+    }
+
+    // Формируем текст для шаринга
+    final buffer = StringBuffer();
+    buffer.writeln('✈️ Полёт по маршруту');
+    buffer.writeln('$route');
+    buffer.writeln('');
+    buffer.writeln('📅 Дата: $formattedDate в $formattedTime');
+
+    // Добавляем информацию о цене
+    if (flight.pricePerSeat > 0) {
+      buffer.writeln('💰 Цена: ${formatPrice(flight.pricePerSeat.toInt())} за место');
+    }
+
+    // Добавляем информацию о местах
+
+    buffer.writeln('🪑 Свободных мест: ${flight.availableSeats}');
+
+    // Добавляем тип самолета, если указан
+    if (flight.aircraftType != null && flight.aircraftType!.isNotEmpty) {
+      buffer.writeln('✈️ Тип самолёта: ${flight.aircraftType}');
+    }
+
+    // Добавляем имя пилота, если доступно
+    if (flight.pilotFullName != null && flight.pilotFullName!.isNotEmpty) {
+      buffer.writeln('👨‍✈️ Пилот: ${flight.pilotFullName}');
+    }
+
+    buffer.writeln('');
+    buffer.writeln('🔗 $flightUrl');
+    buffer.writeln('');
+    buffer.writeln('Смотрите подробности о плёте на AviaPoint - сервис для пилотов');
+
+    final shareText = buffer.toString();
+
+    // Если есть фотографии самолёта, делимся с первым изображением
+    if (flight.photos != null && flight.photos!.isNotEmpty) {
+      _shareFlightWithImage(context, flight.photos!.first, shareText);
+    } else {
+      Share.share(shareText);
+    }
+  }
+
+  /// Поделиться полетом с изображением самолёта
+  Future<void> _shareFlightWithImage(BuildContext context, String photoUrl, String text) async {
+    try {
+      if (kIsWeb) {
+        // На вебе просто делимся текстом и ссылкой на изображение
+        final imageUrl = getImageUrl(photoUrl);
+        Share.share('$text\n\n🖼️ Фото самолёта: $imageUrl');
+        return;
+      }
+
+      // На мобильных платформах скачиваем изображение и делимся файлом
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+              SizedBox(width: 16),
+              Text('Подготовка к отправке...'),
+            ],
+          ),
+          duration: Duration(seconds: 10),
+        ),
+      );
+
+      final imageUrl = getImageUrl(photoUrl);
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+      final fileName = photoUrl.split('/').last.split('?').first;
+      final filePath = '${tempDir.path}/$fileName';
+
+      await dio.download(imageUrl, filePath);
+
+      if (context.mounted) {
+        scaffoldMessenger.hideCurrentSnackBar();
+        await Share.shareXFiles([XFile(filePath)], text: text);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось поделиться с изображением: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        // В случае ошибки делимся только текстом
+        Share.share(text);
+      }
+    }
   }
 
   @override
@@ -94,7 +207,7 @@ class _FlightAppBarActions extends StatelessWidget {
 
         // Кнопка "Поделиться" всегда видна
         final shareButton = IconButton(
-          icon: Icon(Icons.share, color: Color(0xFF0A6EFA)),
+          icon: Icon(Icons.share, color: Color(0xFF0A6EFA), size: 30),
           onPressed: () => _shareFlight(context),
           tooltip: 'Поделиться',
         );
@@ -106,7 +219,7 @@ class _FlightAppBarActions extends StatelessWidget {
             children: [
               shareButton,
               IconButton(
-                icon: Icon(Icons.edit, color: Color(0xFF0A6EFA)),
+                icon: Icon(Icons.edit, color: Color(0xFF0A6EFA), size: 30),
                 onPressed: () async {
                   final result = await AutoRouter.of(context).push(EditFlightRoute(flight: flight));
                   // Обновляем детали полета после редактирования
@@ -117,7 +230,7 @@ class _FlightAppBarActions extends StatelessWidget {
                 tooltip: 'Редактировать',
               ),
               IconButton(
-                icon: Icon(Icons.cancel, color: Color(0xFFEF4444)),
+                icon: Icon(Icons.cancel, color: Color(0xFFEF4444), size: 30),
                 onPressed: () {
                   _FlightDetailScreenState._showCancelFlightDialogStatic(context, flight.id);
                 },
@@ -602,7 +715,60 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
     );
   }
 
+  /// Обновляет SEO мета-теги для страницы полета
+  void _updateFlightSeoTags(FlightEntity flight) {
+    if (!kIsWeb) return;
+
+    // Форматируем дату
+    final dateFormat = DateFormat('dd.MM.yyyy', 'ru');
+    final formattedDate = dateFormat.format(flight.departureDate);
+
+    // Формируем маршрут
+    String departure = flight.departureAirport;
+    if (flight.departureAirportName != null && flight.departureAirportName!.isNotEmpty) {
+      departure = '${flight.departureAirportName} ($departure)';
+    }
+
+    String arrival = flight.arrivalAirport;
+    if (flight.arrivalAirportName != null && flight.arrivalAirportName!.isNotEmpty) {
+      arrival = '${flight.arrivalAirportName} ($arrival)';
+    }
+
+    final route = '$departure → $arrival';
+
+    // Формируем описание
+    final description = StringBuffer();
+    description.write('Полёт по маршруту $route на $formattedDate');
+
+    if (flight.pricePerSeat > 0) {
+      description.write('. Компенсация: ${formatPrice(flight.pricePerSeat.toInt())} ₽ за место');
+    }
+
+    if (flight.availableSeats > 0) {
+      description.write('. Свободных мест: ${flight.availableSeats}');
+    }
+
+    if (flight.aircraftType != null && flight.aircraftType!.isNotEmpty) {
+      description.write('. Тип самолёта: ${flight.aircraftType}');
+    }
+
+    // Используем первое фото самолёта, если есть, иначе логотип AviaPoint
+    String? imageUrl;
+    if (flight.photos != null && flight.photos!.isNotEmpty) {
+      // Получаем полный URL изображения самолёта
+      imageUrl = getImageUrl(flight.photos!.first);
+    }
+
+    // Устанавливаем мета-теги
+    SeoHelper.setMetaTags(title: 'Полёт $route - AviaPoint', description: description.toString(), imageUrl: imageUrl, url: '/on-the-way/${flight.id}', type: 'website');
+  }
+
   Widget _buildSuccessState(BuildContext context, FlightEntity flight) {
+    // Устанавливаем SEO мета-теги для веб-версии
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateFlightSeoTags(flight);
+    });
+
     final priceFormat = NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
     final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
 
@@ -843,7 +1009,7 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
                 ),
                 SizedBox(height: 16),
                 // Цена за место
-                _buildInfoRow(Icons.attach_money, 'Цена за место', priceFormat.format(flight.pricePerSeat)),
+                _buildInfoRow(Icons.currency_ruble, 'Компенсация за место', priceFormat.format(flight.pricePerSeat)),
                 SizedBox(height: 12),
                 // Всего мест и свободных мест
                 if (flight.totalSeats != null) ...[
@@ -1985,12 +2151,20 @@ class _FlightDetailScreenState extends State<FlightDetailScreen> {
 
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(icon, size: 20, color: Color(0xFF9CA5AF)),
-        SizedBox(width: 12),
-        Expanded(
-          child: Text(label, style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+        Flexible(
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: Color(0xFF9CA5AF)),
+              SizedBox(width: 12),
+              Flexible(
+                child: Text(label, style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+              ),
+            ],
+          ),
         ),
+
         Flexible(
           child: Text(
             value,

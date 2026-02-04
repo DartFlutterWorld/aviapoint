@@ -6,8 +6,8 @@ import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
+import 'package:aviapoint/market/presentation/bloc/aircraft_market_edit_bloc.dart';
 import 'package:aviapoint/market/presentation/widgets/aircraft_market_card.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,71 +34,20 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
       },
       child: MultiBlocListener(
         listeners: [
-          // Слушаем локальный BLoC (для создания, обновления и удаления через локальный BLoC)
-          BlocListener<AircraftMarketBloc, AircraftMarketState>(
-            listenWhen: (previous, current) {
-              // Реагируем на изменения состояния после удаления, создания или обновления
-              // Отслеживаем переход от одного success к другому после delete
-              if (previous is SuccessAircraftMarketState && current is SuccessAircraftMarketState) {
-                // Это может быть удаление - проверяем, что количество товаров уменьшилось
-                final previousProducts = previous.products;
-                final currentProducts = current.products;
-                if (currentProducts.length < previousProducts.length) {
-                  // Товар был удален
-                  return true;
-                }
-              }
-              // Реагируем на создание, обновление и ошибки
-              return current.maybeWhen(createdAirCraft: (_) => true, updated: (_) => true, error: (_) => true, orElse: () => false);
-            },
-            listener: (context, state) {
-              // Обновляем список после создания, обновления или удаления
-              state.maybeWhen(
-                createdAirCraft: (product) {
-                  context.read<AircraftMarketBloc>().add(AircraftMarketEvent.getProducts(sellerId: widget.userId, includeInactive: true));
-                },
-                updated: (product) {
-                  context.read<AircraftMarketBloc>().add(AircraftMarketEvent.getProducts(sellerId: widget.userId, includeInactive: true));
-                },
-                success: (products, hasMore) {
-                  // После успешного удаления товар уже убран из списка через _currentProducts.removeWhere
-                  // Показываем сообщение об успешном удалении (будет показано только если количество уменьшилось)
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление успешно удалено'), backgroundColor: Colors.green));
-                },
-                error: (message) {
-                  // Показываем ошибку удаления, если она произошла
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
-                },
-                orElse: () {},
-              );
-            },
-          ),
-          // Слушаем глобальный BLoC (для обновления через глобальный BLoC из экрана редактирования и при возврате с детальной страницы)
+          // Слушаем глобальный BLoC (для обновления при возврате с экрана редактирования)
           BlocListener<AircraftMarketBloc, AircraftMarketState>(
             bloc: globalBloc,
             listenWhen: (previous, current) {
-              // Реагируем на:
-              // 1. updated после updating в глобальном BLoC
-              // 2. success после refresh в глобальном BLoC (когда возвращаемся с детальной страницы)
-              if (previous is UpdatingMarketProductState) {
-                return current is UpdatedMarketProductState;
-              }
-              // Если было loading и стало success - это refresh
+              // Реагируем на refresh в глобальном BLoC (когда возвращаемся с экрана редактирования)
               if (previous is LoadingAircraftMarketState && current is SuccessAircraftMarketState) {
                 return true;
               }
               return false;
             },
             listener: (context, state) {
-              // Обновляем локальный список после обновления в глобальном BLoC
+              // После refresh в глобальном BLoC обновляем локальный BLoC в профиле
               state.maybeWhen(
-                updated: (product) {
-                  // Обновляем локальный BLoC в профиле
-                  final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
-                  localBloc.add(AircraftMarketEvent.getProducts(sellerId: widget.userId, includeInactive: true));
-                },
                 success: (products, hasMore) {
-                  // После refresh в глобальном BLoC обновляем локальный BLoC в профиле
                   final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
                   localBloc.add(AircraftMarketEvent.getProducts(sellerId: widget.userId, includeInactive: true));
                 },
@@ -115,7 +64,7 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Мои объявления', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                    Text('Мои самолёты', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
                     TextButton(
                       onPressed: () {
                         context.router.push(
@@ -143,31 +92,13 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                     child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                   ),
                   loadingMore: (products) => _buildAdsGrid(context, products, isLoading: true),
-                  error: (message) => Center(
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
                     child: Padding(
                       padding: EdgeInsets.all(16),
-                      child: Text(message, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
+                      child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: const Color(0xFFEF4444))),
                     ),
                   ),
                   success: (products, hasMore) => _buildAdsGrid(context, products, isLoading: false),
-                  creatingAirCraft: () => Center(
-                    child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
-                  ),
-                  createdAirCraft: (product) {
-                    // Список обновится через BlocListener
-                    return Center(
-                      child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
-                    );
-                  },
-                  updating: () => Center(
-                    child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
-                  ),
-                  updated: (product) {
-                    // Список обновится через BlocListener
-                    return Center(
-                      child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
-                    );
-                  },
                 ),
               ],
             );
@@ -211,15 +142,18 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
       );
     }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(8),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: kIsWeb ? 3 : 2, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : 0.67),
+    return SizedBox(
+      height: 280, // Фиксированная высота для горизонтального списка
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 8),
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
-        return AircraftMarketCard(
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.45, // Ширина карточки
+            margin: EdgeInsets.only(right: 12),
+            child: AircraftMarketCard(
           product: product,
           showEditButtons: true,
           showYearAndLocation: true,
@@ -237,60 +171,83 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
             context.router.push(
               BaseRoute(
                 children: [
-                  MarketNavigationRoute(children: [EditAircraftMarketRoute(product: product)]),
+                      MarketNavigationRoute(children: [EditAircraftMarketRoute(productId: product.id)]),
                 ],
               ),
             );
           },
           onDelete: () => _showDeleteConfirmation(product),
+            ),
         );
       },
+      ),
     );
   }
 
   void _showDeleteConfirmation(AircraftMarketEntity product) {
-    // Важно: используем локальный BLoC из BlocProvider
-    final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
+    // Создаем локальный BLoC для удаления
+    final deleteBloc = AircraftMarketEditBloc(repository: getIt<MarketRepository>());
 
     showDialog<void>(
       context: context,
       builder: (dialogContext) => BlocProvider.value(
-        value: localBloc,
+        value: deleteBloc,
+        child: BlocListener<AircraftMarketEditBloc, AircraftMarketEditState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              deleted: (productId) {
+                Navigator.of(dialogContext).pop();
+                deleteBloc.close();
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление успешно удалено'), backgroundColor: Colors.green));
+                // Обновляем список после удаления
+                final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
+                localBloc.add(AircraftMarketEvent.getProducts(sellerId: widget.userId, includeInactive: true));
+              },
+              error: (message) {
+                Navigator.of(dialogContext).pop();
+                deleteBloc.close();
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+              },
+              orElse: () {},
+            );
+          },
         child: AlertDialog(
           title: Text('Удалить объявление?', style: AppStyles.bold16s),
           content: Text('Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.', style: AppStyles.regular14s),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  deleteBloc.close();
+                },
               child: Text('Отмена', style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280))),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                _deleteProduct(product);
+              BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
+                builder: (context, state) {
+                  final isDeleting = state is DeletingAircraftMarketEditState;
+                  return ElevatedButton(
+                    onPressed: isDeleting
+                        ? null
+                        : () {
+                            deleteBloc.add(AircraftMarketEditEvent.deleteProduct(product.id));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: Text('Удалить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
+                    child: isDeleting
+                        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : Text('Удалить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
+                  );
+                },
             ),
           ],
+          ),
         ),
       ),
     );
-  }
-
-  void _deleteProduct(AircraftMarketEntity product) {
-    // Используем локальный AircraftMarketBloc для удаления
-    // Важно: используем BlocProvider.of, чтобы получить именно локальный BLoC из BlocProvider
-    final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
-
-    // Отправляем событие удаления
-    // После успешного удаления BLoC автоматически удалит товар из _currentProducts
-    // и эмитнет success с обновленным списком
-    // BlocListener отследит изменение и покажет сообщение об успехе
-    localBloc.add(AircraftMarketEvent.deleteProduct(product.id));
   }
 }

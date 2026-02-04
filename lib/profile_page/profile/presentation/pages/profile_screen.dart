@@ -12,6 +12,7 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aviapoint/generated/l10n.dart';
 import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:aviapoint/injection_container.dart';
@@ -29,6 +30,10 @@ import 'package:aviapoint/profile_page/profile/presentation/widget/Subscribe_wid
 import 'package:aviapoint/profile_page/profile/presentation/widget/profile_data_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/subscribe_widget_active.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/my_aircraft_ads_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/my_parts_ads_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/my_blog_articles_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/my_flights_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/my_bookings_widget.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/reviews_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/review_card.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
@@ -446,7 +451,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        const Icon(Icons.telegram, size: 16, color: Color(0xFF4B5767)),
+                                                        SvgPicture.asset(Pictures.telegramm, width: 16, height: 16),
                                                         SizedBox(width: 6),
                                                         Text(state.profile.telegram!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF4B5767))),
                                                       ],
@@ -457,7 +462,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        const Icon(Icons.chat, size: 16, color: Color(0xFF4B5767)),
+                                                        SvgPicture.asset(Pictures.max, width: 16, height: 16),
                                                         SizedBox(width: 6),
                                                         Text(state.profile.max!, style: AppStyles.regular14s.copyWith(color: const Color(0xFF4B5767))),
                                                       ],
@@ -593,11 +598,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Divider(height: 18),
                                     ProfileDataWidget(title: 'Выйти', icon: Pictures.logout, onTap: () => logOut(context)),
                                     SizedBox(height: 16),
-                                    // Секция моих объявлений
+                                    // Секция моих самолётов
                                     BlocBuilder<ProfileBloc, ProfileState>(
                                       builder: (context, profileState) {
                                         return profileState.maybeWhen(
                                           success: (profile) => MyAircraftAdsWidget(userId: profile.id),
+                                          orElse: () => SizedBox.shrink(),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 24),
+                                    // Секция моих запчастей
+                                    BlocBuilder<ProfileBloc, ProfileState>(
+                                      builder: (context, profileState) {
+                                        return profileState.maybeWhen(
+                                          success: (profile) => MyPartsAdsWidget(userId: profile.id),
+                                          orElse: () => SizedBox.shrink(),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 24),
+                                    // Секция моего авиажурнала
+                                    BlocBuilder<ProfileBloc, ProfileState>(
+                                      builder: (context, profileState) {
+                                        return profileState.maybeWhen(
+                                          success: (profile) => MyBlogArticlesWidget(userId: profile.id),
+                                          orElse: () => SizedBox.shrink(),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 16),
+                                    // Секция моих полётов
+                                    BlocBuilder<ProfileBloc, ProfileState>(
+                                      builder: (context, profileState) {
+                                        return profileState.maybeWhen(
+                                          success: (profile) => MyFlightsWidget(userId: profile.id),
+                                          orElse: () => SizedBox.shrink(),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 15),
+                                    // Секция моих бронирований
+                                    BlocBuilder<ProfileBloc, ProfileState>(
+                                      builder: (context, profileState) {
+                                        return profileState.maybeWhen(
+                                          success: (profile) => MyBookingsWidget(userId: profile.id),
                                           orElse: () => SizedBox.shrink(),
                                         );
                                       },

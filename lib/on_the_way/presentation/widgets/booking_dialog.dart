@@ -185,7 +185,7 @@ class _BookingDialogState extends State<BookingDialog> {
                               ),
                               SizedBox(height: 8),
                               Text('Свободных мест: ${flight.availableSeats}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-                              Text('Цена за место: ${priceFormat.format(flight.pricePerSeat)}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                              Text('Компенсация за место: ${priceFormat.format(flight.pricePerSeat)}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
                             ],
                           ),
                         ),

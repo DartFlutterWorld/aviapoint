@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 import 'package:easy_localization/easy_localization.dart' as hello;
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,16 @@ class ElectricalPowerSupplySystemMalfunctionsScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: 'electrical_power_supply_system_malfunctions'.tr(),
         withBack: true,
-        // actions: [
-        //   IconButton(
-        //     onPressed: () => context.read<EmergencyCheckedCubit>().clearAllCategory(),
-        //     icon: SvgPicture.asset(Pictures.round_clear2),
-        //   ),
-        // ],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: AppColors.primary100p),
+            onPressed: () => LearningShareHelper.shareLearningPage(
+              context,
+              title: 'electrical_power_supply_system_malfunctions'.tr(),
+            ),
+            tooltip: 'Поделиться',
+          ),
+        ],
       ),
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(

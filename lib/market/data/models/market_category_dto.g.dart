@@ -14,6 +14,7 @@ MarketCategoryDto _$MarketCategoryDtoFromJson(Map<String, dynamic> json) =>
       iconUrl: json['icon_url'] as String?,
       productType: json['product_type'] as String,
       parentId: (json['parent_id'] as num?)?.toInt(),
+      partsMainCategoryId: (json['parts_main_category_id'] as num?)?.toInt(),
       displayOrder: (json['display_order'] as num?)?.toInt(),
       isMain: json['is_main'] as bool?,
     );

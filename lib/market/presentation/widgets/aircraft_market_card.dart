@@ -111,7 +111,7 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${formatPrice(widget.product.price)} ₽',
+                        '${formatPrice(widget.product.price)} ${getCurrencySymbol(widget.product.currency)}',
                         style: AppStyles.bold16s.copyWith(
                           color: AppColors.primary100p, // Фиолетовый цвет для всех цен
                           fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                 ),
               ),
             ),
-            // Бейдж "Не активно" (если нужно и объявление неактивно)
+            // Бейдж "Заблокировано администратором" (если нужно и объявление неактивно)
             if (widget.showInactiveBadge && !widget.product.isActive)
               Positioned.fill(
                 child: IgnorePointer(
@@ -131,9 +131,31 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                     color: Colors.black.withOpacity(0.35),
                     alignment: Alignment.center,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.7), borderRadius: BorderRadius.circular(8)),
-                      child: Text('Не активно', style: AppStyles.regular12s.copyWith(color: Colors.white)),
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                      child: Text(
+                        'Заблокировано администратором',
+                        style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            // Бейдж "Не опубликовано" (если объявление не опубликовано, но активно)
+            if (widget.showInactiveBadge && !widget.product.isPublished && widget.product.isActive)
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.35),
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(color: Colors.orange.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                      child: Text(
+                        'Не опубликовано',
+                        style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                 ),
@@ -183,7 +205,7 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                               context.router.push(
                                 BaseRoute(
                                   children: [
-                                    MarketNavigationRoute(children: [EditAircraftMarketRoute(product: widget.product)]),
+                                    MarketNavigationRoute(children: [EditAircraftMarketRoute(productId: widget.product.id)]),
                                   ],
                                 ),
                               );
@@ -320,9 +342,7 @@ class _ProductImageState extends State<_ProductImage> {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: Colors.grey.shade100,
-            child: Center(
-              child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.0),
-            ),
+            child: Center(child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.0)),
           );
         },
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {

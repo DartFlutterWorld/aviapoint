@@ -72,6 +72,7 @@ class Pictures {
   static const String planeRatBaner = 'assets/png/plane_rat_baner.png';
   static const String whatsapp = 'assets/svg/whatsapp.svg';
   static const String telegramm = 'assets/svg/telegramm.svg';
+  static const String max = 'assets/svg/max.svg';
   static const String zapp = 'assets/png/zapp.png';
   static const String lock = 'assets/png/lock.png';
   static const String unlock = 'assets/png/unlock.png';

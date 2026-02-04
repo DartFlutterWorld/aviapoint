@@ -16,6 +16,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,10 @@ class PreflightInspectionCheckListScreen extends StatefulWidget {
 }
 
 class _PreflightInspectionCheckListScreenState extends State<PreflightInspectionCheckListScreen> {
+  final ValueNotifier<String?> currentImageUrl = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> currentTitle = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> currentDoing = ValueNotifier<String?>(null);
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +41,14 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
     // Загружаем список категорий для получения названия
     context.read<PreflightInspectionCategoriesBloc>().add(GetPreflightInspectionCategoriesEvent());
     context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
+  }
+
+  @override
+  void dispose() {
+    currentImageUrl.dispose();
+    currentTitle.dispose();
+    currentDoing.dispose();
+    super.dispose();
   }
 
   String _getCategoryName(BuildContext context) {
@@ -59,7 +72,32 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
       builder: (context, categoriesState) {
         final categoryName = _getCategoryName(context);
         return Scaffold(
-          appBar: CustomAppBar(title: categoryName, withBack: true),
+          appBar: CustomAppBar(
+            title: categoryName,
+            withBack: true,
+            actions: [
+              ValueListenableBuilder<String?>(
+                valueListenable: currentImageUrl,
+                builder: (context, imageUrl, _) {
+                  return ValueListenableBuilder<String?>(
+                    valueListenable: currentTitle,
+                    builder: (context, title, _) {
+                      return ValueListenableBuilder<String?>(
+                        valueListenable: currentDoing,
+                        builder: (context, doing, _) {
+                          return IconButton(
+                icon: const Icon(Icons.share, color: AppColors.primary100p),
+                            onPressed: () => LearningShareHelper.shareLearningPage(context, title: title, description: doing, imageUrl: imageUrl),
+                tooltip: 'Поделиться',
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
           backgroundColor: AppColors.background,
           body: BlocBuilder<PreflightInspectionCheckListByCategoryBloc, PreflightInspectionCheckListByCategoryState>(
             builder: (context, state) => state.map(
@@ -68,6 +106,9 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
                 indexCheck: value.index,
                 categoryName: categoryName,
                 categoryId: widget.preflihgtInspectionCategoryId,
+                onImageUrlChanged: (url) => currentImageUrl.value = url,
+                onTitleChanged: (title) => currentTitle.value = title,
+                onDoingChanged: (doing) => currentDoing.value = doing,
               ),
               loading: (value) => LoadingCustom(),
               error: (value) => ErrorCustom(
@@ -90,8 +131,19 @@ class _Success extends StatefulWidget {
   final int indexCheck;
   final String categoryName;
   final String categoryId;
+  final ValueChanged<String?> onImageUrlChanged;
+  final ValueChanged<String?> onTitleChanged;
+  final ValueChanged<String?> onDoingChanged;
 
-  const _Success({required this.preflightInspectionCheck, required this.indexCheck, required this.categoryName, required this.categoryId});
+  const _Success({
+    required this.preflightInspectionCheck,
+    required this.indexCheck,
+    required this.categoryName,
+    required this.categoryId,
+    required this.onImageUrlChanged,
+    required this.onTitleChanged,
+    required this.onDoingChanged,
+  });
 
   @override
   State<_Success> createState() => _SuccessState();
@@ -107,6 +159,20 @@ class _SuccessState extends State<_Success> {
     // Если какие то проверки уже были проведены то при заходе в категории начинаем
     // показывать проверки с следующей (после последней)
     indexCheck = widget.indexCheck;
+    // Откладываем обновление до завершения текущего кадра сборки
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateImageUrl();
+    });
+  }
+
+  void _updateImageUrl() {
+    if (indexCheck < widget.preflightInspectionCheck.length) {
+      final item = widget.preflightInspectionCheck[indexCheck];
+      final picture = item.picture;
+      widget.onImageUrlChanged(picture != null && picture.isNotEmpty ? picture : null);
+      widget.onTitleChanged(item.title);
+      widget.onDoingChanged(item.doing);
+    }
   }
 
   final LiveOptions options = LiveOptions(
@@ -233,7 +299,10 @@ class _SuccessState extends State<_Success> {
                 context.read<PreflightCheckedCubit>().setCheck(idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId, idCheck: indexCheck + 1);
 
                 if (widget.preflightInspectionCheck.length - 1 > indexCheck) {
-                  setState(() => indexCheck++);
+                  setState(() {
+                    indexCheck++;
+                    _updateImageUrl();
+                  });
                 } else {
                   context.router.pop();
                 }

@@ -6,9 +6,8 @@ import 'package:aviapoint/core/utils/const/spacing.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/airport_info_bottom_sheet.dart';
-import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
-import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -227,61 +226,54 @@ class FlightCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: [
-                            // Аватар пилота
-                            Builder(
-                              builder: (context) {
-                                final avatarUrl = flight.pilotAvatarUrl;
-                                final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+                      children: [
+                        // Аватар пилота
+                        Builder(
+                          builder: (context) {
+                            final avatarUrl = flight.pilotAvatarUrl;
+                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
 
-                                return GestureDetector(
-                                  onTap: avatarUrl != null && avatarUrl.isNotEmpty ? () => _showPhotoViewer(context, [avatarUrl], 0) : null, // Если нет фото, не открываем просмотр
-                                  child: ClipOval(
-                                    child: imageUrl != null && imageUrl.isNotEmpty
-                                        ? NetworkImageWidget(
-                                            imageUrl: imageUrl,
-                                            width: avatarSize,
-                                            height: avatarSize,
-                                            fit: BoxFit.cover,
-                                            placeholder: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                            errorWidget: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                          )
-                                        : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(width: padding8),
-                            // Имя и рейтинг
-                            Flexible(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(flight.pilotFullName ?? 'Пилот', style: bold12s.copyWith(color: Color(0xFF374151))),
-                                  if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
-                                    SizedBox(height: spacing4 / 2),
+                            return GestureDetector(
+                              onTap: avatarUrl != null && avatarUrl.isNotEmpty ? () => _showPhotoViewer(context, [avatarUrl], 0) : null, // Если нет фото, не открываем просмотр
+                              child: ClipOval(
+                                child: imageUrl != null && imageUrl.isNotEmpty
+                                    ? NetworkImageWidget(
+                                        imageUrl: imageUrl,
+                                        width: avatarSize,
+                                        height: avatarSize,
+                                        fit: BoxFit.cover,
+                                        placeholder: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                        errorWidget: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                                      )
+                                    : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(width: padding8),
+                        // Имя и рейтинг
+                        Flexible(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(flight.pilotFullName ?? 'Пилот', style: bold12s.copyWith(color: Color(0xFF374151))),
+                              if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
+                                SizedBox(height: spacing4 / 2),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
-                                            SizedBox(width: spacing4),
-                                            Text(flight.pilotAverageRating!.toStringAsFixed(1), style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                          ],
+                                Row(
+                                  children: [
+                                    Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
+                                    SizedBox(width: spacing4),
+                                    Text(flight.pilotAverageRating!.toStringAsFixed(1), style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                  ],
                                         ),
                                         // Кнопка отзывов о пилоте
                                         TextButton(
                                           onPressed: () {
-                                            showUniversalBottomSheet<void>(
-                                              context: context,
-                                              title: 'Отзывы о пилоте',
-                                              height: MediaQuery.of(context).size.height * 0.9,
-                                              backgroundColor: Colors.white,
-                                              showCloseButton: false,
-                                              child: UserReviewsBottomSheet(userId: flight.pilotId, title: 'Отзывы о пилоте'),
-                                            );
+                                            openPilotReviews(context: context, pilotId: flight.pilotId);
                                           },
                                           child: Text('Отзывы', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                                         ),
@@ -293,21 +285,14 @@ class FlightCard extends StatelessWidget {
                                       alignment: Alignment.centerRight,
                                       child: TextButton(
                                         onPressed: () {
-                                          showUniversalBottomSheet<void>(
-                                            context: context,
-                                            title: 'Отзывы о пилоте',
-                                            height: MediaQuery.of(context).size.height * 0.9,
-                                            backgroundColor: Colors.white,
-                                            showCloseButton: false,
-                                            child: UserReviewsBottomSheet(userId: flight.pilotId, title: 'Отзывы о пилоте'),
-                                          );
+                                          openPilotReviews(context: context, pilotId: flight.pilotId);
                                         },
                                         child: Text('Отзывы', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                                       ),
-                                    ),
-                                  ],
-                                ],
-                              ),
+                                ),
+                              ],
+                            ],
+                          ),
                             ),
                           ],
                         ),

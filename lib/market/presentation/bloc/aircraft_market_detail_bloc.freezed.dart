@@ -86,14 +86,11 @@ extension AircraftMarketDetailEventPatterns on AircraftMarketDetailEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetAircraftMarketDetailEvent value)?  getProduct,TResult Function( DeleteAircraftMarketDetailEvent value)?  deleteProduct,TResult Function( AddToFavoritesDetailEvent value)?  addToFavorites,TResult Function( RemoveFromFavoritesDetailEvent value)?  removeFromFavorites,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GetAircraftMarketDetailEvent value)?  getProduct,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case GetAircraftMarketDetailEvent() when getProduct != null:
-return getProduct(_that);case DeleteAircraftMarketDetailEvent() when deleteProduct != null:
-return deleteProduct(_that);case AddToFavoritesDetailEvent() when addToFavorites != null:
-return addToFavorites(_that);case RemoveFromFavoritesDetailEvent() when removeFromFavorites != null:
-return removeFromFavorites(_that);case _:
+return getProduct(_that);case _:
   return orElse();
 
 }
@@ -111,14 +108,11 @@ return removeFromFavorites(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetAircraftMarketDetailEvent value)  getProduct,required TResult Function( DeleteAircraftMarketDetailEvent value)  deleteProduct,required TResult Function( AddToFavoritesDetailEvent value)  addToFavorites,required TResult Function( RemoveFromFavoritesDetailEvent value)  removeFromFavorites,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GetAircraftMarketDetailEvent value)  getProduct,}){
 final _that = this;
 switch (_that) {
 case GetAircraftMarketDetailEvent():
-return getProduct(_that);case DeleteAircraftMarketDetailEvent():
-return deleteProduct(_that);case AddToFavoritesDetailEvent():
-return addToFavorites(_that);case RemoveFromFavoritesDetailEvent():
-return removeFromFavorites(_that);case _:
+return getProduct(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -135,14 +129,11 @@ return removeFromFavorites(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetAircraftMarketDetailEvent value)?  getProduct,TResult? Function( DeleteAircraftMarketDetailEvent value)?  deleteProduct,TResult? Function( AddToFavoritesDetailEvent value)?  addToFavorites,TResult? Function( RemoveFromFavoritesDetailEvent value)?  removeFromFavorites,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GetAircraftMarketDetailEvent value)?  getProduct,}){
 final _that = this;
 switch (_that) {
 case GetAircraftMarketDetailEvent() when getProduct != null:
-return getProduct(_that);case DeleteAircraftMarketDetailEvent() when deleteProduct != null:
-return deleteProduct(_that);case AddToFavoritesDetailEvent() when addToFavorites != null:
-return addToFavorites(_that);case RemoveFromFavoritesDetailEvent() when removeFromFavorites != null:
-return removeFromFavorites(_that);case _:
+return getProduct(_that);case _:
   return null;
 
 }
@@ -159,13 +150,10 @@ return removeFromFavorites(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int productId)?  getProduct,TResult Function( int productId)?  deleteProduct,TResult Function( int productId)?  addToFavorites,TResult Function( int productId)?  removeFromFavorites,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int productId)?  getProduct,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case GetAircraftMarketDetailEvent() when getProduct != null:
-return getProduct(_that.productId);case DeleteAircraftMarketDetailEvent() when deleteProduct != null:
-return deleteProduct(_that.productId);case AddToFavoritesDetailEvent() when addToFavorites != null:
-return addToFavorites(_that.productId);case RemoveFromFavoritesDetailEvent() when removeFromFavorites != null:
-return removeFromFavorites(_that.productId);case _:
+return getProduct(_that.productId);case _:
   return orElse();
 
 }
@@ -183,13 +171,10 @@ return removeFromFavorites(_that.productId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int productId)  getProduct,required TResult Function( int productId)  deleteProduct,required TResult Function( int productId)  addToFavorites,required TResult Function( int productId)  removeFromFavorites,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int productId)  getProduct,}) {final _that = this;
 switch (_that) {
 case GetAircraftMarketDetailEvent():
-return getProduct(_that.productId);case DeleteAircraftMarketDetailEvent():
-return deleteProduct(_that.productId);case AddToFavoritesDetailEvent():
-return addToFavorites(_that.productId);case RemoveFromFavoritesDetailEvent():
-return removeFromFavorites(_that.productId);case _:
+return getProduct(_that.productId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,13 +191,10 @@ return removeFromFavorites(_that.productId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int productId)?  getProduct,TResult? Function( int productId)?  deleteProduct,TResult? Function( int productId)?  addToFavorites,TResult? Function( int productId)?  removeFromFavorites,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int productId)?  getProduct,}) {final _that = this;
 switch (_that) {
 case GetAircraftMarketDetailEvent() when getProduct != null:
-return getProduct(_that.productId);case DeleteAircraftMarketDetailEvent() when deleteProduct != null:
-return deleteProduct(_that.productId);case AddToFavoritesDetailEvent() when addToFavorites != null:
-return addToFavorites(_that.productId);case RemoveFromFavoritesDetailEvent() when removeFromFavorites != null:
-return removeFromFavorites(_that.productId);case _:
+return getProduct(_that.productId);case _:
   return null;
 
 }
@@ -287,204 +269,6 @@ as int,
 }
 
 /// @nodoc
-
-
-class DeleteAircraftMarketDetailEvent implements AircraftMarketDetailEvent {
-  const DeleteAircraftMarketDetailEvent(this.productId);
-  
-
-@override final  int productId;
-
-/// Create a copy of AircraftMarketDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$DeleteAircraftMarketDetailEventCopyWith<DeleteAircraftMarketDetailEvent> get copyWith => _$DeleteAircraftMarketDetailEventCopyWithImpl<DeleteAircraftMarketDetailEvent>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteAircraftMarketDetailEvent&&(identical(other.productId, productId) || other.productId == productId));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,productId);
-
-@override
-String toString() {
-  return 'AircraftMarketDetailEvent.deleteProduct(productId: $productId)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $DeleteAircraftMarketDetailEventCopyWith<$Res> implements $AircraftMarketDetailEventCopyWith<$Res> {
-  factory $DeleteAircraftMarketDetailEventCopyWith(DeleteAircraftMarketDetailEvent value, $Res Function(DeleteAircraftMarketDetailEvent) _then) = _$DeleteAircraftMarketDetailEventCopyWithImpl;
-@override @useResult
-$Res call({
- int productId
-});
-
-
-
-
-}
-/// @nodoc
-class _$DeleteAircraftMarketDetailEventCopyWithImpl<$Res>
-    implements $DeleteAircraftMarketDetailEventCopyWith<$Res> {
-  _$DeleteAircraftMarketDetailEventCopyWithImpl(this._self, this._then);
-
-  final DeleteAircraftMarketDetailEvent _self;
-  final $Res Function(DeleteAircraftMarketDetailEvent) _then;
-
-/// Create a copy of AircraftMarketDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,}) {
-  return _then(DeleteAircraftMarketDetailEvent(
-null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class AddToFavoritesDetailEvent implements AircraftMarketDetailEvent {
-  const AddToFavoritesDetailEvent(this.productId);
-  
-
-@override final  int productId;
-
-/// Create a copy of AircraftMarketDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$AddToFavoritesDetailEventCopyWith<AddToFavoritesDetailEvent> get copyWith => _$AddToFavoritesDetailEventCopyWithImpl<AddToFavoritesDetailEvent>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddToFavoritesDetailEvent&&(identical(other.productId, productId) || other.productId == productId));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,productId);
-
-@override
-String toString() {
-  return 'AircraftMarketDetailEvent.addToFavorites(productId: $productId)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $AddToFavoritesDetailEventCopyWith<$Res> implements $AircraftMarketDetailEventCopyWith<$Res> {
-  factory $AddToFavoritesDetailEventCopyWith(AddToFavoritesDetailEvent value, $Res Function(AddToFavoritesDetailEvent) _then) = _$AddToFavoritesDetailEventCopyWithImpl;
-@override @useResult
-$Res call({
- int productId
-});
-
-
-
-
-}
-/// @nodoc
-class _$AddToFavoritesDetailEventCopyWithImpl<$Res>
-    implements $AddToFavoritesDetailEventCopyWith<$Res> {
-  _$AddToFavoritesDetailEventCopyWithImpl(this._self, this._then);
-
-  final AddToFavoritesDetailEvent _self;
-  final $Res Function(AddToFavoritesDetailEvent) _then;
-
-/// Create a copy of AircraftMarketDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,}) {
-  return _then(AddToFavoritesDetailEvent(
-null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class RemoveFromFavoritesDetailEvent implements AircraftMarketDetailEvent {
-  const RemoveFromFavoritesDetailEvent(this.productId);
-  
-
-@override final  int productId;
-
-/// Create a copy of AircraftMarketDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$RemoveFromFavoritesDetailEventCopyWith<RemoveFromFavoritesDetailEvent> get copyWith => _$RemoveFromFavoritesDetailEventCopyWithImpl<RemoveFromFavoritesDetailEvent>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RemoveFromFavoritesDetailEvent&&(identical(other.productId, productId) || other.productId == productId));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,productId);
-
-@override
-String toString() {
-  return 'AircraftMarketDetailEvent.removeFromFavorites(productId: $productId)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $RemoveFromFavoritesDetailEventCopyWith<$Res> implements $AircraftMarketDetailEventCopyWith<$Res> {
-  factory $RemoveFromFavoritesDetailEventCopyWith(RemoveFromFavoritesDetailEvent value, $Res Function(RemoveFromFavoritesDetailEvent) _then) = _$RemoveFromFavoritesDetailEventCopyWithImpl;
-@override @useResult
-$Res call({
- int productId
-});
-
-
-
-
-}
-/// @nodoc
-class _$RemoveFromFavoritesDetailEventCopyWithImpl<$Res>
-    implements $RemoveFromFavoritesDetailEventCopyWith<$Res> {
-  _$RemoveFromFavoritesDetailEventCopyWithImpl(this._self, this._then);
-
-  final RemoveFromFavoritesDetailEvent _self;
-  final $Res Function(RemoveFromFavoritesDetailEvent) _then;
-
-/// Create a copy of AircraftMarketDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,}) {
-  return _then(RemoveFromFavoritesDetailEvent(
-null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-
-}
-
-/// @nodoc
 mixin _$AircraftMarketDetailState {
 
 
@@ -528,15 +312,14 @@ extension AircraftMarketDetailStatePatterns on AircraftMarketDetailState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialAircraftMarketDetailState value)?  initial,TResult Function( LoadingAircraftMarketDetailState value)?  loading,TResult Function( ErrorAircraftMarketDetailState value)?  error,TResult Function( SuccessAircraftMarketDetailState value)?  success,TResult Function( DeletedAircraftMarketDetailState value)?  deleted,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialAircraftMarketDetailState value)?  initial,TResult Function( LoadingAircraftMarketDetailState value)?  loading,TResult Function( ErrorAircraftMarketDetailState value)?  error,TResult Function( SuccessAircraftMarketDetailState value)?  success,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case InitialAircraftMarketDetailState() when initial != null:
 return initial(_that);case LoadingAircraftMarketDetailState() when loading != null:
 return loading(_that);case ErrorAircraftMarketDetailState() when error != null:
 return error(_that);case SuccessAircraftMarketDetailState() when success != null:
-return success(_that);case DeletedAircraftMarketDetailState() when deleted != null:
-return deleted(_that);case _:
+return success(_that);case _:
   return orElse();
 
 }
@@ -554,15 +337,14 @@ return deleted(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialAircraftMarketDetailState value)  initial,required TResult Function( LoadingAircraftMarketDetailState value)  loading,required TResult Function( ErrorAircraftMarketDetailState value)  error,required TResult Function( SuccessAircraftMarketDetailState value)  success,required TResult Function( DeletedAircraftMarketDetailState value)  deleted,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialAircraftMarketDetailState value)  initial,required TResult Function( LoadingAircraftMarketDetailState value)  loading,required TResult Function( ErrorAircraftMarketDetailState value)  error,required TResult Function( SuccessAircraftMarketDetailState value)  success,}){
 final _that = this;
 switch (_that) {
 case InitialAircraftMarketDetailState():
 return initial(_that);case LoadingAircraftMarketDetailState():
 return loading(_that);case ErrorAircraftMarketDetailState():
 return error(_that);case SuccessAircraftMarketDetailState():
-return success(_that);case DeletedAircraftMarketDetailState():
-return deleted(_that);case _:
+return success(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -579,15 +361,14 @@ return deleted(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialAircraftMarketDetailState value)?  initial,TResult? Function( LoadingAircraftMarketDetailState value)?  loading,TResult? Function( ErrorAircraftMarketDetailState value)?  error,TResult? Function( SuccessAircraftMarketDetailState value)?  success,TResult? Function( DeletedAircraftMarketDetailState value)?  deleted,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialAircraftMarketDetailState value)?  initial,TResult? Function( LoadingAircraftMarketDetailState value)?  loading,TResult? Function( ErrorAircraftMarketDetailState value)?  error,TResult? Function( SuccessAircraftMarketDetailState value)?  success,}){
 final _that = this;
 switch (_that) {
 case InitialAircraftMarketDetailState() when initial != null:
 return initial(_that);case LoadingAircraftMarketDetailState() when loading != null:
 return loading(_that);case ErrorAircraftMarketDetailState() when error != null:
 return error(_that);case SuccessAircraftMarketDetailState() when success != null:
-return success(_that);case DeletedAircraftMarketDetailState() when deleted != null:
-return deleted(_that);case _:
+return success(_that);case _:
   return null;
 
 }
@@ -604,14 +385,13 @@ return deleted(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  error,TResult Function( AircraftMarketEntity product)?  success,TResult Function()?  deleted,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  error,TResult Function( AircraftMarketEntity product)?  success,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case InitialAircraftMarketDetailState() when initial != null:
 return initial();case LoadingAircraftMarketDetailState() when loading != null:
 return loading();case ErrorAircraftMarketDetailState() when error != null:
 return error(_that.message);case SuccessAircraftMarketDetailState() when success != null:
-return success(_that.product);case DeletedAircraftMarketDetailState() when deleted != null:
-return deleted();case _:
+return success(_that.product);case _:
   return orElse();
 
 }
@@ -629,14 +409,13 @@ return deleted();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  error,required TResult Function( AircraftMarketEntity product)  success,required TResult Function()  deleted,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  error,required TResult Function( AircraftMarketEntity product)  success,}) {final _that = this;
 switch (_that) {
 case InitialAircraftMarketDetailState():
 return initial();case LoadingAircraftMarketDetailState():
 return loading();case ErrorAircraftMarketDetailState():
 return error(_that.message);case SuccessAircraftMarketDetailState():
-return success(_that.product);case DeletedAircraftMarketDetailState():
-return deleted();case _:
+return success(_that.product);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -653,14 +432,13 @@ return deleted();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  error,TResult? Function( AircraftMarketEntity product)?  success,TResult? Function()?  deleted,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  error,TResult? Function( AircraftMarketEntity product)?  success,}) {final _that = this;
 switch (_that) {
 case InitialAircraftMarketDetailState() when initial != null:
 return initial();case LoadingAircraftMarketDetailState() when loading != null:
 return loading();case ErrorAircraftMarketDetailState() when error != null:
 return error(_that.message);case SuccessAircraftMarketDetailState() when success != null:
-return success(_that.product);case DeletedAircraftMarketDetailState() when deleted != null:
-return deleted();case _:
+return success(_that.product);case _:
   return null;
 
 }
@@ -863,37 +641,5 @@ as AircraftMarketEntity,
 
 
 }
-
-/// @nodoc
-
-
-class DeletedAircraftMarketDetailState implements AircraftMarketDetailState {
-  const DeletedAircraftMarketDetailState();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeletedAircraftMarketDetailState);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'AircraftMarketDetailState.deleted()';
-}
-
-
-}
-
-
-
 
 // dart format on

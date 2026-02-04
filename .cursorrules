@@ -1,0 +1,101 @@
+# Правила разработки проекта AviaPoint
+
+## Архитектура проекта
+
+### Clean Architecture
+Проект использует Clean Architecture с разделением на слои:
+- **data/** - источники данных (API, БД), модели (DTO), мапперы (DTO -> Entity), репозитории (реализация)
+- **domain/** - бизнес-логика: entities, repositories (интерфейсы)
+- **presentation/** - UI: pages, widgets, bloc/cubit
+
+### Паттерны управления состоянием
+
+#### BLoC Pattern
+- **ВСЕГДА** используй BLoC/Cubit для управления состоянием
+- **НИКОГДА** не используй setState для обновления данных из BLoC
+- Используй Freezed для событий и состояний
+- Обработка событий через `event.map()` или `on<Event>((event, emit) => ...)`
+
+#### Состояния BLoC
+- Стандартные состояния: `loading`, `error`, `success`
+- Для ошибок используй структуру:
+  error: {
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }
+  - для loading - CustomLoading
+  - для error-состояний в BLoC передавай поля по шаблону, как в `NewsBloc`:
+    - `errorForUser`: всегда дружелюбный текст для пользователя, например `'Что-то пошло не так!\nПопробуйте повторить запрос'`
+    - `errorFromApi`: `l.message` (сырой текст ошибки с бэкенда)
+    - `statusCode`: строка вида `'Код ошибки сервера: \${l.statusCode}'`
+    - `responseMessage`: `l.responseMessage`
+    - `stackTrace`: прокидывай, если есть
+    Пример:
+    `ErrorNewsState(errorForUser: 'Что-то пошло не так!\\nПопробуйте повторить запрос', errorFromApi: l.message, statusCode: 'Код ошибки сервера: \${l.statusCode}', responseMessage: l.responseMessage)`
+
+  ### Работа с API
+- **ВСЕГДА** создавай отдельный Service (Retrofit) для каждого репозитория
+- Service размещается в `data/datasources/`
+- Service определяет API endpoints через аннотации (`@GET`, `@POST`, `@PUT`, `@DELETE` и т.д.)
+- Service возвращает только DTO
+- RepositoryImpl использует Service для получения DTO, затем преобразует через Mapper в Entity
+- Service не должен знать об Entity, только о DTO
+
+### Dependency Injection (DI)
+
+#### GetIt для синглтонов
+- **ВСЕГДА** используй `GetIt` (get_it) для регистрации синглтонов
+- Регистрация происходит в `lib/injection_container.dart` через `getIt.registerSingleton<T>()`
+- Как синглтоны регистрируются:
+  - Все репозитории (Repository)
+  - Сервисы (Service) при необходимости
+  - Другие глобальные зависимости (ApiDatasource, AppRouter, AppState, AppDb и т.д.)
+
+
+
+####  Првило использования BLoC на страницах
+- Для каждого действия использум отдельный  (BLoC), который будет управлять состоянием этого действия.
+
+
+
+#### Регистрация BLoC
+Используй глобальную регистрацию для:
+Списков (AircraftMarketBloc, PartsMarketBloc, NewsBloc и др)
+Глобального состояния (AuthBloc, ProfileBloc, AppSettingsBloc и др.)
+`lib/core/presentation/pages/app.dart` через `MultiProvider` с `BlocProvider`
+
+Для  deail экранов используй локальную регистрацию:
+- Detail-экранов, если состояние должно сбрасываться при открытии
+- Модальных окон/диалогов с собственным состоянием
+- Виджетов, которые могут использоваться независимо
+Важно: если используешь локальную регистрацию, создавай BLoC в initState или через BlocProvider.value, а не в build.
+
+### При создании ui экранов используй, ели есть соответствующий виджет:
+- CustomAppBar
+- CustomBottomNavigationBar
+- CustomButton
+- **CustomTextField** - **ВСЕГДА** используй CustomTextField вместо TextFormField/TextField для единообразия
+- CustomDropdownButton
+- CustomCheckbox
+- CustomRadio
+- CustomSwitch
+- CustomSlider
+- CustomProgressIndicator
+- CustomAlertDialog
+- UniversalBottomSheet
+
+### Обработка ошибок в UI
+- **ВСЕГДА** используй `ErrorCustom` для отображения ошибок загрузки данных на экранах (в том числе в маркете), вместо самописных `Column/Text/ElevatedButton`.
+- Для повторной попытки передавай в `ErrorCustom.repeat` колбэк, который заново диспатчит событие в соответствующий BLoC (например, повторный `getProducts` / `getParts` или `refresh`).
+
+#### Паддинги в UI
+- **Горизонтальные паддинги на экранах**: всегда 8px (`EdgeInsets.symmetric(horizontal: 8, vertical: 16)`)
+- **Отступы между секциями**: всегда 16px (`SizedBox(height: 16)`)
+- Используй `EdgeInsets.symmetric(horizontal: 8, vertical: 16)` для `SingleChildScrollView` padding на экранах
+
+
+
+# Бэкенд находится в папке ../aviapoint_server

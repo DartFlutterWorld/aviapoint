@@ -503,7 +503,7 @@ class _EditFlightScreenState extends State<EditFlightScreen> {
                         SizedBox(width: 12),
                         RichText(
                           text: TextSpan(
-                            text: 'Цена за место',
+                            text: 'Компенсация за место',
                             style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                             children: [
                               TextSpan(

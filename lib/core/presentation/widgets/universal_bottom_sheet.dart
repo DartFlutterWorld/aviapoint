@@ -4,6 +4,7 @@ import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:flutter/foundation.dart';
 
 /// Универсальный bottom sheet виджет
 /// Используется для создания единообразных bottom sheet по всему приложению
@@ -40,11 +41,9 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
             builder: (context, orientation) {
               // Получаем реальную высоту экрана через MediaQuery (обновляется при повороте)
               final screenHeight = MediaQuery.of(context).size.height;
-              debugPrint('screenHeight: $screenHeight');
 
               // Определяем ориентацию через OrientationBuilder
               final isLandscape = orientation == Orientation.landscape;
-              debugPrint('screenHeight: $isLandscape');
               // Для портрета: высота экрана - 100, для ландшафта: высота экрана - 20
               // В ландшафте высота экрана меньше, поэтому отнимаем меньше
               final defaultHeight = isLandscape ? (screenHeight - 50) : (screenHeight - 100);
@@ -55,9 +54,9 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
                 constraints: BoxConstraints(maxHeight: maxHeight),
                 decoration: BoxDecoration(
                   color: widget.backgroundColor ?? AppColors.background,
-                  // borderRadius не нужен здесь, он задается через topRadius в showCupertinoModalBottomSheet
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
                 ),
-                padding: EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, top: 16, bottom: mediaQuery.viewInsets.bottom + 16 + mediaQuery.padding.bottom),
+                padding: EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, top: 16, bottom: kIsWeb ? 0 : (mediaQuery.viewInsets.bottom + 16 + mediaQuery.padding.bottom)),
                 child: Material(
                   color: Colors.transparent,
                   child: Column(
@@ -76,17 +75,22 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
                       // Header с заголовком
                       if (widget.title.isNotEmpty) ...[
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                          padding: EdgeInsets.symmetric(vertical: 0),
                           child: Text(
                             widget.title,
-                            style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ],
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                       // Контент с прокруткой - используем Flexible для ограничения высоты
-                      Flexible(child: SingleChildScrollView(child: widget.child)),
+                      Flexible(
+                        child: SingleChildScrollView(
+                          physics: ClampingScrollPhysics(), // Убираем bounce эффект
+                          child: widget.child,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -114,25 +118,79 @@ Future<T?> showUniversalBottomSheet<T>({
   bool useRootNavigator = true,
   Color? barrierColor,
 }) async {
-  // Используем showCupertinoModalBottomSheet из modal_bottom_sheet, как в авторизации
-  // Этот пакет правильно обрабатывает ширину в ландшафтной ориентации
-  return await showCupertinoModalBottomSheet<T>(
-    context: context,
-    barrierColor: barrierColor ?? AppColors.bgOverlay,
-    topRadius: Radius.circular(18),
-    backgroundColor: Colors.transparent,
-    expand: false,
-    useRootNavigator: useRootNavigator,
-    isDismissible: isDismissible,
-    enableDrag: enableDrag,
-    builder: (context) {
-      // Используем Builder, чтобы виджет перестраивался при изменении MediaQuery
-      return Builder(
-        builder: (builderContext) {
-          // MediaQuery.of(builderContext) будет обновляться при повороте экрана
-          return UniversalBottomSheet(title: title, height: height, onClose: onClose, showCloseButton: showCloseButton, backgroundColor: backgroundColor, padding: padding, child: child);
+  print('🔵 [showUniversalBottomSheet] Вызван, title: $title');
+  print('🔵 [showUniversalBottomSheet] context.mounted: ${context.mounted}');
+  print('🔵 [showUniversalBottomSheet] kIsWeb: $kIsWeb');
+  print('🔵 [showUniversalBottomSheet] useRootNavigator: $useRootNavigator');
+
+  try {
+    // На веб-платформе используем showModalBottomSheet, так как showCupertinoModalBottomSheet может не работать
+    if (kIsWeb) {
+      print('🔵 [showUniversalBottomSheet] Веб-платформа, использую showModalBottomSheet');
+      final screenHeight = MediaQuery.of(context).size.height;
+      final defaultHeight = screenHeight - 100;
+      final maxHeight = height ?? defaultHeight;
+
+      return await showModalBottomSheet<T>(
+        context: context,
+        isScrollControlled: true,
+        useRootNavigator: useRootNavigator,
+        isDismissible: isDismissible,
+        enableDrag: enableDrag,
+        backgroundColor: Colors.transparent,
+        barrierColor: barrierColor ?? AppColors.bgOverlay,
+        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
+        builder: (context) {
+          print('🔵 [showUniversalBottomSheet] Builder вызван (веб)');
+          // На веб используем ширину экрана, но ограничиваем максимумом 1400px (вся ширина сайта)
+          final screenWidth = MediaQuery.of(context).size.width;
+          final maxSiteWidth = 1400.0; // Вся ширина сайта (200px сайдбар + 1200px контент)
+          final bottomSheetWidth = screenWidth > maxSiteWidth ? maxSiteWidth : screenWidth;
+
+          // Убираем отступ снизу, который добавляет showModalBottomSheet
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                constraints: BoxConstraints(maxWidth: bottomSheetWidth),
+                child: UniversalBottomSheet(title: title, height: maxHeight, onClose: onClose, showCloseButton: showCloseButton, backgroundColor: backgroundColor, padding: padding, child: child),
+              ),
+            ),
+          );
         },
       );
-    },
-  );
+    }
+
+    // На мобильных платформах используем showCupertinoModalBottomSheet
+    print('🔵 [showUniversalBottomSheet] Мобильная платформа, вызываю showCupertinoModalBottomSheet...');
+    final result = await showCupertinoModalBottomSheet<T>(
+      context: context,
+      barrierColor: barrierColor ?? AppColors.bgOverlay,
+      topRadius: Radius.circular(18),
+      backgroundColor: Colors.transparent,
+      expand: false,
+      useRootNavigator: useRootNavigator,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      builder: (context) {
+        print('🔵 [showUniversalBottomSheet] Builder вызван');
+        // Используем Builder, чтобы виджет перестраивался при изменении MediaQuery
+        return Builder(
+          builder: (builderContext) {
+            print('🔵 [showUniversalBottomSheet] BuilderContext создан');
+            // MediaQuery.of(builderContext) будет обновляться при повороте экрана
+            return UniversalBottomSheet(title: title, height: height, onClose: onClose, showCloseButton: showCloseButton, backgroundColor: backgroundColor, padding: padding, child: child);
+          },
+        );
+      },
+    );
+    print('🔵 [showUniversalBottomSheet] showCupertinoModalBottomSheet завершен, result: $result');
+    return result;
+  } catch (e, stackTrace) {
+    print('❌ [showUniversalBottomSheet] Ошибка: $e');
+    print('❌ [showUniversalBottomSheet] StackTrace: $stackTrace');
+    rethrow;
+  }
 }

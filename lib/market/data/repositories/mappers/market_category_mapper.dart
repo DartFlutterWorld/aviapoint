@@ -10,6 +10,7 @@ class MarketCategoryMapper {
       iconUrl: dto.iconUrl,
       productType: dto.productType,
       parentId: dto.parentId,
+      partsMainCategoryId: dto.partsMainCategoryId,
       displayOrder: dto.displayOrder ?? 0,
       isMain: dto.isMain ?? false,
     );

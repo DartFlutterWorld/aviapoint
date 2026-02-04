@@ -14,7 +14,7 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io' show Platform;
@@ -39,24 +39,18 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     // Инициализируем предыдущий статус авторизации
     final appState = Provider.of<AppState>(context, listen: false);
     _previousAuthStatus = appState.isAuthenticated;
-    _checkSubscription();
-    _loadShowPaidContentSetting();
 
-    // Обрабатываем параметры из URL (для редиректа после оплаты)
+    // Все проверки делаем в фоне после первого кадра, не блокируя UI
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkSubscription();
+      _loadShowPaidContentSetting();
       _handlePaymentRedirect();
     });
   }
 
   Future<void> _handlePaymentRedirect() async {
-    if (!kIsWeb) {
-      // На мобильных WebView сам обработает через _handleUrl в PaymentWebViewScreen
-      return;
-    }
-
     try {
-      // ЮKassa всегда возвращает на return_url, независимо от результата
-      // Проверяем наличие payment_id в localStorage и проверяем статус через API
+      // Проверяем наличие payment_id (для веба - localStorage, для мобильных - shared preferences)
       final paymentId = await PaymentStorageHelper.getPaymentId();
 
       if (paymentId != null && paymentId.isNotEmpty) {
@@ -65,27 +59,27 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
           final paymentRepository = getIt<PaymentRepository>();
           final payment = await paymentRepository.getPaymentStatus(paymentId);
 
-          print('🔵 Статус платежа от API (веб): ${payment.status}, paid: ${payment.paid}');
+          print('🔵 Статус платежа от API: ${payment.status}, paid: ${payment.paid}');
 
-          // Очищаем payment_id из localStorage
+          // Очищаем payment_id
           await PaymentStorageHelper.clearPaymentId();
 
-          // Логируем статус платежа (уведомления убраны, чтобы не вводить пользователя в заблуждение)
+          // Логируем статус платежа
           if (payment.status == 'succeeded') {
-            print('✅ Платеж успешно выполнен (веб)');
-            // Обновляем информацию о подписке
-            _checkSubscription();
-            // Навигируем на исходный экран используя ту же логику, что и при отмене
-            PaymentHelper.navigateToSource(context, 'testing_mode');
+            print('✅ Платеж успешно выполнен');
+            // Обновляем информацию о подписке и разблокируем тренировочный режим
+            await _checkSubscription();
           } else if (payment.status == 'canceled') {
-            print('⚠️ Платеж отменен (веб)');
+            print('⚠️ Платеж отменен');
           } else if (payment.status == 'pending' || payment.status == 'waiting_for_capture') {
-            print('⏳ Платеж имеет статус ${payment.status} (веб)');
+            print('⏳ Платеж имеет статус ${payment.status}');
+            // Даже для pending обновляем подписку (может быть уже активирована на бэкенде)
+            await _checkSubscription();
           } else {
-            print('⚠️ Неизвестный статус платежа: ${payment.status} (веб)');
+            print('⚠️ Неизвестный статус платежа: ${payment.status}');
           }
         } catch (e) {
-          print('Ошибка при проверке статуса платежа: $e');
+          print('❌ Ошибка при проверке статуса платежа: $e');
           // Очищаем payment_id даже при ошибке
           await PaymentStorageHelper.clearPaymentId();
         }
@@ -111,13 +105,26 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
+      print('🔵 [_checkSubscription] Получено подписок: ${subscriptions.length}');
+      for (final subscription in subscriptions) {
+        print('   Подписка: id=${subscription.id}, isActive=${subscription.isActive}, endDate=${subscription.endDate}, isAfterNow=${subscription.endDate.isAfter(DateTime.now())}');
+      }
+
       final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+
+      print('🔵 [_checkSubscription] hasActive=$hasActive, текущее состояние _hasActiveSubscription=$_hasActiveSubscription');
 
       if (mounted) {
         setState(() {
           _hasActiveSubscription = hasActive;
         });
+        print('✅ [_checkSubscription] Состояние обновлено: _hasActiveSubscription=$_hasActiveSubscription');
+      } else {
+        print('⚠️ [_checkSubscription] Widget не mounted, состояние не обновлено');
       }
+      
+      // Просто обновляем состояние - пользователь сам решит, куда идти
+      // Никакой автоматики - только показываем, что подписка разблокирована
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -145,6 +152,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     }
 
     // Если авторизован - проверяем статус подписки
+    // На веб-платформе проверяем подписку синхронно, так как это быстрая операция
     await _checkSubscriptionAndNavigate(context);
   }
 
@@ -157,14 +165,14 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       // Проверяем, есть ли хотя бы одна активная подписка
       final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
 
-      if (hasActiveSubscription) {
-        // Обновляем состояние подписки в UI
-        if (mounted) {
-          setState(() {
-            _hasActiveSubscription = true;
-          });
-        }
+      // Обновляем состояние подписки в UI
+      if (mounted) {
+        setState(() {
+          _hasActiveSubscription = hasActiveSubscription;
+        });
+      }
 
+      if (hasActiveSubscription) {
         // Подписка активна - открываем боттом шит с настройками
         final rosAviaTestCubit = context.read<RosAviaTestCubit>();
         rosAviaTestCubit.setTestMode(TestMode.training);
@@ -173,25 +181,47 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
         final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
         final db = getIt<AppDb>();
         await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: 'training');
+        if (kDebugMode) {
+          print('✅ [_checkSubscriptionAndNavigate] Режим успешно сохранен в БД: certificateTypeId=$certificateTypeId, testMode=training');
+        }
 
         // Открываем боттом шит с настройками
         if (context.mounted) {
+          if (kDebugMode) {
+            print('🔵 [_checkSubscriptionAndNavigate] Открываю bottom sheet с настройками...');
+          }
           final rootContext = navigatorKey.currentContext;
           if (rootContext != null && rootContext.mounted) {
-            await selectTopics(context: rootContext, testMode: TestMode.training);
+            if (kDebugMode) {
+              print('🔵 [_checkSubscriptionAndNavigate] Использую rootContext');
+            }
+            // Передаем статус подписки, чтобы не делать повторный запрос в selectTopics
+            await selectTopics(context: rootContext, testMode: TestMode.training, hasActiveSubscription: hasActiveSubscription);
           } else if (context.mounted) {
-            await selectTopics(context: context, testMode: TestMode.training);
+            if (kDebugMode) {
+              print('🔵 [_checkSubscriptionAndNavigate] Использую local context');
+            }
+            // Передаем статус подписки, чтобы не делать повторный запрос в selectTopics
+            await selectTopics(context: context, testMode: TestMode.training, hasActiveSubscription: hasActiveSubscription);
+          } else {
+            if (kDebugMode) {
+              print('❌ [_checkSubscriptionAndNavigate] Context не mounted');
+            }
           }
         }
       } else {
         // Подписка не активна - переходим на оплату
-        print('🔵 Подписка не активна, переходим на оплату');
+        if (kDebugMode) {
+          print('🔵 Подписка не активна, переходим на оплату');
+        }
         await _navigateToPayment(context);
       }
     } catch (e, stackTrace) {
       // В случае ошибки переходим на оплату
-      print('❌ Ошибка при проверке подписки: $e');
-      print('StackTrace: $stackTrace');
+      if (kDebugMode) {
+        print('❌ Ошибка при проверке подписки: $e');
+        print('StackTrace: $stackTrace');
+      }
       await _navigateToPayment(context);
     }
   }
@@ -273,6 +303,10 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   }
 
   Future<void> _handleModeSelection(BuildContext context, TestMode testMode) async {
+    if (kDebugMode) {
+      print('🔵 [_handleModeSelection] Режим выбран: $testMode');
+    }
+
     final rosAviaTestCubit = context.read<RosAviaTestCubit>();
     rosAviaTestCubit.setTestMode(testMode);
 
@@ -280,16 +314,83 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
     final certificateTypeId = rosAviaTestCubit.state.typeSertificate.id;
     final db = getIt<AppDb>();
     final testModeString = testMode.name; // 'training' или 'standart'
+
+    if (kDebugMode) {
+      print('🔵 [_handleModeSelection] Сохраняю режим в БД...');
+    }
+
     await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: testModeString);
+    if (kDebugMode) {
+      print('✅ [_handleModeSelection] Режим успешно сохранен в БД: certificateTypeId=$certificateTypeId, testMode=$testModeString');
+    }
+
+    if (kDebugMode) {
+      print('🔵 [_handleModeSelection] Режим сохранен в БД (пропущено)');
+    }
+
+    // Небольшая задержка для веб-платформы, чтобы БД успела обработать запрос
+    if (kIsWeb) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+
+    if (kDebugMode) {
+      print('🔵 [_handleModeSelection] context.mounted: ${context.mounted}');
+    }
 
     // Открываем боттом шит с настройками
-    if (context.mounted) {
-      // Используем root контекст для открытия боттом шита
-      final rootContext = navigatorKey.currentContext;
-      if (rootContext != null && rootContext.mounted) {
+    if (!context.mounted) {
+      if (kDebugMode) {
+        print('❌ [_handleModeSelection] Context не mounted после сохранения');
+      }
+      return;
+    }
+
+    if (kDebugMode) {
+      print('🔵 [_handleModeSelection] Открываю bottom sheet с настройками...');
+    }
+
+    // Используем root контекст для открытия боттом шита
+    final rootContext = navigatorKey.currentContext;
+    if (kDebugMode) {
+      print('🔵 [_handleModeSelection] rootContext: ${rootContext != null}');
+      if (rootContext != null) {
+        print('🔵 [_handleModeSelection] rootContext.mounted: ${rootContext.mounted}');
+      }
+    }
+
+    if (rootContext != null && rootContext.mounted) {
+      if (kDebugMode) {
+        print('🔵 [_handleModeSelection] Использую rootContext, вызываю selectTopics...');
+      }
+      try {
         await selectTopics(context: rootContext, testMode: testMode);
-      } else if (context.mounted) {
+        if (kDebugMode) {
+          print('🔵 [_handleModeSelection] selectTopics завершен');
+        }
+      } catch (e, stackTrace) {
+        if (kDebugMode) {
+          print('❌ [_handleModeSelection] Ошибка при вызове selectTopics: $e');
+          print('❌ StackTrace: $stackTrace');
+        }
+      }
+    } else if (context.mounted) {
+      if (kDebugMode) {
+        print('🔵 [_handleModeSelection] Использую local context, вызываю selectTopics...');
+      }
+      try {
         await selectTopics(context: context, testMode: testMode);
+        if (kDebugMode) {
+          print('🔵 [_handleModeSelection] selectTopics завершен');
+        }
+      } catch (e, stackTrace) {
+        if (kDebugMode) {
+          print('❌ [_handleModeSelection] Ошибка при вызове selectTopics: $e');
+          print('❌ StackTrace: $stackTrace');
+        }
+      }
+    } else {
+      if (kDebugMode) {
+        print('❌ [_handleModeSelection] Context не mounted');
       }
     }
   }
@@ -351,7 +452,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Стандартный режим позволит вам бесплатно готовиться к экзамену. Статистика по правильно отвечнным вопросам появится вконце всех вопросов',
+                    'Стандартный режим позволит вам бесплатно готовиться к экзамену. Статистика по правильно отвечнным вопросам появится вконце всех вопросов.',
                     style: AppStyles.regular12s.copyWith(color: Color(0xFF4B5767), height: 1.5),
                   ),
                   SizedBox(height: 32),

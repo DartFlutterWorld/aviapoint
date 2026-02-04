@@ -13,9 +13,11 @@ import 'package:aviapoint/learning/ros_avia_test/domain/repositories/ros_avia_te
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/questions_by_type_certificate_and_categories_bloc.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/bloc/ros_avia_test_cubit.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/test_by_mode_widget.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 
 @RoutePage()
 class TestByModeScreen extends StatefulWidget {
@@ -66,32 +68,110 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: questionsByTypeCertificateAndCategoriesBloc..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
-      child: Scaffold(
-        appBar: CustomAppBar(title: getNameOfTestMode(context.read<RosAviaTestCubit>().state.testMode), withBack: true),
-        backgroundColor: AppColors.background,
-        body: BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
-          builder: (context, state) => state.map(
-            loading: (value) => Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20)),
-            error: (value) => ErrorCustom(
-              textError: value.errorForUser,
-              repeat: () {
-                questionsByTypeCertificateAndCategoriesBloc.add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId));
-              },
+      child: BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: CustomAppBar(
+              title: getNameOfTestMode(context.read<RosAviaTestCubit>().state.testMode),
+              withBack: true,
+              actions: [
+                ValueListenableBuilder<int>(
+                  valueListenable: indexQuestion,
+                  builder: (context, currentIndex, _) {
+                    return BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
+                      builder: (context, state) {
+                        if (state is! SuccessQuestionsByTypeCertificateAndCategoriesState) {
+                          return SizedBox.shrink();
+                        }
+                        
+                        return FutureBuilder<List<dynamic>>(
+                          future: _getUnansweredQuestions(state.questionsWithAnswers),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data!.isEmpty || currentIndex >= snapshot.data!.length) {
+                              return SizedBox.shrink();
+                            }
+                            
+                            final question = snapshot.data![currentIndex];
+                            final questionText = question.questionText ?? '';
+                            final explanation = question.explanation ?? '';
+                            final categoryTitle = question.categoryTitle ?? '';
+                            final answers = question.answers as List;
+                            
+                            return IconButton(
+                              icon: const Icon(Icons.share, color: AppColors.primary100p),
+                              onPressed: () {
+                                // Находим все правильные ответы
+                                final correctAnswers = answers.where((answer) => (answer as dynamic).isCorrect == true).toList();
+                                
+                                // Формируем описание: категория + правильные ответы + объяснение (если есть)
+                                String description = '';
+                                
+                                if (categoryTitle.isNotEmpty) {
+                                  description = 'Категория: $categoryTitle';
+                                }
+                                
+                                // Добавляем правильные ответы
+                                if (correctAnswers.isNotEmpty) {
+                                  if (description.isNotEmpty) {
+                                    description += '\n\n';
+                                  }
+                                  description += 'Правильный ответ:';
+                                  for (var i = 0; i < correctAnswers.length; i++) {
+                                    description += '\n${i + 1}. ${(correctAnswers[i] as dynamic).answerText}';
+                                  }
+                                }
+                                
+                                // Добавляем объяснение
+                                if (explanation.isNotEmpty) {
+                                  if (description.isNotEmpty) {
+                                    description += '\n\n';
+                                  }
+                                  description += 'Объяснение: ';
+                                  // Убираем HTML теги из объяснения для текстового шаринга
+                                  description += explanation.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+                                }
+                                
+                                LearningShareHelper.shareLearningPage(
+                                  context,
+                                  title: 'РосАвиаТест. $questionText',
+                                  description: description.isNotEmpty ? description : null,
+                                  imageUrl: null,
+                                );
+                              },
+                              tooltip: 'Поделиться',
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-            success: (value) {
-              _saveSelectedQuestions(value.questionsWithAnswers);
-              return FutureBuilder<List<dynamic>>(
-                future: _getUnansweredQuestions(value.questionsWithAnswers),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
-                  }
+            backgroundColor: AppColors.background,
+            body: BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
+              builder: (context, state) => state.map(
+                loading: (value) => Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20)),
+                error: (value) => ErrorCustom(
+                  textError: value.errorForUser,
+                  repeat: () {
+                    questionsByTypeCertificateAndCategoriesBloc.add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId));
+                  },
+                ),
+                success: (value) {
+                  _saveSelectedQuestions(value.questionsWithAnswers);
+                  return FutureBuilder<List<dynamic>>(
+                    future: _getUnansweredQuestions(value.questionsWithAnswers),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
+                      }
 
-                  if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
-                  }
+                      if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
+                      }
 
-                  final filteredQuestions = snapshot.data!;
+                      final filteredQuestions = snapshot.data!;
 
                   // Сбросить индекс при загрузке новых вопросов
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -177,7 +257,9 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
               );
             },
           ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

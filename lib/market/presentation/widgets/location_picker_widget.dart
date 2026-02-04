@@ -515,6 +515,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                 fillColor: Colors.white,
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: _buildSuffixIcon(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               ),
               onTap: () {
                 // Подсказки показываются только при изменении текста, не при клике на поле

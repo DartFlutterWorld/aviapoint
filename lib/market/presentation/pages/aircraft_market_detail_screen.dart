@@ -10,11 +10,13 @@ import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/price_history_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/domain/entities/market_category_entity.dart';
 import 'package:aviapoint/market/domain/repositories/market_repository.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_detail_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
+import 'package:aviapoint/market/presentation/bloc/aircraft_market_edit_bloc.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +28,12 @@ import 'package:latlong2/latlong.dart';
 import 'package:dio/dio.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 
 @RoutePage()
 class AircraftMarketDetailScreen extends StatefulWidget {
@@ -46,15 +51,22 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
   LatLng? _locationCoordinates;
   bool _isLoadingLocation = false;
   String? _lastGeocodedAddress; // Отслеживаем последний загеокодированный адрес
+  late AircraftMarketDetailBloc _detailBloc;
+  late AircraftMarketEditBloc _editBloc;
 
   @override
   void initState() {
     super.initState();
+    // Создаем BLoC в initState согласно правилам (локальная регистрация для detail экранов)
+    _detailBloc = AircraftMarketDetailBloc(repository: getIt<MarketRepository>())..add(GetAircraftMarketDetailEvent(widget.id));
+    _editBloc = AircraftMarketEditBloc(repository: getIt<MarketRepository>());
   }
 
   @override
   void dispose() {
     _dio.close();
+    _detailBloc.close();
+    _editBloc.close();
     super.dispose();
   }
 
@@ -122,7 +134,131 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
     final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
     final productUrl = '$baseUrl/market/${product.id}';
 
-    Share.share('${product.title}\n\n$productUrl\n\nСмотрите в AviaPoint');
+    // Формируем текст для шаринга
+    final buffer = StringBuffer();
+    buffer.writeln('✈️ ${product.title}');
+    buffer.writeln('');
+
+    // Добавляем описание, если есть
+    if (product.description != null && product.description!.isNotEmpty) {
+      // Берем первые 200 символов описания
+      final description = product.description!.length > 200 ? '${product.description!.substring(0, 200)}...' : product.description!;
+      buffer.writeln(description);
+      buffer.writeln('');
+    }
+
+    // Добавляем цену
+    buffer.writeln('💰 Цена: ${formatPrice(product.price)}');
+
+    // Добавляем бренд, если есть
+    if (product.brand != null && product.brand!.isNotEmpty) {
+      buffer.writeln('🏷️ Бренд: ${product.brand}');
+    }
+
+    // Добавляем год, если указан
+    if (product.year != null) {
+      buffer.writeln('📅 Год выпуска: ${product.year}');
+    }
+
+    // Добавляем налет часов, если указан
+    if (product.totalFlightHours != null) {
+      buffer.writeln('⏱️ Налет: ${product.totalFlightHours} ч');
+    }
+
+    // Добавляем мощность двигателя, если указана
+    if (product.enginePower != null) {
+      buffer.writeln('⚙️ Мощность: ${product.enginePower} л.с.');
+    }
+
+    // Добавляем количество мест, если указано
+    if (product.seats != null) {
+      buffer.writeln('🪑 Мест: ${product.seats}');
+    }
+
+    // Добавляем состояние, если указано
+    if (product.condition != null && product.condition!.isNotEmpty) {
+      buffer.writeln('✅ Состояние: ${product.condition}');
+    }
+
+    // Добавляем местоположение, если указано
+    if (product.location != null && product.location!.isNotEmpty) {
+      buffer.writeln('📍 Местоположение: ${product.location}');
+    }
+
+    // Добавляем информацию о лизинге
+    if (product.isLeasing == true) {
+      buffer.writeln('💳 Доступен лизинг');
+      if (product.leasingConditions != null && product.leasingConditions!.isNotEmpty) {
+        buffer.writeln('   Условия: ${product.leasingConditions}');
+      }
+    }
+
+    // Добавляем информацию о продаже доли
+    if (product.isShareSale == true && product.shareNumerator != null && product.shareDenominator != null) {
+      buffer.writeln('📊 Продажа доли: ${product.shareNumerator}/${product.shareDenominator}');
+    }
+
+    buffer.writeln('');
+    buffer.writeln('🔗 $productUrl');
+    buffer.writeln('');
+    buffer.writeln('Смотрите подробности в AviaPoint');
+
+    final shareText = buffer.toString();
+
+    // Если есть основное фото, делимся с изображением
+    if (product.mainImageUrl != null && product.mainImageUrl!.isNotEmpty) {
+      _shareProductWithImage(context, product.mainImageUrl!, shareText);
+    } else {
+      Share.share(shareText);
+    }
+  }
+
+  /// Поделиться объявлением с изображением
+  Future<void> _shareProductWithImage(BuildContext context, String imageUrl, String text) async {
+    try {
+      if (kIsWeb) {
+        // На вебе просто делимся текстом и ссылкой на изображение
+        final fullImageUrl = getImageUrl(imageUrl);
+        Share.share('$text\n\n🖼️ Фото: $fullImageUrl');
+        return;
+      }
+
+      // На мобильных платформах скачиваем изображение и делимся файлом
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+              SizedBox(width: 16),
+              Text('Подготовка к отправке...'),
+            ],
+          ),
+          duration: Duration(seconds: 10),
+        ),
+      );
+
+      final fullImageUrl = getImageUrl(imageUrl);
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+      final fileName = imageUrl.split('/').last.split('?').first;
+      final filePath = '${tempDir.path}/$fileName';
+
+      await dio.download(fullImageUrl, filePath);
+
+      if (context.mounted) {
+        scaffoldMessenger.hideCurrentSnackBar();
+        await Share.shareXFiles([XFile(filePath)], text: text);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось поделиться с изображением: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        // В случае ошибки делимся только текстом
+        Share.share(text);
+      }
+    }
   }
 
   Widget _buildLocationMap(String? location) {
@@ -304,9 +440,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     if (photoUrl == null || photoUrl.isEmpty) {
                       return Container(
                         color: Colors.black,
-                        child: Center(
-                          child: Icon(Icons.broken_image, color: Colors.white70, size: 64.0),
-                        ),
+                        child: Center(child: Icon(Icons.broken_image, color: Colors.white70, size: 64.0)),
                       );
                     }
                     return InteractiveViewer(
@@ -422,11 +556,10 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
   }
 
   void _showDeleteConfirmation(int productId, BuildContext context, AircraftMarketEntity product) {
-    final bloc = context.read<AircraftMarketDetailBloc>();
     showDialog<bool>(
       context: context,
       builder: (dialogContext) => BlocProvider.value(
-        value: bloc,
+        value: _editBloc,
         child: AlertDialog(
           title: Text('Удалить товар?', style: AppStyles.bold16s),
           content: Text('Вы уверены, что хотите удалить этот товар? Это действие нельзя отменить.', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
@@ -438,7 +571,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
-                bloc.add(DeleteAircraftMarketDetailEvent(productId));
+                _editBloc.add(AircraftMarketEditEvent.deleteProduct(productId));
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Colors.red)),
@@ -446,83 +579,6 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _publishProduct(BuildContext context, int productId) async {
-    final repository = getIt<MarketRepository>();
-    final result = await repository.publishProduct(productId);
-    result.fold(
-      (failure) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(failure.message ?? 'Ошибка публикации', style: AppStyles.regular14s.copyWith(color: Colors.white)),
-            backgroundColor: Colors.red,
-          ),
-        );
-      },
-      (product) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Объявление опубликовано на 1 месяц', style: AppStyles.regular14s.copyWith(color: Colors.white)),
-            backgroundColor: Colors.green,
-          ),
-        );
-        if (!mounted) return;
-        // Обновляем список объявлений
-        context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
-        // Возвращаемся назад
-        context.router.maybePop();
-      },
-    );
-  }
-
-  void _showUnpublishConfirmation(int productId, BuildContext context) {
-    showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Снять с публикации?'),
-        content: const Text('Объявление станет неактивным и не будет видно другим пользователям.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Отмена')),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              _unpublishProduct(context, productId);
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Снять'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _unpublishProduct(BuildContext context, int productId) async {
-    final repository = getIt<MarketRepository>();
-    final result = await repository.unpublishProduct(productId);
-    result.fold(
-      (failure) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(failure.message ?? 'Ошибка снятия публикации', style: AppStyles.regular14s.copyWith(color: Colors.white)),
-            backgroundColor: Colors.red,
-          ),
-        );
-      },
-      (product) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Объявление снято с публикации', style: AppStyles.regular14s.copyWith(color: Colors.white)),
-            backgroundColor: Colors.green,
-          ),
-        );
-        if (!mounted) return;
-        // Обновляем список объявлений
-        context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
-        // Возвращаемся назад
-        context.router.maybePop();
-      },
     );
   }
 
@@ -557,7 +613,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
     }
   }
 
-  Future<void> _showPriceHistoryModal(BuildContext context, int productId) async {
+  Future<void> _showPriceHistoryModal(BuildContext context, int productId, String currency) async {
     final repository = getIt<MarketRepository>();
     final priceHistoryResult = await repository.getPriceHistory(productId);
 
@@ -569,8 +625,25 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
             backgroundColor: Colors.red,
           ),
         );
+        return;
       },
       (priceHistory) async {
+        if (priceHistory.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('История цен пуста', style: AppStyles.regular14s.copyWith(color: Colors.white)),
+              backgroundColor: Colors.orange,
+            ),
+          );
+          return;
+        }
+
+        await _showPriceHistoryModalContent(context, priceHistory, currency);
+      },
+    );
+  }
+
+  Future<void> _showPriceHistoryModalContent(BuildContext context, List<PriceHistoryEntity> priceHistory, String currency) async {
         if (priceHistory.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -621,7 +694,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('${formatPrice(historyItem.price)} ₽', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                    Text('${formatPrice(historyItem.price)} ${getCurrencySymbol(currency)}', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                         if (priceChange != null && priceChange != 0) ...[
                           SizedBox(height: 4),
                           Row(
@@ -629,7 +702,7 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                             children: [
                               Icon(priceChange > 0 ? Icons.arrow_upward : Icons.arrow_downward, size: 14.0, color: priceChange > 0 ? Colors.red : Colors.green),
                               SizedBox(width: 4),
-                              Text('${formatPrice(priceChange.abs())} ₽', style: AppStyles.regular12s.copyWith(color: priceChange > 0 ? Colors.red : Colors.green)),
+                          Text('${formatPrice(priceChange.abs())} ${getCurrencySymbol(currency)}', style: AppStyles.regular12s.copyWith(color: priceChange > 0 ? Colors.red : Colors.green)),
                             ],
                           ),
                         ],
@@ -640,26 +713,74 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
               );
             },
           ),
-        );
-      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AircraftMarketDetailBloc(repository: getIt<MarketRepository>())..add(GetAircraftMarketDetailEvent(widget.id)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _detailBloc),
+        BlocProvider.value(value: _editBloc),
+      ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<AircraftMarketDetailBloc, AircraftMarketDetailState>(
             listener: (context, state) {
               state.maybeWhen(
-                deleted: () {
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                },
+                orElse: () {},
+              );
+            },
+          ),
+          // Слушаем AircraftMarketEditBloc для операций delete, publish, unpublish
+          BlocListener<AircraftMarketEditBloc, AircraftMarketEditState>(
+            // listenWhen: (previous, current) {
+            //   // Реагируем на deleted, published, unpublished
+            //   if (previous is DeletingAircraftMarketEditState) {
+            //     return current is DeletedAircraftMarketEditState || current is ErrorAircraftMarketEditState;
+            //   }
+            //   if (previous is PublishingAircraftMarketEditState) {
+            //     return current is PublishedAircraftMarketEditState || current is ErrorAircraftMarketEditState;
+            //   }
+            //   if (previous is UnpublishingAircraftMarketEditState) {
+            //     return current is UnpublishedAircraftMarketEditState || current is ErrorAircraftMarketEditState;
+            //   }
+            //   return false;
+            // },
+            listener: (context, state) {
+              if (!mounted) return;
+              state.maybeWhen(
+                deleted: (productId) {
+                  if (productId == widget.id) {
                   // Обновляем список товаров
                   context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
                   // Возвращаемся назад
-                  Navigator.of(context).pop();
+                    context.router.maybePop();
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Товар успешно удален'), backgroundColor: Colors.green));
+                  }
+                },
+                published: (product) {
+                  if (product.id == widget.id) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление опубликовано'), backgroundColor: Colors.green));
+                    // Обновляем список объявлений
+                    context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
+                    // Загружаем продукт снова в оба BLoC
+                    _detailBloc.add(GetAircraftMarketDetailEvent(widget.id));
+                    _editBloc.add(AircraftMarketEditEvent.getProduct(widget.id));
+                  }
+                },
+                unpublished: (product) {
+                  if (product.id == widget.id) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление снято с публикации'), backgroundColor: Colors.green));
+                    // Обновляем список объявлений
+                    context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
+                    // Загружаем продукт снова в оба BLoC
+                    _detailBloc.add(GetAircraftMarketDetailEvent(widget.id));
+                    _editBloc.add(AircraftMarketEditEvent.getProduct(widget.id));
+                  }
                 },
                 error: (message) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
@@ -681,61 +802,18 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
               // Данные продавца берутся из профиля при запросе, поэтому обновим объявление
               if (!mounted) return;
 
-              final detailBloc = context.read<AircraftMarketDetailBloc>();
-              final detailState = detailBloc.state;
+              final detailState = _detailBloc.state;
 
               detailState.maybeWhen(
                 success: (product) {
                   // Обновляем детали объявления, чтобы получить актуальные данные продавца
-                  detailBloc.add(AircraftMarketDetailEvent.getProduct(product.id));
-                },
-                orElse: () {},
-              );
-            },
-          ),
-          // Слушаем обновление товара в глобальном BLoC для обновления детальной страницы
-          BlocListener<AircraftMarketBloc, AircraftMarketState>(
-            listenWhen: (previous, current) {
-              // Реагируем на updated после updating в глобальном BLoC
-              if (previous is UpdatingMarketProductState) {
-                return current is UpdatedMarketProductState;
-              }
-              return false;
-            },
-            listener: (context, state) {
-              if (!mounted) return;
-
-              state.maybeWhen(
-                updated: (updatedProduct) {
-                  // Проверяем, обновлен ли текущий товар
-                  final detailBloc = context.read<AircraftMarketDetailBloc>();
-                  final detailState = detailBloc.state;
-
-                  detailState.maybeWhen(
-                    success: (currentProduct) {
-                      // Если ID совпадает, обновляем детальную страницу
-                      if (currentProduct.id == updatedProduct.id) {
-                        detailBloc.add(AircraftMarketDetailEvent.getProduct(updatedProduct.id));
-                      }
-                    },
-                    orElse: () {},
-                  );
+                  _detailBloc.add(GetAircraftMarketDetailEvent(product.id));
                 },
                 orElse: () {},
               );
             },
           ),
         ],
-        child: BlocBuilder<AircraftMarketDetailBloc, AircraftMarketDetailState>(
-          builder: (context, state) {
-            return PopScope(
-              onPopInvoked: (didPop) {
-                if (didPop) {
-                  // При возврате назад всегда обновляем список товаров
-                  final marketBloc = context.read<AircraftMarketBloc>();
-                  marketBloc.add(const AircraftMarketEvent.refresh());
-                }
-              },
               child: Scaffold(
                 appBar: CustomAppBar(
                   title: 'АвиаТехника',
@@ -766,11 +844,11 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                                 IconButton(
                                   icon: const Icon(Icons.edit, color: AppColors.primary100p),
                                   onPressed: () async {
-                                    await context.router.push(EditAircraftMarketRoute(product: product));
+                              await context.router.push(EditAircraftMarketRoute(productId: product.id));
 
                                     // После возврата из редактирования обновляем данные с сервера
                                     if (mounted) {
-                                      context.read<AircraftMarketDetailBloc>().add(AircraftMarketDetailEvent.getProduct(product.id));
+                                _detailBloc.add(GetAircraftMarketDetailEvent(product.id));
                                     }
                                   },
                                   tooltip: 'Редактировать товар',
@@ -790,18 +868,19 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                   ],
                 ),
                 backgroundColor: AppColors.background,
-                body: state.when(
+
+          body: BlocBuilder<AircraftMarketDetailBloc, AircraftMarketDetailState>(
+            builder: (context, state) {
+              return state.when(
                   initial: () => const Center(child: LoadingCustom()),
                   loading: () => const Center(child: LoadingCustom()),
                   error: (message) => Center(
-                    child: ErrorCustom(textError: message, repeat: () => context.read<AircraftMarketDetailBloc>().add(GetAircraftMarketDetailEvent(widget.id))),
+                  child: ErrorCustom(textError: message, repeat: () => _detailBloc.add(GetAircraftMarketDetailEvent(widget.id))),
                   ),
                   success: (product) => _buildProductContent(product),
-                  deleted: () => const SizedBox.shrink(), // Не показываем контент, т.к. уже переходим назад
-                ),
-              ),
             );
           },
+          ),
         ),
       ),
     );
@@ -829,6 +908,44 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
               child: Stack(
                 children: [
                   SizedBox(height: 300, width: double.infinity, child: _buildImageWidget(mainImage)),
+                  // Бейдж "Заблокировано администратором" по центру
+                  if (!product.isActive)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        ignoring: true,
+                        child: Container(
+                          color: Colors.black.withOpacity(0.35),
+                          alignment: Alignment.center,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                            child: Text(
+                              'Заблокировано администратором',
+                              style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // Бейдж "Не опубликовано" по центру
+                  if (!product.isPublished && product.isActive)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        ignoring: true,
+                        child: Container(
+                          color: Colors.black.withOpacity(0.35),
+                          alignment: Alignment.center,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(color: Colors.orange.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                            child: Text(
+                              'Не опубликовано',
+                              style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   // Чипсы: доля и лизинг
                   Positioned(
                     top: 8,
@@ -911,13 +1028,10 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    Text(
-                      '${_formatPrice(product.price)} ₽',
-                      style: AppStyles.bold20s.copyWith(color: AppColors.primary100p, fontSize: 24.0),
-                    ),
+                    Text('${_formatPrice(product.price)} ${getCurrencySymbol(product.currency)}', style: AppStyles.bold20s.copyWith(color: AppColors.primary100p, fontSize: 24.0)),
                     SizedBox(width: 12),
                     TextButton.icon(
-                      onPressed: () => _showPriceHistoryModal(context, product.id),
+                      onPressed: () => _showPriceHistoryModal(context, product.id, product.currency),
                       icon: Icon(Icons.history, size: 18, color: Color(0xFF0A6EFA)),
                       label: Text('История цены', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
                       style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4)),
@@ -1038,27 +1152,33 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                 Text('Продавец', style: AppStyles.bold16s),
                 SizedBox(height: 12),
                 if (product.sellerFullName != null) _buildInfoRow('Имя', product.sellerFullName),
-                if (product.sellerPhone != null)
-                  _buildContactRow('Телефон', formatPhone(product.sellerPhone!), Icons.phone, () async {
-                    final uri = Uri.parse('tel:${product.sellerPhone}');
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    }
-                  }),
-                if (product.sellerTelegram != null)
-                  _buildContactRow('Telegram', product.sellerTelegram!, Icons.send, () async {
-                    final uri = Uri.parse('https://t.me/${product.sellerTelegram!.replaceAll('@', '')}');
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    }
-                  }),
-                if (product.sellerMax != null)
-                  _buildContactRow('MAX', product.sellerMax!, Icons.message, () async {
-                    final uri = Uri.parse('https://max.me/${product.sellerMax!.replaceAll('@', '')}');
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    }
-                  }),
+                if (product.sellerPhone != null || product.sellerTelegram != null || product.sellerMax != null) ...[
+                  SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (product.sellerPhone != null && product.sellerPhone!.isNotEmpty)
+                        _buildContactButton(
+                          context: context,
+                          icon: Icons.phone,
+                          label: formatPhone(product.sellerPhone!),
+                          color: Color(0xFF10B981),
+                          onTap: () => _launchPhone(context, product.sellerPhone!),
+                        ),
+                      if (product.sellerTelegram != null && product.sellerTelegram!.isNotEmpty)
+                        _buildContactButton(
+                          context: context,
+                          iconAsset: Pictures.telegramm,
+                          label: product.sellerTelegram!,
+                          color: Color(0xFF0088CC),
+                          onTap: () => _launchTelegram(context, product.sellerTelegram!),
+                        ),
+                      if (product.sellerMax != null && product.sellerMax!.isNotEmpty)
+                        _buildContactButton(context: context, iconAsset: Pictures.max, label: product.sellerMax!, color: Color(0xFF9CA5AF), onTap: () => _launchMax(context, product.sellerMax!)),
+                    ],
+                  ),
+                ],
                 SizedBox(height: 24),
 
                 // Метаданные
@@ -1078,10 +1198,10 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        await context.router.push(EditAircraftMarketRoute(product: product));
+                        await context.router.push(EditAircraftMarketRoute(productId: product.id));
                         // После возврата из редактирования обновляем данные с сервера
                         if (mounted) {
-                          context.read<AircraftMarketDetailBloc>().add(AircraftMarketDetailEvent.getProduct(product.id));
+                          _detailBloc.add(GetAircraftMarketDetailEvent(product.id));
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -1094,26 +1214,29 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                     ),
                   ),
                   SizedBox(height: 12),
+
                   // Кнопка "Снять с публикации" / "Опубликовать"
+                  // Пользователь управляет только isPublished
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (product.isActive) {
-                          _showUnpublishConfirmation(product.id, context);
+                        if (product.isPublished) {
+                          _editBloc.add(AircraftMarketEditEvent.unpublishProduct(product.id));
                         } else {
-                          _publishProduct(context, product.id);
+                          _editBloc.add(AircraftMarketEditEvent.publishProduct(product.id));
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: product.isActive ? Colors.red : AppColors.primary100p,
+                        backgroundColor: product.isPublished ? Colors.red : AppColors.primary100p,
                         foregroundColor: Colors.white,
                         padding: EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
-                      child: Text(product.isActive ? 'Снять с публикации' : 'Опубликовать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
+                      child: Text(product.isPublished ? 'Снять с публикации' : 'Опубликовать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                     ),
                   ),
+
                   SizedBox(height: 16),
                 ],
               ],
@@ -1133,38 +1256,83 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
         children: [
           SizedBox(
             width: 160,
-            child: Text(label, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+            child: Text(label, style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary)),
           ),
-          Expanded(child: Text(value, style: AppStyles.regular14s)),
+          Expanded(child: Text(value, style: AppStyles.regular12s)),
         ],
       ),
     );
   }
 
-  Widget _buildContactRow(String label, String value, IconData icon, VoidCallback onTap) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 160,
-            child: Text(label, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-          ),
-          Expanded(
-            child: InkWell(
+  /// Виджет кнопки контакта продавца
+  Widget _buildContactButton({required BuildContext context, IconData? icon, String? iconAsset, required String label, required Color color, required VoidCallback onTap}) {
+    return GestureDetector(
               onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: color.withOpacity(0.3)),
+        ),
               child: Row(
+          mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(icon, size: 16, color: AppColors.primary100p),
-                  SizedBox(width: 8),
-                  Text(value, style: AppStyles.regular14s.copyWith(color: AppColors.primary100p)),
-                ],
-              ),
+            if (iconAsset != null)
+              (iconAsset == Pictures.max || iconAsset == Pictures.telegramm)
+                  ? SvgPicture.asset(iconAsset, width: 16, height: 16)
+                  : SvgPicture.asset(iconAsset, width: 16, height: 16, colorFilter: ColorFilter.mode(color, BlendMode.srcIn))
+            else if (icon != null)
+              Icon(icon, size: 16, color: color),
+            SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                style: AppStyles.regular12s.copyWith(color: color),
+                overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
+        ),
       ),
     );
+  }
+
+  /// Позвонить продавцу
+  Future<void> _launchPhone(BuildContext context, String phone) async {
+    final uri = Uri.parse('tel:$phone');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)));
+      }
+    }
+  }
+
+  /// Открыть Telegram продавца
+  Future<void> _launchTelegram(BuildContext context, String telegram) async {
+    final username = telegram.replaceAll('@', '');
+    final uri = Uri.parse('https://t.me/$username');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+      }
+    }
+  }
+
+  /// Открыть MAX продавца
+  Future<void> _launchMax(BuildContext context, String max) async {
+    final username = max.replaceAll('@', '');
+    final uri = Uri.parse('https://max.me/$username');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
+      }
+    }
   }
 }

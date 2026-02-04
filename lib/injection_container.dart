@@ -98,5 +98,7 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton<RosAviaTestCubit>(RosAviaTestCubit());
 
   // Payment
-  getIt.registerSingleton<PaymentRepository>(PaymentRepositoryImpl(paymentService: PaymentService(dataSource.dio)));
+  final paymentService = PaymentService(dataSource.dio);
+  getIt.registerSingleton<PaymentService>(paymentService);
+  getIt.registerSingleton<PaymentRepository>(PaymentRepositoryImpl(paymentService: paymentService));
 }

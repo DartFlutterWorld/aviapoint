@@ -12,7 +12,7 @@ class YourSpecializationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 12, right: 12, bottom: 16),
+      padding: EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 16),
       decoration: BoxDecoration(
         color: Color(0xFFE3F1FF),
         borderRadius: BorderRadius.circular(18),

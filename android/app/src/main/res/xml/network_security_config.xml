@@ -28,4 +28,13 @@
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">127.0.0.1</domain>
     </domain-config>
+
+    <!-- Конфигурация для ЮКассы -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">yookassa.ru</domain>
+        <domain includeSubdomains="true">checkout.yookassa.ru</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
 </network-security-config>

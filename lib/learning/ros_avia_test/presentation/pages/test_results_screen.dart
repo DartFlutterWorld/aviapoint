@@ -235,7 +235,7 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             children: [
                               DiagramWidget(
                                 percent: percentage / 100, // 80%
-                                width: 160, // подгоните под ваш дизайн
+                                width: 180, // подгоните под ваш дизайн
                                 strokeWidth: 30,
                                 gradientColors: const [
                                   Color(0xFF2F7C5A), // тёмно-зелёный

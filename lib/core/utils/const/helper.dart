@@ -126,6 +126,20 @@ String formatPrice(int price) {
   return format.format(price);
 }
 
+/// Преобразует код валюты в символ
+String getCurrencySymbol(String currency) {
+  switch (currency.toUpperCase()) {
+    case 'RUB':
+      return '₽';
+    case 'USD':
+      return '\$';
+    case 'EUR':
+      return '€';
+    default:
+      return currency; // Если валюта неизвестна, возвращаем код
+  }
+}
+
 /// Форматирует дату в формат дд.мм.гггг
 String formatDate(DateTime? date) {
   if (date == null) return '';

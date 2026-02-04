@@ -57,8 +57,8 @@ class QuestionsByTypeCertificateAndCategoriesBloc
     final response = await _rosAviaTestRepository.fetchQuestionsWithAnswersByCategoryAndTypeCertificate(
       typeSsertificatesId: event.typeSsertificatesId,
       categoryIds: s?.selectedCategoryIds ?? {},
-      mixAnswers: s?.mixAnswers ?? true,
-      mixQuestions: s?.mixQuestions ?? true,
+      mixAnswers: s?.mixAnswers ?? false,
+      mixQuestions: s?.mixQuestions ?? false,
     );
 
     response.fold(
@@ -76,7 +76,7 @@ class QuestionsByTypeCertificateAndCategoriesBloc
         emit(
           SuccessQuestionsByTypeCertificateAndCategoriesState(
             questionsWithAnswers: r,
-            buttonHint: s?.buttonHint ?? true,
+            buttonHint: s?.buttonHint ?? false,
           ),
         );
       },

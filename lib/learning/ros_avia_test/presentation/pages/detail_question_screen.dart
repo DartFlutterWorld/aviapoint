@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
 import 'package:aviapoint/learning/ros_avia_test/domain/entities/question_with_answers_entity.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/answer_widget.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/chips_widget.dart';
+import 'package:aviapoint/learning/utils/learning_share_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -64,9 +66,57 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
           if (widget.withClose)
             Align(
               alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () => context.router.maybePop(null),
-                child: SizedBox(width: 30, height: 30, child: Center(child: SvgPicture.asset(Pictures.closeAuth))),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.share, color: AppColors.primary100p),
+                    onPressed: () {
+                      final questionText = widget.question?.questionText ?? '';
+                      final explanation = widget.question?.explanation ?? '';
+                      final categoryTitle = widget.categoryTitle ?? '';
+                      final answers = widget.question?.answers ?? [];
+
+                      // Находим все правильные ответы
+                      final correctAnswers = answers.where((answer) => answer.isCorrect == true).toList();
+
+                      // Формируем описание: категория + правильные ответы + объяснение (если есть)
+                      String description = '';
+
+                      if (categoryTitle.isNotEmpty) {
+                        description = 'Категория: $categoryTitle';
+                      }
+
+                      // Добавляем правильные ответы
+                      if (correctAnswers.isNotEmpty) {
+                        if (description.isNotEmpty) {
+                          description += '\n\n';
+                        }
+                        description += 'Правильный ответ:';
+                        for (var i = 0; i < correctAnswers.length; i++) {
+                          description += '\n${i + 1}. ${correctAnswers[i].answerText}';
+                        }
+                      }
+
+                      // Добавляем объяснение
+                      if (explanation.isNotEmpty) {
+                        if (description.isNotEmpty) {
+                          description += '\n\n';
+                        }
+                        description += 'Объяснение: ';
+                        // Убираем HTML теги из объяснения для текстового шаринга
+                        description += explanation.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+                      }
+
+                      LearningShareHelper.shareLearningPage(context, title: 'РосАвиаТест. $questionText', description: description.isNotEmpty ? description : null, imageUrl: null);
+                    },
+                    tooltip: 'Поделиться',
+                  ),
+                  GestureDetector(
+                    onTap: () => context.router.maybePop(null),
+                    child: SizedBox(width: 30, height: 30, child: Center(child: SvgPicture.asset(Pictures.closeAuth))),
+                  ),
+                ],
               ),
             ),
           // Убрали Expanded, так как виджет используется внутри SingleChildScrollView

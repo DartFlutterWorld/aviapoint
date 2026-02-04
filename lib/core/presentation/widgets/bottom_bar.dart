@@ -44,8 +44,19 @@ class BottomBarState extends State<BottomBar> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // Логотип
-                Center(child: SvgPicture.asset(Pictures.logoTitle, height: 30)),
+                // Логотип (кликабельный на веб)
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (widget.tabsRouter!.activeIndex == 0) {
+                        AutoRouter.of(context).navigate(const MainNavigationRoute());
+                      } else {
+                        widget.tabsRouter!.setActiveIndex(0);
+                      }
+                    },
+                    child: SvgPicture.asset(Pictures.logoTitle, height: 30),
+                  ),
+                ),
                 const SizedBox(height: 16),
                 // Главная (индекс 0)
                 BottomBarItem(
@@ -156,8 +167,19 @@ class BottomBarState extends State<BottomBar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Логотип
-            Center(child: SvgPicture.asset(Pictures.logoTitle, height: 40)),
+            // Логотип (кликабельный на веб)
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.tabsRouter!.activeIndex == 0) {
+                    AutoRouter.of(context).navigate(const MainNavigationRoute());
+                  } else {
+                    widget.tabsRouter!.setActiveIndex(0);
+                  }
+                },
+                child: SvgPicture.asset(Pictures.logoTitle, height: 40),
+              ),
+            ),
             const SizedBox(height: 24),
             // Главная (индекс 0)
             BottomBarItem(

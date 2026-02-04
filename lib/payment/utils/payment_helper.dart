@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/injection_container.dart';
+import 'package:aviapoint/payment/data/datasources/iap_service.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_event.dart';
@@ -19,17 +21,219 @@ import 'payment_screen_stub.dart' if (dart.library.html) 'payment_screen_web.dar
 
 /// Утилита для создания платежа и обработки редиректа/WebView
 class PaymentHelper {
-  /// Создает платеж и сразу открывает WebView (мобильные) или редиректит (веб)
-  ///
-  /// [context] - контекст для доступа к BlocProvider
-  /// [amount] - сумма платежа
-  /// [currency] - валюта (по умолчанию 'RUB')
-  /// [description] - описание платежа
-  /// [subscriptionTypeId] - ID типа подписки
-  /// [returnRouteSource] - источник, откуда пришел пользователь ('profile' или 'testing_mode')
-  ///
-  /// Возвращает true, если платеж успешно создан и редирект/WebView открыт
+  /// Создает платеж через Apple IAP (только для iOS)
+  /// На других платформах использует YooKassa
   static Future<bool> createPaymentAndRedirect({
+    required BuildContext context,
+    required double amount,
+    String currency = 'RUB',
+    required String description,
+    required int subscriptionTypeId,
+    String? returnRouteSource,
+  }) async {
+    // На iOS используем Apple IAP, на остальных платформах - YooKassa
+    // Важно: IAP работает только на реальных устройствах, не на симуляторе
+    if (!kIsWeb && Platform.isIOS) {
+      try {
+        return await _createIAPPayment(
+          context: context,
+          subscriptionTypeId: subscriptionTypeId,
+          returnRouteSource: returnRouteSource,
+        );
+      } catch (e) {
+        print('Error with IAP, falling back to YooKassa: $e');
+        // Если IAP не работает (например, на симуляторе), используем YooKassa
+        return await _createYooKassaPayment(
+          context: context,
+          amount: amount,
+          currency: currency,
+          description: description,
+          subscriptionTypeId: subscriptionTypeId,
+          returnRouteSource: returnRouteSource,
+        );
+      }
+    } else {
+      return await _createYooKassaPayment(
+        context: context,
+        amount: amount,
+        currency: currency,
+        description: description,
+        subscriptionTypeId: subscriptionTypeId,
+        returnRouteSource: returnRouteSource,
+      );
+    }
+  }
+
+  /// Создает платеж через Apple IAP
+  static Future<bool> _createIAPPayment({
+    required BuildContext context,
+    required int subscriptionTypeId,
+    String? returnRouteSource,
+  }) async {
+    try {
+      final iapService = IAPService();
+      
+      try {
+        final initialized = await iapService.initialize();
+
+        if (!initialized) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('In-App Purchases недоступны. Используйте реальное устройство для тестирования IAP.'),
+                backgroundColor: Colors.orange,
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
+          // Возвращаем false, чтобы вызвать fallback на YooKassa
+          throw Exception('IAP not available');
+        }
+      } catch (e) {
+        print('Error initializing IAP: $e');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('In-App Purchases недоступны: ${e.toString()}. Используйте реальное устройство.'),
+              backgroundColor: Colors.orange,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+        // Пробрасываем ошибку, чтобы вызвать fallback на YooKassa
+        rethrow;
+      }
+
+      // Показываем индикатор загрузки
+      if (context.mounted) {
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      // Загружаем продукты
+      print('🔵 Начинаем загрузку продуктов из App Store...');
+      final products = await iapService.loadProducts();
+      
+      if (products.isEmpty) {
+        if (context.mounted) {
+          Navigator.of(context).pop(); // Закрываем индикатор
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Не удалось загрузить продукты для покупки. Проверьте, что подписка создана в App Store Connect и отправлена на проверку.'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 5),
+            ),
+          );
+        }
+        print('❌ Продукты не загружены. Проверьте логи выше для деталей.');
+        return false;
+      }
+      
+      print('✅ Продукты загружены успешно: ${products.length}');
+
+      // Находим годовую подписку
+      final yearlyProduct = products.firstWhere(
+        (p) => p.id == IAPProducts.yearlySubscription,
+        orElse: () => throw Exception('Годовая подписка не найдена'),
+      );
+
+      // Закрываем индикатор загрузки
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+
+      // Слушаем результат покупки
+      StreamSubscription<bool>? purchaseSubscription;
+      bool purchaseCompleted = false;
+
+      purchaseSubscription = iapService.purchaseStream.listen((success) {
+        purchaseCompleted = true;
+        purchaseSubscription?.cancel();
+
+        if (context.mounted) {
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Подписка успешно активирована'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
+            // Обновляем информацию о подписке
+            final paymentRepository = getIt<PaymentRepository>();
+            paymentRepository.getSubscriptionStatus().then((_) {
+              // Навигируем обратно
+              navigateToSource(context, returnRouteSource);
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Ошибка при покупке подписки'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      });
+
+      // Запускаем покупку
+      final purchaseStarted = await iapService.buySubscription(yearlyProduct.id);
+
+      if (!purchaseStarted) {
+        purchaseSubscription.cancel();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Не удалось начать покупку'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return false;
+      }
+
+      // Ждем завершения покупки (таймаут 5 минут)
+      await Future<void>.delayed(const Duration(seconds: 1));
+      int attempts = 0;
+      while (!purchaseCompleted && attempts < 300) {
+        await Future<void>.delayed(const Duration(seconds: 1));
+        attempts++;
+      }
+
+      if (!purchaseCompleted) {
+        purchaseSubscription.cancel();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Превышено время ожидания покупки'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+      }
+
+      iapService.dispose();
+      return purchaseCompleted;
+    } catch (e, stackTrace) {
+      print('❌ Ошибка при покупке через IAP: $e');
+      print('StackTrace: $stackTrace');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return false;
+    }
+  }
+
+  /// Создает платеж через YooKassa (веб и Android)
+  static Future<bool> _createYooKassaPayment({
     required BuildContext context,
     required double amount,
     String currency = 'RUB',
@@ -309,26 +513,31 @@ class PaymentHelper {
 
       print('🔵 Статус платежа от API: ${payment.status}, paid: ${payment.paid}');
 
-      // Очищаем paymentId
-      await PaymentStorageHelper.clearPaymentId();
-
-      // Логируем статус платежа (уведомления убраны, чтобы не вводить пользователя в заблуждение)
+      // Логируем статус платежа
       if (payment.status == 'succeeded') {
         print('✅ Платеж успешно выполнен');
+        // Для успешных платежей НЕ очищаем paymentId - он будет очищен на экране после проверки подписки
+        // Это позволяет экрану проверить статус и обновить подписку
       } else if (payment.status == 'canceled') {
         print('⚠️ Платеж отменен');
+        // Для отмененных платежей очищаем paymentId сразу
+        await PaymentStorageHelper.clearPaymentId();
       } else if (payment.status == 'pending' || payment.status == 'waiting_for_capture') {
         print('⏳ Платеж имеет статус ${payment.status}');
+        // Для pending платежей НЕ очищаем paymentId - экран проверит статус и обновит подписку
       } else {
         print('⚠️ Неизвестный статус платежа: ${payment.status}');
+        // Для неизвестных статусов очищаем paymentId
+        await PaymentStorageHelper.clearPaymentId();
       }
 
       // Навигируем на исходный экран
+      // paymentId останется в хранилище для проверки на экране (если платеж успешен или pending)
       navigateToSource(context, returnRouteSource);
     } catch (e, stackTrace) {
       print('❌ Ошибка при проверке статуса платежа: $e');
       print('StackTrace: $stackTrace');
-      // Очищаем paymentId даже при ошибке
+      // Очищаем paymentId при ошибке
       await PaymentStorageHelper.clearPaymentId();
       // Навигируем на исходный экран даже при ошибке
       navigateToSource(context, returnRouteSource);
@@ -339,6 +548,7 @@ class PaymentHelper {
   /// Публичный метод для использования на вебе и мобильных
   static void navigateToSource(BuildContext context, String? returnRouteSource) {
     print('🔵 _navigateToSource вызван: returnRouteSource=$returnRouteSource, context.mounted=${context.mounted}');
+    
     if (!context.mounted) {
       print('❌ Контекст не mounted, пытаемся использовать глобальный контекст');
       final rootContext = navigatorKey.currentContext;
@@ -364,7 +574,7 @@ class PaymentHelper {
       }
 
       try {
-        // Сначала очищаем стек до BaseRoute
+        // Очищаем стек до BaseRoute
         print('🔵 Очищаем стек навигации до BaseRoute');
         currentContext.router.popUntil((route) => route.settings.name == BaseRoute.name || route.isFirst);
 
@@ -374,7 +584,9 @@ class PaymentHelper {
         if (returnRouteSource == 'profile') {
           print('🔵 Переход на ProfileNavigationRoute (push)');
           currentContext.router.push(const ProfileNavigationRoute());
-        } else if (returnRouteSource == 'testing_mode') {
+        } else if (returnRouteSource == 'testing_mode' || returnRouteSource == 'select_topics') {
+          // Для select_topics и testing_mode навигируем на экран режима тестирования
+          // Там будет проверен статус платежа и разблокирован тренировочный режим
           print('🔵 Переход на TestingModeRoute (push)');
           // TestingModeRoute находится внутри LearningNavigationRoute (path: 'learning')
           currentContext.router.push(
@@ -394,7 +606,7 @@ class PaymentHelper {
         try {
           if (returnRouteSource == 'profile') {
             currentContext.router.push(const ProfileNavigationRoute());
-          } else if (returnRouteSource == 'testing_mode') {
+          } else if (returnRouteSource == 'testing_mode' || returnRouteSource == 'select_topics') {
             currentContext.router.push(
               BaseRoute(
                 children: [
