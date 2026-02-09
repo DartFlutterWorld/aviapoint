@@ -79,14 +79,21 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.only(left: AppSpacing.horizontal, right: AppSpacing.horizontal, top: AppSpacing.section, bottom: AppSpacing.section),
+            padding: EdgeInsets.only(
+              left: AppSpacing.horizontal,
+              right: AppSpacing.horizontal,
+              top: AppSpacing.section,
+              bottom: AppSpacing.section,
+            ),
             child: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {
                 return state.when(
                   loading: () => _buildLoadingState(),
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => _buildErrorState(errorForUser),
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
+                      _buildErrorState(errorForUser),
                   success: (bookings) => _buildSuccessState(bookings),
-                  bookingCreated: (booking) => _buildSuccessState([]), // После создания показываем пустой список, т.к. нужно перезагрузить
+                  bookingCreated: (booking) =>
+                      _buildSuccessState([]), // После создания показываем пустой список, т.к. нужно перезагрузить
                   bookingConfirmed: (booking) {
                     // Показываем модальное окно с контактами пилота после подтверждения
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -94,9 +101,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                         showPilotContactsBottomSheet(context: context, booking: booking);
                       }
                     });
-                    return _buildSuccessState([]); // После подтверждения показываем пустой список, т.к. нужно перезагрузить
+                    return _buildSuccessState(
+                      [],
+                    ); // После подтверждения показываем пустой список, т.к. нужно перезагрузить
                   },
-                  bookingCancelled: (booking) => _buildSuccessState([]), // После отмены показываем пустой список, т.к. нужно перезагрузить
+                  bookingCancelled: (booking) =>
+                      _buildSuccessState([]), // После отмены показываем пустой список, т.к. нужно перезагрузить
                 );
               },
             ),
@@ -195,7 +205,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               context.read<BookingsBloc>().add(GetBookingsEvent());
             },
             child: Text('Повторить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
-            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA), padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF0A6EFA),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
           ),
         ],
       ),

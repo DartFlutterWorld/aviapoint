@@ -21,7 +21,8 @@ import 'package:talker_flutter/talker_flutter.dart';
 class SSlHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -39,7 +40,8 @@ Future<void> main() async {
     // Игнорируем некритичную ошибку QuillNativeBridgeApi.isIosSimulator
     if (details.exception is PlatformException) {
       final e = details.exception as PlatformException;
-      if (e.code == 'channel-error' && (e.message?.contains('isIosSimulator') == true || e.message?.contains('QuillNativeBridgeApi') == true)) {
+      if (e.code == 'channel-error' &&
+          (e.message?.contains('isIosSimulator') == true || e.message?.contains('QuillNativeBridgeApi') == true)) {
         // Это некритичная ошибка, просто игнорируем её
         return;
       }
@@ -64,7 +66,13 @@ Future<void> _run() async {
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   /// Задаем цвета статусбара.
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
 
   /// Задаем обработку SSL.
   HttpOverrides.global = SSlHttpOverrides();
@@ -94,15 +102,15 @@ Future<void> _run() async {
   runApp(
     TalkerWrapper(
       talker: AppTalker.instance,
-        child: EasyLocalization(
-          supportedLocales: [Locale('en', 'EN'), Locale('ru', 'RU')],
-          path: 'assets/translations',
-          useOnlyLangCode: false,
-          // startLocale: Locale('en', 'EN'),
-          startLocale: Locale('ru', 'RU'),
-          child: BlocProvider<InternetConnectionBloc>(
-            create: (context) => InternetConnectionBloc()..add(const InternetConnectionEvent.startMonitoring()),
-            lazy: false,
+      child: EasyLocalization(
+        supportedLocales: [Locale('en', 'EN'), Locale('ru', 'RU')],
+        path: 'assets/translations',
+        useOnlyLangCode: false,
+        // startLocale: Locale('en', 'EN'),
+        startLocale: Locale('ru', 'RU'),
+        child: BlocProvider<InternetConnectionBloc>(
+          create: (context) => InternetConnectionBloc()..add(const InternetConnectionEvent.startMonitoring()),
+          lazy: false,
           child: AppWrapper(child: const App()),
         ),
       ),

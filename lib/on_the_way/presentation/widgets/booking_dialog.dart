@@ -31,7 +31,9 @@ class _BookingDialogState extends State<BookingDialog> {
 
   void _submitBooking(FlightEntity flight) {
     if (_seatsCount <= 0 || _seatsCount > flight.availableSeats) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Выберите корректное количество мест'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Выберите корректное количество мест'), backgroundColor: Colors.red));
       return;
     }
 
@@ -73,7 +75,10 @@ class _BookingDialogState extends State<BookingDialog> {
                 if (_shouldCheckProfileAfterBooking) {
                   _shouldCheckProfileAfterBooking = false; // Сбрасываем флаг
                   // Используем универсальную функцию для проверки ФИО
-                  checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования');
+                  checkDataProfileAndOpenEditIfNeeded(
+                    context: context,
+                    message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования',
+                  );
                 }
               },
             ),
@@ -84,9 +89,16 @@ class _BookingDialogState extends State<BookingDialog> {
                     // Не показываем ничего при loading
                   },
                   error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(responseMessage ?? errorForUser),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 4),
+                      ),
+                    );
                     // Если ошибка связана с недостатком мест, обновляем информацию о полете
-                    if (responseMessage != null && (responseMessage.contains('недостаточно') || responseMessage.contains('Not enough'))) {
+                    if (responseMessage != null &&
+                        (responseMessage.contains('недостаточно') || responseMessage.contains('Not enough'))) {
                       // Обновляем информацию о полете через FlightDetailBloc
                       try {
                         final flightDetailBloc = context.read<FlightDetailBloc>();
@@ -105,7 +117,9 @@ class _BookingDialogState extends State<BookingDialog> {
                     try {
                       final flightDetailBloc = context.read<FlightDetailBloc>();
                       flightDetailBloc.add(flight.id);
-                      print('✅ [BookingDialog] Обновление информации о полете после успешного бронирования для flightId=${flight.id}');
+                      print(
+                        '✅ [BookingDialog] Обновление информации о полете после успешного бронирования для flightId=${flight.id}',
+                      );
                     } catch (e) {
                       print('❌ [BookingDialog] Не удалось обновить информацию о полете: $e');
                     }
@@ -114,16 +128,31 @@ class _BookingDialogState extends State<BookingDialog> {
                     Navigator.of(context).pop({'success': true, 'switchToMyBookings': true});
 
                     // Проверяем, заполнены ли ФИО у пользователя (универсальная функция)
-                    final profileCheckResult = checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования');
+                    final profileCheckResult = checkDataProfileAndOpenEditIfNeeded(
+                      context: context,
+                      message: 'Пожалуйста, заполните имя и фамилию для завершения бронирования',
+                    );
 
                     // Если ФИО заполнены, показываем сообщение об успехе
                     if (profileCheckResult == true) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Бронирование успешно создано'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Бронирование успешно создано'),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
                     } else if (profileCheckResult == null) {
                       // Если профиль еще не загружен (null), устанавливаем флаг для проверки после загрузки
                       _shouldCheckProfileAfterBooking = true;
                       // Показываем сообщение об успехе
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Бронирование успешно создано'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Бронирование успешно создано'),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
                     }
                   },
                   bookingConfirmed: (booking) {
@@ -176,16 +205,28 @@ class _BookingDialogState extends State<BookingDialog> {
                             children: [
                               Row(
                                 children: [
-                                  Text(flight.departureAirport, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                  Text(
+                                    flight.departureAirport,
+                                    style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                                  ),
                                   SizedBox(width: 8),
                                   Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)),
                                   SizedBox(width: 8),
-                                  Text(flight.arrivalAirport, style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                  Text(
+                                    flight.arrivalAirport,
+                                    style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 8),
-                              Text('Свободных мест: ${flight.availableSeats}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
-                              Text('Компенсация за место: ${priceFormat.format(flight.pricePerSeat)}', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                              Text(
+                                'Свободных мест: ${flight.availableSeats}',
+                                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                              ),
+                              Text(
+                                'Компенсация за место: ${priceFormat.format(flight.pricePerSeat)}',
+                                style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                              ),
                             ],
                           ),
                         ),
@@ -235,7 +276,10 @@ class _BookingDialogState extends State<BookingDialog> {
                               border: Border.all(color: Color(0xFFD9E6F8)),
                             ),
                           ),
-                          menuItemStyleData: MenuItemStyleData(height: 48, padding: EdgeInsets.symmetric(horizontal: 16)),
+                          menuItemStyleData: MenuItemStyleData(
+                            height: 48,
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                          ),
                           iconStyleData: IconStyleData(icon: Icon(Icons.arrow_drop_down, color: Color(0xFF9CA5AF))),
                         ),
                         SizedBox(height: 16),
@@ -247,7 +291,10 @@ class _BookingDialogState extends State<BookingDialog> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Итого:', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
-                              Text(priceFormat.format(totalPrice), style: AppStyles.bold20s.copyWith(color: Color(0xFF0A6EFA))),
+                              Text(
+                                priceFormat.format(totalPrice),
+                                style: AppStyles.bold20s.copyWith(color: Color(0xFF0A6EFA)),
+                              ),
                             ],
                           ),
                         ),
@@ -277,7 +324,11 @@ class _BookingDialogState extends State<BookingDialog> {
                                   disabledBackgroundColor: Color(0xFF9CA5AF),
                                 ),
                                 child: isLoading
-                                    ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                    ? SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      )
                                     : Text('Забронировать', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                               ),
                             ),

@@ -102,51 +102,60 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
     }
 
     if (_selectedMainCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию 1-го уровня'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите категорию 1-го уровня'), backgroundColor: Colors.red));
       return;
     }
-    
+
     // Проверяем, что выбраны все доступные уровни категорий
     // Получаем состояние категорий из BLoC
     final categoriesState = context.read<MarketCategoriesBloc>().state;
     if (categoriesState is SuccessMarketCategoriesState) {
       final categories = categoriesState.categories;
-      
+
       // Проверяем наличие категорий 2-го уровня
-      final level2Categories = categories.where((c) => 
-        c.partsMainCategoryId == _selectedMainCategoryId && c.parentId == null
-      ).toList();
-      
+      final level2Categories = categories
+          .where((c) => c.partsMainCategoryId == _selectedMainCategoryId && c.parentId == null)
+          .toList();
+
       if (level2Categories.isNotEmpty && _selectedCategoryLevels.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию 2-го уровня'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Выберите категорию 2-го уровня'), backgroundColor: Colors.red));
         return;
       }
-      
+
       // Проверяем наличие категорий для каждого выбранного уровня
       for (int i = 0; i < _selectedCategoryLevels.length; i++) {
         final currentLevelId = _selectedCategoryLevels[i];
         final nextLevel = i + 3; // level 2 -> index 0, level 3 -> index 1, etc.
-        
+
         // Ищем категории следующего уровня
-        final nextLevelCategories = categories.where((c) => 
-          c.parentId == currentLevelId
-        ).toList();
-        
+        final nextLevelCategories = categories.where((c) => c.parentId == currentLevelId).toList();
+
         // Если есть категории следующего уровня, но они не выбраны
         if (nextLevelCategories.isNotEmpty && (i + 1 >= _selectedCategoryLevels.length)) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Выберите категорию $nextLevel-го уровня'), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Выберите категорию $nextLevel-го уровня'), backgroundColor: Colors.red),
+          );
           return;
         }
       }
     }
 
     if (_mainPhoto == null || !_mainPhoto!.isNew) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
       return;
     }
 
-    if (_selectedManufacturerId == null && (_selectedManufacturerName == null || _selectedManufacturerName!.trim().isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите производителя'), backgroundColor: Colors.red));
+    if (_selectedManufacturerId == null &&
+        (_selectedManufacturerName == null || _selectedManufacturerName!.trim().isEmpty)) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите производителя'), backgroundColor: Colors.red));
       return;
     }
 
@@ -172,7 +181,9 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
         price: int.parse(_priceController.text.trim()),
         currency: _currency,
         partsMainCategoryId: _selectedMainCategoryId,
-        partsSubcategoryId: _selectedCategoryLevels.isNotEmpty ? _selectedCategoryLevels.last : null, // Используем самую глубокую выбранную категорию
+        partsSubcategoryId: _selectedCategoryLevels.isNotEmpty
+            ? _selectedCategoryLevels.last
+            : null, // Используем самую глубокую выбранную категорию
         manufacturerId: _selectedManufacturerId,
         manufacturerName: _selectedManufacturerName,
         partNumber: _partNumberController.text.trim().isEmpty ? null : _partNumberController.text.trim(),
@@ -181,9 +192,15 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
         quantity: int.tryParse(_quantityController.text.trim()) ?? 1,
         location: _selectedLocation,
         weightKg: _weightKgController.text.trim().isEmpty ? null : double.tryParse(_weightKgController.text.trim()),
-        dimensionsLengthCm: _dimensionsLengthController.text.trim().isEmpty ? null : double.tryParse(_dimensionsLengthController.text.trim()),
-        dimensionsWidthCm: _dimensionsWidthController.text.trim().isEmpty ? null : double.tryParse(_dimensionsWidthController.text.trim()),
-        dimensionsHeightCm: _dimensionsHeightController.text.trim().isEmpty ? null : double.tryParse(_dimensionsHeightController.text.trim()),
+        dimensionsLengthCm: _dimensionsLengthController.text.trim().isEmpty
+            ? null
+            : double.tryParse(_dimensionsLengthController.text.trim()),
+        dimensionsWidthCm: _dimensionsWidthController.text.trim().isEmpty
+            ? null
+            : double.tryParse(_dimensionsWidthController.text.trim()),
+        dimensionsHeightCm: _dimensionsHeightController.text.trim().isEmpty
+            ? null
+            : double.tryParse(_dimensionsHeightController.text.trim()),
         compatibleAircraftModelIds: _selectedAircraftModelIds.isNotEmpty ? _selectedAircraftModelIds : null,
         compatibleAircraftModelsText: _manualAircraftModelsText?.isEmpty ?? true ? null : _manualAircraftModelsText,
         mainImageFile: mainImageFile,
@@ -211,9 +228,9 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
               loading: () {},
               loadingMore: (parts) {},
               error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) async {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(errorForUser), backgroundColor: Colors.red),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
               },
               success: (parts, hasMore) {},
               creatingPart: () {},
@@ -221,7 +238,13 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                 final currentPath = context.router.currentPath;
                 final isFromMarket = currentPath.contains('/market');
 
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление успешно создано'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Объявление успешно создано'),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
 
                 final profileCheckResult = checkProfileDataComplete(context);
                 if (profileCheckResult == null) {
@@ -234,7 +257,13 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                       final rootContext = navigatorKey.currentContext;
                       if (rootContext != null && rootContext.mounted) {
                         openProfileEdit(context: rootContext);
-                        ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text('Заполните профиль чтоб с вами могли связаться'), backgroundColor: Colors.orange, duration: Duration(seconds: 5)));
+                        ScaffoldMessenger.of(rootContext).showSnackBar(
+                          SnackBar(
+                            content: Text('Заполните профиль чтоб с вами могли связаться'),
+                            backgroundColor: Colors.orange,
+                            duration: Duration(seconds: 5),
+                          ),
+                        );
                       }
                     });
                   });
@@ -270,7 +299,10 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
             if (!mounted) return;
             if (_shouldCheckProfileAfterCreation) {
               _shouldCheckProfileAfterCreation = false;
-              checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Заполните профиль чтоб с вами могли связаться');
+              checkDataProfileAndOpenEditIfNeeded(
+                context: context,
+                message: 'Заполните профиль чтоб с вами могли связаться',
+              );
             }
           },
         ),
@@ -314,7 +346,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                 SizedBox(height: 16),
                 CustomTextField(
                   controller: _titleController,
-                    labelText: 'Название запчасти *',
+                  labelText: 'Название запчасти *',
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Введите название запчасти';
@@ -323,11 +355,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                   },
                 ),
                 SizedBox(height: 16),
-                CustomTextField(
-                  controller: _descriptionController,
-                    labelText: 'Описание запчасти',
-                  maxLines: 4,
-                ),
+                CustomTextField(controller: _descriptionController, labelText: 'Описание запчасти', maxLines: 4),
                 SizedBox(height: 16),
                 Row(
                   children: [
@@ -359,7 +387,11 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                           fillColor: Colors.white,
                           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         ),
-                        items: ['RUB', 'USD', 'EUR'].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
+                        items: [
+                          'RUB',
+                          'USD',
+                          'EUR',
+                        ].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
                         onChanged: (value) {
                           if (value != null) {
                             setState(() {
@@ -372,21 +404,15 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                   ],
                 ),
                 SizedBox(height: 16),
-                CustomTextField(
-                  controller: _partNumberController,
-                    labelText: 'Артикул (если вы магазин)',
-                ),
+                CustomTextField(controller: _partNumberController, labelText: 'Артикул (если вы магазин)'),
                 SizedBox(height: 16),
-                CustomTextField(
-                  controller: _oemNumberController,
-                    labelText: 'OEM номер',
-                ),
+                CustomTextField(controller: _oemNumberController, labelText: 'OEM номер'),
                 SizedBox(height: 16),
                 _buildConditionField(),
                 SizedBox(height: 16),
                 CustomTextField(
                   controller: _quantityController,
-                    labelText: 'Количество',
+                  labelText: 'Количество',
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value != null && value.trim().isNotEmpty) {
@@ -410,7 +436,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                 SizedBox(height: 16),
                 CustomTextField(
                   controller: _weightKgController,
-                    labelText: 'Вес (кг)',
+                  labelText: 'Вес (кг)',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
                 SizedBox(height: 16),
@@ -419,7 +445,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                     Expanded(
                       child: CustomTextField(
                         controller: _dimensionsLengthController,
-                          labelText: 'Длина (см)',
+                        labelText: 'Длина (см)',
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                       ),
                     ),
@@ -427,7 +453,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                     Expanded(
                       child: CustomTextField(
                         controller: _dimensionsWidthController,
-                          labelText: 'Ширина (см)',
+                        labelText: 'Ширина (см)',
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                       ),
                     ),
@@ -435,7 +461,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                     Expanded(
                       child: CustomTextField(
                         controller: _dimensionsHeightController,
-                          labelText: 'Высота (см)',
+                        labelText: 'Высота (см)',
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                       ),
                     ),
@@ -555,7 +581,12 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedMainCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedMainCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -567,7 +598,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
     }
 
     final widgets = <Widget>[];
-    
+
     // Создаем поле для каждого уровня категорий (начиная с 2-го уровня, так как 1-й - это главная категория)
     for (int level = 2; level <= _selectedCategoryLevels.length + 2; level++) {
       widgets.add(_buildCategoryLevelDropdown(level));
@@ -623,7 +654,9 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
             }
 
             // Получаем выбранную категорию для этого уровня
-            final selectedCategoryId = level <= _selectedCategoryLevels.length + 1 ? _selectedCategoryLevels[level - 2] : null;
+            final selectedCategoryId = level <= _selectedCategoryLevels.length + 1
+                ? _selectedCategoryLevels[level - 2]
+                : null;
 
             return _buildCategoryLevelField(level, levelCategories, selectedCategoryId);
           },
@@ -657,13 +690,22 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: selectedCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: selectedCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
 
   /// Показывает bottom sheet для выбора категории определенного уровня
-  Future<void> _showCategoryLevelBottomSheet(int level, List<MarketCategoryEntity> categories, int? currentSelectedId) async {
+  Future<void> _showCategoryLevelBottomSheet(
+    int level,
+    List<MarketCategoryEntity> categories,
+    int? currentSelectedId,
+  ) async {
     final result = await showUniversalBottomSheet<int?>(
       context: context,
       title: 'Выберите категорию $level-го уровня *',
@@ -708,13 +750,20 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           _selectedCategoryLevels.add(result);
         }
       });
-      
+
       // Загружаем категории следующего уровня
-      debugPrint('🔵 Загружаем категории ${level + 1}-го уровня для categoryId=${result}, mainCategoryId=${_selectedMainCategoryId}');
-      context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getSubcategories(productType: 'parts', parentId: result, mainCategoryId: _selectedMainCategoryId));
+      debugPrint(
+        '🔵 Загружаем категории ${level + 1}-го уровня для categoryId=${result}, mainCategoryId=${_selectedMainCategoryId}',
+      );
+      context.read<MarketCategoriesBloc>().add(
+        MarketCategoriesEvent.getSubcategories(
+          productType: 'parts',
+          parentId: result,
+          mainCategoryId: _selectedMainCategoryId,
+        ),
+      );
     }
   }
-
 
   Widget _buildManufacturerField() {
     final displayText = _selectedManufacturerName ?? 'Выберите производителя *';
@@ -730,7 +779,12 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedManufacturerName != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedManufacturerName != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -762,20 +816,29 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildMainPhotoSection() {
-    final hasValidPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
+    final hasValidPhoto =
+        _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
         SizedBox(height: 12),
-        if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true)) else _buildEmptyPhotoPlaceholder(isMain: true),
+        if (hasValidPhoto)
+          SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true))
+        else
+          _buildEmptyPhotoPlaceholder(isMain: true),
       ],
     );
   }
@@ -790,7 +853,12 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.0,
+            ),
             itemCount: _additionalPhotos.length + 1, // +1 для кнопки "+ ещё"
             itemBuilder: (context, index) {
               if (index == _additionalPhotos.length) {
@@ -830,14 +898,14 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
   Widget _buildPhotoItem(_PhotoItem photoItem, {required bool isMain}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
           // Изображение занимает всё доступное пространство
-            Positioned.fill(
-              child: photoItem.isNew
-                  ? kIsWeb
-                        ? photoItem.bytes != null
+          Positioned.fill(
+            child: photoItem.isNew
+                ? kIsWeb
+                      ? photoItem.bytes != null
                             ? Image.memory(
                                 photoItem.bytes!,
                                 fit: BoxFit.cover,
@@ -858,7 +926,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                             child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                           ),
                         )
-                  : photoItem.url != null && photoItem.url!.isNotEmpty
+                : photoItem.url != null && photoItem.url!.isNotEmpty
                 ? Image.network(
                     getImageUrl(photoItem.url!),
                     fit: BoxFit.cover,
@@ -878,21 +946,21 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                     color: Color(0xFFF3F4F6),
                     child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                   ),
-            ),
+          ),
           // Кнопка удаления
-            Positioned(
-              top: 8,
-              right: 8,
-              child: GestureDetector(
-                onTap: () => _deletePhoto(photoItem, isMain: isMain),
-                child: Container(
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                  child: Icon(Icons.close, size: 16, color: Colors.white),
-                ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: GestureDetector(
+              onTap: () => _deletePhoto(photoItem, isMain: isMain),
+              child: Container(
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                child: Icon(Icons.close, size: 16, color: Colors.white),
               ),
             ),
-          ],
+          ),
+        ],
       ),
     );
   }
@@ -914,7 +982,10 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
           children: [
             Icon(Icons.add_photo_alternate, size: 48, color: Color(0xFF9CA5AF)),
             SizedBox(height: 12),
-            Text(isMain ? 'Добавить основную фотографию' : 'Добавить фотографии', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+            Text(
+              isMain ? 'Добавить основную фотографию' : 'Добавить фотографии',
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+            ),
           ],
         ),
       ),
@@ -923,7 +994,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
 
   Future<void> _pickPhoto({required bool isMain}) async {
     final ImagePicker picker = ImagePicker();
-    
+
     if (isMain) {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null && mounted) {
@@ -992,8 +1063,13 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                   // Закрываем только bottom sheet, используя контекст bottom sheet
                   Navigator.pop(bottomSheetContext, category.id);
                   // Затем загружаем подкатегории для выбранной главной категории
-                  debugPrint('🔵 [onTap] После Navigator.pop, загружаем подкатегории для mainCategoryId=${category.id}');
-                  final event = MarketCategoriesEvent.getSubcategories(productType: 'parts', mainCategoryId: category.id);
+                  debugPrint(
+                    '🔵 [onTap] После Navigator.pop, загружаем подкатегории для mainCategoryId=${category.id}',
+                  );
+                  final event = MarketCategoriesEvent.getSubcategories(
+                    productType: 'parts',
+                    mainCategoryId: category.id,
+                  );
                   debugPrint('🔵 [onTap] Создано событие: $event');
                   context.read<MarketCategoriesBloc>().add(event);
                   debugPrint('🔵 [onTap] Событие добавлено в BLoC');
@@ -1005,7 +1081,6 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
       ),
     );
   }
-
 
   Future<void> _showManufacturerBottomSheet() async {
     final repository = getIt<MarketRepository>();
@@ -1026,7 +1101,7 @@ class _CreatePartsMarketScreenState extends State<CreatePartsMarketScreen> {
                 child: Text('Ошибка загрузки: ${failure.message ?? "Неизвестная ошибка"}', style: AppStyles.regular14s),
               ),
             ),
-        (manufacturers) => ListView(
+            (manufacturers) => ListView(
               shrinkWrap: true,
               children: [
                 ...manufacturers.map((manufacturer) {

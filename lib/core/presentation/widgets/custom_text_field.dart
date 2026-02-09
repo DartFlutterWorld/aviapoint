@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final TextInputAction? textInputAction;
   final EdgeInsets? contentPadding;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
@@ -40,6 +42,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.textInputAction,
     this.contentPadding,
+    this.inputFormatters,
   });
 
   @override
@@ -57,6 +60,7 @@ class CustomTextField extends StatelessWidget {
       focusNode: focusNode,
       maxLength: maxLength,
       textInputAction: textInputAction,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

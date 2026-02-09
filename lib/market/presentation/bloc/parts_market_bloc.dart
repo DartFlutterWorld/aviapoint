@@ -102,7 +102,8 @@ abstract class PartsMarketState with _$PartsMarketState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorPartsMarketState;
-  const factory PartsMarketState.success({required List<PartsMarketEntity> parts, @Default(true) bool hasMore}) = SuccessPartsMarketState;
+  const factory PartsMarketState.success({required List<PartsMarketEntity> parts, @Default(true) bool hasMore}) =
+      SuccessPartsMarketState;
   const factory PartsMarketState.creatingPart() = CreatingPartsMarketState;
   const factory PartsMarketState.createdPart({required PartsMarketEntity part}) = CreatedPartsMarketState;
   const factory PartsMarketState.updating() = UpdatingPartsMarketState;
@@ -128,7 +129,9 @@ class PartsMarketBloc extends Bloc<PartsMarketEvent, PartsMarketState> {
   bool _lastIncludeInactive = false;
   static const int _defaultLimit = 20;
 
-  PartsMarketBloc({required MarketRepository repository}) : _repository = repository, super(const PartsMarketState.loading()) {
+  PartsMarketBloc({required MarketRepository repository})
+    : _repository = repository,
+      super(const PartsMarketState.loading()) {
     on<GetPartsMarketEvent>(_onGetParts);
     on<LoadMorePartsMarketEvent>(_onLoadMore);
     on<RefreshPartsMarketEvent>(_onRefresh);
@@ -199,7 +202,11 @@ class PartsMarketBloc extends Bloc<PartsMarketEvent, PartsMarketState> {
   Future<void> _onLoadMore(LoadMorePartsMarketEvent event, Emitter<PartsMarketState> emit) async {
     if (!_hasMore) return;
 
-    final currentParts = state.maybeWhen(success: (parts, hasMore) => parts, loadingMore: (parts) => parts, orElse: () => <PartsMarketEntity>[]);
+    final currentParts = state.maybeWhen(
+      success: (parts, hasMore) => parts,
+      loadingMore: (parts) => parts,
+      orElse: () => <PartsMarketEntity>[],
+    );
 
     if (currentParts.isEmpty) return;
 

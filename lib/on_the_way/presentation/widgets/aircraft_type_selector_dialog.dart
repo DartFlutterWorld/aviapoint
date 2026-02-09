@@ -147,7 +147,12 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
       debugPrint('$stack');
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке моделей. Попробуйте еще раз или введите вручную.'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при загрузке моделей. Попробуйте еще раз или введите вручную.'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
 
       setState(() {
@@ -175,7 +180,9 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
       final manufacturerName = _selectedManufacturer?.name.trim();
       final fullName = manufacturerName != null && manufacturerName.isNotEmpty
           ? // Если пользователь уже указал производителя вручную в начале, не дублируем его
-            (manualModel.toLowerCase().startsWith(manufacturerName.toLowerCase()) ? manualModel : '$manufacturerName $manualModel')
+            (manualModel.toLowerCase().startsWith(manufacturerName.toLowerCase())
+                ? manualModel
+                : '$manufacturerName $manualModel')
           : manualModel;
       if (widget.returnModelId) {
         Navigator.of(context).pop({'id': null, 'fullName': fullName});
@@ -242,7 +249,10 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                         children: [
                           _isLoadingManufacturers
                               ? Center(
-                                  child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator(strokeWidth: 2)),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
                                 )
                               : TextField(
                                   controller: _manufacturerSearchController,
@@ -251,7 +261,9 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                   onChanged: (_) => _onManufacturerSearchChanged(),
                                   style: AppStyles.regular14s,
                                   onTap: () {
-                                    if (_selectedManufacturer == null && !_isLoadingManufacturers && _manufacturers.isNotEmpty) {
+                                    if (_selectedManufacturer == null &&
+                                        !_isLoadingManufacturers &&
+                                        _manufacturers.isNotEmpty) {
                                       setState(() {
                                         _filteredManufacturers = _manufacturers;
                                         _showManufacturerSuggestions = true;
@@ -259,7 +271,9 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                     }
                                   },
                                   decoration: InputDecoration(
-                                    hintText: _selectedManufacturer == null ? 'Поиск производителя...' : _selectedManufacturer!.name,
+                                    hintText: _selectedManufacturer == null
+                                        ? 'Поиск производителя...'
+                                        : _selectedManufacturer!.name,
                                     hintStyle: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
                                     prefixIcon: Icon(Icons.search, color: Color(0xFF9CA5AF), size: 20),
                                     suffixIcon: _selectedManufacturer != null
@@ -313,7 +327,9 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                     ),
 
                     // Подсказки производителей
-                    if (_showManufacturerSuggestions && _selectedManufacturer == null && _filteredManufacturers.isNotEmpty)
+                    if (_showManufacturerSuggestions &&
+                        _selectedManufacturer == null &&
+                        _filteredManufacturers.isNotEmpty)
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Container(
@@ -322,7 +338,9 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Color(0xFFD9E6F8)),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 4))],
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 4)),
+                            ],
                           ),
                           child: ListView.builder(
                             shrinkWrap: true,
@@ -336,7 +354,9 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                   width: double.infinity,
                                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                   decoration: BoxDecoration(
-                                    border: index != _filteredManufacturers.length - 1 ? Border(bottom: BorderSide(color: Color(0xFFE5E7EB), width: 1)) : null,
+                                    border: index != _filteredManufacturers.length - 1
+                                        ? Border(bottom: BorderSide(color: Color(0xFFE5E7EB), width: 1))
+                                        : null,
                                   ),
                                   child: Text(
                                     manufacturer.name,
@@ -379,7 +399,10 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                           });
                                         },
                                         icon: Icon(Icons.edit, size: 18, color: Color(0xFF0A6EFA)),
-                                        label: Text('Ввести вручную', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                        label: Text(
+                                          'Ввести вручную',
+                                          style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -409,14 +432,23 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                             decoration: BoxDecoration(
                                               color: isSelected ? Color(0xFFE3F1FF) : Colors.white,
                                               borderRadius: BorderRadius.circular(12),
-                                              border: Border.all(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFFE5E7EB), width: isSelected ? 2 : 1),
+                                              border: Border.all(
+                                                color: isSelected ? Color(0xFF0A6EFA) : Color(0xFFE5E7EB),
+                                                width: isSelected ? 2 : 1,
+                                              ),
                                             ),
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: Text(model.modelCode, style: AppStyles.bold14s.copyWith(color: isSelected ? Color(0xFF0A6EFA) : Color(0xFF374151))),
+                                                  child: Text(
+                                                    model.modelCode,
+                                                    style: AppStyles.bold14s.copyWith(
+                                                      color: isSelected ? Color(0xFF0A6EFA) : Color(0xFF374151),
+                                                    ),
+                                                  ),
                                                 ),
-                                                if (isSelected) Icon(Icons.check_circle, color: Color(0xFF0A6EFA), size: 20),
+                                                if (isSelected)
+                                                  Icon(Icons.check_circle, color: Color(0xFF0A6EFA), size: 20),
                                               ],
                                             ),
                                           ),
@@ -433,7 +465,10 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                         });
                                       },
                                       icon: Icon(Icons.edit, size: 16, color: Color(0xFF9CA5AF)),
-                                      label: Text('Ввести другую модель вручную', style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF))),
+                                      label: Text(
+                                        'Ввести другую модель вручную',
+                                        style: AppStyles.bold16s.copyWith(color: Color(0xFF9CA5AF)),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -447,7 +482,10 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Введите название модели вручную', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                            Text(
+                              'Введите название модели вручную',
+                              style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                            ),
                             SizedBox(height: 12),
                             TextField(
                               controller: _manualInputController,
@@ -480,7 +518,10 @@ class _AircraftTypeSelectorDialogState extends State<AircraftTypeSelectorDialog>
                                   _isManualMode = false;
                                 });
                               },
-                              child: Text('Вернуться к каталогу', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                              child: Text(
+                                'Вернуться к каталогу',
+                                style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
+                              ),
                             ),
                           ],
                         ),

@@ -84,7 +84,9 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
                       color: markerColor,
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2))],
+                      boxShadow: [
+                        BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2)),
+                      ],
                     ),
                     child: Icon(markerIcon, color: Colors.white, size: 24),
                   ),
@@ -137,12 +139,18 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: Color(0xFF0A6EFA), width: 1),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 2))],
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 2)),
+                  ],
                 ),
                 child: Center(
                   child: Text(
                     distanceText,
-                    style: AppStyles.regular12s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.bold, fontSize: 11),
+                    style: AppStyles.regular12s.copyWith(
+                      color: Color(0xFF0A6EFA),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -244,7 +252,11 @@ class _FlightRouteMapState extends State<FlightRouteMap> {
             },
           ),
           children: [
-            TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.aviapoint.app', maxZoom: 19),
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.aviapoint.app',
+              maxZoom: 19,
+            ),
             if (_routePoints.length > 1)
               PolylineLayer(
                 polylines: [Polyline(points: _routePoints, strokeWidth: 3.0, color: const Color(0xFF0A6EFA))],

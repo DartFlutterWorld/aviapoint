@@ -18,7 +18,7 @@ DatabaseConnection openConnection() {
         // и база данных будет работать без этого workaround
       }
     }
-    
+
     final dir = await getApplicationDocumentsDirectory();
     final file = File(p.join(dir.path, 'rosavia_app.db'));
     // Используем синхронное создание вместо createInBackground для более надежной работы

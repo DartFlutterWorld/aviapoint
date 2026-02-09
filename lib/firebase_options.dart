@@ -68,5 +68,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'aviapoint.firebasestorage.app',
     iosBundleId: 'ru.dartflutter.aviapoint',
   );
-
 }

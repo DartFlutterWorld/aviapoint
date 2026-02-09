@@ -5,13 +5,12 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +63,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = 30.0;
+    final iconSize = 26.0;
     return AppBar(
       toolbarHeight: height,
       surfaceTintColor: Colors.transparent,
@@ -91,10 +90,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       shadowColor: kIsWeb ? null : shadowColor ?? const Color(0xFFA8A39C).withValues(alpha: 0.12),
       title: withLogo
-          ? Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [SvgPicture.asset(Pictures.logoTitle, height: 40)])
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [SvgPicture.asset(Pictures.logoTitle, height: 40)],
+            )
           : Text(
               title,
-              style: AppStyles.bold14s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
+              style: AppStyles.bold24s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
               maxLines: 2,
               textAlign: titleTextAlign,
               overflow: TextOverflow.ellipsis,
@@ -112,15 +116,22 @@ class _ProfileButton extends StatelessWidget {
     final iconSize = 28.0;
 
     if (!isAuthenticated) {
+      // Не авторизован: всегда показываем кнопку профиля, при нажатии — bottom sheet авторизации
       return IconButton(
         constraints: const BoxConstraints(),
         iconSize: iconSize,
-        icon: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
-        onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
+        icon: SvgPicture.asset(
+          Pictures.profileNavbar,
+          height: iconSize,
+          width: iconSize,
+          colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+        ),
+        onPressed: () => showLogin(context),
         tooltip: 'Профиль',
       );
     }
 
+    // Авторизован: показываем аватар и ведём в профиль (как отдельную вкладку)
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
@@ -132,7 +143,7 @@ class _ProfileButton extends StatelessWidget {
           iconSize: iconSize,
           icon: ClipOval(
             clipBehavior: Clip.hardEdge,
-            child: SizedBox(
+          child: SizedBox(
               width: iconSize,
               height: iconSize,
               child: imageUrl != null && imageUrl.isNotEmpty
@@ -141,13 +152,48 @@ class _ProfileButton extends StatelessWidget {
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.cover,
-                      placeholder: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
-                      errorWidget: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      placeholder: SvgPicture.asset(
+                        Pictures.profileNavbar,
+                        height: iconSize,
+                        width: iconSize,
+                        colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+                      ),
+                      errorWidget: SvgPicture.asset(
+                        Pictures.profileNavbar,
+                        height: iconSize,
+                        width: iconSize,
+                        colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+                      ),
                     )
-                  : SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                  : SvgPicture.asset(
+                      Pictures.profileNavbar,
+                      height: iconSize,
+                      width: iconSize,
+                      colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+                    ),
             ),
           ),
-          onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
+          onPressed: () {
+            try {
+              // Сначала пробуем найти TabsRouter из текущего контекста (страница внутри BaseScreen)
+              final tabsRouter = AutoTabsRouter.of(context);
+              // Индекс профиля в BaseScreen.routes:
+              // 0-main,1-learning,2-on-the-way,3-work,4-market,5-journal,6-profile
+              tabsRouter.setActiveIndex(6);
+            } catch (_) {
+              // Если по какой-то причине TabsRouter не найден в локальном контексте,
+              // пробуем обратиться через глобальный navigatorKey и, если нужно, просто навигируемся в профиль.
+              final rootContext = navigatorKey.currentContext;
+              if (rootContext != null) {
+                try {
+                  final tabsRouter = AutoTabsRouter.of(rootContext);
+                  tabsRouter.setActiveIndex(6);
+                } catch (_) {
+                  AutoRouter.of(rootContext).navigate(const ProfileNavigationRoute());
+                }
+              }
+            }
+          },
           tooltip: 'Профиль',
         );
       },

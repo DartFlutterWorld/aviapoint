@@ -20,8 +20,8 @@ class NewsRepositoryImpl extends NewsRepository {
   final Dio _dio;
 
   NewsRepositoryImpl({required NewsService newsService})
-      : _newsService = newsService,
-        _dio = (getIt<ApiDatasource>() as ApiDatasourceDio).dio;
+    : _newsService = newsService,
+      _dio = (getIt<ApiDatasource>() as ApiDatasourceDio).dio;
 
   @override
   Future<Either<Failure, List<CategoryNewsEntity>>> getCategoryNews() async {
@@ -57,7 +57,11 @@ class NewsRepositoryImpl extends NewsRepository {
   }
 
   @override
-  Future<Either<Failure, List<NewsEntity>>> getNewsByCategory({required int categoryId, bool? published, int? authorId}) async {
+  Future<Either<Failure, List<NewsEntity>>> getNewsByCategory({
+    required int categoryId,
+    bool? published,
+    int? authorId,
+  }) async {
     try {
       final response = await _newsService.getNewsByCategory(categoryId, published: published, authorId: authorId);
 
@@ -91,10 +95,7 @@ class NewsRepositoryImpl extends NewsRepository {
     try {
       // Проверяем наличие большого изображения
       if (pictureBig == null && pictureBigFile == null && pictureBigBytes == null) {
-        return left(ServerFailure(
-          statusCode: '400',
-          message: 'Необходимо предоставить изображение для обложки',
-        ));
+        return left(ServerFailure(statusCode: '400', message: 'Необходимо предоставить изображение для обложки'));
       }
 
       // Если есть файл изображения или bytes, отправляем через multipart/form-data
@@ -150,12 +151,12 @@ class NewsRepositoryImpl extends NewsRepository {
           multipartFile = MultipartFile.fromBytes(bytes, filename: fileName);
         } else if (pictureBigFile != null) {
           // Для других платформ используем File напрямую
-          multipartFile = await MultipartFile.fromFile(pictureBigFile.path, filename: pictureBigFile.path.split('/').last);
+          multipartFile = await MultipartFile.fromFile(
+            pictureBigFile.path,
+            filename: pictureBigFile.path.split('/').last,
+          );
         } else {
-          return left(ServerFailure(
-            statusCode: '400',
-            message: 'Не удалось подготовить файл изображения',
-          ));
+          return left(ServerFailure(statusCode: '400', message: 'Не удалось подготовить файл изображения'));
         }
 
         formData.files.add(MapEntry('picture_big', multipartFile));
@@ -164,7 +165,7 @@ class NewsRepositoryImpl extends NewsRepository {
         try {
           final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
           final dio = apiDatasource.dio;
-          
+
           final response = await dio.post<Map<String, dynamic>>(
             '/api/news',
             data: formData,
@@ -172,10 +173,7 @@ class NewsRepositoryImpl extends NewsRepository {
           );
 
           if (response.data == null) {
-            return left(ServerFailure(
-              statusCode: response.statusCode?.toString(),
-              message: 'Пустой ответ от сервера',
-            ));
+            return left(ServerFailure(statusCode: response.statusCode?.toString(), message: 'Пустой ответ от сервера'));
           }
 
           final newsDto = NewsDto.fromJson(response.data!);
@@ -233,12 +231,7 @@ class NewsRepositoryImpl extends NewsRepository {
         ),
       );
     } catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: '500',
-          message: e.toString(),
-        ),
-      );
+      return left(ServerFailure(statusCode: '500', message: e.toString()));
     }
   }
 
@@ -388,7 +381,12 @@ class NewsRepositoryImpl extends NewsRepository {
               final fileName = file.path.split('/').last;
               formData.files.add(MapEntry('additional_images[]', MultipartFile.fromBytes(bytes, filename: fileName)));
             } else {
-              formData.files.add(MapEntry('additional_images[]', await MultipartFile.fromFile(file.path, filename: file.path.split('/').last)));
+              formData.files.add(
+                MapEntry(
+                  'additional_images[]',
+                  await MultipartFile.fromFile(file.path, filename: file.path.split('/').last),
+                ),
+              );
             }
           }
         } else if (additionalImageBytes != null && additionalImageBytes.isNotEmpty) {
@@ -495,12 +493,7 @@ class NewsRepositoryImpl extends NewsRepository {
         ),
       );
     } catch (e) {
-      return left(
-        ServerFailure(
-          statusCode: '500',
-          message: e.toString(),
-        ),
-      );
+      return left(ServerFailure(statusCode: '500', message: e.toString()));
     }
   }
 }

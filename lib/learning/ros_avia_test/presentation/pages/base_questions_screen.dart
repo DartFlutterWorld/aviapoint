@@ -37,7 +37,11 @@ class _BaseQuestionsScreenState extends State<BaseQuestionsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id));
+    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(
+      GetCategoriesWithListQuestionsEvent(
+        typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id,
+      ),
+    );
     BlocProvider.of<TypeCorrectAnswersBloc>(context).add(GetTypeCorrectAnswersEvent());
     // BlocProvider.of<EmergencyCheckListBloc>(context).add(GetEmergencyCheckListEvent());
   }
@@ -96,9 +100,11 @@ class _BaseQuestionsScreenState extends State<BaseQuestionsScreen> {
                 paddingTop: 100,
                 textError: value.errorForUser,
                 repeat: () {
-                  BlocProvider.of<CategoriesWithListQuestionsBloc>(
-                    context,
-                  ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id));
+                  BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(
+                    GetCategoriesWithListQuestionsEvent(
+                      typeSsertificatesId: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id,
+                    ),
+                  );
                 },
               ),
             ),
@@ -124,7 +130,11 @@ class _SuccessTypeCorrectAnswers extends StatelessWidget {
         Wrap(
           spacing: 4,
           runSpacing: 4,
-          children: [...typeCorrectAnswer.map((e) => CorrectAnswer(color: getColors(e.id).$1, title: e.title, colorTitle: getColors(e.id).$2))],
+          children: [
+            ...typeCorrectAnswer.map(
+              (e) => CorrectAnswer(color: getColors(e.id).$1, title: e.title, colorTitle: getColors(e.id).$2),
+            ),
+          ],
         ),
       ],
     );
@@ -176,7 +186,9 @@ class _Success extends StatelessWidget {
                                   questionId: categoryWithQuestions[index].questionsWithAnswers[index2].questionId,
                                   categoryTitle: categoryWithQuestions[index].categoryTitle,
                                 ),
-                                child: ChipsWidget(questionWithAnswers: categoryWithQuestions[index].questionsWithAnswers[index2]),
+                                child: ChipsWidget(
+                                  questionWithAnswers: categoryWithQuestions[index].questionsWithAnswers[index2],
+                                ),
                               ),
                             ),
                           ),

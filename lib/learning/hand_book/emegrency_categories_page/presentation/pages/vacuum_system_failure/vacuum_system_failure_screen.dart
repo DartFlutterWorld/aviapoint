@@ -19,10 +19,7 @@ class VacuumSystemFailureScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'vacuum_system_failure'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'vacuum_system_failure'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

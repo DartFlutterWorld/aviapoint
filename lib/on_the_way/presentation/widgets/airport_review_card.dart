@@ -66,7 +66,10 @@ class AirportReviewCard extends StatelessWidget {
               children: [
                 _buildHeader(context),
                 SizedBox(height: 12),
-                if (review.rating != null && review.rating! > 0) ...[RatingWidget(rating: review.rating!, size: 16), SizedBox(height: 12)],
+                if (review.rating != null && review.rating! > 0) ...[
+                  RatingWidget(rating: review.rating!, size: 16),
+                  SizedBox(height: 12),
+                ],
                 if (review.comment != null && review.comment!.isNotEmpty) ...[_buildComment(), SizedBox(height: 12)],
                 if (review.hasPhotos) ...[_buildPhotos(context), SizedBox(height: 12)],
                 if (onReply != null && !isReply) _buildReplyButton(),
@@ -91,7 +94,10 @@ class AirportReviewCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(review.reviewerName, style: AppStyles.bold14s.copyWith(color: Color(0xFF1E293B))),
-              if (review.createdAt != null) ...[SizedBox(height: 4), Text(formatDate(review.createdAt!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
+              if (review.createdAt != null) ...[
+                SizedBox(height: 4),
+                Text(formatDate(review.createdAt!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+              ],
             ],
           ),
         ),
@@ -128,7 +134,12 @@ class AirportReviewCard extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 1.0,
+      ),
       itemCount: review.photoUrls!.length,
       itemBuilder: (context, index) {
         final photoUrl = review.photoUrls![index];
@@ -230,7 +241,13 @@ class AirportReviewCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(imageUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -242,14 +259,26 @@ class AirportReviewCard extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Правый клик по изображению → "Сохранить как"'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Необходимо разрешение на сохранение файлов'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
@@ -275,21 +304,37 @@ class AirportReviewCard extends StatelessWidget {
       await dio.download(imageUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid
+          ? await getExternalStorageDirectory()
+          : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid
+            ? '${directory.path}/Download/$fileName'
+            : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Фотография сохранена'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     } catch (e) {
       if (context.mounted) {
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -335,7 +380,10 @@ class AirportReviewCard extends StatelessWidget {
     return Positioned(
       top: 16,
       right: 16,
-      child: Text(formatDateWithTime(review.createdAt!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+      child: Text(
+        formatDateWithTime(review.createdAt!),
+        style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+      ),
     );
   }
 

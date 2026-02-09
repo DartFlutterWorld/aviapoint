@@ -7,10 +7,10 @@ import 'payment_url_helper_stub.dart' if (dart.library.html) 'payment_url_helper
 /// Вспомогательный класс для генерации URL для платежей
 class PaymentUrlHelper {
   /// Генерирует URL для успешного возврата после оплаты
-  /// 
+  ///
   /// НА ВЕБ: используем HTTP/HTTPS URL для редиректа на сайт
   /// НА МОБИЛЬНЫХ: используем HTTP/HTTPS URL (ЮKassa требует, чтобы return_url начинался с http:// или https://)
-  /// 
+  ///
   /// [source] - опциональный параметр для указания исходного экрана (например, 'profile' или 'testing_mode')
   static String buildReturnUrl({String? source}) {
     if (kIsWeb) {

@@ -108,7 +108,12 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                         description += explanation.replaceAll(RegExp(r'<[^>]*>'), '').trim();
                       }
 
-                      LearningShareHelper.shareLearningPage(context, title: 'РосАвиаТест. $questionText', description: description.isNotEmpty ? description : null, imageUrl: null);
+                      LearningShareHelper.shareLearningPage(
+                        context,
+                        title: 'РосАвиаТест. $questionText',
+                        description: description.isNotEmpty ? description : null,
+                        imageUrl: null,
+                      );
                     },
                     tooltip: 'Поделиться',
                   ),
@@ -130,7 +135,10 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                 children: [
                   ChipsWidget(questionWithAnswers: widget.question ?? emptyQuestion),
                   Flexible(
-                    child: Text(bigFirstSymbol(widget.categoryTitle ?? ''), style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF))),
+                    child: Text(
+                      bigFirstSymbol(widget.categoryTitle ?? ''),
+                      style: AppStyles.regular13s.copyWith(color: Color(0xFF9CA5AF)),
+                    ),
                   ),
                 ],
               ),
@@ -146,9 +154,15 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                   child: Column(
                     children: [
                       AnswerWidget(
-                        backgroundColor: getIcon(isCorrect: widget.question?.answers[index].isCorrect ?? false, isOfficial: widget.question?.answers[index].isOfficial ?? false).$2,
+                        backgroundColor: getIcon(
+                          isCorrect: widget.question?.answers[index].isCorrect ?? false,
+                          isOfficial: widget.question?.answers[index].isOfficial ?? false,
+                        ).$2,
                         title: widget.question?.answers[index].answerText ?? '',
-                        icon: getIcon(isCorrect: widget.question?.answers[index].isCorrect ?? false, isOfficial: widget.question?.answers[index].isOfficial ?? false).$1,
+                        icon: getIcon(
+                          isCorrect: widget.question?.answers[index].isCorrect ?? false,
+                          isOfficial: widget.question?.answers[index].isOfficial ?? false,
+                        ).$1,
                       ),
                     ],
                   ),
@@ -160,7 +174,10 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                 children: [
                   SvgPicture.asset(Pictures.isCorrect),
                   Flexible(
-                    child: Text('Правильный и обоснованный вариант ответа', style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89))),
+                    child: Text(
+                      'Правильный и обоснованный вариант ответа',
+                      style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89)),
+                    ),
                   ),
                 ],
               ),
@@ -170,7 +187,10 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                 children: [
                   SvgPicture.asset(Pictures.isOfficial),
                   Flexible(
-                    child: Text('Вариант ответа, считающийся правильным в официальном тесте', style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89))),
+                    child: Text(
+                      'Вариант ответа, считающийся правильным в официальном тесте',
+                      style: AppStyles.light12s.copyWith(color: Color(0xFF6E7A89)),
+                    ),
                   ),
                 ],
               ),
@@ -179,7 +199,10 @@ class _DetailQuestionScreenState extends State<DetailQuestionScreen> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xFFF1F7FF)),
-                  child: HtmlWidget(widget.question!.explanation!, textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767))),
+                  child: HtmlWidget(
+                    widget.question!.explanation!,
+                    textStyle: AppStyles.regular14s.copyWith(color: Color(0xFF4B5767)),
+                  ),
                 ),
             ],
           ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
@@ -31,10 +32,11 @@ import 'package:intl/intl.dart';
 
 @RoutePage()
 class DetailNewsScreen extends StatefulWidget {
-  final NewsEntity news;
+  /// Передаётся при навигации из приложения; при открытии по ссылке (path) может быть null — тогда данные грузятся по newsId.
+  final NewsEntity? news;
   final int newsId;
 
-  const DetailNewsScreen({super.key, @PathParam('id') required this.newsId, required this.news});
+  const DetailNewsScreen({super.key, @PathParam('id') required this.newsId, this.news});
 
   @override
   State<DetailNewsScreen> createState() => _DetailNewsScreenState();
@@ -50,6 +52,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
   /// Поделиться новостью
   void _shareNews() {
     final news = _currentNews ?? widget.news;
+    if (news == null) return;
     final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
     final newsUrl = '$baseUrl/news/${widget.newsId}';
 
@@ -91,9 +94,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
 
     // Добавляем краткое описание (первые 200 символов body)
     if (news.body.isNotEmpty) {
-      final description = news.body.length > 200 
-          ? '${news.body.substring(0, 200)}...' 
-          : news.body;
+      final description = news.body.length > 200 ? '${news.body.substring(0, 200)}...' : news.body;
       buffer.writeln(description);
       buffer.writeln('');
     }
@@ -140,7 +141,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
 
       // На мобильных платформах скачиваем изображение и делимся файлом
       final scaffoldMessenger = ScaffoldMessenger.of(context);
-      
+
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Row(
@@ -169,19 +170,24 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось поделиться с изображением: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться с изображением: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
         // В случае ошибки делимся только текстом
         Share.share(text);
       }
     }
   }
 
-
   @override
   void initState() {
     super.initState();
     _currentNews = widget.news;
-    // Загружаем полные данные новости (включая дополнительные изображения)
+    // Загружаем полные данные новости (включая при открытии по ссылке только по id)
     _loadFullNews();
     // Устанавливаем SEO метатеги для страницы новости
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -199,7 +205,9 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
       },
       (news) {
         if (mounted) {
-          debugPrint('✅ [DetailNewsScreen] Загружена новость ID: ${news.id}, additionalImages: ${news.additionalImages?.length ?? 0}');
+          debugPrint(
+            '✅ [DetailNewsScreen] Загружена новость ID: ${news.id}, additionalImages: ${news.additionalImages?.length ?? 0}',
+          );
           if (news.additionalImages != null && news.additionalImages!.isNotEmpty) {
             debugPrint('📸 [DetailNewsScreen] URLs: ${news.additionalImages}');
           }
@@ -214,6 +222,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
 
   void _updateSeoTags() {
     final news = _currentNews ?? widget.news;
+    if (news == null) return;
     SeoHelper.setNewsMetaTags(
       title: news.title,
       description: news.subTitle.isNotEmpty ? news.subTitle : news.title,
@@ -244,6 +253,12 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
   @override
   Widget build(BuildContext context) {
     final news = _currentNews ?? widget.news;
+    if (news == null) {
+      return Scaffold(
+        appBar: CustomAppBar(title: 'Новости авиации', withBack: true),
+        body: Center(child: LoadingCustom()),
+      );
+    }
     final isAuthenticated = Provider.of<AppState>(context, listen: false).isAuthenticated;
     final isAuthor = isAuthenticated && PermissionHelper.isOwnerOrAdmin(news.authorId, context);
 
@@ -260,176 +275,167 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
         );
       },
       child: Scaffold(
-      appBar: CustomAppBar(
-        title: 'Новости авиации',
-        withBack: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: _shareNews,
-            tooltip: 'Поделиться',
-          ),
-          if (isAuthor)
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () async {
-                await AutoRouter.of(context).push(EditNewsRoute(newsId: news.id));
-                // После возврата с экрана редактирования перезагружаем новость
-                _reloadNews();
-              },
-              tooltip: 'Редактировать новость',
-            ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          // padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Color(0xFFD9E6F8)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Создаем список всех изображений (обложка + дополнительные)
-                      final allImages = <String?>[
-                        news.pictureBig,
-                        ...(news.additionalImages ?? []),
-                      ];
-                      PhotoViewer.show(context, allImages, initialIndex: 0);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                      child: NetworkImageWidget(
-                        imageUrl: getImageUrl(news.pictureBig),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  // Чипс со статусом для автора в правом верхнем углу (как в блоге)
-                  if (Provider.of<AppState>(context, listen: false).isAuthenticated &&
-                      PermissionHelper.isOwnerOrAdmin(news.authorId, context))
-                    Positioned(
-                      top: 16,
-                      right: 8,
-                      child: StatusChip(
-                        text: news.published ? 'Опубликовано' : 'Не опубликовано',
-                        backgroundColor: news.published ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        borderRadius: 8,
-                      ),
-                    ),
-                ],
+        appBar: CustomAppBar(
+          title: 'Новости авиации',
+          withBack: true,
+          actions: [
+            IconButton(icon: const Icon(Icons.share), onPressed: _shareNews, tooltip: 'Поделиться'),
+            if (isAuthor)
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () async {
+                  await AutoRouter.of(context).push(EditNewsRoute(newsId: news.id));
+                  // После возврата с экрана редактирования перезагружаем новость
+                  _reloadNews();
+                },
+                tooltip: 'Редактировать новость',
               ),
-              SizedBox(height: 16),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            // padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Color(0xFFD9E6F8)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
                   children: [
-                    Text(news.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
-                    SizedBox(height: 8),
-                    // Анонс (subTitle)
-                    if (news.subTitle.isNotEmpty) ...[
-                      SizedBox(height: 8),
-                      Text(
-                        news.subTitle,
-                        style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+                    GestureDetector(
+                      onTap: () {
+                        // Создаем список всех изображений (обложка + дополнительные)
+                        final allImages = <String?>[news.pictureBig, ...(news.additionalImages ?? [])];
+                        PhotoViewer.show(context, allImages, initialIndex: 0);
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                        child: NetworkImageWidget(imageUrl: getImageUrl(news.pictureBig), fit: BoxFit.fill),
                       ),
-                      SizedBox(height: 12),
-                    ],
-                    // Дата в виде чипа как в блоге
-                    Wrap(
-                      spacing: 16,
-                      runSpacing: 8,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.calendar_today, size: 14, color: const Color(0xFF9CA5AF)),
-                            SizedBox(width: 4),
-                            Text(formatNewsDate(news.date), style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF))),
-                          ],
-                        ),
-                      ],
                     ),
-                    SizedBox(height: 16),
-                    // Контент (Quill или body)
-                    if (news.content != null && news.content!.isNotEmpty) ...[
-                      _buildQuillContent(news.content!),
-                    ] else ...[
-                      HtmlWidget(news.body),
-                    ],
-                    SizedBox(height: 16),
-                    // Дополнительные изображения
-                    if (news.additionalImages != null && news.additionalImages!.isNotEmpty) ...[
-                      SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.zero,
-                          itemCount: news.additionalImages!.length,
-                          itemBuilder: (context, index) {
-                            final imageUrl = news.additionalImages![index];
-                            return GestureDetector(
-                              onTap: () {
-                                // Создаем список всех изображений (обложка + дополнительные)
-                                final allImages = <String?>[
-                                  news.pictureBig,
-                                  ...(news.additionalImages ?? []),
-                                ];
-                                // Вычисляем индекс в общем списке (обложка + дополнительные)
-                                PhotoViewer.show(context, allImages, initialIndex: 1 + index);
-                              },
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                margin: EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: NetworkImageWidget(
-                                    imageUrl: getImageUrl(imageUrl),
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                    // Чипс со статусом для автора в правом верхнем углу (как в блоге)
+                    if (Provider.of<AppState>(context, listen: false).isAuthenticated &&
+                        PermissionHelper.isOwnerOrAdmin(news.authorId, context))
+                      Positioned(
+                        top: 16,
+                        right: 8,
+                        child: StatusChip(
+                          text: news.published ? 'Опубликовано' : 'Не опубликовано',
+                          backgroundColor: news.published ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          borderRadius: 8,
                         ),
                       ),
-                      SizedBox(height: 16),
-                    ],
-                    // Источник
-                    if (news.source.isNotEmpty) ...[
-                      GestureDetector(
-                        onTap: () => openSource(news.source),
-                        child: Text(
-                          news.source,
-                          style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline, decorationColor: Color(0xFF0A6EFA)),
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                    ],
                   ],
                 ),
-              ),
-              SizedBox(height: 16),
-            ],
+                SizedBox(height: 16),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(news.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
+                      SizedBox(height: 8),
+                      // Анонс (subTitle)
+                      if (news.subTitle.isNotEmpty) ...[
+                        SizedBox(height: 8),
+                        Text(news.subTitle, style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+                        SizedBox(height: 12),
+                      ],
+                      // Дата в виде чипа как в блоге
+                      Wrap(
+                        spacing: 16,
+                        runSpacing: 8,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.calendar_today, size: 14, color: const Color(0xFF9CA5AF)),
+                              SizedBox(width: 4),
+                              Text(
+                                formatNewsDate(news.date),
+                                style: AppStyles.light12s.copyWith(color: const Color(0xFF9CA5AF)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      // Контент (Quill или body)
+                      if (news.content != null && news.content!.isNotEmpty) ...[
+                        _buildQuillContent(news.content!),
+                      ] else ...[
+                        HtmlWidget(news.body),
+                      ],
+                      SizedBox(height: 16),
+                      // Дополнительные изображения
+                      if (news.additionalImages != null && news.additionalImages!.isNotEmpty) ...[
+                        SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.zero,
+                            itemCount: news.additionalImages!.length,
+                            itemBuilder: (context, index) {
+                              final imageUrl = news.additionalImages![index];
+                              return GestureDetector(
+                                onTap: () {
+                                  // Создаем список всех изображений (обложка + дополнительные)
+                                  final allImages = <String?>[news.pictureBig, ...(news.additionalImages ?? [])];
+                                  // Вычисляем индекс в общем списке (обложка + дополнительные)
+                                  PhotoViewer.show(context, allImages, initialIndex: 1 + index);
+                                },
+                                child: Container(
+                                  width: 100,
+                                  height: 100,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: NetworkImageWidget(
+                                      imageUrl: getImageUrl(imageUrl),
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                      // Источник
+                      if (news.source.isNotEmpty) ...[
+                        GestureDetector(
+                          onTap: () => openSource(news.source),
+                          child: Text(
+                            news.source,
+                            style: AppStyles.medium10s.copyWith(
+                              color: Color(0xFF0A6EFA),
+                              decoration: TextDecoration.underline,
+                              decorationColor: Color(0xFF0A6EFA),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 

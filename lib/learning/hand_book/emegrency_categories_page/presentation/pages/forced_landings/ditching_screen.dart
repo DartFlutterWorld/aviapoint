@@ -19,10 +19,7 @@ class DitchingScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'ditching'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'ditching'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

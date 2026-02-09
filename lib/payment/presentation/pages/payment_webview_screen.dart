@@ -13,7 +13,15 @@ class PaymentWebViewScreen extends StatefulWidget {
   final VoidCallback? onCancel;
   final VoidCallback? onFailure;
 
-  const PaymentWebViewScreen({super.key, required this.paymentUrl, this.returnRouteSource, this.paymentId, this.onSuccess, this.onCancel, this.onFailure});
+  const PaymentWebViewScreen({
+    super.key,
+    required this.paymentUrl,
+    this.returnRouteSource,
+    this.paymentId,
+    this.onSuccess,
+    this.onCancel,
+    this.onFailure,
+  });
 
   @override
   State<PaymentWebViewScreen> createState() => _PaymentWebViewScreenState();
@@ -127,7 +135,7 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
     // Проверяем, является ли URL нашим return_url
     // Для мобильных return_url = https://avia-point.com/payments/return?source=...
     final isReturnUrl = uri.path.contains('/payments/return');
-    
+
     // Проверяем, является ли URL нашим cancel_url (когда пользователь нажимает "Exit" в ЮKassa)
     // Для мобильных cancel_url = https://avia-point.com/payments/cancel?source=...
     final isCancelUrl = uri.path.contains('/payments/cancel');

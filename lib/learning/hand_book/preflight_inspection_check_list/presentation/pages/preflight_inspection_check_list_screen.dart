@@ -23,7 +23,10 @@ import 'package:provider/provider.dart';
 @RoutePage()
 class PreflightInspectionCheckListScreen extends StatefulWidget {
   final String preflihgtInspectionCategoryId;
-  const PreflightInspectionCheckListScreen({super.key, @PathParam('preflihgtInspectionCategoryId') required this.preflihgtInspectionCategoryId});
+  const PreflightInspectionCheckListScreen({
+    super.key,
+    @PathParam('preflihgtInspectionCategoryId') required this.preflihgtInspectionCategoryId,
+  });
 
   @override
   State<PreflightInspectionCheckListScreen> createState() => _PreflightInspectionCheckListScreenState();
@@ -40,7 +43,9 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
     if (!mounted) return;
     // Загружаем список категорий для получения названия
     context.read<PreflightInspectionCategoriesBloc>().add(GetPreflightInspectionCategoriesEvent());
-    context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
+    context.read<PreflightInspectionCheckListByCategoryBloc>().add(
+      GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId),
+    );
   }
 
   @override
@@ -86,9 +91,14 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
                         valueListenable: currentDoing,
                         builder: (context, doing, _) {
                           return IconButton(
-                icon: const Icon(Icons.share, color: AppColors.primary100p),
-                            onPressed: () => LearningShareHelper.shareLearningPage(context, title: title, description: doing, imageUrl: imageUrl),
-                tooltip: 'Поделиться',
+                            icon: const Icon(Icons.share, color: AppColors.primary100p),
+                            onPressed: () => LearningShareHelper.shareLearningPage(
+                              context,
+                              title: title,
+                              description: doing,
+                              imageUrl: imageUrl,
+                            ),
+                            tooltip: 'Поделиться',
                           );
                         },
                       );
@@ -114,7 +124,9 @@ class _PreflightInspectionCheckListScreenState extends State<PreflightInspection
               error: (value) => ErrorCustom(
                 textError: value.errorForUser,
                 repeat: () {
-                  context.read<PreflightInspectionCheckListByCategoryBloc>().add(GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId));
+                  context.read<PreflightInspectionCheckListByCategoryBloc>().add(
+                    GetPreflightInspectionCheckListByCategoryEvent(widget.preflihgtInspectionCategoryId),
+                  );
                 },
               ),
               initial: (value) => Center(child: LoadingCustom()),
@@ -188,7 +200,9 @@ class _SuccessState extends State<_Success> {
     // По preflightInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
     // с айдишниками и смотрим в нем,
     // если согласно индексу +1 (+1 потому что счетает индекс от 0) есть уже такой то показываем зелёный кубик, иначе красный
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId);
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
+      (e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId,
+    );
     if (index == indexCheck) {
       return Color(0xFFF1F7FF);
     }
@@ -200,7 +214,9 @@ class _SuccessState extends State<_Success> {
     // По preflightInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
     // с айдишниками и смотрим в нем,
     // если согласно индексу +1 (+1 потому что счетает индекс от 0) есть уже такой то показываем зелёный кубик, иначе красный
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId);
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
+      (e) => e.idCategory == widget.preflightInspectionCheck.first.preflightInspectionCategoryId,
+    );
     if (index == indexCheck) {
       return Color(0xFF223B76);
     }
@@ -246,7 +262,11 @@ class _SuccessState extends State<_Success> {
                       options: options,
                       itemBuilder: buildAnimatedItem,
                       itemCount: widget.preflightInspectionCheck.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 15, crossAxisSpacing: 4, mainAxisSpacing: 4),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 15,
+                        crossAxisSpacing: 4,
+                        mainAxisSpacing: 4,
+                      ),
                     ),
                     SizedBox(height: 24),
                     Padding(
@@ -270,17 +290,25 @@ class _SuccessState extends State<_Success> {
                           children: [
                             SvgPicture.asset(Pictures.danger),
                             Flexible(
-                              child: Text(widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(), style: AppStyles.regular15s.copyWith(color: Color(0xFF374151))),
+                              child: Text(
+                                widget.preflightInspectionCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(),
+                                style: AppStyles.regular15s.copyWith(color: Color(0xFF374151)),
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
                     SizedBox(height: 24),
-                    if (widget.preflightInspectionCheck[indexCheck].picture != null && widget.preflightInspectionCheck[indexCheck].picture!.isNotEmpty)
+                    if (widget.preflightInspectionCheck[indexCheck].picture != null &&
+                        widget.preflightInspectionCheck[indexCheck].picture!.isNotEmpty)
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: NetworkImageWidget(imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture), placeholder: LoadingCustom(), errorWidget: Icon(Icons.error)),
+                        child: NetworkImageWidget(
+                          imageUrl: getImageUrl(widget.preflightInspectionCheck[indexCheck].picture),
+                          placeholder: LoadingCustom(),
+                          errorWidget: Icon(Icons.error),
+                        ),
                       ),
                     SizedBox(height: 24),
                   ],
@@ -294,9 +322,19 @@ class _SuccessState extends State<_Success> {
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
               borderRadius: 46,
-              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.25),
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7),
+                ),
+              ],
               onPressed: () {
-                context.read<PreflightCheckedCubit>().setCheck(idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId, idCheck: indexCheck + 1);
+                context.read<PreflightCheckedCubit>().setCheck(
+                  idCategory: widget.preflightInspectionCheck[indexCheck].preflightInspectionCategoryId,
+                  idCheck: indexCheck + 1,
+                );
 
                 if (widget.preflightInspectionCheck.length - 1 > indexCheck) {
                   setState(() {

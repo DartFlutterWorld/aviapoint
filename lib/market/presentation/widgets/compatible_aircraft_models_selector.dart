@@ -69,7 +69,6 @@ class _CompatibleAircraftModelsSelectorState extends State<CompatibleAircraftMod
     }
   }
 
-
   void _removeSelectedModel(AircraftModelDto model) {
     setState(() {
       _selectedModels.removeWhere((m) => m.id == model.id);
@@ -104,21 +103,18 @@ class _CompatibleAircraftModelsSelectorState extends State<CompatibleAircraftMod
   Future<void> _showAircraftModelsModal(BuildContext context) async {
     final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
     final service = OnTheWayService(apiDatasource.dio);
-    
+
     try {
       final allModels = await service.getAircraftModels();
-      
+
       if (!mounted) return;
-      
+
       final selectedIds = _selectedModels.map((m) => m.id).toSet();
       final result = await showDialog<List<AircraftModelDto>>(
         context: context,
-        builder: (context) => _AircraftModelsSelectionDialog(
-          allModels: allModels,
-          selectedIds: selectedIds,
-        ),
+        builder: (context) => _AircraftModelsSelectionDialog(allModels: allModels, selectedIds: selectedIds),
       );
-      
+
       if (result != null && mounted) {
         setState(() {
           _selectedModels = result;
@@ -128,9 +124,9 @@ class _CompatibleAircraftModelsSelectorState extends State<CompatibleAircraftMod
     } catch (e) {
       debugPrint('Error loading aircraft models: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка загрузки моделей'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка загрузки моделей'), backgroundColor: Colors.red));
       }
     }
   }
@@ -142,7 +138,7 @@ class _CompatibleAircraftModelsSelectorState extends State<CompatibleAircraftMod
       children: [
         Text('Совместимые модели самолётов', style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary)),
         SizedBox(height: 12),
-        
+
         // Кнопка для открытия модалки выбора моделей
         InkWell(
           onTap: () => _showAircraftModelsModal(context),
@@ -265,10 +261,7 @@ class _AircraftModelsSelectionDialog extends StatefulWidget {
   final List<AircraftModelDto> allModels;
   final Set<int> selectedIds;
 
-  const _AircraftModelsSelectionDialog({
-    required this.allModels,
-    required this.selectedIds,
-  });
+  const _AircraftModelsSelectionDialog({required this.allModels, required this.selectedIds});
 
   @override
   State<_AircraftModelsSelectionDialog> createState() => _AircraftModelsSelectionDialogState();
@@ -335,16 +328,8 @@ class _AircraftModelsSelectionDialogState extends State<_AircraftModelsSelection
               padding: EdgeInsets.all(16),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Text(
-                      'Выберите модели самолётов',
-                      style: AppStyles.bold16s,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
+                  Expanded(child: Text('Выберите модели самолётов', style: AppStyles.bold16s)),
+                  IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
                 ],
               ),
             ),
@@ -384,15 +369,9 @@ class _AircraftModelsSelectionDialogState extends State<_AircraftModelsSelection
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text('Отмена'),
-                  ),
+                  TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('Отмена')),
                   SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _confirmSelection,
-                    child: Text('Выбрать (${_selectedIds.length})'),
-                  ),
+                  ElevatedButton(onPressed: _confirmSelection, child: Text('Выбрать (${_selectedIds.length})')),
                 ],
               ),
             ),

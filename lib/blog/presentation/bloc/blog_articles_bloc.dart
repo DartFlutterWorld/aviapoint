@@ -11,8 +11,17 @@ part 'blog_articles_bloc.freezed.dart';
 class BlogArticlesEvent with _$BlogArticlesEvent {
   const BlogArticlesEvent._();
 
-  const factory BlogArticlesEvent.get({int? categoryId, int? tagId, int? authorId, bool? featured, String? status, int? limit, int? offset, String? search, int? aircraftModelId}) =
-      GetBlogArticlesEvent;
+  const factory BlogArticlesEvent.get({
+    int? categoryId,
+    int? tagId,
+    int? authorId,
+    bool? featured,
+    String? status,
+    int? limit,
+    int? offset,
+    String? search,
+    int? aircraftModelId,
+  }) = GetBlogArticlesEvent;
 
   const factory BlogArticlesEvent.loadMore() = LoadMoreBlogArticlesEvent;
 
@@ -53,9 +62,17 @@ class BlogArticlesState with _$BlogArticlesState {
   const BlogArticlesState._();
 
   const factory BlogArticlesState.loading() = LoadingBlogArticlesState;
-  const factory BlogArticlesState.loadingMore({required List<BlogArticleEntity> articles}) = LoadingMoreBlogArticlesState;
-  const factory BlogArticlesState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorBlogArticlesState;
-  const factory BlogArticlesState.success({required List<BlogArticleEntity> articles, required bool hasMore}) = SuccessBlogArticlesState;
+  const factory BlogArticlesState.loadingMore({required List<BlogArticleEntity> articles}) =
+      LoadingMoreBlogArticlesState;
+  const factory BlogArticlesState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorBlogArticlesState;
+  const factory BlogArticlesState.success({required List<BlogArticleEntity> articles, required bool hasMore}) =
+      SuccessBlogArticlesState;
   const factory BlogArticlesState.creating() = CreatingBlogArticleState;
   const factory BlogArticlesState.created({required BlogArticleEntity article}) = CreatedBlogArticleState;
   const factory BlogArticlesState.updating() = UpdatingBlogArticleState;
@@ -79,7 +96,9 @@ class BlogArticlesBloc extends Bloc<BlogArticlesEvent, BlogArticlesState> {
   String? _lastSearch;
   int? _lastAircraftModelId;
 
-  BlogArticlesBloc({required BlogRepository blogRepository}) : _blogRepository = blogRepository, super(const LoadingBlogArticlesState()) {
+  BlogArticlesBloc({required BlogRepository blogRepository})
+    : _blogRepository = blogRepository,
+      super(const LoadingBlogArticlesState()) {
     on<BlogArticlesEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -139,7 +158,11 @@ class BlogArticlesBloc extends Bloc<BlogArticlesEvent, BlogArticlesState> {
   Future<void> _loadMore(LoadMoreBlogArticlesEvent event, Emitter<BlogArticlesState> emit) async {
     if (!_hasMore) return;
 
-    final currentArticles = state.maybeWhen(success: (articles, hasMore) => articles, loadingMore: (articles) => articles, orElse: () => <BlogArticleEntity>[]);
+    final currentArticles = state.maybeWhen(
+      success: (articles, hasMore) => articles,
+      loadingMore: (articles) => articles,
+      orElse: () => <BlogArticleEntity>[],
+    );
 
     if (currentArticles.isEmpty) return;
 

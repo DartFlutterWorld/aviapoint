@@ -21,7 +21,9 @@ class AircraftMarketDetailState with _$AircraftMarketDetailState {
 class AircraftMarketDetailBloc extends Bloc<AircraftMarketDetailEvent, AircraftMarketDetailState> {
   final MarketRepository _repository;
 
-  AircraftMarketDetailBloc({required MarketRepository repository}) : _repository = repository, super(const AircraftMarketDetailState.initial()) {
+  AircraftMarketDetailBloc({required MarketRepository repository})
+    : _repository = repository,
+      super(const AircraftMarketDetailState.initial()) {
     on<GetAircraftMarketDetailEvent>(_onGetProduct);
   }
 
@@ -30,7 +32,9 @@ class AircraftMarketDetailBloc extends Bloc<AircraftMarketDetailEvent, AircraftM
 
     final result = await _repository.getProductById(event.productId);
 
-    result.fold((failure) => emit(AircraftMarketDetailState.error(failure.message ?? 'Ошибка загрузки товара')), (product) => emit(AircraftMarketDetailState.success(product)));
+    result.fold(
+      (failure) => emit(AircraftMarketDetailState.error(failure.message ?? 'Ошибка загрузки товара')),
+      (product) => emit(AircraftMarketDetailState.success(product)),
+    );
   }
-
 }

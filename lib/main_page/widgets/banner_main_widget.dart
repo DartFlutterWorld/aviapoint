@@ -110,7 +110,14 @@ class BannerMainWidget extends StatelessWidget {
                     textStyle: AppStyles.bold16s.copyWith(color: textColorButton),
                     borderColor: borderColorButton,
                     borderRadius: buttonRadius,
-                    boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: shadowBlur, spreadRadius: 0, offset: Offset(0.0, shadowOffset))],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xff0064D6).withOpacity(0.25),
+                        blurRadius: shadowBlur,
+                        spreadRadius: 0,
+                        offset: Offset(0.0, shadowOffset),
+                      ),
+                    ],
                     onPressed: onTap,
                   ),
                 ),

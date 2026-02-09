@@ -76,8 +76,22 @@ class _LearningScreenState extends State<LearningScreen> {
               alignPicture: Alignment.bottomRight,
               titleButton2: 'Тестирование',
               titleButtonStyle2: AppStyles.bold16s.copyWith(color: Colors.white),
-              boxShadowButton: [BoxShadow(color: Color(0xff106BD2).withOpacity(0.11), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7))],
-              boxShadowButton2: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7))],
+              boxShadowButton: [
+                BoxShadow(
+                  color: Color(0xff106BD2).withOpacity(0.11),
+                  blurRadius: 9,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7),
+                ),
+              ],
+              boxShadowButton2: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.27),
+                  blurRadius: 9,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7),
+                ),
+              ],
             ),
           ],
         ),

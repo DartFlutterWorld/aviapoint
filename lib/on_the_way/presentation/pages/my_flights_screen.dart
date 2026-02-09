@@ -78,14 +78,22 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.only(left: AppSpacing.horizontal, right: AppSpacing.horizontal, top: AppSpacing.section, bottom: AppSpacing.section),
+            padding: EdgeInsets.only(
+              left: AppSpacing.horizontal,
+              right: AppSpacing.horizontal,
+              top: AppSpacing.section,
+              bottom: AppSpacing.section,
+            ),
             child: BlocBuilder<FlightsBloc, FlightsState>(
               builder: (context, state) {
                 return state.when(
                   loading: () => _buildLoadingState(),
-                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => _buildErrorState(errorForUser),
-                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildSuccessState(flights),
-                  flightCreated: (flight) => _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) =>
+                      _buildErrorState(errorForUser),
+                  success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) =>
+                      _buildSuccessState(flights),
+                  flightCreated: (flight) =>
+                      _buildSuccessState([]), // Игнорируем состояние создания на экране моих полётов
                 );
               },
             ),
@@ -184,7 +192,10 @@ class _MyFlightsScreenState extends State<MyFlightsScreen> {
               context.read<FlightsBloc>().add(const GetMyFlightsEvent(isRefresh: false));
             },
             child: Text('Повторить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
-            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0A6EFA), padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF0A6EFA),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
           ),
         ],
       ),

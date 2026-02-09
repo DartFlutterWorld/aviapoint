@@ -104,7 +104,11 @@ class StoryScreenElement extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: videoPlayer!.controller.value.aspectRatio,
-                  child: GestureDetector(onLongPress: onLongPress, onLongPressEnd: onLongPressEnd, child: VideoPlayer(videoPlayer!.controller)),
+                  child: GestureDetector(
+                    onLongPress: onLongPress,
+                    onLongPressEnd: onLongPressEnd,
+                    child: VideoPlayer(videoPlayer!.controller),
+                  ),
                 ),
               )
             : ClipRRect(
@@ -135,7 +139,12 @@ class StoryScreenElement extends StatelessWidget {
                 Row(
                   children: [
                     ...stories.asMap().map((index, e) {
-                      return MapEntry(index, animController != null ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex) : const SizedBox());
+                      return MapEntry(
+                        index,
+                        animController != null
+                            ? AnimatedBar(animController: animController!, position: index, currentIndex: currentIndex)
+                            : const SizedBox(),
+                      );
                     }).values,
                     SizedBox(width: 13),
                     // Заглушка для кнопки закрытия (чтобы не было прыжков в layout)
@@ -250,7 +259,11 @@ class StoryScreenElement extends StatelessWidget {
                             // _sendAnalyticsEventMiniStoryClickButton(context: context, position: currentIndex + 1);
                             startUrl(url: story.hyperlink, context: context);
                           },
-                          textStyle: AppStyles.adaptiveTextStyle(context, AppStyles.button, baseSize: 20).copyWith(color: Color(int.parse('0xFF$textColor')), overflow: TextOverflow.ellipsis),
+                          textStyle: AppStyles.adaptiveTextStyle(
+                            context,
+                            AppStyles.button,
+                            baseSize: 20,
+                          ).copyWith(color: Color(int.parse('0xFF$textColor')), overflow: TextOverflow.ellipsis),
                           borderColor: Color(int.parse('0xFF$buttonColor')),
                           boxShadow: const [],
                         ),

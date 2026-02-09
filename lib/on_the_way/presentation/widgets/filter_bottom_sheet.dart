@@ -72,7 +72,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           _dateTo = null;
                         });
                       },
-                      child: SvgPicture.asset(Pictures.closeAuth, width: 18, height: 18, colorFilter: const ColorFilter.mode(Color(0xFF9CA5AF), BlendMode.srcIn)),
+                      child: SvgPicture.asset(
+                        Pictures.closeAuth,
+                        width: 18,
+                        height: 18,
+                        colorFilter: const ColorFilter.mode(Color(0xFF9CA5AF), BlendMode.srcIn),
+                      ),
                     ),
                 ],
               ),

@@ -44,7 +44,10 @@ class BlogCategoryChip extends StatelessWidget {
             //     padding: EdgeInsets.only(right: 4),
             //     child: Image.network(category.iconUrl!, width: 14, height: 14, errorBuilder: (context, error, stackTrace) => const SizedBox()),
             //   ),
-            Text(category.name, style: AppStyles.regular12s.copyWith(color: isSelected ? Colors.white : AppColors.textPrimary)),
+            Text(
+              category.name,
+              style: AppStyles.regular12s.copyWith(color: isSelected ? Colors.white : AppColors.textPrimary),
+            ),
           ],
         ),
       ),

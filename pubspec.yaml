@@ -1,7 +1,7 @@
 name: aviapoint
 description: service for pilot.
 publish_to: "none"
-version: 0.0.1+39
+version: 0.0.1+40
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -20,7 +20,7 @@ dependencies:
   firebase_crashlytics: ^5.0.4
   firebase_analytics: ^12.0.4
   firebase_messaging: ^16.0.4
-  flutter_bloc: ^9.0.0
+  flutter_bloc: ^9.1.1
   flutter_secure_storage: ^10.0.0
   flutter_svg: ^2.0.17
   freezed_annotation: ^3.1.0
@@ -42,6 +42,7 @@ dependencies:
   pinput: ^6.0.1
   dropdown_button2: ^2.1.4
   image_picker: ^1.0.0
+  file_selector: ^1.1.0
   calendar_date_picker2: ^2.0.1
   path: ^1.8.2
   cached_network_image: ^3.4.1

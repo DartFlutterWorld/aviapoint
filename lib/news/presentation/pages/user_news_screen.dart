@@ -81,7 +81,13 @@ class _UserNewsScreenState extends State<UserNewsScreen> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             color: Colors.white,
             child: Row(
-              children: [_buildFilterChip('all', 'Все'), SizedBox(width: 8), _buildFilterChip('published', 'Опубликовано'), SizedBox(width: 8), _buildFilterChip('unpublished', 'Не опубликовано')],
+              children: [
+                _buildFilterChip('all', 'Все'),
+                SizedBox(width: 8),
+                _buildFilterChip('published', 'Опубликовано'),
+                SizedBox(width: 8),
+                _buildFilterChip('unpublished', 'Не опубликовано'),
+              ],
             ),
           ),
           // Список новостей
@@ -120,7 +126,10 @@ class _UserNewsScreenState extends State<UserNewsScreen> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: isSelected ? const Color(0xFF0A6EFA) : const Color(0xFFD9E6F8), width: 1),
         ),
-        child: Text(label, style: AppStyles.regular14s.copyWith(color: isSelected ? Colors.white : const Color(0xFF374151))),
+        child: Text(
+          label,
+          style: AppStyles.regular14s.copyWith(color: isSelected ? Colors.white : const Color(0xFF374151)),
+        ),
       ),
     );
   }

@@ -33,9 +33,17 @@ class ExcessiveFuelVaporScreen extends StatelessWidget {
             children: [
               SizedBox(height: 8),
               Center(
-                child: Text('fuel_flow_stabilization_procedures', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
+                child: Text(
+                  'fuel_flow_stabilization_procedures',
+                  style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
+                ).tr(),
               ),
-              Center(child: Text('if_flow_fluctuations_of_1_gph_or_more_or_power_surges_occur', textAlign: TextAlign.center).tr()),
+              Center(
+                child: Text(
+                  'if_flow_fluctuations_of_1_gph_or_more_or_power_surges_occur',
+                  textAlign: TextAlign.center,
+                ).tr(),
+              ),
               SizedBox(height: 8),
               Table(
                 columnWidths: {0: FixedColumnWidth(32), 1: FlexColumnWidth(1), 2: FlexColumnWidth(1)},

@@ -11,10 +11,7 @@ abstract class NewsService {
   factory NewsService(Dio dio) = _NewsService;
 
   @GET('/api/news')
-  Future<List<NewsDto>> getNews({
-    @Query('published') bool? published,
-    @Query('author_id') int? authorId,
-  });
+  Future<List<NewsDto>> getNews({@Query('published') bool? published, @Query('author_id') int? authorId});
 
   @GET('/api/news/{id}')
   Future<NewsDto> getNewsById(@Path('id') int id);

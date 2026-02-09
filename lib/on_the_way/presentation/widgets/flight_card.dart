@@ -68,7 +68,10 @@ class FlightCard extends StatelessWidget {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
-                      decoration: BoxDecoration(color: Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(borderRadius8)),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF3F4F6),
+                        borderRadius: BorderRadius.circular(borderRadius8),
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -76,7 +79,10 @@ class FlightCard extends StatelessWidget {
                           SizedBox(width: spacing4),
                           Text('Вылет ', style: regular14s.copyWith(color: Color(0xFF374151))),
 
-                          Text(formatDateWithTime(flight.departureDate), style: regular14s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            formatDateWithTime(flight.departureDate),
+                            style: regular14s.copyWith(color: Color(0xFF374151)),
+                          ),
                         ],
                       ),
                     ),
@@ -136,7 +142,11 @@ class FlightCard extends StatelessWidget {
                               SizedBox(height: spacing8),
                               Padding(
                                 padding: EdgeInsets.only(left: padding22),
-                                child: Icon(Icons.arrow_downward, size: iconSize, color: isLast ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
+                                child: Icon(
+                                  Icons.arrow_downward,
+                                  size: iconSize,
+                                  color: isLast ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+                                ),
                               ),
                               SizedBox(height: spacing8),
                             ],
@@ -176,13 +186,19 @@ class FlightCard extends StatelessWidget {
                           Text('Компенсация', style: regular12s.copyWith(color: Color(0xFF374151))),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
-                            decoration: BoxDecoration(color: Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF10B981).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(borderRadius8),
+                            ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.currency_ruble, size: iconSize, color: Color(0xFF0A6EFA)),
                                 SizedBox(width: spacing4),
-                                Text('${formatPrice(flight.pricePerSeat.toInt())} / место', style: regular12s.copyWith(color: Color(0xFF374151))),
+                                Text(
+                                  '${formatPrice(flight.pricePerSeat.toInt())} / место',
+                                  style: regular12s.copyWith(color: Color(0xFF374151)),
+                                ),
                               ],
                             ),
                           ),
@@ -196,7 +212,10 @@ class FlightCard extends StatelessWidget {
                           Text('Свободных мест', style: regular12s.copyWith(color: Color(0xFF374151))),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: padding8, vertical: padding4),
-                            decoration: BoxDecoration(color: Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF10B981).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(borderRadius8),
+                            ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -226,56 +245,84 @@ class FlightCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                      children: [
-                        // Аватар пилота
-                        Builder(
-                          builder: (context) {
-                            final avatarUrl = flight.pilotAvatarUrl;
-                            final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
+                          children: [
+                            // Аватар пилота
+                            Builder(
+                              builder: (context) {
+                                final avatarUrl = flight.pilotAvatarUrl;
+                                final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty
+                                    ? getImageUrl(avatarUrl)
+                                    : null;
 
-                            return GestureDetector(
-                              onTap: avatarUrl != null && avatarUrl.isNotEmpty ? () => _showPhotoViewer(context, [avatarUrl], 0) : null, // Если нет фото, не открываем просмотр
-                              child: ClipOval(
-                                child: imageUrl != null && imageUrl.isNotEmpty
-                                    ? NetworkImageWidget(
-                                        imageUrl: imageUrl,
-                                        width: avatarSize,
-                                        height: avatarSize,
-                                        fit: BoxFit.cover,
-                                        placeholder: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                        errorWidget: Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                                      )
-                                    : Image.asset(Pictures.pilot, width: avatarSize, height: avatarSize, fit: BoxFit.cover),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(width: padding8),
-                        // Имя и рейтинг
-                        Flexible(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(flight.pilotFullName ?? 'Пилот', style: bold12s.copyWith(color: Color(0xFF374151))),
-                              if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
-                                SizedBox(height: spacing4 / 2),
+                                return GestureDetector(
+                                  onTap: avatarUrl != null && avatarUrl.isNotEmpty
+                                      ? () => _showPhotoViewer(context, [avatarUrl], 0)
+                                      : null, // Если нет фото, не открываем просмотр
+                                  child: ClipOval(
+                                    child: imageUrl != null && imageUrl.isNotEmpty
+                                        ? NetworkImageWidget(
+                                            imageUrl: imageUrl,
+                                            width: avatarSize,
+                                            height: avatarSize,
+                                            fit: BoxFit.cover,
+                                            placeholder: Image.asset(
+                                              Pictures.pilot,
+                                              width: avatarSize,
+                                              height: avatarSize,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            errorWidget: Image.asset(
+                                              Pictures.pilot,
+                                              width: avatarSize,
+                                              height: avatarSize,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )
+                                        : Image.asset(
+                                            Pictures.pilot,
+                                            width: avatarSize,
+                                            height: avatarSize,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(width: padding8),
+                            // Имя и рейтинг
+                            Flexible(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    flight.pilotFullName ?? 'Пилот',
+                                    style: bold12s.copyWith(color: Color(0xFF374151)),
+                                  ),
+                                  if (flight.pilotAverageRating != null && flight.pilotAverageRating! > 0) ...[
+                                    SizedBox(height: spacing4 / 2),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
-                                    SizedBox(width: spacing4),
-                                    Text(flight.pilotAverageRating!.toStringAsFixed(1), style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                  ],
+                                        Row(
+                                          children: [
+                                            Icon(Icons.star, size: iconSize, color: Color(0xFFFFA726)),
+                                            SizedBox(width: spacing4),
+                                            Text(
+                                              flight.pilotAverageRating!.toStringAsFixed(1),
+                                              style: regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                            ),
+                                          ],
                                         ),
                                         // Кнопка отзывов о пилоте
                                         TextButton(
                                           onPressed: () {
                                             openPilotReviews(context: context, pilotId: flight.pilotId);
                                           },
-                                          child: Text('Отзывы', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                          child: Text(
+                                            'Отзывы',
+                                            style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -287,12 +334,15 @@ class FlightCard extends StatelessWidget {
                                         onPressed: () {
                                           openPilotReviews(context: context, pilotId: flight.pilotId);
                                         },
-                                        child: Text('Отзывы', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                                        child: Text(
+                                          'Отзывы',
+                                          style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                                        ),
                                       ),
-                                ),
-                              ],
-                            ],
-                          ),
+                                    ),
+                                  ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -326,7 +376,8 @@ class FlightCard extends StatelessWidget {
                     ),
                     SizedBox(height: AppSpacing.section),
                     // Модель самолёта и фотографии в едином сером контейнере (как секции выше)
-                    if ((flight.aircraftType != null && flight.aircraftType!.isNotEmpty) || (flight.photos != null && flight.photos!.isNotEmpty)) ...[
+                    if ((flight.aircraftType != null && flight.aircraftType!.isNotEmpty) ||
+                        (flight.photos != null && flight.photos!.isNotEmpty)) ...[
                       Container(
                         padding: EdgeInsets.all(padding8),
                         decoration: BoxDecoration(
@@ -344,21 +395,30 @@ class FlightCard extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     flex: 1,
-                                    child: Text('Модель cамолёта', style: regular12s.copyWith(color: Color(0xFF374151))),
+                                    child: Text(
+                                      'Модель cамолёта',
+                                      style: regular12s.copyWith(color: Color(0xFF374151)),
+                                    ),
                                   ),
 
                                   Flexible(
                                     flex: 2,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(horizontal: padding8, vertical: 4),
-                                      decoration: BoxDecoration(color: Color(0xFF10B981).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFF10B981).withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(borderRadius8),
+                                      ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(Icons.flight, size: iconSize, color: Color(0xFF9CA5AF)),
                                           SizedBox(width: spacing4),
                                           Flexible(
-                                            child: Text(flight.aircraftType!, style: regular12s.copyWith(color: Color(0xFF374151))),
+                                            child: Text(
+                                              flight.aircraftType!,
+                                              style: regular12s.copyWith(color: Color(0xFF374151)),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -366,7 +426,8 @@ class FlightCard extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              if (flight.photos != null && flight.photos!.isNotEmpty) SizedBox(height: AppSpacing.section),
+                              if (flight.photos != null && flight.photos!.isNotEmpty)
+                                SizedBox(height: AppSpacing.section),
                             ],
                             // Фотографии самолёта (если есть)
                             if (flight.photos != null && flight.photos!.isNotEmpty) ...[
@@ -502,7 +563,10 @@ class FlightCard extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(padding8),
-            decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius8)),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(borderRadius8),
+            ),
             child: Icon(iconData, color: iconColor, size: iconSize),
           ),
           SizedBox(width: spacing8),
@@ -527,7 +591,10 @@ class FlightCard extends StatelessWidget {
                       SizedBox(width: spacing6),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: spacing4, vertical: spacing2v),
-                        decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(borderRadius4)),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0A6EFA).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(borderRadius4),
+                        ),
                         child: Text(
                           'INT',
                           style: medium10s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.w600),
@@ -566,7 +633,10 @@ class FlightCard extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (city != null) ...[Text('•', style: regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: spacing6)],
+                              if (city != null) ...[
+                                Text('•', style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                SizedBox(width: spacing6),
+                              ],
                               Flexible(
                                 child: Text(region, style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
                               ),
@@ -576,7 +646,10 @@ class FlightCard extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (city != null || region != null) ...[Text('•', style: regular12s.copyWith(color: Color(0xFF9CA5AF))), SizedBox(width: spacing6)],
+                              if (city != null || region != null) ...[
+                                Text('•', style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                SizedBox(width: spacing6),
+                              ],
                               Flexible(
                                 child: Text(typeDisplay, style: regular12s.copyWith(color: Color(0xFF9CA5AF))),
                               ),
@@ -651,7 +724,10 @@ class FlightCard extends StatelessWidget {
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                     SizedBox(height: 16),
-                                    Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                    Text(
+                                      'Не удалось загрузить изображение',
+                                      style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -673,7 +749,11 @@ class FlightCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -681,7 +761,10 @@ class FlightCard extends StatelessWidget {
                             // Индикатор текущей фотографии
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Text(
                                 '${currentIndex + 1} / ${fullUrls.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -695,7 +778,10 @@ class FlightCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(dialogContext, photos[currentIndex]),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8),
@@ -703,7 +789,10 @@ class FlightCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(dialogContext, photos[currentIndex]),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8),
@@ -711,7 +800,10 @@ class FlightCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -731,7 +823,11 @@ class FlightCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -741,9 +837,15 @@ class FlightCard extends StatelessWidget {
                               IconButton(
                                 icon: Icon(Icons.chevron_left, color: Colors.white, size: 32),
                                 onPressed: () {
-                                  pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                                  pageController.previousPage(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
                                 },
-                                style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                style: IconButton.styleFrom(
+                                  backgroundColor: Colors.black.withOpacity(0.5),
+                                  shape: CircleBorder(),
+                                ),
                               )
                             else
                               SizedBox(width: 48),
@@ -758,7 +860,10 @@ class FlightCard extends StatelessWidget {
                                     width: 6,
                                     height: 6,
                                     margin: EdgeInsets.symmetric(horizontal: 3),
-                                    decoration: BoxDecoration(shape: BoxShape.circle, color: index == currentIndex ? Colors.white : Colors.white.withOpacity(0.4)),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: index == currentIndex ? Colors.white : Colors.white.withOpacity(0.4),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -769,9 +874,15 @@ class FlightCard extends StatelessWidget {
                               IconButton(
                                 icon: Icon(Icons.chevron_right, color: Colors.white, size: 32),
                                 onPressed: () {
-                                  pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                                  pageController.nextPage(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
                                 },
-                                style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                style: IconButton.styleFrom(
+                                  backgroundColor: Colors.black.withOpacity(0.5),
+                                  shape: CircleBorder(),
+                                ),
                               )
                             else
                               SizedBox(width: 48),
@@ -797,7 +908,13 @@ class FlightCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(imageUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -823,16 +940,34 @@ class FlightCard extends StatelessWidget {
         final savedFile = await File(filePath).copy('${appDocDir.path}/$fileName');
 
         if (context.mounted) {
-          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена: ${savedFile.path}'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('Фотография сохранена: ${savedFile.path}'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       } else {
         if (context.mounted) {
-          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 2)));
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('Необходимо разрешение на сохранение файлов'),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       }
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }

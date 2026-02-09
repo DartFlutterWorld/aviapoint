@@ -61,8 +61,8 @@ class PartsMarketEditBloc extends Bloc<PartsMarketEditEvent, PartsMarketEditStat
   final MarketRepository _repository;
 
   PartsMarketEditBloc({required MarketRepository repository})
-      : _repository = repository,
-        super(const PartsMarketEditState.initial()) {
+    : _repository = repository,
+      super(const PartsMarketEditState.initial()) {
     on<GetPartsMarketEditEvent>(_onGetProduct);
     on<UpdatePartsMarketEditEvent>(_onUpdateProduct);
     on<DeletePartsMarketEditEvent>(_onDeleteProduct);

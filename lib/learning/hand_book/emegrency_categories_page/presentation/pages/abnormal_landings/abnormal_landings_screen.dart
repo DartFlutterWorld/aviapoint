@@ -19,10 +19,7 @@ class AbnormalLandingsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'abnormal_landings'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'abnormal_landings'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

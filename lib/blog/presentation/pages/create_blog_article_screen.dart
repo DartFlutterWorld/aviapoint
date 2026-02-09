@@ -74,7 +74,10 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
   }
 
   Future<void> _showAircraftModelSelector(BuildContext context) async {
-    final result = await showDialog<Map<String, dynamic>>(context: context, builder: (context) => AircraftTypeSelectorDialog(returnModelId: true));
+    final result = await showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (context) => AircraftTypeSelectorDialog(returnModelId: true),
+    );
 
     if (result != null) {
       setState(() {
@@ -122,7 +125,12 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
   Future<void> _pickCoverImage() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1920,
+        maxHeight: 1920,
+      );
 
       if (image != null) {
         if (kIsWeb) {
@@ -149,7 +157,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -168,7 +178,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
+            );
           }
         },
         (imageUrl) {
@@ -176,7 +188,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
           if (!mounted) return;
 
           // Преобразуем относительный путь в полный URL
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           // Вставляем изображение в Quill
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -208,7 +222,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
+                );
               }
             }
           });
@@ -217,7 +233,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -244,7 +262,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -267,7 +287,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
+            );
           }
         },
         (imageUrl) {
@@ -275,7 +297,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
           if (!mounted) return;
 
           // Преобразуем относительный путь в полный URL
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           // Вставляем изображение в Quill
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -307,7 +331,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
+                );
               }
             }
           });
@@ -316,7 +342,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка при загрузке изображения: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -381,19 +409,25 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
 
     // Проверка обязательных полей
     if (title.isEmpty || content.trim().isEmpty || content == '[]') {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Заполните обязательные поля'), backgroundColor: Colors.red));
       return;
     }
 
     // Проверка категории
     if (_selectedCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
       return;
     }
 
     // Проверка краткого описания
     if (excerpt.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите краткое описание'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Введите краткое описание'), backgroundColor: Colors.red));
       return;
     }
 
@@ -405,7 +439,9 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
 
     // Проверка обложки
     if (coverImageFile == null && coverImageBytes == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите изображение для обложки'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите изображение для обложки'), backgroundColor: Colors.red));
       return;
     }
 
@@ -469,7 +505,13 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
         state.maybeWhen(
           created: (article) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно создана'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Статья успешно создана'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
 
             // Обновляем список статей перед возвратом
             context.read<BlogArticlesBloc>().add(const GetBlogArticlesEvent(status: 'published'));
@@ -486,14 +528,22 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
           },
           updated: (article) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Статья успешно обновлена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Статья успешно обновлена'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
             // Обновляем список статей перед возвратом
             context.read<BlogArticlesBloc>().add(const GetBlogArticlesEvent(status: 'published'));
             AutoRouter.of(context).pop();
           },
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
             setState(() => _isLoading = false);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)),
+            );
           },
           orElse: () {},
         );
@@ -518,7 +568,10 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     OutlinedButton.icon(
                       onPressed: _pickCoverImage,
                       icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
-                      label: Text('Выберите изображение для статьи', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                      label: Text(
+                        'Выберите изображение для статьи',
+                        style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
+                      ),
                       style: OutlinedButton.styleFrom(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         side: BorderSide(color: Color(0xFF0A6EFA)),
@@ -714,7 +767,10 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                           Transform.scale(
                             scale: 1,
                             alignment: Alignment.topLeft,
-                            child: QuillSimpleToolbar(controller: _quillController, config: const QuillSimpleToolbarConfig(showClipboardCut: true)),
+                            child: QuillSimpleToolbar(
+                              controller: _quillController,
+                              config: const QuillSimpleToolbarConfig(showClipboardCut: true),
+                            ),
                           ),
                           Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
                           Container(
@@ -722,7 +778,10 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                             padding: EdgeInsets.all(12),
                             child: QuillEditor.basic(
                               controller: _quillController,
-                              config: QuillEditorConfig(placeholder: 'Введите текст статьи...', embedBuilders: FlutterQuillEmbeds.editorBuilders()),
+                              config: QuillEditorConfig(
+                                placeholder: 'Введите текст статьи...',
+                                embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                              ),
                               focusNode: _quillFocusNode,
                             ),
                           ),
@@ -734,7 +793,10 @@ class _CreateBlogArticleScreenState extends State<CreateBlogArticleScreen> {
                     OutlinedButton.icon(
                       onPressed: _isLoading ? null : _pickContentImage,
                       icon: Icon(Icons.image, color: Color(0xFF0A6EFA)),
-                      label: Text('Вставить изображение в тексты', style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA))),
+                      label: Text(
+                        'Вставить изображение в тексты',
+                        style: AppStyles.regular14s.copyWith(color: Color(0xFF0A6EFA)),
+                      ),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: Color(0xFF0A6EFA)),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

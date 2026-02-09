@@ -58,7 +58,9 @@ class _MainScreenState extends State<MainScreen> {
     // Загружаем продукты маркета (самолёты)
     final marketState = BlocProvider.of<AircraftMarketBloc>(context).state;
     if (marketState is! SuccessAircraftMarketState) {
-      BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
+      BlocProvider.of<AircraftMarketBloc>(
+        context,
+      ).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
     }
 
     // Загружаем запчасти маркета
@@ -96,7 +98,9 @@ class _MainScreenState extends State<MainScreen> {
     BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
 
     // Обновляем продукты маркета (самолёты) — на главной специально берём только 2
-    BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
+    BlocProvider.of<AircraftMarketBloc>(
+      context,
+    ).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
 
     // Обновляем запчасти маркета — на главной специально берём только 2
     BlocProvider.of<PartsMarketBloc>(context).add(const PartsMarketEvent.getParts(limit: 2, includeInactive: false));
@@ -210,7 +214,8 @@ class _MainScreenState extends State<MainScreen> {
                           descriptionColor: Colors.white,
                           description: 'Предполётный осмотр, запуск двигателя, полёт покругу',
                           picture: Pictures.planeRatBaner,
-                          onTap: () => AutoRouter.of(context).push(const BaseRoute(children: [LearningNavigationRoute()])),
+                          onTap: () =>
+                              AutoRouter.of(context).push(const BaseRoute(children: [LearningNavigationRoute()])),
                           background: Pictures.leaningBackgroundBanner,
                           titleButton: 'Обучение',
                           backgroundColorButton: const Color(0xFF0A6EFA),
@@ -230,7 +235,12 @@ class _MainScreenState extends State<MainScreen> {
                   return GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: isLandscape ? 3 : 2, mainAxisSpacing: 11, crossAxisSpacing: 11, childAspectRatio: childAspectRatio),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isLandscape ? 3 : 2,
+                      mainAxisSpacing: 11,
+                      crossAxisSpacing: 11,
+                      childAspectRatio: childAspectRatio,
+                    ),
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       if (index == 0) {
@@ -255,7 +265,8 @@ class _MainScreenState extends State<MainScreen> {
                           descriptionColor: Colors.white,
                           description: 'Предполётный осмотр, запуск двигателя, полёт покругу',
                           picture: Pictures.planeRatBaner,
-                          onTap: () => AutoRouter.of(context).push(const BaseRoute(children: [LearningNavigationRoute()])),
+                          onTap: () =>
+                              AutoRouter.of(context).push(const BaseRoute(children: [LearningNavigationRoute()])),
                           background: Pictures.leaningBackgroundBanner,
                           titleButton: 'Обучение',
                           backgroundColorButton: const Color(0xFF0A6EFA),
@@ -276,13 +287,23 @@ class _MainScreenState extends State<MainScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(18),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
                   Text('По пути', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
                   SizedBox(height: AppSpacing.horizontal),
-                  Text('Найдите попутные полёты или предложите свой', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  Text(
+                    'Найдите попутные полёты или предложите свой',
+                    style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767)),
+                  ),
                   SizedBox(height: AppSpacing.section),
                   BlocBuilder<FlightsBloc, FlightsState>(
                     builder: (context, state) => state.maybeWhen(
@@ -294,7 +315,8 @@ class _MainScreenState extends State<MainScreen> {
                         },
                       ),
                       loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
-                      success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _SuccessFlights(flights: flights, context: context),
+                      success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) =>
+                          _SuccessFlights(flights: flights, context: context),
                       flightCreated: (flight) {
                         // После создания полёта обновляем список
                         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -314,7 +336,8 @@ class _MainScreenState extends State<MainScreen> {
                   HomeSectionButton(
                     title: 'Все полёты',
                     color: const Color.fromARGB(255, 150, 196, 32),
-                    onPressed: () => AutoRouter.of(context).push(const BaseRoute(children: [OnTheWayNavigationRoute()])),
+                    onPressed: () =>
+                        AutoRouter.of(context).push(const BaseRoute(children: [OnTheWayNavigationRoute()])),
                   ),
                 ],
               ),
@@ -326,7 +349,14 @@ class _MainScreenState extends State<MainScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(18),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -338,8 +368,11 @@ class _MainScreenState extends State<MainScreen> {
                     builder: (context, state) => state.maybeWhen(
                       error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                         textError: errorForUser,
+                        paddingTop: 0,
                         repeat: () {
-                          BlocProvider.of<AircraftMarketBloc>(context).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
+                          BlocProvider.of<AircraftMarketBloc>(
+                            context,
+                          ).add(const AircraftMarketEvent.getProducts(limit: 2, includeInactive: false));
                         },
                       ),
                       loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
@@ -363,22 +396,42 @@ class _MainScreenState extends State<MainScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(18),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
                   Text('Запчасти', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
                   SizedBox(height: AppSpacing.horizontal),
-                  Text('Запчасти для авиационной техники', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  Text(
+                    'Запчасти для авиационной техники',
+                    style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767)),
+                  ),
                   SizedBox(height: AppSpacing.section),
                   BlocBuilder<PartsMarketBloc, PartsMarketState>(
                     builder: (context, state) => state.maybeWhen(
-                      error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) => ErrorCustom(
-                        textError: errorForUser,
-                        repeat: () {
-                          BlocProvider.of<PartsMarketBloc>(context).add(const PartsMarketEvent.getParts(limit: 2, includeInactive: false));
-                        },
-                      ),
+                      error:
+                          (
+                            String? errorFromApi,
+                            String errorForUser,
+                            String? statusCode,
+                            StackTrace? stackTrace,
+                            String? responseMessage,
+                          ) => ErrorCustom(
+                            textError: errorForUser,
+                            paddingTop: 0,
+                            repeat: () {
+                              BlocProvider.of<PartsMarketBloc>(
+                                context,
+                              ).add(const PartsMarketEvent.getParts(limit: 2, includeInactive: false));
+                            },
+                          ),
                       loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
                       success: (parts, hasMore) => _SuccessPartsProducts(parts: parts, context: context),
                       orElse: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
@@ -408,20 +461,33 @@ class _MainScreenState extends State<MainScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(18),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
                   Text('АвиаЖурнал', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
                   SizedBox(height: AppSpacing.horizontal),
-                  Text('Статьи, обзоры и советы для пилотов и авиаэнтузиастов', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  Text(
+                    'Статьи, обзоры и советы для пилотов и авиаэнтузиастов',
+                    style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767)),
+                  ),
                   SizedBox(height: AppSpacing.section),
                   BlocBuilder<BlogArticlesBloc, BlogArticlesState>(
                     builder: (context, state) => state.maybeWhen(
                       error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                         textError: errorForUser,
+                        paddingTop: 0,
                         repeat: () {
-                          BlocProvider.of<BlogArticlesBloc>(context).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
+                          BlocProvider.of<BlogArticlesBloc>(
+                            context,
+                          ).add(const GetBlogArticlesEvent(status: 'published', limit: 4));
                         },
                       ),
                       loading: () => LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4),
@@ -445,19 +511,30 @@ class _MainScreenState extends State<MainScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(18),
-                boxShadow: [BoxShadow(color: const Color(0xFF045EC5).withOpacity(0.08), blurRadius: 10, spreadRadius: 0, offset: Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
                   Text('Новости авиации', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
                   SizedBox(height: AppSpacing.horizontal),
-                  Text('Мы публикуем только актуальные и полезные новости для пилотов и авиаперсонала', style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767))),
+                  Text(
+                    'Мы публикуем только актуальные и полезные новости для пилотов и авиаперсонала',
+                    style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767)),
+                  ),
                   SizedBox(height: AppSpacing.section),
 
                   BlocBuilder<NewsBloc, NewsState>(
                     builder: (context, state) => state.map(
                       error: (state) => ErrorCustom(
                         textError: state.errorForUser,
+                        paddingTop: 0,
                         repeat: () {
                           // Загружаем все новости из всех категорий
                           BlocProvider.of<NewsBloc>(context).add(const NewsEvent.get(authorId: null));
@@ -516,12 +593,18 @@ class _SuccessNews extends StatelessWidget {
 
     final itemCount = kIsWeb
         ? (sortedNews.length >= crossAxisCount ? crossAxisCount : sortedNews.length)
-        : (isLandscape ? (sortedNews.length >= 3 ? 3 : sortedNews.length) : (sortedNews.length >= 4 ? 4 : sortedNews.length));
+        : (isLandscape
+              ? (sortedNews.length >= 3 ? 3 : sortedNews.length)
+              : (sortedNews.length >= 4 ? 4 : sortedNews.length));
 
     return SizedBox(
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          crossAxisCount: crossAxisCount,
+        ),
         itemCount: itemCount,
         shrinkWrap: true,
         itemBuilder: (context, index) => GestureDetector(
@@ -608,7 +691,12 @@ class _SuccessAircraftProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Сортируем товары по дате создания: последние добавленные сверху
-    final sortedProducts = [...products]..sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+    final sortedProducts = [...products]
+      ..sort(
+        (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(
+          a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0),
+        ),
+      );
 
     // Берём только 2 последних
     final displayProducts = sortedProducts.take(2).toList();
@@ -648,7 +736,12 @@ class _SuccessAircraftProducts extends StatelessWidget {
         return SizedBox(
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount, childAspectRatio: childAspectRatio),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: childAspectRatio,
+            ),
             itemCount: itemCount,
             shrinkWrap: true,
             itemBuilder: (context, index) => AircraftMarketCard(
@@ -680,7 +773,12 @@ class _SuccessPartsProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Сортируем запчасти по дате создания: последние добавленные сверху
-    final sortedParts = [...parts]..sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+    final sortedParts = [...parts]
+      ..sort(
+        (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(
+          a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0),
+        ),
+      );
 
     // Берём только 2 последних
     final displayParts = sortedParts.take(2).toList();
@@ -720,7 +818,12 @@ class _SuccessPartsProducts extends StatelessWidget {
         return SizedBox(
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount, childAspectRatio: childAspectRatio),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: childAspectRatio,
+            ),
             itemCount: itemCount,
             shrinkWrap: true,
             itemBuilder: (context, index) => PartsMarketCard(
@@ -752,7 +855,8 @@ class _SuccessFlights extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Фильтруем только активные полеты и сортируем по ID (последние созданные = больший ID)
-    final activeFlights = flights.where((f) => f.status == 'active').toList()..sort((a, b) => b.id.compareTo(a.id)); // Сортируем по убыванию ID (новые первыми)
+    final activeFlights = flights.where((f) => f.status == 'active').toList()
+      ..sort((a, b) => b.id.compareTo(a.id)); // Сортируем по убыванию ID (новые первыми)
 
     if (activeFlights.isEmpty) {
       return Padding(
@@ -798,7 +902,12 @@ class _SuccessBlogArticles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Сортируем статьи блога: свежие сверху по publishedAt/createdAt
-    final sortedArticles = [...articles]..sort((a, b) => _parseBlogDateTime(b.publishedAt ?? b.createdAt).compareTo(_parseBlogDateTime(a.publishedAt ?? a.createdAt)));
+    final sortedArticles = [...articles]
+      ..sort(
+        (a, b) => _parseBlogDateTime(
+          b.publishedAt ?? b.createdAt,
+        ).compareTo(_parseBlogDateTime(a.publishedAt ?? a.createdAt)),
+      );
 
     if (sortedArticles.isEmpty) {
       return Padding(
@@ -827,12 +936,18 @@ class _SuccessBlogArticles extends StatelessWidget {
 
     final itemCount = kIsWeb
         ? (sortedArticles.length > crossAxisCount ? crossAxisCount : sortedArticles.length)
-        : (isLandscape ? (sortedArticles.length > 3 ? 3 : sortedArticles.length) : (sortedArticles.length > 4 ? 4 : sortedArticles.length));
+        : (isLandscape
+              ? (sortedArticles.length > 3 ? 3 : sortedArticles.length)
+              : (sortedArticles.length > 4 ? 4 : sortedArticles.length));
 
     return SizedBox(
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 10, crossAxisSpacing: 10, crossAxisCount: crossAxisCount),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          crossAxisCount: crossAxisCount,
+        ),
         itemCount: itemCount,
         shrinkWrap: true,
         itemBuilder: (context, index) => GestureDetector(

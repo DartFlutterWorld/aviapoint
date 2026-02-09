@@ -38,7 +38,8 @@ class EditAircraftMarketScreen extends StatefulWidget {
 
 class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
   final _formKey = GlobalKey<FormState>();
-  AircraftMarketEditState? _previousStateBeforeLoading; // Сохраняем состояние перед loading для определения publish/unpublish
+  AircraftMarketEditState?
+  _previousStateBeforeLoading; // Сохраняем состояние перед loading для определения publish/unpublish
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _priceController;
@@ -85,7 +86,8 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     // Сохраняем productId
     _productId = widget.productId;
     // Создаем BLoC для редактирования
-    _editBloc = AircraftMarketEditBloc(repository: getIt<MarketRepository>())..add(AircraftMarketEditEvent.getProduct(_productId));
+    _editBloc = AircraftMarketEditBloc(repository: getIt<MarketRepository>())
+      ..add(AircraftMarketEditEvent.getProduct(_productId));
 
     // Инициализируем контроллеры пустыми, заполним после загрузки данных
     _titleController = TextEditingController();
@@ -116,7 +118,9 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     _enginePowerController.text = product.enginePower?.toString() ?? '';
     _engineVolumeController.text = product.engineVolume?.toString() ?? '';
     _seatsController.text = product.seats?.toString() ?? '';
-    _condition = product.condition != null && _validConditionValues.contains(product.condition) ? product.condition : null;
+    _condition = product.condition != null && _validConditionValues.contains(product.condition)
+        ? product.condition
+        : null;
     _selectedCategoryId = product.aircraftSubcategoriesId;
     _selectedBrand = product.brand;
     _selectedLocation = product.location;
@@ -131,7 +135,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     if (product.mainImageUrl != null && product.mainImageUrl!.isNotEmpty) {
       _mainPhoto = _PhotoItem(url: product.mainImageUrl, file: null, isNew: false);
     }
-    _additionalPhotos = product.additionalImageUrls.where((url) => url.isNotEmpty).map((url) => _PhotoItem(url: url, file: null, isNew: false)).toList();
+    _additionalPhotos = product.additionalImageUrls
+        .where((url) => url.isNotEmpty)
+        .map((url) => _PhotoItem(url: url, file: null, isNew: false))
+        .toList();
   }
 
   @override
@@ -157,29 +164,40 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
 
     // Дополнительная валидация для полей, которые не используют TextFormField
     if (_selectedCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
       return;
     }
 
     if (_condition == null || _condition!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите состояние'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите состояние'), backgroundColor: Colors.red));
       return;
     }
 
     if (_selectedBrand == null || _selectedBrand!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите самолёт'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите самолёт'), backgroundColor: Colors.red));
       return;
     }
 
     if (_selectedLocation == null || _selectedLocation!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите местоположение'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите местоположение'), backgroundColor: Colors.red));
       return;
     }
 
     // Проверка основной фотографии
-    final hasValidMainPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
+    final hasValidMainPhoto =
+        _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
     if (!hasValidMainPhoto) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
       return;
     }
 
@@ -187,7 +205,13 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
 
     // Получаем текущий продукт из состояния BLoC
     final currentState = _editBloc.state;
-    final currentProduct = currentState.maybeWhen(loaded: (product) => product, saved: (product) => product, published: (product) => product, unpublished: (product) => product, orElse: () => null);
+    final currentProduct = currentState.maybeWhen(
+      loaded: (product) => product,
+      saved: (product) => product,
+      published: (product) => product,
+      unpublished: (product) => product,
+      orElse: () => null,
+    );
 
     if (currentProduct == null) return;
 
@@ -214,7 +238,9 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     List<XFile>? additionalImageFiles;
 
     final newAdditionalPhotos = _additionalPhotos.where((photo) => photo.isNew).toList();
-    final existingAdditionalPhotos = _additionalPhotos.where((photo) => !photo.isNew && photo.url != null && photo.url!.isNotEmpty).toList();
+    final existingAdditionalPhotos = _additionalPhotos
+        .where((photo) => !photo.isNew && photo.url != null && photo.url!.isNotEmpty)
+        .toList();
 
     // Всегда передаем существующие URL (которые не были удалены)
     additionalImageUrls.addAll(existingAdditionalPhotos.map((photo) => photo.url!));
@@ -241,16 +267,24 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
         brand: _selectedBrand,
         location: _selectedLocation,
         year: _yearController.text.trim().isEmpty ? null : int.tryParse(_yearController.text.trim()),
-        totalFlightHours: _totalFlightHoursController.text.trim().isEmpty ? null : int.tryParse(_totalFlightHoursController.text.trim()),
-        enginePower: _enginePowerController.text.trim().isEmpty ? null : int.tryParse(_enginePowerController.text.trim()),
-        engineVolume: _engineVolumeController.text.trim().isEmpty ? null : int.tryParse(_engineVolumeController.text.trim()),
+        totalFlightHours: _totalFlightHoursController.text.trim().isEmpty
+            ? null
+            : int.tryParse(_totalFlightHoursController.text.trim()),
+        enginePower: _enginePowerController.text.trim().isEmpty
+            ? null
+            : int.tryParse(_enginePowerController.text.trim()),
+        engineVolume: _engineVolumeController.text.trim().isEmpty
+            ? null
+            : int.tryParse(_engineVolumeController.text.trim()),
         seats: _seatsController.text.trim().isEmpty ? null : int.tryParse(_seatsController.text.trim()),
         condition: _condition,
         isShareSale: _isShareSale,
         shareNumerator: _isShareSale ? _shareNumerator : null,
         shareDenominator: _isShareSale ? _shareDenominator : null,
         isLeasing: _isLeasing,
-        leasingConditions: _isLeasing && _leasingConditionsController.text.trim().isNotEmpty ? _leasingConditionsController.text.trim() : null,
+        leasingConditions: _isLeasing && _leasingConditionsController.text.trim().isNotEmpty
+            ? _leasingConditionsController.text.trim()
+            : null,
         mainImageUrl: mainImageUrl,
         additionalImageUrls: additionalImageUrls,
         mainImageFile: mainImageFile,
@@ -271,7 +305,13 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     return BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
       builder: (context, state) {
         // Получаем актуальный продукт из состояния BLoC
-        final currentProduct = state.maybeWhen(published: (product) => product, unpublished: (product) => product, saved: (product) => product, loaded: (product) => product, orElse: () => null);
+        final currentProduct = state.maybeWhen(
+          published: (product) => product,
+          unpublished: (product) => product,
+          saved: (product) => product,
+          loaded: (product) => product,
+          orElse: () => null,
+        );
 
         if (currentProduct == null) return const SizedBox.shrink();
 
@@ -339,11 +379,15 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка блокировки'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка блокировки'), backgroundColor: Colors.red));
       },
       (product) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление заблокировано'), backgroundColor: Colors.orange));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Объявление заблокировано'), backgroundColor: Colors.orange));
         context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
         context.router.maybePop(); // Закрываем экран редактирования
       },
@@ -356,11 +400,15 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка разблокировки'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка разблокировки'), backgroundColor: Colors.red));
       },
       (product) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление разблокировано'), backgroundColor: Colors.green));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Объявление разблокировано'), backgroundColor: Colors.green));
         context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
         context.router.maybePop(); // Закрываем экран редактирования
       },
@@ -387,7 +435,9 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                 },
                 saved: (product) {
                   // Успешно сохранено
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Товар успешно обновлен'), backgroundColor: Colors.green));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Товар успешно обновлен'), backgroundColor: Colors.green),
+                  );
                   // Обновляем список в главном BLoC
                   context.read<AircraftMarketBloc>().add(const AircraftMarketEvent.refresh());
                   // Закрываем экран
@@ -399,7 +449,9 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                 },
                 error: (message) {
                   // Ошибка сохранения - показываем snackbar, остаемся на экране
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
                 },
                 orElse: () {},
               );
@@ -450,9 +502,14 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                     final wasUnpublished = _previousStateBeforeLoading is UnpublishedAircraftMarketEditState;
                     if (wasPublished || wasUnpublished) {
                       // Показываем сообщение только после получения обновленного состояния
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(product.isPublished ? 'Объявление опубликовано' : 'Объявление снято с публикации'), backgroundColor: Colors.green));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            product.isPublished ? 'Объявление опубликовано' : 'Объявление снято с публикации',
+                          ),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                       _previousStateBeforeLoading = null; // Сбрасываем после использования
                       // Возвращаемся на детальную страницу после успешного publish/unpublish
                       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -465,7 +522,9 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                 },
                 error: (message) {
                   _previousStateBeforeLoading = null; // Сбрасываем при ошибке
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
                 },
                 orElse: () {},
               );
@@ -580,7 +639,11 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                                   fillColor: Colors.white,
                                   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                                 ),
-                                items: ['RUB', 'USD', 'EUR'].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
+                                items: [
+                                  'RUB',
+                                  'USD',
+                                  'EUR',
+                                ].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
                                 onChanged: (value) {
                                   if (value != null) {
                                     setState(() {
@@ -768,7 +831,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                 unpublishing: () => const Center(child: LoadingCustom()),
                 unpublished: (_) => const Center(child: LoadingCustom()),
                 error: (message) => Center(
-                  child: ErrorCustom(textError: message, repeat: () => _editBloc.add(AircraftMarketEditEvent.getProduct(_productId))),
+                  child: ErrorCustom(
+                    textError: message,
+                    repeat: () => _editBloc.add(AircraftMarketEditEvent.getProduct(_productId)),
+                  ),
                 ),
               );
             },
@@ -791,7 +857,12 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedBrand != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedBrand != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -846,7 +917,12 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -880,7 +956,12 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -905,7 +986,11 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
         if (scrollController.hasClients) {
           final itemHeight = 56.0; // Примерная высота ListTile
           final scrollOffset = selectedIndex! * itemHeight;
-          scrollController.animateTo(scrollOffset.clamp(0.0, scrollController.position.maxScrollExtent), duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+          scrollController.animateTo(
+            scrollOffset.clamp(0.0, scrollController.position.maxScrollExtent),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
         }
       });
     }
@@ -994,7 +1079,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                 children: [
                   Text('Продажа доли', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
                   if (_isShareSale && _shareNumerator != null && _shareDenominator != null)
-                    Text('${_shareNumerator}/${_shareDenominator}', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))
+                    Text(
+                      '${_shareNumerator}/${_shareDenominator}',
+                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                    )
                   else
                     Text('Нажмите для выбора', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                 ],
@@ -1015,7 +1103,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text('Самолёт можно купить в лизинг', style: AppStyles.regular14s.copyWith(color: AppColors.netural100p)),
+              child: Text(
+                'Самолёт можно купить в лизинг',
+                style: AppStyles.regular14s.copyWith(color: AppColors.netural100p),
+              ),
             ),
             Switch(
               value: _isLeasing,
@@ -1121,7 +1212,14 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
               borderRadius: 12,
-              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.25),
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 4.0),
+                ),
+              ],
               onPressed: () {
                 setState(() {
                   _isShareSale = tempIsShareSale;
@@ -1140,11 +1238,18 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
 
   Widget _buildMainPhotoSection() {
     // Проверяем, есть ли валидная фотография (новая или с непустым URL)
-    final hasValidPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
+    final hasValidPhoto =
+        _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
 
     return BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
       builder: (context, state) {
-        final product = state.maybeWhen(loaded: (p) => p, saved: (p) => p, published: (p) => p, unpublished: (p) => p, orElse: () => null);
+        final product = state.maybeWhen(
+          loaded: (p) => p,
+          saved: (p) => p,
+          published: (p) => p,
+          unpublished: (p) => p,
+          orElse: () => null,
+        );
         final isBlocked = product != null && !product.isActive;
 
         return Column(
@@ -1152,7 +1257,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
           children: [
             Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
             SizedBox(height: 16),
-            if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true, isBlocked: isBlocked)) else _buildEmptyPhotoPlaceholder(isMain: true),
+            if (hasValidPhoto)
+              SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true, isBlocked: isBlocked))
+            else
+              _buildEmptyPhotoPlaceholder(isMain: true),
           ],
         );
       },
@@ -1187,7 +1295,11 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
               padding: EdgeInsets.zero,
               itemCount: _additionalPhotos.length,
               itemBuilder: (context, index) {
-                return Container(margin: EdgeInsets.only(right: 12), width: 150, child: _buildPhotoItem(_additionalPhotos[index], isMain: false));
+                return Container(
+                  margin: EdgeInsets.only(right: 12),
+                  width: 150,
+                  child: _buildPhotoItem(_additionalPhotos[index], isMain: false),
+                );
               },
             ),
           )
@@ -1259,7 +1371,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                   alignment: Alignment.center,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Text(
                       'Заблокировано администратором',
                       style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -1321,7 +1436,12 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
   Future<void> _pickMainPhoto() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1920,
+        maxHeight: 1920,
+      );
 
       if (image != null && mounted) {
         Uint8List? bytes;
@@ -1337,7 +1457,13 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографию: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось выбрать фотографию: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -1365,7 +1491,13 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось выбрать фотографии: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -1390,5 +1522,6 @@ class _PhotoItem {
   final bool isNew;
   final Uint8List? bytes; // Кэшированные байты для веб-платформы
 
-  _PhotoItem({this.url, this.file, required this.isNew, this.bytes}) : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
+  _PhotoItem({this.url, this.file, required this.isNew, this.bytes})
+    : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
 }

@@ -33,7 +33,11 @@ class SelectTopicsScreen extends StatefulWidget {
 class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
   final ValueNotifier<Set<int>> selectedCategoryId = ValueNotifier<Set<int>>({});
   final ValueNotifier<int> categoriesLenght = ValueNotifier<int>(0);
-  final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((mixAnswers: false, mixQuestions: false, buttonHint: false));
+  final ValueNotifier<SettingsTest> settingsTest = ValueNotifier<SettingsTest>((
+    mixAnswers: false,
+    mixQuestions: false,
+    buttonHint: false,
+  ));
   late int _lastCertificateTypeId;
   bool _hasActiveSubscription = false;
 
@@ -41,7 +45,9 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
   void initState() {
     super.initState();
     _lastCertificateTypeId = BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.id;
-    BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: _lastCertificateTypeId));
+    BlocProvider.of<CategoriesWithListQuestionsBloc>(
+      context,
+    ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: _lastCertificateTypeId));
 
     // Если статус подписки передан извне, используем его, иначе делаем запрос
     if (widget.hasActiveSubscription != null) {
@@ -85,7 +91,9 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
 
       if (!mounted) return;
 
-      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+      final hasActive = subscriptions.any(
+        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+      );
 
       if (mounted) {
         setState(() {
@@ -118,7 +126,7 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
       // Закрываем bottom sheet перед открытием оплаты
       print('🔵 [SelectTopicsScreen] Закрываю bottom sheet перед открытием оплаты');
       Navigator.of(context).pop();
-      
+
       // Небольшая задержка для закрытия bottom sheet
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
@@ -194,7 +202,13 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
       print('❌ [SelectTopicsScreen] StackTrace: $stackTrace');
       final rootContext = navigatorKey.currentContext;
       if (rootContext != null && rootContext.mounted) {
-        ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+        ScaffoldMessenger.of(rootContext).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при загрузке типов подписок: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -212,7 +226,13 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
       if (!appState.isAuthenticated) {
         print('❌ [SelectTopicsScreen] Пользователь не авторизован, не могу открыть оплату');
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Необходима авторизация для оформления подписки'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Необходима авторизация для оформления подписки'),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
         return;
       }
@@ -222,7 +242,10 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
       print('🔵 [SelectTopicsScreen] Типы подписок загружены: ${subscriptionTypes.length}');
-      final yearlyType = subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => throw Exception('Годовая подписка не найдена'));
+      final yearlyType = subscriptionTypes.firstWhere(
+        (type) => type.code == 'rosaviatest_365' && type.isActive,
+        orElse: () => throw Exception('Годовая подписка не найдена'),
+      );
       print('🔵 [SelectTopicsScreen] Годовая подписка найдена: ${yearlyType.name}, цена: ${yearlyType.price}');
 
       if (!context.mounted) {
@@ -235,7 +258,13 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
       if (rootContext == null || !rootContext.mounted) {
         print('❌ [SelectTopicsScreen] rootContext не доступен');
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть экран оплаты'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Не удалось открыть экран оплаты'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
         return;
       }
@@ -255,7 +284,13 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
       print('❌ [SelectTopicsScreen] StackTrace: $stackTrace');
       final rootContext = navigatorKey.currentContext;
       if (rootContext != null && rootContext.mounted) {
-        ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+        ScaffoldMessenger.of(rootContext).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при загрузке типов подписок: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -273,7 +308,9 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
               _lastCertificateTypeId = state.typeSertificate.id;
               selectedCategoryId.value = <int>{};
               settingsTest.value = (mixAnswers: false, mixQuestions: false, buttonHint: false);
-              BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: state.typeSertificate.id));
+              BlocProvider.of<CategoriesWithListQuestionsBloc>(
+                context,
+              ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: state.typeSertificate.id));
             }
           },
           child: BlocBuilder<CategoriesWithListQuestionsBloc, CategoriesWithListQuestionsState>(
@@ -318,7 +355,11 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                       if (!_hasActiveSubscription) {
                         settingsTest.value = (mixAnswers: false, mixQuestions: false, buttonHint: false);
                       } else {
-                        settingsTest.value = (mixAnswers: settings.mixAnswers, mixQuestions: settings.mixQuestions, buttonHint: settings.buttonHint);
+                        settingsTest.value = (
+                          mixAnswers: settings.mixAnswers,
+                          mixQuestions: settings.mixQuestions,
+                          buttonHint: settings.buttonHint,
+                        );
                       }
                       selectedCategoryId.value = Set.from(settings.selectedCategoryIds);
                     } else if (mounted) {
@@ -361,17 +402,29 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                   hasActiveSubscription: _hasActiveSubscription,
                   onToggleMixAnswers: () {
                     if (_hasActiveSubscription) {
-                      settingsTest.value = (mixAnswers: !value.mixAnswers, mixQuestions: value.mixQuestions, buttonHint: value.buttonHint);
+                      settingsTest.value = (
+                        mixAnswers: !value.mixAnswers,
+                        mixQuestions: value.mixQuestions,
+                        buttonHint: value.buttonHint,
+                      );
                     }
                   },
                   onToggleMixQuestions: () {
                     if (_hasActiveSubscription) {
-                      settingsTest.value = (mixAnswers: value.mixAnswers, mixQuestions: !value.mixQuestions, buttonHint: value.buttonHint);
+                      settingsTest.value = (
+                        mixAnswers: value.mixAnswers,
+                        mixQuestions: !value.mixQuestions,
+                        buttonHint: value.buttonHint,
+                      );
                     }
                   },
                   onToggleButtonHint: () {
                     if (_hasActiveSubscription) {
-                      settingsTest.value = (mixAnswers: value.mixAnswers, mixQuestions: value.mixQuestions, buttonHint: !value.buttonHint);
+                      settingsTest.value = (
+                        mixAnswers: value.mixAnswers,
+                        mixQuestions: value.mixQuestions,
+                        buttonHint: !value.buttonHint,
+                      );
                     }
                   },
                   onSubscribeTap: () {
@@ -416,7 +469,8 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                       valueListenable: selectedCategoryId,
                       builder: (context, selected, child) {
                         final allIds = state.categoryWithQuestions.map((e) => e.categoryId).toSet();
-                        final sortedCategories = [...state.categoryWithQuestions]..sort((a, b) => a.categoryId.compareTo(b.categoryId));
+                        final sortedCategories = [...state.categoryWithQuestions]
+                          ..sort((a, b) => a.categoryId.compareTo(b.categoryId));
                         return SelectTopicsTestWidget(
                           categories: sortedCategories,
                           selectedCategoryId: selected,
@@ -480,7 +534,15 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                   }
                 });
 
-                final result = (certificateTypeId, testSettings.mixAnswers, testSettings.buttonHint, selectedCategoryId.value, typeSertificate.title, typeSertificate.image, testSettings.mixQuestions);
+                final result = (
+                  certificateTypeId,
+                  testSettings.mixAnswers,
+                  testSettings.buttonHint,
+                  selectedCategoryId.value,
+                  typeSertificate.title,
+                  typeSertificate.image,
+                  testSettings.mixQuestions,
+                );
 
                 print('🔵 [SelectTopicsScreen] Вызываю Navigator.of(context).pop() с результатом');
                 print('🔵 [SelectTopicsScreen] context.mounted: ${context.mounted}');
@@ -498,7 +560,10 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
                   builder: (context) => Material(
                     type: MaterialType.transparency,
                     child: Center(
-                      child: ClipRRect(borderRadius: BorderRadius.all(Radius.circular(20)), child: SelectTopicsWarningDialog()),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: SelectTopicsWarningDialog(),
+                      ),
                     ),
                   ),
                 );
@@ -507,7 +572,14 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
             borderRadius: 46,
             textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
             borderColor: Color(0xFF0A6EFA),
-            boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.28), blurRadius: 17.8, spreadRadius: 0, offset: Offset(0.0, 7))],
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xff0064D6).withOpacity(0.28),
+                blurRadius: 17.8,
+                spreadRadius: 0,
+                offset: Offset(0.0, 7),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 46),

@@ -33,11 +33,15 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   late QuestionsByTypeCertificateAndCategoriesBloc questionsByTypeCertificateAndCategoriesBloc;
 
   final ValueNotifier<int> indexQuestion = ValueNotifier<int>(0);
-  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(null); // Отслеживаем выбранный ответ для текущего вопроса
+  final ValueNotifier<int?> currentSelectedAnswerIndex = ValueNotifier<int?>(
+    null,
+  ); // Отслеживаем выбранный ответ для текущего вопроса
 
   @override
   void initState() {
-    questionsByTypeCertificateAndCategoriesBloc = QuestionsByTypeCertificateAndCategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>());
+    questionsByTypeCertificateAndCategoriesBloc = QuestionsByTypeCertificateAndCategoriesBloc(
+      rosAviaTestRepository: getIt<RosAviaTestRepository>(),
+    );
     super.initState();
   }
 
@@ -67,7 +71,8 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: questionsByTypeCertificateAndCategoriesBloc..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
+      value: questionsByTypeCertificateAndCategoriesBloc
+        ..add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId)),
       child: BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
         builder: (context, state) {
           return Scaffold(
@@ -78,38 +83,43 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                 ValueListenableBuilder<int>(
                   valueListenable: indexQuestion,
                   builder: (context, currentIndex, _) {
-                    return BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
+                    return BlocBuilder<
+                      QuestionsByTypeCertificateAndCategoriesBloc,
+                      QuestionsByTypeCertificateAndCategoriesState
+                    >(
                       builder: (context, state) {
                         if (state is! SuccessQuestionsByTypeCertificateAndCategoriesState) {
                           return SizedBox.shrink();
                         }
-                        
+
                         return FutureBuilder<List<dynamic>>(
                           future: _getUnansweredQuestions(state.questionsWithAnswers),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || snapshot.data!.isEmpty || currentIndex >= snapshot.data!.length) {
                               return SizedBox.shrink();
                             }
-                            
+
                             final question = snapshot.data![currentIndex];
                             final questionText = question.questionText ?? '';
                             final explanation = question.explanation ?? '';
                             final categoryTitle = question.categoryTitle ?? '';
                             final answers = question.answers as List;
-                            
+
                             return IconButton(
                               icon: const Icon(Icons.share, color: AppColors.primary100p),
                               onPressed: () {
                                 // Находим все правильные ответы
-                                final correctAnswers = answers.where((answer) => (answer as dynamic).isCorrect == true).toList();
-                                
+                                final correctAnswers = answers
+                                    .where((answer) => (answer as dynamic).isCorrect == true)
+                                    .toList();
+
                                 // Формируем описание: категория + правильные ответы + объяснение (если есть)
                                 String description = '';
-                                
+
                                 if (categoryTitle.isNotEmpty) {
                                   description = 'Категория: $categoryTitle';
                                 }
-                                
+
                                 // Добавляем правильные ответы
                                 if (correctAnswers.isNotEmpty) {
                                   if (description.isNotEmpty) {
@@ -120,7 +130,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                                     description += '\n${i + 1}. ${(correctAnswers[i] as dynamic).answerText}';
                                   }
                                 }
-                                
+
                                 // Добавляем объяснение
                                 if (explanation.isNotEmpty) {
                                   if (description.isNotEmpty) {
@@ -130,7 +140,7 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
                                   // Убираем HTML теги из объяснения для текстового шаринга
                                   description += explanation.replaceAll(RegExp(r'<[^>]*>'), '').trim();
                                 }
-                                
+
                                 LearningShareHelper.shareLearningPage(
                                   context,
                                   title: 'РосАвиаТест. $questionText',
@@ -149,115 +159,130 @@ class _TestByModeScreenState extends State<TestByModeScreen> {
               ],
             ),
             backgroundColor: AppColors.background,
-            body: BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
-              builder: (context, state) => state.map(
-                loading: (value) => Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20)),
-                error: (value) => ErrorCustom(
-                  textError: value.errorForUser,
-                  repeat: () {
-                    questionsByTypeCertificateAndCategoriesBloc.add(GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId));
-                  },
-                ),
-                success: (value) {
-                  _saveSelectedQuestions(value.questionsWithAnswers);
-                  return FutureBuilder<List<dynamic>>(
-                    future: _getUnansweredQuestions(value.questionsWithAnswers),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
-                      }
+            body:
+                BlocBuilder<QuestionsByTypeCertificateAndCategoriesBloc, QuestionsByTypeCertificateAndCategoriesState>(
+                  builder: (context, state) => state.map(
+                    loading: (value) =>
+                        Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20)),
+                    error: (value) => ErrorCustom(
+                      textError: value.errorForUser,
+                      repeat: () {
+                        questionsByTypeCertificateAndCategoriesBloc.add(
+                          GetQuestionsByTypeCertificateAndCategories(typeSsertificatesId: widget.typeCertificateId),
+                        );
+                      },
+                    ),
+                    success: (value) {
+                      _saveSelectedQuestions(value.questionsWithAnswers);
+                      return FutureBuilder<List<dynamic>>(
+                        future: _getUnansweredQuestions(value.questionsWithAnswers),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
+                          }
 
-                      if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
-                      }
+                          if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                            return Center(child: LoadingCustom(paddingTop: MediaQuery.of(context).size.height / 20));
+                          }
 
-                      final filteredQuestions = snapshot.data!;
+                          final filteredQuestions = snapshot.data!;
 
-                  // Сбросить индекс при загрузке новых вопросов
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (indexQuestion.value >= filteredQuestions.length) {
-                      indexQuestion.value = 0;
-                    }
-                  });
-
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ValueListenableBuilder(
-                          valueListenable: indexQuestion,
-                          builder: (_, indexQuestionValue, __) {
-                            if (indexQuestionValue >= filteredQuestions.length) {
-                              return const Center(child: Text('No more questions'));
+                          // Сбросить индекс при загрузке новых вопросов
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (indexQuestion.value >= filteredQuestions.length) {
+                              indexQuestion.value = 0;
                             }
+                          });
 
-                            return TestByModeWidget(
-                              questionId: filteredQuestions[indexQuestionValue].questionId,
-                              categoryTitle: filteredQuestions[indexQuestionValue].categoryTitle ?? '',
-                              question: filteredQuestions[indexQuestionValue],
-                              testMode: BlocProvider.of<RosAviaTestCubit>(context).state.testMode,
-                              buttonHint: value.buttonHint,
-                              onStateChanged: (selectedAnswerIndex, showResults) {
-                                // Только сохраняем выбранный ответ в памяти (не в БД)
-                                currentSelectedAnswerIndex.value = selectedAnswerIndex;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                        child: Center(
-                          child: ValueListenableBuilder<int?>(
-                            valueListenable: currentSelectedAnswerIndex,
-                            builder: (context, selectedIndex, _) {
-                              return CustomButton(
-                                title: 'Следующий',
-                                verticalPadding: 8,
-                                onPressed: selectedIndex != null
-                                    ? () async {
-                                        // Сохраняем ответ в БД перед переходом к следующему вопросу
-                                        if (currentSelectedAnswerIndex.value != null) {
-                                          final question = filteredQuestions[indexQuestion.value];
-                                          await getIt<AppDb>().saveTestAnswer(
-                                            certificateTypeId: widget.typeCertificateId,
-                                            questionId: question.questionId,
-                                            selectedAnswerId: currentSelectedAnswerIndex.value!,
-                                            categoryId: question.categoryId,
-                                            isCorrect: question.answers[currentSelectedAnswerIndex.value!].isCorrect,
-                                          );
-                                        }
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: ValueListenableBuilder(
+                                  valueListenable: indexQuestion,
+                                  builder: (_, indexQuestionValue, __) {
+                                    if (indexQuestionValue >= filteredQuestions.length) {
+                                      return const Center(child: Text('No more questions'));
+                                    }
 
-                                        // Переходим к следующему вопросу
-                                        if (indexQuestion.value + 1 < filteredQuestions.length) {
-                                          currentSelectedAnswerIndex.value = null; // Сбрасываем выбор для нового вопроса
-                                          indexQuestion.value++;
-                                        } else {
-                                          // Все вопросы ответчены - переходим на результаты БЕЗ очистки
-                                          // Очистка будет при нажатии "Завершить" на экране результатов
-                                          if (mounted) {
-                                            context.router.push(TestResultsRoute(certificateTypeId: widget.typeCertificateId));
-                                          }
-                                        }
-                                      }
-                                    : null, // Кнопка неактивна если ответ не выбран
-                                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: Offset(0.0, 7.0))],
-                                textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                                borderColor: Colors.transparent,
-                                backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,
-                                borderRadius: 46,
-                                rightSvg: Pictures.rightArrowMini,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-            ),
+                                    return TestByModeWidget(
+                                      questionId: filteredQuestions[indexQuestionValue].questionId,
+                                      categoryTitle: filteredQuestions[indexQuestionValue].categoryTitle ?? '',
+                                      question: filteredQuestions[indexQuestionValue],
+                                      testMode: BlocProvider.of<RosAviaTestCubit>(context).state.testMode,
+                                      buttonHint: value.buttonHint,
+                                      onStateChanged: (selectedAnswerIndex, showResults) {
+                                        // Только сохраняем выбранный ответ в памяти (не в БД)
+                                        currentSelectedAnswerIndex.value = selectedAnswerIndex;
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                                child: Center(
+                                  child: ValueListenableBuilder<int?>(
+                                    valueListenable: currentSelectedAnswerIndex,
+                                    builder: (context, selectedIndex, _) {
+                                      return CustomButton(
+                                        title: 'Следующий',
+                                        verticalPadding: 8,
+                                        onPressed: selectedIndex != null
+                                            ? () async {
+                                                // Сохраняем ответ в БД перед переходом к следующему вопросу
+                                                if (currentSelectedAnswerIndex.value != null) {
+                                                  final question = filteredQuestions[indexQuestion.value];
+                                                  await getIt<AppDb>().saveTestAnswer(
+                                                    certificateTypeId: widget.typeCertificateId,
+                                                    questionId: question.questionId,
+                                                    selectedAnswerId: currentSelectedAnswerIndex.value!,
+                                                    categoryId: question.categoryId,
+                                                    isCorrect:
+                                                        question.answers[currentSelectedAnswerIndex.value!].isCorrect,
+                                                  );
+                                                }
+
+                                                // Переходим к следующему вопросу
+                                                if (indexQuestion.value + 1 < filteredQuestions.length) {
+                                                  currentSelectedAnswerIndex.value =
+                                                      null; // Сбрасываем выбор для нового вопроса
+                                                  indexQuestion.value++;
+                                                } else {
+                                                  // Все вопросы ответчены - переходим на результаты БЕЗ очистки
+                                                  // Очистка будет при нажатии "Завершить" на экране результатов
+                                                  if (mounted) {
+                                                    context.router.push(
+                                                      TestResultsRoute(certificateTypeId: widget.typeCertificateId),
+                                                    );
+                                                  }
+                                                }
+                                              }
+                                            : null, // Кнопка неактивна если ответ не выбран
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xff0064D6).withOpacity(0.27),
+                                            blurRadius: 9,
+                                            spreadRadius: 0,
+                                            offset: Offset(0.0, 7.0),
+                                          ),
+                                        ],
+                                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                                        borderColor: Colors.transparent,
+                                        backgroundColor: selectedIndex != null ? Color(0xFF0A6EFA) : Colors.grey,
+                                        borderRadius: 46,
+                                        rightSvg: Pictures.rightArrowMini,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
           );
         },
       ),

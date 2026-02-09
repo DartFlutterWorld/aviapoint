@@ -19,7 +19,8 @@ class AirspeedsForEmergencyOperationsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'airspeeds_for_emergency_operations'.tr()),
+            onPressed: () =>
+                LearningShareHelper.shareLearningPage(context, title: 'airspeeds_for_emergency_operations'.tr()),
             tooltip: 'Поделиться',
           ),
         ],
@@ -31,7 +32,10 @@ class AirspeedsForEmergencyOperationsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Center(
-              child: Text('engine_failure_after_take_off', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
+              child: Text(
+                'engine_failure_after_take_off',
+                style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
+              ).tr(),
             ),
             SizedBox(height: 8),
             Table(
@@ -105,7 +109,10 @@ class AirspeedsForEmergencyOperationsScreen extends StatelessWidget {
                 ),
                 TableRow(
                   children: [
-                    Padding(padding: const EdgeInsets.all(8.0), child: Text('precautionary_landing_with_engine_power').tr()),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('precautionary_landing_with_engine_power').tr(),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text('65_kias', textAlign: TextAlign.right).tr(),
@@ -116,7 +123,10 @@ class AirspeedsForEmergencyOperationsScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Center(
-              child: Text('landing_without_engine_power', style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary)).tr(),
+              child: Text(
+                'landing_without_engine_power',
+                style: AppStyles.titleMidle.copyWith(color: AppColors.textPrimary),
+              ).tr(),
             ),
             SizedBox(height: 8),
             Table(

@@ -26,10 +26,7 @@ class BigNewsWidget extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                child: NetworkImageWidget(
-                  imageUrl: getImageUrl(news.pictureBig),
-                  fit: BoxFit.fill,
-                ),
+                child: NetworkImageWidget(imageUrl: getImageUrl(news.pictureBig), fit: BoxFit.fill),
               ),
               if (showStatus)
                 Positioned(
@@ -58,7 +55,10 @@ class BigNewsWidget extends StatelessWidget {
                 // Дата в правом нижнем углу
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text(formatNewsDate(news.date), style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF), fontSize: 8)),
+                  child: Text(
+                    formatNewsDate(news.date),
+                    style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF), fontSize: 8),
+                  ),
                 ),
                 SizedBox(height: 8),
               ],

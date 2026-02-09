@@ -46,8 +46,8 @@ class AircraftMarketCreateBloc extends Bloc<AircraftMarketCreateEvent, AircraftM
   final MarketRepository _repository;
 
   AircraftMarketCreateBloc({required MarketRepository repository})
-      : _repository = repository,
-        super(const AircraftMarketCreateState.initial()) {
+    : _repository = repository,
+      super(const AircraftMarketCreateState.initial()) {
     on<CreateAircraftMarketCreateEvent>(_onCreateAirCraft);
     on<ResetAircraftMarketCreateEvent>(_onReset);
   }

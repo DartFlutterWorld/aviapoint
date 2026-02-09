@@ -15,9 +15,17 @@ class ChipsWidget extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(minWidth: 55, maxWidth: 75),
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: colorBackground ?? getColors(questionWithAnswers.correctAnswer ?? 0).$1),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: colorBackground ?? getColors(questionWithAnswers.correctAnswer ?? 0).$1,
+      ),
       child: Center(
-        child: Text(questionWithAnswers.questionId.toString(), style: AppStyles.regular13s.copyWith(color: colorTitle ?? getColors(questionWithAnswers.correctAnswer ?? 0).$2)),
+        child: Text(
+          questionWithAnswers.questionId.toString(),
+          style: AppStyles.regular13s.copyWith(
+            color: colorTitle ?? getColors(questionWithAnswers.correctAnswer ?? 0).$2,
+          ),
+        ),
       ),
     );
   }

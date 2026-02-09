@@ -51,7 +51,11 @@ abstract class MarketService {
   Future<void> removeFromFavorites(@Path('id') int id);
 
   @GET('/api/market/favorites')
-  Future<List<AircraftMarketDto>> getFavoriteProducts({@Query('product_type') String? productType, @Query('limit') int? limit, @Query('offset') int? offset});
+  Future<List<AircraftMarketDto>> getFavoriteProducts({
+    @Query('product_type') String? productType,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+  });
 
   @POST('/api/market/aircraft')
   Future<AircraftMarketDto> createAirCraft(@Body() Map<String, dynamic> body);
@@ -82,7 +86,10 @@ abstract class MarketService {
   /// Загрузить дополнительные фотографии товара
   @POST('/api/market/products/{id}/additional-images')
   @MultiPart()
-  Future<UploadImagesResponseDto> uploadAdditionalImages(@Path('id') int id, @Part(name: 'images') List<MultipartFile> images);
+  Future<UploadImagesResponseDto> uploadAdditionalImages(
+    @Path('id') int id,
+    @Part(name: 'images') List<MultipartFile> images,
+  );
 
   // ========== PARTS ENDPOINTS ==========
 
@@ -96,9 +103,7 @@ abstract class MarketService {
   });
 
   @GET('/api/market/parts/manufacturers')
-  Future<List<PartsManufacturerDto>> getPartsManufacturers({
-    @Query('search') String? search,
-  });
+  Future<List<PartsManufacturerDto>> getPartsManufacturers({@Query('search') String? search});
 
   @GET('/api/market/parts')
   Future<List<PartsMarketDto>> getParts({
@@ -144,8 +149,5 @@ abstract class MarketService {
   Future<void> removePartFromFavorites(@Path('id') int id);
 
   @GET('/api/market/parts/favorites')
-  Future<List<PartsMarketDto>> getFavoriteParts({
-    @Query('limit') int? limit,
-    @Query('offset') int? offset,
-  });
+  Future<List<PartsMarketDto>> getFavoriteParts({@Query('limit') int? limit, @Query('offset') int? offset});
 }

@@ -107,12 +107,18 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
       print('🔵 [_checkSubscription] Получено подписок: ${subscriptions.length}');
       for (final subscription in subscriptions) {
-        print('   Подписка: id=${subscription.id}, isActive=${subscription.isActive}, endDate=${subscription.endDate}, isAfterNow=${subscription.endDate.isAfter(DateTime.now())}');
+        print(
+          '   Подписка: id=${subscription.id}, isActive=${subscription.isActive}, endDate=${subscription.endDate}, isAfterNow=${subscription.endDate.isAfter(DateTime.now())}',
+        );
       }
 
-      final hasActive = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+      final hasActive = subscriptions.any(
+        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+      );
 
-      print('🔵 [_checkSubscription] hasActive=$hasActive, текущее состояние _hasActiveSubscription=$_hasActiveSubscription');
+      print(
+        '🔵 [_checkSubscription] hasActive=$hasActive, текущее состояние _hasActiveSubscription=$_hasActiveSubscription',
+      );
 
       if (mounted) {
         setState(() {
@@ -122,7 +128,7 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       } else {
         print('⚠️ [_checkSubscription] Widget не mounted, состояние не обновлено');
       }
-      
+
       // Просто обновляем состояние - пользователь сам решит, куда идти
       // Никакой автоматики - только показываем, что подписка разблокирована
     } catch (e) {
@@ -163,7 +169,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
       // Проверяем, есть ли хотя бы одна активная подписка
-      final hasActiveSubscription = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+      final hasActiveSubscription = subscriptions.any(
+        (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+      );
 
       // Обновляем состояние подписки в UI
       if (mounted) {
@@ -182,7 +190,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
         final db = getIt<AppDb>();
         await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: 'training');
         if (kDebugMode) {
-          print('✅ [_checkSubscriptionAndNavigate] Режим успешно сохранен в БД: certificateTypeId=$certificateTypeId, testMode=training');
+          print(
+            '✅ [_checkSubscriptionAndNavigate] Режим успешно сохранен в БД: certificateTypeId=$certificateTypeId, testMode=training',
+          );
         }
 
         // Открываем боттом шит с настройками
@@ -196,13 +206,21 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
               print('🔵 [_checkSubscriptionAndNavigate] Использую rootContext');
             }
             // Передаем статус подписки, чтобы не делать повторный запрос в selectTopics
-            await selectTopics(context: rootContext, testMode: TestMode.training, hasActiveSubscription: hasActiveSubscription);
+            await selectTopics(
+              context: rootContext,
+              testMode: TestMode.training,
+              hasActiveSubscription: hasActiveSubscription,
+            );
           } else if (context.mounted) {
             if (kDebugMode) {
               print('🔵 [_checkSubscriptionAndNavigate] Использую local context');
             }
             // Передаем статус подписки, чтобы не делать повторный запрос в selectTopics
-            await selectTopics(context: context, testMode: TestMode.training, hasActiveSubscription: hasActiveSubscription);
+            await selectTopics(
+              context: context,
+              testMode: TestMode.training,
+              hasActiveSubscription: hasActiveSubscription,
+            );
           } else {
             if (kDebugMode) {
               print('❌ [_checkSubscriptionAndNavigate] Context не mounted');
@@ -253,7 +271,10 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       // Загружаем типы подписок и находим yearly
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
-      final yearlyType = subscriptionTypes.firstWhere((type) => type.code == 'rosaviatest_365' && type.isActive, orElse: () => throw Exception('Годовая подписка не найдена'));
+      final yearlyType = subscriptionTypes.firstWhere(
+        (type) => type.code == 'rosaviatest_365' && type.isActive,
+        orElse: () => throw Exception('Годовая подписка не найдена'),
+      );
 
       if (!context.mounted) return;
 
@@ -269,7 +290,13 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       print('❌ Ошибка при создании платежа: $e');
       print('StackTrace: $stackTrace');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка при загрузке типов подписок: $e'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при загрузке типов подписок: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -321,7 +348,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
 
     await db.saveTestMode(certificateTypeId: certificateTypeId, testMode: testModeString);
     if (kDebugMode) {
-      print('✅ [_handleModeSelection] Режим успешно сохранен в БД: certificateTypeId=$certificateTypeId, testMode=$testModeString');
+      print(
+        '✅ [_handleModeSelection] Режим успешно сохранен в БД: certificateTypeId=$certificateTypeId, testMode=$testModeString',
+      );
     }
 
     if (kDebugMode) {
@@ -398,7 +427,9 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
   @override
   Widget build(BuildContext context) {
     // Формируем title в зависимости от наличия активной подписки
-    final trainingModeTitle = _hasActiveSubscription ? 'Тренировочный\nрежим' : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
+    final trainingModeTitle = _hasActiveSubscription
+        ? 'Тренировочный\nрежим'
+        : 'Тренировочный\nрежим (Подписка 1000 ₽/год)';
 
     return BlocProvider.value(
       value: getIt<RosAviaTestCubit>(),

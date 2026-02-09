@@ -24,7 +24,9 @@ class MarketRepositoryImpl implements MarketRepository {
   final MarketService _service;
   final Dio _dio;
 
-  MarketRepositoryImpl({required MarketService marketService}) : _service = marketService, _dio = (getIt<ApiDatasource>() as ApiDatasourceDio).dio;
+  MarketRepositoryImpl({required MarketService marketService})
+    : _service = marketService,
+      _dio = (getIt<ApiDatasource>() as ApiDatasourceDio).dio;
 
   @override
   Future<Either<Failure, List<MarketCategoryEntity>>> getMainCategories(String productType) async {
@@ -74,7 +76,9 @@ class MarketRepositoryImpl implements MarketRepository {
     int offset = 0,
   }) async {
     try {
-      final aircraftSubcategoriesIdsStr = aircraftSubcategoriesIds != null && aircraftSubcategoriesIds.isNotEmpty ? aircraftSubcategoriesIds.map((e) => e.toString()).join(',') : null;
+      final aircraftSubcategoriesIdsStr = aircraftSubcategoriesIds != null && aircraftSubcategoriesIds.isNotEmpty
+          ? aircraftSubcategoriesIds.map((e) => e.toString()).join(',')
+          : null;
 
       final products = await _service.getProducts(
         aircraftSubcategoriesId: aircraftSubcategoriesId,
@@ -129,7 +133,11 @@ class MarketRepositoryImpl implements MarketRepository {
   }
 
   @override
-  Future<Either<Failure, List<AircraftMarketEntity>>> getFavoriteProducts({String? productType, int limit = 20, int offset = 0}) async {
+  Future<Either<Failure, List<AircraftMarketEntity>>> getFavoriteProducts({
+    String? productType,
+    int limit = 20,
+    int offset = 0,
+  }) async {
     try {
       final products = await _service.getFavoriteProducts(productType: productType, limit: limit, offset: offset);
       return right(AircraftMarketMapper.toEntities(products));
@@ -177,7 +185,8 @@ class MarketRepositoryImpl implements MarketRepository {
         if (description != null && description.isNotEmpty) formData.fields.add(MapEntry('description', description));
         formData.fields.add(MapEntry('price', price.toString()));
         formData.fields.add(MapEntry('currency', currency));
-        if (aircraftSubcategoriesId != null) formData.fields.add(MapEntry('aircraft_subcategories_id', aircraftSubcategoriesId.toString()));
+        if (aircraftSubcategoriesId != null)
+          formData.fields.add(MapEntry('aircraft_subcategories_id', aircraftSubcategoriesId.toString()));
         if (brand != null && brand.isNotEmpty) formData.fields.add(MapEntry('brand', brand));
         if (location != null && location.isNotEmpty) formData.fields.add(MapEntry('location', location));
         if (year != null) formData.fields.add(MapEntry('year', year.toString()));
@@ -248,12 +257,24 @@ class MarketRepositoryImpl implements MarketRepository {
                 errorMessage = dioResponse.data.toString();
               }
             }
-            return left(ServerFailure(statusCode: dioResponse.statusCode.toString(), message: errorMessage ?? 'Ошибка при создании товара', responseMessage: errorMessage));
+            return left(
+              ServerFailure(
+                statusCode: dioResponse.statusCode.toString(),
+                message: errorMessage ?? 'Ошибка при создании товара',
+                responseMessage: errorMessage,
+              ),
+            );
           }
 
           response = AircraftMarketDto.fromJson(dioResponse.data!);
         } on FormatException {
-          return left(ServerFailure(statusCode: '400', message: 'Ошибка декодирования ответа сервера', responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.'));
+          return left(
+            ServerFailure(
+              statusCode: '400',
+              message: 'Ошибка декодирования ответа сервера',
+              responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
+            ),
+          );
         }
       } else {
         // Если нет файлов, отправляем JSON как обычно
@@ -296,7 +317,13 @@ class MarketRepositoryImpl implements MarketRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message, responseMessage: responseMessage));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -341,7 +368,8 @@ class MarketRepositoryImpl implements MarketRepository {
         if (description != null) formData.fields.add(MapEntry('description', description));
         if (price != null) formData.fields.add(MapEntry('price', price.toString()));
         if (currency != null) formData.fields.add(MapEntry('currency', currency));
-        if (aircraftSubcategoriesId != null) formData.fields.add(MapEntry('aircraft_subcategories_id', aircraftSubcategoriesId.toString()));
+        if (aircraftSubcategoriesId != null)
+          formData.fields.add(MapEntry('aircraft_subcategories_id', aircraftSubcategoriesId.toString()));
         // Передаём mainImageUrl только если НЕТ нового файла (для удаления или сохранения старого URL)
         if (mainImageUrl != null && !hasMainImageFile) formData.fields.add(MapEntry('main_image_url', mainImageUrl));
         if (additionalImageUrls != null) {
@@ -422,12 +450,24 @@ class MarketRepositoryImpl implements MarketRepository {
                 errorMessage = dioResponse.data.toString();
               }
             }
-            return left(ServerFailure(statusCode: dioResponse.statusCode.toString(), message: errorMessage ?? 'Ошибка при обновлении товара', responseMessage: errorMessage));
+            return left(
+              ServerFailure(
+                statusCode: dioResponse.statusCode.toString(),
+                message: errorMessage ?? 'Ошибка при обновлении товара',
+                responseMessage: errorMessage,
+              ),
+            );
           }
 
           response = AircraftMarketDto.fromJson(dioResponse.data!);
         } on FormatException {
-          return left(ServerFailure(statusCode: '400', message: 'Ошибка декодирования ответа сервера', responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.'));
+          return left(
+            ServerFailure(
+              statusCode: '400',
+              message: 'Ошибка декодирования ответа сервера',
+              responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
+            ),
+          );
         }
       } else {
         // Если нет файлов, отправляем JSON как обычно
@@ -474,7 +514,13 @@ class MarketRepositoryImpl implements MarketRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message, responseMessage: responseMessage));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -598,7 +644,13 @@ class MarketRepositoryImpl implements MarketRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message, responseMessage: responseMessage));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     } catch (e) {
       return left(ServerFailure(statusCode: null, message: 'Ошибка при загрузке изображения: ${e.toString()}'));
     }
@@ -635,7 +687,13 @@ class MarketRepositoryImpl implements MarketRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message, responseMessage: responseMessage));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     } catch (e) {
       return left(ServerFailure(statusCode: null, message: 'Ошибка при загрузке изображений: ${e.toString()}'));
     }
@@ -680,7 +738,10 @@ class MarketRepositoryImpl implements MarketRepository {
   }
 
   @override
-  Future<Either<Failure, List<MarketCategoryEntity>>> getPartsSubcategories({int? parentId, int? mainCategoryId}) async {
+  Future<Either<Failure, List<MarketCategoryEntity>>> getPartsSubcategories({
+    int? parentId,
+    int? mainCategoryId,
+  }) async {
     try {
       print('🔵 [MarketRepository] getPartsSubcategories: parentId=$parentId, mainCategoryId=$mainCategoryId');
       final categories = await _service.getPartsSubcategories(parentId: parentId, mainCategoryId: mainCategoryId);
@@ -698,7 +759,11 @@ class MarketRepositoryImpl implements MarketRepository {
   Future<Either<Failure, List<Map<String, dynamic>>>> getPartsManufacturers({String? search}) async {
     try {
       final manufacturers = await _service.getPartsManufacturers(search: search);
-      return right(manufacturers.map((dto) => {'id': dto.id, 'name': dto.name, 'name_en': dto.nameEn, 'country': dto.country}).toList());
+      return right(
+        manufacturers
+            .map((dto) => {'id': dto.id, 'name': dto.name, 'name_en': dto.nameEn, 'country': dto.country})
+            .toList(),
+      );
     } on DioException catch (e) {
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
     }
@@ -913,21 +978,28 @@ class MarketRepositoryImpl implements MarketRepository {
                 errorMessage = dioResponse.data.toString();
               }
             }
-            return left(ServerFailure(statusCode: dioResponse.statusCode.toString(), message: errorMessage ?? 'Ошибка при создании запчасти', responseMessage: errorMessage));
+            return left(
+              ServerFailure(
+                statusCode: dioResponse.statusCode.toString(),
+                message: errorMessage ?? 'Ошибка при создании запчасти',
+                responseMessage: errorMessage,
+              ),
+            );
           }
 
           response = PartsMarketDto.fromJson(dioResponse.data!);
         } on FormatException {
-          return left(ServerFailure(statusCode: '400', message: 'Ошибка декодирования ответа сервера', responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.'));
+          return left(
+            ServerFailure(
+              statusCode: '400',
+              message: 'Ошибка декодирования ответа сервера',
+              responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
+            ),
+          );
         }
       } else {
         // Если нет файлов, отправляем JSON как обычно
-        final body = <String, dynamic>{
-          'title': title,
-          'price': price,
-          'currency': currency,
-          'quantity': quantity,
-        };
+        final body = <String, dynamic>{'title': title, 'price': price, 'currency': currency, 'quantity': quantity};
         if (description != null && description.isNotEmpty) body['description'] = description;
         if (partsMainCategoryId != null) body['parts_main_category_id'] = partsMainCategoryId;
         if (partsSubcategoryId != null) body['parts_subcategory_id'] = partsSubcategoryId;
@@ -968,7 +1040,13 @@ class MarketRepositoryImpl implements MarketRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message, responseMessage: responseMessage));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 
@@ -1129,12 +1207,24 @@ class MarketRepositoryImpl implements MarketRepository {
                 errorMessage = dioResponse.data.toString();
               }
             }
-            return left(ServerFailure(statusCode: dioResponse.statusCode.toString(), message: errorMessage ?? 'Ошибка при обновлении запчасти', responseMessage: errorMessage));
+            return left(
+              ServerFailure(
+                statusCode: dioResponse.statusCode.toString(),
+                message: errorMessage ?? 'Ошибка при обновлении запчасти',
+                responseMessage: errorMessage,
+              ),
+            );
           }
 
           response = PartsMarketDto.fromJson(dioResponse.data!);
         } on FormatException {
-          return left(ServerFailure(statusCode: '400', message: 'Ошибка декодирования ответа сервера', responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.'));
+          return left(
+            ServerFailure(
+              statusCode: '400',
+              message: 'Ошибка декодирования ответа сервера',
+              responseMessage: 'Сервер вернул невалидный ответ. Возможно, проблема с кодировкой данных.',
+            ),
+          );
         }
       } else {
         // Если нет файлов, отправляем JSON как обычно
@@ -1189,7 +1279,13 @@ class MarketRepositoryImpl implements MarketRepository {
           responseMessage = e.response!.data.toString();
         }
       }
-      return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message, responseMessage: responseMessage));
+      return left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
     }
   }
 

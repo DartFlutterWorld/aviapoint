@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
-import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
@@ -81,14 +80,20 @@ class _NewsScreenState extends State<NewsScreen> {
       if (userId == null) {
         // Показываем индикатор загрузки
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Загрузка данных профиля...'), duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Загрузка данных профиля...'), duration: Duration(seconds: 2)));
         }
 
         // Ждем загрузки профиля (максимум 5 секунд)
         try {
           await profileBloc.stream
               .firstWhere((state) {
-                return state.maybeWhen(success: (_) => true, error: (_, __, ___, ____, _____) => true, orElse: () => false);
+                return state.maybeWhen(
+                  success: (_) => true,
+                  error: (_, __, ___, ____, _____) => true,
+                  orElse: () => false,
+                );
               })
               .timeout(const Duration(seconds: 5));
 
@@ -114,7 +119,9 @@ class _NewsScreenState extends State<NewsScreen> {
         // Загружаем новости пользователя
         BlocProvider.of<NewsBloc>(context).add(NewsEvent.get(authorId: userId));
       } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось загрузить данные профиля'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Не удалось загрузить данные профиля'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -122,7 +129,6 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Новости авиации', withBack: false, withProfile: true),
       backgroundColor: AppColors.background,
       floatingActionButton: FloatingActionButtonWidget(
         title: 'Предложить\nновость',
@@ -167,8 +173,15 @@ class _NewsScreenState extends State<NewsScreen> {
                 padding: EdgeInsets.only(bottom: 0),
                 child: OutlinedButton.icon(
                   onPressed: _toggleMyNews,
-                  icon: Icon(_showMyNews ? Icons.check_circle : Icons.person_outline, size: 16, color: _showMyNews ? Colors.white : const Color(0xFF0A6EFA)),
-                  label: Text('Мои', style: AppStyles.bold16s.copyWith(color: _showMyNews ? Colors.white : const Color(0xFF0A6EFA))),
+                  icon: Icon(
+                    _showMyNews ? Icons.check_circle : Icons.person_outline,
+                    size: 16,
+                    color: _showMyNews ? Colors.white : const Color(0xFF0A6EFA),
+                  ),
+                  label: Text(
+                    'Мои',
+                    style: AppStyles.bold16s.copyWith(color: _showMyNews ? Colors.white : const Color(0xFF0A6EFA)),
+                  ),
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     minimumSize: Size(0, 36),
@@ -314,7 +327,9 @@ class _Success extends StatelessWidget {
                       width: gridItemWidth,
                       child: GestureDetector(
                         onTap: () => AutoRouter.of(context).push(DetailNewsRoute(news: newsItem, newsId: newsItem.id)),
-                        child: newsItem.isBigNews ? BigNewsWidget(news: newsItem, showStatus: showStatus) : SmallNewsWidget(news: newsItem, showStatus: showStatus),
+                        child: newsItem.isBigNews
+                            ? BigNewsWidget(news: newsItem, showStatus: showStatus)
+                            : SmallNewsWidget(news: newsItem, showStatus: showStatus),
                       ),
                     );
                   }).toList(),

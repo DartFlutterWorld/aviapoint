@@ -49,7 +49,9 @@ class SmallBlogArticleWidget extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 4),
                     child: StatusChip(
                       text: article.status == 'published' ? 'Опубликовано' : 'Не опубликовано',
-                      backgroundColor: article.status == 'published' ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+                      backgroundColor: article.status == 'published'
+                          ? const Color(0xFF10B981)
+                          : const Color(0xFFF59E0B),
                       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
                       borderRadius: 10,
                       height: 20,

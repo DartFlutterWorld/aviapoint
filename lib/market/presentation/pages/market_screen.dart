@@ -5,8 +5,6 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
-import 'package:aviapoint/core/utils/const/pictures.dart';
-import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/parts_market_bloc.dart';
@@ -18,13 +16,15 @@ import 'package:aviapoint/market/presentation/widgets/parts_market_card.dart';
 import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
-import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
+import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
+import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
 class MarketScreen extends StatefulWidget {
@@ -109,11 +109,15 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
         // Проверяем, есть ли категории для текущего типа продукта
         final hasCategoriesForType = categories.any((cat) => cat.productType == _currentProductType);
         if (!hasCategoriesForType) {
-          context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
+          context.read<MarketCategoriesBloc>().add(
+            MarketCategoriesEvent.getMainCategories(productType: _currentProductType),
+          );
         }
       },
       orElse: () {
-        context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getMainCategories(productType: _currentProductType));
+        context.read<MarketCategoriesBloc>().add(
+          MarketCategoriesEvent.getMainCategories(productType: _currentProductType),
+        );
       },
     );
 
@@ -138,7 +142,14 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
         state.when(
           loading: () {},
           loadingMore: (List<PartsMarketEntity> parts) {},
-          error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) {},
+          error:
+              (
+                String? errorFromApi,
+                String errorForUser,
+                String? statusCode,
+                StackTrace? stackTrace,
+                String? responseMessage,
+              ) {},
           success: (List<PartsMarketEntity> parts, bool hasMore) {
             if (hasMore) {
               context.read<PartsMarketBloc>().add(const PartsMarketEvent.loadMore());
@@ -186,7 +197,9 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
       context.read<PartsMarketBloc>().add(
         PartsMarketEvent.getParts(
           subcategoryId: singleCategoryId,
-          mainCategoryId: _selectedCategoryIds.isNotEmpty && _selectedCategoryIds.length > 1 ? null : null, // TODO: нужно будет доработать логику для main category
+          mainCategoryId: _selectedCategoryIds.isNotEmpty && _selectedCategoryIds.length > 1
+              ? null
+              : null, // TODO: нужно будет доработать логику для main category
           searchQuery: searchQuery,
           priceFrom: _priceFrom,
           priceTo: _priceTo,
@@ -227,7 +240,13 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
   void _showFiltersDialog() async {
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      builder: (context) => _FiltersDialog(productType: _currentProductType, priceFrom: _priceFrom, priceTo: _priceTo, brand: _brand, sortBy: _sortBy),
+      builder: (context) => _FiltersDialog(
+        productType: _currentProductType,
+        priceFrom: _priceFrom,
+        priceTo: _priceTo,
+        brand: _brand,
+        sortBy: _sortBy,
+      ),
     );
 
     if (result != null) {
@@ -248,7 +267,8 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
         BlocListener<PartsMarketBloc, PartsMarketState>(
           listenWhen: (previous, current) {
             // Слушаем когда создание или обновление завершилось успешно
-            return (previous is CreatingPartsMarketState && current is CreatedPartsMarketState) || (previous is UpdatingPartsMarketState && current is UpdatedPartsMarketState);
+            return (previous is CreatingPartsMarketState && current is CreatedPartsMarketState) ||
+                (previous is UpdatingPartsMarketState && current is UpdatedPartsMarketState);
           },
           listener: (context, state) {
             state.maybeWhen(
@@ -277,7 +297,10 @@ class _MarketScreenState extends State<MarketScreen> with SingleTickerProviderSt
       ],
       child: Scaffold(
         backgroundColor: AppColors.background,
-        floatingActionButton: FloatingActionButtonWidget(title: 'Создать\nобъявление', onTap: () => _handleCreateAdButtonTap(context)),
+        floatingActionButton: FloatingActionButtonWidget(
+          title: 'Создать\nобъявление',
+          onTap: () => _handleCreateAdButtonTap(context),
+        ),
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
@@ -411,7 +434,11 @@ class _MarketContent extends StatelessWidget {
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
               error: (message) => const SliverToBoxAdapter(child: SizedBox.shrink()),
               success: (categories) => SliverToBoxAdapter(
-                child: _CategoriesSection(categories: categories, selectedCategoryIds: selectedCategoryIds, onCategorySelected: onCategorySelected),
+                child: _CategoriesSection(
+                  categories: categories,
+                  selectedCategoryIds: selectedCategoryIds,
+                  onCategorySelected: onCategorySelected,
+                ),
               ),
             ),
           ),
@@ -443,13 +470,10 @@ class _MarketContent extends StatelessWidget {
               loading: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
               loadingMore: (products) => _ProductsSliverGrid(products: products, isLoadingMore: true, sortBy: sortBy),
               error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => SliverFillRemaining(
-                child: ErrorCustom(
-                  paddingTop: 0,
-                  textError: errorForUser,
-                  repeat: onApplyFilters,
-                ),
+                child: ErrorCustom(paddingTop: 0, textError: errorForUser, repeat: onApplyFilters),
               ),
-              success: (products, hasMore) => _ProductsSliverGrid(products: products, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
+              success: (products, hasMore) =>
+                  _ProductsSliverGrid(products: products, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
             ),
           ),
         ],
@@ -464,7 +488,11 @@ class _CategoriesSection extends StatefulWidget {
   final List<int> selectedCategoryIds;
   final void Function(MarketCategoryEntity) onCategorySelected;
 
-  const _CategoriesSection({required this.categories, required this.selectedCategoryIds, required this.onCategorySelected});
+  const _CategoriesSection({
+    required this.categories,
+    required this.selectedCategoryIds,
+    required this.onCategorySelected,
+  });
 
   @override
   State<_CategoriesSection> createState() => _CategoriesSectionState();
@@ -502,7 +530,12 @@ class _CategoriesSectionState extends State<_CategoriesSection> {
           },
           onPanUpdate: (details) {
             if (_scrollController.hasClients) {
-              _scrollController.position.moveTo((_scrollController.position.pixels - details.delta.dx).clamp(0.0, _scrollController.position.maxScrollExtent));
+              _scrollController.position.moveTo(
+                (_scrollController.position.pixels - details.delta.dx).clamp(
+                  0.0,
+                  _scrollController.position.maxScrollExtent,
+                ),
+              );
             }
           },
           onPanEnd: (_) {
@@ -518,7 +551,11 @@ class _CategoriesSectionState extends State<_CategoriesSection> {
             child: Row(
               children: [
                 ...widget.categories.map(
-                  (category) => _CategoryCard(category: category, isSelected: widget.selectedCategoryIds.contains(category.id), onTap: _isDragging ? () {} : () => widget.onCategorySelected(category)),
+                  (category) => _CategoryCard(
+                    category: category,
+                    isSelected: widget.selectedCategoryIds.contains(category.id),
+                    onTap: _isDragging ? () {} : () => widget.onCategorySelected(category),
+                  ),
                 ),
               ],
             ),
@@ -550,7 +587,10 @@ class _CategoryCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary100p.withOpacity(0.1) : Colors.white,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: isSelected ? AppColors.primary100p : Colors.grey.shade300, width: isSelected ? 2 : 1),
+            border: Border.all(
+              color: isSelected ? AppColors.primary100p : Colors.grey.shade300,
+              width: isSelected ? 2 : 1,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -559,7 +599,12 @@ class _CategoryCard extends StatelessWidget {
               if (category.iconUrl != null && category.iconUrl!.isNotEmpty)
                 Padding(
                   padding: EdgeInsets.only(bottom: 0),
-                  child: Image.network(getImageUrl(category.iconUrl!), height: 50, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => const SizedBox()),
+                  child: Image.network(
+                    getImageUrl(category.iconUrl!),
+                    height: 50,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                  ),
                 ),
               Text(
                 category.name.replaceAll('самолёты', '').replaceAll('самолёт', '').replaceAll('Самолёт', '').trim(),
@@ -651,18 +696,30 @@ class _FiltersDialogState extends State<_FiltersDialog> {
             Text('Сортировка', style: AppStyles.bold16s),
             SizedBox(height: 8),
             ...['default', 'date', 'price_asc', 'price_desc'].map((sort) {
-              return RadioListTile<String>(title: Text(_getSortName(sort)), value: sort, groupValue: _sortBy, onChanged: (value) => setState(() => _sortBy = value!));
+              return RadioListTile<String>(
+                title: Text(_getSortName(sort)),
+                value: sort,
+                groupValue: _sortBy,
+                onChanged: (value) => setState(() => _sortBy = value!),
+              );
             }).toList(),
           ],
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.of(context).pop({'priceFrom': null, 'priceTo': null, 'brand': null, 'sortBy': 'default'}), child: const Text('Очистить')),
+        TextButton(
+          onPressed: () =>
+              Navigator.of(context).pop({'priceFrom': null, 'priceTo': null, 'brand': null, 'sortBy': 'default'}),
+          child: const Text('Очистить'),
+        ),
         TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Отмена')),
         TextButton(
-          onPressed: () => Navigator.of(
-            context,
-          ).pop({'priceFrom': _priceFromText != null ? int.tryParse(_priceFromText!) : null, 'priceTo': _priceToText != null ? int.tryParse(_priceToText!) : null, 'brand': _brand, 'sortBy': _sortBy}),
+          onPressed: () => Navigator.of(context).pop({
+            'priceFrom': _priceFromText != null ? int.tryParse(_priceFromText!) : null,
+            'priceTo': _priceToText != null ? int.tryParse(_priceToText!) : null,
+            'brand': _brand,
+            'sortBy': _sortBy,
+          }),
           child: const Text('Поиск'),
         ),
       ],
@@ -723,7 +780,11 @@ class _PartsMarketContent extends StatelessWidget {
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
               error: (message) => const SliverToBoxAdapter(child: SizedBox.shrink()),
               success: (categories) => SliverToBoxAdapter(
-                child: _CategoriesSection(categories: categories, selectedCategoryIds: selectedCategoryIds, onCategorySelected: onCategorySelected),
+                child: _CategoriesSection(
+                  categories: categories,
+                  selectedCategoryIds: selectedCategoryIds,
+                  onCategorySelected: onCategorySelected,
+                ),
               ),
             ),
           ),
@@ -753,15 +814,20 @@ class _PartsMarketContent extends StatelessWidget {
           BlocBuilder<PartsMarketBloc, PartsMarketState>(
             builder: (context, state) => state.when(
               loading: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
-              loadingMore: (List<PartsMarketEntity> parts) => _PartsSliverGrid(parts: parts, isLoadingMore: true, sortBy: sortBy),
-              error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) => SliverFillRemaining(
-                child: ErrorCustom(
-                  paddingTop: 0,
-                  textError: errorForUser,
-                  repeat: onApplyFilters,
-                ),
-              ),
-              success: (List<PartsMarketEntity> parts, bool hasMore) => _PartsSliverGrid(parts: parts, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
+              loadingMore: (List<PartsMarketEntity> parts) =>
+                  _PartsSliverGrid(parts: parts, isLoadingMore: true, sortBy: sortBy),
+              error:
+                  (
+                    String? errorFromApi,
+                    String errorForUser,
+                    String? statusCode,
+                    StackTrace? stackTrace,
+                    String? responseMessage,
+                  ) => SliverFillRemaining(
+                    child: ErrorCustom(paddingTop: 0, textError: errorForUser, repeat: onApplyFilters),
+                  ),
+              success: (List<PartsMarketEntity> parts, bool hasMore) =>
+                  _PartsSliverGrid(parts: parts, isLoadingMore: false, hasMore: hasMore, sortBy: sortBy),
               creatingPart: () => const SliverFillRemaining(child: Center(child: LoadingCustom())),
               createdPart: (PartsMarketEntity part) {
                 // После создания показываем loading, refresh загрузит данные
@@ -797,7 +863,11 @@ class _ProductsSliverGrid extends StatelessWidget {
     // По умолчанию и при сортировке "по дате" показываем последние добавленные товары сверху
     final displayedProducts = [...products];
     if (sortBy == null || sortBy == 'default' || sortBy == 'date') {
-      displayedProducts.sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+      displayedProducts.sort(
+        (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(
+          a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0),
+        ),
+      );
     }
 
     if (displayedProducts.isEmpty && !isLoadingMore) {
@@ -822,7 +892,12 @@ class _ProductsSliverGrid extends StatelessWidget {
     return SliverPadding(
       padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67),
+        ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final product = displayedProducts[index];
           return AircraftMarketCard(
@@ -857,7 +932,11 @@ class _PartsSliverGrid extends StatelessWidget {
     // По умолчанию и при сортировке "по дате" показываем последние добавленные запчасти сверху
     final displayedParts = [...parts];
     if (sortBy == null || sortBy == 'default' || sortBy == 'date') {
-      displayedParts.sort((a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)));
+      displayedParts.sort(
+        (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(
+          a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0),
+        ),
+      );
     } else if (sortBy == 'price_asc') {
       displayedParts.sort((a, b) => a.price.compareTo(b.price));
     } else if (sortBy == 'price_desc') {
@@ -892,7 +971,12 @@ class _PartsSliverGrid extends StatelessWidget {
     return SliverPadding(
       padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67)),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67),
+        ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final part = displayedParts[index];
           return PartsMarketCard(
@@ -918,18 +1002,28 @@ class _MarketProfileButton extends StatelessWidget {
     final iconSize = 28.0;
 
     if (!isAuthenticated) {
+      // Не авторизован: открываем bottom sheet авторизации
       return IconButton(
         constraints: const BoxConstraints(),
         iconSize: iconSize,
-        icon: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
-        onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
+        icon: SvgPicture.asset(
+          Pictures.profileNavbar,
+          height: iconSize,
+          width: iconSize,
+          colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+        ),
+        onPressed: () => showLogin(context),
         tooltip: 'Профиль',
       );
     }
 
+    // Авторизован: показываем аватар и просто переключаем вкладку профиля в AutoTabsScaffold
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        final avatarUrl = state.maybeWhen(success: (profile) => profile.avatarUrl, orElse: () => null);
+        final avatarUrl = state.maybeWhen< String? >(
+          success: (profile) => profile.avatarUrl,
+          orElse: () => null,
+        );
 
         final imageUrl = avatarUrl != null && avatarUrl.isNotEmpty ? getImageUrl(avatarUrl) : null;
 
@@ -947,13 +1041,38 @@ class _MarketProfileButton extends StatelessWidget {
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.cover,
-                      placeholder: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
-                      errorWidget: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      placeholder: SvgPicture.asset(
+                        Pictures.profileNavbar,
+                        height: iconSize,
+                        width: iconSize,
+                        colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+                      ),
+                      errorWidget: SvgPicture.asset(
+                        Pictures.profileNavbar,
+                        height: iconSize,
+                        width: iconSize,
+                        colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+                      ),
                     )
-                  : SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                  : SvgPicture.asset(
+                      Pictures.profileNavbar,
+                      height: iconSize,
+                      width: iconSize,
+                      colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
+                    ),
             ),
           ),
-          onPressed: () => AutoRouter.of(context).push(const ProfileNavigationRoute()),
+          onPressed: () {
+            // Переключаемся на вкладку профиля в корневом AutoTabsScaffold
+            final rootContext = navigatorKey.currentContext;
+            if (rootContext == null) return;
+            try {
+              final tabsRouter = AutoTabsRouter.of(rootContext);
+              tabsRouter.setActiveIndex(6);
+            } catch (_) {
+              // В крайнем случае ничего не делаем
+            }
+          },
           tooltip: 'Профиль',
         );
       },

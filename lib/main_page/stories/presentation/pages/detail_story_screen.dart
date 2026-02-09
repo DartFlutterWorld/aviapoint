@@ -16,14 +16,16 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 @RoutePage()
 class DetailStoryScreen extends StatefulWidget {
   final int idStory;
-  final int currentIndex;
+  /// Список сторис для свайпов; при открытии по path может быть пустым — тогда показывается одна сторис из bloc.
   final List<StoryEntity> stories;
+  /// Индекс текущей сторис в списке; при открытии по path не используется.
+  final int currentIndex;
 
   const DetailStoryScreen({
     super.key,
     @PathParam('id') required this.idStory,
-    required this.stories,
-    required this.currentIndex,
+    this.stories = const [],
+    this.currentIndex = 0,
   });
 
   @override

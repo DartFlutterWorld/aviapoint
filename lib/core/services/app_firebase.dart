@@ -33,15 +33,16 @@ class AppFirebase {
       final apps = Firebase.apps;
       if (apps.isNotEmpty) {
         if (kDebugMode) {
-          debugPrint('⚠️ Firebase уже инициализирован (найдено ${apps.length} приложений), пропускаем повторную инициализацию');
+          debugPrint(
+            '⚠️ Firebase уже инициализирован (найдено ${apps.length} приложений), пропускаем повторную инициализацию',
+          );
         }
       } else {
         // Firebase еще не инициализирован, инициализируем с таймаутом
         if (kIsWeb) {
           // Для веба используем короткий таймаут (5 секунд), особенно важно для iOS Safari
           try {
-            await Firebase.initializeApp(options: DefaultFirebaseOptions.web)
-                .timeout(
+            await Firebase.initializeApp(options: DefaultFirebaseOptions.web).timeout(
               const Duration(seconds: 5),
               onTimeout: () {
                 if (kDebugMode) {
@@ -65,8 +66,7 @@ class AppFirebase {
         } else {
           // Для мобильных платформ используем более длинный таймаут (10 секунд)
           try {
-            await Firebase.initializeApp(name: 'aviapoint', options: DefaultFirebaseOptions.currentPlatform)
-                .timeout(
+            await Firebase.initializeApp(name: 'aviapoint', options: DefaultFirebaseOptions.currentPlatform).timeout(
               const Duration(seconds: 10),
               onTimeout: () {
                 if (kDebugMode) {
@@ -79,13 +79,13 @@ class AppFirebase {
             /// Инициализация Crashlytics с таймаутом
             try {
               await AppCrashlytics().init().timeout(
-                    const Duration(seconds: 5),
-                    onTimeout: () {
-                      if (kDebugMode) {
-                        debugPrint('⏱️ Crashlytics инициализация превысила таймаут');
-                      }
-                    },
-                  );
+                const Duration(seconds: 5),
+                onTimeout: () {
+                  if (kDebugMode) {
+                    debugPrint('⏱️ Crashlytics инициализация превысила таймаут');
+                  }
+                },
+              );
             } catch (e) {
               if (kDebugMode) {
                 debugPrint('⚠️ Ошибка инициализации Crashlytics: $e');
@@ -105,13 +105,13 @@ class AppFirebase {
       /// Инициализируем Firebase message (включая веб) с таймаутом
       try {
         await AppMessaging().init().timeout(
-              const Duration(seconds: 10),
-              onTimeout: () {
-                if (kDebugMode) {
-                  debugPrint('⏱️ AppMessaging инициализация превысила таймаут (10 сек)');
-                }
-              },
-            );
+          const Duration(seconds: 10),
+          onTimeout: () {
+            if (kDebugMode) {
+              debugPrint('⏱️ AppMessaging инициализация превысила таймаут (10 сек)');
+            }
+          },
+        );
         _fcmToken = AppMessaging().fcmToken;
         if (kDebugMode) {
           if (_fcmToken != null) {

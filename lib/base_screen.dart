@@ -17,12 +17,12 @@ class BaseScreen extends StatelessWidget {
         if (kIsWeb) {
           // Определяем, является ли это мобильным устройством (ширина < 600px)
           final isMobile = MediaQuery.of(context).size.width < 600;
-          
+
           if (isMobile) {
             // На мобильных устройствах определяем ориентацию
             final orientation = MediaQuery.of(context).orientation;
             final isLandscape = orientation == Orientation.landscape;
-            
+
             if (isLandscape) {
               // В ландшафтной ориентации - sidebar слева, контент справа
               return Row(
@@ -41,11 +41,11 @@ class BaseScreen extends StatelessWidget {
                 ],
               );
             }
-            
+
             // В портретной ориентации bottom bar будет внизу через bottomNavigationBuilder
             return child;
           }
-          
+
           // На десктопе - обычный layout с sidebar
           return Center(
             child: ConstrainedBox(
@@ -65,10 +65,7 @@ class BaseScreen extends StatelessWidget {
                   // Основной контент
                   Expanded(
                     child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 1200),
-                        child: child,
-                      ),
+                      child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 1200), child: child),
                     ),
                   ),
                 ],
@@ -79,13 +76,14 @@ class BaseScreen extends StatelessWidget {
         return child;
       },
       animationDuration: Duration.zero,
-      routes: const [
+      routes: [
         MainNavigationRoute(), // Главная (индекс 0)
         LearningNavigationRoute(), // Обучение (индекс 1)
         OnTheWayNavigationRoute(), // По пути (индекс 2)
-        NewsNavigationRoute(), // Новости (индекс 3)
+        const WorkRoute(), // Работа (индекс 3)
         MarketNavigationRoute(), // Маркет (индекс 4)
-        BlogNavigationRoute(), // Блог (индекс 5)
+        JournalNavigationRoute(), // Журнал (индекс 5)
+        const ProfileNavigationRoute(), // Профиль (индекс 6, без кнопки в bottom bar)
       ],
       bottomNavigationBuilder: (context, tabsRouter) {
         if (kIsWeb) {
@@ -95,12 +93,12 @@ class BaseScreen extends StatelessWidget {
             // Проверяем ориентацию
             final orientation = MediaQuery.of(context).orientation;
             final isLandscape = orientation == Orientation.landscape;
-            
+
             // В ландшафтной ориентации sidebar показывается в transitionBuilder
             if (isLandscape) {
               return const SizedBox.shrink();
             }
-            
+
             // В портретной ориентации показываем bottom bar внизу
             return BottomNavBar(tabsRouter: tabsRouter);
           }

@@ -11,7 +11,13 @@ class CheckBoxRow extends StatelessWidget {
   final bool active;
   final VoidCallback onTap;
 
-  const CheckBoxRow({super.key, required this.title, required this.questionCount, required this.active, required this.onTap});
+  const CheckBoxRow({
+    super.key,
+    required this.title,
+    required this.questionCount,
+    required this.active,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,11 @@ class CheckBoxRow extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 13, horizontal: 0),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),
-              child: SvgPicture.asset(active ? Pictures.checkBoxActive : Pictures.checkBox, fit: BoxFit.cover, height: 20),
+              child: SvgPicture.asset(
+                active ? Pictures.checkBoxActive : Pictures.checkBox,
+                fit: BoxFit.cover,
+                height: 20,
+              ),
             ),
             SizedBox(width: 8),
             Expanded(

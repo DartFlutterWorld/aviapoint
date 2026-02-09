@@ -54,7 +54,12 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
     }
 
     if (_selectedDocuments.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, прикрепите документы, подтверждающие право собственности'), backgroundColor: Color(0xFFEF4444)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Пожалуйста, прикрепите документы, подтверждающие право собственности'),
+          backgroundColor: Color(0xFFEF4444),
+        ),
+      );
       return;
     }
 
@@ -97,14 +102,18 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Заявка на владение аэродромом успешно подана'), backgroundColor: Color(0xFF10B981)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Заявка на владение аэродромом успешно подана'), backgroundColor: Color(0xFF10B981)),
+        );
 
         // Закрываем bottom sheet
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка отправки: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) {
@@ -134,13 +143,19 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text('Заявка на владение аэродромом', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                  child: Text(
+                    'Заявка на владение аэродромом',
+                    style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
+                  ),
                 ),
                 IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
               ],
             ),
             SizedBox(height: 16),
-            Text('Для подтверждения права собственности на аэродром, пожалуйста, заполните форму и прикрепите документы', style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280))),
+            Text(
+              'Для подтверждения права собственности на аэродром, пожалуйста, заполните форму и прикрепите документы',
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280)),
+            ),
             SizedBox(height: 16),
             // Поле ФИО
             TextFormField(
@@ -204,7 +219,10 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
             ),
             SizedBox(height: 16),
             // Загрузка документов
-            Text('Документы, подтверждающие право собственности *', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+            Text(
+              'Документы, подтверждающие право собственности *',
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+            ),
             SizedBox(height: 8),
             OutlinedButton.icon(
               onPressed: _isSubmitting ? null : _pickDocuments,
@@ -289,7 +307,14 @@ class _AirportOwnershipRequestBottomSheetState extends State<AirportOwnershipReq
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 child: _isSubmitting
-                    ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
                     : Text('Отправить заявку', style: AppStyles.bold14s.copyWith(color: Colors.white)),
               ),
             ),

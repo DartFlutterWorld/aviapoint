@@ -24,16 +24,15 @@ class InternetConnectionState with _$InternetConnectionState {
 }
 
 class InternetConnectionBloc extends Bloc<InternetConnectionEvent, InternetConnectionState> {
-  final InternetConnection _connectionChecker = InternetConnection();
+  // final InternetConnection _connectionChecker = InternetConnection();
+  final _connectionChecker = InternetConnection.createInstance(customCheckOptions: [InternetCheckOption(uri: Uri.parse('https://yandex.ru'))]);
+
   StreamSubscription<InternetStatus>? _subscription;
 
   InternetConnectionBloc() : super(const InitialInternetConnectionState()) {
     on<InternetConnectionEvent>(
-      (event, emitter) => event.map(
-        startMonitoring: (event) => _startMonitoring(event, emitter),
-        stopMonitoring: (event) => _stopMonitoring(event, emitter),
-        statusChanged: (event) => _statusChanged(event, emitter),
-      ),
+      (event, emitter) =>
+          event.map(startMonitoring: (event) => _startMonitoring(event, emitter), stopMonitoring: (event) => _stopMonitoring(event, emitter), statusChanged: (event) => _statusChanged(event, emitter)),
     );
   }
 

@@ -29,7 +29,9 @@ class CustomButton extends StatelessWidget {
     this.borderRadius = 12,
     this.borderWidth = 2,
     this.gradientBackgroundColor,
-    this.boxShadow = const [BoxShadow(color: Color(0xff104A91), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+    this.boxShadow = const [
+      BoxShadow(color: Color(0xff104A91), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0)),
+    ],
     this.leftSvg,
     this.rightSvg,
   });
@@ -54,7 +56,8 @@ class CustomButton extends StatelessWidget {
             children: [
               if (leftSvg != null) Opacity(opacity: disabled ? 0.5 : 1, child: SvgPicture.asset(leftSvg!, height: 20)),
               Text(title, style: disabled ? textStyle.copyWith(color: textStyle.color?.withOpacity(0.5)) : textStyle),
-              if (rightSvg != null) Opacity(opacity: disabled ? 0.5 : 1, child: SvgPicture.asset(rightSvg!, height: 20)),
+              if (rightSvg != null)
+                Opacity(opacity: disabled ? 0.5 : 1, child: SvgPicture.asset(rightSvg!, height: 20)),
             ],
           ),
         ),

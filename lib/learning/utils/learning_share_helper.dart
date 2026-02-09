@@ -11,7 +11,12 @@ import 'package:aviapoint/core/utils/const/app.dart';
 class LearningShareHelper {
   /// Поделиться страницей обучения
   /// [imageUrl] - относительный путь к изображению (будет преобразован через getImageUrl)
-  static Future<void> shareLearningPage(BuildContext context, {String? title, String? description, String? imageUrl}) async {
+  static Future<void> shareLearningPage(
+    BuildContext context, {
+    String? title,
+    String? description,
+    String? imageUrl,
+  }) async {
     final baseUrl = kIsWeb ? 'https://avia-point.com' : 'https://avia-point.com';
 
     // Получаем текущий путь из роутера

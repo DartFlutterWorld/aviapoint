@@ -12,12 +12,7 @@ class PriceHistoryDto {
   @JsonKey(name: 'created_at', fromJson: _dateTimeFromJson)
   final DateTime createdAt;
 
-  PriceHistoryDto({
-    required this.id,
-    required this.aircraftMarketId,
-    required this.price,
-    required this.createdAt,
-  });
+  PriceHistoryDto({required this.id, required this.aircraftMarketId, required this.price, required this.createdAt});
 
   factory PriceHistoryDto.fromJson(Map<String, dynamic> json) => _$PriceHistoryDtoFromJson(json);
 
@@ -29,11 +24,6 @@ class PriceHistoryDto {
   }
 
   PriceHistoryEntity toEntity() {
-    return PriceHistoryEntity(
-      id: id,
-      aircraftMarketId: aircraftMarketId,
-      price: price,
-      createdAt: createdAt,
-    );
+    return PriceHistoryEntity(id: id, aircraftMarketId: aircraftMarketId, price: price, createdAt: createdAt);
   }
 }

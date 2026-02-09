@@ -78,7 +78,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
     result.fold(
       (failure) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки новости: ${failure.message}'), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ошибка загрузки новости: ${failure.message}'), backgroundColor: Colors.red),
+          );
           AutoRouter.of(context).pop();
         }
       },
@@ -101,7 +103,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                 final deltaJson = jsonDecode(news.content!);
                 final delta = Delta.fromJson(deltaJson);
                 _quillController.dispose();
-                _quillController = QuillController(document: Document.fromDelta(delta), selection: const TextSelection.collapsed(offset: 0));
+                _quillController = QuillController(
+                  document: Document.fromDelta(delta),
+                  selection: const TextSelection.collapsed(offset: 0),
+                );
               } catch (e) {
                 _quillController.dispose();
                 _quillController = QuillController.basic();
@@ -121,7 +126,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text('Удалить новость?', style: AppStyles.bold16s),
-        content: Text('Вы уверены, что хотите удалить эту новость? Это действие нельзя отменить.', style: AppStyles.regular14s),
+        content: Text(
+          'Вы уверены, что хотите удалить эту новость? Это действие нельзя отменить.',
+          style: AppStyles.regular14s,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
           TextButton(
@@ -173,7 +181,12 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
   Future<void> _pickPictureBig() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1920,
+        maxHeight: 1920,
+      );
 
       if (image != null) {
         if (kIsWeb) {
@@ -198,7 +211,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -224,12 +239,16 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
+            );
           }
         },
         (imageUrl) {
           if (!mounted) return;
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
@@ -256,7 +275,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
+                );
               }
             }
           });
@@ -264,7 +285,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -277,12 +300,16 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       result.fold(
         (failure) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ошибка загрузки изображения: ${failure.message}'), backgroundColor: Colors.red),
+            );
           }
         },
         (imageUrl) {
           if (!mounted) return;
-          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://') ? imageUrl : getImageUrl(imageUrl);
+          final fullImageUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
+              ? imageUrl
+              : getImageUrl(imageUrl);
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
@@ -309,7 +336,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
               });
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка вставки изображения: ${e.toString()}'), backgroundColor: Colors.red),
+                );
               }
             }
           });
@@ -317,7 +346,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
     }
   }
@@ -340,7 +371,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображение: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -377,7 +410,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
         return;
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать изображения: ${e.toString()}'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Не удалось выбрать изображения: ${e.toString()}'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -404,13 +439,18 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       errorMessage = 'Выберите фото для обложки';
     } else {
       final contentTrimmed = content.trim();
-      if (contentTrimmed.isEmpty || contentTrimmed == '[]' || contentTrimmed == '[{"insert":"\\n"}]' || contentTrimmed == '[{"insert":"\\n\\n"}]') {
+      if (contentTrimmed.isEmpty ||
+          contentTrimmed == '[]' ||
+          contentTrimmed == '[{"insert":"\\n"}]' ||
+          contentTrimmed == '[{"insert":"\\n\\n"}]') {
         errorMessage = 'Введите текст новости';
       }
     }
 
     if (errorMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red, duration: const Duration(seconds: 3)),
+      );
       Scrollable.ensureVisible(context);
       return;
     }
@@ -422,7 +462,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
 
     // Определяем список URL дополнительных изображений для удаления
     // (те, которые были в исходном списке, но отсутствуют в текущем)
-    final imagesToDelete = _initialAdditionalImageUrls.where((url) => !_originalAdditionalImageUrls.contains(url)).toList();
+    final imagesToDelete = _initialAdditionalImageUrls
+        .where((url) => !_originalAdditionalImageUrls.contains(url))
+        .toList();
 
     context.read<NewsBloc>().add(
       NewsEvent.update(
@@ -465,7 +507,13 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
           // Закрываем диалог загрузки, если он открыт
           Navigator.of(context, rootNavigator: true).pop();
           // Показываем сообщение об успешном удалении
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Новость успешно удалена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Новость успешно удалена'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
           // Обновляем список новостей перед возвратом
           final newsBloc = context.read<NewsBloc>();
           newsBloc.add(const NewsEvent.get(authorId: null));
@@ -502,7 +550,13 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
             Future.delayed(const Duration(milliseconds: 300), () {
               final navigatorContext = navigatorKey.currentContext;
               if (navigatorContext != null) {
-                ScaffoldMessenger.of(navigatorContext).showSnackBar(SnackBar(content: Text('Новость успешно обновлена'), backgroundColor: Colors.green, duration: const Duration(seconds: 5)));
+                ScaffoldMessenger.of(navigatorContext).showSnackBar(
+                  SnackBar(
+                    content: Text('Новость успешно обновлена'),
+                    backgroundColor: Colors.green,
+                    duration: const Duration(seconds: 5),
+                  ),
+                );
               }
             });
           },
@@ -511,7 +565,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
             if (state.toString().contains('DeletingNewsState')) {
               Navigator.of(context, rootNavigator: true).pop();
             }
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(errorForUser), backgroundColor: Colors.red, duration: const Duration(seconds: 3)),
+            );
           },
           orElse: () {},
         );
@@ -549,7 +605,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Фото для обложки *', style: AppStyles.regular14s.copyWith(color: const Color(0xFF374151))),
+                          Text(
+                            'Фото для обложки *',
+                            style: AppStyles.regular14s.copyWith(color: const Color(0xFF374151)),
+                          ),
                           SizedBox(height: 12),
                           Stack(
                             children: [
@@ -562,8 +621,20 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
                                     border: Border.all(
-                                      color: (_hasAttemptedSubmit && _pictureBigFile == null && _pictureBigBytes == null && _originalPictureBigUrl == null) ? Colors.red : const Color(0xFFD9E6F8),
-                                      width: (_hasAttemptedSubmit && _pictureBigFile == null && _pictureBigBytes == null && _originalPictureBigUrl == null) ? 2 : 1,
+                                      color:
+                                          (_hasAttemptedSubmit &&
+                                              _pictureBigFile == null &&
+                                              _pictureBigBytes == null &&
+                                              _originalPictureBigUrl == null)
+                                          ? Colors.red
+                                          : const Color(0xFFD9E6F8),
+                                      width:
+                                          (_hasAttemptedSubmit &&
+                                              _pictureBigFile == null &&
+                                              _pictureBigBytes == null &&
+                                              _originalPictureBigUrl == null)
+                                          ? 2
+                                          : 1,
                                     ),
                                   ),
                                   child: _pictureBigFile != null || _pictureBigBytes != null
@@ -695,7 +766,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                                 Transform.scale(
                                   scale: 1,
                                   alignment: Alignment.topLeft,
-                                  child: QuillSimpleToolbar(controller: _quillController, config: const QuillSimpleToolbarConfig(showClipboardCut: true)),
+                                  child: QuillSimpleToolbar(
+                                    controller: _quillController,
+                                    config: const QuillSimpleToolbarConfig(showClipboardCut: true),
+                                  ),
                                 ),
                                 Transform.translate(offset: Offset(0, kIsWeb ? 0 : -4), child: Divider(height: 1)),
                                 Container(
@@ -705,7 +779,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                                     controller: _quillController,
                                     config: QuillEditorConfig(
                                       placeholder: 'Введите текст новости...',
-                                      embedBuilders: kIsWeb ? FlutterQuillEmbeds.editorWebBuilders() : FlutterQuillEmbeds.editorBuilders(),
+                                      embedBuilders: kIsWeb
+                                          ? FlutterQuillEmbeds.editorWebBuilders()
+                                          : FlutterQuillEmbeds.editorBuilders(),
                                     ),
                                     focusNode: _quillFocusNode,
                                   ),
@@ -717,7 +793,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                           OutlinedButton.icon(
                             onPressed: _pickContentImage,
                             icon: Icon(Icons.image, color: const Color(0xFF0A6EFA), size: 20),
-                            label: Text('Вставить изображение в текст', style: AppStyles.regular14s.copyWith(color: const Color(0xFF0A6EFA))),
+                            label: Text(
+                              'Вставить изображение в текст',
+                              style: AppStyles.regular14s.copyWith(color: const Color(0xFF0A6EFA)),
+                            ),
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(color: const Color(0xFF0A6EFA)),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -730,18 +809,26 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Дополнительные изображения', style: AppStyles.regular14s.copyWith(color: const Color(0xFF374151))),
+                          Text(
+                            'Дополнительные изображения',
+                            style: AppStyles.regular14s.copyWith(color: const Color(0xFF374151)),
+                          ),
                           SizedBox(height: 12),
                           OutlinedButton.icon(
                             onPressed: _pickAdditionalImages,
                             icon: Icon(Icons.add_photo_alternate, color: const Color(0xFF0A6EFA), size: 20),
-                            label: Text('Добавить изображения', style: AppStyles.regular14s.copyWith(color: const Color(0xFF0A6EFA))),
+                            label: Text(
+                              'Добавить изображения',
+                              style: AppStyles.regular14s.copyWith(color: const Color(0xFF0A6EFA)),
+                            ),
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(color: const Color(0xFF0A6EFA)),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             ),
                           ),
-                          if (_additionalImageFiles.isNotEmpty || _additionalImageBytes.isNotEmpty || _originalAdditionalImageUrls.isNotEmpty) ...[
+                          if (_additionalImageFiles.isNotEmpty ||
+                              _additionalImageBytes.isNotEmpty ||
+                              _originalAdditionalImageUrls.isNotEmpty) ...[
                             SizedBox(height: 12),
                             Wrap(
                               spacing: 8,
@@ -753,7 +840,12 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
-                                        child: Image.network(getImageUrl(url), width: 100, height: 100, fit: BoxFit.cover),
+                                        child: Image.network(
+                                          getImageUrl(url),
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                       Positioned(
                                         top: 0,
@@ -782,9 +874,19 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: kIsWeb && _additionalImageBytes.isNotEmpty
-                                            ? Image.memory(_additionalImageBytes[index], width: 100, height: 100, fit: BoxFit.cover)
+                                            ? Image.memory(
+                                                _additionalImageBytes[index],
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              )
                                             : _additionalImageFiles.isNotEmpty
-                                            ? Image.file(_additionalImageFiles[index], width: 100, height: 100, fit: BoxFit.cover)
+                                            ? Image.file(
+                                                _additionalImageFiles[index],
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              )
                                             : const SizedBox.shrink(),
                                       ),
                                       Positioned(

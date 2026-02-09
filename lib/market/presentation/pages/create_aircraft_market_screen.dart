@@ -110,28 +110,38 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
 
     // Дополнительная валидация для полей, которые не используют TextFormField
     if (_selectedCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
       return;
     }
 
     if (_condition == null || _condition!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите состояние'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите состояние'), backgroundColor: Colors.red));
       return;
     }
 
     if (_selectedBrand == null || _selectedBrand!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите самолёт'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите самолёт'), backgroundColor: Colors.red));
       return;
     }
 
     if (_selectedLocation == null || _selectedLocation!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите местоположение'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите местоположение'), backgroundColor: Colors.red));
       return;
     }
 
     // Проверка основной фотографии
     if (_mainPhoto == null || !_mainPhoto!.isNew) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
       return;
     }
 
@@ -170,7 +180,9 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
         shareNumerator: _isShareSale ? _shareNumerator : null,
         shareDenominator: _isShareSale ? _shareDenominator : null,
         isLeasing: _isLeasing,
-        leasingConditions: _isLeasing && _leasingConditionsController.text.trim().isNotEmpty ? _leasingConditionsController.text.trim() : null,
+        leasingConditions: _isLeasing && _leasingConditionsController.text.trim().isNotEmpty
+            ? _leasingConditionsController.text.trim()
+            : null,
         mainImageFile: mainImageFile,
         additionalImageFiles: additionalImageFiles,
         isPublished: _shouldPublish,
@@ -183,367 +195,386 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
     return BlocProvider.value(
       value: _createBloc,
       child: MultiBlocListener(
-      listeners: [
+        listeners: [
           BlocListener<AircraftMarketCreateBloc, AircraftMarketCreateState>(
-          listenWhen: (previous, current) {
+            listenWhen: (previous, current) {
               // Реагируем только на created или error после creating
               if (previous is CreatingAircraftMarketCreateState) {
                 return current is CreatedAircraftMarketCreateState || current is ErrorAircraftMarketCreateState;
-            }
-            return false;
-          },
-          listener: (context, state) {
-            if (!mounted) return;
+              }
+              return false;
+            },
+            listener: (context, state) {
+              if (!mounted) return;
 
-            state.maybeWhen(
+              state.maybeWhen(
                 created: (product) async {
-                // Проверяем, откуда мы создаем объявление - проверяем путь до закрытия экрана
-                final currentPath = context.router.currentPath;
-                final isFromMarket = currentPath.contains('/market');
+                  // Проверяем, откуда мы создаем объявление - проверяем путь до закрытия экрана
+                  final currentPath = context.router.currentPath;
+                  final isFromMarket = currentPath.contains('/market');
 
-                // Обновляем список товаров - вызываем refresh для получения свежих данных с сервера
-                final productsBloc = context.read<AircraftMarketBloc>();
-                productsBloc.add(const AircraftMarketEvent.refresh());
+                  // Обновляем список товаров - вызываем refresh для получения свежих данных с сервера
+                  final productsBloc = context.read<AircraftMarketBloc>();
+                  productsBloc.add(const AircraftMarketEvent.refresh());
 
-                // Показываем сообщение об успехе
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление успешно создано'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                  // Показываем сообщение об успехе
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Объявление успешно создано'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
 
-                // Проверяем, заполнены ли поля профиля (только проверка, без открытия модалки)
-                final profileCheckResult = checkProfileDataComplete(context);
+                  // Проверяем, заполнены ли поля профиля (только проверка, без открытия модалки)
+                  final profileCheckResult = checkProfileDataComplete(context);
 
-                // Если профиль еще не загружен (null), устанавливаем флаг для проверки после загрузки
-                if (profileCheckResult == null) {
-                  _shouldCheckProfileAfterCreation = true;
-                }
+                  // Если профиль еще не загружен (null), устанавливаем флаг для проверки после загрузки
+                  if (profileCheckResult == null) {
+                    _shouldCheckProfileAfterCreation = true;
+                  }
 
-                // Если нужно открыть модалку редактирования профиля, открываем её после навигации
-                if (profileCheckResult == false) {
-                  // Открываем модалку после закрытия экрана создания с задержкой
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      final rootContext = navigatorKey.currentContext;
-                      if (rootContext != null && rootContext.mounted) {
-                        openProfileEdit(context: rootContext);
-                        ScaffoldMessenger.of(
-                          rootContext,
-                        ).showSnackBar(SnackBar(content: Text('Заполните профиль чтоб с вами могли связаться'), backgroundColor: Colors.orange, duration: Duration(seconds: 5)));
+                  // Если нужно открыть модалку редактирования профиля, открываем её после навигации
+                  if (profileCheckResult == false) {
+                    // Открываем модалку после закрытия экрана создания с задержкой
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        final rootContext = navigatorKey.currentContext;
+                        if (rootContext != null && rootContext.mounted) {
+                          openProfileEdit(context: rootContext);
+                          ScaffoldMessenger.of(rootContext).showSnackBar(
+                            SnackBar(
+                              content: Text('Заполните профиль чтоб с вами могли связаться'),
+                              backgroundColor: Colors.orange,
+                              duration: Duration(seconds: 5),
+                            ),
+                          );
+                        }
+                      });
+                    });
+                  }
+
+                  // Если мы создаем из маркета, переходим на детальную страницу
+                  if (isFromMarket) {
+                    // Переходим к созданному объявлению только если мы в маркете
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (context.mounted) {
+                        // Закрываем экран создания
+                        context.router.maybePop();
+                        // Переходим на детальную страницу
+                        context.router.push(
+                          BaseRoute(
+                            children: [
+                              MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: product.id)]),
+                            ],
+                          ),
+                        );
                       }
                     });
-                  });
-                }
-
-                // Если мы создаем из маркета, переходим на детальную страницу
-                if (isFromMarket) {
-                  // Переходим к созданному объявлению только если мы в маркете
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (context.mounted) {
-                      // Закрываем экран создания
-                      context.router.maybePop();
-                      // Переходим на детальную страницу
-                      context.router.push(
-                        BaseRoute(
-                          children: [
-                            MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: product.id)]),
-                          ],
-                        ),
-                      );
-                    }
-                  });
-                } else {
-                  // Если мы создаем из профиля, просто возвращаемся назад (в профиль)
-                  // Список обновится автоматически через BlocListener в MyAircraftAdsWidget
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (context.mounted) {
-                      context.router.maybePop();
-                    }
-                  });
-                }
-              },
-              error: (message) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
-              },
-              orElse: () {},
-            );
-          },
-        ),
-        BlocListener<ProfileBloc, ProfileState>(
-          listenWhen: (previous, current) {
-            // Проверяем ФИО только если был запрос на проверку после создания объявления
-            if (_shouldCheckProfileAfterCreation && current is SuccessProfileState) {
-              return true;
-            }
-            return false;
-          },
-          listener: (context, profileState) {
-            if (!mounted) return;
-            // Проверяем ФИО только если был запрос на проверку после создания объявления
-            if (_shouldCheckProfileAfterCreation) {
-              _shouldCheckProfileAfterCreation = false; // Сбрасываем флаг
-              // Используем универсальную функцию для проверки ФИО
-              checkDataProfileAndOpenEditIfNeeded(context: context, message: 'Заполните профиль чтоб с вами могли связаться');
-            }
-          },
-        ),
-      ],
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Создать объявление',
-          withBack: true,
-          actions: [
-            BlocBuilder<AircraftMarketCreateBloc, AircraftMarketCreateState>(
-              builder: (context, state) {
-                final isLoading = state is CreatingAircraftMarketCreateState;
-                return TextButton(
-                  onPressed: isLoading ? null : _createProduct,
-                  child: isLoading
-                      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : Text('Создать', style: AppStyles.bold16s.copyWith(color: AppColors.primary100p)),
-                );
-              },
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.background,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Основная фотография
-                _buildMainPhotoSection(),
-                SizedBox(height: 16),
-                // Дополнительные фотографии
-                _buildAdditionalPhotosSection(),
-                SizedBox(height: 16),
-                // Категория
-                _buildCategoryDropdown(),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _titleController,
-                    labelText: 'Название *',
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите название товара';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _descriptionController,
-                    labelText: 'Описание *',
-                  maxLines: 4,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите описание';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                  controller: _priceController,
-                        labelText: 'Цена *',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите цену';
-                    }
-                    final price = int.tryParse(value.trim());
-                    if (price == null || price <= 0) {
-                      return 'Введите корректную цену';
-                    }
-                    return null;
-                  },
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    SizedBox(
-                      width: 90,
-                      child: DropdownButtonFormField<String>(
-                        value: _currency,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                        ),
-                        items: ['RUB', 'USD', 'EUR'].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              _currency = value;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                _buildBrandField(),
-                SizedBox(height: 16),
-                LocationPickerWidget(
-                  initialLocation: _selectedLocation,
-                  onLocationSelected: (locationData) {
-                    print('🔵 [CreateAircraftMarketScreen] Выбор местоположения: $locationData');
-                    setState(() {
-                      _selectedLocation = locationData['address'] as String?;
+                  } else {
+                    // Если мы создаем из профиля, просто возвращаемся назад (в профиль)
+                    // Список обновится автоматически через BlocListener в MyAircraftAdsWidget
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (context.mounted) {
+                        context.router.maybePop();
+                      }
                     });
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _yearController,
-                    labelText: 'Год выпуска *',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите год выпуска';
-                    }
-                    final year = int.tryParse(value.trim());
-                    if (year == null || year <= 0) {
-                      return 'Введите корректный год';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _totalFlightHoursController,
-                    labelText: 'Общий налёт часов *',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите общий налёт часов';
-                    }
-                    final hours = int.tryParse(value.trim());
-                    if (hours == null || hours < 0) {
-                      return 'Введите корректный общий налёт часов';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _enginePowerController,
-                    labelText: 'Мощность двигателя *',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите мощность двигателя';
-                    }
-                    final power = int.tryParse(value.trim());
-                    if (power == null || power <= 0) {
-                      return 'Введите корректную мощность двигателя';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _engineVolumeController,
-                    labelText: 'Объём двигателя *',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите объём двигателя';
-                    }
-                    final volume = int.tryParse(value.trim());
-                    if (volume == null || volume <= 0) {
-                      return 'Введите корректный объём двигателя';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _seatsController,
-                    labelText: 'Количество мест *',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Введите количество мест';
-                    }
-                    final seats = int.tryParse(value.trim());
-                    if (seats == null || seats <= 0) {
-                      return 'Введите корректное количество мест';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildConditionField(),
-                SizedBox(height: 16),
-                _buildShareSaleField(),
-                SizedBox(height: 16),
-                _buildLeasingField(),
-                SizedBox(height: 24),
-                // Чекбокс для выбора публикации
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.strokeForDarkArea),
+                  }
+                },
+                error: (message) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                },
+                orElse: () {},
+              );
+            },
+          ),
+          BlocListener<ProfileBloc, ProfileState>(
+            listenWhen: (previous, current) {
+              // Проверяем ФИО только если был запрос на проверку после создания объявления
+              if (_shouldCheckProfileAfterCreation && current is SuccessProfileState) {
+                return true;
+              }
+              return false;
+            },
+            listener: (context, profileState) {
+              if (!mounted) return;
+              // Проверяем ФИО только если был запрос на проверку после создания объявления
+              if (_shouldCheckProfileAfterCreation) {
+                _shouldCheckProfileAfterCreation = false; // Сбрасываем флаг
+                // Используем универсальную функцию для проверки ФИО
+                checkDataProfileAndOpenEditIfNeeded(
+                  context: context,
+                  message: 'Заполните профиль чтоб с вами могли связаться',
+                );
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: 'Создать объявление',
+            withBack: true,
+            actions: [
+              BlocBuilder<AircraftMarketCreateBloc, AircraftMarketCreateState>(
+                builder: (context, state) {
+                  final isLoading = state is CreatingAircraftMarketCreateState;
+                  return TextButton(
+                    onPressed: isLoading ? null : _createProduct,
+                    child: isLoading
+                        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                        : Text('Создать', style: AppStyles.bold16s.copyWith(color: AppColors.primary100p)),
+                  );
+                },
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.background,
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Основная фотография
+                  _buildMainPhotoSection(),
+                  SizedBox(height: 16),
+                  // Дополнительные фотографии
+                  _buildAdditionalPhotosSection(),
+                  SizedBox(height: 16),
+                  // Категория
+                  _buildCategoryDropdown(),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _titleController,
+                    labelText: 'Название *',
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите название товара';
+                      }
+                      return null;
+                    },
                   ),
-                  child: Row(
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _descriptionController,
+                    labelText: 'Описание *',
+                    maxLines: 4,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите описание';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Row(
                     children: [
-                      Checkbox(
-                        value: _shouldPublish,
-                        onChanged: (value) {
-                          setState(() {
-                            _shouldPublish = value ?? true;
-                          });
-                        },
-                        activeColor: AppColors.primary100p,
-                      ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Опубликовать объявление',
-                              style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              _shouldPublish
-                                  ? 'Объявление будет видно всем пользователям'
-                                  : 'Объявление будет сохранено как черновик',
-                              style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary),
-                            ),
-                          ],
+                        child: CustomTextField(
+                          controller: _priceController,
+                          labelText: 'Цена *',
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Введите цену';
+                            }
+                            final price = int.tryParse(value.trim());
+                            if (price == null || price <= 0) {
+                              return 'Введите корректную цену';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      SizedBox(
+                        width: 90,
+                        child: DropdownButtonFormField<String>(
+                          value: _currency,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          ),
+                          items: [
+                            'RUB',
+                            'USD',
+                            'EUR',
+                          ].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _currency = value;
+                              });
+                            }
+                          },
                         ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 16),
-                // Кнопка "Создать" (дублируем из AppBar)
-                BlocBuilder<AircraftMarketCreateBloc, AircraftMarketCreateState>(
-                  builder: (context, state) {
-                    final isLoading = state is CreatingAircraftMarketCreateState;
-                    return CustomButton(
-                      title: isLoading ? 'Создание...' : 'Создать',
-                      verticalPadding: 12,
-                      backgroundColor: AppColors.primary100p,
-                      textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                      borderColor: AppColors.primary100p,
-                      borderRadius: 12,
-                      onPressed: isLoading ? null : _createProduct,
-                      disabled: isLoading,
-                    );
-                  },
-                ),
-                SizedBox(height: 16),
-              ],
-            ),
+                  SizedBox(height: 16),
+                  _buildBrandField(),
+                  SizedBox(height: 16),
+                  LocationPickerWidget(
+                    initialLocation: _selectedLocation,
+                    onLocationSelected: (locationData) {
+                      print('🔵 [CreateAircraftMarketScreen] Выбор местоположения: $locationData');
+                      setState(() {
+                        _selectedLocation = locationData['address'] as String?;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _yearController,
+                    labelText: 'Год выпуска *',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите год выпуска';
+                      }
+                      final year = int.tryParse(value.trim());
+                      if (year == null || year <= 0) {
+                        return 'Введите корректный год';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _totalFlightHoursController,
+                    labelText: 'Общий налёт часов *',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите общий налёт часов';
+                      }
+                      final hours = int.tryParse(value.trim());
+                      if (hours == null || hours < 0) {
+                        return 'Введите корректный общий налёт часов';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _enginePowerController,
+                    labelText: 'Мощность двигателя *',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите мощность двигателя';
+                      }
+                      final power = int.tryParse(value.trim());
+                      if (power == null || power <= 0) {
+                        return 'Введите корректную мощность двигателя';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _engineVolumeController,
+                    labelText: 'Объём двигателя *',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите объём двигателя';
+                      }
+                      final volume = int.tryParse(value.trim());
+                      if (volume == null || volume <= 0) {
+                        return 'Введите корректный объём двигателя';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _seatsController,
+                    labelText: 'Количество мест *',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите количество мест';
+                      }
+                      final seats = int.tryParse(value.trim());
+                      if (seats == null || seats <= 0) {
+                        return 'Введите корректное количество мест';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  _buildConditionField(),
+                  SizedBox(height: 16),
+                  _buildShareSaleField(),
+                  SizedBox(height: 16),
+                  _buildLeasingField(),
+                  SizedBox(height: 24),
+                  // Чекбокс для выбора публикации
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.strokeForDarkArea),
+                    ),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: _shouldPublish,
+                          onChanged: (value) {
+                            setState(() {
+                              _shouldPublish = value ?? true;
+                            });
+                          },
+                          activeColor: AppColors.primary100p,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Опубликовать объявление',
+                                style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                _shouldPublish
+                                    ? 'Объявление будет видно всем пользователям'
+                                    : 'Объявление будет сохранено как черновик',
+                                style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  // Кнопка "Создать" (дублируем из AppBar)
+                  BlocBuilder<AircraftMarketCreateBloc, AircraftMarketCreateState>(
+                    builder: (context, state) {
+                      final isLoading = state is CreatingAircraftMarketCreateState;
+                      return CustomButton(
+                        title: isLoading ? 'Создание...' : 'Создать',
+                        verticalPadding: 12,
+                        backgroundColor: AppColors.primary100p,
+                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                        borderColor: AppColors.primary100p,
+                        borderRadius: 12,
+                        onPressed: isLoading ? null : _createProduct,
+                        disabled: isLoading,
+                      );
+                    },
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),
@@ -568,7 +599,10 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
   }
 
   Widget _buildCategoryField(List<MarketCategoryEntity> categories) {
-    final selectedCategory = categories.firstWhere((category) => category.id == _selectedCategoryId, orElse: () => categories.first);
+    final selectedCategory = categories.firstWhere(
+      (category) => category.id == _selectedCategoryId,
+      orElse: () => categories.first,
+    );
     final displayText = _selectedCategoryId != null ? selectedCategory.name : 'Выберите категорию';
 
     return InkWell(
@@ -582,7 +616,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -617,7 +656,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -636,7 +680,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedBrand != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedBrand != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -737,7 +786,10 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                 children: [
                   Text('Продажа доли', style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
                   if (_isShareSale && _shareNumerator != null && _shareDenominator != null)
-                    Text('${_shareNumerator}/${_shareDenominator}', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))
+                    Text(
+                      '${_shareNumerator}/${_shareDenominator}',
+                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                    )
                   else
                     Text('Нажмите для выбора', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
                 ],
@@ -758,7 +810,10 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text('Самолёт можно купить в лизинг', style: AppStyles.regular14s.copyWith(color: AppColors.netural100p)),
+              child: Text(
+                'Самолёт можно купить в лизинг',
+                style: AppStyles.regular14s.copyWith(color: AppColors.netural100p),
+              ),
             ),
             Switch(
               value: _isLeasing,
@@ -776,11 +831,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
         ),
         if (_isLeasing) ...[
           SizedBox(height: 8),
-          CustomTextField(
-            controller: _leasingConditionsController,
-              labelText: 'Условия лизинга',
-            maxLines: 3,
-          ),
+          CustomTextField(controller: _leasingConditionsController, labelText: 'Условия лизинга', maxLines: 3),
         ],
       ],
     );
@@ -858,7 +909,14 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
               borderRadius: 12,
-              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.25),
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 4.0),
+                ),
+              ],
               onPressed: () {
                 setState(() {
                   _isShareSale = tempIsShareSale;
@@ -877,14 +935,18 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
 
   Widget _buildMainPhotoSection() {
     // Проверяем, есть ли валидная фотография (новая или с непустым URL)
-    final hasValidPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
+    final hasValidPhoto =
+        _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
         SizedBox(height: 12),
-        if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true)) else _buildEmptyPhotoPlaceholder(isMain: true),
+        if (hasValidPhoto)
+          SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true))
+        else
+          _buildEmptyPhotoPlaceholder(isMain: true),
       ],
     );
   }
@@ -899,7 +961,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.0,
+            ),
             itemCount: _additionalPhotos.length + 1, // +1 для кнопки "+ ещё"
             itemBuilder: (context, index) {
               if (index == _additionalPhotos.length) {
@@ -1023,7 +1090,10 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
           children: [
             Icon(Icons.add_photo_alternate, size: 48, color: Color(0xFF9CA5AF)),
             SizedBox(height: 12),
-            Text(isMain ? 'Добавить основную фотографию' : 'Добавить фотографии', style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF))),
+            Text(
+              isMain ? 'Добавить основную фотографию' : 'Добавить фотографии',
+              style: AppStyles.regular14s.copyWith(color: Color(0xFF9CA5AF)),
+            ),
           ],
         ),
       ),
@@ -1033,7 +1103,12 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
   Future<void> _pickMainPhoto() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1920,
+        maxHeight: 1920,
+      );
 
       if (image != null && mounted) {
         Uint8List? bytes;
@@ -1049,7 +1124,13 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографию: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось выбрать фотографию: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -1077,7 +1158,13 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось выбрать фотографии: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -1102,5 +1189,6 @@ class _PhotoItem {
   final bool isNew;
   final Uint8List? bytes; // Кэшированные байты для веб-платформы
 
-  _PhotoItem({this.url, this.file, required this.isNew, this.bytes}) : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
+  _PhotoItem({this.url, this.file, required this.isNew, this.bytes})
+    : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
 }

@@ -84,36 +84,37 @@ class AppVersionChecker {
         _googlePlayUrl,
         options: Options(
           headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
           },
         ),
       );
-      
+
       if (response.statusCode == 200 && response.data != null) {
         final html = response.data!;
         debugPrint('📄 Получен HTML от Google Play, длина: ${html.length} символов');
-        
+
         // Пробуем разные паттерны для поиска версии в Google Play HTML
         List<RegExp> patterns = [
           // Паттерн 1: В структурированных данных JSON-LD (самый надежный)
           RegExp(r'"softwareVersion"\s*:\s*"([^"]+)"', caseSensitive: false),
           RegExp(r'"version"\s*:\s*"([^"]+)"', caseSensitive: false),
-          
+
           // Паттерн 2: В тексте "Версия" или "Version" с цифрами после
           RegExp(r'(?:Версия|Version)[\s:]+(\d+\.\d+(?:\.\d+)?)', caseSensitive: false),
-          
+
           // Паттерн 3: В div с классом или атрибутом version
           RegExp(r'<[^>]*version[^>]*>([^<]*\d+\.\d+(?:\.\d+)?)', caseSensitive: false),
-          
+
           // Паттерн 4: В span или div с текстом версии
           RegExp(r'<[^>]*>([^<]*(?:Версия|Version)[^<]*\d+\.\d+(?:\.\d+)?)', caseSensitive: false),
-          
+
           // Паттерн 5: Просто ищем формат версии X.X.X или X.X
           RegExp(r'\b(\d+\.\d+(?:\.\d+)?)\b', caseSensitive: false),
         ];
-        
+
         String? foundVersion;
         for (final pattern in patterns) {
           final matches = pattern.allMatches(html);
@@ -127,11 +128,11 @@ class AppVersionChecker {
           }
           if (foundVersion != null) break;
         }
-        
+
         if (foundVersion != null) {
           // Пытаемся найти build number из pubspec.yaml формата (version+buildNumber)
           int buildNumber = 0;
-          
+
           // Если версия содержит "+", извлекаем build number
           if (foundVersion.contains('+')) {
             final parts = foundVersion.split('+');
@@ -140,11 +141,8 @@ class AppVersionChecker {
               foundVersion = parts[0]; // Убираем build number из версии
             }
           }
-          
-          return {
-            'version': foundVersion,
-            'buildNumber': buildNumber,
-          };
+
+          return {'version': foundVersion, 'buildNumber': buildNumber};
         } else {
           debugPrint('⚠️ Версия не найдена в HTML Google Play');
           // Ищем ключевые слова в HTML для отладки
@@ -152,11 +150,11 @@ class AppVersionChecker {
             debugPrint('💡 В HTML есть слово "Версия/Version", но паттерны не сработали');
           }
           // Сохраняем часть HTML для отладки (ищем участок с информацией о версии)
-          final versionSection = html.contains('Версия') 
+          final versionSection = html.contains('Версия')
               ? html.substring(html.indexOf('Версия') - 100, html.indexOf('Версия') + 500)
-              : (html.contains('Version') 
-                  ? html.substring(html.indexOf('Version') - 100, html.indexOf('Version') + 500)
-                  : html.substring(0, 1000));
+              : (html.contains('Version')
+                    ? html.substring(html.indexOf('Version') - 100, html.indexOf('Version') + 500)
+                    : html.substring(0, 1000));
           debugPrint('📄 HTML фрагмент для отладки: $versionSection');
         }
       } else {
@@ -166,7 +164,7 @@ class AppVersionChecker {
       debugPrint('❌ Ошибка при получении версии из Google Play: $e');
       debugPrint('Stack trace: $stackTrace');
     }
-    
+
     return {'version': null, 'buildNumber': null};
   }
 
@@ -174,11 +172,11 @@ class AppVersionChecker {
   static bool _isValidVersion(String version) {
     final parts = version.split('.');
     if (parts.length < 2 || parts.length > 3) return false;
-    
+
     for (final part in parts) {
       if (int.tryParse(part.trim()) == null) return false;
     }
-    
+
     return true;
   }
 
@@ -186,28 +184,25 @@ class AppVersionChecker {
   static Future<Map<String, dynamic>> _getAppStoreVersion() async {
     try {
       final response = await _dio.get<String>(_appStoreUrl);
-      
+
       if (response.statusCode == 200 && response.data != null) {
         final html = response.data!;
-        
+
         // Парсим версию из HTML App Store
         // Ищем паттерн "version" или "Версия" в метаданных
         final versionRegex = RegExp(r'"version":"([^"]+)"', caseSensitive: false);
         final versionMatch = versionRegex.firstMatch(html);
-        
+
         if (versionMatch != null) {
           final version = versionMatch.group(1);
           // Для App Store build number обычно не доступен через HTML
-          return {
-            'version': version,
-            'buildNumber': 0,
-          };
+          return {'version': version, 'buildNumber': 0};
         }
       }
     } catch (e) {
       debugPrint('Ошибка при получении версии из App Store: $e');
     }
-    
+
     return {'version': null, 'buildNumber': null};
   }
 
@@ -216,16 +211,16 @@ class AppVersionChecker {
   static int _compareVersions(String version1, String version2) {
     final parts1 = version1.split('.').map((e) => int.tryParse(e) ?? 0).toList();
     final parts2 = version2.split('.').map((e) => int.tryParse(e) ?? 0).toList();
-    
+
     // Дополняем до одинаковой длины нулями
     while (parts1.length < parts2.length) parts1.add(0);
     while (parts2.length < parts1.length) parts2.add(0);
-    
+
     for (int i = 0; i < parts1.length; i++) {
       if (parts1[i] > parts2[i]) return 1;
       if (parts1[i] < parts2[i]) return -1;
     }
-    
+
     return 0;
   }
 

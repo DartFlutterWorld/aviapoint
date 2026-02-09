@@ -25,12 +25,7 @@ class SmallNewsWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: NetworkImageWidget(
-              imageUrl: getImageUrl(news.pictureMini),
-              fit: BoxFit.fill,
-              height: 75,
-              width: 75,
-            ),
+            child: NetworkImageWidget(imageUrl: getImageUrl(news.pictureMini), fit: BoxFit.fill, height: 75, width: 75),
           ),
           SizedBox(width: 8),
           Expanded(

@@ -1,7 +1,10 @@
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SubscribeWidgetActive extends StatelessWidget {
   final SubscriptionDto subscription;
@@ -16,8 +19,8 @@ class SubscribeWidgetActive extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-        height: 225,
-        width: 176,
+        height: Provider.of<AppState>(context).isTablet || kIsWeb ? 280 : 225,
+        width: Provider.of<AppState>(context).isTablet || kIsWeb ? 210 : 176,
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(fon), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(9),

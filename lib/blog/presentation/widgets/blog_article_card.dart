@@ -127,9 +127,15 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                 if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: NetworkImageWidget(imageUrl: getImageUrl(widget.article.coverImageUrl!), fit: BoxFit.cover, height: imageHeight, width: imageWidth),
+                    child: NetworkImageWidget(
+                      imageUrl: getImageUrl(widget.article.coverImageUrl!),
+                      fit: BoxFit.cover,
+                      height: imageHeight,
+                      width: imageWidth,
+                    ),
                   ),
-                if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty) SizedBox(width: 8),
+                if (widget.article.coverImageUrl != null && widget.article.coverImageUrl!.isNotEmpty)
+                  SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,8 +143,17 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (widget.article.category != null) Text(widget.article.category!.name.toUpperCase(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
-                          Text(widget.article.publishedAt != null ? formatDate(DateTime.parse(widget.article.publishedAt!)) : '', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                          if (widget.article.category != null)
+                            Text(
+                              widget.article.category!.name.toUpperCase(),
+                              style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                            ),
+                          Text(
+                            widget.article.publishedAt != null
+                                ? formatDate(DateTime.parse(widget.article.publishedAt!))
+                                : '',
+                            style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                          ),
                         ],
                       ),
                       SizedBox(height: 4),
@@ -167,7 +182,10 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                             children: [
                               Icon(Icons.person_outline, size: 12.0, color: const Color(0xFF9CA5AF)),
                               SizedBox(width: 4),
-                              Text(_getAuthorName(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                              Text(
+                                _getAuthorName(),
+                                style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                              ),
                             ],
                           ),
                           Row(
@@ -175,7 +193,10 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                             children: [
                               Icon(Icons.visibility_outlined, size: 12.0, color: const Color(0xFF9CA5AF)),
                               SizedBox(width: 4),
-                              Text('${widget.article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                              Text(
+                                '${widget.article.viewCount}',
+                                style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                              ),
                             ],
                           ),
                           if (widget.article.aircraftModel != null)
@@ -203,7 +224,10 @@ class _BlogArticleCardState extends State<BlogArticleCard> {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(color: _getStatusColor(), borderRadius: BorderRadius.circular(8)),
-                            child: Text(_getStatusText(), style: AppStyles.light10s.copyWith(color: Colors.white, fontSize: 9)),
+                            child: Text(
+                              _getStatusText(),
+                              style: AppStyles.light10s.copyWith(color: Colors.white, fontSize: 9),
+                            ),
                           ),
                         ),
                       ],

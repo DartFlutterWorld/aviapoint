@@ -98,7 +98,11 @@ class InternetConnectionService {
         try {
           final response = await _dio.get<dynamic>(
             'https://www.google.com/favicon.ico',
-            options: Options(receiveTimeout: const Duration(seconds: 3), sendTimeout: const Duration(seconds: 3), validateStatus: (status) => status != null && status < 500),
+            options: Options(
+              receiveTimeout: const Duration(seconds: 3),
+              sendTimeout: const Duration(seconds: 3),
+              validateStatus: (status) => status != null && status < 500,
+            ),
           );
           isConnected = response.statusCode == 200;
         } catch (e) {
@@ -107,7 +111,10 @@ class InternetConnectionService {
       } else {
         // На мобильных платформах используем internet_connection_checker_plus
         try {
-          isConnected = await _connectionChecker!.hasInternetAccess.timeout(const Duration(seconds: 3), onTimeout: () => false);
+          isConnected = await _connectionChecker!.hasInternetAccess.timeout(
+            const Duration(seconds: 3),
+            onTimeout: () => false,
+          );
         } catch (e) {
           // Если не удалось проверить доступ к интернету, считаем что его нет
           isConnected = false;

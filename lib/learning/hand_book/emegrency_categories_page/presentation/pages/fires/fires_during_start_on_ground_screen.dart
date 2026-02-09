@@ -19,10 +19,7 @@ class FiresDuringStartOnGroundScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'fires_during_start_on_ground'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'fires_during_start_on_ground'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

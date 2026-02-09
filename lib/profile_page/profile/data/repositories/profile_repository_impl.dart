@@ -114,10 +114,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
         }
       }
 
-      await _profileService.saveFcmToken({
-        'fcm_token': fcmToken,
-        'platform': platform,
-      });
+      await _profileService.saveFcmToken({'fcm_token': fcmToken, 'platform': platform});
       return right(null);
     } on DioException catch (e) {
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));
@@ -147,10 +144,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
         }
       }
 
-      await _profileService.saveAnonymousFcmToken({
-        'fcm_token': fcmToken,
-        'platform': platform,
-      });
+      await _profileService.saveAnonymousFcmToken({'fcm_token': fcmToken, 'platform': platform});
       return right(null);
     } on DioException catch (e) {
       return left(ServerFailure(statusCode: e.response?.statusCode.toString(), message: e.message));

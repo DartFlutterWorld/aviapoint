@@ -8,7 +8,13 @@ class SharePickerWidget extends StatelessWidget {
   final ValueChanged<int?>? onNumeratorChanged;
   final ValueChanged<int?>? onDenominatorChanged;
 
-  const SharePickerWidget({super.key, this.numerator, this.denominator, this.onNumeratorChanged, this.onDenominatorChanged});
+  const SharePickerWidget({
+    super.key,
+    this.numerator,
+    this.denominator,
+    this.onNumeratorChanged,
+    this.onDenominatorChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +22,9 @@ class SharePickerWidget extends StatelessWidget {
     final numeratorOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     // Доступные значения для знаменателя (1-10), но фильтруем чтобы знаменатель был больше числителя
     final allDenominatorOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    final denominatorOptions = numerator != null ? allDenominatorOptions.where((d) => d > numerator!).toList() : allDenominatorOptions;
+    final denominatorOptions = numerator != null
+        ? allDenominatorOptions.where((d) => d > numerator!).toList()
+        : allDenominatorOptions;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

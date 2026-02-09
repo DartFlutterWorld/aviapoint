@@ -19,10 +19,7 @@ class AirDataSystemFailureScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'air_data_system_failure'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'air_data_system_failure'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

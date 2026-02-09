@@ -19,10 +19,8 @@ class IcingScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'inadvertent_icing_encounter_during_flight'.tr(),
-            ),
+            onPressed: () =>
+                LearningShareHelper.shareLearningPage(context, title: 'inadvertent_icing_encounter_during_flight'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

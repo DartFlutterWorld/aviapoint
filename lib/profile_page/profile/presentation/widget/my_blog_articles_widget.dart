@@ -80,7 +80,8 @@ class _MyBlogArticlesWidgetState extends State<MyBlogArticlesWidget> {
     }
 
     // Сортируем статьи по дате публикации/создания (новые сверху)
-    final sortedArticles = [...articles]..sort((a, b) {
+    final sortedArticles = [...articles]
+      ..sort((a, b) {
         final aDate = a.publishedAt ?? a.createdAt ?? '';
         final bDate = b.publishedAt ?? b.createdAt ?? '';
         return _parseBlogDateTime(bDate).compareTo(_parseBlogDateTime(aDate));

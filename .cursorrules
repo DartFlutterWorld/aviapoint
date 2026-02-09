@@ -1,4 +1,6 @@
 # Правила разработки проекта AviaPoint
+- При разработке и решении мною поставленных задач используй этот репозиторий с подсказками
+https://github.com/MADTeacher/mad-agents-skills
 
 ## Архитектура проекта
 
@@ -35,6 +37,8 @@
     - `stackTrace`: прокидывай, если есть
     Пример:
     `ErrorNewsState(errorForUser: 'Что-то пошло не так!\\nПопробуйте повторить запрос', errorFromApi: l.message, statusCode: 'Код ошибки сервера: \${l.statusCode}', responseMessage: l.responseMessage)`
+ # Что примнять cubit или setState
+- максимально использовать cubit
 
   ### Работа с API
 - **ВСЕГДА** создавай отдельный Service (Retrofit) для каждого репозитория
@@ -90,6 +94,26 @@
 ### Обработка ошибок в UI
 - **ВСЕГДА** используй `ErrorCustom` для отображения ошибок загрузки данных на экранах (в том числе в маркете), вместо самописных `Column/Text/ElevatedButton`.
 - Для повторной попытки передавай в `ErrorCustom.repeat` колбэк, который заново диспатчит событие в соответствующий BLoC (например, повторный `getProducts` / `getParts` или `refresh`).
+
+### Раздел "Работа" (вакансии и резюме)
+- **Списки вакансий и резюме**:
+  - Используй отдельные BLoC-и с пагинацией (`JobsVacanciesBloc`, `JobsResumesBloc`).
+  - Стандартные состояния: `loading`, `loadingMore`, `success(vacancies/resumes, hasMore)`, `error(...)` по общей схеме ошибок.
+  - В UI для ошибок списков ВСЕГДА используй `ErrorCustom` с дружелюбным `errorForUser` и `repeat`, который диспатчит `get`/`refresh` в BLoC.
+- **Детальные экраны**:
+  - Для деталей вакансии/резюме используй отдельные BLoC-и (`JobVacancyDetailBloc`, `JobResumeDetailBloc`) с состояниями `loading`, `success`, `error(...)` по общей схеме.
+  - Кнопки действий (редактировать/удалить/публиковать) выноси в `CustomAppBar.actions` либо в явные кнопки внизу экрана.
+  - Для ошибок на деталях также используй `ErrorCustom` + повторное событие `getById`.
+- **Создание / редактирование**:
+  - Для создания/редактирования вакансий и резюме используй отдельные BLoC-и действий (`JobVacancyEditBloc`, `JobResumeEditBloc`) с состояниями:
+    - `initial`, `creating/updating/deleting`, `created/updated/deleted`, `error(...)`.
+  - Формы всегда строятся на `CustomTextField` + `DropdownButtonFormField`/bottom sheet, высота инпутов выравнивается через `contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12)` под высоту `CustomTextField`.
+  - Обязательные поля (например, заголовок вакансии/резюме) помечай `*` в label и валидируй через `validator`.
+  - На успех действия показывай `SnackBar` с коротким сообщением (`"Вакансия создана"`, `"Резюме обновлено"`) и закрывай экран через `context.router.maybePop()`.
+  - На ошибку всегда показывай `SnackBar` с `errorForUser` из состояния BLoC.
+- **Навигация**:
+  - Для переходов в раздел "Работа" и детальных экранов используй маршруты `WorkRoute`, `JobVacancyDetailRoute`, `JobResumeDetailRoute`, а для создания/редактирования — `CreateJobVacancyRoute`, `EditJobVacancyRoute`, `CreateJobResumeRoute`, `EditJobResumeRoute`.
+  - Не используй ручные `Navigator.push`, всегда работай через `context.router.push(...)`.
 
 #### Паддинги в UI
 - **Горизонтальные паддинги на экранах**: всегда 8px (`EdgeInsets.symmetric(horizontal: 8, vertical: 16)`)

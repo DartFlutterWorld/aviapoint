@@ -72,7 +72,7 @@ class PaymentHelper {
   }) async {
     try {
       final iapService = IAPService();
-      
+
       try {
         final initialized = await iapService.initialize();
 
@@ -116,13 +116,15 @@ class PaymentHelper {
       // Загружаем продукты
       print('🔵 Начинаем загрузку продуктов из App Store...');
       final products = await iapService.loadProducts();
-      
+
       if (products.isEmpty) {
         if (context.mounted) {
           Navigator.of(context).pop(); // Закрываем индикатор
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Не удалось загрузить продукты для покупки. Проверьте, что подписка создана в App Store Connect и отправлена на проверку.'),
+              content: Text(
+                'Не удалось загрузить продукты для покупки. Проверьте, что подписка создана в App Store Connect и отправлена на проверку.',
+              ),
               backgroundColor: Colors.red,
               duration: Duration(seconds: 5),
             ),
@@ -131,7 +133,7 @@ class PaymentHelper {
         print('❌ Продукты не загружены. Проверьте логи выше для деталей.');
         return false;
       }
-      
+
       print('✅ Продукты загружены успешно: ${products.length}');
 
       // Находим годовую подписку
@@ -169,12 +171,9 @@ class PaymentHelper {
               navigateToSource(context, returnRouteSource);
             });
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Ошибка при покупке подписки'),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Ошибка при покупке подписки'), backgroundColor: Colors.red));
           }
         }
       });
@@ -185,12 +184,9 @@ class PaymentHelper {
       if (!purchaseStarted) {
         purchaseSubscription.cancel();
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Не удалось начать покупку'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Не удалось начать покупку'), backgroundColor: Colors.red));
         }
         return false;
       }
@@ -207,10 +203,7 @@ class PaymentHelper {
         purchaseSubscription.cancel();
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Превышено время ожидания покупки'),
-              backgroundColor: Colors.orange,
-            ),
+            const SnackBar(content: Text('Превышено время ожидания покупки'), backgroundColor: Colors.orange),
           );
         }
       }
@@ -221,12 +214,9 @@ class PaymentHelper {
       print('❌ Ошибка при покупке через IAP: $e');
       print('StackTrace: $stackTrace');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ошибка: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
       }
       return false;
     }
@@ -459,7 +449,10 @@ class PaymentHelper {
               );
               // Обрабатываем результат аналогично
               final rootContextAfterReturn = navigatorKey.currentContext;
-              if (result == true && paymentId.isNotEmpty && rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
+              if (result == true &&
+                  paymentId.isNotEmpty &&
+                  rootContextAfterReturn != null &&
+                  rootContextAfterReturn.mounted) {
                 await _handlePaymentReturn(rootContextAfterReturn, paymentId, returnRouteSource);
               } else if (rootContextAfterReturn != null && rootContextAfterReturn.mounted) {
                 navigateToSource(rootContextAfterReturn, returnRouteSource);
@@ -548,7 +541,7 @@ class PaymentHelper {
   /// Публичный метод для использования на вебе и мобильных
   static void navigateToSource(BuildContext context, String? returnRouteSource) {
     print('🔵 _navigateToSource вызван: returnRouteSource=$returnRouteSource, context.mounted=${context.mounted}');
-    
+
     if (!context.mounted) {
       print('❌ Контекст не mounted, пытаемся использовать глобальный контекст');
       final rootContext = navigatorKey.currentContext;

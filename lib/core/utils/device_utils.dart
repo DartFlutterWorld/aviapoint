@@ -40,22 +40,20 @@ class DeviceUtils {
 
       if (Platform.isAndroid) {
         final androidInfo = await _deviceInfo.androidInfo;
-        
+
         // Проверяем по модели устройства
         final model = androidInfo.model.toLowerCase();
         final brand = androidInfo.brand.toLowerCase();
-        
+
         // Проверяем по названию модели (tablet, tab, pad и т.д.)
-        final isTabletByModel = model.contains('tablet') ||
-                               model.contains('tab') ||
-                               model.contains('pad') ||
-                               brand.contains('tablet');
-        
+        final isTabletByModel =
+            model.contains('tablet') || model.contains('tab') || model.contains('pad') || brand.contains('tablet');
+
         // Проверяем по системным свойствам
         // На планшетах обычно есть определенные характеристики
         // Используем размер экрана в dp через системные настройки
         // Если это не сработает, полагаемся на модель
-        
+
         _isTabletCache = isTabletByModel;
         return _isTabletCache!;
       } else if (Platform.isIOS) {
@@ -64,14 +62,12 @@ class DeviceUtils {
         final model = iosInfo.model.toLowerCase();
         final name = iosInfo.name.toLowerCase();
         final identifier = iosInfo.utsname.machine.toLowerCase();
-        
+
         // iPad всегда планшет - проверяем по модели, имени и идентификатору
-        final isIPad = model.contains('ipad') || 
-                      name.contains('ipad') ||
-                      identifier.contains('ipad');
-        
+        final isIPad = model.contains('ipad') || name.contains('ipad') || identifier.contains('ipad');
+
         debugPrint('iOS Device Info - Model: $model, Name: $name, Identifier: $identifier, IsTablet: $isIPad');
-        
+
         _isTabletCache = isIPad;
         return _isTabletCache!;
       }

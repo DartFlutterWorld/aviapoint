@@ -193,7 +193,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                 Navigator.of(context).pop();
                 // Используем корневой контекст для показа snackbar поверх всех окон
                 final rootContext = Navigator.of(context, rootNavigator: true).context;
-                ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
+                ScaffoldMessenger.of(
+                  rootContext,
+                ).showSnackBar(SnackBar(content: Text('Профиль успешно обновлен'), backgroundColor: Colors.green));
               }
             }
           },
@@ -204,7 +206,9 @@ class _ProfileEditState extends State<ProfileEdit> {
               });
               // Используем корневой контекст для показа snackbar поверх всех окон
               final rootContext = Navigator.of(context, rootNavigator: true).context;
-              ScaffoldMessenger.of(rootContext).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
+              ScaffoldMessenger.of(
+                rootContext,
+              ).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
             }
           },
           orElse: () {},
@@ -230,121 +234,126 @@ class _ProfileEditState extends State<ProfileEdit> {
                   ],
                 ),
                 SizedBox(height: 24),
-                  // Фото профиля
-                  Center(
-                    child: GestureDetector(
-                      onTap: _pickImage,
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFE3F1FF),
-                                border: Border.all(color: Color(0xFF0A6EFA), width: 2),
-                              ),
-                              child: ClipOval(
-                                child: _selectedPhoto != null
-                                    ? (kIsWeb && _selectedPhotoBytes != null
-                                          ? Image.memory(
-                                              _selectedPhotoBytes!,
-                                              fit: BoxFit.cover,
-                                              width: 100,
-                                              height: 100,
-                                            )
-                                          : !kIsWeb
-                                          ? Image.file(
-                                              File(_selectedPhoto!.path),
-                                              fit: BoxFit.cover,
-                                              width: 100,
-                                              height: 100,
-                                            )
-                                          : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100))
-                                    : _currentAvatarUrl != null && _currentAvatarUrl!.isNotEmpty
-                                    ? NetworkImageWidget(
-                                        imageUrl: getImageUrl(_currentAvatarUrl!),
+                // Фото профиля
+                Center(
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFFE3F1FF),
+                              border: Border.all(color: Color(0xFF0A6EFA), width: 2),
+                            ),
+                            child: ClipOval(
+                              child: _selectedPhoto != null
+                                  ? (kIsWeb && _selectedPhotoBytes != null
+                                        ? Image.memory(_selectedPhotoBytes!, fit: BoxFit.cover, width: 100, height: 100)
+                                        : !kIsWeb
+                                        ? Image.file(
+                                            File(_selectedPhoto!.path),
+                                            fit: BoxFit.cover,
+                                            width: 100,
+                                            height: 100,
+                                          )
+                                        : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100))
+                                  : _currentAvatarUrl != null && _currentAvatarUrl!.isNotEmpty
+                                  ? NetworkImageWidget(
+                                      imageUrl: getImageUrl(_currentAvatarUrl!),
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                      placeholder: Image.asset(
+                                        Pictures.pilot,
                                         fit: BoxFit.cover,
                                         width: 100,
                                         height: 100,
-                                        placeholder: Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
-                                        errorWidget: Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
-                                      )
-                                    : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
-                              ),
+                                      ),
+                                      errorWidget: Image.asset(
+                                        Pictures.pilot,
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    )
+                                  : Image.asset(Pictures.pilot, fit: BoxFit.cover, width: 100, height: 100),
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFF0A6EFA),
-                                border: Border.all(color: Colors.white, width: 2),
-                              ),
-                              child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  // Поля для редактирования
-                  if (_isLoading)
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 40),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 16),
-                            Text('Сохранение...', style: AppStyles.regular14s.copyWith(color: Color(0xFF6E7A89))),
-                          ],
                         ),
-                      ),
-                    )
-                  else
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
-                        SizedBox(height: 16),
-                        _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
-                        SizedBox(height: 16),
-                        _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
-                        SizedBox(height: 16),
-                        _buildTextField(controller: _telegramController, hintText: 'Telegram', label: 'Telegram'),
-                        SizedBox(height: 16),
-                        _buildTextField(controller: _maxController, hintText: 'Max', label: 'Max'),
-                        SizedBox(height: 24),
-                        // Кнопка сохранения
-                        CustomButton(
-                          verticalPadding: 8,
-                          backgroundColor: Color(0xFF0A6EFA),
-                          title: 'Сохранить',
-                          textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
-                          borderColor: Color(0xFF0A6EFA),
-                          borderRadius: 46,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xff0064D6).withOpacity(0.25),
-                              blurRadius: 4,
-                              spreadRadius: 0,
-                              offset: Offset(0.0, 7.0),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFF0A6EFA),
+                              border: Border.all(color: Colors.white, width: 2),
                             ),
-                          ],
-                          onPressed: _isLoading ? null : _handleSave,
-                          disabled: _isLoading,
+                            child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                          ),
                         ),
                       ],
                     ),
+                  ),
+                ),
+                SizedBox(height: 24),
+                // Поля для редактирования
+                if (_isLoading)
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 16),
+                          Text('Сохранение...', style: AppStyles.regular14s.copyWith(color: Color(0xFF6E7A89))),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildTextField(controller: _firstNameController, hintText: 'Имя', label: 'Имя'),
+                      SizedBox(height: 16),
+                      _buildTextField(controller: _lastNameController, hintText: 'Фамилия', label: 'Фамилия'),
+                      SizedBox(height: 16),
+                      _buildTextField(controller: _emailController, hintText: 'Email', label: 'Email'),
+                      SizedBox(height: 16),
+                      _buildTextField(controller: _telegramController, hintText: 'Telegram', label: 'Telegram'),
+                      SizedBox(height: 16),
+                      _buildTextField(controller: _maxController, hintText: 'Max', label: 'Max'),
+                      SizedBox(height: 24),
+                      // Кнопка сохранения
+                      CustomButton(
+                        verticalPadding: 8,
+                        backgroundColor: Color(0xFF0A6EFA),
+                        title: 'Сохранить',
+                        textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
+                        borderColor: Color(0xFF0A6EFA),
+                        borderRadius: 46,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xff0064D6).withOpacity(0.25),
+                            blurRadius: 4,
+                            spreadRadius: 0,
+                            offset: Offset(0.0, 7.0),
+                          ),
+                        ],
+                        onPressed: _isLoading ? null : _handleSave,
+                        disabled: _isLoading,
+                      ),
+                    ],
+                  ),
               ],
             ),
           );

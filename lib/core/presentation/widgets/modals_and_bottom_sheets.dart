@@ -32,7 +32,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Единая функция для показа экрана авторизации во всём приложении
 /// Использует универсальный bottom sheet для единообразного отображения
-Future<bool?> showLogin(BuildContext context, {GlobalKey<ScaffoldState>? scaffoldKey, final void Function()? callback}) async {
+Future<bool?> showLogin(
+  BuildContext context, {
+  GlobalKey<ScaffoldState>? scaffoldKey,
+  final void Function()? callback,
+}) async {
   final bool? result = await showUniversalBottomSheet<bool>(
     context: context,
     title: 'Авторизоваться',
@@ -67,7 +71,11 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
             spacing: 24,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Карта контрольных проверок', textAlign: TextAlign.center, style: AppStyles.bigButtonCulture.copyWith(fontSize: 22)),
+              Text(
+                'Карта контрольных проверок',
+                textAlign: TextAlign.center,
+                style: AppStyles.bigButtonCulture.copyWith(fontSize: 22),
+              ),
               Table(
                 border: TableBorder.all(width: 0.5),
                 children: [
@@ -89,7 +97,14 @@ Future<void> checkList({required BuildContext context, required List<NormalCheck
                 textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                 borderColor: Color(0xFF0A6EFA),
                 borderRadius: 46,
-                boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xff0064D6).withOpacity(0.25),
+                    blurRadius: 4,
+                    spreadRadius: 0,
+                    offset: Offset(0.0, 7.0),
+                  ),
+                ],
                 onPressed: () => context.router.maybePop(),
               ),
             ],
@@ -114,7 +129,9 @@ Future<void> selectTypeCertificate({required BuildContext context, required Enum
     if (screen == Screens.learning) {
       BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
 
-      BlocProvider.of<CategoriesWithListQuestionsBloc>(context).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
+      BlocProvider.of<CategoriesWithListQuestionsBloc>(
+        context,
+      ).add(GetCategoriesWithListQuestionsEvent(typeSsertificatesId: result.id));
     }
     if (screen == Screens.selectTopicsScreen) {
       BlocProvider.of<RosAviaTestCubit>(context).setTypeCertificate(result);
@@ -133,7 +150,10 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
         child: Center(
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: ClearProgress(onTap1: () => Navigator.pop(context, true), onTap2: () => Navigator.pop(context, false)),
+            child: ClearProgress(
+              onTap1: () => Navigator.pop(context, true),
+              onTap2: () => Navigator.pop(context, false),
+            ),
           ),
         ),
       );
@@ -144,7 +164,12 @@ Future<bool?> showDialogCustom({required BuildContext context}) async {
   // if (result != null) {}
 }
 
-Future<void> openQuestion({required BuildContext context, required QuestionWithAnswersEntity? question, required int questionId, required String? categoryTitle}) async {
+Future<void> openQuestion({
+  required BuildContext context,
+  required QuestionWithAnswersEntity? question,
+  required int questionId,
+  required String? categoryTitle,
+}) async {
   await showUniversalBottomSheet<void>(
     context: context,
     title: '',
@@ -152,7 +177,12 @@ Future<void> openQuestion({required BuildContext context, required QuestionWithA
     backgroundColor: AppColors.background,
     showCloseButton: false,
     useRootNavigator: true,
-    child: DetailQuestionScreen(questionId: questionId, categoryTitle: categoryTitle, question: question, withClose: true),
+    child: DetailQuestionScreen(
+      questionId: questionId,
+      categoryTitle: categoryTitle,
+      question: question,
+      withClose: true,
+    ),
   );
 }
 
@@ -182,7 +212,9 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode, bo
       try {
         final paymentRepository = getIt<PaymentRepository>();
         final subscriptions = await paymentRepository.getSubscriptionStatus();
-        subscriptionStatus = subscriptions.any((subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()));
+        subscriptionStatus = subscriptions.any(
+          (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
+        );
         print('🔵 [selectTopics] Статус подписки получен: $subscriptionStatus');
       } catch (e) {
         print('⚠️ [selectTopics] Ошибка при получении статуса подписки: $e');
@@ -192,14 +224,25 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode, bo
       print('🔵 [selectTopics] Статус подписки передан извне: $subscriptionStatus');
     }
 
-    final result = await showUniversalBottomSheet<(int certificateTypeId, bool mixAnswers, bool buttonHint, Set<int> selectedCategoryIds, String title, String image, bool mixQuestions)>(
-      context: context,
-      title: 'Выберите настройки тестирования',
-      backgroundColor: const Color(0xFFF1F7FF),
-      showCloseButton: true,
-      useRootNavigator: true,
-      child: SelectTopicsScreen(hasActiveSubscription: subscriptionStatus),
-    );
+    final result =
+        await showUniversalBottomSheet<
+          (
+            int certificateTypeId,
+            bool mixAnswers,
+            bool buttonHint,
+            Set<int> selectedCategoryIds,
+            String title,
+            String image,
+            bool mixQuestions,
+          )
+        >(
+          context: context,
+          title: 'Выберите настройки тестирования',
+          backgroundColor: const Color(0xFFF1F7FF),
+          showCloseButton: true,
+          useRootNavigator: true,
+          child: SelectTopicsScreen(hasActiveSubscription: subscriptionStatus),
+        );
 
     print('🔵 [selectTopics] Bottom sheet закрыт, result: $result');
     print('🔵 [selectTopics] result != null: ${result != null}');
@@ -224,7 +267,15 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode, bo
 
         // Сохраняем настройки
         print('🔵 [selectTopics] Сохраняю настройки...');
-        await db.saveSettings(certificateTypeId: result.$1, mixAnswers: result.$2, buttonHint: result.$3, selectedCategoryIds: result.$4, title: result.$5, image: result.$6, mixQuestions: result.$7);
+        await db.saveSettings(
+          certificateTypeId: result.$1,
+          mixAnswers: result.$2,
+          buttonHint: result.$3,
+          selectedCategoryIds: result.$4,
+          title: result.$5,
+          image: result.$6,
+          mixQuestions: result.$7,
+        );
         print('✅ [selectTopics] Настройки сохранены');
 
         if (!context.mounted) {
@@ -356,7 +407,14 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff0064D6).withOpacity(0.25),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: Offset(0.0, 7.0),
+                    ),
+                  ],
                   onPressed: () {
                     Navigator.pop(dialogContext);
                     // Продолжить тест
@@ -377,7 +435,14 @@ Future<void> startTestingFlowNew({required BuildContext context}) async {
                   textStyle: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff0064D6).withOpacity(0.25),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: Offset(0.0, 7.0),
+                    ),
+                  ],
                   onPressed: () async {
                     Navigator.pop(dialogContext);
                     // Очистить ответы и начать заново
@@ -547,9 +612,13 @@ bool? checkDataProfileAndOpenEditIfNeeded({required BuildContext context, String
               if (!rootContext.mounted) return;
 
               openProfileEdit(context: rootContext);
-              ScaffoldMessenger.of(
-                rootContext,
-              ).showSnackBar(SnackBar(content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'), backgroundColor: Colors.orange, duration: Duration(seconds: 5)));
+              ScaffoldMessenger.of(rootContext).showSnackBar(
+                SnackBar(
+                  content: Text(message ?? 'Заполните профиль чтоб с вами могли связаться'),
+                  backgroundColor: Colors.orange,
+                  duration: Duration(seconds: 5),
+                ),
+              );
             } catch (e) {
               debugPrint('Ошибка при открытии профиля: $e');
             }
@@ -613,7 +682,13 @@ Future<void> openProfileEdit({required BuildContext context}) async {
     debugPrint('❌ [openProfileEdit] Stack trace: $stackTrace');
     // Показываем сообщение об ошибке пользователю
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось открыть форму редактирования профиля'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Не удалось открыть форму редактирования профиля'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 }
@@ -644,7 +719,9 @@ Future<void> openContactUs({required BuildContext context}) async {
                   } else {
                     // Если не удалось открыть, показываем сообщение
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)),
+                      );
                     }
                   }
                 },
@@ -674,7 +751,9 @@ Future<void> openContactUs({required BuildContext context}) async {
                   } else {
                     // Если не удалось открыть, показываем сообщение
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)),
+                      );
                     }
                   }
                 },

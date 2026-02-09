@@ -21,7 +21,11 @@ class CancelButton extends StatelessWidget {
         alignment: Alignment.bottomRight,
         child: Text(
           'Отмена',
-          style: AppStyles.bold12s.copyWith(fontWeight: FontWeight.w600, height: 13.92 / 12, color: AppColors.textSeconds),
+          style: AppStyles.bold12s.copyWith(
+            fontWeight: FontWeight.w600,
+            height: 13.92 / 12,
+            color: AppColors.textSeconds,
+          ),
         ),
       ),
     );

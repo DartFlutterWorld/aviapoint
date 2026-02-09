@@ -22,9 +22,9 @@ Future<void> showUpdateRequiredBottomSheet(BuildContext context, {Upgrader? upgr
     await showModalBottomSheet<void>(
       context: context,
       useRootNavigator: true,
-      isDismissible: false,
+      isDismissible: true,
       isScrollControlled: true,
-      enableDrag: false,
+      enableDrag: true,
       barrierColor: Colors.black54,
       backgroundColor: AppColors.background,
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),

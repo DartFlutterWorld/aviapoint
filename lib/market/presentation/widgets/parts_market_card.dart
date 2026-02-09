@@ -57,7 +57,9 @@ class _PartsMarketCardState extends State<PartsMarketCard> {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = widget.part.mainImageUrl ?? (widget.part.additionalImageUrls.isNotEmpty ? widget.part.additionalImageUrls.first : null);
+    final imageUrl =
+        widget.part.mainImageUrl ??
+        (widget.part.additionalImageUrls.isNotEmpty ? widget.part.additionalImageUrls.first : null);
     final isHorizontal = _isImageHorizontal;
 
     return GestureDetector(
@@ -71,7 +73,11 @@ class _PartsMarketCardState extends State<PartsMarketCard> {
           children: [
             // Фоновое изображение заполняет весь контейнер (или уменьшается для горизонтальных)
             if (imageUrl != null)
-              _ProductImage(imageUrl: getImageUrl(imageUrl), onOrientationDetected: _onImageOrientationDetected, isHorizontal: isHorizontal == true)
+              _ProductImage(
+                imageUrl: getImageUrl(imageUrl),
+                onOrientationDetected: _onImageOrientationDetected,
+                isHorizontal: isHorizontal == true,
+              )
             else
               Container(
                 color: Colors.grey.shade200,
@@ -140,7 +146,10 @@ class _PartsMarketCardState extends State<PartsMarketCard> {
                     alignment: Alignment.center,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Text(
                         'Заблокировано администратором',
                         style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -171,7 +180,10 @@ class _PartsMarketCardState extends State<PartsMarketCard> {
                     alignment: Alignment.center,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(color: Colors.orange.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Text(
                         'Не опубликовано',
                         style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -315,7 +327,9 @@ class _ProductImageState extends State<_ProductImage> {
             color: Colors.grey.shade50,
             child: Center(
               child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
                 strokeWidth: 2,
                 color: Colors.grey.shade400,
               ),
@@ -325,14 +339,17 @@ class _ProductImageState extends State<_ProductImage> {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: Colors.grey.shade100,
-            child: Center(
-              child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.0),
-            ),
+            child: Center(child: Icon(Icons.image_not_supported, color: Colors.grey.shade400, size: 32.0)),
           );
         },
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded || frame != null) {
-            return AnimatedOpacity(opacity: frame == null ? 0 : 1, duration: const Duration(milliseconds: 200), curve: Curves.easeOut, child: child);
+            return AnimatedOpacity(
+              opacity: frame == null ? 0 : 1,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: child,
+            );
           }
           return Container(
             color: Colors.grey.shade50,

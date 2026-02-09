@@ -15,7 +15,17 @@ class CategoryWidget extends StatelessWidget {
   final bool withClear;
   final String? image;
 
-  const CategoryWidget({super.key, required this.title, required this.onTap, required this.subTitle, this.child, this.clearCategory, this.withClear = true, this.image, this.isSelect = false});
+  const CategoryWidget({
+    super.key,
+    required this.title,
+    required this.onTap,
+    required this.subTitle,
+    this.child,
+    this.clearCategory,
+    this.withClear = true,
+    this.image,
+    this.isSelect = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +39,17 @@ class CategoryWidget extends StatelessWidget {
               border: Border.all(color: isSelect ? Color(0xFF0A6EFA) : const Color(0xFFE3F1FF), width: 1),
               borderRadius: BorderRadius.all(Radius.circular(16)),
               color: Colors.white,
-              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0)),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
-                    if (image != null) Padding(padding: const EdgeInsets.only(right: 10), child: SvgPicture.asset(image!)),
+                    if (image != null)
+                      Padding(padding: const EdgeInsets.only(right: 10), child: SvgPicture.asset(image!)),
                     Expanded(
                       flex: 5,
                       child: Text(title, style: AppStyles.bold15s.copyWith(color: Color(0xFF374151))),

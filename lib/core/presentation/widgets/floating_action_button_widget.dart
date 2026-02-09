@@ -15,9 +15,20 @@ class FloatingActionButtonWidget extends StatelessWidget {
     return Container(
       margin: margin ?? EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFF0A6EFA), Color(0xFF7A0FD9)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF0A6EFA), Color(0xFF7A0FD9)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: const Color(0xFF0A6EFA).withOpacity(0.4), blurRadius: 12, spreadRadius: 0, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0A6EFA).withOpacity(0.4),
+            blurRadius: 12,
+            spreadRadius: 0,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,

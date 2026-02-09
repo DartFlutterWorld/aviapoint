@@ -101,7 +101,9 @@ class _Success extends StatelessWidget {
                 clearCategory: () {},
                 withClear: false,
                 image: getIcon(typeSertificatesEntity[index].id),
-                isSelect: BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title == typeSertificatesEntity[index].title,
+                isSelect:
+                    BlocProvider.of<RosAviaTestCubit>(context).state.typeSertificate.title ==
+                    typeSertificatesEntity[index].title,
               ),
             ),
           ),

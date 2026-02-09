@@ -11,8 +11,17 @@ class LocationPickerWidget extends StatefulWidget {
   final String? initialLocation;
   final LatLng? initialCoordinates;
   final ValueChanged<Map<String, dynamic>>? onLocationSelected;
+  final bool readOnly;
+  final bool showSearch;
 
-  const LocationPickerWidget({super.key, this.initialLocation, this.initialCoordinates, this.onLocationSelected});
+  const LocationPickerWidget({
+    super.key,
+    this.initialLocation,
+    this.initialCoordinates,
+    this.onLocationSelected,
+    this.readOnly = false,
+    this.showSearch = true,
+  });
 
   @override
   State<LocationPickerWidget> createState() => _LocationPickerWidgetState();
@@ -39,7 +48,12 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
   void initState() {
     super.initState();
     // Настраиваем Dio с User-Agent для избежания блокировки
-    _dio = Dio(BaseOptions(headers: {'User-Agent': 'AviaPoint App (Flutter)'}, validateStatus: (status) => status != null && status < 500));
+    _dio = Dio(
+      BaseOptions(
+        headers: {'User-Agent': 'AviaPoint App (Flutter)'},
+        validateStatus: (status) => status != null && status < 500,
+      ),
+    );
 
     if (widget.initialLocation != null) {
       _searchController.text = widget.initialLocation!;
@@ -409,7 +423,13 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
       // Используем Nominatim API для обратного геокодирования
       final response = await _dio.get<dynamic>(
         'https://nominatim.openstreetmap.org/reverse',
-        queryParameters: {'lat': point.latitude.toString(), 'lon': point.longitude.toString(), 'format': 'json', 'addressdetails': 1, 'accept-language': 'ru'},
+        queryParameters: {
+          'lat': point.latitude.toString(),
+          'lon': point.longitude.toString(),
+          'format': 'json',
+          'addressdetails': 1,
+          'accept-language': 'ru',
+        },
         options: Options(headers: {'User-Agent': 'AviaPoint App (Flutter)'}, responseType: ResponseType.json),
       );
 
@@ -455,7 +475,11 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
 
   void _notifyLocationSelected() {
     if (_selectedLocation != null && widget.onLocationSelected != null) {
-      widget.onLocationSelected!({'address': _selectedAddress ?? '', 'lat': _selectedLocation!.latitude, 'lng': _selectedLocation!.longitude});
+      widget.onLocationSelected!({
+        'address': _selectedAddress ?? '',
+        'lat': _selectedLocation!.latitude,
+        'lng': _selectedLocation!.longitude,
+      });
     }
   }
 
@@ -501,87 +525,115 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Поле поиска
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _searchController,
-              focusNode: _searchFocusNode,
-              decoration: InputDecoration(
-                labelText: 'Местоположение *',
-                hintText: 'Введите адрес',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _buildSuffixIcon(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              ),
-              onTap: () {
-                // Подсказки показываются только при изменении текста, не при клике на поле
-                // Это предотвращает показ подсказок после выбора адреса
-              },
-            ),
-            // Список подсказок
-            if (_showSuggestions && _suggestions.isNotEmpty)
-              Container(
-                margin: EdgeInsets.only(top: 4),
-                constraints: BoxConstraints(maxHeight: 200),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4))],
+        if (widget.showSearch) ...[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                readOnly: widget.readOnly,
+                enabled: !widget.readOnly,
+                decoration: InputDecoration(
+                  labelText: 'Местоположение *',
+                  hintText: 'Введите адрес',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xFFE5E7EB)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color(0xFFE5E7EB)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColors.primary100p, width: 2),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: widget.readOnly ? null : _buildSuffixIcon(),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  labelStyle: AppStyles.regular14s.copyWith(color: AppColors.textSecondary),
+                  hintStyle: AppStyles.regular14s.copyWith(color: AppColors.textSecondary),
                 ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _suggestions.length,
-                  itemBuilder: (context, index) {
-                    final suggestion = _suggestions[index];
-                    final displayName = suggestion['displayName'] as String? ?? '';
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        print('🔵 [LocationPickerWidget] GestureDetector onTap вызван для: ${suggestion['displayName']}');
-                        _selectSuggestion(suggestion);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on, color: AppColors.primary100p, size: 20.0),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(displayName.isNotEmpty ? displayName : 'Адрес не указан', style: AppStyles.regular14s, maxLines: 2, overflow: TextOverflow.ellipsis),
-                            ),
-                          ],
+                onTap: () {
+                  // Подсказки показываются только при изменении текста, не при клике на поле
+                  // Это предотвращает показ подсказок после выбора адреса
+                },
+              ),
+              // Список подсказок
+              if (!widget.readOnly && _showSuggestions && _suggestions.isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(top: 4),
+                  constraints: BoxConstraints(maxHeight: 200),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey.shade300),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 4)),
+                    ],
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _suggestions.length,
+                    itemBuilder: (context, index) {
+                      final suggestion = _suggestions[index];
+                      final displayName = suggestion['displayName'] as String? ?? '';
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          print(
+                            '🔵 [LocationPickerWidget] GestureDetector onTap вызван для: ${suggestion['displayName']}',
+                          );
+                          _selectSuggestion(suggestion);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_on, color: AppColors.primary100p, size: 20.0),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Text(
+                                  displayName.isNotEmpty ? displayName : 'Адрес не указан',
+                                  style: AppStyles.regular14s,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-          ],
-        ),
-        SizedBox(height: 16),
+            ],
+          ),
+          SizedBox(height: 16),
+        ],
         // Карта
         Container(
           height: 300,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: Color(0xFFE5E7EB)),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: FlutterMap(
-              key: kIsWeb ? ValueKey('flutter_map_${_markerKey}_${_selectedLocation?.latitude}_${_selectedLocation?.longitude}') : null,
+              key: kIsWeb
+                  ? ValueKey('flutter_map_${_markerKey}_${_selectedLocation?.latitude}_${_selectedLocation?.longitude}')
+                  : null,
               mapController: _mapController,
               options: MapOptions(
                 initialCenter: _selectedLocation ?? const LatLng(55.7558, 37.6173), // Москва по умолчанию
                 initialZoom: _selectedLocation != null ? 15.0 : 10.0,
                 minZoom: 3.0,
                 maxZoom: 18.0,
-                onTap: _onMapTap,
+                onTap: widget.readOnly ? null : _onMapTap,
                 onMapReady: () {
                   if (_selectedLocation != null && mounted) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -593,10 +645,16 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                 },
               ),
               children: [
-                TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.aviapoint.app', maxZoom: 19),
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.aviapoint.app',
+                  maxZoom: 19,
+                ),
                 if (_selectedLocation != null)
                   MarkerLayer(
-                    key: ValueKey('marker_layer_${_markerKey}_${_selectedLocation!.latitude}_${_selectedLocation!.longitude}'),
+                    key: ValueKey(
+                      'marker_layer_${_markerKey}_${_selectedLocation!.latitude}_${_selectedLocation!.longitude}',
+                    ),
                     markers: [
                       Marker(
                         key: ValueKey('marker_point_$_markerKey'),

@@ -336,6 +336,38 @@ class CreateFlightRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CreateJobResumeScreen]
+class CreateJobResumeRoute extends PageRouteInfo<void> {
+  const CreateJobResumeRoute({List<PageRouteInfo>? children})
+    : super(CreateJobResumeRoute.name, initialChildren: children);
+
+  static const String name = 'CreateJobResumeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreateJobResumeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [CreateJobVacancyScreen]
+class CreateJobVacancyRoute extends PageRouteInfo<void> {
+  const CreateJobVacancyRoute({List<PageRouteInfo>? children})
+    : super(CreateJobVacancyRoute.name, initialChildren: children);
+
+  static const String name = 'CreateJobVacancyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CreateJobVacancyScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [CreateNewsScreen]
 class CreateNewsRoute extends PageRouteInfo<void> {
   const CreateNewsRoute({List<PageRouteInfo>? children})
@@ -368,12 +400,65 @@ class CreatePartsMarketRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CreateVacancyResponseScreen]
+class CreateVacancyResponseRoute
+    extends PageRouteInfo<CreateVacancyResponseRouteArgs> {
+  CreateVacancyResponseRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CreateVacancyResponseRoute.name,
+         args: CreateVacancyResponseRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'CreateVacancyResponseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<CreateVacancyResponseRouteArgs>(
+        orElse: () =>
+            CreateVacancyResponseRouteArgs(id: pathParams.getInt('id')),
+      );
+      return CreateVacancyResponseScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class CreateVacancyResponseRouteArgs {
+  const CreateVacancyResponseRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'CreateVacancyResponseRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CreateVacancyResponseRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
 /// [DetailNewsScreen]
 class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
   DetailNewsRoute({
     Key? key,
     required int newsId,
-    required NewsEntity news,
+    NewsEntity? news,
     List<PageRouteInfo>? children,
   }) : super(
          DetailNewsRoute.name,
@@ -387,7 +472,10 @@ class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<DetailNewsRouteArgs>();
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<DetailNewsRouteArgs>(
+        orElse: () => DetailNewsRouteArgs(newsId: pathParams.getInt('id')),
+      );
       return DetailNewsScreen(
         key: args.key,
         newsId: args.newsId,
@@ -398,17 +486,13 @@ class DetailNewsRoute extends PageRouteInfo<DetailNewsRouteArgs> {
 }
 
 class DetailNewsRouteArgs {
-  const DetailNewsRouteArgs({
-    this.key,
-    required this.newsId,
-    required this.news,
-  });
+  const DetailNewsRouteArgs({this.key, required this.newsId, this.news});
 
   final Key? key;
 
   final int newsId;
 
-  final NewsEntity news;
+  final NewsEntity? news;
 
   @override
   String toString() {
@@ -530,8 +614,8 @@ class DetailStoryRoute extends PageRouteInfo<DetailStoryRouteArgs> {
   DetailStoryRoute({
     Key? key,
     required int idStory,
-    required List<StoryEntity> stories,
-    required int currentIndex,
+    List<StoryEntity> stories = const [],
+    int currentIndex = 0,
     List<PageRouteInfo>? children,
   }) : super(
          DetailStoryRoute.name,
@@ -550,7 +634,10 @@ class DetailStoryRoute extends PageRouteInfo<DetailStoryRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<DetailStoryRouteArgs>();
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<DetailStoryRouteArgs>(
+        orElse: () => DetailStoryRouteArgs(idStory: pathParams.getInt('id')),
+      );
       return DetailStoryScreen(
         key: args.key,
         idStory: args.idStory,
@@ -565,8 +652,8 @@ class DetailStoryRouteArgs {
   const DetailStoryRouteArgs({
     this.key,
     required this.idStory,
-    required this.stories,
-    required this.currentIndex,
+    this.stories = const [],
+    this.currentIndex = 0,
   });
 
   final Key? key;
@@ -832,6 +919,105 @@ class EditFlightRouteArgs {
 }
 
 /// generated route for
+/// [EditJobResumeScreen]
+class EditJobResumeRoute extends PageRouteInfo<EditJobResumeRouteArgs> {
+  EditJobResumeRoute({Key? key, required int id, List<PageRouteInfo>? children})
+    : super(
+        EditJobResumeRoute.name,
+        args: EditJobResumeRouteArgs(key: key, id: id),
+        rawPathParams: {'id': id},
+        initialChildren: children,
+      );
+
+  static const String name = 'EditJobResumeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditJobResumeRouteArgs>(
+        orElse: () => EditJobResumeRouteArgs(id: pathParams.getInt('id')),
+      );
+      return EditJobResumeScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class EditJobResumeRouteArgs {
+  const EditJobResumeRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'EditJobResumeRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditJobResumeRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
+/// [EditJobVacancyScreen]
+class EditJobVacancyRoute extends PageRouteInfo<EditJobVacancyRouteArgs> {
+  EditJobVacancyRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditJobVacancyRoute.name,
+         args: EditJobVacancyRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'EditJobVacancyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditJobVacancyRouteArgs>(
+        orElse: () => EditJobVacancyRouteArgs(id: pathParams.getInt('id')),
+      );
+      return EditJobVacancyScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class EditJobVacancyRouteArgs {
+  const EditJobVacancyRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'EditJobVacancyRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditJobVacancyRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
 /// [EditNewsScreen]
 class EditNewsRoute extends PageRouteInfo<EditNewsRouteArgs> {
   EditNewsRoute({Key? key, required int newsId, List<PageRouteInfo>? children})
@@ -1074,6 +1260,22 @@ class EmergencyLandingWithoutEnginePowerRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const EmergencyLandingWithoutEnginePowerScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [EmployerVacancyResponsesScreen]
+class EmployerVacancyResponsesRoute extends PageRouteInfo<void> {
+  const EmployerVacancyResponsesRoute({List<PageRouteInfo>? children})
+    : super(EmployerVacancyResponsesRoute.name, initialChildren: children);
+
+  static const String name = 'EmployerVacancyResponsesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EmployerVacancyResponsesScreen();
     },
   );
 }
@@ -1424,6 +1626,140 @@ class IcingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [JobResumeDetailScreen]
+class JobResumeDetailRoute extends PageRouteInfo<JobResumeDetailRouteArgs> {
+  JobResumeDetailRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         JobResumeDetailRoute.name,
+         args: JobResumeDetailRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'JobResumeDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<JobResumeDetailRouteArgs>(
+        orElse: () => JobResumeDetailRouteArgs(id: pathParams.getInt('id')),
+      );
+      return JobResumeDetailScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class JobResumeDetailRouteArgs {
+  const JobResumeDetailRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'JobResumeDetailRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! JobResumeDetailRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
+/// [JobVacancyDetailScreen]
+class JobVacancyDetailRoute extends PageRouteInfo<JobVacancyDetailRouteArgs> {
+  JobVacancyDetailRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         JobVacancyDetailRoute.name,
+         args: JobVacancyDetailRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'JobVacancyDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<JobVacancyDetailRouteArgs>(
+        orElse: () => JobVacancyDetailRouteArgs(id: pathParams.getInt('id')),
+      );
+      return JobVacancyDetailScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class JobVacancyDetailRouteArgs {
+  const JobVacancyDetailRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'JobVacancyDetailRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! JobVacancyDetailRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
+/// [JournalNavigationScreen]
+class JournalNavigationRoute extends PageRouteInfo<void> {
+  const JournalNavigationRoute({List<PageRouteInfo>? children})
+    : super(JournalNavigationRoute.name, initialChildren: children);
+
+  static const String name = 'JournalNavigationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const JournalNavigationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [JournalScreen]
+class JournalRoute extends PageRouteInfo<void> {
+  const JournalRoute({List<PageRouteInfo>? children})
+    : super(JournalRoute.name, initialChildren: children);
+
+  static const String name = 'JournalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const JournalScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [LearningNavigationScreen]
 class LearningNavigationRoute extends PageRouteInfo<void> {
   const LearningNavigationRoute({List<PageRouteInfo>? children})
@@ -1679,6 +2015,22 @@ class MarketRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ initialTab.hashCode;
+}
+
+/// generated route for
+/// [MyVacancyResponsesScreen]
+class MyVacancyResponsesRoute extends PageRouteInfo<void> {
+  const MyVacancyResponsesRoute({List<PageRouteInfo>? children})
+    : super(MyVacancyResponsesRoute.name, initialChildren: children);
+
+  static const String name = 'MyVacancyResponsesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MyVacancyResponsesScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -2410,6 +2762,57 @@ class UserNewsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [VacancyResponsesScreen]
+class VacancyResponsesRoute extends PageRouteInfo<VacancyResponsesRouteArgs> {
+  VacancyResponsesRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         VacancyResponsesRoute.name,
+         args: VacancyResponsesRouteArgs(key: key, id: id),
+         rawPathParams: {'id': id},
+         initialChildren: children,
+       );
+
+  static const String name = 'VacancyResponsesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<VacancyResponsesRouteArgs>(
+        orElse: () => VacancyResponsesRouteArgs(id: pathParams.getInt('id')),
+      );
+      return VacancyResponsesScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class VacancyResponsesRouteArgs {
+  const VacancyResponsesRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'VacancyResponsesRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! VacancyResponsesRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
 /// [VacuumSystemFailureScreen]
 class VacuumSystemFailureRoute extends PageRouteInfo<void> {
   const VacuumSystemFailureRoute({List<PageRouteInfo>? children})
@@ -2453,6 +2856,38 @@ class WingFireRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const WingFireScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [WorkNavigationScreen]
+class WorkNavigationRoute extends PageRouteInfo<void> {
+  const WorkNavigationRoute({List<PageRouteInfo>? children})
+    : super(WorkNavigationRoute.name, initialChildren: children);
+
+  static const String name = 'WorkNavigationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const WorkNavigationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [WorkScreen]
+class WorkRoute extends PageRouteInfo<void> {
+  const WorkRoute({List<PageRouteInfo>? children})
+    : super(WorkRoute.name, initialChildren: children);
+
+  static const String name = 'WorkRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const WorkScreen();
     },
   );
 }

@@ -10,12 +10,7 @@ class PartsManufacturerDto {
   final String? nameEn;
   final String? country;
 
-  PartsManufacturerDto({
-    required this.id,
-    required this.name,
-    this.nameEn,
-    this.country,
-  });
+  PartsManufacturerDto({required this.id, required this.name, this.nameEn, this.country});
 
   factory PartsManufacturerDto.fromJson(Map<String, dynamic> json) => _$PartsManufacturerDtoFromJson(json);
 }

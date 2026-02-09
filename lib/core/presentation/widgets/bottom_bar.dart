@@ -97,20 +97,24 @@ class BottomBarState extends State<BottomBar> {
                   activeColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFFE3F1FF) : Colors.transparent,
                   textColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFF0970FF) : Color(0xFF4B5767),
                   onPressed: () {
-                    widget.tabsRouter!.setActiveIndex(2);
+                    if (widget.tabsRouter!.activeIndex == 2) {
+                      AutoRouter.of(context).navigate(const OnTheWayNavigationRoute());
+                    } else {
+                      widget.tabsRouter!.setActiveIndex(2);
+                    }
                   },
                   isActive: widget.tabsRouter!.activeIndex == 2,
                 ),
                 const SizedBox(height: 8),
-                // Новости (индекс 3)
+                // Работа (индекс 3)
                 BottomBarItem(
-                  icon: Pictures.newsNavbar,
-                  text: 'Новости',
+                  iconData: Icons.currency_ruble,
+                  text: 'Работа',
                   activeColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFFE3F1FF) : Colors.transparent,
                   textColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFF0970FF) : Color(0xFF4B5767),
                   onPressed: () {
                     if (widget.tabsRouter!.activeIndex == 3) {
-                      AutoRouter.of(context).navigate(const NewsNavigationRoute());
+                      AutoRouter.of(context).navigate(const WorkNavigationRoute());
                     } else {
                       widget.tabsRouter!.setActiveIndex(3);
                     }
@@ -142,7 +146,7 @@ class BottomBarState extends State<BottomBar> {
                   textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
                   onPressed: () {
                     if (widget.tabsRouter!.activeIndex == 5) {
-                      AutoRouter.of(context).navigate(const BlogNavigationRoute());
+                      AutoRouter.of(context).navigate(const JournalNavigationRoute());
                     } else {
                       widget.tabsRouter!.setActiveIndex(5);
                     }
@@ -220,20 +224,24 @@ class BottomBarState extends State<BottomBar> {
               activeColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
-                widget.tabsRouter!.setActiveIndex(2);
+                if (widget.tabsRouter!.activeIndex == 2) {
+                  AutoRouter.of(context).navigate(const OnTheWayNavigationRoute());
+                } else {
+                  widget.tabsRouter!.setActiveIndex(2);
+                }
               },
               isActive: widget.tabsRouter!.activeIndex == 2,
             ),
             const SizedBox(height: 13),
-            // Новости (индекс 3)
+            // Работа (индекс 3)
             BottomBarItem(
-              icon: Pictures.newsNavbar,
-              text: 'Новости',
+              iconData: Icons.currency_ruble,
+              text: 'Работа',
               activeColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFFE3F1FF) : Colors.transparent,
               textColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 3) {
-                  AutoRouter.of(context).navigate(const NewsNavigationRoute());
+                  AutoRouter.of(context).navigate(const WorkNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(3);
                 }
@@ -265,7 +273,7 @@ class BottomBarState extends State<BottomBar> {
               textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
               onPressed: () {
                 if (widget.tabsRouter!.activeIndex == 5) {
-                  AutoRouter.of(context).navigate(const BlogNavigationRoute());
+                  AutoRouter.of(context).navigate(const JournalNavigationRoute());
                 } else {
                   widget.tabsRouter!.setActiveIndex(5);
                 }
@@ -292,7 +300,12 @@ class BottomBarState extends State<BottomBar> {
 
     return Container(
       width: kIsWeb ? double.infinity : MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom / 2, left: paddingLeft, right: paddingRight, top: paddingTop),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.viewPaddingOf(context).bottom / 2,
+        left: paddingLeft,
+        right: paddingRight,
+        top: paddingTop,
+      ),
       decoration: const BoxDecoration(color: Color(0xFFF9FDFF)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,19 +348,23 @@ class BottomBarState extends State<BottomBar> {
             activeColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFFE3F1FF) : Colors.transparent,
             textColor: widget.tabsRouter!.activeIndex == 2 ? Color(0xFF0970FF) : Color(0xFF4B5767),
             onPressed: () {
-              widget.tabsRouter!.setActiveIndex(2);
+              if (widget.tabsRouter!.activeIndex == 2) {
+                AutoRouter.of(context).navigate(const OnTheWayNavigationRoute());
+              } else {
+                widget.tabsRouter!.setActiveIndex(2);
+              }
             },
             isActive: widget.tabsRouter!.activeIndex == 2,
           ),
-          // Новости (индекс 3)
+          // Работа (индекс 3)
           BottomBarItem(
-            icon: Pictures.newsNavbar,
-            text: 'Новости',
+            iconData: Icons.currency_ruble,
+            text: 'Работа',
             activeColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFFE3F1FF) : Colors.transparent,
             textColor: widget.tabsRouter!.activeIndex == 3 ? Color(0xFF0970FF) : Color(0xFF4B5767),
             onPressed: () {
               if (widget.tabsRouter!.activeIndex == 3) {
-                AutoRouter.of(context).navigate(const NewsNavigationRoute());
+                AutoRouter.of(context).navigate(const WorkNavigationRoute());
               } else {
                 widget.tabsRouter!.setActiveIndex(3);
               }
@@ -377,7 +394,7 @@ class BottomBarState extends State<BottomBar> {
             textColor: widget.tabsRouter!.activeIndex == 5 ? Color(0xFF0970FF) : Color(0xFF4B5767),
             onPressed: () {
               if (widget.tabsRouter!.activeIndex == 5) {
-                AutoRouter.of(context).navigate(const BlogNavigationRoute());
+                AutoRouter.of(context).navigate(const JournalNavigationRoute());
               } else {
                 widget.tabsRouter!.setActiveIndex(5);
               }

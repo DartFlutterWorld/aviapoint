@@ -77,16 +77,34 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           verticalPadding: 8,
                           backgroundColor: const Color(0xFF0A6EFA),
                           title: 'Получить смс код',
-                          textStyle: AppStyles.bold16s.copyWith(color: (phone.isEmpty || phone.length < 15 ? true : false) ? Colors.white.withOpacity(0.5) : Colors.white),
+                          textStyle: AppStyles.bold16s.copyWith(
+                            color: (phone.isEmpty || phone.length < 15 ? true : false)
+                                ? Colors.white.withOpacity(0.5)
+                                : Colors.white,
+                          ),
                           borderColor: const Color(0xFF0A6EFA),
                           borderRadius: 46,
-                          boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xff0064D6).withOpacity(0.25),
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0.0, 7),
+                            ),
+                          ],
                           onPressed: (phone.isEmpty || phone.length < 15 ? true : false)
                               ? null
                               : () {
-                                  BlocProvider.of<SmsBloc>(
-                                    context,
-                                  ).add(GetSmsEvent(phone: ('+7$phone').replaceAll(r'-', '').replaceAll(r'(', '').replaceAll(r')', '').replaceAll(r'(', '').replaceAll(r' ', '')));
+                                  BlocProvider.of<SmsBloc>(context).add(
+                                    GetSmsEvent(
+                                      phone: ('+7$phone')
+                                          .replaceAll(r'-', '')
+                                          .replaceAll(r'(', '')
+                                          .replaceAll(r')', '')
+                                          .replaceAll(r'(', '')
+                                          .replaceAll(r' ', ''),
+                                    ),
+                                  );
                                 },
                         ),
                       ],
@@ -159,16 +177,35 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           verticalPadding: 8,
                           backgroundColor: const Color(0xFF0A6EFA),
                           title: 'Отправить',
-                          textStyle: AppStyles.bold16s.copyWith(color: (phone.isEmpty || phone.length < 15 ? true : false) ? Colors.white.withOpacity(0.5) : Colors.white),
+                          textStyle: AppStyles.bold16s.copyWith(
+                            color: (phone.isEmpty || phone.length < 15 ? true : false)
+                                ? Colors.white.withOpacity(0.5)
+                                : Colors.white,
+                          ),
                           borderColor: const Color(0xFF0A6EFA),
                           borderRadius: 46,
-                          boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xff0064D6).withOpacity(0.25),
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0.0, 7),
+                            ),
+                          ],
                           onPressed: (phone.isEmpty || phone.length < 15 ? true : false || code.length != 4)
                               ? null
                               : () {
-                                  BlocProvider.of<AuthBloc>(
-                                    context,
-                                  ).add(GetAuthEvent(phone: ('+7$phone').replaceAll(r'-', '').replaceAll(r'(', '').replaceAll(r')', '').replaceAll(r'(', '').replaceAll(r' ', ''), sms: code));
+                                  BlocProvider.of<AuthBloc>(context).add(
+                                    GetAuthEvent(
+                                      phone: ('+7$phone')
+                                          .replaceAll(r'-', '')
+                                          .replaceAll(r'(', '')
+                                          .replaceAll(r')', '')
+                                          .replaceAll(r'(', '')
+                                          .replaceAll(r' ', ''),
+                                      sms: code,
+                                    ),
+                                  );
                                 },
                         ),
                       ],

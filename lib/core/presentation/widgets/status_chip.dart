@@ -13,7 +13,16 @@ class StatusChip extends StatelessWidget {
   final TextStyle? textStyle;
   final double? height;
 
-  const StatusChip({super.key, required this.text, required this.backgroundColor, this.textColor = Colors.white, this.padding, this.borderRadius = 12, this.textStyle, this.height});
+  const StatusChip({
+    super.key,
+    required this.text,
+    required this.backgroundColor,
+    this.textColor = Colors.white,
+    this.padding,
+    this.borderRadius = 12,
+    this.textStyle,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {

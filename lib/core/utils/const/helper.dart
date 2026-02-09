@@ -47,7 +47,13 @@ void logOut(BuildContext context) async {
   }
 }
 
-final emptyQuestion = QuestionWithAnswersEntity(answers: List.empty(), questionId: 0, questionText: '', categoryTitle: '', categoryId: 0);
+final emptyQuestion = QuestionWithAnswersEntity(
+  answers: List.empty(),
+  questionId: 0,
+  questionText: '',
+  categoryTitle: '',
+  categoryId: 0,
+);
 
 enum TestMode { training, standart }
 
@@ -118,6 +124,42 @@ String formatPhone(String phone) {
   } else {
     return '+7 $cleanDigits';
   }
+}
+
+/// Из номера с API возвращает строку для поля с маской (###) ###-##-## (только 10 цифр).
+String phoneToMaskedInput(String? apiPhone) {
+  if (apiPhone == null || apiPhone.isEmpty) return '';
+  String digits = apiPhone.replaceAll(RegExp(r'[^\d]'), '');
+  if (digits.startsWith('8') && digits.length >= 11) digits = digits.substring(1);
+  if (digits.startsWith('7') && digits.length >= 11) digits = digits.substring(1);
+  if (digits.length < 10) return digits;
+  final d = digits.length > 10 ? digits.substring(0, 10) : digits;
+  return '(${d.substring(0, 3)}) ${d.substring(3, 6)}-${d.substring(6, 8)}-${d.substring(8, 10)}';
+}
+
+/// Из значения поля с маской (###) ###-##-## возвращает номер для API (+7XXXXXXXXXX).
+String phoneFromMaskedInput(String masked) {
+  final digits = masked.replaceAll(RegExp(r'[^\d]'), '');
+  if (digits.isEmpty) return '';
+  if (digits.length >= 10) {
+    final ten = digits.length > 10 ? digits.substring(0, 10) : digits;
+    return '+7$ten';
+  }
+  return '+7$digits';
+}
+
+/// Форматирует дату из API (yyyy-MM-dd или ISO) в вид дд.мм.гггг
+String formatDateToDisplay(String? dateStr) {
+  if (dateStr == null || dateStr.isEmpty) return '';
+  final d = DateTime.tryParse(dateStr);
+  if (d == null) return dateStr;
+  return '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year}';
+}
+
+/// Форматирует год в вид дд.мм.гггг (01.01.yyyy) для единообразия вывода дат
+String formatYearToDisplay(int? year) {
+  if (year == null) return '';
+  return '01.01.$year';
 }
 
 /// Форматирует цену с разделителями тысяч без копеек

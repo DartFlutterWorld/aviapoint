@@ -38,6 +38,7 @@ class AppStyles {
   static TextStyle get medium8s => TextStyle(fontWeight: FontWeight.w500, fontSize: _scaleFontSize(8), height: 1);
   static TextStyle get medium10s => TextStyle(fontWeight: FontWeight.w500, fontSize: _scaleFontSize(10), height: 1);
   static TextStyle get medium14s => TextStyle(fontWeight: FontWeight.w500, fontSize: _scaleFontSize(14), height: 1);
+  static TextStyle get bold24s => TextStyle(fontWeight: FontWeight.w700, fontSize: _scaleFontSize(24), height: 1);
   static TextStyle get bold20s => TextStyle(fontWeight: FontWeight.w700, fontSize: _scaleFontSize(20), height: 1);
   static TextStyle get bold17s => TextStyle(fontWeight: FontWeight.w700, fontSize: _scaleFontSize(17), height: 1);
   static TextStyle get bold18s => TextStyle(fontWeight: FontWeight.w700, fontSize: _scaleFontSize(18), height: 1);
@@ -51,6 +52,7 @@ class AppStyles {
   static TextStyle get regular10s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(10), height: 1);
   static TextStyle get regular13s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(13), height: 1);
   static TextStyle get regular14s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(14), height: 1);
+  static TextStyle get regular18s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(18), height: 1);
   static TextStyle get mediumItalic13s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(13), height: 1, fontStyle: FontStyle.italic);
   static TextStyle get mediumItalic12s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(12), height: 1, fontStyle: FontStyle.italic);
   static TextStyle get light10s => TextStyle(fontWeight: FontWeight.w400, fontSize: _scaleFontSize(10), height: 1);

@@ -19,10 +19,7 @@ class LowVoltsAnnunciatorComesOnOrDoesNotGoOffAtHigherRpmScreen extends Stateles
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'low_volts_annunciator'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'low_volts_annunciator'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

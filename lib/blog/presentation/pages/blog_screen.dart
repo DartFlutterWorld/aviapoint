@@ -7,7 +7,6 @@ import 'package:aviapoint/blog/presentation/bloc/blog_categories_bloc.dart';
 import 'package:aviapoint/blog/presentation/widgets/big_blog_article_widget.dart';
 import 'package:aviapoint/blog/presentation/widgets/blog_category_chip.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
-import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
 import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/floating_action_button_widget.dart';
@@ -134,14 +133,20 @@ class _BlogScreenState extends State<BlogScreen> {
       if (userId == null) {
         // Показываем индикатор загрузки
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Загрузка данных профиля...'), duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Загрузка данных профиля...'), duration: Duration(seconds: 2)));
         }
 
         // Ждем загрузки профиля (максимум 5 секунд)
         try {
           await profileBloc.stream
               .firstWhere((state) {
-                return state.maybeWhen(success: (_) => true, error: (_, __, ___, ____, _____) => true, orElse: () => false);
+                return state.maybeWhen(
+                  success: (_) => true,
+                  error: (_, __, ___, ____, _____) => true,
+                  orElse: () => false,
+                );
               })
               .timeout(const Duration(seconds: 5));
 
@@ -166,7 +171,9 @@ class _BlogScreenState extends State<BlogScreen> {
         });
         _applyFilters();
       } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось загрузить данные профиля'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Не удалось загрузить данные профиля'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -224,14 +231,6 @@ class _BlogScreenState extends State<BlogScreen> {
             );
           },
           child: Scaffold(
-            appBar: CustomAppBar(
-              title: 'АвиаЖурнал',
-              withBack: false,
-              withProfile: true,
-              actions: isAuthenticated
-                  ? [IconButton(padding: EdgeInsets.all(0), icon: Icon(Icons.add), onPressed: () => AutoRouter.of(context).push(const CreateBlogArticleRoute()), tooltip: 'Сделать запись')]
-                  : const [],
-            ),
             backgroundColor: AppColors.background,
             floatingActionButton: FloatingActionButtonWidget(
               title: 'Сделать\nзапись',
@@ -268,41 +267,38 @@ class _BlogScreenState extends State<BlogScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
-                        // Поле поиска
-                        SizedBox(
-                          // height: 36,
-                          child: TextField(
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Поиск по записям...',
-                              prefixIcon: Icon(Icons.search, color: const Color(0xFF9CA5AF), size: 18.0),
-                              suffixIcon: _searchController.text.isNotEmpty
-                                  ? IconButton(
-                                      icon: Icon(Icons.clear, color: const Color(0xFF9CA5AF), size: 18.0),
-                                      onPressed: _clearSearch,
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(),
-                                    )
-                                  : null,
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: const Color(0xFFD9E6F8)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: const Color(0xFF0A6EFA), width: 2),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 18),
-                              isDense: true,
+                        // Поле поиска (по высоте как поиск по самолёту в маркете)
+                        TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Поиск по записям...',
+                            prefixIcon: const Icon(Icons.search, color: Color(0xFF9CA5AF), size: 18.0),
+                            suffixIcon: _searchController.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear, color: Color(0xFF9CA5AF), size: 18.0),
+                                    onPressed: _clearSearch,
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                  )
+                                : null,
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: Color(0xFFD9E6F8)),
                             ),
-                            style: AppStyles.regular12s,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: Color(0xFFD9E6F8)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: Color(0xFF0A6EFA), width: 2),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            isDense: true,
                           ),
+                          style: AppStyles.regular12s,
                         ),
                         SizedBox(height: 8),
                         // Фильтр по самолётам и кнопка "Мои статьи"
@@ -325,7 +321,11 @@ class _BlogScreenState extends State<BlogScreen> {
                                       Expanded(
                                         child: Text(
                                           _selectedAircraftModelName ?? 'Фильтр по самолёту',
-                                          style: AppStyles.regular12s.copyWith(color: _selectedAircraftModelName != null ? const Color(0xFF374151) : const Color(0xFF9CA5AF)),
+                                          style: AppStyles.regular12s.copyWith(
+                                            color: _selectedAircraftModelName != null
+                                                ? const Color(0xFF374151)
+                                                : const Color(0xFF9CA5AF),
+                                          ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -353,13 +353,24 @@ class _BlogScreenState extends State<BlogScreen> {
                               SizedBox(width: 8),
                               OutlinedButton.icon(
                                 onPressed: _toggleMyArticles,
-                                icon: Icon(_showMyArticles ? Icons.check_circle : Icons.person_outline, size: 16.0, color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA)),
-                                label: Text('Мои', style: AppStyles.bold16s.copyWith(color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA))),
+                                icon: Icon(
+                                  _showMyArticles ? Icons.check_circle : Icons.person_outline,
+                                  size: 16.0,
+                                  color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA),
+                                ),
+                                label: Text(
+                                  'Мои',
+                                  style: AppStyles.bold16s.copyWith(
+                                    color: _showMyArticles ? Colors.white : const Color(0xFF0A6EFA),
+                                  ),
+                                ),
                                 style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  minimumSize: Size(0, 0),
                                   backgroundColor: _showMyArticles ? const Color(0xFF0A6EFA) : Colors.white,
-                                  side: BorderSide(color: _showMyArticles ? const Color(0xFF0A6EFA) : const Color(0xFF0A6EFA)),
+                                  side: BorderSide(
+                                    color: _showMyArticles ? const Color(0xFF0A6EFA) : const Color(0xFF0A6EFA),
+                                  ),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 ),
                               ),
@@ -379,8 +390,12 @@ class _BlogScreenState extends State<BlogScreen> {
                           context.read<BlogCategoriesBloc>().add(const GetBlogCategoriesEvent());
                         },
                       ),
-                      success: (categories) =>
-                          _CategoryList(categories: categories, selectedCategoryId: _selectedCategoryId, onCategorySelected: _onCategorySelected, onCategoryDeselected: _onCategoryDeselected),
+                      success: (categories) => _CategoryList(
+                        categories: categories,
+                        selectedCategoryId: _selectedCategoryId,
+                        onCategorySelected: _onCategorySelected,
+                        onCategoryDeselected: _onCategoryDeselected,
+                      ),
                       orElse: () => const SizedBox(),
                     ),
                   ),
@@ -391,14 +406,27 @@ class _BlogScreenState extends State<BlogScreen> {
                       error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
                         textError: errorForUser,
                         repeat: () {
-                          final searchQuery = _searchController.text.trim().isEmpty ? null : _searchController.text.trim();
+                          final searchQuery = _searchController.text.trim().isEmpty
+                              ? null
+                              : _searchController.text.trim();
                           context.read<BlogArticlesBloc>().add(
-                            GetBlogArticlesEvent(categoryId: _selectedCategoryId, aircraftModelId: _selectedAircraftModelId, status: 'published', search: searchQuery),
+                            GetBlogArticlesEvent(
+                              categoryId: _selectedCategoryId,
+                              aircraftModelId: _selectedAircraftModelId,
+                              status: 'published',
+                              search: searchQuery,
+                            ),
                           );
                         },
                       ),
-                      loadingMore: (articles) => _ArticleList(articles: articles, isLoadingMore: true, showStatus: _showMyArticles),
-                      success: (articles, hasMore) => _ArticleList(articles: articles, isLoadingMore: false, hasMore: hasMore, showStatus: _showMyArticles),
+                      loadingMore: (articles) =>
+                          _ArticleList(articles: articles, isLoadingMore: true, showStatus: _showMyArticles),
+                      success: (articles, hasMore) => _ArticleList(
+                        articles: articles,
+                        isLoadingMore: false,
+                        hasMore: hasMore,
+                        showStatus: _showMyArticles,
+                      ),
                       orElse: () => const SizedBox(),
                     ),
                   ),
@@ -418,7 +446,12 @@ class _CategoryList extends StatefulWidget {
   final void Function(BlogCategoryEntity) onCategorySelected;
   final VoidCallback onCategoryDeselected;
 
-  const _CategoryList({required this.categories, required this.selectedCategoryId, required this.onCategorySelected, required this.onCategoryDeselected});
+  const _CategoryList({
+    required this.categories,
+    required this.selectedCategoryId,
+    required this.onCategorySelected,
+    required this.onCategoryDeselected,
+  });
 
   @override
   State<_CategoryList> createState() => _CategoryListState();
@@ -452,7 +485,12 @@ class _CategoryListState extends State<_CategoryList> {
         },
         onPanUpdate: (details) {
           if (_scrollController.hasClients) {
-            _scrollController.position.moveTo((_scrollController.position.pixels - details.delta.dx).clamp(0.0, _scrollController.position.maxScrollExtent));
+            _scrollController.position.moveTo(
+              (_scrollController.position.pixels - details.delta.dx).clamp(
+                0.0,
+                _scrollController.position.maxScrollExtent,
+              ),
+            );
           }
         },
         onPanEnd: (_) {
@@ -496,12 +534,22 @@ class _ArticleList extends StatelessWidget {
   final bool hasMore;
   final bool showStatus;
 
-  const _ArticleList({required this.articles, this.isLoadingMore = false, this.hasMore = false, this.showStatus = false});
+  const _ArticleList({
+    required this.articles,
+    this.isLoadingMore = false,
+    this.hasMore = false,
+    this.showStatus = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     // Сортируем статьи: сначала по опубликованной дате, затем по дате создания (новые сверху)
-    final sortedArticles = [...articles]..sort((a, b) => _parseBlogDateTime(b.publishedAt ?? b.createdAt).compareTo(_parseBlogDateTime(a.publishedAt ?? a.createdAt)));
+    final sortedArticles = [...articles]
+      ..sort(
+        (a, b) => _parseBlogDateTime(
+          b.publishedAt ?? b.createdAt,
+        ).compareTo(_parseBlogDateTime(a.publishedAt ?? a.createdAt)),
+      );
 
     if (sortedArticles.isEmpty) {
       return Padding(

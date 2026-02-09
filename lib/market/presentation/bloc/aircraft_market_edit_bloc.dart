@@ -60,8 +60,8 @@ class AircraftMarketEditBloc extends Bloc<AircraftMarketEditEvent, AircraftMarke
   final MarketRepository _repository;
 
   AircraftMarketEditBloc({required MarketRepository repository})
-      : _repository = repository,
-        super(const AircraftMarketEditState.initial()) {
+    : _repository = repository,
+      super(const AircraftMarketEditState.initial()) {
     on<GetAircraftMarketEditEvent>(_onGetProduct);
     on<UpdateAircraftMarketEditEvent>(_onUpdateProduct);
     on<DeleteAircraftMarketEditEvent>(_onDeleteProduct);
@@ -130,7 +130,10 @@ class AircraftMarketEditBloc extends Bloc<AircraftMarketEditEvent, AircraftMarke
     );
   }
 
-  Future<void> _onUnpublishProduct(UnpublishAircraftMarketEditEvent event, Emitter<AircraftMarketEditState> emit) async {
+  Future<void> _onUnpublishProduct(
+    UnpublishAircraftMarketEditEvent event,
+    Emitter<AircraftMarketEditState> emit,
+  ) async {
     emit(const AircraftMarketEditState.unpublishing());
     final result = await _repository.unpublishProduct(event.productId);
     result.fold(

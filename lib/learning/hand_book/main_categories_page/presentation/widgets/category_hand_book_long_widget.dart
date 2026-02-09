@@ -12,7 +12,15 @@ class CategoryHandBookLongWidget extends StatelessWidget {
   final String background;
   final double imageHeight;
   final VoidCallback onTap;
-  const CategoryHandBookLongWidget({super.key, required this.title, required this.subTitle, required this.picturePlane, required this.background, required this.imageHeight, required this.onTap});
+  const CategoryHandBookLongWidget({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.picturePlane,
+    required this.background,
+    required this.imageHeight,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,9 @@ class CategoryHandBookLongWidget extends StatelessWidget {
             height: 138,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0))],
+              boxShadow: [
+                BoxShadow(color: Color(0xFF045EC5).withOpacity(0.08), blurRadius: 9.3, offset: Offset(0.0, 4.0)),
+              ],
               image: DecorationImage(fit: BoxFit.fill, image: AssetImage(background)),
             ),
             child: Column(
@@ -49,7 +59,10 @@ class CategoryHandBookLongWidget extends StatelessWidget {
                           SizedBox(height: 5),
                           Padding(
                             padding: const EdgeInsets.only(right: 13),
-                            child: Text(subTitle, style: AppStyles.regular13s.copyWith(color: Color(0xFF4B5767), height: 1)),
+                            child: Text(
+                              subTitle,
+                              style: AppStyles.regular13s.copyWith(color: Color(0xFF4B5767), height: 1),
+                            ),
                           ),
                         ],
                       ),

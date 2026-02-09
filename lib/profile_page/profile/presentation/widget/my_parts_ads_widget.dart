@@ -64,12 +64,19 @@ class _MyPartsAdsWidgetState extends State<MyPartsAdsWidget> {
                   child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                 ),
                 loadingMore: (parts) => _buildPartsList(context, parts, isLoading: true),
-                error: (String? errorFromApi, String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage) => Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: const Color(0xFFEF4444))),
-                  ),
-                ),
+                error:
+                    (
+                      String? errorFromApi,
+                      String errorForUser,
+                      String? statusCode,
+                      StackTrace? stackTrace,
+                      String? responseMessage,
+                    ) => Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: const Color(0xFFEF4444))),
+                      ),
+                    ),
                 success: (parts, hasMore) => _buildPartsList(context, parts, isLoading: false),
                 creatingPart: () => Center(
                   child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
@@ -182,7 +189,10 @@ class _MyPartsAdsWidgetState extends State<MyPartsAdsWidget> {
         value: localBloc,
         child: AlertDialog(
           title: Text('Удалить объявление?', style: AppStyles.bold16s),
-          content: Text('Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.', style: AppStyles.regular14s),
+          content: Text(
+            'Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.',
+            style: AppStyles.regular14s,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),

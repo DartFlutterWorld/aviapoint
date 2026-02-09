@@ -19,10 +19,8 @@ class EmergencyLandingWithEnginePowerScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'emergency_landing_with_engine_power'.tr(),
-            ),
+            onPressed: () =>
+                LearningShareHelper.shareLearningPage(context, title: 'emergency_landing_with_engine_power'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

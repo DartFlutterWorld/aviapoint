@@ -7,10 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Bottom sheet для отображения контактов пилота после подтверждения бронирования
-void showPilotContactsBottomSheet({
-  required BuildContext context,
-  required BookingEntity booking,
-}) {
+void showPilotContactsBottomSheet({required BuildContext context, required BookingEntity booking}) {
   showUniversalBottomSheet<void>(
     context: context,
     title: 'Контакты пилота',
@@ -95,7 +92,8 @@ class _PilotContactsContent extends StatelessWidget {
           ],
           // Telegram
           if (booking.pilotTelegram != null && booking.pilotTelegram!.isNotEmpty) ...[
-            if ((booking.pilotPhone != null && booking.pilotPhone!.isNotEmpty) || (booking.pilotEmail != null && booking.pilotEmail!.isNotEmpty))
+            if ((booking.pilotPhone != null && booking.pilotPhone!.isNotEmpty) ||
+                (booking.pilotEmail != null && booking.pilotEmail!.isNotEmpty))
               SizedBox(height: 12),
             _buildContactRow(
               context: context,
@@ -148,10 +146,7 @@ class _PilotContactsContent extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
+              decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
               child: Icon(icon, size: 24, color: color),
             ),
             SizedBox(width: 16),
@@ -178,9 +173,9 @@ class _PilotContactsContent extends StatelessWidget {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -191,9 +186,9 @@ class _PilotContactsContent extends StatelessWidget {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть почтовый клиент'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть почтовый клиент'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -205,9 +200,9 @@ class _PilotContactsContent extends StatelessWidget {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -219,9 +214,9 @@ class _PilotContactsContent extends StatelessWidget {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
       }
     }
   }

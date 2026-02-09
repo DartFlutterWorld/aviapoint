@@ -96,9 +96,13 @@ class PilotBookingCard extends StatelessWidget {
                     // Аватар пассажира
                     Builder(
                       builder: (context) {
-                        final imageUrl = booking.passengerAvatarUrl != null && booking.passengerAvatarUrl!.isNotEmpty ? getImageUrl(booking.passengerAvatarUrl!) : null;
+                        final imageUrl = booking.passengerAvatarUrl != null && booking.passengerAvatarUrl!.isNotEmpty
+                            ? getImageUrl(booking.passengerAvatarUrl!)
+                            : null;
                         return GestureDetector(
-                          onTap: imageUrl != null && imageUrl.isNotEmpty ? () => _showPhotoViewer(context, imageUrl) : null,
+                          onTap: imageUrl != null && imageUrl.isNotEmpty
+                              ? () => _showPhotoViewer(context, imageUrl)
+                              : null,
                           child: ClipOval(
                             child: imageUrl != null && imageUrl.isNotEmpty
                                 ? NetworkImageWidget(
@@ -125,7 +129,10 @@ class PilotBookingCard extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(booking.passengerFullName ?? 'Пассажир', style: AppStyles.bold12s.copyWith(color: Color(0xFF374151))),
+                                Text(
+                                  booking.passengerFullName ?? 'Пассажир',
+                                  style: AppStyles.bold12s.copyWith(color: Color(0xFF374151)),
+                                ),
                                 if (booking.passengerAverageRating != null && booking.passengerAverageRating! > 0) ...[
                                   SizedBox(height: 2),
                                   RatingStarsWidget(rating: booking.passengerAverageRating!, fontSize: 10.0),
@@ -136,7 +143,10 @@ class PilotBookingCard extends StatelessWidget {
                                     },
                                     child: Text(
                                       'Отзывы',
-                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF0A6EFA), decoration: TextDecoration.underline),
+                                      style: AppStyles.regular12s.copyWith(
+                                        color: Color(0xFF0A6EFA),
+                                        decoration: TextDecoration.underline,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -153,7 +163,10 @@ class PilotBookingCard extends StatelessWidget {
                                   children: [
                                     Icon(Icons.phone, size: 14, color: Color(0xFF9CA5AF)),
                                     SizedBox(width: 4),
-                                    Text(formatPhone(booking.passengerPhone!), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                    Text(
+                                      formatPhone(booking.passengerPhone!),
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -164,7 +177,10 @@ class PilotBookingCard extends StatelessWidget {
                                   children: [
                                     Icon(Icons.email, size: 14, color: Color(0xFF9CA5AF)),
                                     SizedBox(width: 4),
-                                    Text(booking.passengerEmail!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                    Text(
+                                      booking.passengerEmail!,
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -175,7 +191,10 @@ class PilotBookingCard extends StatelessWidget {
                                   children: [
                                     Icon(Icons.telegram, size: 14, color: Color(0xFF9CA5AF)),
                                     SizedBox(width: 4),
-                                    Text(booking.passengerTelegram!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                    Text(
+                                      booking.passengerTelegram!,
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -186,7 +205,10 @@ class PilotBookingCard extends StatelessWidget {
                                   children: [
                                     Icon(Icons.chat, size: 14, color: Color(0xFF9CA5AF)),
                                     SizedBox(width: 4),
-                                    Text(booking.passengerMax!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                    Text(
+                                      booking.passengerMax!,
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -267,7 +289,10 @@ class PilotBookingCard extends StatelessWidget {
             children: [
               Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
               SizedBox(width: 6),
-              Text('${priceFormat.format(booking.totalPrice)}', style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981))),
+              Text(
+                '${priceFormat.format(booking.totalPrice)}',
+                style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981)),
+              ),
             ],
           ),
           // Кнопки действий для пилота
@@ -278,7 +303,10 @@ class PilotBookingCard extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: onConfirm,
-                    style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF10B981), padding: EdgeInsets.symmetric(vertical: 8)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF10B981),
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                    ),
                     child: Text('Подтвердить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                   ),
                 ),
@@ -356,7 +384,10 @@ class PilotBookingCard extends StatelessWidget {
                               children: [
                                 Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                 SizedBox(height: 16),
-                                Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                Text(
+                                  'Не удалось загрузить изображение',
+                                  style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                ),
                               ],
                             ),
                           ),
@@ -376,7 +407,11 @@ class PilotBookingCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,7 +425,10 @@ class PilotBookingCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.share, color: Colors.white, size: 24),
                                   onPressed: () => _sharePhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Поделиться',
                                 ),
                                 SizedBox(width: 8),
@@ -398,7 +436,10 @@ class PilotBookingCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.download, color: Colors.white, size: 24),
                                   onPressed: () => _downloadPhoto(dialogContext, imageUrl),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                   tooltip: 'Скачать',
                                 ),
                                 SizedBox(width: 8),
@@ -406,7 +447,10 @@ class PilotBookingCard extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 28),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -431,7 +475,13 @@ class PilotBookingCard extends StatelessWidget {
       await Share.shareUri(Uri.parse(photoUrl));
     } catch (e) {
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -443,14 +493,26 @@ class PilotBookingCard extends StatelessWidget {
     try {
       if (kIsWeb) {
         // Для веб - показываем подсказку
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Правый клик по изображению → "Сохранить как"'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
       // Для мобильных платформ - скачиваем файл
       final status = await Permission.storage.request();
       if (!status.isGranted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Необходимо разрешение на сохранение файлов'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
@@ -475,21 +537,37 @@ class PilotBookingCard extends StatelessWidget {
       await dio.download(photoUrl, filePath);
 
       // Для Android используем Downloads, для iOS - Photos
-      final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+      final directory = Platform.isAndroid
+          ? await getExternalStorageDirectory()
+          : await getApplicationDocumentsDirectory();
 
       if (directory != null) {
-        final downloadPath = Platform.isAndroid ? '${directory.path}/Download/$fileName' : '${directory.path}/$fileName';
+        final downloadPath = Platform.isAndroid
+            ? '${directory.path}/Download/$fileName'
+            : '${directory.path}/$fileName';
 
         final file = File(filePath);
         await file.copy(downloadPath);
 
         scaffoldMessenger.hideCurrentSnackBar();
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Фотография сохранена'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     } catch (e) {
       scaffoldMessenger.hideCurrentSnackBar();
       if (context.mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -534,9 +612,9 @@ class PilotBookingCard extends StatelessWidget {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -547,9 +625,9 @@ class PilotBookingCard extends StatelessWidget {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть почтовый клиент'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть почтовый клиент'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -561,9 +639,9 @@ class PilotBookingCard extends StatelessWidget {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -575,9 +653,9 @@ class PilotBookingCard extends StatelessWidget {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
       }
     }
   }

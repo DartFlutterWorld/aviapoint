@@ -45,6 +45,11 @@ import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/aircraft_market_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/parts_market_bloc.dart';
 import 'package:aviapoint/market/domain/repositories/market_repository.dart';
+import 'package:aviapoint/work/domain/repositories/jobs_repository.dart';
+import 'package:aviapoint/work/presentation/bloc/jobs_resumes_bloc.dart';
+import 'package:aviapoint/work/presentation/bloc/job_vacancy_favorite_toggle_bloc.dart';
+import 'package:aviapoint/work/presentation/bloc/job_vacancy_favorites_bloc.dart';
+import 'package:aviapoint/work/presentation/bloc/jobs_vacancies_bloc.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
@@ -131,28 +136,51 @@ class _AppState extends State<App> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppState>(create: (context) => getIt<AppState>()),
-        BlocProvider<VideoForStudentsBloc>(create: (context) => VideoForStudentsBloc(videoForStudentsRepository: getIt<VideoForStudentsRepository>())),
-        BlocProvider<HandBookMainCategoriesBloc>(create: (context) => HandBookMainCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
-        BlocProvider<PreflightInspectionCategoriesBloc>(create: (context) => PreflightInspectionCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<VideoForStudentsBloc>(
+          create: (context) => VideoForStudentsBloc(videoForStudentsRepository: getIt<VideoForStudentsRepository>()),
+        ),
+        BlocProvider<HandBookMainCategoriesBloc>(
+          create: (context) => HandBookMainCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
+        BlocProvider<PreflightInspectionCategoriesBloc>(
+          create: (context) => PreflightInspectionCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<PreflightInspectionCheckListByCategoryBloc>(
-          create: (context) => PreflightInspectionCheckListByCategoryBloc(handBookRepository: getIt<HandBookRepository>(), preflightCheckedCubit: getIt<PreflightCheckedCubit>()),
+          create: (context) => PreflightInspectionCheckListByCategoryBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+            preflightCheckedCubit: getIt<PreflightCheckedCubit>(),
+          ),
           lazy: false,
         ),
-        BlocProvider<PreflightInspectionCheckListBloc>(create: (context) => PreflightInspectionCheckListBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<PreflightInspectionCheckListBloc>(
+          create: (context) => PreflightInspectionCheckListBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<PreflightCheckedCubit>(create: (context) => getIt<PreflightCheckedCubit>()),
-        BlocProvider<NormalCategoriesBloc>(create: (context) => NormalCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<NormalCategoriesBloc>(
+          create: (context) => NormalCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<NormalCheckListByCategoryBloc>(
-          create: (context) => NormalCheckListByCategoryBloc(handBookRepository: getIt<HandBookRepository>(), normalCheckedCubit: getIt<NormalCheckedCubit>()),
+          create: (context) => NormalCheckListByCategoryBloc(
+            handBookRepository: getIt<HandBookRepository>(),
+            normalCheckedCubit: getIt<NormalCheckedCubit>(),
+          ),
           lazy: false,
         ),
-        BlocProvider<NormalCheckListBloc>(create: (context) => NormalCheckListBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<NormalCheckListBloc>(
+          create: (context) => NormalCheckListBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<NormalCheckedCubit>(create: (context) => getIt<NormalCheckedCubit>()),
-        BlocProvider<EmergencyCategoriesBloc>(create: (context) => EmergencyCategoriesBloc(handBookRepository: getIt<HandBookRepository>())),
+        BlocProvider<EmergencyCategoriesBloc>(
+          create: (context) => EmergencyCategoriesBloc(handBookRepository: getIt<HandBookRepository>()),
+        ),
         BlocProvider<SmsBloc>(create: (context) => SmsBloc(authRepository: getIt<AuthRepository>())),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository: getIt<AuthRepository>(), appState: getIt<AppState>()),
         ),
-        BlocProvider<CacheManagerBloc>(create: (context) => CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent())),
+        BlocProvider<CacheManagerBloc>(
+          create: (context) =>
+              CacheManagerBloc(storyRepository: getIt<StoryRepository>())..add(const GetStoriesCacheManagerEvent()),
+        ),
         BlocProvider<ProfileBloc>(
           create: (context) => ProfileBloc(profileRepository: getIt<ProfileRepository>(), initState: getIt<AppState>()),
         ),
@@ -162,20 +190,52 @@ class _AppState extends State<App> {
         BlocProvider<NewsBloc>(create: (context) => NewsBloc(newsRepository: getIt<NewsRepository>())),
         BlocProvider<CategoryNewsBloc>(create: (context) => CategoryNewsBloc(newsRepository: getIt<NewsRepository>())),
         BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
-        BlocProvider<BlogCategoriesBloc>(create: (context) => BlogCategoriesBloc(blogRepository: getIt<BlogRepository>())),
+        BlocProvider<BlogCategoriesBloc>(
+          create: (context) => BlogCategoriesBloc(blogRepository: getIt<BlogRepository>()),
+        ),
         BlocProvider<BlogTagsBloc>(create: (context) => BlogTagsBloc(blogRepository: getIt<BlogRepository>())),
         BlocProvider<BlogArticlesBloc>(create: (context) => BlogArticlesBloc(blogRepository: getIt<BlogRepository>())),
-        BlocProvider<BlogArticleDetailBloc>(create: (context) => BlogArticleDetailBloc(blogRepository: getIt<BlogRepository>())),
-        BlocProvider<MarketCategoriesBloc>(create: (context) => MarketCategoriesBloc(repository: getIt<MarketRepository>())),
-        BlocProvider<AircraftMarketBloc>(create: (context) => AircraftMarketBloc(repository: getIt<MarketRepository>())),
+        BlocProvider<BlogArticleDetailBloc>(
+          create: (context) => BlogArticleDetailBloc(blogRepository: getIt<BlogRepository>()),
+        ),
+        BlocProvider<MarketCategoriesBloc>(
+          create: (context) => MarketCategoriesBloc(repository: getIt<MarketRepository>()),
+        ),
+        BlocProvider<AircraftMarketBloc>(
+          create: (context) => AircraftMarketBloc(repository: getIt<MarketRepository>()),
+        ),
         BlocProvider<PartsMarketBloc>(create: (context) => PartsMarketBloc(repository: getIt<MarketRepository>())),
-        BlocProvider<TypeSertificatesBloc>(create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
-        BlocProvider<TypeCorrectAnswersBloc>(create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
-        BlocProvider<CategoriesWithListQuestionsBloc>(create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<JobsVacanciesBloc>(
+          create: (context) =>
+              JobsVacanciesBloc(repository: getIt<JobsRepository>())
+                ..add(const JobsVacanciesEvent.get(includeInactive: false)),
+        ),
+        BlocProvider<JobVacancyFavoritesBloc>(
+          create: (context) => JobVacancyFavoritesBloc(repository: getIt<JobsRepository>()),
+        ),
+        BlocProvider<JobVacancyFavoriteToggleBloc>(
+          create: (context) => JobVacancyFavoriteToggleBloc(repository: getIt<JobsRepository>()),
+        ),
+        BlocProvider<JobsResumesBloc>(
+          create: (context) => JobsResumesBloc(repository: getIt<JobsRepository>())..add(const JobsResumesEvent.get()),
+        ),
+        BlocProvider<TypeSertificatesBloc>(
+          create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<TypeCorrectAnswersBloc>(
+          create: (context) => TypeCorrectAnswersBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
+        BlocProvider<CategoriesWithListQuestionsBloc>(
+          create: (context) => CategoriesWithListQuestionsBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
         BlocProvider<PaymentBloc>(create: (context) => PaymentBloc(paymentRepository: getIt<PaymentRepository>())),
-        BlocProvider<CategoriesBloc>(create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>())),
+        BlocProvider<CategoriesBloc>(
+          create: (context) => CategoriesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),
+        ),
         BlocProvider<AppSettingsBloc>(
-          create: (context) => AppSettingsBloc(db: getIt<AppDb>(), rosAviaTestCubit: getIt<RosAviaTestCubit>())..add(SetAppSettingsEvent()),
+          create: (context) =>
+              AppSettingsBloc(db: getIt<AppDb>(), rosAviaTestCubit: getIt<RosAviaTestCubit>())
+                ..add(SetAppSettingsEvent()),
           lazy: false,
         ),
         BlocProvider<RosAviaTestCubit>(create: (context) => getIt<RosAviaTestCubit>()),
@@ -209,7 +269,10 @@ class _AppState extends State<App> {
                         // Ждем загрузки профиля (максимум 10 секунд)
                         ProfileState? finalProfileState;
                         try {
-                          finalProfileState = await profileBloc.stream.where((state) => state is SuccessProfileState || state is ErrorProfileState).timeout(const Duration(seconds: 10)).first;
+                          finalProfileState = await profileBloc.stream
+                              .where((state) => state is SuccessProfileState || state is ErrorProfileState)
+                              .timeout(const Duration(seconds: 10))
+                              .first;
                         } catch (e) {
                           // Если таймаут, берем текущее состояние
                           finalProfileState = profileBloc.state;
@@ -227,7 +290,9 @@ class _AppState extends State<App> {
                           // Проверяем, есть ли ID аэропорта в списке owned_airports
                           final isOwner = ownedAirports != null && ownedAirports.contains(airport.id);
 
-                          print('🔍 Проверка владельца: airportId=${airport.id}, ownedAirports=$ownedAirports, isOwner=$isOwner');
+                          print(
+                            '🔍 Проверка владельца: airportId=${airport.id}, ownedAirports=$ownedAirports, isOwner=$isOwner',
+                          );
 
                           if (isOwner) {
                             // Если владелец - открываем страницу редактирования
@@ -238,7 +303,9 @@ class _AppState extends State<App> {
                           }
                         } else {
                           // Если аэропорт не найден или профиль не загружен, открываем форму заявки
-                          print('⚠️ Аэропорт не найден или профиль не загружен: airport=${airport != null}, profileState=${finalProfileState.runtimeType}');
+                          print(
+                            '⚠️ Аэропорт не найден или профиль не загружен: airport=${airport != null}, profileState=${finalProfileState.runtimeType}',
+                          );
                           showAirportOwnershipRequestBottomSheet(navigatorContext, airportCode: airportCode);
                         }
 
@@ -280,7 +347,10 @@ class _AppState extends State<App> {
                                 Icon(Icons.check_circle, color: Colors.white),
                                 SizedBox(width: 8),
                                 Expanded(
-                                  child: Text('Авторизация успешна! Теперь вы можете добавлять фотографии.', style: AppStyles.regular14s.copyWith(color: Colors.white)),
+                                  child: Text(
+                                    'Авторизация успешна! Теперь вы можете добавлять фотографии.',
+                                    style: AppStyles.regular14s.copyWith(color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),
@@ -344,7 +414,11 @@ class _AppState extends State<App> {
             },
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
-              localizationsDelegates: [...context.localizationDelegates, S.delegate, FlutterQuillLocalizations.delegate],
+              localizationsDelegates: [
+                ...context.localizationDelegates,
+                S.delegate,
+                FlutterQuillLocalizations.delegate,
+              ],
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               title: 'AviaPoint',

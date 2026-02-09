@@ -17,7 +17,16 @@ class UniversalBottomSheet extends StatefulWidget {
   final Color? backgroundColor;
   final EdgeInsets? padding;
 
-  const UniversalBottomSheet({super.key, required this.title, required this.child, this.height, this.onClose, this.showCloseButton = true, this.backgroundColor, this.padding});
+  const UniversalBottomSheet({
+    super.key,
+    required this.title,
+    required this.child,
+    this.height,
+    this.onClose,
+    this.showCloseButton = true,
+    this.backgroundColor,
+    this.padding,
+  });
 
   @override
   State<UniversalBottomSheet> createState() => _UniversalBottomSheetState();
@@ -56,7 +65,14 @@ class _UniversalBottomSheetState extends State<UniversalBottomSheet> {
                   color: widget.backgroundColor ?? AppColors.background,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
                 ),
-                padding: EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, top: 16, bottom: kIsWeb ? 0 : (mediaQuery.viewInsets.bottom + 16 + mediaQuery.padding.bottom)),
+                // Нижний отступ фиксированный — не используем viewInsets, чтобы шит не прыгал при появлении клавиатуры.
+                // Сдвиг шита вверх при клавиатуре делается обёрткой в showUniversalBottomSheet.
+                padding: EdgeInsets.only(
+                  left: horizontalPadding,
+                  right: horizontalPadding,
+                  top: 16,
+                  bottom: 16 + mediaQuery.padding.bottom,
+                ),
                 child: Material(
                   color: Colors.transparent,
                   child: Column(
@@ -123,6 +139,11 @@ Future<T?> showUniversalBottomSheet<T>({
   print('🔵 [showUniversalBottomSheet] kIsWeb: $kIsWeb');
   print('🔵 [showUniversalBottomSheet] useRootNavigator: $useRootNavigator');
 
+  if (!context.mounted) {
+    print('🟡 [showUniversalBottomSheet] context уже dispose, выходим');
+    return null;
+  }
+
   try {
     // На веб-платформе используем showModalBottomSheet, так как showCupertinoModalBottomSheet может не работать
     if (kIsWeb) {
@@ -131,10 +152,12 @@ Future<T?> showUniversalBottomSheet<T>({
       final defaultHeight = screenHeight - 100;
       final maxHeight = height ?? defaultHeight;
 
+      // На вебе всегда используем локальный Navigator, чтобы избежать конфликтов с rootNavigator и
+      // потенциальных ошибок "Trying to render a disposed EngineFlutterView".
       return await showModalBottomSheet<T>(
         context: context,
         isScrollControlled: true,
-        useRootNavigator: useRootNavigator,
+        useRootNavigator: false,
         isDismissible: isDismissible,
         enableDrag: enableDrag,
         backgroundColor: Colors.transparent,
@@ -155,7 +178,15 @@ Future<T?> showUniversalBottomSheet<T>({
               alignment: Alignment.bottomCenter,
               child: Container(
                 constraints: BoxConstraints(maxWidth: bottomSheetWidth),
-                child: UniversalBottomSheet(title: title, height: maxHeight, onClose: onClose, showCloseButton: showCloseButton, backgroundColor: backgroundColor, padding: padding, child: child),
+                child: UniversalBottomSheet(
+                  title: title,
+                  height: maxHeight,
+                  onClose: onClose,
+                  showCloseButton: showCloseButton,
+                  backgroundColor: backgroundColor,
+                  padding: padding,
+                  child: child,
+                ),
               ),
             ),
           );
@@ -176,13 +207,24 @@ Future<T?> showUniversalBottomSheet<T>({
       enableDrag: enableDrag,
       builder: (context) {
         print('🔵 [showUniversalBottomSheet] Builder вызван');
-        // Используем Builder, чтобы виджет перестраивался при изменении MediaQuery
-        return Builder(
-          builder: (builderContext) {
-            print('🔵 [showUniversalBottomSheet] BuilderContext создан');
-            // MediaQuery.of(builderContext) будет обновляться при повороте экрана
-            return UniversalBottomSheet(title: title, height: height, onClose: onClose, showCloseButton: showCloseButton, backgroundColor: backgroundColor, padding: padding, child: child);
-          },
+        // Обёртка с viewInsets сдвигает весь шит вверх при появлении клавиатуры, без изменения размера контента — нет прыжка
+        final viewInsets = MediaQuery.of(context).viewInsets;
+        return Padding(
+          padding: EdgeInsets.only(bottom: viewInsets.bottom),
+          child: Builder(
+            builder: (builderContext) {
+              print('🔵 [showUniversalBottomSheet] BuilderContext создан');
+              return UniversalBottomSheet(
+                title: title,
+                height: height,
+                onClose: onClose,
+                showCloseButton: showCloseButton,
+                backgroundColor: backgroundColor,
+                padding: padding,
+                child: child,
+              );
+            },
+          ),
         );
       },
     );

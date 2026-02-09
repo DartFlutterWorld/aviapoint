@@ -19,10 +19,7 @@ class StaticSourceBlockageScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'static_source_blockage'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'static_source_blockage'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

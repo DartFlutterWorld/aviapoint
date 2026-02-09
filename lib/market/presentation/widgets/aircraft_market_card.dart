@@ -18,7 +18,16 @@ class AircraftMarketCard extends StatefulWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
-  const AircraftMarketCard({super.key, required this.product, this.showEditButtons = false, this.showYearAndLocation = true, this.showInactiveBadge = false, this.onTap, this.onEdit, this.onDelete});
+  const AircraftMarketCard({
+    super.key,
+    required this.product,
+    this.showEditButtons = false,
+    this.showYearAndLocation = true,
+    this.showInactiveBadge = false,
+    this.onTap,
+    this.onEdit,
+    this.onDelete,
+  });
 
   @override
   State<AircraftMarketCard> createState() => _AircraftMarketCardState();
@@ -37,7 +46,9 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = widget.product.mainImageUrl ?? (widget.product.additionalImageUrls.isNotEmpty ? widget.product.additionalImageUrls.first : null);
+    final imageUrl =
+        widget.product.mainImageUrl ??
+        (widget.product.additionalImageUrls.isNotEmpty ? widget.product.additionalImageUrls.first : null);
     final isHorizontal = _isImageHorizontal;
 
     return GestureDetector(
@@ -51,7 +62,11 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
           children: [
             // Фоновое изображение заполняет весь контейнер (или уменьшается для горизонтальных)
             if (imageUrl != null)
-              _ProductImage(imageUrl: getImageUrl(imageUrl), onOrientationDetected: _onImageOrientationDetected, isHorizontal: isHorizontal == true)
+              _ProductImage(
+                imageUrl: getImageUrl(imageUrl),
+                onOrientationDetected: _onImageOrientationDetected,
+                isHorizontal: isHorizontal == true,
+              )
             else
               Container(
                 color: Colors.grey.shade200,
@@ -81,12 +96,17 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (widget.showYearAndLocation && (widget.product.year != null || (widget.product.location != null && widget.product.location!.isNotEmpty))) ...[
+                    if (widget.showYearAndLocation &&
+                        (widget.product.year != null ||
+                            (widget.product.location != null && widget.product.location!.isNotEmpty))) ...[
                       SizedBox(height: 4),
                       Row(
                         children: [
-                          if (widget.product.year != null) Text('${widget.product.year}', style: AppStyles.medium8s.copyWith(color: Colors.white70)),
-                          if (widget.product.year != null && widget.product.location != null && widget.product.location!.isNotEmpty) ...[
+                          if (widget.product.year != null)
+                            Text('${widget.product.year}', style: AppStyles.medium8s.copyWith(color: Colors.white70)),
+                          if (widget.product.year != null &&
+                              widget.product.location != null &&
+                              widget.product.location!.isNotEmpty) ...[
                             SizedBox(width: 8),
                             Container(
                               width: 3,
@@ -132,7 +152,10 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                     alignment: Alignment.center,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Text(
                         'Заблокировано администратором',
                         style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -151,7 +174,10 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                     alignment: Alignment.center,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(color: Colors.orange.withOpacity(0.8), borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Text(
                         'Не опубликовано',
                         style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -161,7 +187,10 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                 ),
               ),
             // Чипсы: доля и лизинг
-            if ((widget.product.isShareSale == true && widget.product.shareNumerator != null && widget.product.shareDenominator != null) || widget.product.isLeasing == true)
+            if ((widget.product.isShareSale == true &&
+                    widget.product.shareNumerator != null &&
+                    widget.product.shareDenominator != null) ||
+                widget.product.isLeasing == true)
               Positioned(
                 top: 8,
                 left: widget.showEditButtons ? 8 : null,
@@ -169,7 +198,9 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (widget.product.isShareSale == true && widget.product.shareNumerator != null && widget.product.shareDenominator != null)
+                    if (widget.product.isShareSale == true &&
+                        widget.product.shareNumerator != null &&
+                        widget.product.shareDenominator != null)
                       Padding(
                         padding: EdgeInsets.only(bottom: 4),
                         child: StatusChip(
@@ -180,7 +211,12 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                         ),
                       ),
                     if (widget.product.isLeasing == true)
-                      StatusChip(text: 'Лизинг', backgroundColor: Colors.black.withOpacity(0.7), padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), borderRadius: 12),
+                      StatusChip(
+                        text: 'Лизинг',
+                        backgroundColor: Colors.black.withOpacity(0.7),
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        borderRadius: 12,
+                      ),
                   ],
                 ),
               ),
@@ -205,7 +241,9 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                               context.router.push(
                                 BaseRoute(
                                   children: [
-                                    MarketNavigationRoute(children: [EditAircraftMarketRoute(productId: widget.product.id)]),
+                                    MarketNavigationRoute(
+                                      children: [EditAircraftMarketRoute(productId: widget.product.id)],
+                                    ),
                                   ],
                                 ),
                               );
@@ -332,7 +370,9 @@ class _ProductImageState extends State<_ProductImage> {
             color: Colors.grey.shade50,
             child: Center(
               child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
                 strokeWidth: 2,
                 color: Colors.grey.shade400,
               ),
@@ -347,7 +387,12 @@ class _ProductImageState extends State<_ProductImage> {
         },
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded || frame != null) {
-            return AnimatedOpacity(opacity: frame == null ? 0 : 1, duration: const Duration(milliseconds: 200), curve: Curves.easeOut, child: child);
+            return AnimatedOpacity(
+              opacity: frame == null ? 0 : 1,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: child,
+            );
           }
           return Container(
             color: Colors.grey.shade50,

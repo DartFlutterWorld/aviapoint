@@ -32,6 +32,10 @@ class RatingStarsWidget extends StatelessWidget {
   }
 
   Widget _buildStar(IconData icon, bool filled) {
-    return Icon(icon, size: (fontSize ?? 14.0) + 2, color: filled ? (starColor ?? Color(0xFFFFB800)) : Color(0xFFD1D5DB));
+    return Icon(
+      icon,
+      size: (fontSize ?? 14.0) + 2,
+      color: filled ? (starColor ?? Color(0xFFFFB800)) : Color(0xFFD1D5DB),
+    );
   }
 }

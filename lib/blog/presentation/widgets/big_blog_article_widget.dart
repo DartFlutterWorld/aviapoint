@@ -55,12 +55,16 @@ class BigBlogArticleWidget extends StatelessWidget {
               children: [
                 Text(article.title, style: AppStyles.medium14s.copyWith(color: Color(0xFF374151))),
                 SizedBox(height: 5),
-                if (article.excerpt != null && article.excerpt!.isNotEmpty) Text(article.excerpt!, style: AppStyles.light10s.copyWith(color: Color(0xFF4B5767))),
+                if (article.excerpt != null && article.excerpt!.isNotEmpty)
+                  Text(article.excerpt!, style: AppStyles.light10s.copyWith(color: Color(0xFF4B5767))),
                 SizedBox(height: 8),
                 // Дата в правом нижнем углу
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text(article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '', style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF), fontSize: 8)),
+                  child: Text(
+                    article.publishedAt != null ? formatDate(DateTime.parse(article.publishedAt!)) : '',
+                    style: AppStyles.light10s.copyWith(color: Color(0xFF9CA5AF), fontSize: 8),
+                  ),
                 ),
                 SizedBox(height: 8),
               ],

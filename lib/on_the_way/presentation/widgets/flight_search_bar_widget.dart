@@ -17,7 +17,14 @@ class FlightSearchBarWidget extends StatefulWidget {
   final VoidCallback? onClear;
   final AirportService airportService;
 
-  const FlightSearchBarWidget({super.key, this.initialValue, required this.hintText, required this.onSelected, this.onClear, required this.airportService});
+  const FlightSearchBarWidget({
+    super.key,
+    this.initialValue,
+    required this.hintText,
+    required this.onSelected,
+    this.onClear,
+    required this.airportService,
+  });
 
   @override
   State<FlightSearchBarWidget> createState() => _FlightSearchBarWidgetState();
@@ -150,7 +157,8 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
             return flight.waypoints!.any((wp) => airportCodesUpper.contains(wp.airportCode.toUpperCase()));
           }
           // Если waypoints нет, проверяем departure и arrival
-          return airportCodesUpper.contains(flight.departureAirport.toUpperCase()) || airportCodesUpper.contains(flight.arrivalAirport.toUpperCase());
+          return airportCodesUpper.contains(flight.departureAirport.toUpperCase()) ||
+              airportCodesUpper.contains(flight.arrivalAirport.toUpperCase());
         }).toList();
 
         final suggestions = filteredFlights.take(10).toList();
@@ -180,7 +188,10 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
   void _selectFlight(FlightEntity flight) {
     // При выборе полета берем первый аэропорт из маршрута, который совпадает с запросом
     if (flight.waypoints != null && flight.waypoints!.isNotEmpty) {
-      final matchingWaypoint = flight.waypoints!.firstWhere((wp) => wp.airportCode.toUpperCase() == _searchQuery?.toUpperCase(), orElse: () => flight.waypoints!.first);
+      final matchingWaypoint = flight.waypoints!.firstWhere(
+        (wp) => wp.airportCode.toUpperCase() == _searchQuery?.toUpperCase(),
+        orElse: () => flight.waypoints!.first,
+      );
       _controller.text = matchingWaypoint.airportCode;
       widget.onSelected(matchingWaypoint.airportCode);
     }
@@ -212,14 +223,20 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
               final isLast = index == waypoints.length - 1;
               // Подсвечиваем если совпадает код или название
               final codeMatches = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
-              final nameMatches = waypoint.airportName != null && waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
+              final nameMatches =
+                  waypoint.airportName != null &&
+                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
               final isHighlighted = codeMatches || nameMatches;
 
               return [
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 16, color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF)),
+                    Icon(
+                      isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                      size: 16,
+                      color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+                    ),
                     SizedBox(width: 4),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -230,12 +247,19 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
                       ),
                       child: Text(
                         waypoint.airportCode,
-                        style: AppStyles.regular12s.copyWith(color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF), fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal),
+                        style: AppStyles.regular12s.copyWith(
+                          color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+                          fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                if (!isLast) ...[SizedBox(width: 4), Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)), SizedBox(width: 4)],
+                if (!isLast) ...[
+                  SizedBox(width: 4),
+                  Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)),
+                  SizedBox(width: 4),
+                ],
               ];
             }).toList(),
           ],
@@ -248,7 +272,9 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
             children: waypoints.where((wp) => wp.airportName != null || wp.airportCity != null).map((waypoint) {
               // Подсвечиваем если совпадает код или название
               final codeMatches = waypoint.airportCode.toUpperCase() == searchQuery.toUpperCase();
-              final nameMatches = waypoint.airportName != null && waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
+              final nameMatches =
+                  waypoint.airportName != null &&
+                  waypoint.airportName!.toUpperCase().contains(searchQuery.toUpperCase());
               final isHighlighted = codeMatches || nameMatches;
 
               return Padding(
@@ -258,7 +284,10 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
                   children: [
                     Text(
                       waypoint.airportCode,
-                      style: AppStyles.regular12s.copyWith(color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF), fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal),
+                      style: AppStyles.regular12s.copyWith(
+                        color: isHighlighted ? Color(0xFF0A6EFA) : Color(0xFF9CA5AF),
+                        fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
+                      ),
                     ),
                     if (waypoint.airportName != null || waypoint.airportCity != null) ...[
                       SizedBox(width: 4),
@@ -419,7 +448,10 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
                               Icon(Icons.flight, size: 16, color: Color(0xFF0A6EFA)),
                               SizedBox(width: 8),
                               Expanded(
-                                child: Text('Полёт #${flight.id}', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
+                                child: Text(
+                                  'Полёт #${flight.id}',
+                                  style: AppStyles.bold14s.copyWith(color: Color(0xFF374151)),
+                                ),
                               ),
                               if (flight.pilotFullName != null) ...[
                                 Icon(Icons.person, size: 16, color: Color(0xFF9CA5AF)),
@@ -438,7 +470,10 @@ class _FlightSearchBarWidgetState extends State<FlightSearchBarWidget> {
                             children: [
                               Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
                               SizedBox(width: 4),
-                              Text(formatDate(flight.departureDate), style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                              Text(
+                                formatDate(flight.departureDate),
+                                style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                              ),
                             ],
                           ),
                           SizedBox(height: 8),

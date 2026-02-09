@@ -10,7 +10,13 @@ class DateTimeFieldWidget extends StatelessWidget {
   final void Function(DateTime?) onDateTimeSelected;
   final Key? fieldKey;
 
-  const DateTimeFieldWidget({Key? key, this.label, this.initialDateTime, required this.onDateTimeSelected, this.fieldKey}) : super(key: key);
+  const DateTimeFieldWidget({
+    Key? key,
+    this.label,
+    this.initialDateTime,
+    required this.onDateTimeSelected,
+    this.fieldKey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,9 @@ class DateTimeFieldWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 initialDateTime != null ? formatDateWithTime(initialDateTime!) : 'Выберите дату и время',
-                style: AppStyles.regular14s.copyWith(color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF)),
+                style: AppStyles.regular14s.copyWith(
+                  color: initialDateTime != null ? Color(0xFF374151) : Color(0xFF9CA5AF),
+                ),
               ),
             ),
             Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFF9CA5AF)),
@@ -73,7 +81,13 @@ class DateTimeFieldWidget extends StatelessWidget {
     );
 
     if (timeResult != null) {
-      final dateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, timeResult.hour, timeResult.minute);
+      final dateTime = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        timeResult.hour,
+        timeResult.minute,
+      );
       onDateTimeSelected(dateTime);
     }
   }

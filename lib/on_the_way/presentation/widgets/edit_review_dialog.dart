@@ -34,11 +34,19 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
 
   void _submitReview() {
     if (_rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Пожалуйста, выберите рейтинг'), backgroundColor: Colors.red));
       return;
     }
 
-    context.read<ReviewsBloc>().add(UpdateReviewEvent(reviewId: widget.review.id, rating: _rating, comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim()));
+    context.read<ReviewsBloc>().add(
+      UpdateReviewEvent(
+        reviewId: widget.review.id,
+        rating: _rating,
+        comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+      ),
+    );
   }
 
   @override
@@ -48,13 +56,25 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
         state.when(
           loading: () {},
           error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseMessage ?? errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(responseMessage ?? errorForUser),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 4),
+              ),
+            );
           },
           success: (reviews, flights) {},
           reviewCreated: (review) {},
           reviewUpdated: (review) {
             Navigator.of(context).pop(true);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Отзыв успешно обновлён'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Отзыв успешно обновлён'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
           },
           reviewDeleted: () {},
         );
@@ -132,7 +152,14 @@ class _EditReviewDialogState extends State<EditReviewDialog> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         child: isLoading
-                            ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                            ? SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
                             : Text('Сохранить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
                       ),
                     ),

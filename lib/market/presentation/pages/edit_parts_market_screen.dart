@@ -36,7 +36,8 @@ class EditPartsMarketScreen extends StatefulWidget {
 
 class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
   final _formKey = GlobalKey<FormState>();
-  PartsMarketEditState? _previousStateBeforeLoading; // Сохраняем состояние перед loading для определения publish/unpublish
+  PartsMarketEditState?
+  _previousStateBeforeLoading; // Сохраняем состояние перед loading для определения publish/unpublish
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _priceController;
@@ -82,7 +83,8 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     // Сохраняем productId
     _productId = widget.productId;
     // Создаем BLoC для редактирования
-    _editBloc = PartsMarketEditBloc(repository: getIt<MarketRepository>())..add(PartsMarketEditEvent.getProduct(_productId));
+    _editBloc = PartsMarketEditBloc(repository: getIt<MarketRepository>())
+      ..add(PartsMarketEditEvent.getProduct(_productId));
 
     // Инициализируем контроллеры пустыми, заполним после загрузки данных
     _titleController = TextEditingController();
@@ -117,7 +119,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     _selectedAircraftModelIds = product.compatibleAircraftModelIds ?? [];
     _manualAircraftModelsText = product.compatibleAircraftModelsText;
 
-    _condition = product.condition != null && _validConditionValues.contains(product.condition) ? product.condition : null;
+    _condition = product.condition != null && _validConditionValues.contains(product.condition)
+        ? product.condition
+        : null;
     _selectedMainCategoryId = product.partsMainCategoryId;
     _selectedSubcategoryId = product.partsSubcategoryId;
     _selectedManufacturerId = product.manufacturerId;
@@ -129,7 +133,10 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     if (product.mainImageUrl != null && product.mainImageUrl!.isNotEmpty) {
       _mainPhoto = _PhotoItem(url: product.mainImageUrl, file: null, bytes: null, isNew: false);
     }
-    _additionalPhotos = product.additionalImageUrls.where((url) => url.isNotEmpty).map((url) => _PhotoItem(url: url, file: null, bytes: null, isNew: false)).toList();
+    _additionalPhotos = product.additionalImageUrls
+        .where((url) => url.isNotEmpty)
+        .map((url) => _PhotoItem(url: url, file: null, bytes: null, isNew: false))
+        .toList();
   }
 
   @override
@@ -154,23 +161,33 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     }
 
     if (_selectedMainCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите категорию'), backgroundColor: Colors.red));
       return;
     }
 
     if (_selectedSubcategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите подкатегорию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите подкатегорию'), backgroundColor: Colors.red));
       return;
     }
 
-    final hasValidMainPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
+    final hasValidMainPhoto =
+        _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
     if (!hasValidMainPhoto) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Добавьте основную фотографию'), backgroundColor: Colors.red));
       return;
     }
 
-    if (_selectedManufacturerId == null && (_selectedManufacturerName == null || _selectedManufacturerName!.trim().isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Выберите производителя'), backgroundColor: Colors.red));
+    if (_selectedManufacturerId == null &&
+        (_selectedManufacturerName == null || _selectedManufacturerName!.trim().isEmpty)) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Выберите производителя'), backgroundColor: Colors.red));
       return;
     }
 
@@ -178,7 +195,13 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
 
     // Получаем текущий продукт из состояния BLoC
     final currentState = _editBloc.state;
-    final currentProduct = currentState.maybeWhen(loaded: (product) => product, saved: (product) => product, published: (product) => product, unpublished: (product) => product, orElse: () => null);
+    final currentProduct = currentState.maybeWhen(
+      loaded: (product) => product,
+      saved: (product) => product,
+      published: (product) => product,
+      unpublished: (product) => product,
+      orElse: () => null,
+    );
 
     if (currentProduct == null) return;
 
@@ -204,7 +227,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     List<XFile>? additionalImageFiles;
 
     final newAdditionalPhotos = _additionalPhotos.where((photo) => photo.isNew).toList();
-    final existingAdditionalPhotos = _additionalPhotos.where((photo) => !photo.isNew && photo.url != null && photo.url!.isNotEmpty).toList();
+    final existingAdditionalPhotos = _additionalPhotos
+        .where((photo) => !photo.isNew && photo.url != null && photo.url!.isNotEmpty)
+        .toList();
 
     // Всегда передаем существующие URL (которые не были удалены)
     additionalImageUrls.addAll(existingAdditionalPhotos.map((photo) => photo.url!));
@@ -223,7 +248,11 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
         price: int.tryParse(_priceController.text.trim()) ?? currentProduct.price,
         currency: _currency,
         partsMainCategoryId: _selectedMainCategoryId,
-        partsSubcategoryId: _selectedSubSubSubSubcategoryId ?? _selectedSubSubSubcategoryId ?? _selectedSubSubcategoryId ?? _selectedSubcategoryId,
+        partsSubcategoryId:
+            _selectedSubSubSubSubcategoryId ??
+            _selectedSubSubSubcategoryId ??
+            _selectedSubSubcategoryId ??
+            _selectedSubcategoryId,
         manufacturerId: _selectedManufacturerId,
         manufacturerName: _selectedManufacturerName,
         partNumber: _partNumberController.text.trim().isEmpty ? null : _partNumberController.text.trim(),
@@ -232,9 +261,15 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
         quantity: int.tryParse(_quantityController.text.trim()) ?? currentProduct.quantity,
         location: _selectedLocation,
         weightKg: _weightKgController.text.trim().isEmpty ? null : double.tryParse(_weightKgController.text.trim()),
-        dimensionsLengthCm: _dimensionsLengthController.text.trim().isEmpty ? null : double.tryParse(_dimensionsLengthController.text.trim()),
-        dimensionsWidthCm: _dimensionsWidthController.text.trim().isEmpty ? null : double.tryParse(_dimensionsWidthController.text.trim()),
-        dimensionsHeightCm: _dimensionsHeightController.text.trim().isEmpty ? null : double.tryParse(_dimensionsHeightController.text.trim()),
+        dimensionsLengthCm: _dimensionsLengthController.text.trim().isEmpty
+            ? null
+            : double.tryParse(_dimensionsLengthController.text.trim()),
+        dimensionsWidthCm: _dimensionsWidthController.text.trim().isEmpty
+            ? null
+            : double.tryParse(_dimensionsWidthController.text.trim()),
+        dimensionsHeightCm: _dimensionsHeightController.text.trim().isEmpty
+            ? null
+            : double.tryParse(_dimensionsHeightController.text.trim()),
         compatibleAircraftModelIds: _selectedAircraftModelIds.isNotEmpty ? _selectedAircraftModelIds : null,
         compatibleAircraftModelsText: _manualAircraftModelsText?.isEmpty ?? true ? null : _manualAircraftModelsText,
         mainImageUrl: mainImageUrl,
@@ -257,7 +292,13 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     return BlocBuilder<PartsMarketEditBloc, PartsMarketEditState>(
       builder: (context, state) {
         // Получаем актуальный продукт из состояния BLoC
-        final currentProduct = state.maybeWhen(published: (product) => product, unpublished: (product) => product, saved: (product) => product, loaded: (product) => product, orElse: () => null);
+        final currentProduct = state.maybeWhen(
+          published: (product) => product,
+          unpublished: (product) => product,
+          saved: (product) => product,
+          loaded: (product) => product,
+          orElse: () => null,
+        );
 
         if (currentProduct == null) return const SizedBox.shrink();
 
@@ -265,11 +306,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
         final isActive = currentProduct.isActive;
 
         // Показываем индикатор загрузки во время публикации/снятия с публикации
-        final isLoading = state.maybeWhen(
-          publishing: () => true,
-          unpublishing: () => true,
-          orElse: () => false,
-        );
+        final isLoading = state.maybeWhen(publishing: () => true, unpublishing: () => true, orElse: () => false);
 
         return Column(
           children: [
@@ -329,11 +366,15 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка блокировки'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка блокировки'), backgroundColor: Colors.red));
       },
       (product) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление заблокировано'), backgroundColor: Colors.orange));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Объявление заблокировано'), backgroundColor: Colors.orange));
         context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
         context.router.maybePop(); // Закрываем экран редактирования
       },
@@ -346,11 +387,15 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка разблокировки'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message ?? 'Ошибка разблокировки'), backgroundColor: Colors.red));
       },
       (product) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление разблокировано'), backgroundColor: Colors.green));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Объявление разблокировано'), backgroundColor: Colors.green));
         context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
         context.router.maybePop(); // Закрываем экран редактирования
       },
@@ -365,23 +410,25 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
         listeners: [
           // Слушаем PartsMarketEditBloc для сохранения
           BlocListener<PartsMarketEditBloc, PartsMarketEditState>(
-      listenWhen: (previous, current) {
+            listenWhen: (previous, current) {
               return previous.maybeWhen(
-                saving: () => current.maybeWhen(
-                  saved: (_) => true,
-                  error: (_) => true,
-                  orElse: () => false,
-                ),
+                saving: () => current.maybeWhen(saved: (_) => true, error: (_) => true, orElse: () => false),
                 orElse: () => false,
               );
-      },
-      listener: (context, state) {
-        if (!mounted) return;
+            },
+            listener: (context, state) {
+              if (!mounted) return;
               state.maybeWhen(
                 saved: (product) {
                   // Обновляем список в главном BLoC
                   context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Изменения сохранены'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Изменения сохранены'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                   // Возвращаемся на детальную страницу после успешного сохранения
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (mounted) {
@@ -389,10 +436,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                     }
                   });
                 },
-          error: (message) {
+                error: (message) {
                   // Ошибка сохранения - показываем snackbar, остаемся на экране
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
-          },
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                },
                 orElse: () {},
               );
             },
@@ -403,19 +452,11 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
               // Реагируем на published/unpublished
               final isPublishing = previous.maybeWhen(publishing: () => true, orElse: () => false);
               if (isPublishing) {
-                return current.maybeWhen(
-                  published: (_) => true,
-                  error: (_) => true,
-                  orElse: () => false,
-                );
+                return current.maybeWhen(published: (_) => true, error: (_) => true, orElse: () => false);
               }
               final isUnpublishing = previous.maybeWhen(unpublishing: () => true, orElse: () => false);
               if (isUnpublishing) {
-                return current.maybeWhen(
-                  unpublished: (_) => true,
-                  error: (_) => true,
-                  orElse: () => false,
-                );
+                return current.maybeWhen(unpublished: (_) => true, error: (_) => true, orElse: () => false);
               }
               // Сохраняем состояние перед loading (когда вызываем getProduct после publish/unpublish)
               final wasPublishedOrUnpublished = previous.maybeWhen(
@@ -433,11 +474,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
               // Реагируем на loaded после loading, если перед loading было published/unpublished
               final wasLoading = previous.maybeWhen(loading: () => true, orElse: () => false);
               if (wasLoading && _previousStateBeforeLoading != null) {
-                return current.maybeWhen(
-                  loaded: (_) => true,
-                  error: (_) => true,
-                  orElse: () => false,
-                );
+                return current.maybeWhen(loaded: (_) => true, error: (_) => true, orElse: () => false);
               }
               return false;
             },
@@ -446,7 +483,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
               state.maybeWhen(
                 published: (product) {
                   // Обновляем список в главном BLoC
-            context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
+                  context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
                   // Запрашиваем обновленный продукт с сервера для обновления формы
                   _editBloc.add(PartsMarketEditEvent.getProduct(_productId));
                 },
@@ -463,47 +500,54 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                     final wasUnpublished = _previousStateBeforeLoading is UnpublishedPartsMarketEditState;
                     if (wasPublished || wasUnpublished) {
                       // Показываем сообщение только после получения обновленного состояния
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(product.isPublished ? 'Объявление опубликовано' : 'Объявление снято с публикации'), backgroundColor: Colors.green));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            product.isPublished ? 'Объявление опубликовано' : 'Объявление снято с публикации',
+                          ),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                       _previousStateBeforeLoading = null; // Сбрасываем после использования
                       // Возвращаемся на детальную страницу после успешного publish/unpublish
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (mounted) {
-                context.router.maybePop();
-              }
-            });
+                          context.router.maybePop();
+                        }
+                      });
                     }
                   }
-          },
+                },
                 error: (message) {
                   _previousStateBeforeLoading = null; // Сбрасываем при ошибке
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
                 },
                 orElse: () {},
-        );
-      },
+              );
+            },
           ),
         ],
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Редактирование',
-          withBack: true,
-          actions: [
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: 'Редактирование',
+            withBack: true,
+            actions: [
               BlocBuilder<PartsMarketEditBloc, PartsMarketEditState>(
-              builder: (context, state) {
+                builder: (context, state) {
                   final isLoading = state.maybeWhen(saving: () => true, orElse: () => false);
-                return TextButton(
-                  onPressed: isLoading ? null : _saveChanges,
-                  child: isLoading
-                      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  return TextButton(
+                    onPressed: isLoading ? null : _saveChanges,
+                    child: isLoading
+                        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                         : Text('Сохранить', style: AppStyles.bold14s.copyWith(color: AppColors.primary100p)),
-                );
-              },
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.background,
+                  );
+                },
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.background,
           body: BlocBuilder<PartsMarketEditBloc, PartsMarketEditState>(
             builder: (context, state) {
               return state.when(
@@ -516,7 +560,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                       _initializeFromProduct(product);
                       // Загружаем подкатегории если нужно
                       if (_selectedMainCategoryId != null) {
-                        context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getSubcategories(productType: 'parts', mainCategoryId: _selectedMainCategoryId));
+                        context.read<MarketCategoriesBloc>().add(
+                          MarketCategoriesEvent.getSubcategories(
+                            productType: 'parts',
+                            mainCategoryId: _selectedMainCategoryId,
+                          ),
+                        );
                       }
                     }
                   });
@@ -525,15 +574,20 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                 saved: (_) => _buildForm(),
                 published: (_) => _buildForm(),
                 unpublished: (_) => _buildForm(),
-                error: (message) => Center(child: ErrorCustom(textError: message, repeat: () => _editBloc.add(PartsMarketEditEvent.getProduct(_productId)))),
+                error: (message) => Center(
+                  child: ErrorCustom(
+                    textError: message,
+                    repeat: () => _editBloc.add(PartsMarketEditEvent.getProduct(_productId)),
+                  ),
+                ),
                 saving: () => const Center(child: LoadingCustom()),
                 deleting: () => const Center(child: LoadingCustom()),
                 deleted: (_) => const Center(child: Text('Товар удален')),
                 publishing: () => const Center(child: LoadingCustom()),
                 unpublishing: () => const Center(child: LoadingCustom()),
-                    );
-                  },
-                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -548,7 +602,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildMainPhotoSection(),
-                SizedBox(height: 16),
+            SizedBox(height: 16),
             _buildAdditionalPhotosSection(),
             SizedBox(height: 16),
             _buildMainCategoryDropdown(),
@@ -625,7 +679,11 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                       fillColor: Colors.white,
                       contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     ),
-                    items: ['RUB', 'USD', 'EUR'].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
+                    items: [
+                      'RUB',
+                      'USD',
+                      'EUR',
+                    ].map((currency) => DropdownMenuItem(value: currency, child: Text(currency))).toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
@@ -774,7 +832,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
   }
 
   Widget _buildMainCategoryField(List<MarketCategoryEntity> categories) {
-    final selectedCategory = _selectedMainCategoryId != null ? categories.firstWhere((category) => category.id == _selectedMainCategoryId, orElse: () => categories.first) : null;
+    final selectedCategory = _selectedMainCategoryId != null
+        ? categories.firstWhere((category) => category.id == _selectedMainCategoryId, orElse: () => categories.first)
+        : null;
     final displayText = _selectedMainCategoryId != null ? selectedCategory!.name : 'Выберите категорию';
 
     return InkWell(
@@ -788,7 +848,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedMainCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedMainCategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -804,7 +869,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           success: (categories) {
             // Фильтруем подкатегории: они должны иметь partsMainCategoryId равный выбранной главной категории
             // И parentId должен быть null (это подкатегории, а не под-подкатегории)
-            final subcategories = categories.where((c) => c.partsMainCategoryId == _selectedMainCategoryId && c.parentId == null).toList();
+            final subcategories = categories
+                .where((c) => c.partsMainCategoryId == _selectedMainCategoryId && c.parentId == null)
+                .toList();
 
             // Если подкатегорий нет, не показываем ничего
             if (subcategories.isEmpty) {
@@ -826,7 +893,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
   }
 
   Widget _buildSubcategoryField(List<MarketCategoryEntity> subcategories) {
-    final selectedSubcategory = _selectedSubcategoryId != null ? subcategories.firstWhere((category) => category.id == _selectedSubcategoryId, orElse: () => subcategories.first) : null;
+    final selectedSubcategory = _selectedSubcategoryId != null
+        ? subcategories.firstWhere(
+            (category) => category.id == _selectedSubcategoryId,
+            orElse: () => subcategories.first,
+          )
+        : null;
     final displayText = _selectedSubcategoryId != null ? selectedSubcategory!.name : 'Выберите подкатегорию *';
 
     return InkWell(
@@ -840,7 +912,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -859,7 +936,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedManufacturerName != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedManufacturerName != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -891,20 +973,29 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           suffixIcon: Icon(Icons.arrow_drop_down),
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _condition != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildMainPhotoSection() {
-    final hasValidPhoto = _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
+    final hasValidPhoto =
+        _mainPhoto != null && (_mainPhoto!.isNew || (_mainPhoto!.url != null && _mainPhoto!.url!.isNotEmpty));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Основная фотография', style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
         SizedBox(height: 12),
-        if (hasValidPhoto) SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true)) else _buildEmptyPhotoPlaceholder(isMain: true),
+        if (hasValidPhoto)
+          SizedBox(height: 200, child: _buildPhotoItem(_mainPhoto!, isMain: true))
+        else
+          _buildEmptyPhotoPlaceholder(isMain: true),
       ],
     );
   }
@@ -919,7 +1010,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.0,
+            ),
             itemCount: _additionalPhotos.length,
             itemBuilder: (context, index) {
               return _buildPhotoItem(_additionalPhotos[index], isMain: false);
@@ -1013,7 +1109,10 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           children: [
             Icon(Icons.add_photo_alternate, size: 48, color: Color(0xFF9CA5AF)),
             SizedBox(height: 8),
-            Text(isMain ? 'Добавить основное фото' : 'Добавить фото', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+            Text(
+              isMain ? 'Добавить основное фото' : 'Добавить фото',
+              style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+            ),
           ],
         ),
       ),
@@ -1023,7 +1122,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
   Future<void> _pickMainPhoto() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1920,
+        maxHeight: 1920,
+      );
 
       if (image != null && mounted) {
         Uint8List? bytes;
@@ -1037,7 +1141,13 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографию: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось выбрать фотографию: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -1064,7 +1174,13 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Не удалось выбрать фотографии: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
@@ -1106,7 +1222,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
               Navigator.pop(context, category.id);
               // Затем загружаем подкатегории для выбранной главной категории
               debugPrint('🔵 Загружаем подкатегории для mainCategoryId=${category.id}');
-              context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getSubcategories(productType: 'parts', mainCategoryId: category.id));
+              context.read<MarketCategoriesBloc>().add(
+                MarketCategoriesEvent.getSubcategories(productType: 'parts', mainCategoryId: category.id),
+              );
             },
           );
         },
@@ -1151,7 +1269,13 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
       });
       // Загружаем суб-подкатегории для выбранной подкатегории
       debugPrint('🔵 Загружаем суб-подкатегории для subcategoryId=${result}');
-      context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getSubcategories(productType: 'parts', parentId: result, mainCategoryId: _selectedMainCategoryId));
+      context.read<MarketCategoriesBloc>().add(
+        MarketCategoriesEvent.getSubcategories(
+          productType: 'parts',
+          parentId: result,
+          mainCategoryId: _selectedMainCategoryId,
+        ),
+      );
     }
   }
 
@@ -1167,7 +1291,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           success: (categories) {
             // Фильтруем суб-подкатегории: они должны иметь parentId равный выбранной подкатегории
             final subSubcategories = categories.where((c) => c.parentId == _selectedSubcategoryId).toList();
-            debugPrint('🔵 Найдено суб-подкатегорий для subcategoryId=$_selectedSubcategoryId: ${subSubcategories.length}');
+            debugPrint(
+              '🔵 Найдено суб-подкатегорий для subcategoryId=$_selectedSubcategoryId: ${subSubcategories.length}',
+            );
 
             // Если суб-подкатегорий нет, не показываем ничего
             if (subSubcategories.isEmpty) {
@@ -1194,8 +1320,15 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
   }
 
   Widget _buildSubSubcategoryField(List<MarketCategoryEntity> subSubcategories) {
-    final selectedSubSubcategory = _selectedSubSubcategoryId != null ? subSubcategories.firstWhere((category) => category.id == _selectedSubSubcategoryId, orElse: () => subSubcategories.first) : null;
-    final displayText = _selectedSubSubcategoryId != null ? selectedSubSubcategory!.name : 'Выберите суб-подкатегорию (необязательно)';
+    final selectedSubSubcategory = _selectedSubSubcategoryId != null
+        ? subSubcategories.firstWhere(
+            (category) => category.id == _selectedSubSubcategoryId,
+            orElse: () => subSubcategories.first,
+          )
+        : null;
+    final displayText = _selectedSubSubcategoryId != null
+        ? selectedSubSubcategory!.name
+        : 'Выберите суб-подкатегорию (необязательно)';
 
     return InkWell(
       onTap: () => _showSubSubcategoryBottomSheet(subSubcategories),
@@ -1207,7 +1340,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedSubSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedSubSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -1255,12 +1393,20 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     if (result != null && result != _selectedSubSubcategoryId) {
       setState(() {
         _selectedSubSubcategoryId = result;
-        _selectedSubSubSubcategoryId = null; // Сбрасываем подкатегорию третьего уровня при смене подкатегории второго уровня
-        _selectedSubSubSubSubcategoryId = null; // Сбрасываем подкатегорию четвертого уровня при смене подкатегории второго уровня
+        _selectedSubSubSubcategoryId =
+            null; // Сбрасываем подкатегорию третьего уровня при смене подкатегории второго уровня
+        _selectedSubSubSubSubcategoryId =
+            null; // Сбрасываем подкатегорию четвертого уровня при смене подкатегории второго уровня
       });
       // Загружаем подкатегории третьего уровня для выбранной подкатегории второго уровня
       debugPrint('🔵 Загружаем подкатегории третьего уровня для subSubcategoryId=${result}');
-      context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getSubcategories(productType: 'parts', parentId: result, mainCategoryId: _selectedMainCategoryId));
+      context.read<MarketCategoriesBloc>().add(
+        MarketCategoriesEvent.getSubcategories(
+          productType: 'parts',
+          parentId: result,
+          mainCategoryId: _selectedMainCategoryId,
+        ),
+      );
     }
   }
 
@@ -1271,12 +1417,16 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
 
     return BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
       builder: (context, state) {
-        debugPrint('🔵 _buildSubSubSubcategoryDropdown: _selectedSubSubcategoryId=$_selectedSubSubcategoryId, state=$state');
+        debugPrint(
+          '🔵 _buildSubSubSubcategoryDropdown: _selectedSubSubcategoryId=$_selectedSubSubcategoryId, state=$state',
+        );
         return state.maybeWhen(
           success: (categories) {
             // Фильтруем подкатегории третьего уровня: они должны иметь parentId равный выбранной подкатегории второго уровня
             final subSubSubcategories = categories.where((c) => c.parentId == _selectedSubSubcategoryId).toList();
-            debugPrint('🔵 Найдено подкатегорий третьего уровня для subSubcategoryId=$_selectedSubSubcategoryId: ${subSubSubcategories.length}');
+            debugPrint(
+              '🔵 Найдено подкатегорий третьего уровня для subSubcategoryId=$_selectedSubSubcategoryId: ${subSubSubcategories.length}',
+            );
 
             // Если подкатегорий третьего уровня нет, не показываем ничего
             if (subSubSubcategories.isEmpty) {
@@ -1304,9 +1454,14 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
 
   Widget _buildSubSubSubcategoryField(List<MarketCategoryEntity> subSubSubcategories) {
     final selectedSubSubSubcategory = _selectedSubSubSubcategoryId != null
-        ? subSubSubcategories.firstWhere((category) => category.id == _selectedSubSubSubcategoryId, orElse: () => subSubSubcategories.first)
+        ? subSubSubcategories.firstWhere(
+            (category) => category.id == _selectedSubSubSubcategoryId,
+            orElse: () => subSubSubcategories.first,
+          )
         : null;
-    final displayText = _selectedSubSubSubcategoryId != null ? selectedSubSubSubcategory!.name : 'Выберите подкатегорию третьего уровня (необязательно)';
+    final displayText = _selectedSubSubSubcategoryId != null
+        ? selectedSubSubSubcategory!.name
+        : 'Выберите подкатегорию третьего уровня (необязательно)';
 
     return InkWell(
       onTap: () => _showSubSubSubcategoryBottomSheet(subSubSubcategories),
@@ -1318,7 +1473,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedSubSubSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedSubSubSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -1367,11 +1527,20 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
       debugPrint('🔵 Выбрана подкатегория третьего уровня: id=${result}');
       setState(() {
         _selectedSubSubSubcategoryId = result;
-        _selectedSubSubSubSubcategoryId = null; // Сбрасываем подкатегорию четвертого уровня при смене подкатегории третьего уровня
+        _selectedSubSubSubSubcategoryId =
+            null; // Сбрасываем подкатегорию четвертого уровня при смене подкатегории третьего уровня
       });
       // Загружаем подкатегории четвертого уровня для выбранной подкатегории третьего уровня
-      debugPrint('🔵 Загружаем подкатегории четвертого уровня для subSubSubcategoryId=${result}, mainCategoryId=${_selectedMainCategoryId}');
-      context.read<MarketCategoriesBloc>().add(MarketCategoriesEvent.getSubcategories(productType: 'parts', parentId: result, mainCategoryId: _selectedMainCategoryId));
+      debugPrint(
+        '🔵 Загружаем подкатегории четвертого уровня для subSubSubcategoryId=${result}, mainCategoryId=${_selectedMainCategoryId}',
+      );
+      context.read<MarketCategoriesBloc>().add(
+        MarketCategoriesEvent.getSubcategories(
+          productType: 'parts',
+          parentId: result,
+          mainCategoryId: _selectedMainCategoryId,
+        ),
+      );
     }
   }
 
@@ -1382,19 +1551,27 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
 
     return BlocBuilder<MarketCategoriesBloc, MarketCategoriesState>(
       builder: (context, state) {
-        debugPrint('🔵 _buildSubSubSubSubcategoryDropdown: _selectedSubSubSubcategoryId=$_selectedSubSubSubcategoryId, state=$state');
+        debugPrint(
+          '🔵 _buildSubSubSubSubcategoryDropdown: _selectedSubSubSubcategoryId=$_selectedSubSubSubcategoryId, state=$state',
+        );
         return state.maybeWhen(
           success: (categories) {
             debugPrint('🔵 _buildSubSubSubSubcategoryDropdown: Все категории в состоянии: ${categories.length}');
             debugPrint(
               '🔵 _buildSubSubSubSubcategoryDropdown: Категории: ${categories.map((c) => 'id=${c.id}, name=${c.name}, parentId=${c.parentId}, partsMainCategoryId=${c.partsMainCategoryId}').join(', ')}',
             );
-            debugPrint('🔵 _buildSubSubSubSubcategoryDropdown: Ищем категории с parentId=$_selectedSubSubSubcategoryId');
+            debugPrint(
+              '🔵 _buildSubSubSubSubcategoryDropdown: Ищем категории с parentId=$_selectedSubSubSubcategoryId',
+            );
             // Фильтруем подкатегории четвертого уровня: они должны иметь parentId равный выбранной подкатегории третьего уровня
             final subSubSubSubcategories = categories.where((c) => c.parentId == _selectedSubSubSubcategoryId).toList();
-            debugPrint('🔵 Найдено подкатегорий четвертого уровня для subSubSubcategoryId=$_selectedSubSubSubcategoryId: ${subSubSubSubcategories.length}');
+            debugPrint(
+              '🔵 Найдено подкатегорий четвертого уровня для subSubSubcategoryId=$_selectedSubSubSubcategoryId: ${subSubSubSubcategories.length}',
+            );
             if (subSubSubSubcategories.isNotEmpty) {
-              debugPrint('🔵 Подкатегории четвертого уровня: ${subSubSubSubcategories.map((c) => 'id=${c.id}, name=${c.name}').join(', ')}');
+              debugPrint(
+                '🔵 Подкатегории четвертого уровня: ${subSubSubSubcategories.map((c) => 'id=${c.id}, name=${c.name}').join(', ')}',
+              );
             }
 
             // Если подкатегорий четвертого уровня нет, не показываем ничего
@@ -1402,7 +1579,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
               debugPrint('🔵 Подкатегорий четвертого уровня нет, скрываем поле');
               return const SizedBox.shrink();
             }
-            debugPrint('🔵 Отображаем поле подкатегорий четвертого уровня с ${subSubSubSubcategories.length} элементами');
+            debugPrint(
+              '🔵 Отображаем поле подкатегорий четвертого уровня с ${subSubSubSubcategories.length} элементами',
+            );
             return _buildSubSubSubSubcategoryField(subSubSubSubcategories);
           },
           loading: () {
@@ -1423,9 +1602,14 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
 
   Widget _buildSubSubSubSubcategoryField(List<MarketCategoryEntity> subSubSubSubcategories) {
     final selectedSubSubSubSubcategory = _selectedSubSubSubSubcategoryId != null
-        ? subSubSubSubcategories.firstWhere((category) => category.id == _selectedSubSubSubSubcategoryId, orElse: () => subSubSubSubcategories.first)
+        ? subSubSubSubcategories.firstWhere(
+            (category) => category.id == _selectedSubSubSubSubcategoryId,
+            orElse: () => subSubSubSubcategories.first,
+          )
         : null;
-    final displayText = _selectedSubSubSubSubcategoryId != null ? selectedSubSubSubSubcategory!.name : 'Выберите подкатегорию четвертого уровня (необязательно)';
+    final displayText = _selectedSubSubSubSubcategoryId != null
+        ? selectedSubSubSubSubcategory!.name
+        : 'Выберите подкатегорию четвертого уровня (необязательно)';
 
     return InkWell(
       onTap: () => _showSubSubSubSubcategoryBottomSheet(subSubSubSubcategories),
@@ -1437,7 +1621,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
           fillColor: Colors.white,
           suffixIcon: Icon(Icons.arrow_drop_down),
         ),
-        child: Text(displayText, style: AppStyles.regular14s.copyWith(color: _selectedSubSubSubSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary)),
+        child: Text(
+          displayText,
+          style: AppStyles.regular14s.copyWith(
+            color: _selectedSubSubSubSubcategoryId != null ? AppColors.textPrimary : AppColors.textSecondary,
+          ),
+        ),
       ),
     );
   }
@@ -1456,7 +1645,9 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
             children: [
               ListTile(
                 title: Text('Не выбрано', style: AppStyles.regular14s),
-                trailing: _selectedSubSubSubSubcategoryId == null ? Icon(Icons.check, color: AppColors.primary100p) : null,
+                trailing: _selectedSubSubSubSubcategoryId == null
+                    ? Icon(Icons.check, color: AppColors.primary100p)
+                    : null,
                 onTap: () {
                   // Закрываем только bottom sheet, используя контекст bottom sheet
                   Navigator.pop(bottomSheetContext, null);

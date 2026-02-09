@@ -19,10 +19,8 @@ class HighCarbonMonoxideCoLevelAdvisoryScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'high_carbon_monoxide_co_level_advisory'.tr(),
-            ),
+            onPressed: () =>
+                LearningShareHelper.shareLearningPage(context, title: 'high_carbon_monoxide_co_level_advisory'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

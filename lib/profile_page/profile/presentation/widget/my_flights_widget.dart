@@ -43,7 +43,8 @@ class _MyFlightsWidgetState extends State<MyFlightsWidget> {
                   child: Text(errorForUser, style: AppStyles.regular14s.copyWith(color: Color(0xFFEF4444))),
                 ),
               ),
-              success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) => _buildFlightsList(context, flights),
+              success: (flights, airport, departureAirport, arrivalAirport, dateFrom, dateTo) =>
+                  _buildFlightsList(context, flights),
               orElse: () => SizedBox.shrink(),
             ),
           ],

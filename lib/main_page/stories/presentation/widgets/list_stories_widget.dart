@@ -58,7 +58,9 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                   itemCount: state.story.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      AutoRouter.of(context).push(DetailStoryRoute(idStory: state.story[index].id, stories: state.story, currentIndex: index));
+                      AutoRouter.of(context).push(
+                        DetailStoryRoute(idStory: state.story[index].id, stories: state.story, currentIndex: index),
+                      );
                     },
                     child: Padding(
                       padding: EdgeInsets.only(right: AppStyles.adaptiveHorizontalPadding(context)),
@@ -68,14 +70,19 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            border: storyState.listStories.contains(state.story[index].id) ? null : Border.all(color: const Color(0xFF0A6EFA), width: 1),
+                            border: storyState.listStories.contains(state.story[index].id)
+                                ? null
+                                : Border.all(color: const Color(0xFF0A6EFA), width: 1),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
-                                NetworkImageWidget(imageUrl: getImageUrl(state.story[index].logoStory), fit: BoxFit.cover),
+                                NetworkImageWidget(
+                                  imageUrl: getImageUrl(state.story[index].logoStory),
+                                  fit: BoxFit.cover,
+                                ),
                                 Positioned(
                                   left: 0,
                                   right: 0,
@@ -83,7 +90,11 @@ class _ListStoriesWidgetState extends State<ListStoriesWidget> {
                                   child: Container(
                                     padding: EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.black.withOpacity(0.5)]),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                                      ),
                                     ),
                                     child: Text(
                                       state.story[index].title,

@@ -41,6 +41,13 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/profile_page/profile/data/datasources/profile_service.dart';
 import 'package:aviapoint/profile_page/profile/data/repositories/profile_repository_impl.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
+import 'package:aviapoint/work/data/datasources/checko_service.dart';
+import 'package:aviapoint/work/data/repositories/checko_repository_impl.dart';
+import 'package:aviapoint/work/data/datasources/jobs_service.dart';
+import 'package:aviapoint/work/data/repositories/jobs_repository_impl.dart';
+import 'package:aviapoint/work/domain/repositories/checko_repository.dart';
+import 'package:aviapoint/work/domain/repositories/jobs_repository.dart';
+import 'package:aviapoint/work/presentation/bloc/jobs_list_refresh_cubit.dart';
 import 'package:aviapoint/on_the_way/data/datasources/on_the_way_service.dart';
 import 'package:aviapoint/on_the_way/data/repositories/on_the_way_repository_impl.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
@@ -101,4 +108,13 @@ Future<void> setupDependencies() async {
   final paymentService = PaymentService(dataSource.dio);
   getIt.registerSingleton<PaymentService>(paymentService);
   getIt.registerSingleton<PaymentRepository>(PaymentRepositoryImpl(paymentService: paymentService));
+
+  // Jobs (вакансии и резюме)
+  final jobsService = JobsService(dataSource.dio);
+  getIt.registerSingleton<JobsRepository>(JobsRepositoryImpl(jobsService: jobsService));
+  getIt.registerSingleton<JobsVacanciesRefreshCubit>(JobsVacanciesRefreshCubit());
+  getIt.registerSingleton<JobsResumesRefreshCubit>(JobsResumesRefreshCubit());
+
+  final checkoService = CheckoService(dataSource.dio);
+  getIt.registerSingleton<CheckoRepository>(CheckoRepositoryImpl(service: checkoService));
 }

@@ -62,11 +62,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await _authService.refreshToken({'refresh_token': refreshTokenValue});
 
-      // Проверяем, что токены пришли
-      if (response.token == null || response.refreshToken == null) {
-        throw Exception('Invalid token response: tokens are null');
-      }
-
       // Сохраняем токены (может выбросить исключение)
       await TokenStorage.saveTokens(accessToken: response.token, refreshToken: response.refreshToken);
 
@@ -85,7 +80,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return response.token;
-    } catch (e, stack) {
+    } catch (e, _) {
       // Логируем ошибку, но НЕ выходим из системы автоматически
       // logger.e("Refresh token failed (non-critical)", e, stack);
       return null; // Пусть вызывающий код решает, что делать

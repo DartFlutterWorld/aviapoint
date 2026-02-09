@@ -10,7 +10,14 @@ class SearchBarWidget extends StatefulWidget {
   final VoidCallback? onClear;
   final AirportService airportService;
 
-  const SearchBarWidget({super.key, this.initialValue, required this.hintText, required this.onSelected, this.onClear, required this.airportService});
+  const SearchBarWidget({
+    super.key,
+    this.initialValue,
+    required this.hintText,
+    required this.onSelected,
+    this.onClear,
+    required this.airportService,
+  });
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -75,7 +82,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           _suggestions = results;
           _showSuggestions = results.isNotEmpty;
         });
-        print('📊 [SearchBarWidget] Подсказки: ${_showSuggestions ? "показаны" : "скрыты"} (${_suggestions.length} элементов)');
+        print(
+          '📊 [SearchBarWidget] Подсказки: ${_showSuggestions ? "показаны" : "скрыты"} (${_suggestions.length} элементов)',
+        );
       }
     } catch (e, stackTrace) {
       print('❌ [SearchBarWidget] Ошибка поиска аэропортов: $e');
@@ -157,7 +166,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Color(0xFFD9E6F8)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12, offset: Offset(0, 4), spreadRadius: 0)],
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12, offset: Offset(0, 4), spreadRadius: 0),
+              ],
             ),
             constraints: BoxConstraints(maxHeight: 300),
             child: ListView.separated(
@@ -170,8 +181,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 IconData iconData = Icons.local_airport; // Иконка аэропорта (самолётик)
                 Color iconColor = Color(0xFF0A6EFA);
                 final typeLower = airport.type.toLowerCase();
-                if (typeLower == 'heliport' || typeLower == 'вертодром' || typeLower.contains('heliport') || typeLower.contains('вертодром')) {
-                  iconData = Icons.airplanemode_active; // Иконка вертолёта (альтернативная иконка самолёта для визуального отличия)
+                if (typeLower == 'heliport' ||
+                    typeLower == 'вертодром' ||
+                    typeLower.contains('heliport') ||
+                    typeLower.contains('вертодром')) {
+                  iconData = Icons
+                      .airplanemode_active; // Иконка вертолёта (альтернативная иконка самолёта для визуального отличия)
                   iconColor = Color(0xFF10B981);
                 }
 
@@ -189,7 +204,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                               // Иконка типа аэропорта
                               Container(
                                 padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+                                decoration: BoxDecoration(
+                                  color: iconColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 child: Icon(iconData, color: iconColor, size: 20),
                               ),
                               SizedBox(width: 16),
@@ -204,16 +222,25 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                         Text(airport.code, style: AppStyles.bold14s.copyWith(color: Color(0xFF374151))),
                                         if (airport.identRu != null && airport.identRu != airport.code) ...[
                                           SizedBox(width: 6),
-                                          Text('(${airport.identRu})', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                          Text(
+                                            '(${airport.identRu})',
+                                            style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                          ),
                                         ],
                                         if (airport.isInternational == true) ...[
                                           SizedBox(width: 8),
                                           Container(
                                             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                                            decoration: BoxDecoration(color: Color(0xFF0A6EFA).withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF0A6EFA).withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
                                             child: Text(
                                               'INT',
-                                              style: AppStyles.medium10s.copyWith(color: Color(0xFF0A6EFA), fontWeight: FontWeight.w600),
+                                              style: AppStyles.medium10s.copyWith(
+                                                color: Color(0xFF0A6EFA),
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -228,7 +255,13 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     // Тип аэропорта под названием
-                                    if (airport.typeDisplay.isNotEmpty) ...[SizedBox(height: 4), Text(airport.typeDisplay, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
+                                    if (airport.typeDisplay.isNotEmpty) ...[
+                                      SizedBox(height: 4),
+                                      Text(
+                                        airport.typeDisplay,
+                                        style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                      ),
+                                    ],
                                     // Адрес (город и регион) - без ограничений по overflow
                                     if (airport.city != null || airport.region != null) ...[
                                       SizedBox(height: 4),
@@ -240,11 +273,18 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                           if (airport.city != null) ...[
                                             Icon(Icons.location_city, size: 12, color: Color(0xFF9CA5AF)),
                                             SizedBox(width: 4),
-                                            Text(airport.city!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                            Text(
+                                              airport.city!,
+                                              style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                            ),
                                           ],
                                           if (airport.region != null) ...[
-                                            if (airport.city != null) Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
-                                            Text(airport.region!, style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                            if (airport.city != null)
+                                              Text('•', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                                            Text(
+                                              airport.region!,
+                                              style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)),
+                                            ),
                                           ],
                                         ],
                                       ),
@@ -260,10 +300,18 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                             right: 0,
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(color: airport.isActive ? Color(0xFF10B981).withOpacity(0.1) : Color(0xFFEF4444).withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
+                              decoration: BoxDecoration(
+                                color: airport.isActive
+                                    ? Color(0xFF10B981).withOpacity(0.1)
+                                    : Color(0xFFEF4444).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
                               child: Text(
                                 airport.isActive ? 'Действующий' : 'Недействующий',
-                                style: AppStyles.medium10s.copyWith(color: airport.isActive ? Color(0xFF10B981) : Color(0xFFEF4444), fontWeight: FontWeight.w600),
+                                style: AppStyles.medium10s.copyWith(
+                                  color: airport.isActive ? Color(0xFF10B981) : Color(0xFFEF4444),
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),

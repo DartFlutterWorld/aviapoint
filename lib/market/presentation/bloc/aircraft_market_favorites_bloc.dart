@@ -17,7 +17,8 @@ class AircraftMarketFavoritesState with _$AircraftMarketFavoritesState {
   const factory AircraftMarketFavoritesState.adding() = AddingAircraftMarketFavoritesState;
   const factory AircraftMarketFavoritesState.added(AircraftMarketEntity product) = AddedAircraftMarketFavoritesState;
   const factory AircraftMarketFavoritesState.removing() = RemovingAircraftMarketFavoritesState;
-  const factory AircraftMarketFavoritesState.removed(AircraftMarketEntity product) = RemovedAircraftMarketFavoritesState;
+  const factory AircraftMarketFavoritesState.removed(AircraftMarketEntity product) =
+      RemovedAircraftMarketFavoritesState;
   const factory AircraftMarketFavoritesState.error(String message) = ErrorAircraftMarketFavoritesState;
 }
 
@@ -25,8 +26,8 @@ class AircraftMarketFavoritesBloc extends Bloc<AircraftMarketFavoritesEvent, Air
   final MarketRepository _repository;
 
   AircraftMarketFavoritesBloc({required MarketRepository repository})
-      : _repository = repository,
-        super(const AircraftMarketFavoritesState.initial()) {
+    : _repository = repository,
+      super(const AircraftMarketFavoritesState.initial()) {
     on<AddToFavoritesFavoritesEvent>(_onAddToFavorites);
     on<RemoveFromFavoritesFavoritesEvent>(_onRemoveFromFavorites);
   }
@@ -47,7 +48,10 @@ class AircraftMarketFavoritesBloc extends Bloc<AircraftMarketFavoritesEvent, Air
     );
   }
 
-  Future<void> _onRemoveFromFavorites(RemoveFromFavoritesFavoritesEvent event, Emitter<AircraftMarketFavoritesState> emit) async {
+  Future<void> _onRemoveFromFavorites(
+    RemoveFromFavoritesFavoritesEvent event,
+    Emitter<AircraftMarketFavoritesState> emit,
+  ) async {
     emit(const AircraftMarketFavoritesState.removing());
     final result = await _repository.removeFromFavorites(event.productId);
     result.fold(

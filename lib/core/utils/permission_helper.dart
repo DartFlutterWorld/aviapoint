@@ -9,11 +9,11 @@ class PermissionHelper {
   PermissionHelper._();
 
   /// Проверяет, является ли текущий пользователь владельцем или администратором
-  /// 
+  ///
   /// Параметры:
   /// - [ownerId] - ID владельца контента (sellerId, pilotId, authorId и т.д.)
   /// - [context] - BuildContext для доступа к ProfileBloc
-  /// 
+  ///
   /// Возвращает true, если текущий пользователь является владельцем ИЛИ администратором
   static bool isOwnerOrAdmin(int? ownerId, BuildContext context) {
     // Проверяем авторизацию
@@ -25,12 +25,9 @@ class PermissionHelper {
     // Получаем профиль текущего пользователя
     final profileBloc = context.read<ProfileBloc>();
     final profileState = profileBloc.state;
-    
+
     ProfileEntity? currentProfile;
-    profileState.maybeWhen(
-      success: (profile) => currentProfile = profile,
-      orElse: () => currentProfile = null,
-    );
+    profileState.maybeWhen(success: (profile) => currentProfile = profile, orElse: () => currentProfile = null);
 
     if (currentProfile == null) {
       return false;
@@ -47,12 +44,9 @@ class PermissionHelper {
   static int? getCurrentUserId(BuildContext context) {
     final profileBloc = context.read<ProfileBloc>();
     final profileState = profileBloc.state;
-    
+
     int? currentUserId;
-    profileState.maybeWhen(
-      success: (profile) => currentUserId = profile.id,
-      orElse: () => currentUserId = null,
-    );
+    profileState.maybeWhen(success: (profile) => currentUserId = profile.id, orElse: () => currentUserId = null);
 
     return currentUserId;
   }
@@ -61,12 +55,9 @@ class PermissionHelper {
   static bool isAdmin(BuildContext context) {
     final profileBloc = context.read<ProfileBloc>();
     final profileState = profileBloc.state;
-    
+
     bool admin = false;
-    profileState.maybeWhen(
-      success: (profile) => admin = profile.isAdmin,
-      orElse: () => admin = false,
-    );
+    profileState.maybeWhen(success: (profile) => admin = profile.isAdmin, orElse: () => admin = false);
 
     return admin;
   }

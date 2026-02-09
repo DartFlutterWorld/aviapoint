@@ -87,9 +87,14 @@ class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
                         valueListenable: currentDoing,
                         builder: (context, doing, _) {
                           return IconButton(
-                icon: const Icon(Icons.share, color: AppColors.primary100p),
-                            onPressed: () => LearningShareHelper.shareLearningPage(context, title: title, description: doing, imageUrl: imageUrl),
-                tooltip: 'Поделиться',
+                            icon: const Icon(Icons.share, color: AppColors.primary100p),
+                            onPressed: () => LearningShareHelper.shareLearningPage(
+                              context,
+                              title: title,
+                              description: doing,
+                              imageUrl: imageUrl,
+                            ),
+                            tooltip: 'Поделиться',
                           );
                         },
                       );
@@ -115,7 +120,9 @@ class _NormalCheckListScreenState extends State<NormalCheckListScreen> {
               error: (value) => ErrorCustom(
                 textError: value.errorForUser,
                 repeat: () {
-                  context.read<NormalCheckListByCategoryBloc>().add(GetNormalCheckListByCategoryEvent(widget.normalCategoryId));
+                  context.read<NormalCheckListByCategoryBloc>().add(
+                    GetNormalCheckListByCategoryEvent(widget.normalCategoryId),
+                  );
                 },
               ),
               initial: (value) => LoadingCustom(),
@@ -189,7 +196,9 @@ class _SuccessState extends State<_Success> {
     // По NormalInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
     // с айдишниками и смотрим в нем,
     // если согласно индексу +1 (+1 потому что счетает индекс от 0) есть уже такой то показываем зелёный кубик, иначе красный
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == widget.normalCheck.first.normalCategoryId);
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
+      (e) => e.idCategory == widget.normalCheck.first.normalCategoryId,
+    );
     if (index == indexCheck) {
       return Color(0xFFF1F7FF);
     }
@@ -201,7 +210,9 @@ class _SuccessState extends State<_Success> {
     // По preflightInspectionCategoryId (айдишник категории в предполётной подготовке) в checkProgress находим нужный список
     // с айдишниками и смотрим в нем,
     // если согласно индексу +1 (+1 потому что счетает индекс от 0) есть уже такой то показываем зелёный кубик, иначе красный
-    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull((e) => e.idCategory == widget.normalCheck.first.normalCategoryId);
+    final checkProgressByIdCategory = state.checkProgress.firstWhereOrNull(
+      (e) => e.idCategory == widget.normalCheck.first.normalCategoryId,
+    );
     if (index == indexCheck) {
       return Color(0xFF223B76);
     }
@@ -252,16 +263,24 @@ class _SuccessState extends State<_Success> {
                       options: options,
                       itemBuilder: buildAnimatedItem,
                       itemCount: normalCheck.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 15, crossAxisSpacing: 4, mainAxisSpacing: 4),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 15,
+                        crossAxisSpacing: 4,
+                        mainAxisSpacing: 4,
+                      ),
                     ),
                     SizedBox(height: 24),
                     Wrap(
                       children: [
-                        if (normalCheck[indexCheck].subCategory != null && normalCheck[indexCheck].subCategory!.isNotEmpty)
+                        if (normalCheck[indexCheck].subCategory != null &&
+                            normalCheck[indexCheck].subCategory!.isNotEmpty)
                           Center(
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 12),
-                              child: Text(normalCheck[indexCheck].subCategory ?? '', style: AppStyles.medium10s.copyWith(color: Color(0xFF1F2937))),
+                              child: Text(
+                                normalCheck[indexCheck].subCategory ?? '',
+                                style: AppStyles.medium10s.copyWith(color: Color(0xFF1F2937)),
+                              ),
                             ),
                           ),
                         Padding(
@@ -286,7 +305,10 @@ class _SuccessState extends State<_Success> {
                             SvgPicture.asset(Pictures.danger),
                             SizedBox(width: 6),
                             Flexible(
-                              child: Text(normalCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(), style: AppStyles.regular15s.copyWith(color: Color(0xFF374151))),
+                              child: Text(
+                                normalCheck[indexCheck].doing.replaceAll("\\n", "\n").trim(),
+                                style: AppStyles.regular15s.copyWith(color: Color(0xFF374151)),
+                              ),
                             ),
                           ],
                         ),
@@ -297,7 +319,12 @@ class _SuccessState extends State<_Success> {
                       Center(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: NetworkImageWidget(imageUrl: getImageUrl(normalCheck[indexCheck].picture), placeholder: LoadingCustom(), errorWidget: Icon(Icons.error), width: 700),
+                          child: NetworkImageWidget(
+                            imageUrl: getImageUrl(normalCheck[indexCheck].picture),
+                            placeholder: LoadingCustom(),
+                            errorWidget: Icon(Icons.error),
+                            width: 700,
+                          ),
                         ),
                       ),
                     SizedBox(height: 24),
@@ -312,9 +339,19 @@ class _SuccessState extends State<_Success> {
               textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
               borderColor: Color(0xFF0A6EFA),
               borderRadius: 46,
-              boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7))],
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xff0064D6).withOpacity(0.25),
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                  offset: Offset(0.0, 7),
+                ),
+              ],
               onPressed: () async {
-                context.read<NormalCheckedCubit>().setCheck(idCategory: normalCheck[indexCheck].normalCategoryId, idCheck: indexCheck + 1);
+                context.read<NormalCheckedCubit>().setCheck(
+                  idCategory: normalCheck[indexCheck].normalCategoryId,
+                  idCheck: indexCheck + 1,
+                );
 
                 if (normalCheck.length - 1 > indexCheck) {
                   setState(() {

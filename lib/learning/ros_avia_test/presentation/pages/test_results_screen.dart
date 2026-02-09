@@ -150,7 +150,9 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Без категории',
                           ).catchError((Object error) {
                             if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ошибка при открытии вопроса')));
+                              ScaffoldMessenger.of(
+                                context,
+                              ).showSnackBar(const SnackBar(content: Text('Ошибка при открытии вопроса')));
                             }
                           });
                         } catch (e) {}
@@ -160,7 +162,8 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                           questionId: answer.questionId,
                           questionText: '',
                           answers: [],
-                          categoryTitle: _questionsMap[answer.questionId]?.categoryTitle ?? 'Категория ${answer.categoryId}',
+                          categoryTitle:
+                              _questionsMap[answer.questionId]?.categoryTitle ?? 'Категория ${answer.categoryId}',
                           categoryId: answer.categoryId,
                         ),
                         colorBackground: isCorrect ? const Color(0xFFD8F9EC) : const Color(0xFFFFE0E0),
@@ -196,7 +199,11 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: CustomAppBar(title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}', titleTextAlign: TextAlign.center, withBack: false),
+        appBar: CustomAppBar(
+          title: 'Результаты\n ${context.read<RosAviaTestCubit>().state.typeSertificate.title}',
+          titleTextAlign: TextAlign.center,
+          withBack: false,
+        ),
         body: FutureBuilder<List<TestAnswer>>(
           future: _answersFuture,
           builder: (context, snapshot) {
@@ -247,7 +254,12 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                                   padding: const EdgeInsets.only(top: 50.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [Text('${percentage.toInt().toString()}%', style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76)))],
+                                    children: [
+                                      Text(
+                                        '${percentage.toInt().toString()}%',
+                                        style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76)),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -256,13 +268,27 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   // mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('Тем: ${categorizedResults.length}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    Text(
+                                      'Тем: ${categorizedResults.length}',
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89)),
+                                    ),
                                     SizedBox(height: 8),
-                                    Text('Вопросов: ${totalCount}', style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89))),
+                                    Text(
+                                      'Вопросов: ${totalCount}',
+                                      style: AppStyles.regular12s.copyWith(color: Color(0xFF6E7A89)),
+                                    ),
                                     SizedBox(height: 8),
-                                    ChipsWithTitleWidget(title: 'правильных ${correctCount}', colorBackground: const Color(0xFFD8F9EC), colorTitle: const Color(0xFF15D585)),
+                                    ChipsWithTitleWidget(
+                                      title: 'правильных ${correctCount}',
+                                      colorBackground: const Color(0xFFD8F9EC),
+                                      colorTitle: const Color(0xFF15D585),
+                                    ),
                                     SizedBox(height: 8),
-                                    ChipsWithTitleWidget(title: 'неправильных ${totalCount - correctCount}', colorBackground: const Color(0xFFFFE0E0), colorTitle: const Color(0xFFFF6B6B)),
+                                    ChipsWithTitleWidget(
+                                      title: 'неправильных ${totalCount - correctCount}',
+                                      colorBackground: const Color(0xFFFFE0E0),
+                                      colorTitle: const Color(0xFFFF6B6B),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -303,7 +329,14 @@ class _TestResultsScreenState extends State<TestResultsScreen> {
                             );
                           }
                         },
-                        boxShadow: [BoxShadow(color: const Color(0xff0064D6).withOpacity(0.27), blurRadius: 9, spreadRadius: 0, offset: const Offset(0.0, 7.0))],
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xff0064D6).withOpacity(0.27),
+                            blurRadius: 9,
+                            spreadRadius: 0,
+                            offset: const Offset(0.0, 7.0),
+                          ),
+                        ],
                         textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                         borderColor: Colors.transparent,
                         backgroundColor: const Color(0xFF0A6EFA),

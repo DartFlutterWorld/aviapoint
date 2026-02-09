@@ -19,10 +19,7 @@ class EngineFireInFlightScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'engine_fire_in_flight'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'engine_fire_in_flight'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

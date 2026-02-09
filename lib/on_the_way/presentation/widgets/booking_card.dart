@@ -57,7 +57,10 @@ class BookingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text('Бронирование #${booking.id}', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                  child: Text(
+                    'Бронирование #${booking.id}',
+                    style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -95,12 +98,20 @@ class BookingCard extends StatelessWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight), size: 18, color: Color(0xFF0A6EFA)),
+                                Icon(
+                                  isFirst ? Icons.flight_takeoff : (isLast ? Icons.flight_land : Icons.flight),
+                                  size: 18,
+                                  color: Color(0xFF0A6EFA),
+                                ),
                                 SizedBox(width: 6),
                                 Text(airportCode, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
                               ],
                             ),
-                            if (!isLast) ...[SizedBox(width: 4), Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)), SizedBox(width: 4)],
+                            if (!isLast) ...[
+                              SizedBox(width: 4),
+                              Icon(Icons.arrow_forward, size: 16, color: Color(0xFF0A6EFA)),
+                              SizedBox(width: 4),
+                            ],
                           ];
                         }).toList(),
                       ],
@@ -112,7 +123,10 @@ class BookingCard extends StatelessWidget {
                         children: [
                           Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
                           SizedBox(width: 6),
-                          Text(formatDate(booking.flightDepartureDate!), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            formatDate(booking.flightDepartureDate!),
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                          ),
                         ],
                       ),
                     ],
@@ -137,13 +151,19 @@ class BookingCard extends StatelessWidget {
                         children: [
                           Icon(Icons.flight_takeoff, size: 18, color: Color(0xFF0A6EFA)),
                           SizedBox(width: 8),
-                          Text(booking.flightDepartureAirport!, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            booking.flightDepartureAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
                           SizedBox(width: 12),
                           Icon(Icons.arrow_forward, size: 18, color: Color(0xFF0A6EFA)),
                           SizedBox(width: 12),
                           Icon(Icons.flight_land, size: 18, color: Color(0xFF0A6EFA)),
                           SizedBox(width: 8),
-                          Text(booking.flightArrivalAirport!, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            booking.flightArrivalAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
                         ],
                       ),
                     ] else if (booking.flightDepartureAirport != null) ...[
@@ -151,7 +171,10 @@ class BookingCard extends StatelessWidget {
                         children: [
                           Icon(Icons.flight_takeoff, size: 18, color: Color(0xFF0A6EFA)),
                           SizedBox(width: 8),
-                          Text(booking.flightDepartureAirport!, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            booking.flightDepartureAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
                         ],
                       ),
                     ] else if (booking.flightArrivalAirport != null) ...[
@@ -159,7 +182,10 @@ class BookingCard extends StatelessWidget {
                         children: [
                           Icon(Icons.flight_land, size: 18, color: Color(0xFF0A6EFA)),
                           SizedBox(width: 8),
-                          Text(booking.flightArrivalAirport!, style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            booking.flightArrivalAirport!,
+                            style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                          ),
                         ],
                       ),
                     ],
@@ -170,7 +196,10 @@ class BookingCard extends StatelessWidget {
                         children: [
                           Icon(Icons.calendar_today, size: 16, color: Color(0xFF9CA5AF)),
                           SizedBox(width: 6),
-                          Text(formatDate(booking.flightDepartureDate!), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
+                          Text(
+                            formatDate(booking.flightDepartureDate!),
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                          ),
                         ],
                       ),
                     ],
@@ -204,13 +233,20 @@ class BookingCard extends StatelessWidget {
                   children: [
                     Icon(Icons.attach_money, size: 16, color: Color(0xFF10B981)),
                     SizedBox(width: 6),
-                    Text('${formatPrice(booking.totalPrice.toInt())}', style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981))),
+                    Text(
+                      '${formatPrice(booking.totalPrice.toInt())}',
+                      style: AppStyles.bold14s.copyWith(color: Color(0xFF10B981)),
+                    ),
                   ],
                 ),
               ],
             ),
             // Контакты пилота (только для подтвержденных бронирований)
-            if (booking.status == 'confirmed' && (booking.pilotPhone != null || booking.pilotEmail != null || booking.pilotTelegram != null || booking.pilotMax != null)) ...[
+            if (booking.status == 'confirmed' &&
+                (booking.pilotPhone != null ||
+                    booking.pilotEmail != null ||
+                    booking.pilotTelegram != null ||
+                    booking.pilotMax != null)) ...[
               SizedBox(height: 16),
               Container(
                 padding: EdgeInsets.all(12),
@@ -349,9 +385,9 @@ class BookingCard extends StatelessWidget {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -362,9 +398,9 @@ class BookingCard extends StatelessWidget {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть почтовый клиент'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть почтовый клиент'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -376,9 +412,9 @@ class BookingCard extends StatelessWidget {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -390,9 +426,9 @@ class BookingCard extends StatelessWidget {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
       }
     }
   }

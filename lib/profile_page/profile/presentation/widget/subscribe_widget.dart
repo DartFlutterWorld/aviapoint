@@ -4,6 +4,7 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +55,8 @@ class SubscribeWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
 
-        height: Provider.of<AppState>(context).isTablet ? 450 : 225,
-        width: Provider.of<AppState>(context).isTablet ? 350 : 176,
+        height: Provider.of<AppState>(context).isTablet || kIsWeb ? 450 : 225,
+        width: Provider.of<AppState>(context).isTablet || kIsWeb ? 350 : 176,
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(fon), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(9),

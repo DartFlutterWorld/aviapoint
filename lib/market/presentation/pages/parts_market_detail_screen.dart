@@ -46,11 +46,16 @@ class PartsMarketDetailScreen extends StatefulWidget {
 
 class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
   final MapController _mapController = MapController();
-  final Dio _dio = Dio(BaseOptions(headers: {'User-Agent': 'AviaPoint App (Flutter)'}, validateStatus: (status) => status != null && status < 500));
+  final Dio _dio = Dio(
+    BaseOptions(
+      headers: {'User-Agent': 'AviaPoint App (Flutter)'},
+      validateStatus: (status) => status != null && status < 500,
+    ),
+  );
   LatLng? _locationCoordinates;
   bool _isLoadingLocation = false;
   String? _lastGeocodedAddress;
-  
+
   PartsMarketEntity? _part;
   bool _isLoading = true;
   String? _errorMessage;
@@ -171,7 +176,7 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       final apiDatasource = getIt<ApiDatasource>() as ApiDatasourceDio;
       final service = OnTheWayService(apiDatasource.dio);
       final allModels = await service.getAircraftModels();
-      
+
       final loadedModels = allModels.where((model) => modelIds.contains(model.id)).toList();
 
       if (mounted) {
@@ -212,8 +217,8 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
     buffer.writeln('');
 
     if (part.description != null && part.description!.isNotEmpty) {
-      final description = part.description!.length > 200 
-          ? '${part.description!.substring(0, 200)}...' 
+      final description = part.description!.length > 200
+          ? '${part.description!.substring(0, 200)}...'
           : part.description!;
       buffer.writeln(description);
       buffer.writeln('');
@@ -264,7 +269,7 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       }
 
       final scaffoldMessenger = ScaffoldMessenger.of(context);
-      
+
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Row(
@@ -340,9 +345,18 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                   )
                 : FlutterMap(
                     mapController: _mapController,
-                    options: MapOptions(initialCenter: _locationCoordinates ?? const LatLng(55.7558, 37.6173), initialZoom: 15.0, minZoom: 3.0, maxZoom: 18.0),
+                    options: MapOptions(
+                      initialCenter: _locationCoordinates ?? const LatLng(55.7558, 37.6173),
+                      initialZoom: 15.0,
+                      minZoom: 3.0,
+                      maxZoom: 18.0,
+                    ),
                     children: [
-                      TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.aviapoint.app', maxZoom: 19),
+                      TileLayer(
+                        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.aviapoint.app',
+                        maxZoom: 19,
+                      ),
                       if (_locationCoordinates != null)
                         MarkerLayer(
                           markers: [
@@ -401,7 +415,13 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       await Share.shareUri(Uri.parse(imageUrl));
     } catch (e) {
       if (mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось поделиться фотографией'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось поделиться фотографией'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -411,7 +431,13 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
 
     try {
       if (kIsWeb) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Правый клик по изображению → "Сохранить как"'), backgroundColor: Colors.blue, duration: Duration(seconds: 3)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Правый клик по изображению → "Сохранить как"'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 3),
+          ),
+        );
         return;
       }
 
@@ -428,16 +454,34 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
         final savedFile = await File(filePath).copy('${appDocDir.path}/$fileName');
 
         if (mounted) {
-          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Фотография сохранена: ${savedFile.path}'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('Фотография сохранена: ${savedFile.path}'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       } else {
         if (mounted) {
-          scaffoldMessenger.showSnackBar(SnackBar(content: Text('Необходимо разрешение на сохранение файлов'), backgroundColor: Colors.orange, duration: Duration(seconds: 2)));
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('Необходимо разрешение на сохранение файлов'),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       }
     } catch (e) {
       if (mounted) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Не удалось скачать фотографию: $e'), backgroundColor: Colors.red, duration: Duration(seconds: 2)));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Не удалось скачать фотографию: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -475,9 +519,7 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                     if (photoUrl == null || photoUrl.isEmpty) {
                       return Container(
                         color: Colors.black,
-                        child: Center(
-                          child: Icon(Icons.broken_image, color: Colors.white70, size: 64.0),
-                        ),
+                        child: Center(child: Icon(Icons.broken_image, color: Colors.white70, size: 64.0)),
                       );
                     }
                     return InteractiveViewer(
@@ -507,7 +549,10 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64.0),
                                     SizedBox(height: 16),
-                                    Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                    Text(
+                                      'Не удалось загрузить изображение',
+                                      style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -527,14 +572,21 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withOpacity(0.7), Colors.transparent]),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Text(
                                 '${currentIndex + 1} / ${photos.length}',
                                 style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -543,18 +595,26 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                if (photos.isNotEmpty && photos[currentIndex] != null && photos[currentIndex]!.isNotEmpty) ...[
+                                if (photos.isNotEmpty &&
+                                    photos[currentIndex] != null &&
+                                    photos[currentIndex]!.isNotEmpty) ...[
                                   IconButton(
                                     icon: Icon(Icons.share, color: Colors.white, size: 24.0),
                                     onPressed: () => _sharePhoto(dialogContext, photos[currentIndex]!),
-                                    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                    style: IconButton.styleFrom(
+                                      backgroundColor: Colors.black.withOpacity(0.5),
+                                      shape: CircleBorder(),
+                                    ),
                                     tooltip: 'Поделиться',
                                   ),
                                   SizedBox(width: 8),
                                   IconButton(
                                     icon: Icon(Icons.download, color: Colors.white, size: 24.0),
                                     onPressed: () => _downloadPhoto(dialogContext, photos[currentIndex]!),
-                                    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                    style: IconButton.styleFrom(
+                                      backgroundColor: Colors.black.withOpacity(0.5),
+                                      shape: CircleBorder(),
+                                    ),
                                     tooltip: 'Скачать',
                                   ),
                                   SizedBox(width: 8),
@@ -562,7 +622,10 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                                 IconButton(
                                   icon: Icon(Icons.close, color: Colors.white, size: 24.0),
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.5), shape: CircleBorder()),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black.withOpacity(0.5),
+                                    shape: CircleBorder(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -585,22 +648,25 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       builder: (dialogContext) => BlocProvider.value(
         value: _editBloc,
         child: AlertDialog(
-        title: Text('Удалить запчасть?', style: AppStyles.bold16s),
-        content: Text('Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text('Отмена', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+          title: Text('Удалить запчасть?', style: AppStyles.bold16s),
+          content: Text(
+            'Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.',
+            style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text('Отмена', style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
                 _editBloc.add(PartsMarketEditEvent.deleteProduct(partId));
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Colors.red)),
-          ),
-        ],
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: Text('Удалить', style: AppStyles.bold14s.copyWith(color: Colors.red)),
+            ),
+          ],
         ),
       ),
     );
@@ -642,10 +708,7 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       return Scaffold(
         appBar: CustomAppBar(title: 'Запчасть', withBack: true),
         body: Center(
-          child: ErrorCustom(
-            textError: _errorMessage!,
-            repeat: _loadPart,
-          ),
+          child: ErrorCustom(textError: _errorMessage!, repeat: _loadPart),
         ),
       );
     }
@@ -664,9 +727,7 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
     final allImages = [if (mainImage != null) mainImage, ...additionalImages];
 
     return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: _editBloc),
-      ],
+      providers: [BlocProvider.value(value: _editBloc)],
       child: MultiBlocListener(
         listeners: [
           BlocListener<PartsMarketEditBloc, PartsMarketEditState>(
@@ -679,12 +740,16 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                     context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
                     // Возвращаемся назад
                     context.router.maybePop();
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Товар успешно удален'), backgroundColor: Colors.green));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Товар успешно удален'), backgroundColor: Colors.green),
+                    );
                   }
                 },
                 published: (product) {
                   if (product.id == widget.id) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление опубликовано'), backgroundColor: Colors.green));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Объявление опубликовано'), backgroundColor: Colors.green),
+                    );
                     // Обновляем список объявлений
                     context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
                     // Загружаем продукт снова
@@ -692,14 +757,18 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                   }
                 },
                 unpublished: (product) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление снято с публикации'), backgroundColor: Colors.green));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Объявление снято с публикации'), backgroundColor: Colors.green),
+                  );
                   // Обновляем список объявлений
                   context.read<PartsMarketBloc>().add(const PartsMarketEvent.refresh());
                   // Загружаем продукт снова
                   _loadPart();
                 },
                 error: (message) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
                 },
                 orElse: () {},
               );
@@ -707,23 +776,27 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
           ),
           BlocListener<PartsMarketBloc, PartsMarketState>(
             listenWhen: (previous, current) {
-              return current is ErrorPartsMarketState || 
-                     current is UpdatedPartsMarketState ||
-                     (previous is SuccessPartsMarketState && current is SuccessPartsMarketState && previous.parts.length != current.parts.length);
+              return current is ErrorPartsMarketState ||
+                  current is UpdatedPartsMarketState ||
+                  (previous is SuccessPartsMarketState &&
+                      current is SuccessPartsMarketState &&
+                      previous.parts.length != current.parts.length);
             },
             listener: (context, state) {
               state.when(
                 loading: () {},
                 loadingMore: (parts) {},
                 error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(errorForUser), backgroundColor: Colors.red),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
                 },
                 success: (parts, hasMore) {
                   final wasDeleted = !parts.any((p) => p.id == widget.id);
                   if (wasDeleted && mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Запчасть удалена'), backgroundColor: Colors.green));
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(const SnackBar(content: Text('Запчасть удалена'), backgroundColor: Colors.green));
                     Navigator.pop(context);
                     return;
                   }
@@ -734,271 +807,292 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                 updating: () {},
                 updated: (part) {
                   _loadPart();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Изменения сохранены'), backgroundColor: Colors.green));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text('Изменения сохранены'), backgroundColor: Colors.green));
                 },
               );
             },
           ),
         ],
         child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Запчасть',
-          withBack: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.share, color: AppColors.primary100p),
-              onPressed: () => _sharePart(context, _part!),
-              tooltip: 'Поделиться',
-            ),
-            if (isOwner) ...[
+          appBar: CustomAppBar(
+            title: 'Запчасть',
+            withBack: true,
+            actions: [
               IconButton(
-                icon: const Icon(Icons.edit, color: AppColors.primary100p),
-                onPressed: () async {
-                  await context.router.push(EditPartsMarketRoute(productId: _part!.id));
-                  if (mounted) {
-                    _loadPart();
-                  }
-                },
-                tooltip: 'Редактировать',
+                icon: const Icon(Icons.share, color: AppColors.primary100p),
+                onPressed: () => _sharePart(context, _part!),
+                tooltip: 'Поделиться',
               ),
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () => _showDeleteConfirmation(_part!.id, context),
-                tooltip: 'Удалить',
-              ),
+              if (isOwner) ...[
+                IconButton(
+                  icon: const Icon(Icons.edit, color: AppColors.primary100p),
+                  onPressed: () async {
+                    await context.router.push(EditPartsMarketRoute(productId: _part!.id));
+                    if (mounted) {
+                      _loadPart();
+                    }
+                  },
+                  tooltip: 'Редактировать',
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => _showDeleteConfirmation(_part!.id, context),
+                  tooltip: 'Удалить',
+                ),
+              ],
             ],
-          ],
-        ),
-        backgroundColor: AppColors.background,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (mainImage != null) ...[
-                GestureDetector(
-                  onTap: () => _showPhotoViewer(context, allImages, 0),
-                  child: Stack(
-                    children: [
-                      SizedBox(height: 300, width: double.infinity, child: _buildImageWidget(mainImage)),
-                      // Чип состояния
-                      if (_part!.condition != null && _part!.condition!.isNotEmpty)
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(12)),
-                            child: Text(
-                              _getConditionText(_part!.condition),
-                              style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: AppColors.background,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (mainImage != null) ...[
+                  GestureDetector(
+                    onTap: () => _showPhotoViewer(context, allImages, 0),
+                    child: Stack(
+                      children: [
+                        SizedBox(height: 300, width: double.infinity, child: _buildImageWidget(mainImage)),
+                        // Чип состояния
+                        if (_part!.condition != null && _part!.condition!.isNotEmpty)
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                _getConditionText(_part!.condition),
+                                style: AppStyles.regular14s.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ] else
-                Container(
-                  height: 300,
-                  color: Colors.grey.shade200,
-                  child: Center(child: Icon(Icons.image, size: 64.0)),
-                ),
+                ] else
+                  Container(
+                    height: 300,
+                    color: Colors.grey.shade200,
+                    child: Center(child: Icon(Icons.image, size: 64.0)),
+                  ),
 
-              if (additionalImages.isNotEmpty) ...[
-                SizedBox(height: 12),
-                SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: additionalImages.length,
-                    itemBuilder: (context, index) {
-                      final photoUrl = additionalImages[index];
-                      return GestureDetector(
-                        onTap: () {
-                          final startIndex = mainImage != null ? 1 : 0;
-                          _showPhotoViewer(context, allImages, startIndex + index);
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          margin: EdgeInsets.only(right: 12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Color(0xFFE5E7EB), width: 1),
+                if (additionalImages.isNotEmpty) ...[
+                  SizedBox(height: 12),
+                  SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: additionalImages.length,
+                      itemBuilder: (context, index) {
+                        final photoUrl = additionalImages[index];
+                        return GestureDetector(
+                          onTap: () {
+                            final startIndex = mainImage != null ? 1 : 0;
+                            _showPhotoViewer(context, allImages, startIndex + index);
+                          },
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            margin: EdgeInsets.only(right: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Color(0xFFE5E7EB), width: 1),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: _buildImageWidget(photoUrl),
+                            ),
                           ),
-                          child: ClipRRect(borderRadius: BorderRadius.circular(12), child: _buildImageWidget(photoUrl)),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(_part!.title, style: AppStyles.bold20s),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Text(
+                            '${_formatPrice(_part!.price)} ${getCurrencySymbol(_part!.currency)}',
+                            style: AppStyles.bold20s.copyWith(color: AppColors.primary100p, fontSize: 24.0),
+                          ),
+                          SizedBox(width: 12),
+                          TextButton.icon(
+                            onPressed: () => _showPriceHistoryModal(context, _part!.id),
+                            icon: Icon(Icons.history, size: 18, color: Color(0xFF0A6EFA)),
+                            label: Text('История цены', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
+                            style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4)),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+
+                      if (_part!.description != null && _part!.description!.isNotEmpty) ...[
+                        Text('Описание', style: AppStyles.bold16s),
+                        SizedBox(height: 8),
+                        Text(_part!.description!, style: AppStyles.regular14s),
+                        SizedBox(height: 24),
+                      ],
+
+                      Text('Характеристики', style: AppStyles.bold16s),
+                      SizedBox(height: 12),
+                      _buildInfoRow('Артикул', _part!.partNumber),
+                      _buildInfoRow('OEM номер', _part!.oemNumber),
+                      _buildInfoRow('Состояние', _part!.condition != null ? _getConditionText(_part!.condition) : null),
+                      _buildInfoRow('Количество', _part!.quantity > 1 ? _part!.quantity.toString() : null),
+                      _buildInfoRow('Вес', _part!.weightKg != null ? '${_part!.weightKg} кг' : null),
+                      if (_part!.dimensionsLengthCm != null ||
+                          _part!.dimensionsWidthCm != null ||
+                          _part!.dimensionsHeightCm != null)
+                        _buildInfoRow(
+                          'Габариты',
+                          '${_part!.dimensionsLengthCm ?? '-'} × ${_part!.dimensionsWidthCm ?? '-'} × ${_part!.dimensionsHeightCm ?? '-'} см',
                         ),
-                      );
-                    },
+                      _buildCompatibleAircraftModelsSection(),
+                      _buildInfoRow('Категория', _part!.subcategoryName ?? _part!.mainCategoryName),
+                      _buildInfoRow('Производитель', _part!.manufacturerNameDisplay ?? _part!.manufacturerName),
+                      _buildInfoRow('Местоположение', _part!.location),
+                      if (_part!.location != null && _part!.location!.isNotEmpty) _buildLocationMap(_part!.location),
+                      SizedBox(height: 24),
+
+                      Text('Продавец', style: AppStyles.bold16s),
+                      SizedBox(height: 12),
+                      if (_part!.sellerFullName != null) _buildInfoRow('Имя', _part!.sellerFullName),
+                      if (_part!.sellerPhone != null || _part!.sellerTelegram != null || _part!.sellerMax != null) ...[
+                        SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            if (_part!.sellerPhone != null && _part!.sellerPhone!.isNotEmpty)
+                              _buildContactButton(
+                                context: context,
+                                icon: Icons.phone,
+                                label: formatPhone(_part!.sellerPhone!),
+                                color: Color(0xFF10B981),
+                                onTap: () => _launchPhone(context, _part!.sellerPhone!),
+                              ),
+                            if (_part!.sellerTelegram != null && _part!.sellerTelegram!.isNotEmpty)
+                              _buildContactButton(
+                                context: context,
+                                iconAsset: Pictures.telegramm,
+                                label: _part!.sellerTelegram!,
+                                color: Color(0xFF0088CC),
+                                onTap: () => _launchTelegram(context, _part!.sellerTelegram!),
+                              ),
+                            if (_part!.sellerMax != null && _part!.sellerMax!.isNotEmpty)
+                              _buildContactButton(
+                                context: context,
+                                iconAsset: Pictures.max,
+                                label: _part!.sellerMax!,
+                                color: Color(0xFF9CA5AF),
+                                onTap: () => _launchMax(context, _part!.sellerMax!),
+                              ),
+                          ],
+                        ),
+                      ],
+                      SizedBox(height: 24),
+
+                      Text('Информация', style: AppStyles.bold16s),
+                      SizedBox(height: 12),
+                      _buildInfoRow('Просмотры', _part!.viewsCount.toString()),
+                      _buildInfoRow('Дата публикации', formatDate(_part!.createdAt)),
+                      if (_part!.updatedAt != null && _part!.updatedAt != _part!.createdAt)
+                        _buildInfoRow('Дата обновления', formatDate(_part!.updatedAt)),
+                      if (isOwner) _buildInfoRow('Опубликовано до', formatDate(_part!.publishedUntil)),
+                      if (isOwner && remainingDays != null) _buildInfoRow('Осталось дней', remainingDays.toString()),
+                      _buildInfoRow('ID объявления', _part!.id.toString()),
+                      SizedBox(height: 24),
+
+                      if (isOwner) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              await context.router.push(EditPartsMarketRoute(productId: _part!.id));
+                              if (mounted) {
+                                _loadPart();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary100p,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            child: Text('Редактировать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        BlocBuilder<PartsMarketEditBloc, PartsMarketEditState>(
+                          builder: (context, state) {
+                            final currentProduct = state.maybeWhen(
+                              loaded: (product) => product,
+                              saved: (product) => product,
+                              published: (product) => product,
+                              unpublished: (product) => product,
+                              orElse: () => _part,
+                            );
+                            final isPublished = currentProduct?.isPublished ?? _part!.isPublished;
+                            final isLoading = state.maybeWhen(
+                              publishing: () => true,
+                              unpublishing: () => true,
+                              orElse: () => false,
+                            );
+                            return SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () {
+                                        if (isPublished) {
+                                          _unpublishPart(context, _part!.id);
+                                        } else {
+                                          _publishPart(context, _part!.id);
+                                        }
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: isPublished ? Colors.red : AppColors.primary100p,
+                                  foregroundColor: Colors.white,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                child: isLoading
+                                    ? SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      )
+                                    : Text(
+                                        isPublished ? 'Снять с публикации' : 'Опубликовать',
+                                        style: AppStyles.bold16s.copyWith(color: Colors.white),
+                                      ),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    ],
                   ),
                 ),
               ],
-
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_part!.title, style: AppStyles.bold20s),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          '${_formatPrice(_part!.price)} ${getCurrencySymbol(_part!.currency)}',
-                          style: AppStyles.bold20s.copyWith(color: AppColors.primary100p, fontSize: 24.0),
-                        ),
-                        SizedBox(width: 12),
-                        TextButton.icon(
-                          onPressed: () => _showPriceHistoryModal(context, _part!.id),
-                          icon: Icon(Icons.history, size: 18, color: Color(0xFF0A6EFA)),
-                          label: Text('История цены', style: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA))),
-                          style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4)),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-
-                    if (_part!.description != null && _part!.description!.isNotEmpty) ...[
-                      Text('Описание', style: AppStyles.bold16s),
-                      SizedBox(height: 8),
-                      Text(_part!.description!, style: AppStyles.regular14s),
-                      SizedBox(height: 24),
-                    ],
-
-                    Text('Характеристики', style: AppStyles.bold16s),
-                    SizedBox(height: 12),
-                    _buildInfoRow('Артикул', _part!.partNumber),
-                    _buildInfoRow('OEM номер', _part!.oemNumber),
-                    _buildInfoRow('Состояние', _part!.condition != null ? _getConditionText(_part!.condition) : null),
-                    _buildInfoRow('Количество', _part!.quantity > 1 ? _part!.quantity.toString() : null),
-                    _buildInfoRow('Вес', _part!.weightKg != null ? '${_part!.weightKg} кг' : null),
-                    if (_part!.dimensionsLengthCm != null || _part!.dimensionsWidthCm != null || _part!.dimensionsHeightCm != null)
-                      _buildInfoRow('Габариты', '${_part!.dimensionsLengthCm ?? '-'} × ${_part!.dimensionsWidthCm ?? '-'} × ${_part!.dimensionsHeightCm ?? '-'} см'),
-                    _buildCompatibleAircraftModelsSection(),
-                    _buildInfoRow('Категория', _part!.subcategoryName ?? _part!.mainCategoryName),
-                    _buildInfoRow('Производитель', _part!.manufacturerNameDisplay ?? _part!.manufacturerName),
-                    _buildInfoRow('Местоположение', _part!.location),
-                    if (_part!.location != null && _part!.location!.isNotEmpty) _buildLocationMap(_part!.location),
-                    SizedBox(height: 24),
-
-                    Text('Продавец', style: AppStyles.bold16s),
-                    SizedBox(height: 12),
-                    if (_part!.sellerFullName != null) _buildInfoRow('Имя', _part!.sellerFullName),
-                    if (_part!.sellerPhone != null || _part!.sellerTelegram != null || _part!.sellerMax != null) ...[
-                      SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          if (_part!.sellerPhone != null && _part!.sellerPhone!.isNotEmpty)
-                            _buildContactButton(
-                              context: context,
-                              icon: Icons.phone,
-                              label: formatPhone(_part!.sellerPhone!),
-                              color: Color(0xFF10B981),
-                              onTap: () => _launchPhone(context, _part!.sellerPhone!),
-                            ),
-                          if (_part!.sellerTelegram != null && _part!.sellerTelegram!.isNotEmpty)
-                            _buildContactButton(
-                              context: context,
-                              iconAsset: Pictures.telegramm,
-                              label: _part!.sellerTelegram!,
-                              color: Color(0xFF0088CC),
-                              onTap: () => _launchTelegram(context, _part!.sellerTelegram!),
-                            ),
-                          if (_part!.sellerMax != null && _part!.sellerMax!.isNotEmpty)
-                            _buildContactButton(
-                              context: context,
-                              iconAsset: Pictures.max,
-                              label: _part!.sellerMax!,
-                              color: Color(0xFF9CA5AF),
-                              onTap: () => _launchMax(context, _part!.sellerMax!),
-                            ),
-                        ],
-                      ),
-                    ],
-                    SizedBox(height: 24),
-
-                    Text('Информация', style: AppStyles.bold16s),
-                    SizedBox(height: 12),
-                    _buildInfoRow('Просмотры', _part!.viewsCount.toString()),
-                    _buildInfoRow('Дата публикации', formatDate(_part!.createdAt)),
-                    if (_part!.updatedAt != null && _part!.updatedAt != _part!.createdAt) _buildInfoRow('Дата обновления', formatDate(_part!.updatedAt)),
-                    if (isOwner) _buildInfoRow('Опубликовано до', formatDate(_part!.publishedUntil)),
-                    if (isOwner && remainingDays != null) _buildInfoRow('Осталось дней', remainingDays.toString()),
-                    _buildInfoRow('ID объявления', _part!.id.toString()),
-                    SizedBox(height: 24),
-                    
-                    if (isOwner) ...[
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await context.router.push(EditPartsMarketRoute(productId: _part!.id));
-                            if (mounted) {
-                              _loadPart();
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary100p,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
-                          child: Text('Редактировать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      BlocBuilder<PartsMarketEditBloc, PartsMarketEditState>(
-                        builder: (context, state) {
-                          final currentProduct = state.maybeWhen(
-                            loaded: (product) => product,
-                            saved: (product) => product,
-                            published: (product) => product,
-                            unpublished: (product) => product,
-                            orElse: () => _part,
-                          );
-                          final isPublished = currentProduct?.isPublished ?? _part!.isPublished;
-                          final isLoading = state.maybeWhen(
-                            publishing: () => true,
-                            unpublishing: () => true,
-                            orElse: () => false,
-                          );
-                          return SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: isLoading
-                                  ? null
-                                  : () {
-                                      if (isPublished) {
-                                        _unpublishPart(context, _part!.id);
-                                      } else {
-                                        _publishPart(context, _part!.id);
-                                      }
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: isPublished ? Colors.red : AppColors.primary100p,
-                                foregroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                              child: isLoading
-                                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                                  : Text(isPublished ? 'Снять с публикации' : 'Опубликовать', style: AppStyles.bold16s.copyWith(color: Colors.white)),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: 16),
-                    ],
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -1021,7 +1115,14 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
   }
 
   /// Виджет кнопки контакта продавца
-  Widget _buildContactButton({required BuildContext context, IconData? icon, String? iconAsset, required String label, required Color color, required VoidCallback onTap}) {
+  Widget _buildContactButton({
+    required BuildContext context,
+    IconData? icon,
+    String? iconAsset,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -1037,9 +1138,14 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
             if (iconAsset != null)
               (iconAsset == Pictures.max || iconAsset == Pictures.telegramm)
                   ? SvgPicture.asset(iconAsset, width: 16, height: 16)
-                  : SvgPicture.asset(iconAsset, width: 16, height: 16, colorFilter: ColorFilter.mode(color, BlendMode.srcIn))
+                  : SvgPicture.asset(
+                      iconAsset,
+                      width: 16,
+                      height: 16,
+                      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                    )
             else if (icon != null)
-            Icon(icon, size: 16, color: color),
+              Icon(icon, size: 16, color: color),
             SizedBox(width: 6),
             Flexible(
               child: Text(
@@ -1061,7 +1167,9 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       await launchUrl(uri);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось совершить звонок'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -1074,7 +1182,9 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
       }
     }
   }
@@ -1087,15 +1197,18 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
       }
     }
   }
 
   Widget _buildCompatibleAircraftModelsSection() {
     final hasCatalogModels = _compatibleModels.isNotEmpty;
-    final hasManualText = _part!.compatibleAircraftModelsText != null && _part!.compatibleAircraftModelsText!.isNotEmpty;
-    
+    final hasManualText =
+        _part!.compatibleAircraftModelsText != null && _part!.compatibleAircraftModelsText!.isNotEmpty;
+
     if (!hasCatalogModels && !hasManualText) {
       return SizedBox.shrink();
     }
@@ -1128,8 +1241,8 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                   if (_isLoadingModels)
                     Chip(
                       label: Text('Загрузка...', style: AppStyles.regular12s),
-                          backgroundColor: AppColors.primary100p.withOpacity(0.1),
-                          labelStyle: AppStyles.regular12s.copyWith(color: AppColors.primary100p),
+                      backgroundColor: AppColors.primary100p.withOpacity(0.1),
+                      labelStyle: AppStyles.regular12s.copyWith(color: AppColors.primary100p),
                     )
                   else
                     ..._compatibleModels.map((model) {
@@ -1142,10 +1255,13 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                         ),
                         child: Text(
                           model.getFullName(),
-                          style: AppStyles.regular12s.copyWith(color: AppColors.primary100p, fontWeight: FontWeight.w500),
+                          style: AppStyles.regular12s.copyWith(
+                            color: AppColors.primary100p,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        );
-                      }).toList(),
+                      );
+                    }).toList(),
                 ],
                 if (hasManualText)
                   ...manualModels.map((modelText) {
@@ -1178,7 +1294,10 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       (failure) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка загрузки истории цен: ${failure.message}', style: AppStyles.regular14s.copyWith(color: Colors.white)),
+            content: Text(
+              'Ошибка загрузки истории цен: ${failure.message}',
+              style: AppStyles.regular14s.copyWith(color: Colors.white),
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -1226,23 +1345,41 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(formatDate(historyItem.createdAt), style: AppStyles.regular14s.copyWith(color: Color(0xFF374151))),
-                          if (isFirst) ...[SizedBox(height: 4), Text('Публикация', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF)))],
+                          Text(
+                            formatDate(historyItem.createdAt),
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF374151)),
+                          ),
+                          if (isFirst) ...[
+                            SizedBox(height: 4),
+                            Text('Публикация', style: AppStyles.regular12s.copyWith(color: Color(0xFF9CA5AF))),
+                          ],
                         ],
                       ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('${formatPrice(historyItem.price)} ${getCurrencySymbol(_part!.currency)}', style: AppStyles.bold16s.copyWith(color: Color(0xFF374151))),
+                        Text(
+                          '${formatPrice(historyItem.price)} ${getCurrencySymbol(_part!.currency)}',
+                          style: AppStyles.bold16s.copyWith(color: Color(0xFF374151)),
+                        ),
                         if (priceChange != null && priceChange != 0) ...[
                           SizedBox(height: 4),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(priceChange > 0 ? Icons.arrow_upward : Icons.arrow_downward, size: 14.0, color: priceChange > 0 ? Colors.red : Colors.green),
+                              Icon(
+                                priceChange > 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                                size: 14.0,
+                                color: priceChange > 0 ? Colors.red : Colors.green,
+                              ),
                               SizedBox(width: 4),
-                              Text('${formatPrice(priceChange.abs())} ${getCurrencySymbol(_part!.currency)}', style: AppStyles.regular12s.copyWith(color: priceChange > 0 ? Colors.red : Colors.green)),
+                              Text(
+                                '${formatPrice(priceChange.abs())} ${getCurrencySymbol(_part!.currency)}',
+                                style: AppStyles.regular12s.copyWith(
+                                  color: priceChange > 0 ? Colors.red : Colors.green,
+                                ),
+                              ),
                             ],
                           ),
                         ],

@@ -35,7 +35,14 @@ class ClearProgress extends StatelessWidget {
                   textStyle: AppStyles.bold16s.copyWith(color: Color(0xFF0A6EFA)),
                   borderColor: Color(0xFFFFFFFF),
                   borderRadius: 46,
-                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff0064D6).withOpacity(0.25),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: Offset(0.0, 7.0),
+                    ),
+                  ],
                   onPressed: onTap1,
                 ),
               ),
@@ -48,7 +55,14 @@ class ClearProgress extends StatelessWidget {
                   textStyle: AppStyles.bold16s.copyWith(color: Colors.white),
                   borderColor: Color(0xFF0A6EFA),
                   borderRadius: 46,
-                  boxShadow: [BoxShadow(color: Color(0xff0064D6).withOpacity(0.25), blurRadius: 4, spreadRadius: 0, offset: Offset(0.0, 7.0))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff0064D6).withOpacity(0.25),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: Offset(0.0, 7.0),
+                    ),
+                  ],
                   onPressed: onTap2,
                 ),
               ),

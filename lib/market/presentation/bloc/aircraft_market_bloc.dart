@@ -29,7 +29,8 @@ class AircraftMarketEvent with _$AircraftMarketEvent {
 @freezed
 class AircraftMarketState with _$AircraftMarketState {
   const factory AircraftMarketState.loading() = LoadingAircraftMarketState;
-  const factory AircraftMarketState.loadingMore({required List<AircraftMarketEntity> products}) = LoadingMoreAircraftMarketState;
+  const factory AircraftMarketState.loadingMore({required List<AircraftMarketEntity> products}) =
+      LoadingMoreAircraftMarketState;
   const factory AircraftMarketState.error({
     String? errorFromApi,
     required String errorForUser,
@@ -37,7 +38,10 @@ class AircraftMarketState with _$AircraftMarketState {
     StackTrace? stackTrace,
     String? responseMessage,
   }) = ErrorAircraftMarketState;
-  const factory AircraftMarketState.success({required List<AircraftMarketEntity> products, @Default(true) bool hasMore}) = SuccessAircraftMarketState;
+  const factory AircraftMarketState.success({
+    required List<AircraftMarketEntity> products,
+    @Default(true) bool hasMore,
+  }) = SuccessAircraftMarketState;
 }
 
 class AircraftMarketBloc extends Bloc<AircraftMarketEvent, AircraftMarketState> {
@@ -58,7 +62,9 @@ class AircraftMarketBloc extends Bloc<AircraftMarketEvent, AircraftMarketState> 
   bool _lastIncludeInactive = false;
   static const int _defaultLimit = 20;
 
-  AircraftMarketBloc({required MarketRepository repository}) : _repository = repository, super(const AircraftMarketState.loading()) {
+  AircraftMarketBloc({required MarketRepository repository})
+    : _repository = repository,
+      super(const AircraftMarketState.loading()) {
     on<GetAircraftMarketEvent>(_onGetProducts);
     on<LoadMoreAircraftMarketEvent>(_onLoadMore);
     on<RefreshAircraftMarketEvent>(_onRefresh);
@@ -95,27 +101,34 @@ class AircraftMarketBloc extends Bloc<AircraftMarketEvent, AircraftMarketState> 
       offset: event.offset,
     );
 
-    result.fold((failure) {
-      emit(
-        AircraftMarketState.error(
-          errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
-          errorFromApi: failure.message,
-          statusCode: failure.statusCode != null ? 'Код ошибки сервера: ${failure.statusCode}' : null,
-          responseMessage: failure.responseMessage,
-        ),
-      );
-    }, (products) {
-      _currentProducts = products;
-      _currentOffset = products.length;
-      _hasMore = products.length >= event.limit;
-      emit(AircraftMarketState.success(products: List.from(_currentProducts), hasMore: _hasMore));
-    });
+    result.fold(
+      (failure) {
+        emit(
+          AircraftMarketState.error(
+            errorForUser: 'Что-то пошло не так!\nПопробуйте повторить запрос',
+            errorFromApi: failure.message,
+            statusCode: failure.statusCode != null ? 'Код ошибки сервера: ${failure.statusCode}' : null,
+            responseMessage: failure.responseMessage,
+          ),
+        );
+      },
+      (products) {
+        _currentProducts = products;
+        _currentOffset = products.length;
+        _hasMore = products.length >= event.limit;
+        emit(AircraftMarketState.success(products: List.from(_currentProducts), hasMore: _hasMore));
+      },
+    );
   }
 
   Future<void> _onLoadMore(LoadMoreAircraftMarketEvent event, Emitter<AircraftMarketState> emit) async {
     if (!_hasMore) return;
 
-    final currentProducts = state.maybeWhen(success: (products, hasMore) => products, loadingMore: (products) => products, orElse: () => <AircraftMarketEntity>[]);
+    final currentProducts = state.maybeWhen(
+      success: (products, hasMore) => products,
+      loadingMore: (products) => products,
+      orElse: () => <AircraftMarketEntity>[],
+    );
 
     if (currentProducts.isEmpty) return;
 

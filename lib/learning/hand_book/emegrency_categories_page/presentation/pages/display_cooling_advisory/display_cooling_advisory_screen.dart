@@ -19,10 +19,7 @@ class DisplayCoolingAdvisoryScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share, color: AppColors.primary100p),
-            onPressed: () => LearningShareHelper.shareLearningPage(
-              context,
-              title: 'display_cooling_advisory'.tr(),
-            ),
+            onPressed: () => LearningShareHelper.shareLearningPage(context, title: 'display_cooling_advisory'.tr()),
             tooltip: 'Поделиться',
           ),
         ],

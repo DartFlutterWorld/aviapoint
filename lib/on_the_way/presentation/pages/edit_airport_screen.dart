@@ -203,7 +203,10 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
       if (_photosToDelete.isNotEmpty) {
         for (final photoUrl in _photosToDelete) {
           try {
-            await dio.delete<Map<String, dynamic>>('/api/airports/${widget.airportCode}/photos', data: {'photo_url': photoUrl});
+            await dio.delete<Map<String, dynamic>>(
+              '/api/airports/${widget.airportCode}/photos',
+              data: {'photo_url': photoUrl},
+            );
           } catch (e) {
             print('Ошибка при удалении фотографии $photoUrl: $e');
           }
@@ -222,7 +225,9 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
       await _loadAirport();
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Изменения успешно сохранены'), backgroundColor: Color(0xFF10B981)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Изменения успешно сохранены'), backgroundColor: Color(0xFF10B981)));
 
         // Закрываем экран редактирования после успешного сохранения
         Navigator.of(context).pop(true);
@@ -232,7 +237,9 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ошибка сохранения: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка сохранения: ${e.toString()}'), backgroundColor: Color(0xFFEF4444)),
+        );
       }
     } finally {
       if (mounted) {
@@ -246,7 +253,10 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: _airport != null ? _getTitleForAirport(_airport!) : 'Редактировать аэродром', withBack: true),
+      appBar: CustomAppBar(
+        title: _airport != null ? _getTitleForAirport(_airport!) : 'Редактировать аэродром',
+        withBack: true,
+      ),
       backgroundColor: AppColors.background,
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -278,7 +288,10 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
                         children: [
                           Icon(Icons.info_outline, color: Color(0xFF6B7280)),
                           SizedBox(width: 8),
-                          Text('Код ICAO: ${_airport?.code} (не редактируется)', style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280))),
+                          Text(
+                            'Код ICAO: ${_airport?.code} (не редактируется)',
+                            style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280)),
+                          ),
                         ],
                       ),
                     ),
@@ -286,7 +299,12 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
                     // Название
                     TextFormField(
                       controller: _nameController,
-                      decoration: InputDecoration(labelText: 'Название *', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Название *',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Поле обязательно для заполнения';
@@ -298,26 +316,46 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
                     // Название (англ.)
                     TextFormField(
                       controller: _nameEngController,
-                      decoration: InputDecoration(labelText: 'Название (англ.)', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Название (англ.)',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     // Город
                     TextFormField(
                       controller: _cityController,
-                      decoration: InputDecoration(labelText: 'Город', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Город',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     // Регион
                     TextFormField(
                       controller: _regionController,
-                      decoration: InputDecoration(labelText: 'Регион', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Регион',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     // Email
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(labelText: 'Email', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                       validator: (value) {
                         if (value != null && value.isNotEmpty) {
                           final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -333,14 +371,24 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
                     TextFormField(
                       controller: _websiteController,
                       keyboardType: TextInputType.url,
-                      decoration: InputDecoration(labelText: 'Веб-сайт', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Веб-сайт',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     // Заметки
                     TextFormField(
                       controller: _notesController,
                       maxLines: 4,
-                      decoration: InputDecoration(labelText: 'Заметки', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Заметки',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 24),
                     // ВПП
@@ -348,26 +396,46 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
                     SizedBox(height: 16),
                     TextFormField(
                       controller: _runwayNameController,
-                      decoration: InputDecoration(labelText: 'Название ВПП', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Название ВПП',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     TextFormField(
                       controller: _runwayLengthController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(labelText: 'Длина ВПП (футы)', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Длина ВПП (футы)',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     TextFormField(
                       controller: _runwayWidthController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(labelText: 'Ширина ВПП (футы)', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Ширина ВПП (футы)',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16),
                     TextFormField(
                       controller: _runwaySurfaceController,
-                      decoration: InputDecoration(labelText: 'Покрытие ВПП', border: OutlineInputBorder(), filled: true, fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Покрытие ВПП',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 32),
                     // Секция официальных фотографий
@@ -384,7 +452,14 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: _isSaving
-                            ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                            ? SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
                             : Text('Сохранить изменения', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                       ),
                     ),
@@ -398,7 +473,10 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
 
   String _getTitleForAirport(AirportModel airport) {
     final typeLower = airport.type.toLowerCase();
-    if (typeLower == 'heliport' || typeLower == 'вертодром' || typeLower.contains('heliport') || typeLower.contains('вертодром')) {
+    if (typeLower == 'heliport' ||
+        typeLower == 'вертодром' ||
+        typeLower.contains('heliport') ||
+        typeLower.contains('вертодром')) {
       return 'Редактировать вертодром';
     }
     return 'Редактировать аэродром';
@@ -442,7 +520,12 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.0,
+            ),
             itemCount: displayPhotos.length,
             itemBuilder: (context, index) {
               final photoItem = displayPhotos[index];
@@ -550,9 +633,13 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
     });
 
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Фотографии добавлены. Нажмите "Сохранить" для применения изменений.'), backgroundColor: Colors.blue, duration: Duration(seconds: 2)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Фотографии добавлены. Нажмите "Сохранить" для применения изменений.'),
+          backgroundColor: Colors.blue,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -589,9 +676,13 @@ class _EditAirportScreenState extends State<EditAirportScreen> {
     });
 
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Фотография помечена для удаления. Нажмите "Сохранить" для применения изменений.'), backgroundColor: Colors.blue, duration: Duration(seconds: 2)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Фотография помечена для удаления. Нажмите "Сохранить" для применения изменений.'),
+          backgroundColor: Colors.blue,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 }
@@ -602,5 +693,6 @@ class _PhotoItem {
   final XFile? file;
   final bool isNew;
 
-  _PhotoItem({this.url, this.file, required this.isNew}) : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
+  _PhotoItem({this.url, this.file, required this.isNew})
+    : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
 }

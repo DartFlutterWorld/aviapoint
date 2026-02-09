@@ -52,7 +52,7 @@ class IAPService {
     try {
       final Set<String> productIds = IAPProducts.allProducts.toSet();
       print('🔵 Загружаем продукты: $productIds');
-      
+
       final ProductDetailsResponse response = await _iap.queryProductDetails(productIds);
 
       print('🔵 Ответ от App Store:');
@@ -81,7 +81,9 @@ class IAPService {
         print('⚠️ Продукты не найдены. Возможные причины:');
         print('   1. Подписка не создана в App Store Connect');
         print('   2. Product ID не совпадает: ${IAPProducts.yearlySubscription}');
-        print('   3. Подписка не отправлена на проверку (первая подписка должна быть отправлена вместе с версией приложения)');
+        print(
+          '   3. Подписка не отправлена на проверку (первая подписка должна быть отправлена вместе с версией приложения)',
+        );
         print('   4. Bundle ID не совпадает');
         return [];
       }
@@ -111,9 +113,7 @@ class IAPService {
       }
 
       final ProductDetails productDetails = response.productDetails.first;
-      final PurchaseParam purchaseParam = PurchaseParam(
-        productDetails: productDetails,
-      );
+      final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
 
       // Запускаем покупку
       final bool success = await _iap.buyNonConsumable(purchaseParam: purchaseParam);

@@ -30,7 +30,7 @@ String getImageUrl(String? imagePath) {
     return '';
   }
 
-  // Если путь уже является полным URL (начинается с http:// или https://), 
+  // Если путь уже является полным URL (начинается с http:// или https://),
   // это ошибка - бэкенд не должен возвращать полные URL
   // Логируем и возвращаем как есть, чтобы не сломать приложение
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {

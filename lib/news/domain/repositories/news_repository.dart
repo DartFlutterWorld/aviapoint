@@ -12,7 +12,11 @@ abstract class NewsRepository {
 
   Future<Either<Failure, NewsEntity>> getNewsById({required int id});
 
-  Future<Either<Failure, List<NewsEntity>>> getNewsByCategory({required int categoryId, bool? published, int? authorId});
+  Future<Either<Failure, List<NewsEntity>>> getNewsByCategory({
+    required int categoryId,
+    bool? published,
+    int? authorId,
+  });
 
   Future<Either<Failure, NewsEntity>> createNews({
     required String title,

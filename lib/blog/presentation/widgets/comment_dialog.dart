@@ -41,16 +41,22 @@ class _CommentDialogState extends State<CommentDialog> {
   void _submit() {
     final text = _textController.text.trim();
     if (text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Введите комментарий'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Введите комментарий'), backgroundColor: Colors.red));
       return;
     }
 
     if (widget.comment == null) {
       // Создание нового комментария
-      context.read<BlogCommentsBloc>().add(CreateCommentEvent(articleId: widget.articleId, parentCommentId: widget.parentCommentId, content: text));
+      context.read<BlogCommentsBloc>().add(
+        CreateCommentEvent(articleId: widget.articleId, parentCommentId: widget.parentCommentId, content: text),
+      );
     } else {
       // Редактирование комментария
-      context.read<BlogCommentsBloc>().add(UpdateCommentEvent(articleId: widget.articleId, commentId: widget.comment!.id, content: text));
+      context.read<BlogCommentsBloc>().add(
+        UpdateCommentEvent(articleId: widget.articleId, commentId: widget.comment!.id, content: text),
+      );
     }
   }
 
@@ -59,17 +65,35 @@ class _CommentDialogState extends State<CommentDialog> {
     return BlocListener<BlogCommentsBloc, BlogCommentsState>(
       listener: (context, state) {
         if (state is ErrorBlogCommentsState) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.responseMessage ?? state.errorForUser), backgroundColor: Colors.red, duration: Duration(seconds: 4)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.responseMessage ?? state.errorForUser),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 4),
+            ),
+          );
         } else if (state is CommentCreatedState) {
           // Вызываем callback для обновления списка в секции (если блоки разные)
           widget.onCommentCreated?.call();
           Navigator.of(context).pop(true);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Комментарий успешно создан'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Комментарий успешно создан'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
         } else if (state is CommentUpdatedState) {
           // Вызываем callback для обновления списка в секции (если блоки разные)
           widget.onCommentCreated?.call();
           Navigator.of(context).pop(true);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Комментарий успешно обновлён'), backgroundColor: Colors.green, duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Комментарий успешно обновлён'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       },
       child: kIsWeb
@@ -111,7 +135,10 @@ class _CommentDialogState extends State<CommentDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(widget.comment == null ? 'Оставить комментарий' : 'Редактировать комментарий', style: AppStyles.bold20s.copyWith(color: Color(0xFF374151))),
+                    Text(
+                      widget.comment == null ? 'Оставить комментарий' : 'Редактировать комментарий',
+                      style: AppStyles.bold20s.copyWith(color: Color(0xFF374151)),
+                    ),
                     IconButton(
                       icon: Icon(Icons.close, color: Color(0xFF9CA5AF)),
                       onPressed: isLoading ? null : () => Navigator.of(context).pop(),
@@ -155,8 +182,18 @@ class _CommentDialogState extends State<CommentDialog> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: isLoading
-                      ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
-                      : Text(widget.comment == null ? 'Отправить комментарий' : 'Сохранить', style: AppStyles.bold14s.copyWith(color: Colors.white)),
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Text(
+                          widget.comment == null ? 'Отправить комментарий' : 'Сохранить',
+                          style: AppStyles.bold14s.copyWith(color: Colors.white),
+                        ),
                 ),
               ],
             ),
@@ -185,11 +222,21 @@ Future<bool?> showCommentDialog({
       builder: (dialogContext) => commentsBloc != null
           ? BlocProvider.value(
               value: bloc,
-              child: CommentDialog(articleId: articleId, comment: comment, parentCommentId: parentCommentId, onCommentCreated: onCommentCreated),
+              child: CommentDialog(
+                articleId: articleId,
+                comment: comment,
+                parentCommentId: parentCommentId,
+                onCommentCreated: onCommentCreated,
+              ),
             )
           : BlocProvider(
               create: (context) => bloc,
-              child: CommentDialog(articleId: articleId, comment: comment, parentCommentId: parentCommentId, onCommentCreated: onCommentCreated),
+              child: CommentDialog(
+                articleId: articleId,
+                comment: comment,
+                parentCommentId: parentCommentId,
+                onCommentCreated: onCommentCreated,
+              ),
             ),
     );
   } else {
@@ -199,11 +246,21 @@ Future<bool?> showCommentDialog({
       builder: (dialogContext) => commentsBloc != null
           ? BlocProvider.value(
               value: bloc,
-              child: CommentDialog(articleId: articleId, comment: comment, parentCommentId: parentCommentId, onCommentCreated: onCommentCreated),
+              child: CommentDialog(
+                articleId: articleId,
+                comment: comment,
+                parentCommentId: parentCommentId,
+                onCommentCreated: onCommentCreated,
+              ),
             )
           : BlocProvider(
               create: (context) => bloc,
-              child: CommentDialog(articleId: articleId, comment: comment, parentCommentId: parentCommentId, onCommentCreated: onCommentCreated),
+              child: CommentDialog(
+                articleId: articleId,
+                comment: comment,
+                parentCommentId: parentCommentId,
+                onCommentCreated: onCommentCreated,
+              ),
             ),
     );
   }

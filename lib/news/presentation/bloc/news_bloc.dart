@@ -65,7 +65,13 @@ class NewsEvent with _$NewsEvent {
 class NewsState with _$NewsState {
   const NewsState._();
   const factory NewsState.loading() = LoadingNewsState;
-  const factory NewsState.error({String? errorFromApi, required String errorForUser, String? statusCode, StackTrace? stackTrace, String? responseMessage}) = ErrorNewsState;
+  const factory NewsState.error({
+    String? errorFromApi,
+    required String errorForUser,
+    String? statusCode,
+    StackTrace? stackTrace,
+    String? responseMessage,
+  }) = ErrorNewsState;
   const factory NewsState.success({required List<NewsEntity> news}) = SuccessNewsState;
   const factory NewsState.creating() = CreatingNewsState;
   const factory NewsState.created({required NewsEntity news}) = CreatedNewsState;
@@ -78,7 +84,9 @@ class NewsState with _$NewsState {
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final NewsRepository _newsRepository;
 
-  NewsBloc({required NewsRepository newsRepository}) : _newsRepository = newsRepository, super(const LoadingNewsState()) {
+  NewsBloc({required NewsRepository newsRepository})
+    : _newsRepository = newsRepository,
+      super(const LoadingNewsState()) {
     on<NewsEvent>(
       (event, emitter) => event.map(
         get: (event) => _get(event, emitter),
@@ -96,7 +104,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
     // Если передан authorId, получаем все новости пользователя (published = null)
     // Иначе получаем только опубликованные (published = true)
-    final response = await _newsRepository.getNews(published: event.authorId != null ? null : true, authorId: event.authorId);
+    final response = await _newsRepository.getNews(
+      published: event.authorId != null ? null : true,
+      authorId: event.authorId,
+    );
 
     response.fold(
       (l) {
@@ -120,7 +131,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
     // Если передан authorId, получаем все новости пользователя (published = null)
     // Иначе получаем только опубликованные (published = true)
-    final response = await _newsRepository.getNewsByCategory(categoryId: event.categoryId, published: event.authorId != null ? null : true, authorId: event.authorId);
+    final response = await _newsRepository.getNewsByCategory(
+      categoryId: event.categoryId,
+      published: event.authorId != null ? null : true,
+      authorId: event.authorId,
+    );
 
     response.fold(
       (l) {

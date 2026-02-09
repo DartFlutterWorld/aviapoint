@@ -147,39 +147,39 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 8),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final product = products[index];
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
           return Container(
             width: MediaQuery.of(context).size.width * 0.45, // Ширина карточки
             margin: EdgeInsets.only(right: 12),
             child: AircraftMarketCard(
-          product: product,
-          showEditButtons: true,
-          showYearAndLocation: true,
-          showInactiveBadge: true,
-          onTap: () {
-            context.router.push(
-              BaseRoute(
-                children: [
-                  MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: product.id)]),
-                ],
-              ),
-            );
-          },
-          onEdit: () {
-            context.router.push(
-              BaseRoute(
-                children: [
+              product: product,
+              showEditButtons: true,
+              showYearAndLocation: true,
+              showInactiveBadge: true,
+              onTap: () {
+                context.router.push(
+                  BaseRoute(
+                    children: [
+                      MarketNavigationRoute(children: [AircraftMarketDetailRoute(id: product.id)]),
+                    ],
+                  ),
+                );
+              },
+              onEdit: () {
+                context.router.push(
+                  BaseRoute(
+                    children: [
                       MarketNavigationRoute(children: [EditAircraftMarketRoute(productId: product.id)]),
-                ],
-              ),
-            );
-          },
-          onDelete: () => _showDeleteConfirmation(product),
+                    ],
+                  ),
+                );
+              },
+              onDelete: () => _showDeleteConfirmation(product),
             ),
-        );
-      },
+          );
+        },
       ),
     );
   }
@@ -199,7 +199,9 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                 Navigator.of(dialogContext).pop();
                 deleteBloc.close();
                 if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Объявление успешно удалено'), backgroundColor: Colors.green));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Объявление успешно удалено'), backgroundColor: Colors.green),
+                );
                 // Обновляем список после удаления
                 final localBloc = BlocProvider.of<AircraftMarketBloc>(context);
                 localBloc.add(AircraftMarketEvent.getProducts(sellerId: widget.userId, includeInactive: true));
@@ -208,22 +210,27 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                 Navigator.of(dialogContext).pop();
                 deleteBloc.close();
                 if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
               },
               orElse: () {},
             );
           },
-        child: AlertDialog(
-          title: Text('Удалить объявление?', style: AppStyles.bold16s),
-          content: Text('Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.', style: AppStyles.regular14s),
-          actions: [
-            TextButton(
+          child: AlertDialog(
+            title: Text('Удалить объявление?', style: AppStyles.bold16s),
+            content: Text(
+              'Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.',
+              style: AppStyles.regular14s,
+            ),
+            actions: [
+              TextButton(
                 onPressed: () {
                   Navigator.of(dialogContext).pop();
                   deleteBloc.close();
                 },
-              child: Text('Отмена', style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280))),
-            ),
+                child: Text('Отмена', style: AppStyles.regular14s.copyWith(color: Color(0xFF6B7280))),
+              ),
               BlocBuilder<AircraftMarketEditBloc, AircraftMarketEditState>(
                 builder: (context, state) {
                   final isDeleting = state is DeletingAircraftMarketEditState;
@@ -232,19 +239,23 @@ class _MyAircraftAdsWidgetState extends State<MyAircraftAdsWidget> {
                         ? null
                         : () {
                             deleteBloc.add(AircraftMarketEditEvent.deleteProduct(product.id));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
                     child: isDeleting
-                        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
                         : Text('Удалить', style: AppStyles.bold16s.copyWith(color: Colors.white)),
                   );
                 },
-            ),
-          ],
+              ),
+            ],
           ),
         ),
       ),

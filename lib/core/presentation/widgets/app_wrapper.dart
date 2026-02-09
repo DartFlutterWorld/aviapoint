@@ -50,7 +50,10 @@ class _AppWrapperState extends State<AppWrapper> {
             Icon(Icons.wifi, color: Colors.white, size: 20.0),
             SizedBox(width: 8),
             Expanded(
-              child: Text('Подключение к интернету восстановлено', style: AppStyles.regular14s.copyWith(color: Colors.white)),
+              child: Text(
+                'Подключение к интернету восстановлено',
+                style: AppStyles.regular14s.copyWith(color: Colors.white),
+              ),
             ),
           ],
         ),

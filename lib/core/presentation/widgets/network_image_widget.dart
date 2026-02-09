@@ -45,7 +45,9 @@ class NetworkImageWidget extends StatelessWidget {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         final uri = Uri.tryParse(imageUrl);
         if (uri != null) {
-          final newUri = uri.replace(queryParameters: {...uri.queryParameters, '_t': DateTime.now().millisecondsSinceEpoch.toString()});
+          final newUri = uri.replace(
+            queryParameters: {...uri.queryParameters, '_t': DateTime.now().millisecondsSinceEpoch.toString()},
+          );
           finalImageUrl = newUri.toString();
         } else {
           // Если не удалось распарсить URL, просто добавляем timestamp

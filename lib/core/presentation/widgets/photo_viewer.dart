@@ -11,11 +11,7 @@ import 'package:aviapoint/core/utils/const/app.dart';
 /// Универсальный виджет для просмотра фотографий с возможностью поделиться и скачать
 class PhotoViewer {
   /// Показать просмотр фотографий
-  static void show(
-    BuildContext context,
-    List<String?> photos, {
-    int initialIndex = 0,
-  }) {
+  static void show(BuildContext context, List<String?> photos, {int initialIndex = 0}) {
     if (photos.isEmpty) return;
 
     final PageController pageController = PageController(initialPage: initialIndex);
@@ -81,7 +77,10 @@ class PhotoViewer {
                                   children: [
                                     Icon(Icons.broken_image, color: Colors.white70, size: 64),
                                     SizedBox(height: 16),
-                                    Text('Не удалось загрузить изображение', style: AppStyles.regular14s.copyWith(color: Colors.white70)),
+                                    Text(
+                                      'Не удалось загрузить изображение',
+                                      style: AppStyles.regular14s.copyWith(color: Colors.white70),
+                                    ),
                                   ],
                                 ),
                               ),

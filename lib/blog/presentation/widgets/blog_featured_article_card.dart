@@ -63,8 +63,17 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (widget.article.category != null) Text(widget.article.category!.name.toUpperCase(), style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
-                      Text(widget.article.publishedAt != null ? formatDate(DateTime.parse(widget.article.publishedAt!)) : '', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                      if (widget.article.category != null)
+                        Text(
+                          widget.article.category!.name.toUpperCase(),
+                          style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                        ),
+                      Text(
+                        widget.article.publishedAt != null
+                            ? formatDate(DateTime.parse(widget.article.publishedAt!))
+                            : '',
+                        style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                      ),
                     ],
                   ),
                   SizedBox(height: 4),
@@ -101,7 +110,10 @@ class _BlogFeaturedArticleCardState extends State<BlogFeaturedArticleCard> {
                         children: [
                           Icon(Icons.visibility_outlined, size: 12, color: const Color(0xFF9CA5AF)),
                           SizedBox(width: 4),
-                          Text('${widget.article.viewCount}', style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF))),
+                          Text(
+                            '${widget.article.viewCount}',
+                            style: AppStyles.light10s.copyWith(color: const Color(0xFF9CA5AF)),
+                          ),
                         ],
                       ),
                       if (widget.article.aircraftModel != null)

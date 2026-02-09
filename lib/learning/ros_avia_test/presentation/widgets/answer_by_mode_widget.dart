@@ -11,7 +11,15 @@ class AnswerByModeWidget extends StatelessWidget {
   final bool isCorrect;
   final bool showResult;
 
-  const AnswerByModeWidget({super.key, required this.backgroundColor, required this.title, this.onTap, this.isSelected = false, this.isCorrect = false, this.showResult = false});
+  const AnswerByModeWidget({
+    super.key,
+    required this.backgroundColor,
+    required this.title,
+    this.onTap,
+    this.isSelected = false,
+    this.isCorrect = false,
+    this.showResult = false,
+  });
 
   @override
   Widget build(BuildContext context) {
