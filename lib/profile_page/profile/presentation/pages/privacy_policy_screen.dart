@@ -90,9 +90,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _buildSection(
               '10. Контакты',
               'Если у вас есть вопросы относительно настоящей Политики конфиденциальности или обработки ваших персональных данных, вы можете связаться с нами:\n\n'
-                  'Email: privacy@avia-point.com\n'
-                  'Телефон: +7 (XXX) XXX-XX-XX\n\n'
-                  'Мы постараемся ответить на ваш запрос в течение 30 дней.',
+                'Сайт: https://avia-point.com\n'
+                'Email: admin@avia-point.com\n\n'
+                'Мы постараемся ответить на ваш запрос в течение 30 дней.',
             ),
             SizedBox(height: 24),
           ],

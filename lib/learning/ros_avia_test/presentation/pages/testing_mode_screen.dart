@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/data/database/app_db.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_app_bar.dart';
+import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
+import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/modals_and_bottom_sheets.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
@@ -13,6 +15,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/testing_mo
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
+import 'package:aviapoint/payment/presentation/cubit/subscription_purchase_cubit.dart';
 import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -256,11 +259,46 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
       print('⚠️  Контекст не mounted, используем rootNavigator');
       final rootContext = navigatorKey.currentContext;
       if (rootContext != null && rootContext.mounted) {
-        await _openPaymentScreen(rootContext);
+        await _handleTrainingModePaymentOrIAP(rootContext);
       }
       return;
     }
 
+    await _handleTrainingModePaymentOrIAP(context);
+  }
+
+  /// На iOS — покупка через IAP и Cubit (ErrorCustom + Повторить). На остальных платформах — YooKassa.
+  Future<void> _handleTrainingModePaymentOrIAP(BuildContext context) async {
+    if (!context.mounted) return;
+    if (!kIsWeb && Platform.isIOS) {
+      try {
+        final paymentRepository = getIt<PaymentRepository>();
+        final subscriptionTypes = await paymentRepository.getSubscriptionTypes();
+        final yearlyType = subscriptionTypes.firstWhere(
+          (type) => type.code == 'rosaviatest_365' && type.isActive,
+          orElse: () => throw Exception('Годовая подписка не найдена'),
+        );
+        if (!context.mounted) return;
+        context.read<SubscriptionPurchaseCubit>().startPurchase(
+          context,
+          subscriptionType: yearlyType,
+          returnRouteSource: 'testing_mode',
+        );
+      } catch (e, stackTrace) {
+        print('❌ Ошибка при загрузке типов подписок: $e');
+        print('StackTrace: $stackTrace');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Ошибка при загрузке типов подписок. Попробуйте позже.'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      }
+      return;
+    }
     await _openPaymentScreen(context);
   }
 
@@ -459,14 +497,63 @@ class _TestingModeScreenState extends State<TestingModeScreen> {
                   SizedBox(height: 16),
                   // На iOS показываем только если showPaidContent = true, на остальных платформах (веб, Android) всегда показываем
                   if (_shouldShowTrainingMode()) ...[
-                    TestingModeElement(
-                      title: trainingModeTitle,
-                      subTitle: 'Правильные ответы появляются сразу',
-                      onTap: () => _handleTrainingModePayment(context),
-                      image: Pictures.zamok,
-                      bg: Pictures.traningTestBgPng,
-                      isLock: !_hasActiveSubscription, // Показываем анимацию, если нет активной подписки
-                    ),
+                    if (!kIsWeb && Platform.isIOS)
+                      BlocProvider(
+                        create: (_) => SubscriptionPurchaseCubit(),
+                        child: BlocListener<SubscriptionPurchaseCubit, SubscriptionPurchaseState>(
+                          listenWhen: (prev, curr) => curr is SubscriptionPurchaseError,
+                          listener: (context, state) {
+                            if (state is SubscriptionPurchaseError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(state.errorForUser),
+                                  backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 5),
+                                  action: SnackBarAction(
+                                    label: 'Повторить',
+                                    textColor: Colors.white,
+                                    onPressed: () => context.read<SubscriptionPurchaseCubit>().retry(context),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: BlocBuilder<SubscriptionPurchaseCubit, SubscriptionPurchaseState>(
+                            builder: (context, purchaseState) {
+                              if (purchaseState is SubscriptionPurchaseLoading) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                                  child: LoadingCustom(),
+                                );
+                              }
+                              if (purchaseState is SubscriptionPurchaseError) {
+                                return ErrorCustom(
+                                  textError: purchaseState.errorForUser,
+                                  repeat: () => context.read<SubscriptionPurchaseCubit>().retry(context),
+                                  paddingTop: 0,
+                                );
+                              }
+                              return TestingModeElement(
+                                title: trainingModeTitle,
+                                subTitle: 'Правильные ответы появляются сразу',
+                                onTap: () => _handleTrainingModePaymentOrIAP(context),
+                                image: Pictures.zamok,
+                                bg: Pictures.traningTestBgPng,
+                                isLock: !_hasActiveSubscription,
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    else
+                      TestingModeElement(
+                        title: trainingModeTitle,
+                        subTitle: 'Правильные ответы появляются сразу',
+                        onTap: () => _handleTrainingModePayment(context),
+                        image: Pictures.zamok,
+                        bg: Pictures.traningTestBgPng,
+                        isLock: !_hasActiveSubscription,
+                      ),
                     SizedBox(height: 16),
                     Text(
                       'Тренировочный режим позволит вам готовиться к экзамену с большей эффективностью. У вас появится возможность перемешать вопросы и ответы. После выбора ответа вы сразу же увидите правильный ответ. Так же вам будет доступно обоснование правильного ответа.',

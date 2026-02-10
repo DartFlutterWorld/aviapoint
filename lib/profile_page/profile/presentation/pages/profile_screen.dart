@@ -24,9 +24,10 @@ import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
+import 'package:aviapoint/payment/presentation/cubit/subscription_purchase_cubit.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
-import 'package:aviapoint/profile_page/profile/presentation/widget/Subscribe_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/widget/subscribe_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/profile_data_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/subscribe_widget_active.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/my_aircraft_ads_widget.dart';
@@ -629,13 +630,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
                                           const SizedBox(height: 225)
                                         else if (_subscriptionTypes.isNotEmpty)
-                                          // Используем первый доступный тип подписки (приоритет yearly)
-                                          SubscribeWidget(
-                                            subscriptionType: _subscriptionTypes.firstWhere(
-                                              (type) => type.code == 'rosaviatest_365' && type.isActive,
-                                              orElse: () => _subscriptionTypes.first,
+                                          BlocProvider(
+                                            create: (_) => SubscriptionPurchaseCubit(),
+                                            child: BlocListener<SubscriptionPurchaseCubit, SubscriptionPurchaseState>(
+                                              listenWhen: (prev, curr) => curr is SubscriptionPurchaseError,
+                                              listener: (context, state) {
+                                                if (state is SubscriptionPurchaseError) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(state.errorForUser),
+                                                      backgroundColor: Colors.red,
+                                                      duration: const Duration(seconds: 5),
+                                                      action: SnackBarAction(
+                                                        label: 'Повторить',
+                                                        textColor: Colors.white,
+                                                        onPressed: () => context.read<SubscriptionPurchaseCubit>().retry(context),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              child: BlocBuilder<SubscriptionPurchaseCubit, SubscriptionPurchaseState>(
+                                                builder: (context, purchaseState) {
+                                                  final subscriptionType = _subscriptionTypes.firstWhere(
+                                                    (type) => type.code == 'rosaviatest_365' && type.isActive,
+                                                    orElse: () => _subscriptionTypes.first,
+                                                  );
+                                                  if (purchaseState is SubscriptionPurchaseLoading) {
+                                                    return const Padding(
+                                                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                                                      child: LoadingCustom(),
+                                                    );
+                                                  }
+                                                  if (purchaseState is SubscriptionPurchaseError) {
+                                                    return ErrorCustom(
+                                                      textError: purchaseState.errorForUser,
+                                                      repeat: () => context.read<SubscriptionPurchaseCubit>().retry(context),
+                                                      paddingTop: 0,
+                                                    );
+                                                  }
+                                                  return SubscribeWidget(
+                                                    subscriptionType: subscriptionType,
+                                                    fon: Pictures.podpiskaNoActiveFon,
+                                                    onPurchase: () => context.read<SubscriptionPurchaseCubit>().startPurchase(
+                                                      context,
+                                                      subscriptionType: subscriptionType,
+                                                      returnRouteSource: 'profile',
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                            fon: Pictures.podpiskaNoActiveFon,
                                           )
                                         else
                                           // Если типов подписок нет, показываем заглушку
@@ -683,6 +728,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       title: 'Политика конфиденциальности',
                                       icon: Pictures.securitySafe,
                                       onTap: () => context.router.push(const PrivacyPolicyRoute()),
+                                    ),
+                                    Divider(height: 18),
+                                    ProfileDataWidget(
+                                      title: 'Условия использования (EULA)',
+                                      icon: Pictures.securitySafe,
+                                      onTap: () => context.router.push(const EulaRoute()),
                                     ),
                                     Divider(height: 18),
                                     ProfileDataWidget(

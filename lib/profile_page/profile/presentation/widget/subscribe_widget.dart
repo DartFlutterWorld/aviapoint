@@ -3,20 +3,29 @@ import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class SubscribeWidget extends StatelessWidget {
   final SubscriptionTypeModel subscriptionType;
   final String fon;
-  const SubscribeWidget({super.key, required this.subscriptionType, required this.fon});
+  /// Если передан, по нажатию «Оформить подписку» вызывается он (Cubit в профиле). Иначе — PaymentHelper.
+  final VoidCallback? onPurchase;
+
+  const SubscribeWidget({
+    super.key,
+    required this.subscriptionType,
+    required this.fon,
+    this.onPurchase,
+  });
 
   Future<void> _navigateToPayment(BuildContext context) async {
     if (!context.mounted) return;
-
+    if (onPurchase != null) {
+      onPurchase!();
+      return;
+    }
     await PaymentHelper.createPaymentAndRedirect(
       context: context,
       amount: subscriptionType.price.toDouble(),
@@ -36,7 +45,7 @@ class SubscribeWidget extends StatelessWidget {
   String _formatPeriod(int periodDays) {
     if (periodDays >= 365) {
       final years = periodDays ~/ 365;
-      return years == 1 ? 'год' : '$years года';
+      return years == 1 ? '12 месяцев' : '$years года';
     } else if (periodDays >= 30) {
       final months = periodDays ~/ 30;
       return months == 1 ? 'месяц' : '$months месяца';
@@ -65,23 +74,28 @@ class SubscribeWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Название подписки (требование App Store 3.1.2)
             Text(
               subscriptionType.name,
               style: AppStyles.extraBold.copyWith(color: Color(0xFF223B76), fontStyle: FontStyle.italic, fontSize: 16.0),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 6),
             Text(subscriptionType.description, style: AppStyles.light12s.copyWith(color: Color(0xFF374151))),
-            SizedBox(height: 8),
+            SizedBox(height: 6),
+            // Срок подписки (требование App Store 3.1.2)
+            Text('Срок: ${_formatPeriod(subscriptionType.periodDays)}', style: AppStyles.regular12s.copyWith(color: Color(0xFF374151))),
+            SizedBox(height: 2),
+            // Цена и цена за единицу срока (требование App Store 3.1.2)
             RichText(
               text: TextSpan(
                 style: AppStyles.light12s.copyWith(color: Color(0xFF374151)),
                 children: [
                   TextSpan(
-                    text: 'Стоимость: ',
+                    text: 'Цена: ',
                     style: AppStyles.light12s.copyWith(color: Color(0xFF374151)),
                   ),
                   TextSpan(
-                    text: '${_formatPrice(subscriptionType.price)}/${_formatPeriod(subscriptionType.periodDays)}',
+                    text: '${_formatPrice(subscriptionType.price)}',
                     style: AppStyles.light12s.copyWith(color: Color(0xFF0A6EFA)),
                   ),
                 ],

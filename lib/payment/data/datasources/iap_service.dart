@@ -62,11 +62,15 @@ class IAPService {
 
       if (response.notFoundIDs.isNotEmpty) {
         print('❌ Продукты не найдены в App Store Connect: ${response.notFoundIDs}');
+        print('   В коде ожидается Product ID: ${IAPProducts.yearlySubscription}');
+        print('   Скопируйте Identifier из App Store Connect и сравните посимвольно.');
         print('   Проверьте:');
         print('   1. Product ID совпадает с App Store Connect');
         print('   2. Подписка создана и имеет статус "Готово к отправке"');
         print('   3. Bundle ID совпадает: ru.dartflutter.aviapoint');
         print('   4. Первая подписка должна быть отправлена вместе с версией приложения');
+        print('   5. Paid Applications Agreement подписан (Agreements, Tax, and Banking)');
+        print('   6. На устройстве войдите в Sandbox-аккаунт (Настройки → App Store)');
       }
 
       if (response.error != null) {

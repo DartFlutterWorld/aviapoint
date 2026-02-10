@@ -92,6 +92,7 @@ import 'package:aviapoint/payment/presentation/pages/payment_screen.dart';
 import 'package:aviapoint/payment/presentation/pages/payment_webview_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_navigation_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/profile_screen.dart';
+import 'package:aviapoint/profile_page/profile/presentation/pages/eula_screen.dart';
 import 'package:aviapoint/profile_page/profile/presentation/pages/privacy_policy_screen.dart';
 import 'package:aviapoint/work/presentation/pages/work_screen.dart';
 import 'package:aviapoint/work/presentation/pages/work_navigation_screen.dart';
@@ -393,6 +394,7 @@ class AppRouter extends RootStackRouter {
               page: ProfileRoute.page,
             ),
             AutoRoute(path: 'privacy-policy', page: PrivacyPolicyRoute.page),
+            AutoRoute(path: 'eula', page: EulaRoute.page),
           ],
         ),
       ],

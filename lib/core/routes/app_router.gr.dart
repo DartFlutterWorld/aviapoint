@@ -1329,6 +1329,22 @@ class EngineFireInFlightRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [EulaScreen]
+class EulaRoute extends PageRouteInfo<void> {
+  const EulaRoute({List<PageRouteInfo>? children})
+    : super(EulaRoute.name, initialChildren: children);
+
+  static const String name = 'EulaRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EulaScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ExcessiveFuelVaporScreen]
 class ExcessiveFuelVaporRoute extends PageRouteInfo<void> {
   const ExcessiveFuelVaporRoute({List<PageRouteInfo>? children})

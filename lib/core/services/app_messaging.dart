@@ -477,6 +477,20 @@ class AppMessaging {
         } else {
           debugPrint('⚠️ Отсутствуют необходимые данные для навигации: flight_id=$flightIdStr, screen=$screen');
         }
+      } else if (type == 'vacancy_new_response') {
+        // Уведомление работодателю о новом отклике на вакансию
+        final screen = data['screen'] as String?;
+        if (screen == 'employer_vacancy_responses') {
+          debugPrint('🔔 Переход в «Отклики по моим вакансиям»');
+          _navigateToEmployerVacancyResponses();
+        }
+      } else if (type == 'vacancy_response_reply') {
+        // Уведомление кандидату об ответе на отклик
+        final screen = data['screen'] as String?;
+        if (screen == 'my_vacancy_responses') {
+          debugPrint('🔔 Переход в «Мои отклики»');
+          _navigateToMyVacancyResponses();
+        }
       }
     } catch (e, stackTrace) {
       debugPrint('❌ Ошибка при обработке нажатия на уведомление: $e');
@@ -503,6 +517,50 @@ class AppMessaging {
       }
     } catch (e, stackTrace) {
       debugPrint('❌ Ошибка навигации на детальную страницу полета: $e');
+      debugPrint('Stack trace: $stackTrace');
+    }
+  }
+
+  /// Навигация в «Отклики по моим вакансиям» (для работодателя)
+  void _navigateToEmployerVacancyResponses() {
+    try {
+      final context = navigatorKey.currentContext;
+      if (context != null) {
+        context.router.push(
+          BaseRoute(
+            children: [
+              WorkNavigationRoute(children: [const EmployerVacancyResponsesRoute()]),
+            ],
+          ),
+        );
+        debugPrint('✅ Навигация в «Отклики по моим вакансиям» выполнена');
+      } else {
+        debugPrint('⚠️ Контекст недоступен для навигации');
+      }
+    } catch (e, stackTrace) {
+      debugPrint('❌ Ошибка навигации в отклики работодателя: $e');
+      debugPrint('Stack trace: $stackTrace');
+    }
+  }
+
+  /// Навигация в «Мои отклики» (для кандидата)
+  void _navigateToMyVacancyResponses() {
+    try {
+      final context = navigatorKey.currentContext;
+      if (context != null) {
+        context.router.push(
+          BaseRoute(
+            children: [
+              WorkNavigationRoute(children: [const MyVacancyResponsesRoute()]),
+            ],
+          ),
+        );
+        debugPrint('✅ Навигация в «Мои отклики» выполнена');
+      } else {
+        debugPrint('⚠️ Контекст недоступен для навигации');
+      }
+    } catch (e, stackTrace) {
+      debugPrint('❌ Ошибка навигации в мои отклики: $e');
       debugPrint('Stack trace: $stackTrace');
     }
   }

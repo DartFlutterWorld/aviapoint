@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:aviapoint/core/routes/app_router.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/payment/data/datasources/iap_service.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
@@ -70,6 +71,7 @@ class PaymentHelper {
     required int subscriptionTypeId,
     String? returnRouteSource,
   }) async {
+    bool loadingDialogWasShown = false;
     try {
       final iapService = IAPService();
 
@@ -104,121 +106,249 @@ class PaymentHelper {
         rethrow;
       }
 
-      // Показываем индикатор загрузки
+      // Показываем индикатор загрузки (всегда закрываем в finally при ошибке)
+      bool loadingDialogOpen = false;
+      void closeLoadingDialog() {
+        if (loadingDialogOpen && context.mounted) {
+          Navigator.of(context).pop();
+          loadingDialogOpen = false;
+        }
+      }
+
       if (context.mounted) {
         showDialog<void>(
           context: context,
           barrierDismissible: false,
           builder: (context) => const Center(child: CircularProgressIndicator()),
         );
+        loadingDialogOpen = true;
+        loadingDialogWasShown = true;
       }
 
-      // Загружаем продукты
-      print('🔵 Начинаем загрузку продуктов из App Store...');
-      final products = await iapService.loadProducts();
+      try {
+        // Загружаем продукты
+        print('🔵 Начинаем загрузку продуктов из App Store...');
+        final products = await iapService.loadProducts();
 
-      if (products.isEmpty) {
+        if (products.isEmpty) {
+          closeLoadingDialog();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Подписка временно недоступна. Убедитесь, что в настройках устройства включены покупки в приложениях и есть подключение к интернету.',
+                ),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 5),
+              ),
+            );
+          }
+          print('❌ Продукты не загружены. Проверьте логи выше для деталей.');
+          return false;
+        }
+
+        print('✅ Продукты загружены успешно: ${products.length}');
+
+        // Находим годовую подписку
+        ProductDetails yearlyProduct;
+        try {
+          yearlyProduct = products.firstWhere(
+            (p) => p.id == IAPProducts.yearlySubscription,
+            orElse: () => throw Exception('Годовая подписка не найдена'),
+          );
+        } catch (_) {
+          closeLoadingDialog();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Подписка не найдена. Попробуйте позже или оформите подписку на сайте.'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 4),
+              ),
+            );
+          }
+          return false;
+        }
+
+        closeLoadingDialog();
+
+        // Слушаем результат покупки
+        StreamSubscription<bool>? purchaseSubscription;
+        bool purchaseCompleted = false;
+
+        purchaseSubscription = iapService.purchaseStream.listen((success) {
+          purchaseCompleted = true;
+          purchaseSubscription?.cancel();
+
+          if (context.mounted) {
+            if (success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Подписка успешно активирована'),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              // Обновляем информацию о подписке
+              final paymentRepository = getIt<PaymentRepository>();
+              paymentRepository.getSubscriptionStatus().then((_) {
+                // Навигируем обратно
+                navigateToSource(context, returnRouteSource);
+              });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Ошибка при покупке подписки. Подписка не была активирована. Попробуйте восстановить покупки или обратитесь в поддержку.',
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 5),
+                ),
+              );
+            }
+          }
+        });
+
+        // Запускаем покупку
+        final purchaseStarted = await iapService.buySubscription(yearlyProduct.id);
+
+        if (!purchaseStarted) {
+          purchaseSubscription.cancel();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Не удалось начать покупку. Попробуйте ещё раз или оформите подписку на сайте.'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 4),
+              ),
+            );
+          }
+          return false;
+        }
+
+        // Ждем завершения покупки (таймаут 5 минут)
+        await Future<void>.delayed(const Duration(seconds: 1));
+        int attempts = 0;
+        while (!purchaseCompleted && attempts < 300) {
+          await Future<void>.delayed(const Duration(seconds: 1));
+          attempts++;
+        }
+
+        if (!purchaseCompleted) {
+          purchaseSubscription.cancel();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Превышено время ожидания покупки'), backgroundColor: Colors.orange),
+            );
+          }
+        }
+
+        iapService.dispose();
+        return purchaseCompleted;
+      } catch (e, stackTrace) {
+        closeLoadingDialog();
+        print('❌ Ошибка при покупке через IAP: $e');
+        print('StackTrace: $stackTrace');
         if (context.mounted) {
-          Navigator.of(context).pop(); // Закрываем индикатор
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                'Не удалось загрузить продукты для покупки. Проверьте, что подписка создана в App Store Connect и отправлена на проверку.',
+                'Не удалось загрузить подписку. Проверьте интернет и настройки покупок в приложениях или оформите подписку на сайте.',
               ),
               backgroundColor: Colors.red,
               duration: Duration(seconds: 5),
             ),
           );
         }
-        print('❌ Продукты не загружены. Проверьте логи выше для деталей.');
         return false;
       }
-
-      print('✅ Продукты загружены успешно: ${products.length}');
-
-      // Находим годовую подписку
-      final yearlyProduct = products.firstWhere(
-        (p) => p.id == IAPProducts.yearlySubscription,
-        orElse: () => throw Exception('Годовая подписка не найдена'),
-      );
-
-      // Закрываем индикатор загрузки
+    } catch (e, stackTrace) {
+      print('❌ Ошибка при покупке через IAP: $e');
+      print('StackTrace: $stackTrace');
       if (context.mounted) {
-        Navigator.of(context).pop();
+        if (loadingDialogWasShown) Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Ошибка при оформлении подписки. Проверьте подключение к интернету и настройки покупок в приложениях.',
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 4),
+          ),
+        );
+      }
+      return false;
+    }
+  }
+
+  /// Запуск IAP без UI (для использования из Cubit). Возвращает успех и текст ошибки для пользователя.
+  static Future<({bool success, String? errorForUser})> runIAPPurchaseWithoutUI({
+    required BuildContext context,
+    required int subscriptionTypeId,
+    String? returnRouteSource,
+  }) async {
+    const errorDefault = 'Не удалось загрузить подписку. Проверьте интернет и настройки покупок в приложениях или оформите подписку на сайте.';
+    final iapService = IAPService();
+    try {
+      final initialized = await iapService.initialize();
+      if (!initialized) {
+        return (success: false, errorForUser: 'In-App Purchases недоступны. Используйте реальное устройство для тестирования IAP.');
+      }
+    } catch (e) {
+      return (success: false, errorForUser: 'In-App Purchases недоступны. Используйте реальное устройство.');
+    }
+
+    try {
+      final products = await iapService.loadProducts();
+      if (products.isEmpty) {
+        return (success: false, errorForUser: 'Подписка временно недоступна. Убедитесь, что в настройках устройства включены покупки в приложениях и есть подключение к интернету.');
+      }
+      ProductDetails yearlyProduct;
+      try {
+        yearlyProduct = products.firstWhere(
+          (p) => p.id == IAPProducts.yearlySubscription,
+          orElse: () => throw Exception('Годовая подписка не найдена'),
+        );
+      } catch (_) {
+        return (success: false, errorForUser: 'Подписка не найдена. Попробуйте позже или оформите подписку на сайте.');
       }
 
-      // Слушаем результат покупки
-      StreamSubscription<bool>? purchaseSubscription;
       bool purchaseCompleted = false;
+      bool purchaseSuccess = false;
+      StreamSubscription<bool>? purchaseSubscription;
 
       purchaseSubscription = iapService.purchaseStream.listen((success) {
         purchaseCompleted = true;
+        purchaseSuccess = success;
         purchaseSubscription?.cancel();
-
-        if (context.mounted) {
-          if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Подписка успешно активирована'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
-            // Обновляем информацию о подписке
-            final paymentRepository = getIt<PaymentRepository>();
-            paymentRepository.getSubscriptionStatus().then((_) {
-              // Навигируем обратно
-              navigateToSource(context, returnRouteSource);
-            });
-          } else {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Ошибка при покупке подписки'), backgroundColor: Colors.red));
-          }
+        if (success && context.mounted) {
+          getIt<PaymentRepository>().getSubscriptionStatus().then((_) {
+            if (context.mounted) PaymentHelper.navigateToSource(context, returnRouteSource);
+          });
         }
       });
 
-      // Запускаем покупку
       final purchaseStarted = await iapService.buySubscription(yearlyProduct.id);
-
       if (!purchaseStarted) {
         purchaseSubscription.cancel();
-        if (context.mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Не удалось начать покупку'), backgroundColor: Colors.red));
-        }
-        return false;
+        return (success: false, errorForUser: 'Не удалось начать покупку. Попробуйте ещё раз или оформите подписку на сайте.');
       }
 
-      // Ждем завершения покупки (таймаут 5 минут)
-      await Future<void>.delayed(const Duration(seconds: 1));
       int attempts = 0;
       while (!purchaseCompleted && attempts < 300) {
         await Future<void>.delayed(const Duration(seconds: 1));
         attempts++;
       }
+      iapService.dispose();
 
       if (!purchaseCompleted) {
-        purchaseSubscription.cancel();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Превышено время ожидания покупки'), backgroundColor: Colors.orange),
-          );
-        }
+        return (success: false, errorForUser: 'Превышено время ожидания покупки.');
       }
-
-      iapService.dispose();
-      return purchaseCompleted;
+      return (success: purchaseSuccess, errorForUser: null);
     } catch (e, stackTrace) {
       print('❌ Ошибка при покупке через IAP: $e');
       print('StackTrace: $stackTrace');
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Ошибка: ${e.toString()}'), backgroundColor: Colors.red));
-      }
-      return false;
+      return (success: false, errorForUser: errorDefault);
     }
   }
 

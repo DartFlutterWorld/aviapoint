@@ -90,15 +90,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       shadowColor: kIsWeb ? null : shadowColor ?? const Color(0xFFA8A39C).withValues(alpha: 0.12),
       title: withLogo
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [SvgPicture.asset(Pictures.logoTitle, height: 40)],
-            )
+          ? Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [SvgPicture.asset(Pictures.logoTitle, height: 40)])
           : Text(
               title,
-              style: AppStyles.bold24s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
+              style: AppStyles.bold20s.copyWith(color: const Color(0xFF223B76), fontFamily: 'Geologica-Medium'),
               maxLines: 2,
               textAlign: titleTextAlign,
               overflow: TextOverflow.ellipsis,
@@ -120,12 +115,7 @@ class _ProfileButton extends StatelessWidget {
       return IconButton(
         constraints: const BoxConstraints(),
         iconSize: iconSize,
-        icon: SvgPicture.asset(
-          Pictures.profileNavbar,
-          height: iconSize,
-          width: iconSize,
-          colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-        ),
+        icon: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
         onPressed: () => showLogin(context),
         tooltip: 'Профиль',
       );
@@ -143,7 +133,7 @@ class _ProfileButton extends StatelessWidget {
           iconSize: iconSize,
           icon: ClipOval(
             clipBehavior: Clip.hardEdge,
-          child: SizedBox(
+            child: SizedBox(
               width: iconSize,
               height: iconSize,
               child: imageUrl != null && imageUrl.isNotEmpty
@@ -152,25 +142,10 @@ class _ProfileButton extends StatelessWidget {
                       width: iconSize,
                       height: iconSize,
                       fit: BoxFit.cover,
-                      placeholder: SvgPicture.asset(
-                        Pictures.profileNavbar,
-                        height: iconSize,
-                        width: iconSize,
-                        colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-                      ),
-                      errorWidget: SvgPicture.asset(
-                        Pictures.profileNavbar,
-                        height: iconSize,
-                        width: iconSize,
-                        colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-                      ),
+                      placeholder: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
+                      errorWidget: SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
                     )
-                  : SvgPicture.asset(
-                      Pictures.profileNavbar,
-                      height: iconSize,
-                      width: iconSize,
-                      colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn),
-                    ),
+                  : SvgPicture.asset(Pictures.profileNavbar, height: iconSize, width: iconSize, colorFilter: const ColorFilter.mode(Color(0xFF223B76), BlendMode.srcIn)),
             ),
           ),
           onPressed: () {
