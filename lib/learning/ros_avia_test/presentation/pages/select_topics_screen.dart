@@ -12,6 +12,7 @@ import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/select_top
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/select_topics_warning_dialog.dart';
 import 'package:aviapoint/learning/ros_avia_test/presentation/widgets/your_specialization_widget.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
+import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +87,17 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
         return;
       }
 
+      // Если платный контент выключен на бэкенде, считаем подписку активной
+      final showPaidContent = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
+      if (!showPaidContent) {
+        if (mounted) {
+          setState(() {
+            _hasActiveSubscription = true;
+          });
+        }
+        return;
+      }
+
       final paymentRepository = getIt<PaymentRepository>();
       final subscriptions = await paymentRepository.getSubscriptionStatus();
 
@@ -118,6 +130,13 @@ class _SelectTopicsScreenState extends State<SelectTopicsScreen> {
   Future<void> _navigateToPayment(BuildContext context) async {
     print('🔵 [SelectTopicsScreen] _navigateToPayment вызван');
     try {
+      // Если платный контент выключен, не открываем оплату
+      final showPaidContent = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
+      if (!showPaidContent) {
+        print('🔵 [SelectTopicsScreen] showPaidContent=false, оплата отключена');
+        return;
+      }
+
       if (!context.mounted) {
         print('❌ [SelectTopicsScreen] Context not mounted');
         return;

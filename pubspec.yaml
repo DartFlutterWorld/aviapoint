@@ -74,7 +74,6 @@ dependencies:
   internet_connection_checker_plus: ^2.9.1+2
   drift: ^2.30.1
   sqlite3_flutter_libs: ^0.5.18
-  in_app_purchase: ^3.1.11
 
 #dart run build_runner build --delete-conflicting-outputs
 dev_dependencies:

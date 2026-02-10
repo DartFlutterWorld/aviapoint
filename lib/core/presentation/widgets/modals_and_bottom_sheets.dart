@@ -22,6 +22,7 @@ import 'package:aviapoint/profile_page/profile/presentation/widget/profile_edit.
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/pilot_reviews_bottom_sheet.dart' show UserReviewsBottomSheet;
 import 'package:aviapoint/core/presentation/widgets/universal_bottom_sheet.dart';
+import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -210,12 +211,19 @@ Future<void> selectTopics({required BuildContext context, TestMode? testMode, bo
     bool? subscriptionStatus = hasActiveSubscription;
     if (subscriptionStatus == null) {
       try {
+      // Если платный контент выключен на бэкенде, считаем подписку активной
+      final showPaidContent = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
+      if (!showPaidContent) {
+        subscriptionStatus = true;
+        print('🔵 [selectTopics] showPaidContent=false, считаем подписку активной');
+      } else {
         final paymentRepository = getIt<PaymentRepository>();
         final subscriptions = await paymentRepository.getSubscriptionStatus();
         subscriptionStatus = subscriptions.any(
           (subscription) => subscription.isActive && subscription.endDate.isAfter(DateTime.now()),
         );
         print('🔵 [selectTopics] Статус подписки получен: $subscriptionStatus');
+      }
       } catch (e) {
         print('⚠️ [selectTopics] Ошибка при получении статуса подписки: $e');
         // В случае ошибки оставляем null, SelectTopicsScreen сделает запрос сам

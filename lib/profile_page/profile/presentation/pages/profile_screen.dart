@@ -17,14 +17,12 @@ import 'package:aviapoint/generated/l10n.dart';
 import 'package:aviapoint/app_settings/data/services/app_settings_service_helper.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:aviapoint/payment/data/models/subscription_dto.dart';
 import 'package:aviapoint/payment/data/models/subscription_type_model.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
 import 'package:aviapoint/payment/utils/payment_storage_helper.dart';
 import 'package:aviapoint/payment/utils/payment_helper.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
-import 'package:aviapoint/payment/presentation/cubit/subscription_purchase_cubit.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_state.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/profile_page/profile/presentation/widget/subscribe_widget.dart';
@@ -42,7 +40,7 @@ import 'package:aviapoint/on_the_way/presentation/widgets/review_card.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/rating_widget.dart';
 import 'package:aviapoint/on_the_way/domain/repositories/on_the_way_repository.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -83,17 +81,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadShowPaidContentSetting() async {
-    if (!kIsWeb && Platform.isIOS) {
-      try {
-        final value = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
-        if (mounted) {
-          setState(() {
-            _showPaidContent = value;
-          });
-        }
-      } catch (e) {
-        // При ошибке оставляем true (значение по умолчанию)
+    try {
+      final value = await AppSettingsServiceHelper().getSettingValue('showPaidContent');
+      if (mounted) {
+        setState(() {
+          _showPaidContent = value;
+        });
       }
+    } catch (e) {
+      // При ошибке оставляем true (значение по умолчанию)
     }
   }
 
@@ -278,16 +274,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool _shouldShowSubscriptionWidget() {
-    // На веб всегда показываем
+    // Если на бэкенде выключен платный контент, вообще не показываем подписку
+    if (!_showPaidContent) return false;
+
+    // В остальных случаях логика по платформам
     if (kIsWeb) return true;
-
-    // На iOS показываем только если showPaidContent = true
-    if (Platform.isIOS) {
-      return _showPaidContent;
-    }
-
-    // На Android и других платформах всегда показываем
     return true;
+  }
+
+  /// Открывает оплату подписки через YooKassa (профиль).
+  Future<void> _openYooKassaSubscription(BuildContext context, SubscriptionTypeModel subscriptionType) async {
+    if (!context.mounted) return;
+    try {
+      await PaymentHelper.createPaymentAndRedirect(
+        context: context,
+        amount: subscriptionType.price.toDouble(),
+        currency: 'RUB',
+        description: '${subscriptionType.name}, ${subscriptionType.description} на ${subscriptionType.periodDays} дней',
+        subscriptionTypeId: subscriptionType.id,
+        returnRouteSource: 'profile',
+      );
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print('❌ Ошибка при открытии оплаты: $e');
+        print('StackTrace: $stackTrace');
+      }
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Не удалось открыть оплату. Проверьте интернет и попробуйте снова.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -630,57 +651,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           // Пока загружаются типы, показываем заглушку (нужно будет обновить SubscribeWidget для поддержки nullable)
                                           const SizedBox(height: 225)
                                         else if (_subscriptionTypes.isNotEmpty)
-                                          BlocProvider(
-                                            create: (_) => SubscriptionPurchaseCubit(),
-                                            child: BlocListener<SubscriptionPurchaseCubit, SubscriptionPurchaseState>(
-                                              listenWhen: (prev, curr) => curr is SubscriptionPurchaseError,
-                                              listener: (context, state) {
-                                                if (state is SubscriptionPurchaseError) {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(state.errorForUser),
-                                                      backgroundColor: Colors.red,
-                                                      duration: const Duration(seconds: 5),
-                                                      action: SnackBarAction(
-                                                        label: 'Повторить',
-                                                        textColor: Colors.white,
-                                                        onPressed: () => context.read<SubscriptionPurchaseCubit>().retry(context),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              child: BlocBuilder<SubscriptionPurchaseCubit, SubscriptionPurchaseState>(
-                                                builder: (context, purchaseState) {
-                                                  final subscriptionType = _subscriptionTypes.firstWhere(
-                                                    (type) => type.code == 'rosaviatest_365' && type.isActive,
-                                                    orElse: () => _subscriptionTypes.first,
-                                                  );
-                                                  if (purchaseState is SubscriptionPurchaseLoading) {
-                                                    return const Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                                                      child: LoadingCustom(),
-                                                    );
-                                                  }
-                                                  if (purchaseState is SubscriptionPurchaseError) {
-                                                    return ErrorCustom(
-                                                      textError: purchaseState.errorForUser,
-                                                      repeat: () => context.read<SubscriptionPurchaseCubit>().retry(context),
-                                                      paddingTop: 0,
-                                                    );
-                                                  }
-                                                  return SubscribeWidget(
-                                                    subscriptionType: subscriptionType,
-                                                    fon: Pictures.podpiskaNoActiveFon,
-                                                    onPurchase: () => context.read<SubscriptionPurchaseCubit>().startPurchase(
-                                                      context,
-                                                      subscriptionType: subscriptionType,
-                                                      returnRouteSource: 'profile',
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
+                                          Builder(
+                                            builder: (context) {
+                                              final subscriptionType = _subscriptionTypes.firstWhere(
+                                                (type) => type.code == 'rosaviatest_365' && type.isActive,
+                                                orElse: () => _subscriptionTypes.first,
+                                              );
+                                              return SubscribeWidget(
+                                                subscriptionType: subscriptionType,
+                                                fon: Pictures.podpiskaNoActiveFon,
+                                                onPurchase: () => _openYooKassaSubscription(context, subscriptionType),
+                                              );
+                                            },
                                           )
                                         else
                                           // Если типов подписок нет, показываем заглушку
