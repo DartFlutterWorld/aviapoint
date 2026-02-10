@@ -1067,7 +1067,12 @@ class JobsRepositoryImpl implements JobsRepository {
       lastActiveAt: dto.lastActiveAt,
       contactName: dto.contactName,
       contactPhone: dto.contactPhone,
+      contactPhoneAlt: dto.contactPhoneAlt,
       contactTelegram: dto.contactTelegram,
+      contactWhatsapp: dto.contactWhatsapp,
+      contactMax: dto.contactMax,
+      contactEmail: dto.contactEmail,
+      contactSite: dto.contactSite,
     );
   }
 

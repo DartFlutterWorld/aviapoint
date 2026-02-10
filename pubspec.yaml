@@ -1,8 +1,7 @@
 name: aviapoint
 description: service for pilot.
 publish_to: "none"
-version: 0.0.3+41
-
+version: 0.0.4+42
 environment:
   sdk: ">=3.9.0 <4.0.0"
 

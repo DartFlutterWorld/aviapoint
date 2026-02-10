@@ -43,5 +43,10 @@ JobResumeDto _$JobResumeDtoFromJson(Map<String, dynamic> json) => JobResumeDto(
   lastActiveAt: json['last_active_at'] as String?,
   contactName: json['contact_name'] as String?,
   contactPhone: json['contact_phone'] as String?,
+  contactPhoneAlt: json['contact_phone_alt'] as String?,
   contactTelegram: json['contact_telegram'] as String?,
+  contactWhatsapp: json['contact_whatsapp'] as String?,
+  contactMax: json['contact_max'] as String?,
+  contactEmail: json['contact_email'] as String?,
+  contactSite: json['contact_site'] as String?,
 );

@@ -417,10 +417,14 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
           _buildExperienceSection(resume),
           const SizedBox(height: 16),
           _buildSkillsSection(resume),
-          if (resume.contactName != null || resume.contactPhone != null || resume.contactTelegram != null) ...[
+          if (_hasAnyResumeContact(resume)) ...[
             const SizedBox(height: 16),
             Text('Контакты кандидата', style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary)),
             const SizedBox(height: 8),
+            if (resume.contactName != null && resume.contactName!.isNotEmpty) ...[
+              Text(resume.contactName!, style: AppStyles.regular14s.copyWith(color: AppColors.textPrimary)),
+              const SizedBox(height: 8),
+            ],
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -433,6 +437,14 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
                     color: const Color(0xFF10B981),
                     onTap: () => _launchPhone(context, resume.contactPhone!),
                   ),
+                if (resume.contactPhoneAlt != null && resume.contactPhoneAlt!.isNotEmpty)
+                  _buildContactButton(
+                    context: context,
+                    icon: Icons.phone,
+                    label: formatPhone(resume.contactPhoneAlt!),
+                    color: const Color(0xFF10B981),
+                    onTap: () => _launchPhone(context, resume.contactPhoneAlt!),
+                  ),
                 if (resume.contactTelegram != null && resume.contactTelegram!.isNotEmpty)
                   _buildContactButton(
                     context: context,
@@ -440,6 +452,38 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
                     label: resume.contactTelegram!,
                     color: const Color(0xFF0088CC),
                     onTap: () => _launchTelegram(context, resume.contactTelegram!),
+                  ),
+                if (resume.contactWhatsapp != null && resume.contactWhatsapp!.isNotEmpty)
+                  _buildContactButton(
+                    context: context,
+                    iconAsset: Pictures.whatsapp,
+                    label: resume.contactWhatsapp!,
+                    color: const Color(0xFF22C55E),
+                    onTap: () => _launchWhatsapp(context, resume.contactWhatsapp!),
+                  ),
+                if (resume.contactMax != null && resume.contactMax!.isNotEmpty)
+                  _buildContactButton(
+                    context: context,
+                    iconAsset: Pictures.max,
+                    label: resume.contactMax!,
+                    color: const Color(0xFF9CA5AF),
+                    onTap: () => _launchMax(context, resume.contactMax!),
+                  ),
+                if (resume.contactEmail != null && resume.contactEmail!.isNotEmpty)
+                  _buildContactButton(
+                    context: context,
+                    icon: Icons.email,
+                    label: resume.contactEmail!,
+                    color: const Color(0xFF3B82F6),
+                    onTap: () => _launchEmail(context, resume.contactEmail!),
+                  ),
+                if (resume.contactSite != null && resume.contactSite!.isNotEmpty)
+                  _buildContactButton(
+                    context: context,
+                    icon: Icons.language,
+                    label: resume.contactSite!,
+                    color: const Color(0xFF6366F1),
+                    onTap: () => _launchSite(context, resume.contactSite!),
                   ),
               ],
             ),
@@ -702,6 +746,17 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
     );
   }
 
+  bool _hasAnyResumeContact(JobResumeEntity r) {
+    return (r.contactName != null && r.contactName!.isNotEmpty) ||
+        (r.contactPhone != null && r.contactPhone!.isNotEmpty) ||
+        (r.contactPhoneAlt != null && r.contactPhoneAlt!.isNotEmpty) ||
+        (r.contactTelegram != null && r.contactTelegram!.isNotEmpty) ||
+        (r.contactWhatsapp != null && r.contactWhatsapp!.isNotEmpty) ||
+        (r.contactMax != null && r.contactMax!.isNotEmpty) ||
+        (r.contactEmail != null && r.contactEmail!.isNotEmpty) ||
+        (r.contactSite != null && r.contactSite!.isNotEmpty);
+  }
+
   Future<void> _launchPhone(BuildContext context, String phone) async {
     final uri = Uri.parse('tel:$phone');
     if (await canLaunchUrl(uri)) {
@@ -718,6 +773,57 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть Telegram'), duration: Duration(seconds: 2)));
+    }
+  }
+
+  Future<void> _launchWhatsapp(BuildContext context, String value) async {
+    final trimmed = value.trim();
+    final normalized = trimmed.replaceAll(RegExp(r'[^\d]'), '');
+    final Uri uri;
+    if (trimmed.startsWith('http')) {
+      uri = Uri.parse(trimmed);
+    } else if (normalized.isNotEmpty) {
+      uri = Uri.parse('https://wa.me/$normalized');
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Неверный формат WhatsApp'), duration: Duration(seconds: 2)));
+      }
+      return;
+    }
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть WhatsApp'), duration: Duration(seconds: 2)));
+    }
+  }
+
+  Future<void> _launchMax(BuildContext context, String max) async {
+    final username = max.replaceAll('@', '');
+    final uri = Uri.parse('https://max.me/$username');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть MAX'), duration: Duration(seconds: 2)));
+    }
+  }
+
+  Future<void> _launchEmail(BuildContext context, String email) async {
+    final uri = Uri.parse('mailto:$email');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть почту'), duration: Duration(seconds: 2)));
+    }
+  }
+
+  Future<void> _launchSite(BuildContext context, String site) async {
+    final trimmed = site.trim();
+    final url = trimmed.startsWith('http') ? trimmed : 'https://$trimmed';
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не удалось открыть ссылку'), duration: Duration(seconds: 2)));
     }
   }
 }

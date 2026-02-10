@@ -31,7 +31,12 @@ class JobResumeEntity {
   final String? lastActiveAt;
   final String? contactName;
   final String? contactPhone;
+  final String? contactPhoneAlt;
   final String? contactTelegram;
+  final String? contactWhatsapp;
+  final String? contactMax;
+  final String? contactEmail;
+  final String? contactSite;
 
   JobResumeEntity({
     required this.id,
@@ -66,6 +71,11 @@ class JobResumeEntity {
     this.lastActiveAt,
     this.contactName,
     this.contactPhone,
+    this.contactPhoneAlt,
     this.contactTelegram,
+    this.contactWhatsapp,
+    this.contactMax,
+    this.contactEmail,
+    this.contactSite,
   });
 }

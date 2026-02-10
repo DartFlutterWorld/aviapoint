@@ -17,6 +17,7 @@ import 'package:aviapoint/work/domain/entities/job_vacancy_entity.dart';
 import 'package:aviapoint/work/domain/repositories/jobs_repository.dart';
 import 'package:aviapoint/work/presentation/bloc/job_vacancy_favorite_toggle_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/job_vacancy_favorites_bloc.dart';
+import 'package:aviapoint/work/presentation/bloc/jobs_list_refresh_cubit.dart';
 import 'package:aviapoint/work/presentation/bloc/jobs_vacancies_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/jobs_resumes_bloc.dart';
 import 'package:aviapoint/work/presentation/widgets/job_vacancy_card.dart';
@@ -207,16 +208,7 @@ class _ResumesTabState extends State<_ResumesTab> {
     });
     final result = await getIt<JobsRepository>().addResumeToFavorites(id);
     if (!context.mounted) return;
-    result.fold(
-      (_) {},
-      (_) => context.read<JobsResumesBloc>().add(
-            JobsResumesEvent.refresh(
-              search: _search,
-              address: _address,
-              onlyFavorites: _onlyFavorites,
-            ),
-          ),
-    );
+    result.fold((_) {}, (_) => context.read<JobsResumesBloc>().add(JobsResumesEvent.refresh(search: _search, address: _address, onlyFavorites: _onlyFavorites)));
   }
 
   Future<void> _removeResumeFromFavorites(int id) async {
@@ -225,16 +217,7 @@ class _ResumesTabState extends State<_ResumesTab> {
     });
     final result = await getIt<JobsRepository>().removeResumeFromFavorites(id);
     if (!context.mounted) return;
-    result.fold(
-      (_) {},
-      (_) => context.read<JobsResumesBloc>().add(
-            JobsResumesEvent.refresh(
-              search: _search,
-              address: _address,
-              onlyFavorites: _onlyFavorites,
-            ),
-          ),
-    );
+    result.fold((_) {}, (_) => context.read<JobsResumesBloc>().add(JobsResumesEvent.refresh(search: _search, address: _address, onlyFavorites: _onlyFavorites)));
   }
 
   @override
@@ -245,13 +228,7 @@ class _ResumesTabState extends State<_ResumesTab> {
 
   void _applySearch() {
     _search = _searchController.text.trim().isNotEmpty ? _searchController.text.trim() : null;
-    context.read<JobsResumesBloc>().add(
-          JobsResumesEvent.get(
-            search: _search,
-            address: _address,
-            onlyFavorites: _onlyFavorites,
-          ),
-        );
+    context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
   }
 
   void _openFiltersBottomSheet() {
@@ -278,19 +255,11 @@ class _ResumesTabState extends State<_ResumesTab> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomTextField(
-                          controller: salaryFromController,
-                          labelText: 'Желаемая зарплата от',
-                          keyboardType: TextInputType.number,
-                        ),
+                        child: CustomTextField(controller: salaryFromController, labelText: 'Желаемая зарплата от', keyboardType: TextInputType.number),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: CustomTextField(
-                          controller: salaryToController,
-                          labelText: 'до',
-                          keyboardType: TextInputType.number,
-                        ),
+                        child: CustomTextField(controller: salaryToController, labelText: 'до', keyboardType: TextInputType.number),
                       ),
                     ],
                   ),
@@ -298,19 +267,11 @@ class _ResumesTabState extends State<_ResumesTab> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomTextField(
-                          controller: ageFromController,
-                          labelText: 'Возраст от',
-                          keyboardType: TextInputType.number,
-                        ),
+                        child: CustomTextField(controller: ageFromController, labelText: 'Возраст от', keyboardType: TextInputType.number),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: CustomTextField(
-                          controller: ageToController,
-                          labelText: 'до',
-                          keyboardType: TextInputType.number,
-                        ),
+                        child: CustomTextField(controller: ageToController, labelText: 'до', keyboardType: TextInputType.number),
                       ),
                     ],
                   ),
@@ -340,13 +301,7 @@ class _ResumesTabState extends State<_ResumesTab> {
                               _readyToRelocate = false;
                             });
                             Navigator.of(bottomSheetContext).pop();
-                            context.read<JobsResumesBloc>().add(
-                                  JobsResumesEvent.get(
-                                    search: _search,
-                                    address: _address,
-                                    onlyFavorites: _onlyFavorites,
-                                  ),
-                                );
+                            context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
                           },
                           child: const Text('Сбросить'),
                         ),
@@ -365,18 +320,9 @@ class _ResumesTabState extends State<_ResumesTab> {
                               _readyToRelocate = tempReadyToRelocate;
                             });
                             Navigator.of(bottomSheetContext).pop();
-                            context.read<JobsResumesBloc>().add(
-                                  JobsResumesEvent.get(
-                                    search: _search,
-                                    address: _address,
-                                    onlyFavorites: _onlyFavorites,
-                                  ),
-                                );
+                            context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary100p,
-                            foregroundColor: Colors.white,
-                          ),
+                          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary100p, foregroundColor: Colors.white),
                           child: const Text('Применить'),
                         ),
                       ),
@@ -436,13 +382,7 @@ class _ResumesTabState extends State<_ResumesTab> {
                           setState(() {
                             _onlyFavorites = true;
                           });
-                          context.read<JobsResumesBloc>().add(
-                                JobsResumesEvent.get(
-                                  search: _search,
-                                  address: _address,
-                                  onlyFavorites: _onlyFavorites,
-                                ),
-                              );
+                          context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
                         },
                       );
                       return;
@@ -451,13 +391,7 @@ class _ResumesTabState extends State<_ResumesTab> {
                     setState(() {
                       _onlyFavorites = !_onlyFavorites;
                     });
-                    context.read<JobsResumesBloc>().add(
-                          JobsResumesEvent.get(
-                            search: _search,
-                            address: _address,
-                            onlyFavorites: _onlyFavorites,
-                          ),
-                        );
+                    context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
                   },
                   icon: Icon(_onlyFavorites ? Icons.favorite : Icons.favorite_border, color: _onlyFavorites ? AppColors.primary100p : AppColors.textPrimary, size: 22),
                 ),
@@ -482,13 +416,7 @@ class _ResumesTabState extends State<_ResumesTab> {
                       _ageTo = null;
                       _readyToRelocate = false;
                     });
-                    context.read<JobsResumesBloc>().add(
-                          JobsResumesEvent.get(
-                            search: _search,
-                            address: _address,
-                            onlyFavorites: _onlyFavorites,
-                          ),
-                        );
+                    context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
                   },
                 ),
                 const SizedBox(width: 8),
@@ -554,59 +482,41 @@ class _ResumesTabState extends State<_ResumesTab> {
             ),
           ),
         Expanded(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              context.read<JobsResumesBloc>().add(
-                    JobsResumesEvent.refresh(
-                      search: _search,
-                      address: _address,
-                      onlyFavorites: _onlyFavorites,
-                    ),
-                  );
-              await Future<void>.delayed(const Duration(milliseconds: 400));
+          child: BlocListener<JobsResumesRefreshCubit, int>(
+            bloc: getIt<JobsResumesRefreshCubit>(),
+            listener: (context, _) {
+              context.read<JobsResumesBloc>().add(JobsResumesEvent.refresh(search: _search, address: _address, onlyFavorites: _onlyFavorites));
             },
-            child: BlocBuilder<JobsResumesBloc, JobsResumesState>(
-              builder: (context, state) => state.when(
-                loading: () => const Center(child: LoadingCustom()),
-                loadingMore: (resumes) => _ResumesList(
-                  resumes: _filterResumes(resumes),
-                  isLoadingMore: true,
-                  onlyFavorites: _onlyFavorites,
-                  favoriteIds: _favoriteResumeIds,
-                  onToggleFavorite: _onlyFavorites ? (id) => _removeResumeFromFavorites(id) : (id) => _addResumeToFavorites(id),
-                  onReturnFromDetail: () => context.read<JobsResumesBloc>().add(
-                        JobsResumesEvent.refresh(
-                          search: _search,
-                          address: _address,
-                          onlyFavorites: _onlyFavorites,
-                        ),
-                      ),
-                ),
-                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
-                  textError: errorForUser,
-                  repeat: () {
-                    context.read<JobsResumesBloc>().add(
-                          JobsResumesEvent.get(
-                            search: _search,
-                            address: _address,
-                            onlyFavorites: _onlyFavorites,
-                          ),
-                        );
-                  },
-                ),
-                success: (resumes, hasMore) => _ResumesList(
-                  resumes: _filterResumes(resumes),
-                  isLoadingMore: false,
-                  onlyFavorites: _onlyFavorites,
-                  favoriteIds: _favoriteResumeIds,
-                  onToggleFavorite: _onlyFavorites ? (id) => _removeResumeFromFavorites(id) : (id) => _addResumeToFavorites(id),
-                  onReturnFromDetail: () => context.read<JobsResumesBloc>().add(
-                        JobsResumesEvent.refresh(
-                          search: _search,
-                          address: _address,
-                          onlyFavorites: _onlyFavorites,
-                        ),
-                      ),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                context.read<JobsResumesBloc>().add(JobsResumesEvent.refresh(search: _search, address: _address, onlyFavorites: _onlyFavorites));
+                await Future<void>.delayed(const Duration(milliseconds: 400));
+              },
+              child: BlocBuilder<JobsResumesBloc, JobsResumesState>(
+                builder: (context, state) => state.when(
+                  loading: () => const Center(child: LoadingCustom()),
+                  loadingMore: (resumes) => _ResumesList(
+                    resumes: _filterResumes(resumes),
+                    isLoadingMore: true,
+                    onlyFavorites: _onlyFavorites,
+                    favoriteIds: _favoriteResumeIds,
+                    onToggleFavorite: _onlyFavorites ? (id) => _removeResumeFromFavorites(id) : (id) => _addResumeToFavorites(id),
+                    onReturnFromDetail: () => context.read<JobsResumesBloc>().add(JobsResumesEvent.refresh(search: _search, address: _address, onlyFavorites: _onlyFavorites)),
+                  ),
+                  error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(
+                    textError: errorForUser,
+                    repeat: () {
+                      context.read<JobsResumesBloc>().add(JobsResumesEvent.get(search: _search, address: _address, onlyFavorites: _onlyFavorites));
+                    },
+                  ),
+                  success: (resumes, hasMore) => _ResumesList(
+                    resumes: _filterResumes(resumes),
+                    isLoadingMore: false,
+                    onlyFavorites: _onlyFavorites,
+                    favoriteIds: _favoriteResumeIds,
+                    onToggleFavorite: _onlyFavorites ? (id) => _removeResumeFromFavorites(id) : (id) => _addResumeToFavorites(id),
+                    onReturnFromDetail: () => context.read<JobsResumesBloc>().add(JobsResumesEvent.refresh(search: _search, address: _address, onlyFavorites: _onlyFavorites)),
+                  ),
                 ),
               ),
             ),
@@ -615,8 +525,8 @@ class _ResumesTabState extends State<_ResumesTab> {
       ],
     );
   }
-  bool get _hasActiveFilters =>
-      _address != null || _salaryFrom != null || _salaryTo != null || _ageFrom != null || _ageTo != null || _readyToRelocate;
+
+  bool get _hasActiveFilters => _address != null || _salaryFrom != null || _salaryTo != null || _ageFrom != null || _ageTo != null || _readyToRelocate;
 
   List<JobResumeEntity> _filterResumes(List<JobResumeEntity> resumes) {
     return resumes.where((r) {
@@ -706,14 +616,7 @@ class _ResumesList extends StatelessWidget {
   final void Function(int id) onToggleFavorite;
   final VoidCallback? onReturnFromDetail;
 
-  const _ResumesList({
-    required this.resumes,
-    required this.isLoadingMore,
-    this.onlyFavorites = false,
-    required this.favoriteIds,
-    required this.onToggleFavorite,
-    this.onReturnFromDetail,
-  });
+  const _ResumesList({required this.resumes, required this.isLoadingMore, this.onlyFavorites = false, required this.favoriteIds, required this.onToggleFavorite, this.onReturnFromDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -1102,79 +1005,85 @@ class _VacanciesTabState extends State<_VacanciesTab> {
             ),
           ),
         Expanded(
-          child: BlocListener<JobVacancyFavoriteToggleBloc, JobVacancyFavoriteToggleState>(
-            listenWhen: (prev, curr) => curr is JobVacancyFavoriteToggleSuccess,
-            listener: (context, state) {
-              if (state is JobVacancyFavoriteToggleSuccess) {
-                if (_onlyFavorites) {
-                  context.read<JobVacancyFavoritesBloc>().add(JobVacancyFavoritesRemoveItem(vacancyId: state.vacancyId));
-                } else {
-                  context.read<JobsVacanciesBloc>().add(JobsVacanciesEvent.updateFavoriteState(vacancyId: state.vacancyId, isFavorite: state.isFavorite));
-                }
-              }
+          child: BlocListener<JobsVacanciesRefreshCubit, int>(
+            bloc: getIt<JobsVacanciesRefreshCubit>(),
+            listener: (context, _) {
+              if (!_onlyFavorites) _applyFilters();
             },
-            child: RefreshIndicator(
-              onRefresh: () async {
-                if (_onlyFavorites) {
-                  context.read<JobVacancyFavoritesBloc>().add(const JobVacancyFavoritesRefresh());
-                } else {
-                  _applyFilters();
+            child: BlocListener<JobVacancyFavoriteToggleBloc, JobVacancyFavoriteToggleState>(
+              listenWhen: (prev, curr) => curr is JobVacancyFavoriteToggleSuccess,
+              listener: (context, state) {
+                if (state is JobVacancyFavoriteToggleSuccess) {
+                  if (_onlyFavorites) {
+                    context.read<JobVacancyFavoritesBloc>().add(JobVacancyFavoritesRemoveItem(vacancyId: state.vacancyId));
+                  } else {
+                    context.read<JobsVacanciesBloc>().add(JobsVacanciesEvent.updateFavoriteState(vacancyId: state.vacancyId, isFavorite: state.isFavorite));
+                  }
                 }
-                await Future<void>.delayed(const Duration(milliseconds: 400));
               },
-              child: _onlyFavorites
-                  ? BlocBuilder<JobVacancyFavoritesBloc, JobVacancyFavoritesState>(
-                      builder: (context, state) {
-                        if (state is LoadingJobVacancyFavoritesState) {
-                          return const Center(child: LoadingCustom());
-                        }
-                        if (state is ErrorJobVacancyFavoritesState) {
-                          return ErrorCustom(textError: state.errorForUser, repeat: () => context.read<JobVacancyFavoritesBloc>().add(const JobVacancyFavoritesGet()));
-                        }
-                        if (state is SuccessJobVacancyFavoritesState) {
-                          return _VacanciesList(
-                            vacancies: state.vacancies,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  if (_onlyFavorites) {
+                    context.read<JobVacancyFavoritesBloc>().add(const JobVacancyFavoritesRefresh());
+                  } else {
+                    _applyFilters();
+                  }
+                  await Future<void>.delayed(const Duration(milliseconds: 400));
+                },
+                child: _onlyFavorites
+                    ? BlocBuilder<JobVacancyFavoritesBloc, JobVacancyFavoritesState>(
+                        builder: (context, state) {
+                          if (state is LoadingJobVacancyFavoritesState) {
+                            return const Center(child: LoadingCustom());
+                          }
+                          if (state is ErrorJobVacancyFavoritesState) {
+                            return ErrorCustom(textError: state.errorForUser, repeat: () => context.read<JobVacancyFavoritesBloc>().add(const JobVacancyFavoritesGet()));
+                          }
+                          if (state is SuccessJobVacancyFavoritesState) {
+                            return _VacanciesList(
+                              vacancies: state.vacancies,
+                              isLoadingMore: false,
+                              onlyFavorites: true,
+                              onToggleFavorite: (id, {isCurrentlyFavorite}) => context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleRemove(vacancyId: id)),
+                              onReturnFromDetail: () => context.read<JobVacancyFavoritesBloc>().add(const JobVacancyFavoritesRefresh()),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      )
+                    : BlocBuilder<JobsVacanciesBloc, JobsVacanciesState>(
+                        builder: (context, state) => state.when(
+                          loading: () => const Center(child: LoadingCustom()),
+                          loadingMore: (vacancies) => _VacanciesList(
+                            vacancies: vacancies,
+                            isLoadingMore: true,
+                            onlyFavorites: false,
+                            onToggleFavorite: (id, {isCurrentlyFavorite}) {
+                              if (isCurrentlyFavorite == true) {
+                                context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleRemove(vacancyId: id));
+                              } else {
+                                context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleAdd(vacancyId: id));
+                              }
+                            },
+                            onReturnFromDetail: () => _applyFilters(),
+                          ),
+                          error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(textError: errorForUser, repeat: _applyFilters, paddingTop: 0),
+                          success: (vacancies, hasMore) => _VacanciesList(
+                            vacancies: vacancies,
                             isLoadingMore: false,
-                            onlyFavorites: true,
-                            onToggleFavorite: (id, {isCurrentlyFavorite}) => context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleRemove(vacancyId: id)),
-                            onReturnFromDetail: () => context.read<JobVacancyFavoritesBloc>().add(const JobVacancyFavoritesRefresh()),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    )
-                  : BlocBuilder<JobsVacanciesBloc, JobsVacanciesState>(
-                      builder: (context, state) => state.when(
-                        loading: () => const Center(child: LoadingCustom()),
-                        loadingMore: (vacancies) => _VacanciesList(
-                          vacancies: vacancies,
-                          isLoadingMore: true,
-                          onlyFavorites: false,
-                          onToggleFavorite: (id, {isCurrentlyFavorite}) {
-                            if (isCurrentlyFavorite == true) {
-                              context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleRemove(vacancyId: id));
-                            } else {
-                              context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleAdd(vacancyId: id));
-                            }
-                          },
-                          onReturnFromDetail: () => _applyFilters(),
-                        ),
-                        error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => ErrorCustom(textError: errorForUser, repeat: _applyFilters, paddingTop: 0),
-                        success: (vacancies, hasMore) => _VacanciesList(
-                          vacancies: vacancies,
-                          isLoadingMore: false,
-                          onlyFavorites: false,
-                          onToggleFavorite: (id, {isCurrentlyFavorite}) {
-                            if (isCurrentlyFavorite == true) {
-                              context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleRemove(vacancyId: id));
-                            } else {
-                              context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleAdd(vacancyId: id));
-                            }
-                          },
-                          onReturnFromDetail: () => _applyFilters(),
+                            onlyFavorites: false,
+                            onToggleFavorite: (id, {isCurrentlyFavorite}) {
+                              if (isCurrentlyFavorite == true) {
+                                context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleRemove(vacancyId: id));
+                              } else {
+                                context.read<JobVacancyFavoriteToggleBloc>().add(JobVacancyFavoriteToggleAdd(vacancyId: id));
+                              }
+                            },
+                            onReturnFromDetail: () => _applyFilters(),
+                          ),
                         ),
                       ),
-                    ),
+              ),
             ),
           ),
         ),

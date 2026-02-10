@@ -59,8 +59,18 @@ class JobResumeDto {
   final String? contactName;
   @JsonKey(name: 'contact_phone')
   final String? contactPhone;
+  @JsonKey(name: 'contact_phone_alt')
+  final String? contactPhoneAlt;
   @JsonKey(name: 'contact_telegram')
   final String? contactTelegram;
+  @JsonKey(name: 'contact_whatsapp')
+  final String? contactWhatsapp;
+  @JsonKey(name: 'contact_max')
+  final String? contactMax;
+  @JsonKey(name: 'contact_email')
+  final String? contactEmail;
+  @JsonKey(name: 'contact_site')
+  final String? contactSite;
 
   JobResumeDto({
     required this.id,
@@ -95,7 +105,12 @@ class JobResumeDto {
     this.lastActiveAt,
     this.contactName,
     this.contactPhone,
+    this.contactPhoneAlt,
     this.contactTelegram,
+    this.contactWhatsapp,
+    this.contactMax,
+    this.contactEmail,
+    this.contactSite,
   });
 
   factory JobResumeDto.fromJson(Map<String, dynamic> json) => _$JobResumeDtoFromJson(json);
