@@ -44,6 +44,7 @@ class JobResumeEditBloc extends Bloc<JobResumeEditEvent, JobResumeEditState> {
       licenses: event.licenses,
       typeRatings: event.typeRatings,
       medicalClass: event.medicalClass,
+      isVisibleForEmployers: event.isVisibleForEmployers,
     );
 
     result.fold(

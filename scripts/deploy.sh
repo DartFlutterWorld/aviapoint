@@ -84,9 +84,10 @@ if ! command -v sshpass &> /dev/null; then
     exit 1
 fi
 
-# 8. Копирование файлов на VPS
+# 8. Копирование файлов на VPS (в т.ч. .well-known для диплинков)
+# Используем $BUILD_DIR/. вместо $BUILD_DIR/* — иначе папки с точкой (.well-known) не копируются
 echo "📤 Копирование файлов на VPS..."
-sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -P $VPS_PORT -r $BUILD_DIR/* $VPS_USER@$VPS_HOST:$VPS_PATH/
+sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -P $VPS_PORT -r $BUILD_DIR/. $VPS_USER@$VPS_HOST:$VPS_PATH/
 
 # 9. Проверка успешности копирования
 if [ $? -eq 0 ]; then

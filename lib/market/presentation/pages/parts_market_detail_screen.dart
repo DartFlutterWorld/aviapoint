@@ -4,6 +4,7 @@ import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
@@ -242,8 +243,18 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
       buffer.writeln('📊 Количество: ${part.quantity}');
     }
 
-    if (part.location != null && part.location!.isNotEmpty) {
-      buffer.writeln('📍 Местоположение: ${part.location}');
+    final locationDisplay = part.address != null
+        ? AddressDisplayHelper.fullDisplay(
+            country: part.address!.country,
+            region: part.address!.region,
+            city: part.address!.city,
+            street: part.address!.street,
+            houseNumber: part.address!.houseNumber,
+            postcode: part.address!.postcode,
+          )
+        : part.location?.trim();
+    if (locationDisplay != null && locationDisplay.isNotEmpty) {
+      buffer.writeln('📍 Местоположение: $locationDisplay');
     }
 
     buffer.writeln('');
@@ -308,6 +319,20 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
         Share.share(text);
       }
     }
+  }
+
+  /// Адрес для детальной страницы: регион (или город без дубля), улица, дом; fallback — location.
+  String? _fullLocationDisplay(PartsMarketEntity part) {
+    if (part.address != null) {
+      final a = part.address!;
+      return AddressDisplayHelper.detailDisplay(
+        region: a.region,
+        city: a.city,
+        street: a.street,
+        houseNumber: a.houseNumber,
+      );
+    }
+    return AddressDisplayHelper.locationStringWithoutDuplicates(part.location);
   }
 
   Widget _buildLocationMap(String? location) {
@@ -964,8 +989,13 @@ class _PartsMarketDetailScreenState extends State<PartsMarketDetailScreen> {
                       _buildCompatibleAircraftModelsSection(),
                       _buildInfoRow('Категория', _part!.subcategoryName ?? _part!.mainCategoryName),
                       _buildInfoRow('Производитель', _part!.manufacturerNameDisplay ?? _part!.manufacturerName),
-                      _buildInfoRow('Местоположение', _part!.location),
-                      if (_part!.location != null && _part!.location!.isNotEmpty) _buildLocationMap(_part!.location),
+                      ...(){
+                        final loc = _fullLocationDisplay(_part!);
+                        return [
+                          _buildInfoRow('Местоположение', loc),
+                          if (loc != null && loc.isNotEmpty) _buildLocationMap(loc),
+                        ];
+                      }(),
                       SizedBox(height: 24),
 
                       Text('Продавец', style: AppStyles.bold16s),

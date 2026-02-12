@@ -1,5 +1,6 @@
 import 'package:aviapoint/market/data/models/parts_market_dto.dart';
 import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/market_address_entity.dart';
 
 class PartsMarketMapper {
   static PartsMarketEntity toEntity(PartsMarketDto dto) {
@@ -14,6 +15,20 @@ class PartsMarketMapper {
       manufacturerId: dto.manufacturerId,
       manufacturerName: dto.manufacturerName,
       location: dto.location,
+      address: dto.address != null
+          ? MarketAddressEntity(
+              country: dto.address?['country'] as String?,
+              region: (dto.address?['state'] ?? dto.address?['region'] ?? dto.address?['state_district']) as String?,
+              city: (dto.address?['city'] ??
+                      dto.address?['town'] ??
+                      dto.address?['village'] ??
+                      dto.address?['municipality'] ??
+                      dto.address?['hamlet']) as String?,
+              street: (dto.address?['road'] ?? dto.address?['street']) as String?,
+              houseNumber: dto.address?['house_number'] as String?,
+              postcode: dto.address?['postcode'] as String?,
+            )
+          : null,
       mainImageUrl: dto.mainImageUrl,
       additionalImageUrls: dto.additionalImageUrls,
       partNumber: dto.partNumber,

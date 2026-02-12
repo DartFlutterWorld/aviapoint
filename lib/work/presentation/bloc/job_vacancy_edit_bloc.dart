@@ -49,6 +49,7 @@ class JobVacancyEditBloc extends Bloc<JobVacancyEditEvent, JobVacancyEditState> 
       minFlightHours: event.minFlightHours,
       requiredTypeRating: event.requiredTypeRating,
       skills: event.skills,
+      isPublished: event.isPublished,
     );
 
     result.fold(
@@ -90,6 +91,7 @@ class JobVacancyEditBloc extends Bloc<JobVacancyEditEvent, JobVacancyEditState> 
       skills: event.skills,
       isPublished: event.isPublished,
       isActive: event.isActive,
+      additionalImageUrls: event.additionalImageUrls,
     );
 
     result.fold(

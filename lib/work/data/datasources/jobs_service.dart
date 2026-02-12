@@ -40,6 +40,13 @@ abstract class JobsService {
   @PUT('/api/jobs/vacancies/{id}')
   Future<JobVacancyDto> updateVacancy(@Path('id') int id, @Body() Map<String, dynamic> body);
 
+  @POST('/api/jobs/vacancies/{id}/additional-images')
+  @MultiPart()
+  Future<UploadImagesResponseDto> uploadVacancyAdditionalImages(
+    @Path('id') int id,
+    @Part(name: 'images') List<MultipartFile> images,
+  );
+
   @DELETE('/api/jobs/vacancies/{id}')
   Future<void> deleteVacancy(@Path('id') int id);
 

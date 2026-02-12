@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:aviapoint/market/domain/entities/market_address_entity.dart';
 
 class PartsMarketEntity extends Equatable {
   final int id;
@@ -11,6 +12,8 @@ class PartsMarketEntity extends Equatable {
   final int? manufacturerId;
   final String? manufacturerName;
   final String? location;
+  // Структурированный адрес (если пришёл с бэка)
+  final MarketAddressEntity? address;
 
   // Изображения (разделены)
   final String? mainImageUrl; // Основное фото
@@ -73,6 +76,7 @@ class PartsMarketEntity extends Equatable {
     this.manufacturerId,
     this.manufacturerName,
     this.location,
+    this.address,
     this.mainImageUrl,
     this.additionalImageUrls = const [],
     this.partNumber,

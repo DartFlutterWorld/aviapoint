@@ -1,4 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
+import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
@@ -138,21 +143,47 @@ class _MyPartsAdsWidgetState extends State<MyPartsAdsWidget> {
       );
     }
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = Provider.of<AppState>(context, listen: false).isTablet;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // Количество карточек в строке — как в разделе «Маркет»
+    final crossAxisCount = kIsWeb
+        ? () {
+            if (screenWidth >= 1200) return 4;
+            if (screenWidth >= 900) return 3;
+            if (screenWidth >= 600) return 2;
+            return 1;
+          }()
+        : (isLandscape ? 3 : (isTablet ? 2 : 2));
+
+    const horizontalPadding = 8.0;
+    const crossAxisSpacing = 12.0;
+    final availableWidth =
+        screenWidth - horizontalPadding * 2 - crossAxisSpacing * (crossAxisCount - 1);
+    final rawCardWidth = availableWidth / crossAxisCount;
+    const maxCardWidth = 480.0;
+    final clampedWidth = math.min(rawCardWidth, maxCardWidth);
+    // Те же пропорции карточки, что и в маркете (childAspectRatio = width/height)
+    final cardAspectRatio = kIsWeb ? 1.0 : (isTablet ? 1.0 : 0.9);
+    final cardHeight = clampedWidth / cardAspectRatio;
+
     return SizedBox(
-      height: 280, // Фиксированная высота для горизонтального списка
+      height: cardHeight,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
         itemCount: parts.length,
         itemBuilder: (context, index) {
           final part = parts[index];
           return Container(
-            width: MediaQuery.of(context).size.width * 0.45, // Ширина карточки
-            margin: EdgeInsets.only(right: 12),
+            width: clampedWidth,
+            margin: const EdgeInsets.only(right: crossAxisSpacing),
             child: PartsMarketCard(
               part: part,
               showEditButtons: true,
               showCategoryAndManufacturer: true,
+              showLocation: true,
               showInactiveBadge: true,
               onTap: () {
                 context.router.push(

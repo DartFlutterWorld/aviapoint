@@ -1,6 +1,7 @@
 import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
@@ -11,6 +12,7 @@ class PartsMarketCard extends StatefulWidget {
   final PartsMarketEntity part;
   final bool showEditButtons; // Показывать ли кнопки редактирования/удаления
   final bool showCategoryAndManufacturer; // Показывать ли категорию и производителя
+  final bool showLocation; // Показывать ли адрес/местоположение
   final bool showInactiveBadge; // Показывать ли бейдж "Не активно"
   final VoidCallback? onTap;
   final VoidCallback? onEdit;
@@ -21,6 +23,7 @@ class PartsMarketCard extends StatefulWidget {
     required this.part,
     this.showEditButtons = false,
     this.showCategoryAndManufacturer = true,
+    this.showLocation = true,
     this.showInactiveBadge = false,
     this.onTap,
     this.onEdit,
@@ -53,6 +56,35 @@ class _PartsMarketCardState extends State<PartsMarketCard> {
       default:
         return condition ?? '';
     }
+  }
+
+  /// Короткий адрес для карточки: город или «город, регион» без дублей; иначе location без дубликатов.
+  String? _shortLocationDisplay(PartsMarketEntity part) {
+    if (part.address != null) {
+      final short = AddressDisplayHelper.shortDisplay(part.address!.city, part.address!.region);
+      if (short != null && short.isNotEmpty) return short;
+    }
+    return AddressDisplayHelper.locationStringWithoutDuplicates(part.location);
+  }
+
+  Widget _buildLocationRow(PartsMarketEntity part) {
+    final text = _shortLocationDisplay(part);
+    if (text == null || text.isEmpty) return const SizedBox.shrink();
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.location_on, size: 12, color: Colors.white70),
+        SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            text,
+            style: AppStyles.medium8s.copyWith(color: Colors.white70),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -103,34 +135,28 @@ class _PartsMarketCardState extends State<PartsMarketCard> {
                     Text(
                       widget.part.title,
                       style: AppStyles.bold12s.copyWith(color: Colors.white, height: 1.3),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (widget.part.location != null && widget.part.location!.isNotEmpty) ...[
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.part.location!,
-                              style: AppStyles.medium8s.copyWith(color: Colors.white70),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                     SizedBox(height: 6),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${formatPrice(widget.part.price)} ${getCurrencySymbol(widget.part.currency)}',
-                        style: AppStyles.bold16s.copyWith(
-                          color: AppColors.primary100p, // Фиолетовый цвет для всех цен
-                          fontWeight: FontWeight.bold,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (widget.showLocation)
+                          Expanded(
+                            child: _buildLocationRow(widget.part),
+                          )
+                        else
+                          const SizedBox.shrink(),
+                        Text(
+                          '${formatPrice(widget.part.price)} ${getCurrencySymbol(widget.part.currency)}',
+                          style: AppStyles.bold16s.copyWith(
+                            color: AppColors.primary100p,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -246,7 +272,6 @@ class _ProductImage extends StatefulWidget {
 }
 
 class _ProductImageState extends State<_ProductImage> {
-  Size? _imageSize;
   bool _isLoadingSize = true;
   ImageStreamListener? _imageStreamListener;
   ImageStream? _imageStream;
@@ -278,7 +303,6 @@ class _ProductImageState extends State<_ProductImage> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted && _isLoadingSize) {
                 setState(() {
-                  _imageSize = size;
                   _isLoadingSize = false;
                 });
                 if (mounted) {
@@ -288,7 +312,6 @@ class _ProductImageState extends State<_ProductImage> {
             });
           } else {
             setState(() {
-              _imageSize = size;
               _isLoadingSize = false;
             });
             if (mounted) {
@@ -312,13 +335,13 @@ class _ProductImageState extends State<_ProductImage> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      alignment: widget.isHorizontal ? Alignment.topCenter : Alignment.center,
+      alignment: Alignment.center,
       child: Image.network(
         widget.imageUrl,
-        fit: widget.isHorizontal ? BoxFit.contain : BoxFit.cover,
-        alignment: widget.isHorizontal ? Alignment.topCenter : Alignment.center,
-        width: widget.isHorizontal ? double.infinity : double.infinity,
-        height: widget.isHorizontal ? null : double.infinity,
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: double.infinity,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;

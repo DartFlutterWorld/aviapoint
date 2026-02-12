@@ -27,6 +27,10 @@ import 'package:aviapoint/market/presentation/widgets/parts_market_card.dart';
 import 'package:aviapoint/on_the_way/domain/entities/flight_entity.dart';
 import 'package:aviapoint/on_the_way/presentation/bloc/flights_bloc.dart';
 import 'package:aviapoint/on_the_way/presentation/widgets/flight_card.dart';
+import 'package:aviapoint/work/presentation/cubit/latest_jobs_cubit.dart';
+import 'package:aviapoint/work/presentation/pages/work_screen.dart';
+import 'package:aviapoint/work/presentation/widgets/job_resume_card.dart';
+import 'package:aviapoint/work/presentation/widgets/job_vacancy_card.dart';
 import 'package:aviapoint/main_page/widgets/home_section_button.dart';
 import 'package:aviapoint/core/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -113,6 +117,9 @@ class _MainScreenState extends State<MainScreen> {
 
     // Обновляем истории
     BlocProvider.of<CacheManagerBloc>(context).add(const CacheManagerEvent.getStories());
+
+    // Обновляем блок «Работа» на главной
+    context.read<LatestJobsCubit>().load();
   }
 
   Future<void> _checkForUpdate() async {
@@ -338,6 +345,118 @@ class _MainScreenState extends State<MainScreen> {
                     color: const Color.fromARGB(255, 150, 196, 32),
                     onPressed: () =>
                         AutoRouter.of(context).push(const BaseRoute(children: [OnTheWayNavigationRoute()])),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: AppSpacing.section),
+            // Работа (вакансии и резюме)
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontal, vertical: AppSpacing.section),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF045EC5).withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Text('Работа', style: AppStyles.bold16s.copyWith(color: const Color(0xFF1F2937))),
+                  SizedBox(height: AppSpacing.horizontal),
+                  Text(
+                    'Вакансии и резюме в авиационной сфере',
+                    style: AppStyles.light14s.copyWith(color: const Color(0xFF4B5767)),
+                  ),
+                  SizedBox(height: AppSpacing.section),
+                  BlocBuilder<LatestJobsCubit, LatestJobsState>(
+                    builder: (context, state) {
+                      if (state.loading) {
+                        return LoadingCustom(paddingTop: MediaQuery.of(context).size.width / 4);
+                      }
+                      if (state.error != null) {
+                        return ErrorCustom(
+                          textError: state.error!,
+                          paddingTop: 0,
+                          repeat: () => context.read<LatestJobsCubit>().load(),
+                        );
+                      }
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: state.vacancy != null
+                                ? JobVacancyCard(
+                                    vacancy: state.vacancy!,
+                                    showChips: false,
+                                    onTap: () => AutoRouter.of(context).push(
+                                      BaseRoute(
+                                        children: [
+                                          WorkNavigationRoute(
+                                            children: [JobVacancyDetailRoute(id: state.vacancy!.id)],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                          if (state.vacancy != null && state.resume != null) SizedBox(width: AppSpacing.horizontal),
+                          Expanded(
+                            child: state.resume != null
+                                ? JobResumeCard(
+                                    resume: state.resume!,
+                                    showChips: false,
+                                    onTap: () => AutoRouter.of(context).push(
+                                      BaseRoute(
+                                        children: [
+                                          WorkNavigationRoute(
+                                            children: [JobResumeDetailRoute(id: state.resume!.id)],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  SizedBox(height: AppSpacing.section),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: HomeSectionButton(
+                          title: 'Все вакансии',
+                          // Новый цвет, не используемый в других секциях главной
+                          color: const Color(0xFFF97316), // оранжевый
+                          onPressed: () {
+                            WorkScreen.initialTabIndexOverride = 0;
+                            AutoRouter.of(context)
+                                .push(const BaseRoute(children: [WorkNavigationRoute()]));
+                          },
+                        ),
+                      ),
+                      SizedBox(width: AppSpacing.horizontal),
+                      Expanded(
+                        child: HomeSectionButton(
+                          title: 'Все резюме',
+                          // Тот же новый акцентный цвет для блока \"Работа\"
+                          color: const Color(0xFFF97316),
+                          onPressed: () {
+                            WorkScreen.initialTabIndexOverride = 1;
+                            AutoRouter.of(context)
+                                .push(const BaseRoute(children: [WorkNavigationRoute()]));
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -747,7 +866,7 @@ class _SuccessAircraftProducts extends StatelessWidget {
             itemBuilder: (context, index) => AircraftMarketCard(
               product: displayProducts[index],
               showEditButtons: false,
-              showYearAndLocation: true,
+              showYearAndLocation: false,
               showInactiveBadge: false,
               onTap: () => AutoRouter.of(context).push(
                 BaseRoute(
@@ -830,6 +949,7 @@ class _SuccessPartsProducts extends StatelessWidget {
               part: displayParts[index],
               showEditButtons: false,
               showCategoryAndManufacturer: true,
+              showLocation: true,
               showInactiveBadge: false,
               onTap: () => AutoRouter.of(context).push(
                 BaseRoute(

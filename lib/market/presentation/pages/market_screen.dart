@@ -896,14 +896,14 @@ class _ProductsSliverGrid extends StatelessWidget {
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67),
+          childAspectRatio: kIsWeb ? 1.0 : (isTablet ? 1.0 : 0.9),
         ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final product = displayedProducts[index];
           return AircraftMarketCard(
             product: product,
             showEditButtons: false,
-            showYearAndLocation: true,
+            showYearAndLocation: false,
             showInactiveBadge: false,
             onTap: () {
               context.router.push(AircraftMarketDetailRoute(id: product.id));
@@ -975,7 +975,7 @@ class _PartsSliverGrid extends StatelessWidget {
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: kIsWeb ? 0.95 : (isTablet ? 0.8 : 0.67),
+          childAspectRatio: kIsWeb ? 1.0 : (isTablet ? 1.0 : 0.9),
         ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final part = displayedParts[index];
@@ -983,6 +983,7 @@ class _PartsSliverGrid extends StatelessWidget {
             part: part,
             showEditButtons: false,
             showCategoryAndManufacturer: true,
+            showLocation: true,
             showInactiveBadge: false,
             onTap: () {
               context.router.push(PartsMarketDetailRoute(id: part.id));
@@ -1064,11 +1065,9 @@ class _MarketProfileButton extends StatelessWidget {
           ),
           onPressed: () {
             // Переключаемся на вкладку профиля в корневом AutoTabsScaffold
-            final rootContext = navigatorKey.currentContext;
-            if (rootContext == null) return;
             try {
-              final tabsRouter = AutoTabsRouter.of(rootContext);
-              tabsRouter.setActiveIndex(6);
+              final tabsRouter = AutoTabsRouter.of(context);
+              tabsRouter.setActiveIndex(6); // индекс профиля в BaseScreen.routes
             } catch (_) {
               // В крайнем случае ничего не делаем
             }

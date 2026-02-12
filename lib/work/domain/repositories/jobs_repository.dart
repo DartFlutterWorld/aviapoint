@@ -53,6 +53,7 @@ abstract class JobsRepository {
     int? minFlightHours,
     String? requiredTypeRating,
     List<String>? skills,
+    bool isPublished = true,
   });
 
   Future<Either<Failure, JobVacancyEntity>> updateVacancy({
@@ -85,6 +86,7 @@ abstract class JobsRepository {
     List<String>? skills,
     bool? isPublished,
     bool? isActive,
+    List<String>? additionalImageUrls,
   });
 
   Future<Either<Failure, void>> deleteVacancy(int id);
@@ -165,6 +167,8 @@ abstract class JobsRepository {
 
   Future<Either<Failure, List<String>>> uploadContactProfileAdditionalImages(int id, List<XFile> imageFiles);
 
+  Future<Either<Failure, List<String>>> uploadVacancyAdditionalImages(int id, List<XFile> imageFiles);
+
   // Резюме
   Future<Either<Failure, List<JobResumeEntity>>> getResumes({
     int? userId,
@@ -202,6 +206,7 @@ abstract class JobsRepository {
     String? licenses,
     String? typeRatings,
     String? medicalClass,
+    bool isVisibleForEmployers = true,
   });
 
   Future<Either<Failure, JobResumeEntity>> updateResume({

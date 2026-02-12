@@ -3,6 +3,7 @@ import 'package:aviapoint/core/routes/app_router.dart';
 import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
@@ -35,6 +36,15 @@ class AircraftMarketCard extends StatefulWidget {
 
 class _AircraftMarketCardState extends State<AircraftMarketCard> {
   bool? _isImageHorizontal;
+
+  /// Местоположение без дублей: из address (город/регион) или из location.
+  String? _locationDisplay(AircraftMarketEntity product) {
+    if (product.address != null) {
+      final short = AddressDisplayHelper.shortDisplay(product.address!.city, product.address!.region);
+      if (short != null && short.isNotEmpty) return short;
+    }
+    return AddressDisplayHelper.locationStringWithoutDuplicates(product.location);
+  }
 
   void _onImageOrientationDetected(bool isHorizontal) {
     if (mounted && _isImageHorizontal != isHorizontal) {
@@ -93,50 +103,40 @@ class _AircraftMarketCardState extends State<AircraftMarketCard> {
                     Text(
                       widget.product.title,
                       style: AppStyles.bold12s.copyWith(color: Colors.white, height: 1.3),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (widget.showYearAndLocation &&
-                        (widget.product.year != null ||
-                            (widget.product.location != null && widget.product.location!.isNotEmpty))) ...[
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          if (widget.product.year != null)
-                            Text('${widget.product.year}', style: AppStyles.medium8s.copyWith(color: Colors.white70)),
-                          if (widget.product.year != null &&
-                              widget.product.location != null &&
-                              widget.product.location!.isNotEmpty) ...[
-                            SizedBox(width: 8),
-                            Container(
-                              width: 3,
-                              height: 3,
-                              decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle),
-                            ),
-                            SizedBox(width: 4),
-                          ],
-                          if (widget.product.location != null && widget.product.location!.isNotEmpty)
-                            Expanded(
-                              child: Text(
-                                widget.product.location!,
-                                style: AppStyles.medium8s.copyWith(color: Colors.white70),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                        ],
-                      ),
+                    if (widget.showYearAndLocation) ...[
+                      if (_locationDisplay(widget.product) != null) ...[
+                        SizedBox(height: 4),
+                        Text(
+                          _locationDisplay(widget.product)!,
+                          style: AppStyles.medium8s.copyWith(color: Colors.white70),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ],
                     SizedBox(height: 6),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${formatPrice(widget.product.price)} ${getCurrencySymbol(widget.product.currency)}',
-                        style: AppStyles.bold16s.copyWith(
-                          color: AppColors.primary100p, // Фиолетовый цвет для всех цен
-                          fontWeight: FontWeight.bold,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (widget.product.year != null)
+                          Text(
+                            '${widget.product.year} г',
+                            style: AppStyles.medium8s.copyWith(color: Colors.white70),
+                          )
+                        else
+                          const SizedBox.shrink(),
+                        Text(
+                          '${formatPrice(widget.product.price)} ${getCurrencySymbol(widget.product.currency)}',
+                          style: AppStyles.bold16s.copyWith(
+                            color: AppColors.primary100p,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -286,7 +286,6 @@ class _ProductImage extends StatefulWidget {
 }
 
 class _ProductImageState extends State<_ProductImage> {
-  Size? _imageSize;
   bool _isLoadingSize = true;
   ImageStreamListener? _imageStreamListener;
   ImageStream? _imageStream;
@@ -320,7 +319,6 @@ class _ProductImageState extends State<_ProductImage> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted && _isLoadingSize) {
                 setState(() {
-                  _imageSize = size;
                   _isLoadingSize = false;
                 });
                 if (mounted) {
@@ -330,7 +328,6 @@ class _ProductImageState extends State<_ProductImage> {
             });
           } else {
             setState(() {
-              _imageSize = size;
               _isLoadingSize = false;
             });
             if (mounted) {
@@ -354,14 +351,13 @@ class _ProductImageState extends State<_ProductImage> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      // color: widget.isHorizontal ? Colors.black : Colors.transparent,
-      alignment: widget.isHorizontal ? Alignment.topCenter : Alignment.center,
+      alignment: Alignment.center,
       child: Image.network(
         widget.imageUrl,
-        fit: widget.isHorizontal ? BoxFit.contain : BoxFit.cover,
-        alignment: widget.isHorizontal ? Alignment.topCenter : Alignment.center,
-        width: widget.isHorizontal ? double.infinity : double.infinity,
-        height: widget.isHorizontal ? null : double.infinity,
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: double.infinity,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;

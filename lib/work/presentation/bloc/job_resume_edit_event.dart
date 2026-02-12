@@ -26,6 +26,7 @@ class JobResumeEditEvent with _$JobResumeEditEvent {
     String? licenses,
     String? typeRatings,
     String? medicalClass,
+    @Default(true) bool isVisibleForEmployers,
   }) = _Create;
 
   const factory JobResumeEditEvent.update({

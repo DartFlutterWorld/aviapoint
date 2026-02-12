@@ -157,6 +157,42 @@ class _JobsService implements JobsService {
   }
 
   @override
+  Future<UploadImagesResponseDto> uploadVacancyAdditionalImages(
+    int id,
+    List<MultipartFile> images,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.files.addAll(images.map((i) => MapEntry('images', i)));
+    final _options = _setStreamType<UploadImagesResponseDto>(
+      Options(
+            method: 'POST',
+            headers: _headers,
+            extra: _extra,
+            contentType: 'multipart/form-data',
+          )
+          .compose(
+            _dio.options,
+            '/api/jobs/vacancies/${id}/additional-images',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UploadImagesResponseDto _value;
+    try {
+      _value = UploadImagesResponseDto.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<void> deleteVacancy(int id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

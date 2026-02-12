@@ -8,13 +8,15 @@ import 'package:aviapoint/core/presentation/widgets/photo_viewer.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/market/presentation/widgets/location_picker_widget.dart';
+import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/job_vacancy_edit_bloc.dart';
 import 'package:aviapoint/work/domain/entities/job_vacancy_entity.dart';
 import 'package:aviapoint/work/domain/repositories/jobs_repository.dart';
-import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/job_vacancy_detail_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/jobs_list_refresh_cubit.dart';
 import 'package:aviapoint/work/presentation/bloc/jobs_vacancies_bloc.dart';
@@ -149,15 +151,15 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
               withBack: true,
               onTap: () => context.router.maybePop(true),
               actions: [
-                BlocBuilder<JobVacancyDetailBloc, JobVacancyDetailState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      success: (vacancy) {
-                        final profileState = context.read<ProfileBloc>().state;
-                        final int? currentUserId = profileState is SuccessProfileState ? profileState.profile.id : null;
-                        final bool isOwner = currentUserId != null && vacancy.employerId == currentUserId;
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, _) {
+                    return BlocBuilder<JobVacancyDetailBloc, JobVacancyDetailState>(
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                          success: (vacancy) {
+                            final canEdit = PermissionHelper.isOwnerOrAdmin(vacancy.employerId, context);
 
-                        return Row(
+                            return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
@@ -167,7 +169,7 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
                               ),
                               onPressed: () => _toggleVacancyFavorite(vacancy.id),
                             ),
-                            if (isOwner) ...[
+                            if (canEdit) ...[
                               IconButton(
                                 icon: const Icon(Icons.edit, color: AppColors.primary100p),
                                 onPressed: () async {
@@ -184,25 +186,31 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
                             ],
                           ],
                         );
+                          },
+                          orElse: () => const SizedBox.shrink(),
+                        );
                       },
-                      orElse: () => const SizedBox.shrink(),
                     );
                   },
                 ),
               ],
             ),
             backgroundColor: AppColors.background,
-            body: BlocBuilder<JobVacancyDetailBloc, JobVacancyDetailState>(
-              builder: (context, state) => state.when(
-                loading: () => const Center(child: LoadingCustom()),
-                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
-                  child: ErrorCustom(
-                    textError: errorForUser,
-                    repeat: () => _bloc.add(JobVacancyDetailEvent.getById(id: widget.id)),
+            body: BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, _) {
+                return BlocBuilder<JobVacancyDetailBloc, JobVacancyDetailState>(
+                  builder: (context, state) => state.when(
+                    loading: () => const Center(child: LoadingCustom()),
+                    error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
+                      child: ErrorCustom(
+                        textError: errorForUser,
+                        repeat: () => _bloc.add(JobVacancyDetailEvent.getById(id: widget.id)),
+                      ),
+                    ),
+                    success: (vacancy) => _buildContent(context, vacancy),
                   ),
-                ),
-                success: (vacancy) => _buildContent(context, vacancy),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -351,7 +359,6 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
   }
 
   Widget _buildContactsAndCompanyCard(BuildContext context, JobVacancyEntity vacancy, List<String> allPhotos) {
-    final hasLogo = vacancy.logoUrl != null && vacancy.logoUrl!.isNotEmpty;
     final hasContacts = vacancy.contactName != null ||
         vacancy.contactPosition != null ||
         vacancy.contactPhone != null ||
@@ -380,6 +387,10 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (vacancy.additionalImageUrls.isNotEmpty) ...[
+            _buildAttachedFilesSection(context, vacancy),
+            if (hasContacts || hasCompanyInfo || hasPhotos) const SizedBox(height: 16),
+          ],
           if (hasContacts) ...[
             Text(
               vacancy.isPrivate == true ? 'Контакты частного лица' : 'Контакты компании',
@@ -510,46 +521,7 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
                   ),
                 ],
               ),
-            if (hasCompanyInfo && vacancy.additionalImageUrls.isNotEmpty) const SizedBox(height: 16),
-            if (vacancy.additionalImageUrls.isNotEmpty) ...[
-              if (hasCompanyInfo) ...[
-                Text(
-                  'Фотографии',
-                  style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary),
-                ),
-                const SizedBox(height: 8),
-              ],
-              SizedBox(
-                height: 96,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: vacancy.additionalImageUrls.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final url = vacancy.additionalImageUrls[index];
-                    final initialIndex = (hasLogo ? 1 : 0) + index;
-                    return GestureDetector(
-                      onTap: () => PhotoViewer.show(context, allPhotos, initialIndex: initialIndex),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          getImageUrl(url),
-                          width: 96,
-                          height: 96,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            width: 96,
-                            height: 96,
-                            color: Colors.grey.shade200,
-                            child: const Icon(Icons.image_not_supported, size: 32),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ] else if (hasPhotos && !hasCompanyInfo)
+            if (hasPhotos && !hasCompanyInfo && vacancy.additionalImageUrls.isEmpty)
               GestureDetector(
                 onTap: () => PhotoViewer.show(context, allPhotos, initialIndex: 0),
                 child: ClipRRect(
@@ -568,6 +540,100 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
                 ),
               ),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAttachedFilesSection(BuildContext context, JobVacancyEntity vacancy) {
+    final urls = vacancy.additionalImageUrls;
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.strokeForDarkArea),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.attach_file, size: 22, color: AppColors.primary100p),
+              const SizedBox(width: 12),
+              Text('Прикреплённые файлы', style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...urls.asMap().entries.map((entry) {
+            final index = entry.key;
+            final url = entry.value;
+            final lower = url.toLowerCase();
+            final isPdf = lower.endsWith('.pdf');
+            final isWord = lower.endsWith('.doc') || lower.endsWith('.docx');
+            final isExcel = lower.endsWith('.xls') || lower.endsWith('.xlsx');
+            final isImage = !isPdf && !isWord && !isExcel;
+            IconData icon = Icons.insert_drive_file;
+            Color iconColor = AppColors.textSecondary;
+            if (isPdf) {
+              icon = Icons.picture_as_pdf;
+              iconColor = Colors.red;
+            } else if (isWord) {
+              icon = Icons.description;
+              iconColor = Colors.blue;
+            } else if (isExcel) {
+              icon = Icons.table_chart;
+              iconColor = Colors.green;
+            } else if (isImage) {
+              icon = Icons.image;
+              iconColor = AppColors.primary100p;
+            }
+            final fileName = url.split('/').last.split('?').first;
+            final displayName = fileName.isNotEmpty ? fileName : 'Файл ${index + 1}';
+            final fullUrl = getImageUrl(url);
+            return Padding(
+              padding: EdgeInsets.only(bottom: index < urls.length - 1 ? 8 : 0),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () async {
+                    if (isImage) {
+                      final initialIndex = (vacancy.logoUrl != null && vacancy.logoUrl!.isNotEmpty ? 1 : 0) + index;
+                      PhotoViewer.show(context, [if (vacancy.logoUrl != null && vacancy.logoUrl!.isNotEmpty) vacancy.logoUrl!, ...urls], initialIndex: initialIndex);
+                    } else {
+                      final uri = Uri.parse(fullUrl);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      } else if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Не удалось открыть файл'), backgroundColor: Colors.orange),
+                        );
+                      }
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    child: Row(
+                      children: [
+                        Icon(icon, size: 28, color: iconColor),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            displayName,
+                            style: AppStyles.regular14s.copyWith(color: AppColors.textPrimary),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(Icons.open_in_new, size: 18, color: AppColors.textSecondary),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -592,9 +658,19 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
     return base;
   }
 
+  /// Адрес для детальной страницы: регион/город без дубля или полный address без дубликатов.
   String? _locationText(JobVacancyEntity v) {
-    if (v.address == null || v.address!.isEmpty) return null;
-    return v.address;
+    final hasCityOrRegion = (v.city != null && v.city!.trim().isNotEmpty) || (v.region != null && v.region!.trim().isNotEmpty);
+    if (hasCityOrRegion) {
+      final detail = AddressDisplayHelper.detailDisplay(
+        region: v.region,
+        city: v.city,
+        street: null,
+        houseNumber: null,
+      );
+      if (detail != null && detail.isNotEmpty) return detail;
+    }
+    return AddressDisplayHelper.locationStringWithoutDuplicates(v.address);
   }
 
   String _formatMoney(int value) {
@@ -711,11 +787,9 @@ class _JobVacancyDetailScreenState extends State<JobVacancyDetailScreen> {
   }
 
   List<Widget> _buildManagementOrRespond(BuildContext context, JobVacancyEntity vacancy) {
-    final profileState = context.read<ProfileBloc>().state;
-    final int? currentUserId = profileState is SuccessProfileState ? profileState.profile.id : null;
-    final bool isOwner = currentUserId != null && vacancy.employerId == currentUserId;
+    final canEdit = PermissionHelper.isOwnerOrAdmin(vacancy.employerId, context);
 
-    if (isOwner) {
+    if (canEdit) {
       return [
         SizedBox(
           width: double.infinity,

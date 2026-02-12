@@ -5,6 +5,7 @@ import 'package:aviapoint/core/presentation/widgets/error_custom.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
@@ -188,9 +189,17 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
       buffer.writeln('✅ Состояние: ${product.condition}');
     }
 
-    // Добавляем местоположение, если указано
-    if (product.location != null && product.location!.isNotEmpty) {
-      buffer.writeln('📍 Местоположение: ${product.location}');
+    // Добавляем местоположение, если указано (формат: регион/город, улица, дом)
+    final locationDisplay = product.address != null
+        ? AddressDisplayHelper.detailDisplay(
+            region: product.address!.region,
+            city: product.address!.city,
+            street: product.address!.street,
+            houseNumber: product.address!.houseNumber,
+          )
+        : AddressDisplayHelper.locationStringWithoutDuplicates(product.location);
+    if (locationDisplay != null && locationDisplay.isNotEmpty) {
+      buffer.writeln('📍 Местоположение: $locationDisplay');
     }
 
     // Добавляем информацию о лизинге
@@ -273,6 +282,20 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
         Share.share(text);
       }
     }
+  }
+
+  /// Адрес для детальной страницы: регион (или город без дубля), улица, дом; fallback — location.
+  String? _locationDisplayForDetail(AircraftMarketEntity product) {
+    if (product.address != null) {
+      final a = product.address!;
+      return AddressDisplayHelper.detailDisplay(
+        region: a.region,
+        city: a.city,
+        street: a.street,
+        houseNumber: a.houseNumber,
+      );
+    }
+    return AddressDisplayHelper.locationStringWithoutDuplicates(product.location);
   }
 
   Widget _buildLocationMap(String? location) {
@@ -1289,8 +1312,13 @@ class _AircraftMarketDetailScreenState extends State<AircraftMarketDetailScreen>
                 _buildInfoRow('Объём двигателя', product.engineVolume != null ? '${product.engineVolume} л' : null),
                 _buildInfoRow('Количество мест', product.seats?.toString()),
                 _buildInfoRow('Состояние', _formatCondition(product.condition)),
-                _buildInfoRow('Местоположение', product.location),
-                if (product.location != null && product.location!.isNotEmpty) _buildLocationMap(product.location),
+                ...(){
+                  final loc = _locationDisplayForDetail(product);
+                  return [
+                    _buildInfoRow('Местоположение', loc),
+                    if (loc != null && loc.isNotEmpty) _buildLocationMap(loc),
+                  ];
+                }(),
                 SizedBox(height: 24),
 
                 // Информация о продавце

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:aviapoint/core/presentation/provider/app_state.dart';
 import 'package:aviapoint/core/presentation/widgets/loading_custom.dart';
@@ -164,6 +166,11 @@ class MyResumesWidget extends StatelessWidget {
       );
     }
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth * 0.85;
+    const maxCardWidth = 480.0;
+    final clampedWidth = math.min(cardWidth, maxCardWidth);
+
     return SizedBox(
       height: 320,
       child: ListView.builder(
@@ -173,7 +180,7 @@ class MyResumesWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final resume = resumes[index];
           return Container(
-            width: MediaQuery.of(context).size.width * 0.85,
+            width: clampedWidth,
             margin: const EdgeInsets.only(right: 12),
             child: JobResumeCard(
               resume: resume,

@@ -50,6 +50,7 @@ import 'package:aviapoint/work/presentation/bloc/jobs_resumes_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/job_vacancy_favorite_toggle_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/job_vacancy_favorites_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/jobs_vacancies_bloc.dart';
+import 'package:aviapoint/work/presentation/cubit/latest_jobs_cubit.dart';
 import 'package:aviapoint/profile_page/profile/domain/repositories/profile_repository.dart';
 import 'package:aviapoint/payment/presentation/bloc/payment_bloc.dart';
 import 'package:aviapoint/payment/domain/repositories/payment_repository.dart';
@@ -218,6 +219,9 @@ class _AppState extends State<App> {
         ),
         BlocProvider<JobsResumesBloc>(
           create: (context) => JobsResumesBloc(repository: getIt<JobsRepository>())..add(const JobsResumesEvent.get()),
+        ),
+        BlocProvider<LatestJobsCubit>(
+          create: (context) => LatestJobsCubit(getIt<JobsRepository>())..load(),
         ),
         BlocProvider<TypeSertificatesBloc>(
           create: (context) => TypeSertificatesBloc(rosAviaTestRepository: getIt<RosAviaTestRepository>()),

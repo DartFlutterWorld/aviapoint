@@ -22,6 +22,7 @@ AircraftMarketDto _$AircraftMarketDtoFromJson(Map<String, dynamic> json) =>
           : _imageUrlsFromJson(json['additional_image_urls']),
       brand: json['brand'] as String?,
       location: json['location'] as String?,
+      address: json['address'] as Map<String, dynamic>?,
       isPublished: json['is_published'] as bool?,
       isActive: json['is_active'] as bool?,
       viewsCount: (json['views_count'] as num?)?.toInt(),

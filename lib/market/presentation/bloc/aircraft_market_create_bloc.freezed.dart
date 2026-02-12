@@ -122,10 +122,10 @@ return reset(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String title,  String? description,  int price,  String currency,  int? aircraftSubcategoriesId,  String? brand,  String? location,  int? year,  int? totalFlightHours,  int? enginePower,  int? engineVolume,  int? seats,  String? condition,  bool? isShareSale,  int? shareNumerator,  int? shareDenominator,  bool? isLeasing,  String? leasingConditions,  XFile? mainImageFile,  List<XFile>? additionalImageFiles,  bool isPublished)?  createAirCraft,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String title,  String? description,  int price,  String currency,  int? aircraftSubcategoriesId,  String? brand,  String? location,  Map<String, dynamic>? address,  int? year,  int? totalFlightHours,  int? enginePower,  int? engineVolume,  int? seats,  String? condition,  bool? isShareSale,  int? shareNumerator,  int? shareDenominator,  bool? isLeasing,  String? leasingConditions,  XFile? mainImageFile,  List<XFile>? additionalImageFiles,  bool isPublished)?  createAirCraft,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case CreateAircraftMarketCreateEvent() when createAirCraft != null:
-return createAirCraft(_that.title,_that.description,_that.price,_that.currency,_that.aircraftSubcategoriesId,_that.brand,_that.location,_that.year,_that.totalFlightHours,_that.enginePower,_that.engineVolume,_that.seats,_that.condition,_that.isShareSale,_that.shareNumerator,_that.shareDenominator,_that.isLeasing,_that.leasingConditions,_that.mainImageFile,_that.additionalImageFiles,_that.isPublished);case ResetAircraftMarketCreateEvent() when reset != null:
+return createAirCraft(_that.title,_that.description,_that.price,_that.currency,_that.aircraftSubcategoriesId,_that.brand,_that.location,_that.address,_that.year,_that.totalFlightHours,_that.enginePower,_that.engineVolume,_that.seats,_that.condition,_that.isShareSale,_that.shareNumerator,_that.shareDenominator,_that.isLeasing,_that.leasingConditions,_that.mainImageFile,_that.additionalImageFiles,_that.isPublished);case ResetAircraftMarketCreateEvent() when reset != null:
 return reset();case _:
   return orElse();
 
@@ -144,10 +144,10 @@ return reset();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String title,  String? description,  int price,  String currency,  int? aircraftSubcategoriesId,  String? brand,  String? location,  int? year,  int? totalFlightHours,  int? enginePower,  int? engineVolume,  int? seats,  String? condition,  bool? isShareSale,  int? shareNumerator,  int? shareDenominator,  bool? isLeasing,  String? leasingConditions,  XFile? mainImageFile,  List<XFile>? additionalImageFiles,  bool isPublished)  createAirCraft,required TResult Function()  reset,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String title,  String? description,  int price,  String currency,  int? aircraftSubcategoriesId,  String? brand,  String? location,  Map<String, dynamic>? address,  int? year,  int? totalFlightHours,  int? enginePower,  int? engineVolume,  int? seats,  String? condition,  bool? isShareSale,  int? shareNumerator,  int? shareDenominator,  bool? isLeasing,  String? leasingConditions,  XFile? mainImageFile,  List<XFile>? additionalImageFiles,  bool isPublished)  createAirCraft,required TResult Function()  reset,}) {final _that = this;
 switch (_that) {
 case CreateAircraftMarketCreateEvent():
-return createAirCraft(_that.title,_that.description,_that.price,_that.currency,_that.aircraftSubcategoriesId,_that.brand,_that.location,_that.year,_that.totalFlightHours,_that.enginePower,_that.engineVolume,_that.seats,_that.condition,_that.isShareSale,_that.shareNumerator,_that.shareDenominator,_that.isLeasing,_that.leasingConditions,_that.mainImageFile,_that.additionalImageFiles,_that.isPublished);case ResetAircraftMarketCreateEvent():
+return createAirCraft(_that.title,_that.description,_that.price,_that.currency,_that.aircraftSubcategoriesId,_that.brand,_that.location,_that.address,_that.year,_that.totalFlightHours,_that.enginePower,_that.engineVolume,_that.seats,_that.condition,_that.isShareSale,_that.shareNumerator,_that.shareDenominator,_that.isLeasing,_that.leasingConditions,_that.mainImageFile,_that.additionalImageFiles,_that.isPublished);case ResetAircraftMarketCreateEvent():
 return reset();case _:
   throw StateError('Unexpected subclass');
 
@@ -165,10 +165,10 @@ return reset();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String title,  String? description,  int price,  String currency,  int? aircraftSubcategoriesId,  String? brand,  String? location,  int? year,  int? totalFlightHours,  int? enginePower,  int? engineVolume,  int? seats,  String? condition,  bool? isShareSale,  int? shareNumerator,  int? shareDenominator,  bool? isLeasing,  String? leasingConditions,  XFile? mainImageFile,  List<XFile>? additionalImageFiles,  bool isPublished)?  createAirCraft,TResult? Function()?  reset,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String title,  String? description,  int price,  String currency,  int? aircraftSubcategoriesId,  String? brand,  String? location,  Map<String, dynamic>? address,  int? year,  int? totalFlightHours,  int? enginePower,  int? engineVolume,  int? seats,  String? condition,  bool? isShareSale,  int? shareNumerator,  int? shareDenominator,  bool? isLeasing,  String? leasingConditions,  XFile? mainImageFile,  List<XFile>? additionalImageFiles,  bool isPublished)?  createAirCraft,TResult? Function()?  reset,}) {final _that = this;
 switch (_that) {
 case CreateAircraftMarketCreateEvent() when createAirCraft != null:
-return createAirCraft(_that.title,_that.description,_that.price,_that.currency,_that.aircraftSubcategoriesId,_that.brand,_that.location,_that.year,_that.totalFlightHours,_that.enginePower,_that.engineVolume,_that.seats,_that.condition,_that.isShareSale,_that.shareNumerator,_that.shareDenominator,_that.isLeasing,_that.leasingConditions,_that.mainImageFile,_that.additionalImageFiles,_that.isPublished);case ResetAircraftMarketCreateEvent() when reset != null:
+return createAirCraft(_that.title,_that.description,_that.price,_that.currency,_that.aircraftSubcategoriesId,_that.brand,_that.location,_that.address,_that.year,_that.totalFlightHours,_that.enginePower,_that.engineVolume,_that.seats,_that.condition,_that.isShareSale,_that.shareNumerator,_that.shareDenominator,_that.isLeasing,_that.leasingConditions,_that.mainImageFile,_that.additionalImageFiles,_that.isPublished);case ResetAircraftMarketCreateEvent() when reset != null:
 return reset();case _:
   return null;
 
@@ -181,7 +181,7 @@ return reset();case _:
 
 
 class CreateAircraftMarketCreateEvent implements AircraftMarketCreateEvent {
-  const CreateAircraftMarketCreateEvent({required this.title, this.description, required this.price, this.currency = 'RUB', this.aircraftSubcategoriesId, this.brand, this.location, this.year, this.totalFlightHours, this.enginePower, this.engineVolume, this.seats, this.condition, this.isShareSale, this.shareNumerator, this.shareDenominator, this.isLeasing, this.leasingConditions, this.mainImageFile, final  List<XFile>? additionalImageFiles, this.isPublished = true}): _additionalImageFiles = additionalImageFiles;
+  const CreateAircraftMarketCreateEvent({required this.title, this.description, required this.price, this.currency = 'RUB', this.aircraftSubcategoriesId, this.brand, this.location, final  Map<String, dynamic>? address, this.year, this.totalFlightHours, this.enginePower, this.engineVolume, this.seats, this.condition, this.isShareSale, this.shareNumerator, this.shareDenominator, this.isLeasing, this.leasingConditions, this.mainImageFile, final  List<XFile>? additionalImageFiles, this.isPublished = true}): _address = address,_additionalImageFiles = additionalImageFiles;
   
 
  final  String title;
@@ -191,6 +191,15 @@ class CreateAircraftMarketCreateEvent implements AircraftMarketCreateEvent {
  final  int? aircraftSubcategoriesId;
  final  String? brand;
  final  String? location;
+ final  Map<String, dynamic>? _address;
+ Map<String, dynamic>? get address {
+  final value = _address;
+  if (value == null) return null;
+  if (_address is EqualUnmodifiableMapView) return _address;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
  final  int? year;
  final  int? totalFlightHours;
  final  int? enginePower;
@@ -224,16 +233,16 @@ $CreateAircraftMarketCreateEventCopyWith<CreateAircraftMarketCreateEvent> get co
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateAircraftMarketCreateEvent&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.aircraftSubcategoriesId, aircraftSubcategoriesId) || other.aircraftSubcategoriesId == aircraftSubcategoriesId)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.location, location) || other.location == location)&&(identical(other.year, year) || other.year == year)&&(identical(other.totalFlightHours, totalFlightHours) || other.totalFlightHours == totalFlightHours)&&(identical(other.enginePower, enginePower) || other.enginePower == enginePower)&&(identical(other.engineVolume, engineVolume) || other.engineVolume == engineVolume)&&(identical(other.seats, seats) || other.seats == seats)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.isShareSale, isShareSale) || other.isShareSale == isShareSale)&&(identical(other.shareNumerator, shareNumerator) || other.shareNumerator == shareNumerator)&&(identical(other.shareDenominator, shareDenominator) || other.shareDenominator == shareDenominator)&&(identical(other.isLeasing, isLeasing) || other.isLeasing == isLeasing)&&(identical(other.leasingConditions, leasingConditions) || other.leasingConditions == leasingConditions)&&(identical(other.mainImageFile, mainImageFile) || other.mainImageFile == mainImageFile)&&const DeepCollectionEquality().equals(other._additionalImageFiles, _additionalImageFiles)&&(identical(other.isPublished, isPublished) || other.isPublished == isPublished));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateAircraftMarketCreateEvent&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.aircraftSubcategoriesId, aircraftSubcategoriesId) || other.aircraftSubcategoriesId == aircraftSubcategoriesId)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.location, location) || other.location == location)&&const DeepCollectionEquality().equals(other._address, _address)&&(identical(other.year, year) || other.year == year)&&(identical(other.totalFlightHours, totalFlightHours) || other.totalFlightHours == totalFlightHours)&&(identical(other.enginePower, enginePower) || other.enginePower == enginePower)&&(identical(other.engineVolume, engineVolume) || other.engineVolume == engineVolume)&&(identical(other.seats, seats) || other.seats == seats)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.isShareSale, isShareSale) || other.isShareSale == isShareSale)&&(identical(other.shareNumerator, shareNumerator) || other.shareNumerator == shareNumerator)&&(identical(other.shareDenominator, shareDenominator) || other.shareDenominator == shareDenominator)&&(identical(other.isLeasing, isLeasing) || other.isLeasing == isLeasing)&&(identical(other.leasingConditions, leasingConditions) || other.leasingConditions == leasingConditions)&&(identical(other.mainImageFile, mainImageFile) || other.mainImageFile == mainImageFile)&&const DeepCollectionEquality().equals(other._additionalImageFiles, _additionalImageFiles)&&(identical(other.isPublished, isPublished) || other.isPublished == isPublished));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,title,description,price,currency,aircraftSubcategoriesId,brand,location,year,totalFlightHours,enginePower,engineVolume,seats,condition,isShareSale,shareNumerator,shareDenominator,isLeasing,leasingConditions,mainImageFile,const DeepCollectionEquality().hash(_additionalImageFiles),isPublished]);
+int get hashCode => Object.hashAll([runtimeType,title,description,price,currency,aircraftSubcategoriesId,brand,location,const DeepCollectionEquality().hash(_address),year,totalFlightHours,enginePower,engineVolume,seats,condition,isShareSale,shareNumerator,shareDenominator,isLeasing,leasingConditions,mainImageFile,const DeepCollectionEquality().hash(_additionalImageFiles),isPublished]);
 
 @override
 String toString() {
-  return 'AircraftMarketCreateEvent.createAirCraft(title: $title, description: $description, price: $price, currency: $currency, aircraftSubcategoriesId: $aircraftSubcategoriesId, brand: $brand, location: $location, year: $year, totalFlightHours: $totalFlightHours, enginePower: $enginePower, engineVolume: $engineVolume, seats: $seats, condition: $condition, isShareSale: $isShareSale, shareNumerator: $shareNumerator, shareDenominator: $shareDenominator, isLeasing: $isLeasing, leasingConditions: $leasingConditions, mainImageFile: $mainImageFile, additionalImageFiles: $additionalImageFiles, isPublished: $isPublished)';
+  return 'AircraftMarketCreateEvent.createAirCraft(title: $title, description: $description, price: $price, currency: $currency, aircraftSubcategoriesId: $aircraftSubcategoriesId, brand: $brand, location: $location, address: $address, year: $year, totalFlightHours: $totalFlightHours, enginePower: $enginePower, engineVolume: $engineVolume, seats: $seats, condition: $condition, isShareSale: $isShareSale, shareNumerator: $shareNumerator, shareDenominator: $shareDenominator, isLeasing: $isLeasing, leasingConditions: $leasingConditions, mainImageFile: $mainImageFile, additionalImageFiles: $additionalImageFiles, isPublished: $isPublished)';
 }
 
 
@@ -244,7 +253,7 @@ abstract mixin class $CreateAircraftMarketCreateEventCopyWith<$Res> implements $
   factory $CreateAircraftMarketCreateEventCopyWith(CreateAircraftMarketCreateEvent value, $Res Function(CreateAircraftMarketCreateEvent) _then) = _$CreateAircraftMarketCreateEventCopyWithImpl;
 @useResult
 $Res call({
- String title, String? description, int price, String currency, int? aircraftSubcategoriesId, String? brand, String? location, int? year, int? totalFlightHours, int? enginePower, int? engineVolume, int? seats, String? condition, bool? isShareSale, int? shareNumerator, int? shareDenominator, bool? isLeasing, String? leasingConditions, XFile? mainImageFile, List<XFile>? additionalImageFiles, bool isPublished
+ String title, String? description, int price, String currency, int? aircraftSubcategoriesId, String? brand, String? location, Map<String, dynamic>? address, int? year, int? totalFlightHours, int? enginePower, int? engineVolume, int? seats, String? condition, bool? isShareSale, int? shareNumerator, int? shareDenominator, bool? isLeasing, String? leasingConditions, XFile? mainImageFile, List<XFile>? additionalImageFiles, bool isPublished
 });
 
 
@@ -261,7 +270,7 @@ class _$CreateAircraftMarketCreateEventCopyWithImpl<$Res>
 
 /// Create a copy of AircraftMarketCreateEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? title = null,Object? description = freezed,Object? price = null,Object? currency = null,Object? aircraftSubcategoriesId = freezed,Object? brand = freezed,Object? location = freezed,Object? year = freezed,Object? totalFlightHours = freezed,Object? enginePower = freezed,Object? engineVolume = freezed,Object? seats = freezed,Object? condition = freezed,Object? isShareSale = freezed,Object? shareNumerator = freezed,Object? shareDenominator = freezed,Object? isLeasing = freezed,Object? leasingConditions = freezed,Object? mainImageFile = freezed,Object? additionalImageFiles = freezed,Object? isPublished = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? title = null,Object? description = freezed,Object? price = null,Object? currency = null,Object? aircraftSubcategoriesId = freezed,Object? brand = freezed,Object? location = freezed,Object? address = freezed,Object? year = freezed,Object? totalFlightHours = freezed,Object? enginePower = freezed,Object? engineVolume = freezed,Object? seats = freezed,Object? condition = freezed,Object? isShareSale = freezed,Object? shareNumerator = freezed,Object? shareDenominator = freezed,Object? isLeasing = freezed,Object? leasingConditions = freezed,Object? mainImageFile = freezed,Object? additionalImageFiles = freezed,Object? isPublished = null,}) {
   return _then(CreateAircraftMarketCreateEvent(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
@@ -270,7 +279,8 @@ as int,currency: null == currency ? _self.currency : currency // ignore: cast_nu
 as String,aircraftSubcategoriesId: freezed == aircraftSubcategoriesId ? _self.aircraftSubcategoriesId : aircraftSubcategoriesId // ignore: cast_nullable_to_non_nullable
 as int?,brand: freezed == brand ? _self.brand : brand // ignore: cast_nullable_to_non_nullable
 as String?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
-as String?,year: freezed == year ? _self.year : year // ignore: cast_nullable_to_non_nullable
+as String?,address: freezed == address ? _self._address : address // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,year: freezed == year ? _self.year : year // ignore: cast_nullable_to_non_nullable
 as int?,totalFlightHours: freezed == totalFlightHours ? _self.totalFlightHours : totalFlightHours // ignore: cast_nullable_to_non_nullable
 as int?,enginePower: freezed == enginePower ? _self.enginePower : enginePower // ignore: cast_nullable_to_non_nullable
 as int?,engineVolume: freezed == engineVolume ? _self.engineVolume : engineVolume // ignore: cast_nullable_to_non_nullable

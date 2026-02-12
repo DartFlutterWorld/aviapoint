@@ -7,6 +7,7 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/presentation/widgets/custom_button.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/permission_helper.dart';
+import 'package:aviapoint/market/domain/entities/market_address_entity.dart';
 import 'package:aviapoint/market/domain/entities/parts_market_entity.dart';
 import 'package:aviapoint/market/presentation/bloc/market_categories_bloc.dart';
 import 'package:aviapoint/market/presentation/bloc/parts_market_bloc.dart';
@@ -60,6 +61,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
   int? _selectedManufacturerId;
   String? _selectedManufacturerName;
   String? _selectedLocation;
+  Map<String, dynamic>? _selectedAddressStruct; // структурированный адрес для сохранения в БД
   String _currency = 'RUB';
 
   // Фотографии
@@ -127,6 +129,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
     _selectedManufacturerId = product.manufacturerId;
     _selectedManufacturerName = product.manufacturerNameDisplay ?? product.manufacturerName;
     _selectedLocation = product.location;
+    _selectedAddressStruct = product.address != null ? _addressEntityToMap(product.address!) : null;
     _currency = product.currency;
 
     // Инициализируем фотографии
@@ -137,6 +140,24 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
         .where((url) => url.isNotEmpty)
         .map((url) => _PhotoItem(url: url, file: null, bytes: null, isNew: false))
         .toList();
+  }
+
+  /// Конвертация entity адреса в Map для бэкенда (Nominatim-стиль).
+  Map<String, dynamic> _addressEntityToMap(MarketAddressEntity a) {
+    final map = <String, dynamic>{};
+    if (a.country != null && a.country!.isNotEmpty) map['country'] = a.country;
+    if (a.region != null && a.region!.isNotEmpty) {
+      map['state'] = a.region;
+      map['region'] = a.region;
+    }
+    if (a.city != null && a.city!.isNotEmpty) map['city'] = a.city;
+    if (a.street != null && a.street!.isNotEmpty) {
+      map['road'] = a.street;
+      map['street'] = a.street;
+    }
+    if (a.houseNumber != null && a.houseNumber!.isNotEmpty) map['house_number'] = a.houseNumber;
+    if (a.postcode != null && a.postcode!.isNotEmpty) map['postcode'] = a.postcode;
+    return map;
   }
 
   @override
@@ -260,6 +281,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
         condition: _condition,
         quantity: int.tryParse(_quantityController.text.trim()) ?? currentProduct.quantity,
         location: _selectedLocation,
+        address: _selectedAddressStruct,
         weightKg: _weightKgController.text.trim().isEmpty ? null : double.tryParse(_weightKgController.text.trim()),
         dimensionsLengthCm: _dimensionsLengthController.text.trim().isEmpty
             ? null
@@ -437,10 +459,10 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                   });
                 },
                 error: (message) {
-                  // Ошибка сохранения - показываем snackbar, остаемся на экране
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  // В SnackBar показываем текст ошибки от сервера
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message), backgroundColor: Colors.red),
+                  );
                 },
                 orElse: () {},
               );
@@ -519,10 +541,10 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                   }
                 },
                 error: (message) {
-                  _previousStateBeforeLoading = null; // Сбрасываем при ошибке
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  _previousStateBeforeLoading = null; // Сбрасываем при ошибке; в SnackBar — ответ сервера
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message), backgroundColor: Colors.red),
+                  );
                 },
                 orElse: () {},
               );
@@ -554,12 +576,12 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                 initial: () => const Center(child: LoadingCustom()),
                 loading: () => const Center(child: LoadingCustom()),
                 loaded: (product) {
-                  // Инициализируем форму при первой загрузке
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted && _titleController.text.isEmpty) {
-                      _initializeFromProduct(product);
-                      // Загружаем подкатегории если нужно
-                      if (_selectedMainCategoryId != null) {
+                  // Инициализируем форму при первой загрузке до построения, чтобы LocationPickerWidget
+                  // и CompatibleAircraftModelsSelector получили правильные initial* при создании
+                  if (_titleController.text.isEmpty) {
+                    _initializeFromProduct(product);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted && _selectedMainCategoryId != null) {
                         context.read<MarketCategoriesBloc>().add(
                           MarketCategoriesEvent.getSubcategories(
                             productType: 'parts',
@@ -567,8 +589,8 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                           ),
                         );
                       }
-                    }
-                  });
+                    });
+                  }
                   return _buildForm();
                 },
                 saved: (_) => _buildForm(),
@@ -576,7 +598,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
                 unpublished: (_) => _buildForm(),
                 error: (message) => Center(
                   child: ErrorCustom(
-                    textError: message,
+                    textError: 'Что-то пошло не так!\nПопробуйте повторить запрос',
                     repeat: () => _editBloc.add(PartsMarketEditEvent.getProduct(_productId)),
                   ),
                 ),
@@ -734,6 +756,7 @@ class _EditPartsMarketScreenState extends State<EditPartsMarketScreen> {
               onLocationSelected: (locationData) {
                 setState(() {
                   _selectedLocation = locationData['address'] as String?;
+                  _selectedAddressStruct = locationData['address_struct'] as Map<String, dynamic>?;
                 });
               },
             ),

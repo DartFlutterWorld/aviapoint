@@ -57,7 +57,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final bool result = await AutoRouter.of(context).maybePop();
 
     if (!result && context.mounted) {
-      AutoRouter.of(context).push(const BaseRoute(children: [MainNavigationRoute()]));
+      // Профиль мог быть открыт через setActiveIndex(6) без push — тогда переключаем на главную вкладку
+      try {
+        final tabsRouter = AutoTabsRouter.of(context);
+        tabsRouter.setActiveIndex(0); // 0 — Main в BaseScreen.routes
+      } catch (_) {
+        final rootContext = navigatorKey.currentContext;
+        if (rootContext != null && rootContext.mounted) {
+          try {
+            final tabsRouter = AutoTabsRouter.of(rootContext);
+            tabsRouter.setActiveIndex(0);
+          } catch (_) {
+            AutoRouter.of(context).push(const BaseRoute(children: [MainNavigationRoute()]));
+          }
+        }
+      }
     }
   }
 

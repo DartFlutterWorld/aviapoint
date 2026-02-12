@@ -98,11 +98,13 @@ class JobsRepositoryImpl implements JobsRepository {
     int? minFlightHours,
     String? requiredTypeRating,
     List<String>? skills,
+    bool isPublished = true,
   }) async {
     try {
       final body = <String, dynamic>{
         'title': title,
         'contact_profile_id': contactProfileId,
+        'is_published': isPublished,
         if (description != null) 'description': description,
         if (responsibilities != null) 'responsibilities': responsibilities,
         if (requirements != null) 'requirements': requirements,
@@ -167,11 +169,13 @@ class JobsRepositoryImpl implements JobsRepository {
     List<String>? skills,
     bool? isPublished,
     bool? isActive,
+    List<String>? additionalImageUrls,
   }) async {
     try {
       final body = <String, dynamic>{
         if (title != null) 'title': title,
         if (contactProfileId != null) 'contact_profile_id': contactProfileId,
+        if (additionalImageUrls != null) 'additional_image_urls': additionalImageUrls,
         if (description != null) 'description': description,
         if (responsibilities != null) 'responsibilities': responsibilities,
         if (requirements != null) 'requirements': requirements,
@@ -536,12 +540,14 @@ class JobsRepositoryImpl implements JobsRepository {
     try {
       final multipartFiles = await Future.wait(
         imageFiles.map((imageFile) async {
+          final filename = imageFile.name.isNotEmpty ? imageFile.name : 'file.jpg';
+          final contentType = _contentTypeForFile(filename);
           if (kIsWeb) {
             final bytes = await imageFile.readAsBytes();
-            return MultipartFile.fromBytes(bytes, filename: imageFile.name);
+            return MultipartFile.fromBytes(bytes, filename: filename, contentType: contentType);
           } else {
             final file = File(imageFile.path);
-            return await MultipartFile.fromFile(file.path, filename: imageFile.name);
+            return await MultipartFile.fromFile(file.path, filename: filename, contentType: contentType);
           }
         }),
       );
@@ -573,6 +579,49 @@ class JobsRepositoryImpl implements JobsRepository {
   }
 
   @override
+  Future<Either<Failure, List<String>>> uploadVacancyAdditionalImages(int id, List<XFile> imageFiles) async {
+    try {
+      final multipartFiles = await Future.wait(
+        imageFiles.map((imageFile) async {
+          final filename = imageFile.name.isNotEmpty ? imageFile.name : 'file.jpg';
+          final contentType = _contentTypeForFile(filename);
+          if (kIsWeb) {
+            final bytes = await imageFile.readAsBytes();
+            return MultipartFile.fromBytes(bytes, filename: filename, contentType: contentType);
+          } else {
+            final file = File(imageFile.path);
+            return await MultipartFile.fromFile(file.path, filename: filename, contentType: contentType);
+          }
+        }),
+      );
+
+      final response = await jobsService.uploadVacancyAdditionalImages(id, multipartFiles);
+      if (response.urls.isEmpty) {
+        return Left(ServerFailure(statusCode: null, message: 'Не удалось получить URL файлов'));
+      }
+      return Right(response.urls);
+    } on DioException catch (e) {
+      String? responseMessage;
+      if (e.response?.data != null) {
+        if (e.response!.data is Map) {
+          responseMessage = e.response!.data['error']?.toString() ?? e.response!.data.toString();
+        } else {
+          responseMessage = e.response!.data.toString();
+        }
+      }
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode.toString(),
+          message: e.message,
+          responseMessage: responseMessage,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure(statusCode: null, message: 'Ошибка при загрузке файлов: ${e.toString()}'));
+    }
+  }
+
+  @override
   Future<Either<Failure, JobResumeEntity>> createResume({
     required String title,
     String? about,
@@ -597,10 +646,12 @@ class JobsRepositoryImpl implements JobsRepository {
     String? licenses,
     String? typeRatings,
     String? medicalClass,
+    bool isVisibleForEmployers = true,
   }) async {
     try {
       final body = <String, dynamic>{
         'title': title,
+        'is_visible_for_employers': isVisibleForEmployers,
         if (about != null) 'about': about,
         if (desiredSalary != null) 'desired_salary': desiredSalary,
         if (currency != null) 'currency': currency,
@@ -747,6 +798,14 @@ class JobsRepositoryImpl implements JobsRepository {
     switch (ext) {
       case 'pdf':
         return MediaType('application', 'pdf');
+      case 'doc':
+        return MediaType('application', 'msword');
+      case 'docx':
+        return MediaType('application', 'vnd.openxmlformats-officedocument.wordprocessingml.document');
+      case 'xls':
+        return MediaType('application', 'vnd.ms-excel');
+      case 'xlsx':
+        return MediaType('application', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       case 'jpg':
       case 'jpeg':
         return MediaType('image', 'jpeg');

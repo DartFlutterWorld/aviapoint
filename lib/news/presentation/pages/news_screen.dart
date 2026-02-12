@@ -142,18 +142,14 @@ class _NewsScreenState extends State<NewsScreen> {
             if (result == true && context.mounted) {
               await appState.checkAuthStatus();
               if (appState.isAuthenticated && context.mounted) {
-                await AutoRouter.of(context).push(const CreateNewsRoute());
-                // После возврата с экрана создания обновляем данные
-                _refreshData();
+                await context.router.push(const CreateNewsRoute());
+                if (mounted) _refreshData();
               }
             }
           } else {
-            // Если авторизован, сразу переходим на создание новости
-            await AutoRouter.of(context).push(const CreateNewsRoute());
-            // После возврата с экрана создания обновляем данные
-            if (mounted) {
-              _refreshData();
-            }
+            // Если авторизован, сразу переходим на создание новости (push внутри стека журнала)
+            await context.router.push(const CreateNewsRoute());
+            if (mounted) _refreshData();
           }
         },
       ),

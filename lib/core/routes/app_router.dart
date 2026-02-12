@@ -296,12 +296,14 @@ class AppRouter extends RootStackRouter {
             AutoRoute(path: 'test_results', page: TestResultsRoute.page),
           ],
         ),
-        // Журнал (блог + новости): вложенная навигация, чтобы по нажатию на новость/статью открывалась деталка, а не главная
+        // Журнал (блог + новости): вложенная навигация, деталки и экраны создания
         AutoRoute(
           path: 'journal',
           page: JournalNavigationRoute.page,
           children: [
             AutoRoute(path: '', page: JournalRoute.page, initial: true),
+            AutoRoute(path: 'article/create', page: CreateBlogArticleRoute.page),
+            AutoRoute(path: 'news/create', page: CreateNewsRoute.page),
             AutoRoute(path: 'news/:id', page: DetailNewsRoute.page),
             AutoRoute(path: 'article/:id', page: BlogArticleDetailRoute.page),
           ],

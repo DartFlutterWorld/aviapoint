@@ -1,6 +1,7 @@
 import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/work/domain/entities/job_vacancy_entity.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ class JobVacancyCard extends StatelessWidget {
   /// Показывать ли чип «Опубликовано»/«Не опубликовано» (только в профиле, не в разделе Работа)
   final bool showPublicationStatus;
 
-  const JobVacancyCard({super.key, required this.vacancy, this.onTap, this.isFavorite = false, this.onToggleFavorite, this.showPublicationStatus = false});
+  /// Показывать ли чипы (тип занятости, график, опыт). На главной — false.
+  final bool showChips;
+
+  const JobVacancyCard({super.key, required this.vacancy, this.onTap, this.isFavorite = false, this.onToggleFavorite, this.showPublicationStatus = false, this.showChips = true});
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +71,7 @@ class JobVacancyCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                  if (vacancy.userHasResponded == true)
+                  if (showChips && vacancy.userHasResponded == true)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6),
                       child: Row(
@@ -110,56 +114,58 @@ class JobVacancyCard extends StatelessWidget {
                     ],
                   ),
                   if (salaryText != null) ...[const SizedBox(height: 6), _buildSalaryRow()],
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    alignment: WrapAlignment.start,
-                    children: [
-                      if (vacancy.employmentType != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            StatusChip(
-                              text: _mapEmploymentType(vacancy.employmentType!),
-                              backgroundColor: const Color(0xFFE5F0FF),
-                              textColor: AppColors.textPrimary,
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              borderRadius: 999,
-                            ),
-                          ],
-                        ),
-                      if (vacancy.schedule != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            StatusChip(
-                              text: _mapSchedule(vacancy.schedule!),
-                              backgroundColor: const Color(0xFFF3F4F6),
-                              textColor: AppColors.textPrimary,
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              borderRadius: 999,
-                            ),
-                          ],
-                        ),
-                      if (vacancy.experienceLevel != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            StatusChip(
-                              text: _mapExperience(vacancy.experienceLevel!),
-                              backgroundColor: const Color(0xFFF3F4F6),
-                              textColor: AppColors.textPrimary,
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              borderRadius: 999,
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+                  if (showChips) ...[
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      alignment: WrapAlignment.start,
+                      children: [
+                        if (vacancy.employmentType != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              StatusChip(
+                                text: _mapEmploymentType(vacancy.employmentType!),
+                                backgroundColor: const Color(0xFFE5F0FF),
+                                textColor: AppColors.textPrimary,
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                borderRadius: 999,
+                              ),
+                            ],
+                          ),
+                        if (vacancy.schedule != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              StatusChip(
+                                text: _mapSchedule(vacancy.schedule!),
+                                backgroundColor: const Color(0xFFF3F4F6),
+                                textColor: AppColors.textPrimary,
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                borderRadius: 999,
+                              ),
+                            ],
+                          ),
+                        if (vacancy.experienceLevel != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              StatusChip(
+                                text: _mapExperience(vacancy.experienceLevel!),
+                                backgroundColor: const Color(0xFFF3F4F6),
+                                textColor: AppColors.textPrimary,
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                borderRadius: 999,
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ],
                   if (_buildContactName() != null || locationText != null) ...[
                     const SizedBox(height: 10),
                     Row(
@@ -291,9 +297,11 @@ class JobVacancyCard extends StatelessWidget {
     );
   }
 
+  /// Короткий адрес для карточки: город или «город, регион» без дубля; иначе address без дубликатов.
   String? _buildLocationText() {
-    if (vacancy.address == null || vacancy.address!.isEmpty) return null;
-    return vacancy.address;
+    final short = AddressDisplayHelper.shortDisplay(vacancy.city, vacancy.region);
+    if (short != null && short.isNotEmpty) return short;
+    return AddressDisplayHelper.locationStringWithoutDuplicates(vacancy.address);
   }
 
   String? _buildContactName() {

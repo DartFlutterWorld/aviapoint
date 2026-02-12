@@ -21,6 +21,7 @@ import 'package:aviapoint/work/presentation/bloc/job_vacancy_edit_bloc.dart';
 import 'package:aviapoint/work/presentation/bloc/jobs_list_refresh_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mask/mask/mask.dart';
@@ -72,6 +73,7 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
   final List<String> _skills = [];
   String? _lastInnLookup;
   int? _selectedContactProfileId;
+  bool _publish = true;
   _PhotoItem? _logoPhoto;
   List<_PhotoItem> _additionalPhotos = [];
   final _contactFormKey = GlobalKey<FormState>();
@@ -168,6 +170,7 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
         workHours: _workHoursController.text.trim().isNotEmpty ? _workHoursController.text.trim() : null,
         relocationAllowed: _relocationAllowed,
         skills: _skills.isNotEmpty ? List<String>.from(_skills) : null,
+        isPublished: _publish,
       ),
     );
   }
@@ -219,7 +222,7 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
       }
       _selectedAddress = profile?.address;
       _logoPhoto = profile?.logoUrl != null && profile!.logoUrl!.isNotEmpty ? _PhotoItem(url: profile.logoUrl, file: null, bytes: null, isNew: false) : null;
-      _additionalPhotos = (profile?.additionalImageUrls ?? []).map((url) => _PhotoItem(url: url, file: null, bytes: null, isNew: false)).toList();
+      // _additionalPhotos не трогаем — файлы хранятся у вакансии
     });
 
     _companyNameController.text = profile?.companyName ?? '';
@@ -341,31 +344,6 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
                               ),
                       ),
                       const SizedBox(height: 16),
-                      Text('Дополнительные фотографии', style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary)),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 120,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _additionalPhotos.length + 1,
-                          separatorBuilder: (_, __) => const SizedBox(width: 12),
-                          itemBuilder: (context, index) {
-                            if (index == _additionalPhotos.length) {
-                              return SizedBox(
-                                width: 120,
-                                child: _buildAddPhotoTile(
-                                  onTap: () async {
-                                    await _pickAdditionalImages();
-                                    if (context.mounted) setSheetState(() {});
-                                  },
-                                ),
-                              );
-                            }
-                            return SizedBox(width: 120, child: _buildPhotoItem(_additionalPhotos[index], isLogo: false, onChanged: () => setSheetState(() {})));
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 16),
                     ],
                     CustomTextField(
                       controller: _contactNameController,
@@ -461,8 +439,9 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
                           logoUrl = '';
                         }
 
-                        final existingAdditionalUrls = _additionalPhotos.where((photo) => !photo.isNew && photo.url != null && photo.url!.isNotEmpty).map((photo) => photo.url!).toList();
-                        final newAdditionalFiles = _additionalPhotos.where((photo) => photo.isNew && photo.file != null).map((photo) => photo.file!).toList();
+                        // Файлы вакансии хранятся у вакансии, в контактах только логотип
+                        final existingAdditionalUrls = <String>[];
+                        final newAdditionalFiles = <XFile>[];
 
                         final created = isEditing
                             ? await _contactProfilesCubit.updateProfile(
@@ -669,13 +648,22 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
     }
   }
 
+  static const XTypeGroup _vacancyFilesTypeGroup = XTypeGroup(
+    label: 'Изображения, PDF, Word, Excel',
+    extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx'],
+    uniformTypeIdentifiers: [
+      'public.jpeg', 'public.png', 'public.gif', 'public.webp', 'public.image', 'com.adobe.pdf',
+      'com.microsoft.word.doc', 'org.openxmlformats.wordprocessingml.document',
+      'com.microsoft.excel.xls', 'org.openxmlformats.spreadsheetml.sheet',
+    ],
+  );
+
   Future<void> _pickAdditionalImages() async {
     try {
-      final ImagePicker picker = ImagePicker();
-      final List<XFile>? images = await picker.pickMultiImage(imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
-      if (images != null && images.isNotEmpty && mounted) {
+      final files = await openFiles(acceptedTypeGroups: const [_vacancyFilesTypeGroup]);
+      if (files.isNotEmpty && mounted) {
         final List<_PhotoItem> photoItems = [];
-        for (final file in images) {
+        for (final file in files) {
           Uint8List? bytes;
           if (kIsWeb) {
             bytes = await file.readAsBytes();
@@ -690,7 +678,7 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать фотографии: ${e.toString()}'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось выбрать файлы: ${e.toString()}'), backgroundColor: Colors.red, duration: const Duration(seconds: 3)));
       }
     }
   }
@@ -707,56 +695,71 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
     }
   }
 
+  Widget _buildDocIconWidget(bool isPdf, bool isWord, bool isExcel) {
+    if (isPdf) return const ColoredBox(color: Color(0xFFF3F4F6), child: Center(child: Icon(Icons.picture_as_pdf, size: 40, color: Colors.red)));
+    if (isWord) return const ColoredBox(color: Color(0xFFF3F4F6), child: Center(child: Icon(Icons.description, size: 40, color: Colors.blue)));
+    if (isExcel) return const ColoredBox(color: Color(0xFFF3F4F6), child: Center(child: Icon(Icons.table_chart, size: 40, color: Colors.green)));
+    return const ColoredBox(color: Color(0xFFF3F4F6), child: Icon(Icons.insert_drive_file, color: Color(0xFF9CA5AF)));
+  }
+
   Widget _buildPhotoItem(_PhotoItem photoItem, {required bool isLogo, VoidCallback? onChanged}) {
+    final name = (photoItem.file?.name ?? photoItem.url ?? '').toLowerCase();
+    final isPdf = name.endsWith('.pdf');
+    final isWord = name.endsWith('.doc') || name.endsWith('.docx');
+    final isExcel = name.endsWith('.xls') || name.endsWith('.xlsx');
+    final isDocument = isPdf || isWord || isExcel;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Stack(
         fit: StackFit.expand,
         children: [
           Positioned.fill(
-            child: photoItem.isNew
-                ? kIsWeb
-                      ? photoItem.bytes != null
-                            ? Image.memory(
-                                photoItem.bytes!,
-                                fit: BoxFit.contain,
-                                errorBuilder: (context, error, stackTrace) => const ColoredBox(
-                                  color: Color(0xFFF3F4F6),
-                                  child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
-                                ),
-                              )
-                            : const ColoredBox(
+            child: isDocument
+                ? _buildDocIconWidget(isPdf, isWord, isExcel)
+                : photoItem.isNew
+                    ? kIsWeb
+                          ? photoItem.bytes != null
+                                ? Image.memory(
+                                    photoItem.bytes!,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) => const ColoredBox(
+                                      color: Color(0xFFF3F4F6),
+                                      child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
+                                    ),
+                                  )
+                                : const ColoredBox(
+                                    color: Color(0xFFF3F4F6),
+                                    child: Center(child: CircularProgressIndicator()),
+                                  )
+                          : Image.file(
+                              File(photoItem.file!.path),
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) => const ColoredBox(
+                                color: Color(0xFFF3F4F6),
+                                child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
+                              ),
+                            )
+                    : photoItem.url != null && photoItem.url!.isNotEmpty
+                        ? Image.network(
+                            getImageUrl(photoItem.url!),
+                            fit: BoxFit.contain,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const ColoredBox(
                                 color: Color(0xFFF3F4F6),
                                 child: Center(child: CircularProgressIndicator()),
-                              )
-                      : Image.file(
-                          File(photoItem.file!.path),
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => const ColoredBox(
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) => const ColoredBox(
+                              color: Color(0xFFF3F4F6),
+                              child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
+                            ),
+                          )
+                        : const ColoredBox(
                             color: Color(0xFFF3F4F6),
                             child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
                           ),
-                        )
-                : photoItem.url != null && photoItem.url!.isNotEmpty
-                ? Image.network(
-                    getImageUrl(photoItem.url!),
-                    fit: BoxFit.contain,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const ColoredBox(
-                        color: Color(0xFFF3F4F6),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) => const ColoredBox(
-                      color: Color(0xFFF3F4F6),
-                      child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
-                    ),
-                  )
-                : const ColoredBox(
-                    color: Color(0xFFF3F4F6),
-                    child: Icon(Icons.broken_image, color: Color(0xFF9CA5AF)),
-                  ),
           ),
           Positioned(
             top: 8,
@@ -859,7 +862,17 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
           BlocListener<JobVacancyEditBloc, JobVacancyEditState>(
             listener: (context, state) {
               state.maybeWhen(
-                created: (vacancy) {
+                created: (vacancy) async {
+                  final newFiles = _additionalPhotos.where((p) => p.isNew && p.file != null).map((p) => p.file!).toList();
+                  if (newFiles.isNotEmpty) {
+                    final uploadResult = await getIt<JobsRepository>().uploadVacancyAdditionalImages(vacancy.id, newFiles);
+                    if (!context.mounted) return;
+                    uploadResult.fold(
+                      (_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Вакансия создана, но не все файлы загружены'), backgroundColor: Colors.orange)),
+                      (_) {},
+                    );
+                  }
+                  if (!context.mounted) return;
                   getIt<JobsVacanciesRefreshCubit>().notify();
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Вакансия создана и отправлена на модерацию'), backgroundColor: Colors.green));
                   context.router.maybePop(true);
@@ -1028,6 +1041,49 @@ class _CreateJobVacancyScreenState extends State<CreateJobVacancyScreen> {
                                 orElse: () => const SizedBox.shrink(),
                               );
                             },
+                          ),
+                          const SizedBox(height: 16),
+                          Text('Прикреплённые файлы (фото, PDF, документы)', style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary)),
+                          const SizedBox(height: 6),
+                          Text('Прикрепляются к вакансии', style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary)),
+                          const SizedBox(height: 8),
+                          if (_additionalPhotos.isNotEmpty)
+                            SizedBox(
+                              height: 100,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _additionalPhotos.length,
+                                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                itemBuilder: (context, index) => SizedBox(
+                                  width: 100,
+                                  child: _buildPhotoItem(_additionalPhotos[index], isLogo: false, onChanged: () => setState(() {})),
+                                ),
+                              ),
+                            ),
+                          if (_additionalPhotos.isNotEmpty) const SizedBox(height: 8),
+                          OutlinedButton.icon(
+                            icon: const Icon(Icons.attach_file, size: 20),
+                            label: const Text('Прикрепить файлы'),
+                            onPressed: () async {
+                              await _pickAdditionalImages();
+                              if (mounted) setState(() {});
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10, offset: const Offset(0, 2))],
+                            ),
+                            child: SwitchListTile(
+                              title: Text('Опубликовать сразу', style: AppStyles.regular14s.copyWith(color: AppColors.textPrimary)),
+                              subtitle: Text('Если выключено, вакансия будет сохранена как черновик', style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary)),
+                              value: _publish,
+                              onChanged: (v) => setState(() => _publish = v),
+                              activeColor: AppColors.primary100p,
+                            ),
                           ),
                           const SizedBox(height: 24),
                           CustomButton(
@@ -1270,7 +1326,5 @@ class _PhotoItem {
   final XFile? file;
   final String? url;
   final Uint8List? bytes;
-  final bool isNew;
-
-  _PhotoItem({this.file, this.url, this.bytes, required this.isNew}) : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
+  final bool isNew;  _PhotoItem({this.file, this.url, this.bytes, required this.isNew}) : assert((url != null && !isNew) || (file != null && isNew), 'Either url or file must be provided');
 }

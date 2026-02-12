@@ -1,5 +1,6 @@
 import 'package:aviapoint/market/data/models/aircraft_market_dto.dart';
 import 'package:aviapoint/market/domain/entities/aircraft_market_entity.dart';
+import 'package:aviapoint/market/domain/entities/market_address_entity.dart';
 
 class AircraftMarketMapper {
   static AircraftMarketEntity toEntity(AircraftMarketDto dto) {
@@ -15,6 +16,20 @@ class AircraftMarketMapper {
       additionalImageUrls: dto.additionalImageUrls,
       brand: dto.brand,
       location: dto.location,
+      address: dto.address != null
+          ? MarketAddressEntity(
+              country: dto.address?['country'] as String?,
+              region: (dto.address?['state'] ?? dto.address?['region'] ?? dto.address?['state_district']) as String?,
+              city: (dto.address?['city'] ??
+                      dto.address?['town'] ??
+                      dto.address?['village'] ??
+                      dto.address?['municipality'] ??
+                      dto.address?['hamlet']) as String?,
+              street: (dto.address?['road'] ?? dto.address?['street']) as String?,
+              houseNumber: dto.address?['house_number'] as String?,
+              postcode: dto.address?['postcode'] as String?,
+            )
+          : null,
       isPublished: dto.isPublished ?? true,
       isActive: dto.isActive ?? true,
       viewsCount: dto.viewsCount ?? 0,

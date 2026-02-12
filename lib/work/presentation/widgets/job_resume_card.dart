@@ -1,6 +1,7 @@
 import 'package:aviapoint/core/presentation/widgets/status_chip.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/work/domain/entities/job_resume_entity.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ class JobResumeCard extends StatelessWidget {
   /// Показывать ли чип «Опубликовано»/«Не опубликовано» (только в профиле, не в разделе Работа)
   final bool showPublicationStatus;
 
+  /// Показывать ли чипы (тип занятости, график и т.д.). На главной — false.
+  final bool showChips;
+
   const JobResumeCard({
     super.key,
     required this.resume,
@@ -21,6 +25,7 @@ class JobResumeCard extends StatelessWidget {
     this.isFavorite = false,
     this.onToggleFavorite,
     this.showPublicationStatus = false,
+    this.showChips = true,
   });
 
   bool get _isBlockedByAdmin => resume.status.toLowerCase() == 'blocked';
@@ -172,18 +177,20 @@ class JobResumeCard extends StatelessWidget {
                         const SizedBox(width: 10),
                       ],
                       Expanded(
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
-                          children: [
-                            if (resume.employmentTypes != null)
-                              ..._splitCsv(resume.employmentTypes!).map((e) => _buildChip(_mapEmploymentType(e))),
-                            if (resume.schedules != null)
-                              ..._splitCsv(resume.schedules!).map((e) => _buildChip(_mapSchedule(e))),
-                            if (resume.readyToRelocate == true) _buildChip('Готов к переезду'),
-                            if (resume.readyForBusinessTrips == true) _buildChip('Готов к командировкам'),
-                          ],
-                        ),
+                        child: showChips
+                            ? Wrap(
+                                spacing: 6,
+                                runSpacing: 4,
+                                children: [
+                                  if (resume.employmentTypes != null)
+                                    ..._splitCsv(resume.employmentTypes!).map((e) => _buildChip(_mapEmploymentType(e))),
+                                  if (resume.schedules != null)
+                                    ..._splitCsv(resume.schedules!).map((e) => _buildChip(_mapSchedule(e))),
+                                  if (resume.readyToRelocate == true) _buildChip('Готов к переезду'),
+                                  if (resume.readyForBusinessTrips == true) _buildChip('Готов к командировкам'),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
                       ),
                     ],
                   ),
@@ -223,10 +230,7 @@ class JobResumeCard extends StatelessWidget {
   }
 
   String? _buildAddressText() {
-    if (resume.address != null && resume.address!.isNotEmpty) {
-      return resume.address;
-    }
-    return null;
+    return AddressDisplayHelper.locationStringWithoutDuplicates(resume.address);
   }
 
   String _formatMoney(int value) {

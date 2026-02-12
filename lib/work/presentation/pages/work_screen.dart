@@ -69,6 +69,11 @@ Future<void> _handleCreateResumeTap(BuildContext context) async {
 class WorkScreen extends StatelessWidget {
   const WorkScreen({super.key});
 
+  /// Если установить это поле перед навигацией на экран \"Работа\",
+  /// при первом построении будет открыт соответствующий таб:
+  /// 0 — «Вакансии», 1 — «Резюме».
+  static int? initialTabIndexOverride;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
@@ -120,6 +125,22 @@ class _WorkScreenContentState extends State<_WorkScreenContent> {
       _hasMyResumes = r.fold((_) => false, (l) => l.isNotEmpty);
       _loaded = true;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final controller = DefaultTabController.of(context);
+    final override = WorkScreen.initialTabIndexOverride;
+    if (override != null && override < controller.length) {
+      // Переключаемся на нужный таб один раз при открытии экрана
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          controller.animateTo(override);
+        }
+      });
+      WorkScreen.initialTabIndexOverride = null;
+    }
   }
 
   @override

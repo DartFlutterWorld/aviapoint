@@ -448,10 +448,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                   });
                 },
                 error: (message) {
-                  // Ошибка сохранения - показываем snackbar, остаемся на экране
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  // В SnackBar показываем текст ошибки от сервера
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message), backgroundColor: Colors.red),
+                  );
                 },
                 orElse: () {},
               );
@@ -521,10 +521,10 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                   }
                 },
                 error: (message) {
-                  _previousStateBeforeLoading = null; // Сбрасываем при ошибке
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+                  _previousStateBeforeLoading = null; // Сбрасываем при ошибке; в SnackBar — ответ сервера
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message), backgroundColor: Colors.red),
+                  );
                 },
                 orElse: () {},
               );
@@ -832,7 +832,7 @@ class _EditAircraftMarketScreenState extends State<EditAircraftMarketScreen> {
                 unpublished: (_) => const Center(child: LoadingCustom()),
                 error: (message) => Center(
                   child: ErrorCustom(
-                    textError: message,
+                    textError: 'Что-то пошло не так!\nПопробуйте повторить запрос',
                     repeat: () => _editBloc.add(AircraftMarketEditEvent.getProduct(_productId)),
                   ),
                 ),

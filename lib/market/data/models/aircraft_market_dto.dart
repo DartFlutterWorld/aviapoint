@@ -24,6 +24,8 @@ class AircraftMarketDto {
 
   final String? brand;
   final String? location;
+  @JsonKey(name: 'address')
+  final Map<String, dynamic>? address;
   @JsonKey(name: 'is_published')
   final bool? isPublished;
   @JsonKey(name: 'is_active')
@@ -90,6 +92,7 @@ class AircraftMarketDto {
     this.additionalImageUrls = const [],
     this.brand,
     this.location,
+    this.address,
     this.isPublished,
     this.isActive,
     this.viewsCount,

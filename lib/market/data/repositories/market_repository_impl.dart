@@ -5,7 +5,6 @@ import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/market/data/datasources/market_service.dart';
 import 'package:aviapoint/market/data/models/aircraft_market_dto.dart';
 import 'package:aviapoint/market/data/models/parts_market_dto.dart';
-import 'package:aviapoint/market/data/models/parts_manufacturer_dto.dart';
 import 'package:aviapoint/market/data/repositories/mappers/market_category_mapper.dart';
 import 'package:aviapoint/market/data/repositories/mappers/aircraft_market_mapper.dart';
 import 'package:aviapoint/market/data/repositories/mappers/parts_market_mapper.dart';
@@ -19,6 +18,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:convert';
 
 class MarketRepositoryImpl implements MarketRepository {
   final MarketService _service;
@@ -155,6 +155,7 @@ class MarketRepositoryImpl implements MarketRepository {
     int? aircraftSubcategoriesId,
     String? brand,
     String? location,
+    Map<String, dynamic>? address,
     int? year,
     int? totalFlightHours,
     int? enginePower,
@@ -189,6 +190,9 @@ class MarketRepositoryImpl implements MarketRepository {
           formData.fields.add(MapEntry('aircraft_subcategories_id', aircraftSubcategoriesId.toString()));
         if (brand != null && brand.isNotEmpty) formData.fields.add(MapEntry('brand', brand));
         if (location != null && location.isNotEmpty) formData.fields.add(MapEntry('location', location));
+        if (address != null) {
+          formData.fields.add(MapEntry('address', jsonEncode(address)));
+        }
         if (year != null) formData.fields.add(MapEntry('year', year.toString()));
         if (totalFlightHours != null) formData.fields.add(MapEntry('total_flight_hours', totalFlightHours.toString()));
         if (enginePower != null) formData.fields.add(MapEntry('engine_power', enginePower.toString()));
@@ -283,6 +287,7 @@ class MarketRepositoryImpl implements MarketRepository {
         if (aircraftSubcategoriesId != null) body['aircraft_subcategories_id'] = aircraftSubcategoriesId;
         if (brand != null && brand.isNotEmpty) body['brand'] = brand;
         if (location != null && location.isNotEmpty) body['location'] = location;
+        if (address != null) body['address'] = address;
         if (year != null) body['year'] = year;
         if (totalFlightHours != null) body['total_flight_hours'] = totalFlightHours;
         if (enginePower != null) body['engine_power'] = enginePower;
@@ -1066,6 +1071,7 @@ class MarketRepositoryImpl implements MarketRepository {
     String? condition,
     int? quantity,
     String? location,
+    Map<String, dynamic>? address,
     double? weightKg,
     double? dimensionsLengthCm,
     double? dimensionsWidthCm,
@@ -1147,6 +1153,9 @@ class MarketRepositoryImpl implements MarketRepository {
           for (final id in compatibleAircraftModelIds) {
             formData.fields.add(MapEntry('compatible_aircraft_model_ids[]', id.toString()));
           }
+        }
+        if (address != null) {
+          formData.fields.add(MapEntry('address', jsonEncode(address)));
         }
         if (mainImageUrl != null && mainImageUrl.isNotEmpty) {
           formData.fields.add(MapEntry('main_image_url', mainImageUrl));
@@ -1242,6 +1251,7 @@ class MarketRepositoryImpl implements MarketRepository {
         if (oemNumber != null && oemNumber.isNotEmpty) body['oem_number'] = oemNumber;
         if (condition != null && condition.isNotEmpty) body['condition'] = condition;
         if (location != null && location.isNotEmpty) body['location'] = location;
+        if (address != null) body['address'] = address;
         if (weightKg != null) body['weight_kg'] = weightKg;
         if (dimensionsLengthCm != null) body['dimensions_length_cm'] = dimensionsLengthCm;
         if (dimensionsWidthCm != null) body['dimensions_width_cm'] = dimensionsWidthCm;

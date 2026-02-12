@@ -41,9 +41,13 @@ class EditJobResumeScreen extends StatefulWidget {
 
 class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
   static const XTypeGroup _resumeFilesTypeGroup = XTypeGroup(
-    label: 'Изображения и PDF',
-    extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'],
-    uniformTypeIdentifiers: ['public.jpeg', 'public.png', 'public.gif', 'public.webp', 'public.image', 'com.adobe.pdf'],
+    label: 'Изображения, PDF, Word, Excel',
+    extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx'],
+    uniformTypeIdentifiers: [
+      'public.jpeg', 'public.png', 'public.gif', 'public.webp', 'public.image', 'com.adobe.pdf',
+      'com.microsoft.word.doc', 'org.openxmlformats.wordprocessingml.document',
+      'com.microsoft.excel.xls', 'org.openxmlformats.spreadsheetml.sheet',
+    ],
   );
 
   final _formKey = GlobalKey<FormState>();
@@ -66,6 +70,7 @@ class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
   bool _contactProfileIdCleared = false;
   List<String> _citizenship = ['RU'];
   bool _workPermit = true;
+  bool _isVisibleForEmployers = true;
   JobResumeEntity? _currentResume;
   bool _uploadingPhoto = false;
   List<JobResumeExperienceEntity> _experiences = [];
@@ -126,6 +131,7 @@ class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
     _dateOfBirthController.text = r.dateOfBirth ?? '';
     _citizenship = (r.citizenship != null && r.citizenship!.isNotEmpty) ? List.from(r.citizenship!) : ['RU'];
     _workPermit = r.workPermit ?? true;
+    _isVisibleForEmployers = r.isVisibleForEmployers;
     _contactProfileId = r.contactProfileId;
     _contactProfileIdCleared = false;
     _flightHoursTotalController.text = r.flightHoursTotal?.toString() ?? '';
@@ -202,6 +208,7 @@ class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
         licenses: _licensesController.text.trim().isNotEmpty ? _licensesController.text.trim() : null,
         typeRatings: _typeRatingsController.text.trim().isNotEmpty ? _typeRatingsController.text.trim() : null,
         medicalClass: _medicalClassController.text.trim().isNotEmpty ? _medicalClassController.text.trim() : null,
+        isVisibleForEmployers: _isVisibleForEmployers,
       ),
     );
   }
@@ -367,6 +374,13 @@ class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
                                 value: _workPermit,
                                 onChanged: (value) => setState(() => _workPermit = value),
                                 title: const Text('Разрешение на работу в РФ'),
+                              ),
+                              const SizedBox(height: 8),
+                              SwitchListTile(
+                                value: _isVisibleForEmployers,
+                                onChanged: (value) => setState(() => _isVisibleForEmployers = value),
+                                title: const Text('Показывать работодателям (опубликовано)'),
+                                activeColor: AppColors.primary100p,
                               ),
                               const SizedBox(height: 16),
                               Row(
@@ -931,23 +945,52 @@ class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final url = additionalUrls[index];
-                final isPdf = url.toLowerCase().endsWith('.pdf');
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: SizedBox(
-                    width: 72,
-                    height: 72,
-                    child: isPdf
-                        ? Container(
-                            color: AppColors.strokeForDarkArea,
-                            child: const Center(child: Icon(Icons.picture_as_pdf, size: 36, color: Colors.red)),
-                          )
-                        : NetworkImageWidget(
-                            imageUrl: getImageUrl(url),
-                            fit: BoxFit.cover,
-                            errorWidget: const Icon(Icons.image_not_supported),
-                          ),
-                  ),
+                final lower = url.toLowerCase();
+                final isPdf = lower.endsWith('.pdf');
+                final isWord = lower.endsWith('.doc') || lower.endsWith('.docx');
+                final isExcel = lower.endsWith('.xls') || lower.endsWith('.xlsx');
+                return Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: 72,
+                        height: 72,
+                        child: isPdf
+                            ? Container(
+                                color: AppColors.strokeForDarkArea,
+                                child: const Center(child: Icon(Icons.picture_as_pdf, size: 36, color: Colors.red)),
+                              )
+                            : isWord
+                                ? Container(
+                                    color: AppColors.strokeForDarkArea,
+                                    child: const Center(child: Icon(Icons.description, size: 36, color: Colors.blue)),
+                                  )
+                                : isExcel
+                                    ? Container(
+                                        color: AppColors.strokeForDarkArea,
+                                        child: const Center(child: Icon(Icons.table_chart, size: 36, color: Colors.green)),
+                                      )
+                                    : NetworkImageWidget(
+                                        imageUrl: getImageUrl(url),
+                                        fit: BoxFit.cover,
+                                        errorWidget: const Icon(Icons.image_not_supported),
+                                      ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 18, color: Colors.white),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black54,
+                        padding: const EdgeInsets.all(4),
+                        minimumSize: const Size(24, 24),
+                      ),
+                      onPressed: _uploadingPhoto
+                          ? null
+                          : () => _removeAttachedFile(index),
+                    ),
+                  ],
                 );
               },
             ),
@@ -987,6 +1030,34 @@ class _EditJobResumeScreenState extends State<EditJobResumeScreen> {
           label: const Text('Прикрепить файлы (грамоты, сертификаты, дипломы, лицензии)'),
         ),
       ],
+    );
+  }
+
+  Future<void> _removeAttachedFile(int index) async {
+    final resume = _currentResume;
+    if (resume == null) return;
+    final urls = resume.additionalPhotoUrls ?? [];
+    if (index < 0 || index >= urls.length) return;
+    final newList = List<String>.from(urls)..removeAt(index);
+    setState(() => _uploadingPhoto = true);
+    final result = await getIt<JobsRepository>().updateResume(
+      id: widget.id,
+      additionalPhotoUrls: newList,
+    );
+    if (!mounted) return;
+    setState(() => _uploadingPhoto = false);
+    result.fold(
+      (failure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message ?? 'Не удалось удалить файл'), backgroundColor: Colors.red),
+        );
+      },
+      (updatedResume) {
+        setState(() => _currentResume = updatedResume);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Файл удалён'), backgroundColor: Colors.green),
+        );
+      },
     );
   }
 

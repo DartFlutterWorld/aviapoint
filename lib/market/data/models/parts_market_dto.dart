@@ -20,6 +20,8 @@ class PartsMarketDto {
   @JsonKey(name: 'manufacturer_name')
   final String? manufacturerName;
   final String? location;
+  @JsonKey(name: 'address')
+  final Map<String, dynamic>? address;
   @JsonKey(name: 'main_image_url', fromJson: _mainImageUrlFromJson)
   final String? mainImageUrl;
   @JsonKey(name: 'additional_image_urls', fromJson: _imageUrlsFromJson)
@@ -93,6 +95,7 @@ class PartsMarketDto {
     this.manufacturerId,
     this.manufacturerName,
     this.location,
+    this.address,
     this.mainImageUrl,
     this.additionalImageUrls = const [],
     this.partNumber,

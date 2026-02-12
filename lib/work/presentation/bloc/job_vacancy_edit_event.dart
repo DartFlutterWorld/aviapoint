@@ -29,6 +29,7 @@ class JobVacancyEditEvent with _$JobVacancyEditEvent {
     int? minFlightHours,
     String? requiredTypeRating,
     List<String>? skills,
+    @Default(true) bool isPublished,
   }) = _Create;
 
   const factory JobVacancyEditEvent.update({
@@ -61,6 +62,7 @@ class JobVacancyEditEvent with _$JobVacancyEditEvent {
     List<String>? skills,
     bool? isPublished,
     bool? isActive,
+    List<String>? additionalImageUrls,
   }) = _Update;
 
   const factory JobVacancyEditEvent.delete({required int id}) = _Delete;

@@ -6,6 +6,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:dio/dio.dart';
 import 'package:aviapoint/core/themes/app_colors.dart';
 import 'package:aviapoint/core/themes/app_styles.dart';
+import 'package:aviapoint/core/utils/location_utils_stub.dart'
+    if (dart.library.html) 'package:aviapoint/core/utils/location_utils_web.dart';
 
 class LocationPickerWidget extends StatefulWidget {
   final String? initialLocation;
@@ -37,12 +39,14 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
   bool _isLoadingSuggestions = false;
   LatLng? _selectedLocation;
   String? _selectedAddress;
+  Map<String, dynamic>? _selectedAddressStruct;
   bool _showSuggestions = false;
   Timer? _debounceTimer;
   String _lastSearchQuery = ''; // Храним последний запрос для определения изменений
   int _markerKey = 0; // Key для принудительного обновления маркера
   VoidCallback? _searchControllerTextListener; // Ссылка на listener для удаления
   VoidCallback? _searchFocusNodeListener; // Ссылка на listener для удаления
+  bool _triedUserLocation = false;
 
   @override
   void initState() {
@@ -101,6 +105,27 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
       // Они появятся только при изменении текста через _onSearchChanged
     };
     _searchFocusNode.addListener(_searchFocusNodeListener!);
+
+    // Если начальной локации нет и виджет не readOnly — пробуем взять геолокацию пользователя (Web).
+    if (!widget.readOnly && _selectedLocation == null) {
+      _initUserLocation();
+    }
+  }
+
+  Future<void> _initUserLocation() async {
+    if (_triedUserLocation) return;
+    _triedUserLocation = true;
+
+    final loc = await getUserLocation();
+    if (!mounted || loc == null) return;
+
+    setState(() {
+      _selectedLocation = loc;
+      _selectedAddress ??= 'Моё местоположение';
+      _markerKey++;
+    });
+    _updateMapPosition();
+    _notifyLocationSelected();
   }
 
   @override
@@ -202,6 +227,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                     'lat': lat,
                     'lng': lng,
                     'displayName': displayName.isNotEmpty ? displayName : (item['name'] as String? ?? ''),
+                    'rawAddress': address,
                   };
                 })
                 .where((suggestion) => suggestion['lat'] != null && suggestion['lng'] != null)
@@ -283,6 +309,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
     final lat = suggestion['lat'] as double?;
     final lng = suggestion['lng'] as double?;
     final displayName = suggestion['displayName'] as String?;
+    final rawAddress = suggestion['rawAddress'] as Map<String, dynamic>?;
 
     if (lat != null && lng != null) {
       final selectedAddress = displayName ?? _searchController.text;
@@ -305,6 +332,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
       setState(() {
         _selectedLocation = coordinates;
         _selectedAddress = selectedAddress;
+        _selectedAddressStruct = rawAddress;
         _showSuggestions = false;
         _suggestions = [];
         _isLoadingSuggestions = false;
@@ -437,11 +465,13 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
 
       String addressText = '${point.latitude.toStringAsFixed(6)}, ${point.longitude.toStringAsFixed(6)}';
 
+      Map<String, dynamic>? addressStruct;
       if (response.statusCode == 200 && response.data != null) {
         // Nominatim reverse возвращает объект с полем address
         final data = response.data is Map ? response.data as Map<String, dynamic> : null;
         final address = data?['address'] as Map<String, dynamic>?;
         if (address != null) {
+          addressStruct = address;
           final displayName = _buildDisplayNameFromAddress(address);
           if (displayName.isNotEmpty) {
             addressText = displayName;
@@ -454,6 +484,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
         setState(() {
           _selectedAddress = addressText;
           _searchController.text = addressText;
+          _selectedAddressStruct = addressStruct;
           // Обновляем последний запрос, чтобы подсказки не появлялись после клика на карту
           _lastSearchQuery = addressText;
         });
@@ -479,6 +510,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
         'address': _selectedAddress ?? '',
         'lat': _selectedLocation!.latitude,
         'lng': _selectedLocation!.longitude,
+        'address_struct': _selectedAddressStruct,
       });
     }
   }

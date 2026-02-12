@@ -18,6 +18,7 @@ PartsMarketDto _$PartsMarketDtoFromJson(Map<String, dynamic> json) =>
       manufacturerId: (json['manufacturer_id'] as num?)?.toInt(),
       manufacturerName: json['manufacturer_name'] as String?,
       location: json['location'] as String?,
+      address: json['address'] as Map<String, dynamic>?,
       mainImageUrl: _mainImageUrlFromJson(json['main_image_url']),
       additionalImageUrls: json['additional_image_urls'] == null
           ? const []

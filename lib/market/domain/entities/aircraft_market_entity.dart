@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:aviapoint/market/domain/entities/market_address_entity.dart';
 
 class AircraftMarketEntity extends Equatable {
   final int id;
@@ -15,6 +16,9 @@ class AircraftMarketEntity extends Equatable {
 
   final String? brand;
   final String? location;
+  // Структурированный адрес (если пришёл с бэка)
+  // Используется для более точного форматирования без дублей типа "Москва, Москва".
+  final MarketAddressEntity? address;
   final bool isPublished;
   final bool isActive;
   final int viewsCount;
@@ -69,6 +73,7 @@ class AircraftMarketEntity extends Equatable {
     this.additionalImageUrls = const [],
     this.brand,
     this.location,
+    this.address,
     this.isPublished = true,
     this.isActive = true,
     this.viewsCount = 0,

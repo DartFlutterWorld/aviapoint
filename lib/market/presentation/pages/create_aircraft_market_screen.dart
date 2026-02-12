@@ -50,6 +50,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
   int? _selectedCategoryId;
   String? _selectedBrand;
   String? _selectedLocation;
+  Map<String, dynamic>? _selectedAddressStruct;
   String _currency = 'RUB';
 
   // Продажа доли
@@ -170,6 +171,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
         aircraftSubcategoriesId: _selectedCategoryId,
         brand: _selectedBrand!,
         location: _selectedLocation!,
+        address: _selectedAddressStruct,
         year: int.tryParse(_yearController.text.trim())!,
         totalFlightHours: int.parse(_totalFlightHoursController.text.trim()),
         enginePower: int.parse(_enginePowerController.text.trim()),
@@ -425,6 +427,7 @@ class _CreateAircraftMarketScreenState extends State<CreateAircraftMarketScreen>
                       print('🔵 [CreateAircraftMarketScreen] Выбор местоположения: $locationData');
                       setState(() {
                         _selectedLocation = locationData['address'] as String?;
+                        _selectedAddressStruct = locationData['address_struct'] as Map<String, dynamic>?;
                       });
                     },
                   ),

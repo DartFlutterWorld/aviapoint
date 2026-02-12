@@ -14,6 +14,7 @@ import 'package:aviapoint/injection_container.dart';
 import 'package:mask/mask/mask.dart';
 import 'package:aviapoint/work/domain/entities/job_contact_profile_entity.dart';
 import 'package:aviapoint/work/presentation/bloc/contact_profiles_cubit.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:aviapoint/work/domain/repositories/jobs_repository.dart';
 import 'package:aviapoint/work/presentation/bloc/job_resume_edit_bloc.dart';
@@ -62,6 +63,7 @@ class _CreateJobResumeScreenState extends State<CreateJobResumeScreen> {
 
   final Set<String> _employmentTypes = {};
   final Set<String> _schedules = {};
+  bool _isVisibleForEmployers = true;
 
   late final JobResumeEditBloc _bloc;
   late final ContactProfilesCubit _contactProfilesCubit;
@@ -111,10 +113,19 @@ class _CreateJobResumeScreenState extends State<CreateJobResumeScreen> {
     setState(() => _contactProfileId = sorted.first.id);
   }
 
+  /// Выбор прикреплённых файлов: изображения, PDF, Word, Excel.
   Future<List<XFile>> _pickResumeAdditionalFiles() async {
-    final picker = ImagePicker();
-    final list = await picker.pickMultiImage(imageQuality: 85, maxWidth: 1920, maxHeight: 1920);
-    return list;
+    const typeGroup = XTypeGroup(
+      label: 'Изображения, PDF, Word, Excel',
+      extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx'],
+      uniformTypeIdentifiers: [
+        'public.jpeg', 'public.png', 'public.gif', 'public.webp', 'public.image', 'com.adobe.pdf',
+        'com.microsoft.word.doc', 'org.openxmlformats.wordprocessingml.document',
+        'com.microsoft.excel.xls', 'org.openxmlformats.spreadsheetml.sheet',
+      ],
+    );
+    final files = await openFiles(acceptedTypeGroups: const [typeGroup]);
+    return files;
   }
 
   void _submit() {
@@ -154,6 +165,7 @@ class _CreateJobResumeScreenState extends State<CreateJobResumeScreen> {
         licenses: _licensesController.text.trim().isNotEmpty ? _licensesController.text.trim() : null,
         typeRatings: _typeRatingsController.text.trim().isNotEmpty ? _typeRatingsController.text.trim() : null,
         medicalClass: _medicalClassController.text.trim().isNotEmpty ? _medicalClassController.text.trim() : null,
+        isVisibleForEmployers: _isVisibleForEmployers,
       ),
     );
   }
@@ -448,6 +460,22 @@ class _CreateJobResumeScreenState extends State<CreateJobResumeScreen> {
                             },
                             title: const Text('Готов к командировкам'),
                           ),
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10, offset: const Offset(0, 2))],
+                            ),
+                            child: SwitchListTile(
+                              title: Text('Опубликовать резюме', style: AppStyles.regular14s.copyWith(color: AppColors.textPrimary)),
+                              subtitle: Text('Если выключено, резюме не будет видно работодателям', style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary)),
+                              value: _isVisibleForEmployers,
+                              onChanged: (v) => setState(() => _isVisibleForEmployers = v),
+                              activeColor: AppColors.primary100p,
+                            ),
+                          ),
                           const SizedBox(height: 24),
                           CustomButton(
                             title: 'Сохранить резюме',
@@ -563,7 +591,10 @@ class _CreateJobResumeScreenState extends State<CreateJobResumeScreen> {
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final file = _additionalPhotos[index];
-                final isPdf = file.name.toLowerCase().endsWith('.pdf');
+                final name = file.name.toLowerCase();
+                final isPdf = name.endsWith('.pdf');
+                final isWord = name.endsWith('.doc') || name.endsWith('.docx');
+                final isExcel = name.endsWith('.xls') || name.endsWith('.xlsx');
                 return Stack(
                   alignment: Alignment.topRight,
                   children: [
@@ -575,7 +606,11 @@ class _CreateJobResumeScreenState extends State<CreateJobResumeScreen> {
                         color: AppColors.strokeForDarkArea,
                         child: isPdf
                             ? const Center(child: Icon(Icons.picture_as_pdf, size: 36, color: Colors.red))
-                            : FutureBuilder<Uint8List>(
+                            : isWord
+                                ? const Center(child: Icon(Icons.description, size: 36, color: Colors.blue))
+                                : isExcel
+                                    ? const Center(child: Icon(Icons.table_chart, size: 36, color: Colors.green))
+                                    : FutureBuilder<Uint8List>(
                                 future: file.readAsBytes(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData && snapshot.data != null) {

@@ -244,12 +244,12 @@ class _BlogScreenState extends State<BlogScreen> {
                   if (result == true && context.mounted) {
                     await appState.checkAuthStatus();
                     if (appState.isAuthenticated && context.mounted) {
-                      AutoRouter.of(context).push(const CreateBlogArticleRoute());
+                      context.router.push(const CreateBlogArticleRoute());
                     }
                   }
                 } else {
-                  // Если авторизован, сразу переходим на создание статьи
-                  AutoRouter.of(context).push(const CreateBlogArticleRoute());
+                  // Если авторизован, сразу переходим на создание статьи (push внутри стека журнала)
+                  context.router.push(const CreateBlogArticleRoute());
                 }
               },
             ),

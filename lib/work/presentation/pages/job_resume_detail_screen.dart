@@ -8,8 +8,10 @@ import 'package:aviapoint/core/themes/app_styles.dart';
 import 'package:aviapoint/core/utils/const/app.dart';
 import 'package:aviapoint/core/utils/const/helper.dart';
 import 'package:aviapoint/core/utils/const/pictures.dart';
+import 'package:aviapoint/core/utils/permission_helper.dart';
 import 'package:aviapoint/injection_container.dart';
 import 'package:aviapoint/core/routes/app_router.dart';
+import 'package:aviapoint/core/utils/address_display_helper.dart';
 import 'package:aviapoint/market/presentation/widgets/location_picker_widget.dart';
 import 'package:aviapoint/profile_page/profile/presentation/bloc/profile_bloc.dart';
 import 'package:aviapoint/work/domain/entities/job_resume_entity.dart';
@@ -110,6 +112,14 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
                 if (context.mounted) context.router.maybePop(true);
               });
             },
+            updated: (resume) {
+              getIt<JobsResumesRefreshCubit>().notify();
+              _bloc.add(JobResumeDetailEvent.getById(id: widget.id));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(resume.isVisibleForEmployers ? 'Резюме опубликовано' : 'Резюме снято с публикации'),
+                backgroundColor: Colors.green,
+              ));
+            },
             error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorForUser), backgroundColor: Colors.red));
             },
@@ -128,22 +138,22 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
               withBack: true,
               onTap: () => context.router.maybePop(true),
               actions: [
-                BlocBuilder<JobResumeDetailBloc, JobResumeDetailState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      success: (resume) {
-                        final profileState = context.read<ProfileBloc>().state;
-                        final int? currentUserId = profileState is SuccessProfileState ? profileState.profile.id : null;
-                        final bool isOwner = currentUserId != null && resume.userId == currentUserId;
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, _) {
+                    return BlocBuilder<JobResumeDetailBloc, JobResumeDetailState>(
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                          success: (resume) {
+                            final canEdit = PermissionHelper.isOwnerOrAdmin(resume.userId, context);
 
-                        return Row(
+                            return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
                               icon: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border, color: _isFavorite ? Colors.red : null),
                               onPressed: () => _toggleResumeFavorite(resume.id),
                             ),
-                            if (isOwner) ...[
+                            if (canEdit) ...[
                               IconButton(
                                 icon: const Icon(Icons.edit, color: AppColors.primary100p),
                                 onPressed: () async {
@@ -161,25 +171,31 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
                             ],
                           ],
                         );
+                          },
+                          orElse: () => const SizedBox.shrink(),
+                        );
                       },
-                      orElse: () => const SizedBox.shrink(),
                     );
                   },
                 ),
               ],
             ),
             backgroundColor: AppColors.background,
-            body: BlocBuilder<JobResumeDetailBloc, JobResumeDetailState>(
-              builder: (context, state) => state.when(
-                loading: () => const Center(child: LoadingCustom()),
-                error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
-                  child: ErrorCustom(
-                    textError: errorForUser,
-                    repeat: () => _bloc.add(JobResumeDetailEvent.getById(id: widget.id)),
+            body: BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, _) {
+                return BlocBuilder<JobResumeDetailBloc, JobResumeDetailState>(
+                  builder: (context, state) => state.when(
+                    loading: () => const Center(child: LoadingCustom()),
+                    error: (errorFromApi, errorForUser, statusCode, stackTrace, responseMessage) => Center(
+                      child: ErrorCustom(
+                        textError: errorForUser,
+                        repeat: () => _bloc.add(JobResumeDetailEvent.getById(id: widget.id)),
+                      ),
+                    ),
+                    success: (resume) => _buildContent(context, resume),
                   ),
-                ),
-                success: (resume) => _buildContent(context, resume),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -338,79 +354,40 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
               ),
             ),
           ],
-          if (_experiences.isNotEmpty) ...[
+          if (resume.additionalPhotoUrls != null && resume.additionalPhotoUrls!.isNotEmpty) ...[
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.strokeForDarkArea),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Опыт работы', style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary)),
-                  const SizedBox(height: 8),
-                  ..._experiences.map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.companyName, style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary)),
-                          const SizedBox(height: 2),
-                          Text(() {
-                            final start = formatDateToDisplay(e.startDate);
-                            final end = e.isCurrent == true ? 'по н.в.' : formatDateToDisplay(e.endDate);
-                            return [start, end].where((s) => s.isNotEmpty).join(' — ');
-                          }(), style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary)),
-                          if (e.responsibilitiesAndAchievements != null && e.responsibilitiesAndAchievements!.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Text(e.responsibilitiesAndAchievements!, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary, height: 1.4)),
-                          ],
-                        ],
-                      ),
-                    ),
+            _buildAttachedFilesSection(context, resume),
+          ],
+          if (_experiences.isNotEmpty) ...[
+            const SizedBox(height: 24),
+            _buildSectionHeader(Icons.work_history_rounded, 'Опыт работы', const Color(0xFF7A0FD9)),
+            const SizedBox(height: 16),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final maxCardWidth = (constraints.maxWidth * 0.92).clamp(280.0, 420.0);
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxCardWidth),
+                    child: _buildExperienceTimeline(),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
           if (_educations.isNotEmpty) ...[
+            const SizedBox(height: 28),
+            _buildSectionHeader(Icons.school_rounded, 'Образование', const Color(0xFF0D9488)),
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.strokeForDarkArea),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Образование', style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary)),
-                  const SizedBox(height: 8),
-                  ..._educations.map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.institution, style: AppStyles.bold14s.copyWith(color: AppColors.textPrimary)),
-                          if (e.speciality != null && e.speciality!.isNotEmpty) Text(e.speciality!, style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary)),
-                          if (e.yearStart != null || e.yearEnd != null || e.isCurrent == true)
-                            Text(() {
-                              final start = formatYearToDisplay(e.yearStart);
-                              final end = e.isCurrent == true ? 'по н.в.' : formatYearToDisplay(e.yearEnd);
-                              return [start, end].where((s) => s.isNotEmpty).join(' — ');
-                            }(), style: AppStyles.regular12s.copyWith(color: AppColors.textSecondary)),
-                        ],
-                      ),
-                    ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final maxCardWidth = (constraints.maxWidth * 0.92).clamp(280.0, 420.0);
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxCardWidth),
+                    child: _buildEducationCards(),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
           const SizedBox(height: 16),
@@ -510,10 +487,7 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
   }
 
   String? _resumeAddressText(JobResumeEntity r) {
-    if (r.address != null && r.address!.isNotEmpty) {
-      return r.address;
-    }
-    return null;
+    return AddressDisplayHelper.locationStringWithoutDuplicates(r.address);
   }
 
   Iterable<String> _splitCsv(String? value) {
@@ -666,12 +640,272 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
     );
   }
 
-  List<Widget> _buildManagementIfOwner(BuildContext context, JobResumeEntity resume) {
-    final profileState = context.read<ProfileBloc>().state;
-    final int? currentUserId = profileState is SuccessProfileState ? profileState.profile.id : null;
-    final bool isOwner = currentUserId != null && resume.userId == currentUserId;
+  Widget _buildAttachedFilesSection(BuildContext context, JobResumeEntity resume) {
+    final urls = resume.additionalPhotoUrls!;
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.strokeForDarkArea),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.attach_file, size: 22, color: AppColors.primary100p),
+              const SizedBox(width: 12),
+              Text('Прикреплённые файлы', style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...urls.asMap().entries.map((entry) {
+            final index = entry.key;
+            final url = entry.value;
+            final lower = url.toLowerCase();
+            final isPdf = lower.endsWith('.pdf');
+            final isWord = lower.endsWith('.doc') || lower.endsWith('.docx');
+            final isExcel = lower.endsWith('.xls') || lower.endsWith('.xlsx');
+            final isImage = !isPdf && !isWord && !isExcel;
+            IconData icon = Icons.insert_drive_file;
+            Color iconColor = AppColors.textSecondary;
+            if (isPdf) {
+              icon = Icons.picture_as_pdf;
+              iconColor = Colors.red;
+            } else if (isWord) {
+              icon = Icons.description;
+              iconColor = Colors.blue;
+            } else if (isExcel) {
+              icon = Icons.table_chart;
+              iconColor = Colors.green;
+            } else if (isImage) {
+              icon = Icons.image;
+              iconColor = AppColors.primary100p;
+            }
+            final fileName = url.split('/').last.split('?').first;
+            final displayName = fileName.isNotEmpty ? fileName : 'Файл ${index + 1}';
+            final fullUrl = getImageUrl(url);
+            return Padding(
+              padding: EdgeInsets.only(bottom: index < urls.length - 1 ? 8 : 0),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () async {
+                    final uri = Uri.parse(fullUrl);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    } else if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Не удалось открыть файл'), backgroundColor: Colors.orange),
+                      );
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    child: Row(
+                      children: [
+                        Icon(icon, size: 28, color: iconColor),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            displayName,
+                            style: AppStyles.regular14s.copyWith(color: AppColors.textPrimary),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(Icons.open_in_new, size: 18, color: AppColors.textSecondary),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
 
-    if (!isOwner) return [];
+  Widget _buildSectionHeader(IconData icon, String title, Color accent) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: accent.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: accent.withOpacity(0.3), width: 1),
+          ),
+          child: Icon(icon, size: 22, color: accent),
+        ),
+        const SizedBox(width: 12),
+        Text(title, style: AppStyles.bold18s.copyWith(color: AppColors.textPrimary, letterSpacing: -0.3)),
+      ],
+    );
+  }
+
+  Widget _buildExperienceTimeline() {
+    return Column(
+      children: [
+        for (int i = 0; i < _experiences.length; i++) ...[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 28,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary100p,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: AppColors.primary100p.withOpacity(0.4), blurRadius: 6, offset: const Offset(0, 2)),
+                        ],
+                      ),
+                    ),
+                    if (i < _experiences.length - 1)
+                      Container(
+                        width: 2,
+                        height: 24,
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary100p.withOpacity(0.25),
+                          borderRadius: BorderRadius.circular(1),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12, offset: const Offset(0, 4)),
+                      BoxShadow(color: AppColors.primary100p.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2)),
+                    ],
+                    border: Border.all(color: AppColors.strokeForDarkArea.withOpacity(0.6)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _experiences[i].companyName,
+                              style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary, height: 1.25),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary100p.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              () {
+                                final e = _experiences[i];
+                                final start = formatDateToDisplay(e.startDate);
+                                final end = e.isCurrent == true ? 'по н.в.' : formatDateToDisplay(e.endDate);
+                                return [start, end].where((s) => s.isNotEmpty).join(' — ');
+                              }(),
+                              style: AppStyles.regular12s.copyWith(color: AppColors.primary100p, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (_experiences[i].responsibilitiesAndAchievements != null &&
+                          _experiences[i].responsibilitiesAndAchievements!.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        Text(
+                          _experiences[i].responsibilitiesAndAchievements!,
+                          style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary, height: 1.45),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildEducationCards() {
+    return Column(
+      children: [
+        for (int i = 0; i < _educations.length; i++) ...[
+          Container(
+            margin: const EdgeInsets.only(bottom: 14),
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 3)),
+                BoxShadow(color: const Color(0xFF0D9488).withOpacity(0.06), blurRadius: 6, offset: const Offset(0, 2)),
+              ],
+              border: Border(
+                left: BorderSide(width: 4, color: const Color(0xFF0D9488)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _educations[i].institution,
+                  style: AppStyles.bold16s.copyWith(color: AppColors.textPrimary, height: 1.25),
+                ),
+                if (_educations[i].speciality != null && _educations[i].speciality!.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    _educations[i].speciality!,
+                    style: AppStyles.regular14s.copyWith(color: AppColors.textSecondary),
+                  ),
+                ],
+                if (_educations[i].yearStart != null || _educations[i].yearEnd != null || _educations[i].isCurrent == true) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_today_rounded, size: 14, color: const Color(0xFF0D9488)),
+                      const SizedBox(width: 6),
+                      Text(
+                        () {
+                          final e = _educations[i];
+                          final start = formatYearToDisplay(e.yearStart);
+                          final end = e.isCurrent == true ? 'по н.в.' : formatYearToDisplay(e.yearEnd);
+                          return [start, end].where((s) => s.isNotEmpty).join(' — ');
+                        }(),
+                        style: AppStyles.regular13s.copyWith(color: const Color(0xFF0D9488), fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  List<Widget> _buildManagementIfOwner(BuildContext context, JobResumeEntity resume) {
+    final canEdit = PermissionHelper.isOwnerOrAdmin(resume.userId, context);
+    if (!canEdit) return [];
 
     return [
       SizedBox(
@@ -690,6 +924,36 @@ class _JobResumeDetailScreenState extends State<JobResumeDetailScreen> {
           icon: const Icon(Icons.edit, size: 20),
           label: const Text('Редактировать'),
         ),
+      ),
+      const SizedBox(height: 12),
+      BlocBuilder<JobResumeEditBloc, JobResumeEditState>(
+        builder: (context, state) {
+          final isLoading = state.maybeWhen(updating: () => true, orElse: () => false);
+          final isVisible = resume.isVisibleForEmployers;
+          return SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      context.read<JobResumeEditBloc>().add(JobResumeEditEvent.update(
+                            id: resume.id,
+                            isVisibleForEmployers: !isVisible,
+                          ));
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isVisible ? Colors.red : AppColors.primary100p,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              icon: isLoading
+                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Icon(Icons.publish, size: 20),
+              label: Text(isVisible ? 'Снять с публикации' : 'Опубликовать'),
+            ),
+          );
+        },
       ),
       const SizedBox(height: 16),
     ];
